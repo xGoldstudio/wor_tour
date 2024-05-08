@@ -1,3 +1,4 @@
+import { CardEffect } from "@/cards";
 import { create } from "zustand";
 
 export interface GameStore {
@@ -53,14 +54,15 @@ export interface InGameCardType {
   dmg: number;
   attackSpeed: number;
   startAttackingTimestamp: number | null;
+  effects: CardEffect[];
 }
 
 const useGameStore = create<GameStore>()((set, get) => ({
   playerDeck: [1,2,3,4,5,6],
   playerHand: [null, null, null, null],
   playerMana: 7,
-  playerHp: 5000,
-  playerMaxHp: 5000,
+  playerHp: 3000,
+  playerMaxHp: 3000,
   playerTimestampStartEarningMana: null,
 
   playerBoard: [null, null, null],
@@ -68,8 +70,8 @@ const useGameStore = create<GameStore>()((set, get) => ({
   opponentDeck: [1,2,3,4,5,6],
   opponentHand: [null, null, null, null],
   opponentMana: 7,
-  opponentHp: 4000,
-  opponentMaxHp: 5000,
+  opponentHp: 3000,
+  opponentMaxHp: 3000,
   opponentTimestampStartEarningMana: null,
 
   opponentBoard: [null, null, null],

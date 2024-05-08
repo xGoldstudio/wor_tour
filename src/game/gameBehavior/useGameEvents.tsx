@@ -6,6 +6,7 @@ import useGameStore, {
 } from "@/stores/gameStateInterface";
 import { useEffect } from "react";
 import iaAgent from "./iaAgent";
+import cardAttacking from "./events/cardAttacking";
 
 export const manaSpeed = 1500;
 
@@ -96,6 +97,8 @@ export interface DrawCardEvent {
 }
 
 let gameEventListeners = initGameEventListeners();
+
+export type TriggerEventType = (event: EventType) => void;
 
 type GameEventListenerFunction = (
   e: EventType,
@@ -202,6 +205,7 @@ function useGameEvents(): GameEventsActions {
         attackSpeed: foundCard.attackSpeed,
         startAttackingTimestamp: null,
         instanceId: getNextInstanceId(),
+        effects: foundCard.effects || [],
       };
       triggerEvent({
         type: "manaConsume",
@@ -234,38 +238,7 @@ function useGameEvents(): GameEventsActions {
         isPlayer: event.isPlayer,
       });
     } else if (event.type === "cardAttacking") {
-      const attakerCard = event.isPlayer
-        ? data.playerBoard[event.cardPosition]
-        : data.opponentBoard[event.cardPosition];
-      const defenseCard = event.isPlayer
-        ? data.opponentBoard[event.cardPosition]
-        : data.playerBoard[event.cardPosition];
-      if (attakerCard === null || attakerCard.instanceId !== event.instanceId) {
-        // if card destroyed or replaced during attack
-        return;
-      }
-      if (defenseCard) {
-        triggerEvent({
-          type: "cardDamage",
-          amount: attakerCard.dmg,
-          cardPosition: event.cardPosition,
-          isPlayerCard: !event.isPlayer,
-          initiator: event,
-        });
-      } else {
-        triggerEvent({
-          type: "playerDamage",
-          damage: attakerCard.dmg,
-          isPlayer: !event.isPlayer,
-          initiator: event,
-        });
-      }
-      triggerEvent({
-        type: "cardStartAttacking",
-        isPlayer: event.isPlayer,
-        cardPosition: event.cardPosition,
-        instanceId: event.instanceId,
-      });
+      cardAttacking(event, data, triggerEvent);
     } else if (event.type === "cardDamage") {
       const isDead = dealDamageToCard(
         event.isPlayerCard,

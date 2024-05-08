@@ -5,10 +5,12 @@ export interface CardType {
   dmg: number;
   hp: number;
 	attackSpeed: number;
-	effect: string;
   rarity: "common" | "rare" | "epic" | "legendary";
 	id: number;
+	effects?: CardEffect[];
 }
+
+export type CardEffect = "multiAttack";
 
 const cards: CardType[] = [
 	{
@@ -18,7 +20,6 @@ const cards: CardType[] = [
 		dmg: 150,
 		attackSpeed: 0.3,
 		hp: 300,
-		effect: "Soigne de 150pv vos alliés",
 		rarity: "rare",
 		id: 1,
 	},
@@ -29,7 +30,6 @@ const cards: CardType[] = [
 		dmg: 90,
 		attackSpeed: 1,
 		hp: 500,
-		effect: "",
 		rarity: "common",
 		id: 2,
 	},
@@ -40,7 +40,6 @@ const cards: CardType[] = [
 		dmg: 450,
 		attackSpeed: 0.2,
 		hp: 700,
-		effect: "Inflige 150 degats à toutes les créatures",
 		rarity: "epic",
 		id: 3,
 	},
@@ -51,7 +50,6 @@ const cards: CardType[] = [
 		dmg: 75,
 		attackSpeed: 2,
 		hp: 300,
-		effect: "",
 		rarity: "legendary",
 		id: 4,
 	},
@@ -59,10 +57,10 @@ const cards: CardType[] = [
 		name: "Petit mordeur",
 		cost: 2,
 		illustration: "5.png",
-		dmg: 150,
+		dmg: 100,
+		effects: ["multiAttack"],
 		attackSpeed: 0.5,
 		hp: 300,
-		effect: "",
 		rarity: "common",
 		id: 5,
 	},
@@ -73,7 +71,6 @@ const cards: CardType[] = [
 		dmg: 1500 ,
 		attackSpeed: 0.1,
 		hp: 1000,
-		effect: "",
 		rarity: "rare",
 		id: 6,
 	},
