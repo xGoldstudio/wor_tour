@@ -5,7 +5,7 @@ interface GameInterfaceStore {
   setSelectedCard: (cardPosition: number) => void;
   unselectCard: () => void;
 
-  cardTarget: number | null;
+  cardTarget: number | null;
   setCardTarget: (target: number) => void;
   removeCardTarget: () => void;
 
