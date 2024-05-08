@@ -7,6 +7,8 @@ import AnimationCanvas from "./AnimationCanvas";
 import * as _ from "lodash";
 import useGameEvents from "./gameBehavior/useGameEvents";
 
+export const IS_DEBUG = true;
+
 export default function Game() {
   const {
     playerMana,

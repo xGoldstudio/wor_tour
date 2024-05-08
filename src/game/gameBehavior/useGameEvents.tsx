@@ -1,16 +1,19 @@
 import findCard from "@/cards";
-import { getRandomElement } from "@/lib/list";
 import useGameInterface from "@/stores/gameInterfaceStore";
-import useGameStore, { InGameCardType } from "@/stores/gameStateInterface";
+import useGameStore, {
+  GameStore,
+  InGameCardType,
+} from "@/stores/gameStateInterface";
 import { useEffect } from "react";
+import iaAgent from "./iaAgent";
 
-export const manaSpeed = 3000;
+export const manaSpeed = 1500;
 
 interface GameEventsActions {
   userPlaceNewCard: (cardInHandPosition: number) => void;
 }
 
-type EventType =
+export type EventType =
   | ManaIncreaseEvent
   | ManaConsumeEvent
   | PlaceCardEvent
@@ -18,6 +21,8 @@ type EventType =
   | CardStartAttackingEvent
   | CardAttackingEvent
   | PlayerDamageEvent
+  | CardDamageEvent
+  | CardDestroyedEvent
   | GameOverEvent
   | DrawCardEvent;
 
@@ -42,7 +47,7 @@ export interface PlaceCardEvent {
   isPlayer: boolean;
   targetPosition: number;
   cardInHandPosition: number;
-  card: InGameCardType;
+  cardId: number;
 }
 
 export interface CardStartAttackingEvent {
@@ -63,7 +68,20 @@ export interface PlayerDamageEvent {
   type: "playerDamage";
   isPlayer: boolean;
   damage: number;
-	initiator: CardAttackingEvent;
+  initiator: CardAttackingEvent;
+}
+
+export interface CardDamageEvent {
+  type: "cardDamage";
+  amount: number;
+  cardPosition: number;
+  isPlayerCard: boolean;
+  initiator: CardAttackingEvent;
+}
+
+export interface CardDestroyedEvent {
+  type: "cardDestroyed";
+  initiator: CardDamageEvent;
 }
 
 export interface GameOverEvent {
@@ -79,22 +97,40 @@ export interface DrawCardEvent {
 
 let gameEventListeners = initGameEventListeners();
 
+type GameEventListenerFunction = (
+  e: EventType,
+  data: GameStore,
+  triggerEvent: (event: EventType) => void
+) => void;
+
 function initGameEventListeners() {
-  return new Map<EventType["type"], ((e: EventType) => void)[]>();
+  return new Map<EventType["type"], GameEventListenerFunction[]>();
 }
 
 export function addGameEventListener(
   type: EventType["type"],
-  action: (e: EventType) => void
+  action: GameEventListenerFunction,
+  filter?: (event: EventType) => boolean
 ) {
   let existingEvents = gameEventListeners.get(type);
-  existingEvents = existingEvents ? [...existingEvents, action] : [action];
+  const actionComputed: GameEventListenerFunction =
+    filter === undefined
+      ? action
+      : (e, data, triggerEvent) => filter(e) && action(e, data, triggerEvent);
+  existingEvents = existingEvents
+    ? [...existingEvents, actionComputed]
+    : [actionComputed];
   gameEventListeners.set(type, existingEvents);
 }
 
-function runGameEventListeners(type: EventType["type"], e: EventType) {
-  gameEventListeners.get(type)?.forEach((action: (e: EventType) => void) => {
-    action(e);
+function runGameEventListeners(
+  type: EventType["type"],
+  e: EventType,
+  data: GameStore,
+  triggerEvent: (event: EventType) => void
+) {
+  gameEventListeners.get(type)?.forEach((action: GameEventListenerFunction) => {
+    action(e, data, triggerEvent);
   });
 }
 
@@ -112,21 +148,26 @@ function useGameEvents(): GameEventsActions {
     consumeMana,
     startEarningMana,
     dealDamageToPlayer,
+    dealDamageToCard,
+    destroyCard,
     setGameOver,
     getNextInstanceId,
     cardDeckToHand,
-    cardHandToDiscard,
-    shuffleDiscardToDeck,
+    cardHandToDeck,
     startAttacking,
   } = useGameStore();
   const { getData: getUserInterfaceData } = useGameInterface();
+
+  useEffect(() => {
+    iaAgent();
+  }, []);
 
   useEffect(() => {
     triggerEvent({ type: "startEarningMana", isPlayer: true });
     triggerEvent({ type: "startEarningMana", isPlayer: false });
     for (let i = 0; i < 4; i++) {
       triggerEvent({ type: "drawCard", isPlayer: true, handPosition: i });
-      // triggerEvent({ type: "drawCard", isPlayer: false, handPosition: i });
+      triggerEvent({ type: "drawCard", isPlayer: false, handPosition: i });
     }
   }, []);
 
@@ -152,12 +193,27 @@ function useGameEvents(): GameEventsActions {
       consumeMana(event.isPlayer, event.delta);
       triggerEvent({ type: "startEarningMana", isPlayer: event.isPlayer });
     } else if (event.type === "placeCard") {
-      placeCardBoard(event.isPlayer, event.targetPosition, event.card);
+      const foundCard = findCard(event.cardId);
+      const cardInGame: InGameCardType = {
+        id: foundCard.id,
+        maxHp: foundCard.hp,
+        hp: foundCard.hp,
+        dmg: foundCard.dmg,
+        attackSpeed: foundCard.attackSpeed,
+        startAttackingTimestamp: null,
+        instanceId: getNextInstanceId(),
+      };
+      triggerEvent({
+        type: "manaConsume",
+        isPlayer: event.isPlayer,
+        delta: foundCard.cost,
+      });
+      placeCardBoard(event.isPlayer, event.targetPosition, cardInGame);
       triggerEvent({
         type: "cardStartAttacking",
         isPlayer: event.isPlayer,
         cardPosition: event.targetPosition,
-        instanceId: event.card.instanceId,
+        instanceId: cardInGame.instanceId,
       });
       triggerEvent({
         type: "drawCard",
@@ -189,13 +245,19 @@ function useGameEvents(): GameEventsActions {
         return;
       }
       if (defenseCard) {
-        // triggerEvent({ type: "cardReceiveDamage", amount: attakerCard.dmg, cardPosition: event.cardPosition });
+        triggerEvent({
+          type: "cardDamage",
+          amount: attakerCard.dmg,
+          cardPosition: event.cardPosition,
+          isPlayerCard: !event.isPlayer,
+          initiator: event,
+        });
       } else {
         triggerEvent({
           type: "playerDamage",
           damage: attakerCard.dmg,
           isPlayer: !event.isPlayer,
-					initiator: event,
+          initiator: event,
         });
       }
       triggerEvent({
@@ -204,6 +266,20 @@ function useGameEvents(): GameEventsActions {
         cardPosition: event.cardPosition,
         instanceId: event.instanceId,
       });
+    } else if (event.type === "cardDamage") {
+      const isDead = dealDamageToCard(
+        event.isPlayerCard,
+        event.amount,
+        event.cardPosition
+      );
+      if (isDead) {
+        triggerEvent({
+          type: "cardDestroyed",
+          initiator: event,
+        });
+      }
+    } else if (event.type === "cardDestroyed") {
+      destroyCard(event.initiator.isPlayerCard, event.initiator.cardPosition);
     } else if (event.type === "playerDamage") {
       dealDamageToPlayer(event.isPlayer, event.damage);
       if (
@@ -214,22 +290,14 @@ function useGameEvents(): GameEventsActions {
       }
     } else if (event.type === "gameOver") {
       setGameOver(event.winnerIsPlayer);
-			resetAllGameEventListeners();
+      resetAllGameEventListeners();
     } else if (event.type === "drawCard") {
-      const hand = event.isPlayer ? data.playerHand : data.opponentHand;
-      const deck = event.isPlayer ? data.playerDeck : data.opponentDeck;
-      const choosenCard = getRandomElement(deck);
-
-      if (hand[event.handPosition] !== null) {
-        cardHandToDiscard(event.isPlayer, event.handPosition);
-      }
-      cardDeckToHand(event.isPlayer, choosenCard, event.handPosition);
-      if (deck.length <= 1) {
-        shuffleDiscardToDeck(event.isPlayer);
-      }
+      cardHandToDeck(event.isPlayer, event.handPosition);
+      cardDeckToHand(event.isPlayer, event.handPosition);
     }
 
-    runGameEventListeners(event.type, event);
+    // we rerun getData to have the updated data
+    runGameEventListeners(event.type, event, getData(), triggerEvent);
   }
 
   function increaseManaTimer(isPlayer: boolean) {
@@ -239,32 +307,17 @@ function useGameEvents(): GameEventsActions {
     }, manaSpeed);
   }
 
-  function userPlaceNewCard(cardInHandPosition: number) {
+  function placeNewCard(cardInHandPosition: number) {
     const playerHand = getData().playerHand;
     const targetPosition = getUserInterfaceData().cardTarget;
     const handCard = playerHand[cardInHandPosition];
     if (targetPosition === null || handCard === null) {
       return;
     }
-    const foundCard = findCard(handCard);
-    const cardInGame: InGameCardType = {
-      id: foundCard.id,
-      maxHp: foundCard.hp,
-      hp: foundCard.hp,
-      dmg: foundCard.dmg,
-      attackSpeed: foundCard.attackSpeed,
-      startAttackingTimestamp: null,
-      instanceId: getNextInstanceId(),
-    };
-    triggerEvent({
-      type: "manaConsume",
-      isPlayer: true,
-      delta: foundCard.cost,
-    });
     triggerEvent({
       type: "placeCard",
       isPlayer: true,
-      card: cardInGame,
+      cardId: handCard,
       targetPosition,
       cardInHandPosition: cardInHandPosition,
     });
@@ -293,7 +346,7 @@ function useGameEvents(): GameEventsActions {
   }
 
   return {
-    userPlaceNewCard,
+    userPlaceNewCard: placeNewCard,
   };
 }
 

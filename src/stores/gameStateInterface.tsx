@@ -1,8 +1,7 @@
 import { create } from "zustand";
 
-interface GameStore {
+export interface GameStore {
   playerDeck: number[];
-  playerDiscard: number[];
   playerHand: (number | null)[];
   playerMana: number;
   playerHp: number;
@@ -10,7 +9,6 @@ interface GameStore {
   playerTimestampStartEarningMana: null | number;
 
   opponentDeck: number[];
-  opponentDiscard: number[];
   opponentHand: (number | null)[];
   opponentMana: number;
   opponentHp: number;
@@ -27,6 +25,8 @@ interface GameStore {
   increaseMana: (isPlayer: boolean) => void;
   consumeMana: (isPlayer: boolean, amount: number) => void;
   dealDamageToPlayer: (isPlayer: boolean, damage: number) => void;
+  dealDamageToCard: (isPlayerCard: boolean, damage: number, cardPosition: number) => boolean;
+  destroyCard: (isPlayerCard: boolean, cardPosition: number) => void;
   getData: () => GameStore;
   getBoardCurrentCard: (
     isPlayer: boolean,
@@ -41,9 +41,8 @@ interface GameStore {
   setGameOver: (winnerIsPlayer: boolean) => void;
   getNextInstanceId: () => number;
   // deck
-  cardDeckToHand: (isPlayer: boolean, cardId: number, targetPosition: number) => void;
-  cardHandToDiscard: (isPlayer: boolean, handCardPosition: number) => void;
-  shuffleDiscardToDeck: (isPlayer: boolean) => void;
+  cardDeckToHand: (isPlayer: boolean, targetPosition: number) => void;
+  cardHandToDeck: (isPlayer: boolean, handCardPosition: number) => void;
 }
 
 export interface InGameCardType {
@@ -58,24 +57,22 @@ export interface InGameCardType {
 
 const useGameStore = create<GameStore>()((set, get) => ({
   playerDeck: [1,2,3,4,5,6],
-  playerDiscard: [],
   playerHand: [null, null, null, null],
-  playerMana: 0,
+  playerMana: 7,
   playerHp: 5000,
   playerMaxHp: 5000,
   playerTimestampStartEarningMana: null,
 
-  playerBoard: [null, null, null, null],
+  playerBoard: [null, null, null],
 
   opponentDeck: [1,2,3,4,5,6],
-  opponentDiscard: [],
   opponentHand: [null, null, null, null],
-  opponentMana: 0,
+  opponentMana: 7,
   opponentHp: 4000,
   opponentMaxHp: 5000,
   opponentTimestampStartEarningMana: null,
 
-  opponentBoard: [null, null, null, null],
+  opponentBoard: [null, null, null],
 
   // global state
   currentWinner: null,
@@ -112,6 +109,28 @@ const useGameStore = create<GameStore>()((set, get) => ({
         ? { playerHp: state.playerHp - damage }
         : { opponentHp: state.opponentHp - damage }
     ),
+  dealDamageToCard: (isPlayerCard: boolean, damage: number, cardPosition: number) => {
+    let isDead = false;
+    set((state) => {
+      const board = isPlayerCard ? [...state.playerBoard] : [...state.opponentBoard];
+      const card = board[cardPosition];
+      if (card === null) {
+        console.warn("Trying to attack unexisting card");
+        return {};
+      }
+      card.hp = Math.max(0, card.hp - damage);
+      isDead = card.hp === 0;
+      return isPlayerCard ? { playerBoard: board } : { opponentBoard: board };
+    });
+    return isDead;
+  },
+  destroyCard: (isPlayerCard: boolean, cardPosition: number) => {
+    set((state) => {
+      const board = isPlayerCard ? [...state.playerBoard] : [...state.opponentBoard];
+      board[cardPosition] = null;
+      return isPlayerCard ? { playerBoard: board } : { opponentBoard: board };
+    })
+  },
   // board
   getBoardCurrentCard: (isPlayer: boolean, position: number) =>
     isPlayer ? get().playerBoard[position] : get().opponentBoard[position],
@@ -144,7 +163,7 @@ const useGameStore = create<GameStore>()((set, get) => ({
     return nextId;
   },
 
-  cardDeckToHand: (isPlayer: boolean, cardId: number, targetPosition: number) => {
+  cardDeckToHand: (isPlayer: boolean, targetPosition: number) => {
     set(state => {
       const hand = isPlayer ? state.playerHand : state.opponentHand;
       let deck = isPlayer ? [...state.playerDeck] : [...state.opponentDeck];
@@ -152,43 +171,32 @@ const useGameStore = create<GameStore>()((set, get) => ({
         console.warn("trying to draw a card on a position where a card already exist, use cardHandToDiscard instead");
         return {};
       }
-      hand[targetPosition] = cardId;
-      deck = deck.filter(deckCardId => deckCardId !== cardId);
+      hand[targetPosition] = deck[0];
+      deck = deck.slice(1);
       return isPlayer
         ? { playerHand: hand, playerDeck: deck }
         : { opponentHand: hand, opponentDeck: deck }
     });
   },
-  cardHandToDiscard: (
+  cardHandToDeck: (
     isPlayer: boolean, handCardPosition: number,
   ) =>
     set(state => {
       const hand = isPlayer ? state.playerHand : state.opponentHand;
-      const discard = isPlayer
-        ? [...state.playerDiscard]
-        : [...state.opponentDiscard];
+      const deck = isPlayer
+        ? [...state.playerDeck]
+        : [...state.opponentDeck];
       const cardId = hand[handCardPosition];
       if (cardId === null) {
         console.warn("card is already discarded");
         return {};
       }
       hand[handCardPosition] = null;
-      discard.push(cardId);
+      deck.push(cardId);
       return isPlayer
-        ? { playerHand: hand, playerDiscard: discard }
-        : { opponentHand: hand, opponentDiscard: discard }
+        ? { playerHand: hand, playerDeck: deck }
+        : { opponentHand: hand, opponentDeck: deck }
     }),
-  shuffleDiscardToDeck: (isPlayer: boolean) =>
-    set(state => isPlayer
-      ? {
-        playerDeck: [...state.playerDeck, ...state.playerDiscard],
-        playerDiscard: []
-      }
-      : {
-        opponentDeck: [...state.opponentDeck, ...state.opponentDiscard],
-        opponentDiscard: []
-      }
-    ),
 }));
 
 export default useGameStore;
