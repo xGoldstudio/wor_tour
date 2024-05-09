@@ -1,16 +1,35 @@
-export interface CardType {
-  name: string;
-  cost: number;
-  illustration: string;
-  dmg: number;
-  hp: number;
+export type CardType = {
+	name: string;
+	cost: number;
+	illustration: string;
+	dmg: number;
+	hp: number;
 	attackSpeed: number;
-  rarity: "common" | "rare" | "epic" | "legendary";
+	rarity: "common" | "rare" | "epic" | "legendary";
 	id: number;
-	effects?: CardEffect[];
+	// effects
+} & CardEffects;
+
+export interface CardEffects {
+	effects: {
+		multiAttack?: MultiAttackEffect;
+		placementHeal?: PlacementHeal;
+		fightBack?: FightBackEffect;
+	}
 }
 
-export type CardEffect = "multiAttack";
+interface MultiAttackEffect {
+	type: "multiAttack";
+}
+
+interface PlacementHeal {
+	type: "placementHeal";
+	amount: number;
+}
+
+interface FightBackEffect {
+	type: "fightBack";
+}
 
 const cards: CardType[] = [
 	{
@@ -22,6 +41,12 @@ const cards: CardType[] = [
 		hp: 300,
 		rarity: "rare",
 		id: 1,
+		effects: {
+			placementHeal: {
+				type: "placementHeal",
+				amount: 250,
+			},
+		}
 	},
 	{
 		name: "Flaque aux 5 yeux",
@@ -32,16 +57,20 @@ const cards: CardType[] = [
 		hp: 500,
 		rarity: "common",
 		id: 2,
+		effects: {},
 	},
 	{
 		name: "Mega Crabvor",
-		cost: 5,
+		cost: 4,
 		illustration: "1.png",
-		dmg: 450,
-		attackSpeed: 0.2,
+		dmg: 250,
+		attackSpeed: 0.3,
 		hp: 700,
 		rarity: "epic",
 		id: 3,
+		effects: {
+			fightBack: { type: "fightBack" },
+		},
 	},
 	{
 		name: "Reine Crabvor",
@@ -52,27 +81,32 @@ const cards: CardType[] = [
 		hp: 300,
 		rarity: "legendary",
 		id: 4,
+		effects: {},
 	},
 	{
 		name: "Petit mordeur",
 		cost: 2,
 		illustration: "5.png",
 		dmg: 100,
-		effects: ["multiAttack"],
 		attackSpeed: 0.5,
 		hp: 300,
 		rarity: "common",
 		id: 5,
+		effects: {
+			multiAttack: { type: "multiAttack" },
+		}
 	},
 	{
 		name: "Mage crabvor",
-		cost: 4,
+		cost: 3,
 		illustration: "5.png",
-		dmg: 1500 ,
-		attackSpeed: 0.1,
-		hp: 1000,
+		dmg: 800,
+		attackSpeed: 0.2,
+		hp: 800,
 		rarity: "rare",
 		id: 6,
+		effects: {
+		},
 	},
 ]
 

@@ -37,12 +37,13 @@ function ManaBar({ isPlayer, mana }: ManaBarProps) {
         <ManaBall mana={mana} />
       </div>
       {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((index) => {
+        // using index as key is ok since the order is static
         if (index < mana) {
-          return <ManaSubBarComplete />;
+          return <ManaSubBarComplete key={index} />;
         } else if (index === mana) {
-          return <ManaSubBarProgress />;
+          return <ManaSubBarProgress key={index} />;
         } else {
-          return <EmptyBar />;
+          return <EmptyBar key={index}/>;
         }
       })}
     </div>

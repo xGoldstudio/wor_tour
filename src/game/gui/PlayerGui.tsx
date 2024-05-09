@@ -47,6 +47,7 @@ function PlayerGUI({
                   <div
                     className="absolute"
                     style={{ top: `${-index * 5}px`, left: `${-index * 5}px` }}
+                    key={`${cardId}_${index}`}
                   >
                     <InHandCard
                       card={findCard(cardId)}

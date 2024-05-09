@@ -1,12 +1,10 @@
-import findCard from "@/cards";
 import useGameInterface from "@/stores/gameInterfaceStore";
-import useGameStore, {
-  GameStore,
-  InGameCardType,
-} from "@/stores/gameStateInterface";
+import useGameStore, { GameStore, getHandFromState } from "@/stores/gameStateInterface";
 import { useEffect } from "react";
 import iaAgent from "./iaAgent";
 import cardAttacking from "./events/cardAttacking";
+import cardPlacementEventManager from "./events/cardPlacement";
+import { CardEffects } from "@/cards";
 
 export const manaSpeed = 1500;
 
@@ -25,7 +23,9 @@ export type EventType =
   | CardDamageEvent
   | CardDestroyedEvent
   | GameOverEvent
-  | DrawCardEvent;
+  | DrawCardEvent
+  | HealCardEvent
+  | RemoveEffectEvent;
 
 export interface ManaConsumeEvent {
   type: "manaConsume";
@@ -77,7 +77,11 @@ export interface CardDamageEvent {
   amount: number;
   cardPosition: number;
   isPlayerCard: boolean;
-  initiator: CardAttackingEvent;
+  directAttack: boolean;
+  initiator: {
+    isPlayerCard: boolean;
+    cardPosition: number;
+  };
 }
 
 export interface CardDestroyedEvent {
@@ -94,6 +98,24 @@ export interface DrawCardEvent {
   type: "drawCard";
   isPlayer: boolean;
   handPosition: number;
+}
+
+export interface HealCardEvent {
+  type: "healCard";
+  isPlayerCard: boolean;
+  cardPosition: number;
+  amount: number;
+  cardInitiator: {
+    isPlayerCard: boolean;
+    cardPosition: number;
+  };
+}
+
+export interface RemoveEffectEvent {
+  type: "removeEffect";
+  isPlayerCard: boolean;
+  cardPosition: number;
+  effectToRemove: keyof CardEffects["effects"];
 }
 
 let gameEventListeners = initGameEventListeners();
@@ -157,7 +179,10 @@ function useGameEvents(): GameEventsActions {
     getNextInstanceId,
     cardDeckToHand,
     cardHandToDeck,
+    shuffleDeck,
     startAttacking,
+    healCard,
+    removeEffect,
   } = useGameStore();
   const { getData: getUserInterfaceData } = useGameInterface();
 
@@ -166,6 +191,8 @@ function useGameEvents(): GameEventsActions {
   }, []);
 
   useEffect(() => {
+    shuffleDeck(true);
+    shuffleDeck(false);
     triggerEvent({ type: "startEarningMana", isPlayer: true });
     triggerEvent({ type: "startEarningMana", isPlayer: false });
     for (let i = 0; i < 4; i++) {
@@ -196,34 +223,13 @@ function useGameEvents(): GameEventsActions {
       consumeMana(event.isPlayer, event.delta);
       triggerEvent({ type: "startEarningMana", isPlayer: event.isPlayer });
     } else if (event.type === "placeCard") {
-      const foundCard = findCard(event.cardId);
-      const cardInGame: InGameCardType = {
-        id: foundCard.id,
-        maxHp: foundCard.hp,
-        hp: foundCard.hp,
-        dmg: foundCard.dmg,
-        attackSpeed: foundCard.attackSpeed,
-        startAttackingTimestamp: null,
-        instanceId: getNextInstanceId(),
-        effects: foundCard.effects || [],
-      };
-      triggerEvent({
-        type: "manaConsume",
-        isPlayer: event.isPlayer,
-        delta: foundCard.cost,
-      });
-      placeCardBoard(event.isPlayer, event.targetPosition, cardInGame);
-      triggerEvent({
-        type: "cardStartAttacking",
-        isPlayer: event.isPlayer,
-        cardPosition: event.targetPosition,
-        instanceId: cardInGame.instanceId,
-      });
-      triggerEvent({
-        type: "drawCard",
-        isPlayer: event.isPlayer,
-        handPosition: event.cardInHandPosition,
-      });
+      cardPlacementEventManager(
+        event,
+        data,
+        triggerEvent,
+        getNextInstanceId,
+        placeCardBoard
+      );
     } else if (event.type === "cardStartAttacking") {
       const usingCard = event.isPlayer
         ? data.playerBoard[event.cardPosition]
@@ -245,6 +251,29 @@ function useGameEvents(): GameEventsActions {
         event.amount,
         event.cardPosition
       );
+      if (event.directAttack) {
+        const card = (
+          event.isPlayerCard ? data.playerBoard : data.opponentBoard
+        )[event.cardPosition];
+        if (card?.effects.fightBack) {
+          // attack before destroying the card
+          triggerEvent({
+            // to avoid infinite ping pong
+            type: "removeEffect",
+            isPlayerCard: event.isPlayerCard,
+            cardPosition: event.cardPosition,
+            effectToRemove: "fightBack",
+          });
+          triggerEvent({
+            type: "cardDamage",
+            amount: card.dmg,
+            cardPosition: event.initiator.cardPosition,
+            isPlayerCard: event.initiator.isPlayerCard,
+            initiator: event,
+            directAttack: true,
+          });
+        }
+      }
       if (isDead) {
         triggerEvent({
           type: "cardDestroyed",
@@ -265,8 +294,18 @@ function useGameEvents(): GameEventsActions {
       setGameOver(event.winnerIsPlayer);
       resetAllGameEventListeners();
     } else if (event.type === "drawCard") {
-      cardHandToDeck(event.isPlayer, event.handPosition);
+      if (getHandFromState(event.isPlayer, data)[event.handPosition] !== null) {
+        cardHandToDeck(event.isPlayer, event.handPosition);
+      }
       cardDeckToHand(event.isPlayer, event.handPosition);
+    } else if (event.type === "healCard") {
+      healCard(event.isPlayerCard, event.cardPosition, event.amount);
+    } else if (event.type === "removeEffect") {
+      removeEffect(
+        event.isPlayerCard,
+        event.cardPosition,
+        event.effectToRemove
+      );
     }
 
     // we rerun getData to have the updated data
