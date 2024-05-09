@@ -1,10 +1,14 @@
+import { useEffect, useRef } from "react";
 import useGameInterface from "@/stores/gameInterfaceStore";
-import useGameStore, { GameStore, getHandFromState } from "@/stores/gameStateInterface";
-import { useEffect } from "react";
+import useGameStore, {
+  GameStore,
+  getHandFromState,
+} from "@/stores/gameStateInterface";
 import iaAgent from "./iaAgent";
 import cardAttacking from "./events/cardAttacking";
 import cardPlacementEventManager from "./events/cardPlacement";
 import { CardEffects } from "@/cards";
+import Clock, { FRAME_TIME } from "./clock/clock";
 
 export const manaSpeed = 1500;
 
@@ -185,12 +189,10 @@ function useGameEvents(): GameEventsActions {
     removeEffect,
   } = useGameStore();
   const { getData: getUserInterfaceData } = useGameInterface();
+  const clock = useRef(Clock(internalTriggerEvent)).current;
 
   useEffect(() => {
     iaAgent();
-  }, []);
-
-  useEffect(() => {
     shuffleDeck(true);
     shuffleDeck(false);
     triggerEvent({ type: "startEarningMana", isPlayer: true });
@@ -199,9 +201,14 @@ function useGameEvents(): GameEventsActions {
       triggerEvent({ type: "drawCard", isPlayer: true, handPosition: i });
       triggerEvent({ type: "drawCard", isPlayer: false, handPosition: i });
     }
+    setInterval(() => {
+      clock.nextTick();
+    }, 1000);
   }, []);
 
-  function triggerEvent(event: EventType) {
+  const triggerEvent = clock.triggerEvent;
+
+  function internalTriggerEvent(event: EventType) {
     const data = getData();
     if (data.currentWinner) {
       // some events may be triggered after the end of the game due to timers
@@ -314,9 +321,13 @@ function useGameEvents(): GameEventsActions {
 
   function increaseManaTimer(isPlayer: boolean) {
     startEarningMana(isPlayer);
-    setTimeout(() => {
-      triggerEvent({ type: "manaIncrease", isPlayer });
-    }, manaSpeed);
+    clock.setGameEventTimeout(
+      {
+        type: "manaIncrease",
+        isPlayer,
+      },
+      Math.round(manaSpeed / FRAME_TIME),
+    );
   }
 
   function placeNewCard(cardInHandPosition: number) {
@@ -347,14 +358,16 @@ function useGameEvents(): GameEventsActions {
     instanceId: number;
   }) {
     startAttacking(isPlayer, cardPosition);
-    setTimeout(() => {
-      triggerEvent({
-        type: "cardAttacking",
-        isPlayer,
-        instanceId,
-        cardPosition,
-      });
-    }, 1000 / attackSpeed);
+    // setGameEventTimeout(
+    //   {
+    //     type: "cardAttacking",
+    //     isPlayer,
+    //     instanceId,
+    //     cardPosition,
+    //   },
+    //   triggerEvent,
+    //   Math.round(1000 / attackSpeed / FRAME_TIME),
+    // );
   }
 
   return {
