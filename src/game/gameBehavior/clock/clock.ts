@@ -1,5 +1,4 @@
-
-export const FRAME_TIME = 1000;
+import * as _ from "lodash";
 
 interface FrameObject {
 	frame: number;
@@ -21,40 +20,33 @@ export default function Clock<EventType>(onTriggerEvent: (e: EventType) => void)
 		event: EventType,
 		timeoutFrame: number
 	) {
-		if (timeoutFrame < 0) {
+		const usingFrame = Math.round(timeoutFrame);
+		if (usingFrame < 0) {
 			console.warn("timeoutFrame must be positive");
 			return;
 		}
-		const targetFrame = currentFrame + timeoutFrame;
+		const targetFrame = currentFrame + usingFrame;
 		for (let i = 0; i < timeoutQueue.length; i++) {
-			// case 1, match
 			if (timeoutQueue[i].frame === targetFrame) {
 				timeoutQueue[i].events.push(() => onTriggerEvent(event));
-				console.log("a")
-				break;
+				return;
 			} else if (
-				i + 1 < currentFrame &&
-				targetFrame < timeoutQueue[i + 1].frame
+				i + 1 < timeoutQueue.length
+				&& targetFrame < timeoutQueue[i + 1].frame
 			) {
 				// case 2, frame in between two frames
 				timeoutQueue.splice(i + 1, 0, {
 					frame: targetFrame,
 					events: [() => onTriggerEvent(event)],
 				});
-				console.log("b")
-
-				break;
-			} else {
-				// mean we reach the end
-				timeoutQueue.push({
-					frame: targetFrame,
-					events: [() => onTriggerEvent(event)],
-				});
-				console.log("c")
-
-				break;
+				return;
 			}
 		}
+		// the element should happened at the end of the list anyway
+		timeoutQueue.push({
+			frame: targetFrame,
+			events: [() => onTriggerEvent(event)],
+		});
 	}
 
 	function addEventToNextFrame(event: EventType) {
@@ -70,14 +62,12 @@ export default function Clock<EventType>(onTriggerEvent: (e: EventType) => void)
 	}
 
 	function nextTick() {
-		console.log(currentFrame, {...timeoutQueue});
 		isRunningEvent = true;
 		const currentFrameObject = getCurrentFrameObject();
 		if (currentFrameObject) {
 			currentFrameObject.events.forEach((event) => event()); // still running in sync of order calling
 			timeoutQueue = timeoutQueue.slice(1); // remove current event
 		}
-		console.log("====>", currentFrame, {...timeoutQueue});
 		isRunningEvent = false;
 		currentFrame = currentFrame + 1;
 	}
@@ -86,14 +76,20 @@ export default function Clock<EventType>(onTriggerEvent: (e: EventType) => void)
 		isRunningEvent ? onTriggerEvent(event) : addEventToNextFrame(event);
 	}
 
+	function getImmutableInternalState() {
+		return {
+			currentFrame,
+			isRunningEvent,
+			timeoutQueue: _.cloneDeep(timeoutQueue),
+		}
+	}
+
 	return {
 		triggerEvent,
 		getCurrentFrameObject,
 		setGameEventTimeout,
 		addEventToNextFrame,
 		nextTick,
-		timeoutQueue,
-		isRunningEvent,
-		currentFrame
+		getImmutableInternalState,
 	}
 }

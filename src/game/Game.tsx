@@ -3,9 +3,9 @@ import useGameInterface from "@/stores/gameInterfaceStore";
 import useGameStore from "@/stores/gameStateInterface";
 import PlayerGUI from "./gui/PlayerGui";
 import GameOverModal from "./GameOverModal";
-import AnimationCanvas from "./AnimationCanvas";
 import * as _ from "lodash";
 import useGameEvents from "./gameBehavior/useGameEvents";
+import GameDebugPanel from "./GameDebugPanel";
 
 export const IS_DEBUG = true;
 
@@ -20,7 +20,7 @@ export default function Game() {
     currentWinner,
   } = useGameStore();
   const { cardSelected, setCardTarget, removeCardTarget } = useGameInterface();
-  const { userPlaceNewCard } = useGameEvents();
+  const { userPlaceNewCard, togglePlay, isClockRunning, fastForward } = useGameEvents();
 
   function watchCardPlacement(event: MouseEvent) {
     const elementIds = _.range(3).map(position => getBoardTileId(true, position));
@@ -49,10 +49,10 @@ export default function Game() {
 
   return (
     <div className="w-screen h-screen grid grid-cols-[1fr_auto_1fr] flex-col items-center bg-black">
+      <GameDebugPanel togglePlay={togglePlay} isClockRunning={isClockRunning} fastForward={fastForward} />
       <GameOverModal currentWinner={currentWinner} />
       <div className="bg-black h-full w-full"></div>
       <div className="h-screen flex flex-col gap-4 justify-between relative bg-violet-400">
-        <AnimationCanvas />
         <PlayerGUI
           mana={opponentMana}
           hp={opponentHp}
@@ -89,9 +89,9 @@ interface CardPlaceholderProps {
 }
 
 function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
-  const { cardTarget } = useGameInterface();
+  const cardTarget = useGameInterface(s => s.cardTarget);
   const isTarget = cardTarget === position && isPlayer;
-  const { getBoardCurrentCard } = useGameStore();
+  const getBoardCurrentCard = useGameStore(s => s.getBoardCurrentCard);
   const currentCard = getBoardCurrentCard(!!isPlayer, position);
   const attackRef = useRef<null | HTMLDivElement>(null);
 

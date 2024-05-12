@@ -8,12 +8,19 @@ import iaAgent from "./iaAgent";
 import cardAttacking from "./events/cardAttacking";
 import cardPlacementEventManager from "./events/cardPlacement";
 import { CardEffects } from "@/cards";
-import Clock, { FRAME_TIME } from "./clock/clock";
+import Clock from "./clock/clock";
+import { useGameSyncAnimationStore } from "./useGameSyncAnimation";
+import { IS_DEBUG } from "../Game";
+
+export const FRAME_TIME = 10;
 
 export const manaSpeed = 1500;
 
 interface GameEventsActions {
   userPlaceNewCard: (cardInHandPosition: number) => void;
+  togglePlay: () => void;
+  isClockRunning: boolean;
+  fastForward: (amount: number) => void;
 }
 
 export type EventType =
@@ -167,6 +174,15 @@ function resetAllGameEventListeners() {
   gameEventListeners = initGameEventListeners();
 }
 
+function timeDiff() {
+  const time = new Date().getTime();
+
+  return (shouldElapsed: number) => {
+    const reallyElapsed = new Date().getTime() - time;
+    console.log("difference: ", reallyElapsed - shouldElapsed, shouldElapsed, reallyElapsed);
+  }
+}
+
 // all game logic here
 // todo to guaranteed fairness, we must wrap setTimeout in a custom gameLoop
 function useGameEvents(): GameEventsActions {
@@ -188,8 +204,13 @@ function useGameEvents(): GameEventsActions {
     healCard,
     removeEffect,
   } = useGameStore();
-  const { getData: getUserInterfaceData } = useGameInterface();
+  const {
+    getData: getUserInterfaceData,
+    isClockRunning,
+    setIsClockRunning,
+  } = useGameInterface();
   const clock = useRef(Clock(internalTriggerEvent)).current;
+  // const getTimeDiff = useRef(timeDiff()).current;
 
   useEffect(() => {
     iaAgent();
@@ -201,10 +222,38 @@ function useGameEvents(): GameEventsActions {
       triggerEvent({ type: "drawCard", isPlayer: true, handPosition: i });
       triggerEvent({ type: "drawCard", isPlayer: false, handPosition: i });
     }
-    setInterval(() => {
-      clock.nextTick();
-    }, 1000);
+    nextTick();
   }, []);
+
+  const triggerGameAnimation = useGameSyncAnimationStore<GameStore & { currentTick: number }>();
+
+  function nextTick() {
+    setTimeout(() => {
+      if (getUserInterfaceData().isClockRunning) {
+        clock.nextTick();
+        nextTick();
+        triggerGameAnimation({ ...getData(), currentTick: clock.getImmutableInternalState().currentFrame });
+        // if (IS_DEBUG) {
+        //   getTimeDiff(clock.getImmutableInternalState().currentFrame * FRAME_TIME);
+        // }
+      }
+    }, FRAME_TIME);
+  }
+
+  function togglePlay() {
+    if (!isClockRunning) {
+      setIsClockRunning(true);
+      nextTick();
+    } else {
+      setIsClockRunning(false);
+    }
+  }
+
+  function fastForward(amount: number) {
+    for (let i = 0; i < amount; i++) {
+      clock.nextTick();
+    }
+  }
 
   const triggerEvent = clock.triggerEvent;
 
@@ -218,8 +267,8 @@ function useGameEvents(): GameEventsActions {
       if (
         (event.isPlayer ? data.playerMana : data.opponentMana) < 9 &&
         (event.isPlayer
-          ? data.playerTimestampStartEarningMana
-          : data.opponentTimestampStartEarningMana) === null
+          ? data.playerTickStartEarningMana
+          : data.opponentTickStartEarningMana) === null
       ) {
         increaseManaTimer(event.isPlayer);
       }
@@ -320,13 +369,13 @@ function useGameEvents(): GameEventsActions {
   }
 
   function increaseManaTimer(isPlayer: boolean) {
-    startEarningMana(isPlayer);
+    startEarningMana(isPlayer, clock.getImmutableInternalState().currentFrame);
     clock.setGameEventTimeout(
       {
         type: "manaIncrease",
         isPlayer,
       },
-      Math.round(manaSpeed / FRAME_TIME),
+      manaSpeed / FRAME_TIME
     );
   }
 
@@ -358,20 +407,22 @@ function useGameEvents(): GameEventsActions {
     instanceId: number;
   }) {
     startAttacking(isPlayer, cardPosition);
-    // setGameEventTimeout(
-    //   {
-    //     type: "cardAttacking",
-    //     isPlayer,
-    //     instanceId,
-    //     cardPosition,
-    //   },
-    //   triggerEvent,
-    //   Math.round(1000 / attackSpeed / FRAME_TIME),
-    // );
+    clock.setGameEventTimeout(
+      {
+        type: "cardAttacking",
+        isPlayer,
+        instanceId,
+        cardPosition,
+      },
+      1000 / attackSpeed / FRAME_TIME
+    );
   }
 
   return {
     userPlaceNewCard: placeNewCard,
+    togglePlay,
+    isClockRunning,
+    fastForward,
   };
 }
 

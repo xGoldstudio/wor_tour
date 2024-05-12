@@ -1,7 +1,7 @@
-import useGameStore from "@/stores/gameStateInterface";
+import useGameStore, { GameStore } from "@/stores/gameStateInterface";
 import { useRef, useState } from "react";
-import { manaSpeed } from "../gameBehavior/useGameEvents";
-import { motion } from "framer-motion";
+import { FRAME_TIME, manaSpeed } from "../gameBehavior/useGameEvents";
+import { useGameAnimation } from "../gameBehavior/useGameSyncAnimation";
 
 interface ManaBarProps {
   isPlayer: boolean;
@@ -11,8 +11,8 @@ interface ManaBarProps {
 function ManaBar({ isPlayer, mana }: ManaBarProps) {
   const manaTimestamp = useGameStore((state) =>
     isPlayer
-      ? state.playerTimestampStartEarningMana
-      : state.opponentTimestampStartEarningMana
+      ? state.playerTickStartEarningMana
+      : state.opponentTickStartEarningMana
   );
 
   const [oldTimestamp, setOldTimestamp] = useState(manaTimestamp);
@@ -40,10 +40,14 @@ function ManaBar({ isPlayer, mana }: ManaBarProps) {
         // using index as key is ok since the order is static
         if (index < mana) {
           return <ManaSubBarComplete key={index} />;
-        } else if (index === mana) {
-          return <ManaSubBarProgress key={index} />;
         } else {
-          return <EmptyBar key={index}/>;
+          return (
+            <ManaSubBarProgress
+              key={index}
+              manaIndex={index}
+              isPlayer={isPlayer}
+            />
+          );
         }
       })}
     </div>
@@ -66,14 +70,37 @@ export function EmptyBar({ children }: { children?: React.ReactNode }) {
   );
 }
 
-function ManaSubBarProgress() {
+function ManaSubBarProgress({
+  manaIndex,
+  isPlayer,
+}: {
+  manaIndex: number;
+  isPlayer: boolean;
+}) {
+  const animationRef = useGameAnimation<GameStore & { currentTick: number }>(
+    (state) => {
+      if (manaIndex !== (isPlayer ? state.playerMana : state.opponentMana)) {
+        return {
+          transform: `scaleX(0%)`,
+        };
+      }
+      const runningManaEarningProgress =
+        (state.currentTick -
+          (isPlayer
+            ? state.playerTickStartEarningMana
+            : state.opponentTickStartEarningMana)!) /
+        (manaSpeed / FRAME_TIME);
+      return {
+        transform: `scaleX(${runningManaEarningProgress * 100}%)`,
+      };
+    }
+  );
+
   return (
     <EmptyBar>
-      <motion.div
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ ease: "linear", duration: manaSpeed / 1000 - 0.1 }}
-        className="w-full h-full left-0 bg-gradient-to-b from-[#C164BA] via-[#FACDF7] via-[37%] to-[#C164BA] origin-left"
+      <div
+        ref={animationRef}
+        className="w-full h-full left-0 bg-gradient-to-b from-[#C164BA] via-[#FACDF7] via-[37%] to-[#C164BA] origin-left scale-x-0"
       />
     </EmptyBar>
   );

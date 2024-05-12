@@ -40,7 +40,7 @@ function PlayerGUI({
           className="w-full flex flex-col bg-gray-500 px-6 py-4"
           id={getPlayerGuiId(isPlayer)}
         >
-          {(isPlayer || IS_DEBUG) && (
+          {(isPlayer) && (
             <div className="flex gap-4 mb-3 h-[120px] -translate-y-1/3">
               <div className="relative scale-75 w-[113px] h-[160px] translate-y-[12%]">
                 {reverseDeck.map((cardId, index) => (

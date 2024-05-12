@@ -8,14 +8,14 @@ export interface GameStore {
   playerMana: number;
   playerHp: number;
   playerMaxHp: number;
-  playerTimestampStartEarningMana: null | number;
+  playerTickStartEarningMana: null | number;
 
   opponentDeck: number[];
   opponentHand: (number | null)[];
   opponentMana: number;
   opponentHp: number;
   opponentMaxHp: number;
-  opponentTimestampStartEarningMana: null | number;
+  opponentTickStartEarningMana: null | number;
 
   playerBoard: (InGameCardType | null)[];
   opponentBoard: (InGameCardType | null)[];
@@ -23,7 +23,7 @@ export interface GameStore {
   currentWinner: "player" | "opponent" | null; // if not null = game over
   currentInstanceId: number;
 
-  startEarningMana: (isPlayer: boolean) => void;
+  startEarningMana: (isPlayer: boolean, tick: number) => void;
   increaseMana: (isPlayer: boolean) => void;
   consumeMana: (isPlayer: boolean, amount: number) => void;
   dealDamageToPlayer: (isPlayer: boolean, damage: number) => void;
@@ -79,7 +79,7 @@ const useGameStore = create<GameStore>()((set, get) => ({
   playerMana: 7,
   playerHp: 3000,
   playerMaxHp: 3000,
-  playerTimestampStartEarningMana: null,
+  playerTickStartEarningMana: null,
 
   playerBoard: [null, null, null],
 
@@ -88,7 +88,7 @@ const useGameStore = create<GameStore>()((set, get) => ({
   opponentMana: 7,
   opponentHp: 3000,
   opponentMaxHp: 3000,
-  opponentTimestampStartEarningMana: null,
+  opponentTickStartEarningMana: null,
 
   opponentBoard: [null, null, null],
 
@@ -97,22 +97,22 @@ const useGameStore = create<GameStore>()((set, get) => ({
   currentInstanceId: 0,
 
   getData: () => get(),
-  startEarningMana: (isPlayer: boolean) =>
+  startEarningMana: (isPlayer: boolean, tick: number) =>
     set(
       isPlayer
-        ? { playerTimestampStartEarningMana: new Date().getTime() }
-        : { opponentTimestampStartEarningMana: new Date().getTime() }
+        ? { playerTickStartEarningMana: tick }
+        : { opponentTickStartEarningMana: tick }
     ),
   increaseMana: (isPlayer: boolean) =>
     set((state) =>
       isPlayer
         ? {
             playerMana: state.playerMana + 1,
-            playerTimestampStartEarningMana: null,
+            playerTickStartEarningMana: null,
           }
         : {
             opponentMana: state.opponentMana + 1,
-            opponentTimestampStartEarningMana: null,
+            opponentTickStartEarningMana: null,
           }
     ),
   consumeMana: (isPlayer: boolean, amount: number) =>

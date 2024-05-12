@@ -1,10 +1,10 @@
 import useGameInterface from "@/stores/gameInterfaceStore";
-import useGameStore from "@/stores/gameStateInterface";
-import { motion, useAnimate, useDragControls } from "framer-motion";
+import useGameStore, { GameStore } from "@/stores/gameStateInterface";
+import { motion, useDragControls } from "framer-motion";
 import { ManaBall } from "./ManaBar";
-import { useEffect, useState } from "react";
-import { manaSpeed } from "../gameBehavior/useGameEvents";
+import { FRAME_TIME, manaSpeed } from "../gameBehavior/useGameEvents";
 import { CardType } from "@/cards";
+import { useGameAnimation } from "../gameBehavior/useGameSyncAnimation";
 
 function InHandCard({
   card,
@@ -64,7 +64,6 @@ function InHandCard({
         <div className="h-[157px] w-[3px] bg-black opacity-60 absolute top-0 right-0"></div>
         <CardIllustartion
           cardId={card.id}
-          currentMana={playerMana}
           manaCost={usable ? card.cost : null}
         />
       </div>
@@ -80,57 +79,26 @@ function InHandCard({
 function CardIllustartion({
   cardId,
   manaCost,
-  currentMana,
 }: {
   cardId: number;
   manaCost: number | null;
-  currentMana: number;
 }) {
-  const [scope, animate] = useAnimate();
-  const [lastMana, setLastMana] = useState(currentMana);
-  const playerTimestampStartEarningMana = useGameStore(
-    (state) => state.playerTimestampStartEarningMana
+  const animationRef = useGameAnimation<GameStore & { currentTick: number }>(
+    (state) => {
+      if (manaCost !== null && state.playerMana >= manaCost) {
+        return {
+          transform: `scaleY(0%)`,
+        };
+      }
+      const runningManaEarningProgress =
+        (state.currentTick - state.playerTickStartEarningMana!) /
+        (manaSpeed / FRAME_TIME);
+      const alreadyProgress = (state.playerMana + runningManaEarningProgress) / (manaCost || 0);
+      return {
+        transform: `scaleY(${100 - alreadyProgress * 100}%)`,
+      };
+    }
   );
-
-  if (currentMana !== lastMana) {
-    setLastMana(currentMana);
-    if (
-      manaCost !== null &&
-      playerTimestampStartEarningMana !== null &&
-      currentMana < lastMana &&
-      currentMana < manaCost
-    ) {
-      computeAnimation(manaCost, playerTimestampStartEarningMana);
-    }
-  }
-
-  useEffect(() => {
-    if (
-      manaCost !== null &&
-      playerTimestampStartEarningMana !== null
-    ) {
-      computeAnimation(manaCost, playerTimestampStartEarningMana);
-    }
-  }, [playerTimestampStartEarningMana]);
-
-  function computeAnimation(
-    manaCost: number,
-    playerTimestampStartEarningMana: number
-  ) {
-    const runningManaEarningProgress =
-      (new Date().getTime() - playerTimestampStartEarningMana) / manaSpeed;
-    const alreadyProgress =
-      (currentMana + runningManaEarningProgress) / manaCost; // normalized value [0,1]
-    const animationTime =
-      (manaCost * manaSpeed - alreadyProgress * manaCost * manaSpeed) / 1000;
-    animate(
-      scope.current,
-      {
-        scaleY: [`${100 - alreadyProgress * 100}%`, "0%"],
-      },
-      { duration: animationTime, ease: "linear" }
-    );
-  }
 
   return (
     <div className="w-[97px] h-[143px] absolute top-[8px] left-[7px] rounded-[2px] overflow-hidden">
@@ -148,8 +116,8 @@ function CardIllustartion({
       ></div>
       {manaCost !== null && (
         <div
-          ref={scope}
-          className="absolute top-0 w-full h-full bg-slate-600 opacity-40 origin-top ease-linear transition-transform"
+          ref={animationRef}
+          className="absolute top-0 w-full h-full bg-slate-600 opacity-40 origin-top"
         />
       )}
     </div>

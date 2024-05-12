@@ -39,7 +39,6 @@ export default function iaAgent() {
       setNextCardToUse(data);
     }
     if (nextCardToUse && nextCardToUse.card.cost <= data.opponentMana) {
-      console.log(data.opponentMana);
       const target = getEmptyTarget(data);
       if (target === null) {
         return;
