@@ -1,4 +1,4 @@
-import { CardEffects } from "@/cards";
+import { CardEffects, CardRarity } from "@/cards";
 import { create } from "zustand";
 import * as _ from "lodash";
 
@@ -49,7 +49,7 @@ export interface GameStore {
     card: InGameCardType
   ) => void;
   shuffleDeck: (isPlayer: boolean) => void;
-  startAttacking: (isPlayer: boolean, cardPosition: number) => void;
+  startAttacking: (isPlayer: boolean, cardPosition: number, tick: number) => void;
   setGameOver: (winnerIsPlayer: boolean) => void;
   getNextInstanceId: () => number;
   // deck
@@ -70,15 +70,16 @@ export type InGameCardType = {
   hp: number;
   dmg: number;
   attackSpeed: number;
-  startAttackingTimestamp: number | null;
+  startAttackingTick: number | null;
+  rarity: CardRarity;
 } & CardEffects;
 
 const useGameStore = create<GameStore>()((set, get) => ({
   playerDeck: [1, 2, 3, 4, 5, 6],
   playerHand: [null, null, null, null],
   playerMana: 7,
-  playerHp: 3000,
-  playerMaxHp: 3000,
+  playerHp: 30000,
+  playerMaxHp: 30000,
   playerTickStartEarningMana: null,
 
   playerBoard: [null, null, null],
@@ -86,8 +87,8 @@ const useGameStore = create<GameStore>()((set, get) => ({
   opponentDeck: [1, 2, 3, 4, 5, 6],
   opponentHand: [null, null, null, null],
   opponentMana: 7,
-  opponentHp: 3000,
-  opponentMaxHp: 3000,
+  opponentHp: 30000,
+  opponentMaxHp: 30000,
   opponentTickStartEarningMana: null,
 
   opponentBoard: [null, null, null],
@@ -181,7 +182,7 @@ const useGameStore = create<GameStore>()((set, get) => ({
       set({ opponentBoard: newBoard });
     }
   },
-  startAttacking: (isPlayer: boolean, cardPosition: number) =>
+  startAttacking: (isPlayer: boolean, cardPosition: number, tick: number) =>
     set((state) => {
       const board = isPlayer ? state.playerBoard : state.opponentBoard;
       const card = board[cardPosition];
@@ -189,7 +190,7 @@ const useGameStore = create<GameStore>()((set, get) => ({
         console.warn("Card doesnt exist");
         return {};
       }
-      card.startAttackingTimestamp = new Date().getTime();
+      card.startAttackingTick = tick;
       return isPlayer ? { playerBoard: board } : { opponentBoard: board };
     }),
   setGameOver: (winnerIsPlayer: boolean) =>

@@ -2,8 +2,8 @@ import HpBar from "./HpBar";
 import ManaBar from "./ManaBar";
 import useGameStore from "@/stores/gameStateInterface";
 import findCard from "@/cards";
-import InHandCard from "./InHandCard";
-import { IS_DEBUG } from "../Game";
+import InHandCard from "./card/InHandCard";
+import StaticCard from "./card/StaticCard";
 
 interface PlayerGUIProps {
   mana: number;
@@ -20,7 +20,7 @@ function PlayerGUI({
   isPlayer,
   userPlaceNewCard,
 }: PlayerGUIProps) {
-  const { deck, hand } = useGameStore(state => ({
+  const { deck, hand } = useGameStore((state) => ({
     deck: isPlayer ? state.playerDeck : state.opponentDeck,
     hand: isPlayer ? state.playerHand : state.opponentHand,
   }));
@@ -32,27 +32,25 @@ function PlayerGUI({
   const reverseDeck = [...deck].reverse();
 
   return (
-    <div>
-      <BorderTop />
+    <div className="relative">
+      <div className="top-0 left-0 w-full h-full absolute bg-gray-500 opacity-80"></div>
+      {/* <BorderTop /> */}
       <div className="flex">
-        <BorderLeft />
+        {/* <BorderLeft /> */}
         <div
-          className="w-full flex flex-col bg-gray-500 px-6 py-4"
+          className="w-full flex flex-col px-6 py-4"
           id={getPlayerGuiId(isPlayer)}
         >
-          {(isPlayer) && (
+          {isPlayer && (
             <div className="flex gap-4 mb-3 h-[120px] -translate-y-1/3">
-              <div className="relative scale-75 w-[113px] h-[160px] translate-y-[12%]">
+              <div className="relative w-[113px] h-[160px] translate-y-[12%]">
                 {reverseDeck.map((cardId, index) => (
                   <div
                     className="absolute"
                     style={{ top: `${-index * 5}px`, left: `${-index * 5}px` }}
                     key={`${cardId}_${index}`}
                   >
-                    <InHandCard
-                      card={findCard(cardId)}
-                      userPlaceNewCard={userPlaceNewCard}
-                    />
+                    <StaticCard card={findCard(cardId)} />
                   </div>
                 ))}
               </div>
@@ -67,11 +65,11 @@ function PlayerGUI({
             </div>
           )}
           <ManaBar isPlayer={isPlayer} mana={mana} />
-          <HpBar isPlayer={isPlayer} hp={hp} maxHp={maxHp} />
+          <HpBar hp={hp} maxHp={maxHp} withHeart />
         </div>
-        <BorderRight />
+        {/* <BorderRight /> */}
       </div>
-      <BorderBottom />
+      {/* <BorderBottom /> */}
     </div>
   );
 }

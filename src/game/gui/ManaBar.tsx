@@ -1,7 +1,7 @@
 import useGameStore, { GameStore } from "@/stores/gameStateInterface";
 import { useRef, useState } from "react";
 import { FRAME_TIME, manaSpeed } from "../gameBehavior/useGameEvents";
-import { useGameAnimation } from "../gameBehavior/useGameSyncAnimation";
+import { useGameAnimation } from "../gameBehavior/animation/useGameSyncAnimation";
 
 interface ManaBarProps {
   isPlayer: boolean;

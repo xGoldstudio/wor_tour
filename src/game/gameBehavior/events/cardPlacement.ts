@@ -21,8 +21,9 @@ export default function cardPlacementEventManager(
 		hp: foundCard.hp,
 		dmg: foundCard.dmg,
 		attackSpeed: foundCard.attackSpeed,
-		startAttackingTimestamp: null,
+		startAttackingTick: null,
 		instanceId: getNextInstanceId(),
+		rarity: foundCard.rarity,
 		effects: _.cloneDeep(foundCard.effects) || {},
 	};
 	triggerEvent({

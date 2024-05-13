@@ -5,10 +5,12 @@ export type CardType = {
 	dmg: number;
 	hp: number;
 	attackSpeed: number;
-	rarity: "common" | "rare" | "epic" | "legendary";
+	rarity: CardRarity;
 	id: number;
 	// effects
 } & CardEffects;
+
+export type CardRarity = "common" | "rare" | "epic" | "legendary";
 
 export interface CardEffects {
 	effects: {

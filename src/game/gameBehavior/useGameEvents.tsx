@@ -9,8 +9,7 @@ import cardAttacking from "./events/cardAttacking";
 import cardPlacementEventManager from "./events/cardPlacement";
 import { CardEffects } from "@/cards";
 import Clock from "./clock/clock";
-import { useGameSyncAnimationStore } from "./useGameSyncAnimation";
-import { IS_DEBUG } from "../Game";
+import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
 
 export const FRAME_TIME = 10;
 
@@ -208,6 +207,7 @@ function useGameEvents(): GameEventsActions {
     getData: getUserInterfaceData,
     isClockRunning,
     setIsClockRunning,
+    removeCardTarget,
   } = useGameInterface();
   const clock = useRef(Clock(internalTriggerEvent)).current;
   // const getTimeDiff = useRef(timeDiff()).current;
@@ -230,14 +230,18 @@ function useGameEvents(): GameEventsActions {
   function nextTick() {
     setTimeout(() => {
       if (getUserInterfaceData().isClockRunning) {
-        clock.nextTick();
+        triggerTickEffects();
         nextTick();
-        triggerGameAnimation({ ...getData(), currentTick: clock.getImmutableInternalState().currentFrame });
         // if (IS_DEBUG) {
         //   getTimeDiff(clock.getImmutableInternalState().currentFrame * FRAME_TIME);
         // }
       }
     }, FRAME_TIME);
+  }
+
+  function triggerTickEffects() {
+    clock.nextTick();
+    triggerGameAnimation({ ...getData(), currentTick: clock.getImmutableInternalState().currentFrame });
   }
 
   function togglePlay() {
@@ -251,7 +255,7 @@ function useGameEvents(): GameEventsActions {
 
   function fastForward(amount: number) {
     for (let i = 0; i < amount; i++) {
-      clock.nextTick();
+      triggerTickEffects();
     }
   }
 
@@ -260,6 +264,7 @@ function useGameEvents(): GameEventsActions {
   function internalTriggerEvent(event: EventType) {
     const data = getData();
     if (data.currentWinner) {
+      togglePlay();
       // some events may be triggered after the end of the game due to timers
       return null;
     }
@@ -393,6 +398,7 @@ function useGameEvents(): GameEventsActions {
       targetPosition,
       cardInHandPosition: cardInHandPosition,
     });
+    removeCardTarget();
   }
 
   function startAttackTimer({
@@ -406,7 +412,7 @@ function useGameEvents(): GameEventsActions {
     isPlayer: boolean;
     instanceId: number;
   }) {
-    startAttacking(isPlayer, cardPosition);
+    startAttacking(isPlayer, cardPosition, clock.getImmutableInternalState().currentFrame);
     clock.setGameEventTimeout(
       {
         type: "cardAttacking",

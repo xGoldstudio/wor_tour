@@ -6,6 +6,7 @@ import GameOverModal from "./GameOverModal";
 import * as _ from "lodash";
 import useGameEvents from "./gameBehavior/useGameEvents";
 import GameDebugPanel from "./GameDebugPanel";
+import GameCard from "./gui/card/GameCard";
 
 export const IS_DEBUG = true;
 
@@ -20,10 +21,13 @@ export default function Game() {
     currentWinner,
   } = useGameStore();
   const { cardSelected, setCardTarget, removeCardTarget } = useGameInterface();
-  const { userPlaceNewCard, togglePlay, isClockRunning, fastForward } = useGameEvents();
+  const { userPlaceNewCard, togglePlay, isClockRunning, fastForward } =
+    useGameEvents();
 
   function watchCardPlacement(event: MouseEvent) {
-    const elementIds = _.range(3).map(position => getBoardTileId(true, position));
+    const elementIds = _.range(3).map((position) =>
+      getBoardTileId(true, position)
+    );
     const overlapped = document.elementsFromPoint(event.pageX, event.pageY);
     for (let i = 0; i < overlapped.length; i++) {
       if (overlapped[i].id.startsWith("board_player_")) {
@@ -49,10 +53,22 @@ export default function Game() {
 
   return (
     <div className="w-screen h-screen grid grid-cols-[1fr_auto_1fr] flex-col items-center bg-black">
-      <GameDebugPanel togglePlay={togglePlay} isClockRunning={isClockRunning} fastForward={fastForward} />
+      <GameDebugPanel
+        togglePlay={togglePlay}
+        isClockRunning={isClockRunning}
+        fastForward={fastForward}
+      />
       <GameOverModal currentWinner={currentWinner} />
       <div className="bg-black h-full w-full"></div>
-      <div className="h-screen flex flex-col gap-4 justify-between relative bg-violet-400">
+      <div className="h-screen flex flex-col gap-4 justify-between relative">
+        <div
+          className="w-full h-full absolute blur-sm"
+          style={{
+            backgroundImage: "url('/bgTexture.jpg')",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+          }}
+        ></div>
         <PlayerGUI
           mana={opponentMana}
           hp={opponentHp}
@@ -60,11 +76,11 @@ export default function Game() {
           isPlayer={false}
           userPlaceNewCard={userPlaceNewCard}
         />
-        <div className="w-full flex justify-center">
+        <div className="w-full flex justify-center relative">
           <div className="grid grid-cols-3 gap-4 px-8">
-            <CardPlaceholder position={0} />
-            <CardPlaceholder position={1} />
-            <CardPlaceholder position={2} />
+            <CardPlaceholder position={0} isPlayer={false} />
+            <CardPlaceholder position={1} isPlayer={false} />
+            <CardPlaceholder position={2} isPlayer={false} />
             <CardPlaceholder position={0} isPlayer />
             <CardPlaceholder position={1} isPlayer />
             <CardPlaceholder position={2} isPlayer />
@@ -85,25 +101,25 @@ export default function Game() {
 
 interface CardPlaceholderProps {
   position: number;
-  isPlayer?: boolean;
+  isPlayer: boolean;
 }
 
 function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
-  const cardTarget = useGameInterface(s => s.cardTarget);
+  const cardTarget = useGameInterface((s) => s.cardTarget);
   const isTarget = cardTarget === position && isPlayer;
-  const getBoardCurrentCard = useGameStore(s => s.getBoardCurrentCard);
+  const getBoardCurrentCard = useGameStore((s) => s.getBoardCurrentCard);
   const currentCard = getBoardCurrentCard(!!isPlayer, position);
   const attackRef = useRef<null | HTMLDivElement>(null);
 
   const [startAttackTimestamp, setStartAttackTimestamp] = useState(
-    currentCard?.startAttackingTimestamp
+    currentCard?.startAttackingTick
   );
 
   if (
-    startAttackTimestamp !== currentCard?.startAttackingTimestamp &&
+    startAttackTimestamp !== currentCard?.startAttackingTick &&
     attackRef.current
   ) {
-    setStartAttackTimestamp(currentCard?.startAttackingTimestamp);
+    setStartAttackTimestamp(currentCard?.startAttackingTick);
   }
 
   useEffect(() => {
@@ -118,37 +134,20 @@ function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
 
   return (
     <div
-      className="w-[192px] h-[192px] border-2 rounded-md ring-2 ring-black overflow-hidden"
+      className="p-1 border-2 rounded-md ring-2 ring-black w-[160px] h-[222.5px] box-content"
       style={{
         boxShadow: isTarget ? "0px 0px 5px 1px rgba(0,0,0,0.75)" : "none",
-        borderColor: currentCard ? "black" : "#cbd5e1",
+        borderColor: "#cbd5e1",
       }}
       id={getBoardTileId(!!isPlayer, position)}
     >
-      {currentCard ? (
-        <div className="flex flex-col items-center h-full">
-          <div className="grow flex items-center gap-1 justify-center relative w-full">
-            <div
-              className="absolute w-full h-full bg-slate-300 origin-left scale-x-0"
-              ref={attackRef}
-            />
-            <p className="relative">{currentCard.dmg}</p>
-            <img src="/sword.svg" height={14} width={14} className="relative" />
-          </div>
-          <div
-            className="w-full h-[120px] border-y-[1px] border-black "
-            style={{
-              backgroundImage: `url('./${currentCard.id}.png')`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-          />
-          <div className="grow flex items-center bg-red-600 w-full justify-center text-white">
-            {currentCard.hp}/{currentCard.maxHp}
-          </div>
-        </div>
-      ) : (
-        <></>
+      {currentCard && (
+        <GameCard
+          card={currentCard}
+          key={currentCard.instanceId}
+          isPlayerCard={isPlayer}
+          position={position}
+        />
       )}
     </div>
   );
