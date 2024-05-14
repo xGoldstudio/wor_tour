@@ -65,7 +65,9 @@ function PlayerGUI({
             </div>
           )}
           <ManaBar isPlayer={isPlayer} mana={mana} />
-          <HpBar hp={hp} maxHp={maxHp} withHeart />
+          <div id={`hpBar_${isPlayer}`}>
+            <HpBar hp={hp} maxHp={maxHp} withHeart />
+          </div>
         </div>
         {/* <BorderRight /> */}
       </div>

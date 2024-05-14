@@ -6,7 +6,7 @@ import { FRAME_TIME } from "@/game/gameBehavior/useGameEvents";
 import { CardEffects } from "@/cards";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
 
-const effectsImages: Partial<Record<keyof CardEffects["effects"], string>> = {
+export const effectsImages: Partial<Record<keyof CardEffects["effects"], string>> = {
   fightBack: "fightback.svg",
   multiAttack: "multiAttack.svg",
 };

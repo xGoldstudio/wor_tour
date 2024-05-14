@@ -7,6 +7,7 @@ import * as _ from "lodash";
 import useGameEvents from "./gameBehavior/useGameEvents";
 import GameDebugPanel from "./GameDebugPanel";
 import GameCard from "./gui/card/GameCard";
+import GameCardDeath from "./gui/card/GameCardDeath";
 
 export const IS_DEBUG = true;
 
@@ -21,7 +22,7 @@ export default function Game() {
     currentWinner,
   } = useGameStore();
   const { cardSelected, setCardTarget, removeCardTarget } = useGameInterface();
-  const { userPlaceNewCard, togglePlay, isClockRunning, fastForward } =
+  const { userPlaceNewCard, togglePlay, isClockRunning, fastForward, gameRef } =
     useGameEvents();
 
   function watchCardPlacement(event: MouseEvent) {
@@ -52,7 +53,10 @@ export default function Game() {
   }, [cardSelected]);
 
   return (
-    <div className="w-screen h-screen grid grid-cols-[1fr_auto_1fr] flex-col items-center bg-black">
+    <div
+      className="w-screen h-screen grid grid-cols-[1fr_auto_1fr] flex-col items-center bg-black"
+      ref={gameRef}
+    >
       <GameDebugPanel
         togglePlay={togglePlay}
         isClockRunning={isClockRunning}
@@ -141,14 +145,18 @@ function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
       }}
       id={getBoardTileId(!!isPlayer, position)}
     >
-      {currentCard && (
-        <GameCard
-          card={currentCard}
-          key={currentCard.instanceId}
-          isPlayerCard={isPlayer}
-          position={position}
-        />
-      )}
+      <div id={`card_${isPlayer}_${position}`}>
+        {currentCard ? (
+          <GameCard
+            card={currentCard}
+            key={currentCard.instanceId}
+            isPlayerCard={isPlayer}
+            position={position}
+          />
+        ) : (
+          <GameCardDeath isPlayerCard={isPlayer} position={position} />
+        )}
+      </div>
     </div>
   );
 }

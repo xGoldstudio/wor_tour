@@ -1,6 +1,7 @@
 import { CardEffects, CardRarity } from "@/cards";
 import { create } from "zustand";
 import * as _ from "lodash";
+import { Point } from "@/game/TargetLine";
 
 export interface GameStore {
   playerDeck: number[];
@@ -49,7 +50,11 @@ export interface GameStore {
     card: InGameCardType
   ) => void;
   shuffleDeck: (isPlayer: boolean) => void;
-  startAttacking: (isPlayer: boolean, cardPosition: number, tick: number) => void;
+  startAttacking: (
+    isPlayer: boolean,
+    cardPosition: number,
+    tick: number
+  ) => void;
   setGameOver: (winnerIsPlayer: boolean) => void;
   getNextInstanceId: () => number;
   // deck
@@ -61,6 +66,27 @@ export interface GameStore {
     cardPosition: number,
     effectToRemove: keyof CardEffects["effects"]
   ) => void;
+
+  // animations
+  addAnimation: (key: string, animation: GameAnimation) => void;
+  removeAnimation: (key: string) => boolean;
+  animations: Map<string, GameAnimation>;
+}
+
+export interface GameAnimation {
+  onTick: number;
+  animationDuration: number;
+  data: DeathAnimation;
+}
+
+interface DeathAnimation {
+  card: InGameCardType;
+}
+
+export interface AttackAnimation {
+  onTick: number;
+  from: Point;
+  to: Point;
 }
 
 export type InGameCardType = {
@@ -258,6 +284,28 @@ const useGameStore = create<GameStore>()((set, get) => ({
       )
     );
   },
+
+  animations: new Map(),
+  addAnimation: (key: string, animation: GameAnimation) => {
+    set((state) => {
+      const animations = state.animations;
+      animations.set(key, animation);
+      return {
+        animations,
+      };
+    });
+  },
+  removeAnimation: (key: string) => {
+    let isRemoved = false;
+    set((state) => {
+      const animations = state.animations;
+      isRemoved = animations.delete(key);
+      return {
+        animations,
+      };
+    });
+    return isRemoved;
+  },
 }));
 
 export default useGameStore;
@@ -284,6 +332,9 @@ function getBoardFromState(isPlayer: boolean, state: GameStore) {
 }
 function setNewBoard(isPlayer: boolean, board: (InGameCardType | null)[]) {
   return isPlayer ? { playerBoard: board } : { opponentBoard: board };
+}
+export function getCardFromState(isPlayer: boolean, position: number, state: GameStore) {
+  return( isPlayer ? [...state.playerBoard] : [...state.opponentBoard])[position];
 }
 
 function getDeckFromState(isPlayer: boolean, state: GameStore) {

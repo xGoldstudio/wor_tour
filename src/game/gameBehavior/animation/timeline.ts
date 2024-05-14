@@ -14,19 +14,22 @@ function cubicBezier(
   );
 }
 
-type AnimationValues = Partial<{
-  y: number;
-  scale: number;
-}>;
+type AnimatedProperties = "x" | "y" | "scale" | "opacity";
+
+type AnimationValues = Partial<Record<AnimatedProperties, number>>;
+
+type Ease = [number, number, number, number];
+
+interface Sequence {
+  from: number;
+  to: number;
+  values: AnimationValues;
+  ease?: Ease;
+}
 
 export default function animationTimeline(
   initialValues: AnimationValues,
-  sequences: {
-    from: number;
-    to: number;
-    values: AnimationValues;
-    ease?: [number, number, number, number];
-  }[]
+  sequences: Sequence[],
 ) {
   return (elapsedFrames: number, requiredFrames: number) => {
     const remainingFrames = requiredFrames - elapsedFrames;
@@ -61,12 +64,6 @@ export default function animationTimeline(
     return transformValues({ scale: 100, y: 0 });
   };
 
-  function easeOrValue(value: number, ease?: [number, number, number, number]) {
-    return ease
-      ? cubicBezier(value, ease[0], ease[1], ease[2], ease[3])
-      : value;
-  }
-
   function getValues(index: number) {
     return index === 0 ? initialValues : sequences[index - 1].values;
   }
@@ -87,10 +84,58 @@ export default function animationTimeline(
     }
     return res;
   }
+}
 
-  function transformValues(values: AnimationValues) {
-    return {
-      transform: `scale(${values.scale}%) translateY(${values.y}px)`,
-    };
+function easeOrValue(value: number, ease?: Ease) {
+  return ease
+    ? cubicBezier(value, ease[0], ease[1], ease[2], ease[3])
+    : value;
+}
+
+function transformValues(values: AnimationValues) {
+  const scale = values.scale !== undefined ? `scale(${values.scale}%)` : "";
+  const x = values.x !== undefined ? `translateX(${values.x}px)` : "";
+  const y = values.y !== undefined ? `translateY(${values.y}px)` : "";
+  return {
+    transform: `${scale} ${x} ${y}`,
+    opacity: values.opacity !== undefined ? `${values.opacity}%` : "",
+  };
+}
+
+type AnimationValuesBySteps = Partial<Record<AnimatedProperties, number[]>>;
+type AnimationByStepsOptions = {
+  ease?: Ease;
+  duration: number;
+};
+
+export function animationSteps(steps: AnimationValuesBySteps, options: AnimationByStepsOptions) {
+  return (elapsedTicks: number) => {
+    const t = easeOrValue(
+      (options.duration - Math.max(options.duration - elapsedTicks, 0)) / options.duration,
+      options.ease
+    ); // [0,1]
+    const values: AnimationValues = {};
+
+    for (const stepKey in steps) {
+      const stepValues = steps[stepKey as AnimatedProperties];
+      if (!stepValues || stepValues.length === 0) {
+        continue;
+      }
+      if (stepValues.length === 1) {
+        values[stepKey as AnimatedProperties] = stepValues[0];
+        continue;
+      }
+      const currentStep = Math.floor(t * (stepValues.length - 1)); // -1 because case 0 is initial
+      if (currentStep === stepValues.length - 1) { // last frame
+        values[stepKey as AnimatedProperties] = stepValues[stepValues.length - 1];
+        continue;
+      }
+      const from = stepValues[currentStep];
+      const to = stepValues[currentStep + 1];
+      const progress = (t * (stepValues.length - 1)) - currentStep; // [0,1]
+      values[stepKey as AnimatedProperties] = from + ((to - from) * progress);
+    }
+
+    return transformValues(values);
   }
 }
