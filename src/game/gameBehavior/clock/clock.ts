@@ -5,7 +5,20 @@ interface FrameObject {
 	events: (() => void)[];
 }
 
-export default function Clock<EventType>(onTriggerEvent: (e: EventType) => void) {
+export interface ClockReturn<EventType> {
+	triggerEvent: (event: EventType) => void;
+	getCurrentFrameObject: () => FrameObject | null;
+	setGameEventTimeout: (event: EventType, timeoutFrame: number) => void;
+	addEventToNextFrame: (event: EventType) => void;
+	nextTick: () => void;
+	getImmutableInternalState: () => {
+    currentFrame: number;
+    isRunningEvent: boolean;
+    timeoutQueue: FrameObject[];
+	};
+}
+
+export default function Clock<EventType>(onTriggerEvent: (e: EventType) => void): ClockReturn<EventType> {
 	let timeoutQueue: FrameObject[] = [];
 	let isRunningEvent = false;
 	let currentFrame = 0;

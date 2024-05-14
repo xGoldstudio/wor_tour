@@ -1,12 +1,10 @@
-import { AttackAnimation, GameStore } from "@/stores/gameStateInterface";
+import { GameStore } from "@/stores/gameStateInterface";
 import { CardAttackingEvent, TriggerEventType } from "../useGameEvents";
 
 export default function cardAttacking(
 	event: CardAttackingEvent,
 	data: GameStore,
 	triggerEvent: TriggerEventType,
-	currentFrame: number,
-	newAnimations: (newAnimations: AttackAnimation[]) => void,
 ) {
 	const attakerCard = event.isPlayer
 		? data.playerBoard[event.cardPosition]
@@ -64,26 +62,6 @@ export default function cardAttacking(
 				initiator: event,
 			});
 		}
-	}
-	// animation
-	const attacker = document.getElementById(`card_${event.isPlayer}_${event.cardPosition}`)?.getBoundingClientRect();
-	const defender = document.getElementById(
-		defenseCard
-			? `card_${!event.isPlayer}_${event.cardPosition}`
-			: `hpBar_${!event.isPlayer}`
-	)?.getBoundingClientRect();
-	if (attacker && defender) {
-		newAnimations([{
-			onTick: currentFrame + 1,
-			from: {
-				x: attacker.left + attacker.width / 2 + window.pageXOffset,
-				y: attacker.top + attacker.height / 2 + window.pageYOffset
-			},
-			to: {
-				x: defender.left + defender.width / 2 + window.pageXOffset,
-				y: defender.top + defender.height / 2 + window.pageYOffset
-			},
-		}]);
 	}
 	// animation
 	triggerEvent({

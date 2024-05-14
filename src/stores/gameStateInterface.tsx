@@ -1,7 +1,6 @@
 import { CardEffects, CardRarity } from "@/cards";
 import { create } from "zustand";
 import * as _ from "lodash";
-import { Point } from "@/game/TargetLine";
 
 export interface GameStore {
   playerDeck: number[];
@@ -83,11 +82,7 @@ interface DeathAnimation {
   card: InGameCardType;
 }
 
-export interface AttackAnimation {
-  onTick: number;
-  from: Point;
-  to: Point;
-}
+export type Animation3dType = "attack" | "heal";
 
 export type InGameCardType = {
   id: number;
@@ -104,8 +99,8 @@ const useGameStore = create<GameStore>()((set, get) => ({
   playerDeck: [1, 2, 3, 4, 5, 6],
   playerHand: [null, null, null, null],
   playerMana: 7,
-  playerHp: 30000,
-  playerMaxHp: 30000,
+  playerHp: 3000,
+  playerMaxHp: 3000,
   playerTickStartEarningMana: null,
 
   playerBoard: [null, null, null],
@@ -113,8 +108,8 @@ const useGameStore = create<GameStore>()((set, get) => ({
   opponentDeck: [1, 2, 3, 4, 5, 6],
   opponentHand: [null, null, null, null],
   opponentMana: 7,
-  opponentHp: 30000,
-  opponentMaxHp: 30000,
+  opponentHp: 3000,
+  opponentMaxHp: 3000,
   opponentTickStartEarningMana: null,
 
   opponentBoard: [null, null, null],

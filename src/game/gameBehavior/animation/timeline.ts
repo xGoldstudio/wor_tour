@@ -1,4 +1,4 @@
-function cubicBezier(
+export function cubicBezier(
   t: number,
   p0: number,
   p1: number,
