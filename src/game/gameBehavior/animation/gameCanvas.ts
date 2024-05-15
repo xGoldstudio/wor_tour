@@ -3,7 +3,7 @@ import { Animation3dType } from "@/stores/gameStateInterface";
 import * as THREE from 'three';
 import { cubicBezier } from "./timeline";
 
-const ATTACK_ANIMATION_TIMING = 30;
+const ATTACK_ANIMATION_TIMING = 20;
 
 export interface GameCanvasReturn {
 	append: (target: HTMLDivElement) => void;

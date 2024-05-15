@@ -66,13 +66,13 @@ function GameCard({
           values: { scale: 100, y: 0 },
         },
         {
-          from: -30,
-          to: -10,
-          ease: [0, 0.42, 1, 1],
+          from: -35,
+          to: -5,
+          ease: [0, 1, 1, 1],
           values: { scale: 108, y: isPlayerCard ? 15 : -15 },
         },
         {
-          from: -10,
+          from: -5,
           to: 0,
           ease: [0, 0.42, 1, 1],
           values: { scale: 108, y: isPlayerCard ? -15 : 15 },
@@ -108,7 +108,7 @@ function GameCard({
           </div>
           <div className="absolute right-1 top-2 flex flex-col gap-2">
             {effectToShow.map((effectSrc) => (
-              <div className="p-[4px] bg-slate-100 border-[1px] border-orange-400 rounded-full">
+              <div className="p-[4px] bg-slate-100 border-[1px] border-orange-400 rounded-full" key={effectSrc}>
                 <img src={`/${effectSrc}`} width={16} height={16} />
               </div>
             ))}

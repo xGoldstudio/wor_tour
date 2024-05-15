@@ -34,11 +34,9 @@ function PlayerGUI({
   return (
     <div className="relative">
       <div className="top-0 left-0 w-full h-full absolute bg-gray-500 opacity-80"></div>
-      {/* <BorderTop /> */}
       <div className="flex">
-        {/* <BorderLeft /> */}
         <div
-          className="w-full flex flex-col px-6 py-4"
+          className="w-full flex flex-col px-6 py-4 items-center"
           id={getPlayerGuiId(isPlayer)}
         >
           {isPlayer && (
@@ -65,69 +63,11 @@ function PlayerGUI({
             </div>
           )}
           <ManaBar isPlayer={isPlayer} mana={mana} />
-          <div id={`hpBar_${isPlayer}`}>
+          <div id={`hpBar_${isPlayer}`} className="w-full">
             <HpBar hp={hp} maxHp={maxHp} withHeart />
           </div>
         </div>
-        {/* <BorderRight /> */}
       </div>
-      {/* <BorderBottom /> */}
-    </div>
-  );
-}
-
-function BorderTop() {
-  return (
-    <div className="w-full relative flex overflow-hidden">
-      <div className="w-[12px] h-[12px] bg-[#634c20]"></div>
-      <div className="grow overflow-hidden relative">
-        <div className="absolute w-full top-[4px] h-[2px] blur-[2px] bg-[#edd7af]"></div>
-        <div className="absolute w-full top-[8px] h-[2px] blur-[2px] bg-[#edd7af]"></div>
-        <div className="w-full h-[4px] bg-[#e1c185]"></div>
-        <div className="w-full h-[6px] bg-[#b4603c]"></div>
-        <div className="w-full h-[2px] bg-[#634c20]"></div>
-      </div>
-      <div className="w-[12px] h-[12px] bg-[#634c20]"></div>
-    </div>
-  );
-}
-
-function BorderBottom() {
-  return (
-    <div className="w-full relative flex overflow-hidden">
-      <div className="w-[12px] h-[12px] bg-[#634c20]"></div>
-      <div className="grow overflow-hidden relative">
-        <div className="absolute w-full bottom-[4px] h-[2px] blur-[2px] bg-[#edd7af]"></div>
-        <div className="absolute w-full bottom-[8px] h-[2px] blur-[2px] bg-[#edd7af]"></div>
-        <div className="w-full h-[2px] bg-[#634c20]"></div>
-        <div className="w-full h-[6px] bg-[#b4603c]"></div>
-        <div className="w-full h-[4px] bg-[#e1c185]"></div>
-      </div>
-      <div className="w-[12px] h-[12px] bg-[#634c20]"></div>
-    </div>
-  );
-}
-
-function BorderLeft() {
-  return (
-    <div className="grow flex relative overflow-hidden">
-      <div className="h-full w-[4px] bg-[#e1c185]"></div>
-      <div className="absolute h-full left-[4px] w-[2px] blur-[2px] bg-[#edd7af]"></div>
-      <div className="h-full w-[6px] bg-[#b4603c]"></div>
-      <div className="absolute h-full left-[8px] w-[2px] blur-[2px] bg-[#edd7af]"></div>
-      <div className="h-full w-[2px] bg-[#634c20]"></div>
-    </div>
-  );
-}
-
-function BorderRight() {
-  return (
-    <div className="grow flex relative overflow-hidden">
-      <div className="absolute h-full right-[4px] w-[2px] blur-[2px] bg-[#edd7af]"></div>
-      <div className="absolute h-full right-[8px] w-[2px] blur-[2px] bg-[#edd7af]"></div>
-      <div className="h-full w-[2px] bg-[#634c20]"></div>
-      <div className="h-full w-[6px] bg-[#b4603c]"></div>
-      <div className="h-full w-[4px] bg-[#e1c185]"></div>
     </div>
   );
 }

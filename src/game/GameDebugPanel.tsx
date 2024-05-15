@@ -1,4 +1,4 @@
-import { IS_DEBUG } from "./Game";
+import { IS_DEBUG } from "@/isDebug";
 
 interface GameDebugPanelProps {
   togglePlay: () => void;
@@ -11,7 +11,7 @@ export default function GameDebugPanel({
   isClockRunning,
   fastForward,
 }: GameDebugPanelProps) {
-  if (!IS_DEBUG) {
+  if (!IS_DEBUG()) {
     return <></>;
   }
   return (

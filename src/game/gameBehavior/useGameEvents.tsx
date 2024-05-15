@@ -14,6 +14,7 @@ import Clock, { ClockReturn } from "./clock/clock";
 import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
 import { getDeathAnimationKey } from "../gui/card/GameCardDeath";
 import GameCanvas, { GameCanvasReturn } from "./animation/gameCanvas";
+import callOnce from "@/lib/callOnce";
 
 export const FRAME_TIME = 10;
 
@@ -214,19 +215,17 @@ function useGameEvents(): GameEventsActions {
     setIsClockRunning,
     removeCardTarget,
   } = useGameInterface();
-  const clock = useRef<ClockReturn<EventType>>(
-    Clock(internalTriggerEvent)
-  ).current;
-  const gameCanvas = useRef<GameCanvasReturn | null>(null);
   const gameRef = useRef<null | HTMLDivElement>(null);
-
-  useEffect(() => {
-    gameCanvas.current = GameCanvas();
-  }, []);
+  const clock = useRef<ClockReturn<EventType>>(
+    callOnce(() => Clock(internalTriggerEvent), gameRef.current !== null),
+  ).current;
+  const gameCanvas = useRef<GameCanvasReturn>(
+    callOnce(() => GameCanvas(), gameRef.current !== null),
+  ).current;
 
   useEffect(() => {
     if (gameRef.current) {
-      gameCanvas.current?.append(gameRef.current);
+      gameCanvas?.append(gameRef.current);
     }
     return () => {};
   }, [gameRef.current]);
@@ -262,7 +261,7 @@ function useGameEvents(): GameEventsActions {
 
   function triggerTickEffects() {
     const currentFrame = clock.getImmutableInternalState().currentFrame;
-    gameCanvas.current?.paint(currentFrame);
+    gameCanvas?.paint(currentFrame);
     clock.nextTick();
     triggerGameAnimation({
       ...getData(),
@@ -334,7 +333,7 @@ function useGameEvents(): GameEventsActions {
       cardAttacking(event, data, triggerEvent);
     } else if (event.type === "cardDamage") {
       // animation
-      gameCanvas.current?.newAnimation(
+      gameCanvas?.newAnimation(
         `card_${event.initiator.isPlayerCard}_${event.initiator.cardPosition}`,
         `card_${event.isPlayerCard}_${event.cardPosition}`,
         "attack",
@@ -398,7 +397,7 @@ function useGameEvents(): GameEventsActions {
       );
       destroyCard(event.initiator.isPlayerCard, event.initiator.cardPosition);
     } else if (event.type === "playerDamage") {
-      gameCanvas.current?.newAnimation(
+      gameCanvas?.newAnimation(
         `card_${event.initiator.isPlayer}_${event.initiator.cardPosition}`,
         `hpBar_${event.isPlayer}`,
         "attack",
@@ -430,7 +429,7 @@ function useGameEvents(): GameEventsActions {
       cardDeckToHand(event.isPlayer, event.handPosition);
     } else if (event.type === "healCard") {
       healCard(event.isPlayerCard, event.cardPosition, event.amount);
-      gameCanvas.current.newAnimation(
+      gameCanvas.newAnimation(
         `card_${event.cardInitiator.isPlayerCard}_${event.cardInitiator.cardPosition}`,
         `card_${event.isPlayerCard}_${event.cardPosition}`,
         "heal",

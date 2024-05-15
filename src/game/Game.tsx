@@ -9,8 +9,6 @@ import GameDebugPanel from "./GameDebugPanel";
 import GameCard from "./gui/card/GameCard";
 import GameCardDeath from "./gui/card/GameCardDeath";
 
-export const IS_DEBUG = true;
-
 export default function Game() {
   const {
     playerMana,
@@ -64,7 +62,7 @@ export default function Game() {
       />
       <GameOverModal currentWinner={currentWinner} />
       <div className="bg-black h-full w-full"></div>
-      <div className="h-screen flex flex-col gap-4 justify-between relative">
+      <div className="h-screen flex flex-col gap-4 justify-between relative overflow-hidden w-[700px]">
         <div
           className="w-full h-full absolute blur-sm"
           style={{

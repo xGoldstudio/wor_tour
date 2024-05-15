@@ -51,7 +51,7 @@ export default function animationTimeline(
       ) {
         normalizedProgress = (elapsedFrames - seq.from) / (seq.to - seq.from);
       }
-      if (normalizedProgress) {
+      if (normalizedProgress !== null) {
         return transformValues(
           computeValues(
             getValues(i),
@@ -61,7 +61,7 @@ export default function animationTimeline(
         );
       }
     }
-    return transformValues({ scale: 100, y: 0 });
+    return transformValues({});
   };
 
   function getValues(index: number) {
