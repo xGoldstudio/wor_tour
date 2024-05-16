@@ -1,9 +1,9 @@
-import Game from "./game/Game";
-import Home from "./Home";
+import Home from "./home/Home";
 
 export default function App() {
+  // <Game />
+
   return (
-    <Game />
-    // <Home />
-  )
+    <Home />
+  );
 }

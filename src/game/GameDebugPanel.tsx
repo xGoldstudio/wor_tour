@@ -28,7 +28,7 @@ export default function GameDebugPanel({
   );
 }
 
-function DebugButton({
+export function DebugButton({
   children,
   onClick,
 }: {

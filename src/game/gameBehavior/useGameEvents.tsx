@@ -132,7 +132,7 @@ export interface RemoveEffectEvent {
   type: "removeEffect";
   isPlayerCard: boolean;
   cardPosition: number;
-  effectToRemove: keyof CardEffects["effects"];
+  effectToRemove: keyof CardEffects;
 }
 
 export interface RemoveAnimationEvent {

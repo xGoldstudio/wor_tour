@@ -7,17 +7,15 @@ export type CardType = {
 	attackSpeed: number;
 	rarity: CardRarity;
 	id: number;
-	// effects
-} & CardEffects;
+	effects: CardEffects;
+};
 
 export type CardRarity = "common" | "rare" | "epic" | "legendary";
 
 export interface CardEffects {
-	effects: {
-		multiAttack?: MultiAttackEffect;
-		placementHeal?: PlacementHeal;
-		fightBack?: FightBackEffect;
-	}
+	multiAttack?: MultiAttackEffect;
+	placementHeal?: PlacementHeal;
+	fightBack?: FightBackEffect;
 }
 
 interface MultiAttackEffect {
@@ -107,6 +105,18 @@ const cards: CardType[] = [
 		hp: 800,
 		rarity: "rare",
 		id: 6,
+		effects: {
+		},
+	},
+	{
+		name: "Médusor",
+		cost: 1,
+		illustration: "7.png",
+		dmg: 150,
+		attackSpeed: 1,
+		hp: 250,
+		rarity: "common",
+		id: 7,
 		effects: {
 		},
 	},

@@ -118,8 +118,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* <Card card={findCard(1)} />
-    <Card card={findCard(2)} /> */}
     </div>
   );
 }

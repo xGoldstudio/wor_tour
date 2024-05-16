@@ -63,7 +63,7 @@ export interface GameStore {
   removeEffect: (
     isPlayerCard: boolean,
     cardPosition: number,
-    effectToRemove: keyof CardEffects["effects"]
+    effectToRemove: keyof CardEffects,
   ) => void;
 
   // animations
@@ -93,7 +93,8 @@ export type InGameCardType = {
   attackSpeed: number;
   startAttackingTick: number | null;
   rarity: CardRarity;
-} & CardEffects;
+  effects: CardEffects
+} ;
 
 const useGameStore = create<GameStore>()((set, get) => ({
   playerDeck: [1, 2, 3, 4, 5, 6],
@@ -265,7 +266,7 @@ const useGameStore = create<GameStore>()((set, get) => ({
   removeEffect: (
     isPlayerCard: boolean,
     cardPosition: number,
-    effectToRemove: keyof CardEffects["effects"]
+    effectToRemove: keyof CardEffects,
   ) => {
     set(
       updateCard(

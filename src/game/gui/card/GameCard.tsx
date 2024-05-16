@@ -81,13 +81,6 @@ function GameCard({
     )(elapsedFrames, requiredFrames);
   });
 
-  const effectToShow = [];
-  for (const effect in card.effects) {
-    const existingImage = effectsImages[effect as keyof CardEffects["effects"]];
-    existingImage &&
-      card.effects[effect as keyof CardEffects["effects"]] &&
-      effectToShow.push(existingImage);
-  }
 
   return (
     <div ref={cardAnimationRef} style={{ transform: `translateY(${isPlayerCard ? -15 : 15}px) scale(108%)` }}>
@@ -106,18 +99,33 @@ function GameCard({
               className="absolute top-0 w-full h-full bg-slate-600 opacity-40 origin-top"
             />
           </div>
-          <div className="absolute right-1 top-2 flex flex-col gap-2">
-            {effectToShow.map((effectSrc) => (
-              <div className="p-[4px] bg-slate-100 border-[1px] border-orange-400 rounded-full" key={effectSrc}>
-                <img src={`/${effectSrc}`} width={16} height={16} />
-              </div>
-            ))}
-          </div>
           <HpBar hp={card.hp} maxHp={card.maxHp} />
+          <CardEffectsElements effects={card.effects} />
         </div>
       </CardBorder>
     </div>
   );
+}
+
+export function CardEffectsElements({ effects }: { effects: CardEffects}) {
+  const effectToShow = [];
+
+  for (const effect in effects) {
+    const existingImage = effectsImages[effect as keyof CardEffects];
+    existingImage &&
+      effects[effect as keyof CardEffects] &&
+      effectToShow.push(existingImage);
+  }
+
+  return (
+    <div className="absolute right-1 top-2 flex flex-col gap-2">
+    {effectToShow.map((effectSrc) => (
+      <div className="p-[4px] bg-slate-100 border-[1px] border-orange-400 rounded-full" key={effectSrc}>
+        <img src={`/${effectSrc}`} width={16} height={16} />
+      </div>
+    ))}
+  </div>
+  )
 }
 
 export default GameCard;
