@@ -1,4 +1,4 @@
-import findCard from "@/cards";
+import { findCard } from "@/cards";
 import { PlaceCardEvent, TriggerEventType } from "../useGameEvents";
 import { GameStore, InGameCardType } from "@/stores/gameStateInterface";
 import * as _ from "lodash";
@@ -14,7 +14,7 @@ export default function cardPlacementEventManager(
     card: InGameCardType
   ) => void
 ) {
-	const foundCard = findCard(event.cardId);
+	const foundCard = findCard(event.cardId, 1);
 	const cardInGame: InGameCardType = {
 		id: foundCard.id,
 		maxHp: foundCard.hp,

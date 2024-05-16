@@ -5,7 +5,7 @@ import {
   ManaIncreaseEvent,
   addGameEventListener,
 } from "./useGameEvents";
-import findCard, { CardType } from "@/cards";
+import { CardType, findCard } from "@/cards";
 import * as _ from "lodash";
 import { GameStore } from "@/stores/gameStateInterface";
 
@@ -14,7 +14,7 @@ export default function iaAgent() {
 
   function setNextCardToUse(data: GameStore) {
     const position = getRandomElement(_.range(4));
-    nextCardToUse = { position, card: findCard(data.opponentHand[position]!) };
+    nextCardToUse = { position, card: findCard(data.opponentHand[position]!, 1) };
   }
 
   function getEmptyTarget(data: GameStore): number | null {

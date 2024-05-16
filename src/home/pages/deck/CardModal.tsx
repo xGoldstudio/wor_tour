@@ -1,19 +1,33 @@
-import { CardType } from "@/cards";
+import { CardType, getCardFromLevel, getCardStats } from "@/cards";
 import { ManaBall } from "@/game/gui/ManaBar";
-import CardBorder from "@/game/gui/card/CardBorder";
+import CardBorder, {
+  CardContentIllustartion,
+} from "@/game/gui/card/CardBorder";
 import { Button } from "@/home/Home";
+import usePlayerStore from "@/home/store/playerStore";
 import Modal from "@/home/ui/modal";
 import { preventDefault } from "@/lib/eventUtils";
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 
 interface CardModalProps {
-  card: CardType;
+  cardId: number;
   closeModal: () => void;
 }
 
-export default function CardModal({ closeModal, card }: CardModalProps) {
-  const [currentPosition, setCurrentPosition] = useState(0);
+export default function CardModal({ closeModal, cardId }: CardModalProps) {
+  const card = getCardStats(cardId);
+  const collectionInfo = usePlayerStore((state) =>
+    state.getCollectionInfo(cardId)
+  );
+  const [currentPosition, setCurrentPosition] = useState(
+    collectionInfo.level - 1
+  );
   const [isPressed, setIsPressed] = useState(false);
+  const { isPlayed, isDeckFull } = usePlayerStore((state) => ({
+    isPlayed: state.isPlayed(cardId),
+    isDeckFull: state.isDeckFull(),
+  }));
 
   function changePosition(e: React.MouseEvent<HTMLDivElement>) {
     if (!isPressed) {
@@ -33,39 +47,63 @@ export default function CardModal({ closeModal, card }: CardModalProps) {
   }
 
   return (
-    <Modal title={`card_${card.id}`} closeModal={closeModal}>
+    <Modal title={`card_${cardId}`} closeModal={closeModal}>
       <div
         className="flex flex-col items-center gap-16 w-full h-full"
         onMouseDown={preventDefault(() => setIsPressed(true))}
         onMouseUp={preventDefault(() => setIsPressed(false))}
         onMouseMove={changePosition}
       >
-        <div className="flex gap-3 rounded-md bg-slate-900 px-3 py-2">
-          <div className="w-4 h-4 bg-slate-50 rounded-full shadow-[0px_0px_5px_0px_#fca5a5]"></div>
-          <div className="w-4 h-4 bg-slate-50 rounded-full shadow-[0px_0px_5px_0px_#fca5a5]"></div>
-          <div className="w-4 h-4 bg-slate-50 rounded-full shadow-[0px_0px_5px_0px_#fca5a5]"></div>
+        <div className="flex gap-3 rounded-sm bg-slate-900 px-3 py-2">
+          {card.stats.map((_, index) => (
+            <BulletPosition selected={index === currentPosition} />
+          ))}
         </div>
         <div className="relative h-[430px]">
-          {[0, 1, 2].map((index) => (
+          {card.stats.map((_, index) => (
             <FullCard
-              card={card}
+              key={`level_${index}`}
+              card={getCardFromLevel(card, index + 1)}
               position={index - currentPosition}
             />
           ))}
         </div>
-				<Button action={closeModal}>Play this card</Button>
+        {isPlayed ? (
+          <Button
+            action={() => usePlayerStore.getState().removeCardFromDeck(cardId)}
+          >
+            Remove from deck
+          </Button>
+        ) : isDeckFull ? (
+          <Button
+            action={() => usePlayerStore.getState().addCardToDeck(cardId)}
+          >
+            Play this card
+          </Button>
+        ) : (
+          <Button
+            action={() => usePlayerStore.getState().addCardToDeck(cardId)}
+          >
+            Play this card
+          </Button>
+        )}
       </div>
     </Modal>
   );
 }
 
-function FullCard({
-  card,
-  position,
-}: {
-  card: CardType;
-  position: number;
-}) {
+function BulletPosition({ selected }: { selected: boolean }) {
+  return (
+    <div
+      className={cn(
+        "w-4 h-4 bg-slate-50 rounded-full shadow-[0px_0px_5px_0px_#fca5a5] ",
+        !selected && "bg-slate-500 shadow-none"
+      )}
+    ></div>
+  );
+}
+
+function FullCard({ card, position }: { card: CardType; position: number }) {
   const translateX =
     (position !== 0 ? 50 : 0) + Math.max(0, Math.abs(position) - 1) * 65;
 
@@ -78,20 +116,13 @@ function FullCard({
         }%) scale(${position === 0 ? 1 : 0.6})`,
         zIndex: position === 0 ? 1 : 0,
         opacity: Math.abs(position) <= 1 ? 1 : 0.5,
-				filter: `brightness(${Math.abs(position) === 0 ? 1 : 0.5})`,
+        filter: `brightness(${Math.abs(position) === 0 ? 1 : 0.5})`,
       }}
     >
       <div className="relative select-none w-min">
         <CardBorder rarity={card.rarity} size={5}>
           <div className="w-full h-full flex flex-col">
-            <div
-              className="w-full grow relative"
-              style={{
-                backgroundImage: `url(/${card.id}.png)`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-            ></div>
+            <CardContentIllustartion card={card} />
 
             <div className="absolute top-0 right-0">
               <svg
@@ -101,12 +132,12 @@ function FullCard({
                 <polygon points="0,0 32,32 32,0" fill="black" />
               </svg>
               <div className=" bg-black text-white text-sm font-[stylised] leading-3 px-2 pl-1 py-[2px]">
-                1
+                {card.level}
               </div>
             </div>
           </div>
         </CardBorder>
-        <div className="absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3">
+        <div className="absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3 scale-125">
           <ManaBall mana={card.cost} />
         </div>
       </div>

@@ -26,13 +26,15 @@ export default function Home() {
         id="home"
       >
         <div
-          className="w-full h-full absolute blur-sm"
+          className="w-full h-full absolute brightness-75"
           style={{
-            backgroundImage: "url('/homeBg.avif')",
+            backgroundImage: "url('/homeBg.png')",
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}
-        ></div>
+        >
+          <div className="w-full h-full absolute bg-[linear-gradient(0deg,_rgba(226,232,240,0.2)_0%,_rgba(226,232,240,0)_100%),_linear-gradient(0deg,_rgba(226,232,240,0)_50%,_rgba(226,232,240,1)_70%)]" />
+        </div>
         <div className="w-full h-full relative flex flex-col items-center justify-between">
 					<Header />
           <div className="grow relative w-full">
@@ -78,7 +80,7 @@ function RessourceCounter({ amount, max }: RessourceCounterProps) {
 
 interface ButtonProps {
   children: React.ReactNode;
-  action: () => void;
+  action: React.MouseEventHandler<HTMLButtonElement>;
   full?: boolean;
   small?: boolean;
 }
