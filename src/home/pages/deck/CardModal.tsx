@@ -2,7 +2,9 @@ import { CardType, getCardFromLevel, getCardStats } from "@/cards";
 import { ManaBall } from "@/game/gui/ManaBar";
 import CardBorder, {
   CardContentIllustartion,
+  InnerBord,
 } from "@/game/gui/card/CardBorder";
+import { getImageEffects } from "@/game/gui/card/GameCard";
 import { Button } from "@/home/Home";
 import usePlayerStore from "@/home/store/playerStore";
 import Modal from "@/home/ui/modal";
@@ -107,6 +109,8 @@ function FullCard({ card, position }: { card: CardType; position: number }) {
   const translateX =
     (position !== 0 ? 50 : 0) + Math.max(0, Math.abs(position) - 1) * 65;
 
+  const effectToShow = getImageEffects(card.effects);
+
   return (
     <div
       className="absolute transition-all duration-500 ease-in-out"
@@ -122,22 +126,67 @@ function FullCard({ card, position }: { card: CardType; position: number }) {
       <div className="relative select-none w-min">
         <CardBorder rarity={card.rarity} size={5}>
           <div className="w-full h-full flex flex-col">
-            <CardContentIllustartion card={card} />
+            <div className="absolute top-0 w-full h-full flex flex-col justify-between">
+              <div>
+                <div className="flex">
+                  <div className="grow bg-slate-50 border-b-4 px-2 border-black font-stylised text-xl h-min">
+                    {card.name}
+                  </div>
+                  <div className="absolute right-0 z-10">
+                    <svg
+                      className="h-full absolute left-0 -translate-x-full"
+                      viewBox="0 0 32 32"
+                    >
+                      <polygon points="0,0 32,32 32,0" fill="black" />
+                    </svg>
+                    <div className=" bg-black text-white text-[2rem] font-[stylised] leading-[2rem] px-4 pl-2 py-[4px]">
+                      {card.level}
+                    </div>
+                  </div>
+                </div>
+                {/* <div className="flex flex-col items-end gap-2 p-2">
+                  {[...effectToShow, ...effectToShow].map((effectSrc) => (
+                    <div
+                      className="p-2 bg-slate-100 border-2 border-black rounded-full shadow-[0px_0px_5px_0px_#fca5a5]"
+                      key={effectSrc}
+                    >
+                      <img src={`/${effectSrc}`} width={28} height={28} />
+                    </div>
+                  ))}
+                </div> */}
+              </div>
 
-            <div className="absolute top-0 right-0">
-              <svg
-                className="h-full absolute left-0 -translate-x-full"
-                viewBox="0 0 32 32"
-              >
-                <polygon points="0,0 32,32 32,0" fill="black" />
-              </svg>
-              <div className=" bg-black text-white text-sm font-[stylised] leading-3 px-2 pl-1 py-[2px]">
-                {card.level}
+              <div className="w-full h-full grow overflow-hidden relative">
+                <CardContentIllustartion card={card} size={3} />
+              </div>
+
+              <div className="text-sm">
+                <div className="mt-1">
+                  <InnerBord size={3}>
+                    <div className="gap-2  bg-slate-50">
+                      <p className="">Force {card.dmg}</p>
+                    </div>
+                  </InnerBord>
+                </div>
+                <div className="mt-1">
+                  <InnerBord size={3}>
+                    <div className="gap-2 px-2 py-1 bg-slate-50">
+                      <p className="">Attack speed {card.attackSpeed}</p>
+                    </div>
+                  </InnerBord>
+                </div>
+                <div className="mt-1">
+                  <InnerBord size={3}>
+                    <div className="gap-2 px-2 py-1 bg-slate-50">
+                      <p className="">Life points {card.hp}</p>
+                    </div>
+                  </InnerBord>
+                </div>
               </div>
             </div>
           </div>
         </CardBorder>
-        <div className="absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3 scale-125">
+        <div className="absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3 scale-[175%]">
           <ManaBall mana={card.cost} />
         </div>
       </div>

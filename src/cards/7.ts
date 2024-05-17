@@ -15,14 +15,14 @@ const card7: CardStatsInfo = {
 		},
 		{
 			"cost": 1,
-			"dmg": 216,
+			"dmg": 180,
 			"attackSpeed": 1.2,
 			"hp": 300,
 			"effects": {},
 		},
 		{
 			"cost": 1,
-			"dmg": 180,
+			"dmg": 216,
 			"attackSpeed": 1.44,
 			"hp": 360,
 			"effects": {

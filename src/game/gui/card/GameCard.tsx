@@ -6,7 +6,9 @@ import { FRAME_TIME } from "@/game/gameBehavior/useGameEvents";
 import { CardEffects } from "@/cards";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
 
-export const effectsImages: Partial<Record<keyof CardEffects["effects"], string>> = {
+export const effectsImages: Partial<
+  Record<keyof CardEffects["effects"], string>
+> = {
   fightBack: "fightback.svg",
   multiAttack: "multiAttack.svg",
 };
@@ -81,9 +83,13 @@ function GameCard({
     )(elapsedFrames, requiredFrames);
   });
 
-
   return (
-    <div ref={cardAnimationRef} style={{ transform: `translateY(${isPlayerCard ? -15 : 15}px) scale(108%)` }}>
+    <div
+      ref={cardAnimationRef}
+      style={{
+        transform: `translateY(${isPlayerCard ? -15 : 15}px) scale(108%)`,
+      }}
+    >
       <CardBorder rarity={card.rarity} size={2.5}>
         <div className="w-full h-full flex flex-col">
           <div
@@ -107,7 +113,24 @@ function GameCard({
   );
 }
 
-export function CardEffectsElements({ effects }: { effects: CardEffects}) {
+export function CardEffectsElements({ effects }: { effects: CardEffects }) {
+  const effectToShow = getImageEffects(effects);
+
+  return (
+    <div className="absolute right-1 top-2 flex flex-col gap-2">
+      {effectToShow.map((effectSrc) => (
+        <div
+          className="p-[4px] bg-slate-100 border-[1px] border-orange-400 rounded-full"
+          key={effectSrc}
+        >
+          <img src={`/${effectSrc}`} width={16} height={16} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function getImageEffects(effects: CardEffects) {
   const effectToShow = [];
 
   for (const effect in effects) {
@@ -117,15 +140,7 @@ export function CardEffectsElements({ effects }: { effects: CardEffects}) {
       effectToShow.push(existingImage);
   }
 
-  return (
-    <div className="absolute right-1 top-2 flex flex-col gap-2">
-    {effectToShow.map((effectSrc) => (
-      <div className="p-[4px] bg-slate-100 border-[1px] border-orange-400 rounded-full" key={effectSrc}>
-        <img src={`/${effectSrc}`} width={16} height={16} />
-      </div>
-    ))}
-  </div>
-  )
+  return effectToShow;
 }
 
 export default GameCard;

@@ -67,7 +67,7 @@ function DeckCard({ cardId, isHand }: DeckCardProps) {
         <div className="" onClick={() => setIsDescriptionOpen(true)}>
           <CardBorder rarity={card.rarity} size={isHand ? 1.4 : 2}>
             <div className="w-full h-full flex flex-col relative">
-              <CardContentIllustartion card={card} />
+              <CardContentIllustartion card={card} size={isHand ? 1.4 : 2} />
               <div className="absolute top-0 right-0">
                 <svg
                   className="h-full absolute left-0 -translate-x-full"
@@ -88,11 +88,19 @@ function DeckCard({ cardId, isHand }: DeckCardProps) {
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/4">
           {card.isInDeck ? (
             <Button action={() => removeCardFromDeck(card.id)} small>
-              <img src="/icons/minus.svg" alt="remove" className="w-4 h-4 m-1 my-2" />
+              <img
+                src="/icons/minus.svg"
+                alt="remove"
+                className="w-4 h-4 m-1 my-2"
+              />
             </Button>
           ) : (
             <Button action={preventDefault(() => addCardToDeck(card.id))} small>
-              <img src="/icons/plus.svg" alt="add" className="w-4 h-4 m-1 my-2" />
+              <img
+                src="/icons/plus.svg"
+                alt="add"
+                className="w-4 h-4 m-1 my-2"
+              />
             </Button>
           )}
         </div>

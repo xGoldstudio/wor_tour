@@ -13,7 +13,7 @@ function inPx(value: number) {
 export default function CardBorder({ rarity, children, size }: CardBoardProps) {
   const width = 64 * size;
   const height = 89 * size;
-
+  const borderUnit = Math.min(0.5 * size, 2);
 
   const borderTextureRarity = {
     common: "bronze.avif",
@@ -42,20 +42,32 @@ export default function CardBorder({ rarity, children, size }: CardBoardProps) {
           />
         </div>
         <div
-          className="w-[3px] bg-black opacity-20 absolute top-[3px] left-0"
-          style={{ height: inPx(height - 6) }}
+          className=" bg-black opacity-20 absolute left-0"
+          style={{
+            width: inPx(borderUnit * 3),
+            top: inPx(borderUnit * 3),
+            height: inPx(height - borderUnit * 6),
+          }}
         ></div>
         <div
-          className="h-[3px] bg-black opacity-20 absolute top-0 left-0"
-          style={{ width: inPx(width - 3) }}
+          className=" bg-black opacity-20 absolute top-0 left-0"
+          style={{
+            height: inPx(borderUnit * 3),
+            width: inPx(width - borderUnit * 3),
+          }}
         ></div>
-        <div className="w-full h-[4px] bg-black opacity-60 absolute bottom-0 left-0"></div>
         <div
-          className="w-[3px] bg-black opacity-60 absolute top-0 right-0"
-          style={{ height: inPx(height - 3) }}
+          className="w-full bg-black opacity-60 absolute bottom-0 left-0"
+          style={{ height: inPx(borderUnit * 3) }}
         ></div>
-
-        <CardIllustartion width={width} height={height}>
+        <div
+          className=" bg-black opacity-60 absolute top-0 right-0"
+          style={{
+            width: inPx(borderUnit * 3),
+            height: inPx(height - borderUnit * 3),
+          }}
+        ></div>
+        <CardIllustartion width={width} height={height} borderUnit={borderUnit}>
           {children}
         </CardIllustartion>
       </div>
@@ -67,29 +79,33 @@ interface CardIllustrationProps {
   children: React.ReactNode;
   width: number;
   height: number;
+  borderUnit: number;
 }
 
-function CardIllustartion({ children, width, height }: CardIllustrationProps) {
+function CardIllustartion({
+  children,
+  width,
+  height,
+  borderUnit,
+}: CardIllustrationProps) {
   return (
     <div
-      className="absolute top-[8px] left-[7.5px] rounded-[2px] overflow-hidden"
-      style={{ width: inPx(width - 16), height: inPx(height - 17) }}
+      className="absolute rounded-[2px] overflow-hidden"
+      style={{
+        top: inPx(8 * borderUnit),
+        left: inPx(7.5 * borderUnit),
+        width: inPx(width - 16 * borderUnit),
+        height: inPx(height - 17 * borderUnit),
+      }}
     >
-      <div className="w-full h-[4px] bg-black opacity-60 absolute bottom-0 top-0"></div>
-      <div className="h-full w-[3px] bg-black opacity-60 absolute top-[4px] left-0"></div>
+      {/* <InnerBord width={width} height={height} borderUnit={borderUnit} /> */}
       <div
-        className="h-[3px] bg-black opacity-20 absolute bottom-0 left-[3px]"
-        style={{ width: inPx(width - 16 - 3) }}
-      ></div>
-      <div
-        className="w-[2px] bg-black opacity-20 absolute top-[4px] right-0"
-        style={{ height: inPx(height - 17 - 7) }}
-      ></div>
-      <div
-        className="top-[4px] left-[3px] absolute"
+        className="absolute"
         style={{
-          width: inPx(width - 16 - 3 - 2),
-          height: inPx(height - 17 - 7),
+          top: inPx(4 * borderUnit),
+          left: inPx(3 * borderUnit),
+          width: inPx(width - 21 * borderUnit),
+          height: inPx(height - 24 * borderUnit),
         }}
       >
         {children}
@@ -98,25 +114,82 @@ function CardIllustartion({ children, width, height }: CardIllustrationProps) {
   );
 }
 
-export function CardContentIllustartion({ card }: { card: CardType }) {
+export function CardContentIllustartion({
+  card,
+  size,
+}: {
+  card: CardType;
+  size: number;
+}) {
   return (
     <>
-      <div
-        className="w-full h-full grow absolute"
-        style={{
-          backgroundImage: `url(${card.worldIllustration})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></div>
-      <div
-        className="w-full grow relative"
-        style={{
-          backgroundImage: `url(${card.illustration})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></div>
+      <InnerBord size={size}>
+        <div
+          className="w-full h-full grow absolute"
+          style={{
+            backgroundImage: `url(${card.worldIllustration})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        ></div>
+        <div
+          className="w-full h-full grow relative"
+          style={{
+            backgroundImage: `url(${card.illustration})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        ></div>
+      </InnerBord>
     </>
+  );
+}
+
+export function InnerBord({
+  size,
+  children,
+}: {
+  size: number;
+  children: React.ReactNode;
+}) {
+  const borderUnit = Math.min(0.5 * size, 2);
+
+  return (
+    <div className="w-full h-full relative rounded-[2px] overflow-hidden">
+      <div
+        className="w-full bg-black opacity-60 absolute bottom-0 top-0"
+        style={{ height: inPx(4 * borderUnit) }}
+      ></div>
+      <div
+        className="h-full  bg-black opacity-60 absolute left-0"
+        style={{ width: inPx(3 * borderUnit), top: inPx(4 * borderUnit) }}
+      ></div>
+      <div
+        className=" bg-black opacity-20 absolute bottom-0 w-full"
+        style={{
+          height: inPx(3 * borderUnit),
+          left: inPx(3 * borderUnit),
+        }}
+      ></div>
+      <div
+        className=" bg-black opacity-20 absolute right-0"
+        style={{
+          height: `calc(100% - ${7 * borderUnit}px)`,
+          width: inPx(2 * borderUnit),
+          top: inPx(4 * borderUnit),
+        }}
+      ></div>
+      <div
+        className="relative"
+        style={{
+          top: inPx(4 * borderUnit),
+          left: inPx(3 * borderUnit),
+          width: `calc(100% - ${5 * borderUnit}px)`,
+          height: `calc(100% - ${7 * borderUnit}px)`,
+        }}
+      >
+        {children}
+      </div>
+    </div>
   );
 }
