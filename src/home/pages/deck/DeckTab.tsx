@@ -20,7 +20,7 @@ export default function DeckTab() {
       <ScrollContainer className="grow overflow-y-scroll pt-2 scrollbar-hide flex justify-center">
         <div className="grid grid-cols-3 gap-4">
           {collection.map((card) => (
-            <div className="w-full flex justify-center">
+            <div className="w-full flex justify-center" key={card.id}>
               <DeckCard cardId={card.id} />
             </div>
           ))}
@@ -30,7 +30,7 @@ export default function DeckTab() {
         <div className="absolute w-full h-full bg-slate-400 opacity-50" />
         <div className="grid grid-cols-4 gap-4 p-4">
           {deck.map((cardId) => (
-            <div className="w-full flex justify-center">
+            <div className="w-full flex justify-center" key={cardId}>
               <DeckCard cardId={cardId} isHand />
             </div>
           ))}
@@ -47,11 +47,12 @@ interface DeckCardProps {
 
 function DeckCard({ cardId, isHand }: DeckCardProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
-  const { card, removeCardFromDeck, addCardToDeck } = usePlayerStore(
+  const { card, removeCardFromDeck, addCardToDeck, isDeckFull } = usePlayerStore(
     (state) => ({
-      card: state.getCompletInfo(cardId),
+      card: state.getCompleteInfo(cardId),
       removeCardFromDeck: state.removeCardFromDeck,
       addCardToDeck: state.addCardToDeck,
+    isDeckFull: state.isDeckFull(),
     })
   );
 
@@ -76,7 +77,7 @@ function DeckCard({ cardId, isHand }: DeckCardProps) {
                   <polygon points="0,0 32,32 32,0" fill="black" />
                 </svg>
                 <div className=" bg-black text-white text-sm font-[stylised] leading-3 px-2 pl-1 py-[2px]">
-                  1
+                  {card.level}
                 </div>
               </div>
             </div>
@@ -95,7 +96,7 @@ function DeckCard({ cardId, isHand }: DeckCardProps) {
               />
             </Button>
           ) : (
-            <Button action={preventDefault(() => addCardToDeck(card.id))} small>
+            <Button action={preventDefault(() => addCardToDeck(card.id))} small disabled={isDeckFull}>
               <img
                 src="/icons/plus.svg"
                 alt="add"

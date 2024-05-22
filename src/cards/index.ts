@@ -6,6 +6,7 @@ import card5 from "./5";
 import card6 from "./6";
 import card7 from "./7";
 import card8 from "./8";
+import card9 from "./9";
 
 export type CardType = {
 	name: string;
@@ -86,7 +87,10 @@ const cards: CardStatsInfo[] = [
 	card6,
 	card7,
 	card8,
+	card9,
 ]
+
+export default cards;
 
 export function findCard(id: number, level: number): CardType {
 	const card = cards.find(card => card.id === id) || cards[0];

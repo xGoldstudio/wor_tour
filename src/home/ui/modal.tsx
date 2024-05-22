@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Header } from "../Home";
+import { stopPropagation } from "@/lib/eventUtils";
 
 interface ModalProps {
   children: React.ReactNode;
@@ -35,7 +36,19 @@ export default function Modal({ children, closeModal, title }: ModalProps) {
   if (!home) return null;
 
   return createPortal(
-    <div className="absolute w-full h-full top-0">
+    <div className="absolute w-full h-full top-0 z-10">{children}</div>,
+    home
+  );
+}
+
+interface CoverModalProps {
+  children: React.ReactNode;
+  closeModal: () => void;
+}
+
+export function CoverModal({ children, closeModal }: CoverModalProps) {
+  return (
+    <>
       <div
         className="w-full h-full absolute brightness-75"
         style={{
@@ -58,7 +71,27 @@ export default function Modal({ children, closeModal, title }: ModalProps) {
           {children}
         </div>
       </div>
-    </div>,
-    home
+    </>
+  );
+}
+
+interface BackgroundModalProps {
+  children: React.ReactNode;
+  closeModal: () => void;
+}
+
+export function BackgroundModal({ children, closeModal }: BackgroundModalProps) {
+  return (
+    <>
+      <div className="w-full h-full absolute bg-slate-900 opacity-80" />
+      <div className="w-full h-full absolute flex justify-center items-center gap-8 flex-col">
+        <img
+          src="/cross.svg"
+          className="absolute top-16 right-8 w-8 h-8 cursor-pointer"
+          onClick={stopPropagation(closeModal)}
+        />
+        {children}
+      </div>
+    </>
   );
 }

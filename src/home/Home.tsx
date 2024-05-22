@@ -4,13 +4,15 @@ import { cn } from "@/lib/utils";
 import HomeTab from "./pages/home/HomeTab";
 import { useState } from "react";
 import DeckTab from "./pages/deck/DeckTab";
+import ShopTab from "./pages/shop/ShopTab";
+import { RewardBlockWithContext } from "./pages/reward/Reward";
 
 type Tabs = "home" | "deck" | "shop";
 
 const tabs: Record<Tabs, () => JSX.Element> = {
   home: HomeTab,
   deck: DeckTab,
-  shop: HomeTab,
+  shop: ShopTab,
 };
 
 export default function Home() {
@@ -25,6 +27,7 @@ export default function Home() {
         className="w-[700px] h-full relative overflow-hidden bg-slate-400"
         id="home"
       >
+        <RewardBlockWithContext />
         <div
           className="w-full h-full absolute brightness-75"
           style={{
@@ -81,20 +84,22 @@ function RessourceCounter({ amount, max }: RessourceCounterProps) {
 interface ButtonProps {
   children: React.ReactNode;
   action: React.MouseEventHandler<HTMLButtonElement>;
+  disabled?: boolean;
   full?: boolean;
   small?: boolean;
 }
 
-export function Button({ children, action, full, small }: ButtonProps) {
+export function Button({ children, action, full, small, disabled }: ButtonProps) {
   return (
     <button
       onClick={action}
-      className={cn("rounded-sm overflow-hidden", full ? "w-full" : "")}
+      className={cn("rounded-sm overflow-hidden text-nowrap", full ? "w-full" : "w-min")}
+      disabled={disabled}
     >
       <EmptyBar>
         <div
           className={cn(
-            "text-white h-full flex justify-center items-center w-full",
+            "text-white h-full flex justify-center items-center",
             !small ? "px-12 py-2" : "px-2"
           )}
         >

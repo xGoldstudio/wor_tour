@@ -6,7 +6,7 @@ interface CardBoardProps {
   size: number;
 }
 
-function inPx(value: number) {
+export function inPx(value: number) {
   return `${value}px`;
 }
 
@@ -15,6 +15,30 @@ export default function CardBorder({ rarity, children, size }: CardBoardProps) {
   const height = 89 * size;
   const borderUnit = Math.min(0.5 * size, 2);
 
+  return (
+    <Borders width={width} height={height} borderUnit={borderUnit} rarity={rarity}>
+      <CardIllustartion width={width} height={height} borderUnit={borderUnit}>
+        {children}
+      </CardIllustartion>
+    </Borders>
+  );
+}
+
+interface BordersProps {
+  width: number;
+  height: number;
+  rarity: CardRarity;
+  children: React.ReactNode;
+  borderUnit: number;
+}
+
+export function Borders({
+  width,
+  height,
+  rarity,
+  children,
+  borderUnit,
+}: BordersProps) {
   const borderTextureRarity = {
     common: "bronze.avif",
     rare: "silver.jpeg",
@@ -67,9 +91,7 @@ export default function CardBorder({ rarity, children, size }: CardBoardProps) {
             height: inPx(height - borderUnit * 3),
           }}
         ></div>
-        <CardIllustartion width={width} height={height} borderUnit={borderUnit}>
-          {children}
-        </CardIllustartion>
+        {children}
       </div>
     </div>
   );
@@ -82,7 +104,7 @@ interface CardIllustrationProps {
   borderUnit: number;
 }
 
-function CardIllustartion({
+export function CardIllustartion({
   children,
   width,
   height,
@@ -98,18 +120,7 @@ function CardIllustartion({
         height: inPx(height - 17 * borderUnit),
       }}
     >
-      {/* <InnerBord width={width} height={height} borderUnit={borderUnit} /> */}
-      <div
-        className="absolute"
-        style={{
-          top: inPx(4 * borderUnit),
-          left: inPx(3 * borderUnit),
-          width: inPx(width - 21 * borderUnit),
-          height: inPx(height - 24 * borderUnit),
-        }}
-      >
-        {children}
-      </div>
+      {children}
     </div>
   );
 }
@@ -121,23 +132,27 @@ export function CardContentIllustartion({
   card: CardType;
   size: number;
 }) {
+  const borderUnit = Math.min(0.5 * size, 2);
+
   return (
     <>
       <InnerBord size={size}>
         <div
-          className="w-full h-full grow absolute"
+          className="w-full h-full grow absolute box-border"
           style={{
             backgroundImage: `url(${card.worldIllustration})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
+            height: `calc(100% - ${7 * borderUnit}px)`,
           }}
         ></div>
         <div
-          className="w-full h-full grow relative"
+          className="w-full h-full grow absolute box-border"
           style={{
             backgroundImage: `url(${card.illustration})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
+            height: `calc(100% - ${7 * borderUnit}px)`,
           }}
         ></div>
       </InnerBord>
@@ -180,9 +195,10 @@ export function InnerBord({
         }}
       ></div>
       <div
-        className="relative"
+        className="relative box-content"
         style={{
-          top: inPx(4 * borderUnit),
+          paddingTop: inPx(4 * borderUnit),
+          paddingBottom: inPx(3 * borderUnit),
           left: inPx(3 * borderUnit),
           width: `calc(100% - ${5 * borderUnit}px)`,
           height: `calc(100% - ${7 * borderUnit}px)`,
