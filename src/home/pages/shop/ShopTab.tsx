@@ -2,107 +2,27 @@ import {
   Borders,
   CardIllustartion,
   InnerBord,
-  inPx,
 } from "@/game/gui/card/CardBorder";
 import { Button } from "../../Home";
 import ScrollContainer from "react-indiana-drag-scroll";
-import usePlayerStore from "@/home/store/playerStore";
 import React, { useState } from "react";
 import Modal, { BackgroundModal } from "@/home/ui/modal";
-import { CardStatsInfo, getCardFromLevel } from "@/cards";
 import { FullCard, useScrollCardList } from "../deck/CardModal";
 import { preventDefault } from "@/lib/eventUtils";
-import useRewardStore from "@/home/store/rewardStore";
+import usePlayerStore from "@/home/store/playerStore";
+import BoosterIllustration from "./BoosterIllustration";
+import useBooster, { BoosterType } from "@/home/store/useBooster";
 
 export default function ShopTab() {
-  const { allCardsUnlocked } = usePlayerStore((state) => ({
-    deck: state.deck,
-    collection: state.getCollection(),
-    allCardsUnlocked: state.getAllCardsUnlocked(),
-  }));
+  const boosters = usePlayerStore((state) => state.getAvailableBoosters());
 
   return (
     <div className="w-full grid grid-rows-[auto_1fr] absolute top-0 h-full">
       <ScrollContainer className="grow overflow-y-scroll pt-2 scrollbar-hide flex justify-center">
         <div className="grid grid-cols-3 gap-1 w-[416px]">
-          <Booster
-            cost={1000}
-            cards={allCardsUnlocked}
-            packName="Classic refill"
-            packDescription="Contain 1 unit from any worlds among unlocked cards."
-          />
-          <Booster
-            cost={1200}
-            cards={allCardsUnlocked}
-            packName="Classic refill"
-            packDescription="Contain 1 unit from any worlds among unlocked cards."
-          />
-          <Booster
-            cost={1400}
-            cards={allCardsUnlocked}
-            packName="Classic refill"
-            packDescription="Contain 1 unit from any worlds among unlocked cards."
-          />
-          <Booster
-            cost={1600}
-            cards={allCardsUnlocked}
-            packName="Classic refill"
-            packDescription="Contain 1 unit from any worlds among unlocked cards."
-          />
-          <Booster
-            cost={1800}
-            cards={allCardsUnlocked}
-            packName="Classic refill"
-            packDescription="Contain 1 unit from any worlds among unlocked cards."
-          />
-          <Booster
-            cost={2000}
-            cards={allCardsUnlocked}
-            packName="Classic refill"
-            packDescription="Contain 1 unit from any worlds among unlocked cards."
-          />
-          <Booster
-            cost={5000}
-            cards={allCardsUnlocked}
-            packName="Classic refill"
-            packDescription="Contain 1 unit from any worlds among unlocked cards."
-          />
-          <Booster
-            cost={8000}
-            cards={allCardsUnlocked}
-            packName="Classic refill"
-            packDescription="Contain 1 unit from any worlds among unlocked cards."
-          />
-          <Booster
-            cost={10000}
-            cards={allCardsUnlocked}
-            packName="Classic refill"
-            packDescription="Contain 1 unit from any worlds among unlocked cards."
-          />
-          <Booster
-            cost={20000}
-            cards={allCardsUnlocked}
-            packName="Classic refill"
-            packDescription="Contain 1 unit from any worlds among unlocked cards."
-          />
-          <Booster
-            cost={50000}
-            cards={allCardsUnlocked}
-            packName="Classic refill"
-            packDescription="Contain 1 unit from any worlds among unlocked cards."
-          />
-          <Booster
-            cost={100000}
-            cards={allCardsUnlocked}
-            packName="Classic refill"
-            packDescription="Contain 1 unit from any worlds among unlocked cards."
-          />
-          <Booster
-            cost={1000000}
-            cards={allCardsUnlocked}
-            packName="Classic refill"
-            packDescription="Contain 1 unit from any worlds among unlocked cards."
-          />
+          {Object.values(boosters).map((booster) => (
+            <Booster booster={booster} />
+          ))}
         </div>
       </ScrollContainer>
     </div>
@@ -110,36 +30,29 @@ export default function ShopTab() {
 }
 
 interface BoosterProps {
-  cost: number;
-  cards: CardStatsInfo[];
-  packName: string;
-  packDescription: string;
+  booster: BoosterType;
 }
 
-export function Booster({
-  cost,
-  cards,
-  packName,
-  packDescription,
-}: BoosterProps) {
+export function Booster({ booster }: BoosterProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div
-      className="flex flex-col items-center gap-2 p-1 bg-teal-100 border-2 border-slate-900 rounded-sm cursor-pointer"
+      className="flex flex-col items-center gap-2 p-1 cursor-pointer"
       onClick={() => setIsModalOpen(true)}
     >
-      <BoosterImage size={1} />
+      <BoosterIllustration
+        size={1}
+        title={booster.name}
+        illustration={booster.illustration}
+      />
       <Button action={() => setIsModalOpen(true)} full small>
-        {cost}
+        {booster.cost}
       </Button>
       {isModalOpen && (
         <BoosterModal
-          cards={cards}
           closeModal={() => setIsModalOpen(false)}
-          price={cost}
-          packName={packName}
-          packDescription={packDescription}
+          booster={booster}
         />
       )}
     </div>
@@ -160,43 +73,18 @@ export function Box({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function BoosterImage({ size }: { size: number }) {
-  return (
-    <div
-      className="w-[128px] h-[178px] bg-slate-50 rounded-sm relative"
-      style={{
-        backgroundImage: "url('/booster.png')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        width: inPx(128 * size),
-        height: inPx(178 * size),
-      }}
-    >
-      <InnerBord size={1}>
-        <p></p>
-      </InnerBord>
-    </div>
-  );
-}
-
 interface BoosterModalProps {
-  cards: CardStatsInfo[];
   closeModal: () => void;
-  price: number;
-  packName: string;
-  packDescription: string;
+  booster: BoosterType;
 }
 
 function BoosterModal({
-  cards,
   closeModal,
-  price,
-  packName,
-  packDescription,
+  booster,
 }: BoosterModalProps) {
   const { currentPosition, setIsPressed, changePosition } = useScrollCardList(
     0,
-    cards.length
+    booster.cards.length
   );
   const [isBoosterPreview, setIsBoosterPreview] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
@@ -212,10 +100,10 @@ function BoosterModal({
         >
           {isBoosterPreview ? (
             <div className="relative h-[430px]">
-              {cards.map((card, index) => (
+              {booster.cards.map((card, index) => (
                 <FullCard
                   key={`level_${index}`}
-                  card={getCardFromLevel(card, 1)}
+                  card={card}
                   position={index - currentPosition}
                 />
               ))}
@@ -228,7 +116,11 @@ function BoosterModal({
               }}
             >
               <div className="w-full h-full bg-slate-900 absolute top-2 left-2 rounded-sm"></div>
-              <BoosterImage size={2.5} />
+              <BoosterIllustration
+                size={2.5}
+                title={booster.name}
+                illustration={booster.illustration}
+              />
 
               <div className="absolute -bottom-4 -right-4">
                 <Button action={() => {}} small>
@@ -242,11 +134,14 @@ function BoosterModal({
           <Box>
             <div className="flex flex-col h-full justify-between items-center">
               <div>
-                <h3 className="font-stylised text-2xl">{packName}</h3>
-                <p className="">{packDescription}</p>
+                <h3 className="font-stylised text-2xl">{booster.name}</h3>
+                <p className="">{booster.description}</p>
               </div>
-              <Button action={() => setIsConfirmationOpen(true)}>
-                Buy for {price} G
+              <Button
+                action={() => setIsConfirmationOpen(true)}
+                disabled={booster.cards.length === 0}
+              >
+                Buy for {booster.cost} G
               </Button>
             </div>
           </Box>
@@ -254,8 +149,7 @@ function BoosterModal({
         {isConfirmationOpen && (
           <ConfirmationModal
             closeModal={() => setIsConfirmationOpen(false)}
-            packName={packName}
-            price={price}
+            booster={booster}
           />
         )}
       </BackgroundModal>
@@ -265,16 +159,12 @@ function BoosterModal({
 
 function ConfirmationModal({
   closeModal,
-  packName,
-  price,
+  booster,
 }: {
   closeModal: () => void;
-  packName: string;
-  price: number;
+  booster: BoosterType
 }) {
-  const buyBooster = useRewardStore(
-    (state) => () => state.buyBooster(packName)
-  );
+  const buyBooster = useBooster(booster);
 
   return (
     <Modal closeModal={closeModal} title={"confirmation"}>
@@ -283,8 +173,8 @@ function ConfirmationModal({
           <Box>
             <h3>
               Are you sure you want to buy{" "}
-              <span className="font-stylised text-amber-500">{packName}</span>{" "}
-              for {price} ?
+              <span className="font-stylised text-amber-500">{booster.name}</span>{" "}
+              for {booster.cost} ?
             </h3>
           </Box>
           <div className="flex gap-16">

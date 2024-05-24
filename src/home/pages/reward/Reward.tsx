@@ -53,7 +53,7 @@ export default function Reward({
   function getAnimationDuration() {
     switch (animationType) {
       case "newCard":
-        return 0;
+        return 2;
       case "shard":
         return 3.4;
       case "evolution":

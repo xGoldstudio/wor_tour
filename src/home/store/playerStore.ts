@@ -1,5 +1,6 @@
-import cards, { CardStatsInfo, CardType, findCard } from '@/cards';
+import cards, { CardStatsInfo, CardType, findCard, getCardStats } from '@/cards';
 import { create } from 'zustand';
+import { BoosterType, boosters } from './useBooster';
 
 export interface CollectionCard {
 	id: number;
@@ -10,6 +11,7 @@ export interface CollectionCard {
 interface PlayerStore {
   collection: Map<number, CollectionCard>;
 	deck: number[];
+	currentWorld: number;
 
 	getCollection: () => CollectionCard[];
 	getCollectionInfo: (id: number) => CollectionCard;
@@ -20,23 +22,31 @@ interface PlayerStore {
 	isDeckFull: () => boolean;
 	isPlayed: (cardId: number) => boolean;
 
-	getAllCardsUnlocked: () => CardStatsInfo[];
+	getAllCardsPackable: () => CardStatsInfo[];
+	isCardPackable: (id: number) => CardType | null;
+
+	addCardOrShardOrEvolve: (cardId: number) => void;
+
+	getAvailableBoosters: () => BoosterType[];
 }
 
 const defaultCollection: Map<number, CollectionCard> = new Map();
 defaultCollection.set(1, { id: 1, level: 1, shard: 0 });
 defaultCollection.set(2, { id: 2, level: 1, shard: 0 });
 defaultCollection.set(3, { id: 3, level: 1, shard: 0 });
-defaultCollection.set(4, { id: 4, level: 1, shard: 0 });
+defaultCollection.set(4, { id: 4, level: 2, shard: 6 });
 defaultCollection.set(5, { id: 5, level: 1, shard: 0 });
 defaultCollection.set(6, { id: 6, level: 1, shard: 0 });
 defaultCollection.set(7, { id: 7, level: 3, shard: 0 });
 defaultCollection.set(8, { id: 8, level: 1, shard: 2 });
 defaultCollection.set(9, { id: 9, level: 2, shard: 2 });
 
+const shardsByLevels = [3,7];
+
 const usePlayerStore = create<PlayerStore>()((set, get) => ({
 	collection: defaultCollection,
-	deck: [7,8,1,2,3,4,5,6],
+	currentWorld: 1,
+	deck: [7,8,1,2,3,9,5,6],
 	getCollection: () => Array.from(get().collection.values()),
 	getCollectionInfo: (id: number) => get().collection.get(id)!,
 	getCompleteInfo: (id: number) => ({ ...findCard(id, get().getCollectionInfo(id)!.level), isInDeck: get().deck.includes(id) }),
@@ -46,9 +56,39 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
 	isDeckFull: () => get().deck.length >= 8,
 	isPlayed: (cardId: number) => get().deck.includes(cardId),
 
-	getAllCardsUnlocked: () => {
-		return cards;
+	isCardPackable: (id: number) => {
+		const card = getCardStats(id);
+		if (card.world > get().currentWorld) return null;
+		const collectionCard = get().getCollectionInfo(id);
+		if (!collectionCard) return findCard(id, 1);
+		return collectionCard.level < 3 ? findCard(id, collectionCard.level) : null;
 	},
+	getAllCardsPackable: () => {
+		return cards.filter((card) => get().isCardPackable(card.id));
+	},
+	addCardOrShardOrEvolve: (cardId: number) => {
+		const collectionCard = get().getCollectionInfo(cardId);
+		if (!collectionCard) {
+			get().collection.set(cardId, { id: cardId, level: 1, shard: 0 });
+		} else {
+			const requiredShards = shardsByLevels[collectionCard.level - 1];
+			if (collectionCard.shard === (requiredShards - 1)) {
+				get().collection.set(cardId, { ...collectionCard, level: collectionCard.level + 1, shard: 0 });
+			} else {
+				get().collection.set(cardId, { ...collectionCard, shard: collectionCard.shard + 1 });
+			}
+		}
+		set((state) => ({ collection: new Map(state.collection) }));
+	},
+
+	getAvailableBoosters: () => {
+		return Object.values(boosters).map((booster) => {
+			if (booster.requirements.world && booster.requirements.world > get().currentWorld) return null;
+			const boosterCardsPackable = booster.cards.map((cardId) => get().isCardPackable(cardId)).filter((card) => card !== null) as CardType[];
+			if (booster.requirements.cardAvailable && !booster.requirements.cardAvailable(boosterCardsPackable)) return null;
+			return { ...booster, cards: boosterCardsPackable };
+		}).filter((booster) => booster !== null) as BoosterType[];
+	}
 }));
 
 

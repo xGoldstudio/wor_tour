@@ -96,7 +96,7 @@ export function Button({ children, action, full, small, disabled }: ButtonProps)
       className={cn("rounded-sm overflow-hidden text-nowrap", full ? "w-full" : "w-min")}
       disabled={disabled}
     >
-      <EmptyBar>
+      {/* <EmptyBar> */}
         <div
           className={cn(
             "text-white h-full flex justify-center items-center",
@@ -105,7 +105,7 @@ export function Button({ children, action, full, small, disabled }: ButtonProps)
         >
           {children}
         </div>
-      </EmptyBar>
+      {/* </EmptyBar> */}
     </button>
   );
 }

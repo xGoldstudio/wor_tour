@@ -3,15 +3,14 @@ import { create } from 'zustand';
 export interface RewardType {
 	cardId: number;
 	level: number;
-	shardTargetIndex: number;
+	shardTargetIndex: number | null;
 }
+
 
 interface RewardStore {
 	rewards: RewardType[];
 	addReward: (reward: RewardType) => void;
 	collectReward: () => RewardType;
-
-	buyBooster: (name: string) => void;
 }
 
 const useRewardStore = create<RewardStore>()((set, get) => ({
@@ -22,10 +21,6 @@ const useRewardStore = create<RewardStore>()((set, get) => ({
 		set({ rewards });
 		return reward;
 	},
-	buyBooster: (name: string) => {
-		const cardId = 7;
-		get().addReward({ cardId, level: 1, shardTargetIndex: 0 });
-	}
 }));
 
 
