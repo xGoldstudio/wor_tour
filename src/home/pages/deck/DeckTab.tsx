@@ -1,6 +1,7 @@
 import { ManaBall } from "@/game/gui/ManaBar";
 import CardBorder, {
   CardContentIllustartion,
+  InnerBord,
 } from "@/game/gui/card/CardBorder";
 import { Button } from "../../Home";
 import ScrollContainer from "react-indiana-drag-scroll";
@@ -8,6 +9,8 @@ import { useState } from "react";
 import CardModal from "./CardModal";
 import usePlayerStore from "@/home/store/playerStore";
 import { preventDefault } from "@/lib/eventUtils";
+import * as _ from "lodash";
+import Box from "@/home/ui/Box";
 
 export default function DeckTab() {
   const { deck, collection } = usePlayerStore((state) => ({
@@ -15,10 +18,12 @@ export default function DeckTab() {
     collection: state.getCollection(),
   }));
 
+  const deckArray = _.concat(deck, _.fill(Array(8 - deck.length), null));
+
   return (
-    <div className="w-full grid grid-rows-[auto_1fr] absolute top-0 h-full">
+    <div className="w-full grid grid-rows-[1fr_auto] absolute top-0 h-full">
       <ScrollContainer className="grow overflow-y-scroll pt-2 scrollbar-hide flex justify-center">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           {collection.map((card) => (
             <div className="w-full flex justify-center" key={card.id}>
               <DeckCard cardId={card.id} />
@@ -26,15 +31,39 @@ export default function DeckTab() {
           ))}
         </div>
       </ScrollContainer>
-      <div className="w-full flex justify-center relative min-h-[300px]">
-        <div className="absolute w-full h-full bg-slate-400 opacity-50" />
-        <div className="grid grid-cols-4 gap-4 p-4">
-          {deck.map((cardId) => (
-            <div className="w-full flex justify-center" key={cardId}>
-              <DeckCard cardId={cardId} isHand />
+      <div className="w-full flex justify-center relative overflow-hidden mb-2 mt-4">
+        <Box width={650} height={224} rarity="legendary">
+          <div
+            className="absolute w-full h-full top-0 left-0 blur-sm"
+            style={{
+              backgroundImage: "url(/silver.jpeg)",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          />
+          <ScrollContainer horizontal={true} vertical={false}>
+            <div className="flex gap-4 relative pt-[6px] pl-[6px] pb-[8px]">
+              {deckArray.map((cardId, index) => (
+                <div
+                  className="w-full flex justify-center overflow-visible"
+                  key={cardId || `index_${index}`}
+                >
+                  <div className="w-[102px] h-[142px] relative rounded-md box-content">
+                    <div className="w-full h-full bg-slate-900 opacity-20 absolute" />
+                    <InnerBord size={1}>
+                      <></>
+                    </InnerBord>
+                    {cardId !== null && (
+                      <div className="absolute top-0 left-0">
+                        <DeckCard cardId={cardId} isHand />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </ScrollContainer>
+        </Box>
       </div>
     </div>
   );
@@ -43,18 +72,18 @@ export default function DeckTab() {
 interface DeckCardProps {
   cardId: number;
   isHand?: boolean;
+  unaddble?: boolean;
 }
 
-function DeckCard({ cardId, isHand }: DeckCardProps) {
+function DeckCard({ cardId, isHand, unaddble: addable }: DeckCardProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
-  const { card, removeCardFromDeck, addCardToDeck, isDeckFull } = usePlayerStore(
-    (state) => ({
+  const { card, removeCardFromDeck, addCardToDeck, isDeckFull } =
+    usePlayerStore((state) => ({
       card: state.getCompleteInfo(cardId),
       removeCardFromDeck: state.removeCardFromDeck,
       addCardToDeck: state.addCardToDeck,
-    isDeckFull: state.isDeckFull(),
-    })
-  );
+      isDeckFull: state.isDeckFull(),
+    }));
 
   return (
     <>
@@ -66,9 +95,9 @@ function DeckCard({ cardId, isHand }: DeckCardProps) {
       )}
       <div className="relative select-none h-min">
         <div className="" onClick={() => setIsDescriptionOpen(true)}>
-          <CardBorder rarity={card.rarity} size={isHand ? 1.4 : 2}>
+          <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>
             <div className="w-full h-full flex flex-col relative">
-              <CardContentIllustartion card={card} size={isHand ? 1.4 : 2} />
+              <CardContentIllustartion card={card} size={isHand ? 1.6 : 2} />
               <div className="absolute top-0 right-0">
                 <svg
                   className="h-full absolute left-0 -translate-x-full"
@@ -86,25 +115,36 @@ function DeckCard({ cardId, isHand }: DeckCardProps) {
             <ManaBall mana={card.cost} />
           </div>
         </div>
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/4">
-          {card.isInDeck ? (
-            <Button action={() => removeCardFromDeck(card.id)} small>
-              <img
-                src="/icons/minus.svg"
-                alt="remove"
-                className="w-4 h-4 m-1 my-2"
-              />
-            </Button>
-          ) : (
-            <Button action={preventDefault(() => addCardToDeck(card.id))} small disabled={isDeckFull}>
-              <img
-                src="/icons/plus.svg"
-                alt="add"
-                className="w-4 h-4 m-1 my-2"
-              />
-            </Button>
-          )}
-        </div>
+        {!addable && (
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/4">
+            {card.isInDeck ? (
+              <Button
+                action={() => removeCardFromDeck(card.id)}
+                small
+                className="px-4 py-0"
+              >
+                <img
+                  src="/icons/minus.svg"
+                  alt="remove"
+                  className="w-4 h-4 m-1 my-2"
+                />
+              </Button>
+            ) : (
+              <Button
+                action={preventDefault(() => addCardToDeck(card.id))}
+                small
+                className="px-4 py-0"
+                disabled={isDeckFull}
+              >
+                <img
+                  src="/icons/plus.svg"
+                  alt="add"
+                  className="w-4 h-4 m-1 my-2"
+                />
+              </Button>
+            )}
+          </div>
+        )}
       </div>
     </>
   );

@@ -25,6 +25,8 @@ export type CardType = {
 
 export type CardRarity = "common" | "rare" | "epic" | "legendary";
 
+export const CardRarityOrder: CardRarity[] = ["common", "rare", "epic", "legendary"];
+
 export interface CardEffects {
 	multiAttack?: MultiAttackEffect;
 	placementHeal?: PlacementHeal;

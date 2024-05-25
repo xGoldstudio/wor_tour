@@ -7,6 +7,10 @@ function numberWithCommas(x: number) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
+export function NumberSpan({ children }: { children: number }) {
+  return <span>{numberWithCommas(children)}</span>
+}
+
 interface HpBarProps {
   hp: number;
   maxHp: number;
