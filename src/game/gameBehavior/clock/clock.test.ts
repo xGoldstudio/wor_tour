@@ -2,6 +2,10 @@ import Clock from "./clock";
 
 const mockTriggerEvent = jest.fn(() => null);
 
+beforeEach(() => {
+	mockTriggerEvent.mockReset();
+});
+
 test('clock next tick', () => {
 	const clock = Clock(mockTriggerEvent);
 	expect(clock.getImmutableInternalState().currentFrame).toBe(0);
@@ -19,6 +23,7 @@ test('trigger event on next tick', () => {
 	clock.nextTick();
 	expect(mockTriggerEvent.mock.calls).toHaveLength(3);
 });
+
 
 test('trigger event on next tick, multiple ticks', () => {
 	const clock = Clock(mockTriggerEvent);

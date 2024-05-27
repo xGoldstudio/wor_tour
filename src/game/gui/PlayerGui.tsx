@@ -71,7 +71,7 @@ function PlayerGUI({
   );
 }
 
-export function getPlayerGuiId(isPlayer: boolean) {
+function getPlayerGuiId(isPlayer: boolean) {
   return `gui_${isPlayer ? "player" : "opponent"}`;
 }
 

@@ -31,7 +31,7 @@ export default function iaAgent() {
   }
 
   function computeMove(
-    event: EventType,
+    _: EventType,
     data: GameStore,
     triggerEvent: (event: EventType) => void
   ) {

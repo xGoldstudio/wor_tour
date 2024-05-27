@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore from "@/game/stores/gameStateStore";
 import PlayerGUI from "./gui/PlayerGui";
-import GameOverModal from "./GameOverModal";
 import * as _ from "lodash";
 import useGameEvents from "./gameBehavior/useGameEvents";
 import GameDebugPanel from "./GameDebugPanel";
@@ -17,7 +16,6 @@ export default function Game() {
     opponentHp,
     opponentMana,
     opponentMaxHp,
-    currentWinner,
   } = useGameStore();
   const { cardSelected, setCardTarget, removeCardTarget } = useGameInterface();
   const {
@@ -30,32 +28,32 @@ export default function Game() {
     isInit,
   } = useGameEvents();
 
-  function watchCardPlacement(event: MouseEvent) {
-    const elementIds = _.range(3).map((position) =>
-      getBoardTileId(true, position)
-    );
-    const overlapped = document.elementsFromPoint(event.pageX, event.pageY);
-    for (let i = 0; i < overlapped.length; i++) {
-      if (overlapped[i].id.startsWith("board_player_")) {
-        for (let y = 0; y < elementIds.length; y++) {
-          if (overlapped[i].id === elementIds[y]) {
-            setCardTarget(y);
-            return;
+  useEffect(() => {
+    function watchCardPlacement(event: MouseEvent) {
+      const elementIds = _.range(3).map((position) =>
+        getBoardTileId(true, position)
+      );
+      const overlapped = document.elementsFromPoint(event.pageX, event.pageY);
+      for (let i = 0; i < overlapped.length; i++) {
+        if (overlapped[i].id.startsWith("board_player_")) {
+          for (let y = 0; y < elementIds.length; y++) {
+            if (overlapped[i].id === elementIds[y]) {
+              setCardTarget(y);
+              return;
+            }
           }
         }
       }
+      removeCardTarget();
     }
-    removeCardTarget();
-  }
 
-  useEffect(() => {
     if (cardSelected !== null) {
       window.addEventListener("mousemove", watchCardPlacement);
       return () => {
         window.removeEventListener("mousemove", watchCardPlacement);
       };
     }
-  }, [cardSelected]);
+  }, [cardSelected, removeCardTarget, setCardTarget]);
 
   return (
     <div
@@ -70,7 +68,6 @@ export default function Game() {
       />
       {isInit && (
         <>
-          <GameOverModal currentWinner={currentWinner} />
           <div className="bg-black h-full w-full"></div>
           <div className="h-screen flex flex-col gap-4 justify-between relative overflow-hidden w-[700px]">
             <div
@@ -144,7 +141,7 @@ function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
       [{ transform: "scaleX(0%)" }, { transform: "scaleX(100%)" }],
       1000 / currentCard.attackSpeed
     );
-  }, [attackRef, startAttackTimestamp]);
+  }, [attackRef, currentCard, startAttackTimestamp]);
 
   return (
     <div
@@ -171,6 +168,6 @@ function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
   );
 }
 
-export function getBoardTileId(isPlayer: boolean, position: number) {
+function getBoardTileId(isPlayer: boolean, position: number) {
   return `board_${isPlayer ? "player" : "opponent"}_${position}`;
 }

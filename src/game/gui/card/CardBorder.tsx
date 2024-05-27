@@ -1,13 +1,10 @@
 import { CardRarity } from "@/cards";
+import { inPx } from "@/lib/utils";
 
 interface CardBoardProps {
   rarity: CardRarity;
   children: React.ReactNode;
   size: number;
-}
-
-export function inPx(value: number) {
-  return `${value}px`;
 }
 
 export default function CardBorder({ rarity, children, size }: CardBoardProps) {

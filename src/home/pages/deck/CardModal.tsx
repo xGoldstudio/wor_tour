@@ -5,39 +5,13 @@ import usePlayerStore from "@/home/store/playerStore";
 import Modal, { CoverModal } from "@/home/ui/modal";
 import { preventDefault } from "@/lib/eventUtils";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import useScrollCardList from "./useScrollCardList";
 
 interface CardModalProps {
   cardId: number;
   closeModal: () => void;
 }
 
-export function useScrollCardList(defaultPosition: number, numberOfCards: number) {
-  const [isPressed, setIsPressed] = useState(false);
-  const [currentPosition, setCurrentPosition] = useState(defaultPosition);
-  function changePosition(e: React.MouseEvent<HTMLDivElement>) {
-    if (!isPressed) {
-      return;
-    }
-
-    if (e.movementX > 0) {
-      updatePosition(-1);
-    } else if (e.movementX < 0) {
-      updatePosition(1);
-    }
-  }
-
-  function updatePosition(value: number) {
-    setCurrentPosition((prev) => Math.max(0, Math.min(numberOfCards - 1, prev + value)));
-    setIsPressed(false);
-  }
-
-  return {
-    currentPosition,
-    setIsPressed,
-    changePosition,
-  };
-}
 
 export default function CardModal({ closeModal, cardId }: CardModalProps) {
   const card = getCardStats(cardId);

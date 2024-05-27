@@ -53,7 +53,7 @@ function getCardsByRarityOrHigher(
   return null;
 }
 
-const useShopeStore = create<ShopStore>()((set, get) => ({
+const useShopeStore = create<ShopStore>()(() => ({
   cards: [],
   hasBeenBought: [],
   nextTimestamp: 0,

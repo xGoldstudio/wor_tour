@@ -46,12 +46,12 @@ interface FightBackEffect {
 	type: "fightBack";
 }
 
-interface CardsByRarity {
-	common: CardType[];
-	rare: CardType[];
-	epic: CardType[];
-	legendary: CardType[];
-}
+// interface CardsByRarity {
+// 	common: CardType[];
+// 	rare: CardType[];
+// 	epic: CardType[];
+// 	legendary: CardType[];
+// }
 
 export interface CardStatsInfo {
 	name: string;

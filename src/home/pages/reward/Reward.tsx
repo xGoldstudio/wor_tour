@@ -146,7 +146,7 @@ export default function Reward({
         });
       }, 2000);
     }
-  }, [cardRef, buttonRef, shinyRef, shardRef, evolutionCardRef]);
+  }, [cardRef, buttonRef, shinyRef, shardRef, evolutionCardRef, animationType, shardTargetIndex]);
 
   return (
     <div className="w-full h-full absolute z-10">
@@ -256,7 +256,7 @@ function ShowTitle({ title, delay }: { title: string; delay?: number }) {
       opacity: 1,
       stagger: 0.03,
     });
-  }, [ref]);
+  }, [delay, ref]);
 
   return (
     <h1 className="text-5xl text-nowrap font-stylised flex" ref={ref}>

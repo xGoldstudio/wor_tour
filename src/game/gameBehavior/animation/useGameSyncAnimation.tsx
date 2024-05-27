@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import * as CSS from "csstype";
 import { create } from "zustand";
+import { useOnMount } from "@/lib/lifecycle";
 
 type ComputeAnimation<State> = (state: State) => CSS.Properties;
 
@@ -37,9 +38,7 @@ function useGameSyncAnimationStore<State>() {
     store.animations.clear();
   }
 
-  useEffect(() => {
-    reset();
-  }, []);
+  useOnMount(reset);
 
   return { triggerGameSyncAnimation, reset: () => {
     reset();
@@ -54,25 +53,25 @@ function useGameAnimation<State, Element = any>(
   const store = useAnimationStore();
 
   useEffect(() => {
+    function registerAnimation(element: Element) {
+      const key = uuidv4();
+      store.animations.set(key, {
+        element: element as HTMLElement,
+        compute: computeAnimation as ComputeAnimation<unknown>,
+      });
+      return key;
+    }
+  
+    function removeAnimation(key: string) {
+      return store.animations.delete(key);
+    }
+
     if (animationRef.current === null) {
       return () => {};
     }
     const key = registerAnimation(animationRef.current);
     return () => removeAnimation(key);
-  }, [animationRef.current]);
-
-  function registerAnimation(element: Element) {
-    const key = uuidv4();
-    store.animations.set(key, {
-      element: element as HTMLElement,
-      compute: computeAnimation as ComputeAnimation<unknown>,
-    });
-    return key;
-  }
-
-  function removeAnimation(key: string) {
-    return store.animations.delete(key);
-  }
+  }, [animationRef, computeAnimation, store.animations]);
 
   return animationRef;
 }

@@ -6,19 +6,19 @@ import useGameStore, {
   getCardFromState,
   getHandFromState,
 } from "@/game/stores/gameStateStore";
-import iaAgent from "./iaAgent";
+import iaAgent from "./aiAgent";
 import cardAttacking from "./events/cardAttacking";
 import cardPlacementEventManager from "./events/cardPlacement";
 import { CardEffects } from "@/cards";
 import Clock, { ClockReturn } from "./clock/clock";
 import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
-import { getDeathAnimationKey } from "../gui/card/GameCardDeath";
 import GameCanvas, { GameCanvasReturn } from "./animation/gameCanvas";
 import {
   resetAllGameEventListeners,
   runGameEventListeners,
 } from "./gameEventListener";
 import useGameMetadataStore from "../stores/gameMetadataStore";
+import { useOnMount } from "@/lib/lifecycle";
 
 export const FRAME_TIME = 10;
 
@@ -158,6 +158,9 @@ export interface RemoveAnimationEvent {
   key: string;
 }
 
+export function getDeathAnimationKey(isPlayerCard: boolean, position: number) {
+  return `death_${isPlayerCard}_${position}`;
+}
 // all game logic here
 // todo to guaranteed fairness, we must wrap setTimeout in a custom gameLoop
 function useGameEvents(): GameEventsActions {
@@ -206,9 +209,9 @@ function useGameEvents(): GameEventsActions {
       gameCanvas?.append(gameRef.current);
     }
     return () => {};
-  }, [gameRef.current]);
+  }, [gameCanvas]);
 
-  useEffect(() => {
+  useOnMount(() => {
     initGameStore();
     initGameInterfaceStore();
 
@@ -223,7 +226,7 @@ function useGameEvents(): GameEventsActions {
     }
     resume();
     setIsInit(true);
-  }, []);
+  });
 
   function destroyGame() {
     setIsInit(false);

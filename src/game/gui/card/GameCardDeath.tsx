@@ -5,14 +5,11 @@ import useGameStore, {
 import { useGameAnimation } from "@/game/gameBehavior/animation/useGameSyncAnimation";
 import { animationSteps } from "@/game/gameBehavior/animation/timeline";
 import { GameCardDesign } from "./GameCard";
+import { getDeathAnimationKey } from "@/game/gameBehavior/useGameEvents";
 
 interface GameCardDeathProps {
   isPlayerCard: boolean;
   position: number;
-}
-
-export function getDeathAnimationKey(isPlayerCard: boolean, position: number) {
-  return `death_${isPlayerCard}_${position}`;
 }
 
 export default function GameCardDeath({
