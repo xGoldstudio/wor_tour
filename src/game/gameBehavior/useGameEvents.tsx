@@ -22,7 +22,7 @@ import { useOnMount } from "@/lib/lifecycle";
 
 export const FRAME_TIME = 10;
 
-export const manaSpeed = 1500; // 1.5s
+export const manaSpeed = 1500;
 
 interface GameEventsActions {
   userPlaceNewCard: (cardInHandPosition: number) => void;
