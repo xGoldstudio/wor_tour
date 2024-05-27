@@ -1,11 +1,11 @@
-import useGameInterface from "@/stores/gameInterfaceStore";
-import useGameStore, { GameStore } from "@/stores/gameStateInterface";
+import useGameInterface from "@/game/stores/gameInterfaceStore";
+import useGameStore, { GameStore } from "@/game/stores/gameStateInterface";
 import { motion, useDragControls } from "framer-motion";
 import { ManaBall } from "../ManaBar";
 import { FRAME_TIME, manaSpeed } from "../../gameBehavior/useGameEvents";
 import { CardType } from "@/cards";
 import { useGameAnimation } from "../../gameBehavior/animation/useGameSyncAnimation";
-import CardBorder from "./CardBorder";
+import CardBorder, { CardContentIllustartion } from "./CardBorder";
 
 function InHandCard({
   card,
@@ -16,7 +16,6 @@ function InHandCard({
   position?: number;
   userPlaceNewCard: (cardInHandPosition: number) => void;
 }) {
-  const usable = position !== undefined;
   const dragControls = useDragControls();
 
   const { setSelectedCard, unselectCard } = useGameInterface();
@@ -34,7 +33,7 @@ function InHandCard({
   return (
     <motion.div
       className="w-fit h-fit bg-black rounded-sm relative select-none"
-      drag={usable && card.cost <= playerMana}
+      drag={card.cost <= playerMana}
       dragSnapToOrigin
       onDragStart={onSelectCard}
       onDragEnd={onUnselectCard}
@@ -42,10 +41,7 @@ function InHandCard({
       dragControls={dragControls}
     >
       <CardBorder rarity={card.rarity} size={1.8}>
-        <CardIllustartion
-          cardId={card.id}
-          manaCost={usable ? card.cost : null}
-        />
+        <InHandCardIllustration card={card} />
       </CardBorder>
       <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 scale-75">
         <ManaBall mana={card.cost} />
@@ -54,16 +50,10 @@ function InHandCard({
   );
 }
 
-function CardIllustartion({
-  cardId,
-  manaCost,
-}: {
-  cardId: number;
-  manaCost: number | null;
-}) {
+function InHandCardIllustration({ card }: { card: CardType }) {
   const animationRef = useGameAnimation<GameStore & { currentTick: number }>(
     (state) => {
-      if (manaCost !== null && state.playerMana >= manaCost) {
+      if (card.cost !== null && state.playerMana >= card.cost) {
         return {
           transform: `scaleY(0%)`,
         };
@@ -72,7 +62,8 @@ function CardIllustartion({
         (state.currentTick - state.playerTickStartEarningMana!) /
         (manaSpeed / FRAME_TIME);
       const alreadyProgress =
-        (state.playerMana + runningManaEarningProgress) / (manaCost || 0);
+        (state.playerMana + runningManaEarningProgress) / (card.cost || 0);
+
       return {
         transform: `scaleY(${100 - alreadyProgress * 100}%)`,
       };
@@ -80,20 +71,13 @@ function CardIllustartion({
   );
 
   return (
-    <>
-      <div
-        className="w-full h-full"
-        style={{
-          backgroundImage: `url(/${cardId}.png)`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></div>
+    <div className="relative w-full h-full">
+      <CardContentIllustartion card={card} size={1.8} />
       <div
         ref={animationRef}
         className="absolute top-0 w-full h-full bg-slate-600 opacity-40 origin-top"
       />
-    </>
+    </div>
   );
 }
 

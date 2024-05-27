@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
-import useGameInterface from "@/stores/gameInterfaceStore";
+import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore, {
   GameAnimation,
   GameStore,
   getCardFromState,
   getHandFromState,
-} from "@/stores/gameStateInterface";
+} from "@/game/stores/gameStateInterface";
 import iaAgent from "./iaAgent";
 import cardAttacking from "./events/cardAttacking";
 import cardPlacementEventManager from "./events/cardPlacement";
@@ -15,6 +15,7 @@ import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
 import { getDeathAnimationKey } from "../gui/card/GameCardDeath";
 import GameCanvas, { GameCanvasReturn } from "./animation/gameCanvas";
 import callOnce from "@/lib/callOnce";
+import useGameBaseStore from "../stores/gameStore";
 
 export const FRAME_TIME = 10;
 
@@ -190,6 +191,7 @@ function resetAllGameEventListeners() {
 // todo to guaranteed fairness, we must wrap setTimeout in a custom gameLoop
 function useGameEvents(): GameEventsActions {
   const {
+    init,
     increaseMana,
     getData,
     placeCardBoard,
@@ -230,7 +232,11 @@ function useGameEvents(): GameEventsActions {
     return () => {};
   }, [gameRef.current]);
 
+  const cards = useGameBaseStore((state) => state.getCards());
+
   useEffect(() => {
+    init(cards.player, cards.opponent);
+
     iaAgent();
     shuffleDeck(true);
     shuffleDeck(false);

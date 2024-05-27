@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import useGameInterface from "@/stores/gameInterfaceStore";
-import useGameStore from "@/stores/gameStateInterface";
+import useGameInterface from "@/game/stores/gameInterfaceStore";
+import useGameStore from "@/game/stores/gameStateInterface";
 import PlayerGUI from "./gui/PlayerGui";
 import GameOverModal from "./GameOverModal";
 import * as _ from "lodash";

@@ -1,4 +1,4 @@
-import { CardRarity, CardType } from "@/cards";
+import { CardRarity } from "@/cards";
 
 interface CardBoardProps {
   rarity: CardRarity;
@@ -129,7 +129,7 @@ export function CardContentIllustartion({
   card,
   size,
 }: {
-  card: CardType;
+  card: { worldIllustration: string; illustration: string };
   size: number;
 }) {
   const borderUnit = Math.min(0.5 * size, 2);

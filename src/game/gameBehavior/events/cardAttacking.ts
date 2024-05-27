@@ -1,4 +1,4 @@
-import { GameStore } from "@/stores/gameStateInterface";
+import { GameStore } from "@/game/stores/gameStateInterface";
 import { CardAttackingEvent, TriggerEventType } from "../useGameEvents";
 
 export default function cardAttacking(

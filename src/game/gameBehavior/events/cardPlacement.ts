@@ -1,6 +1,6 @@
-import { findCard } from "@/cards";
 import { PlaceCardEvent, TriggerEventType } from "../useGameEvents";
-import { GameStore, InGameCardType } from "@/stores/gameStateInterface";
+import { GameStore, InGameCardType } from "@/game/stores/gameStateInterface";
+import useGameBaseStore from "@/game/stores/gameStore";
 import * as _ from "lodash";
 
 export default function cardPlacementEventManager(
@@ -14,7 +14,7 @@ export default function cardPlacementEventManager(
     card: InGameCardType
   ) => void
 ) {
-	const foundCard = findCard(event.cardId, 1);
+	const foundCard = useGameBaseStore.getState().findCard(event.cardId, event.isPlayer);
 	const cardInGame: InGameCardType = {
 		id: foundCard.id,
 		maxHp: foundCard.hp,
@@ -25,6 +25,8 @@ export default function cardPlacementEventManager(
 		instanceId: getNextInstanceId(),
 		rarity: foundCard.rarity,
 		effects: _.cloneDeep(foundCard.effects) || {},
+		illustration: foundCard.illustration,
+		worldIllustration: foundCard.worldIllustration,
 	};
 	triggerEvent({
 		type: "manaConsume",

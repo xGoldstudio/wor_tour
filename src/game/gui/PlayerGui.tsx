@@ -1,9 +1,9 @@
 import HpBar from "./HpBar";
 import ManaBar from "./ManaBar";
-import useGameStore from "@/stores/gameStateInterface";
-import findCard from "@/cards";
+import useGameStore from "@/game/stores/gameStateInterface";
 import InHandCard from "./card/InHandCard";
 import StaticCard from "./card/StaticCard";
+import useGameBaseStore from "@/game/stores/gameStore";
 
 interface PlayerGUIProps {
   mana: number;
@@ -24,10 +24,9 @@ function PlayerGUI({
     deck: isPlayer ? state.playerDeck : state.opponentDeck,
     hand: isPlayer ? state.playerHand : state.opponentHand,
   }));
+  const findCard = useGameBaseStore((state) => state.findCard);
 
-  const playerHandSanitized = hand.find((id) => id === null)
-    ? null
-    : (hand as number[]);
+  const playerHandSanitized = hand.filter((cardId) => cardId !== null) as number[];
 
   const reverseDeck = [...deck].reverse();
 
@@ -48,13 +47,13 @@ function PlayerGUI({
                     style={{ top: `${-index * 5}px`, left: `${-index * 5}px` }}
                     key={`${cardId}_${index}`}
                   >
-                    <StaticCard card={findCard(cardId)} />
+                    <StaticCard card={findCard(cardId, isPlayer)} />
                   </div>
                 ))}
               </div>
               {playerHandSanitized?.map((cardId, index) => (
                 <InHandCard
-                  card={findCard(cardId)}
+                  card={findCard(cardId, isPlayer)}
                   position={index}
                   key={`${cardId}_${index}`}
                   userPlaceNewCard={userPlaceNewCard}

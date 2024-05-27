@@ -1,4 +1,4 @@
-import useGameStore, { GameStore } from "@/stores/gameStateInterface";
+import useGameStore, { GameStore } from "@/game/stores/gameStateInterface";
 import { useRef, useState } from "react";
 import { FRAME_TIME, manaSpeed } from "../gameBehavior/useGameEvents";
 import { useGameAnimation } from "../gameBehavior/animation/useGameSyncAnimation";

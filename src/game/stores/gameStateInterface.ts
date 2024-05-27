@@ -3,6 +3,8 @@ import { create } from "zustand";
 import * as _ from "lodash";
 
 export interface GameStore {
+  init: (playerDeck: number[], opponentDeck: number[]) => void;
+
   playerDeck: number[];
   playerHand: (number | null)[];
   playerMana: number;
@@ -94,10 +96,16 @@ export type InGameCardType = {
   startAttackingTick: number | null;
   rarity: CardRarity;
   effects: CardEffects
-} ;
+  illustration: string;
+  worldIllustration: string;
+};
 
 const useGameStore = create<GameStore>()((set, get) => ({
-  playerDeck: [1, 2, 3, 4, 5, 6],
+  init: (playerDeck: number[], opponentDeck: number[]) => {
+    set({ playerDeck, opponentDeck });
+  },
+
+  playerDeck: [],
   playerHand: [null, null, null, null],
   playerMana: 7,
   playerHp: 3000,
@@ -106,7 +114,7 @@ const useGameStore = create<GameStore>()((set, get) => ({
 
   playerBoard: [null, null, null],
 
-  opponentDeck: [1, 2, 3, 4, 5, 6],
+  opponentDeck: [],
   opponentHand: [null, null, null, null],
   opponentMana: 7,
   opponentHp: 3000,

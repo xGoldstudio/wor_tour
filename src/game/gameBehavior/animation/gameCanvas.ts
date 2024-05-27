@@ -1,5 +1,5 @@
 import { Point } from "@/game/TargetLine";
-import { Animation3dType } from "@/stores/gameStateInterface";
+import { Animation3dType } from "@/game/stores/gameStateInterface";
 import * as THREE from 'three';
 import { cubicBezier } from "./timeline";
 

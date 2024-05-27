@@ -7,7 +7,7 @@ import {
 } from "./useGameEvents";
 import { CardType, findCard } from "@/cards";
 import * as _ from "lodash";
-import { GameStore } from "@/stores/gameStateInterface";
+import { GameStore } from "@/game/stores/gameStateInterface";
 
 export default function iaAgent() {
   let nextCardToUse: { position: number; card: CardType } | null = null;
