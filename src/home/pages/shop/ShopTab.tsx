@@ -17,7 +17,7 @@ export default function ShopTab() {
         <Ribbon>Boosters</Ribbon>
         <div className="grid grid-cols-3 gap-1 w-[416px]">
           {Object.values(boosters).map((booster) => (
-            <Booster booster={booster} />
+            <Booster booster={booster} key={booster.name} />
           ))}
         </div>
         <Ribbon>Cards by unit</Ribbon>
@@ -26,7 +26,7 @@ export default function ShopTab() {
         </p>
         <div className="grid grid-cols-3 gap-4">
           {buyableCards.map((card) => (
-            <BuyCard card={card} />
+            <BuyCard card={card} key={card.id} />
           ))}
         </div>
         <div className="h-[80px] w-4  pt-32"></div>

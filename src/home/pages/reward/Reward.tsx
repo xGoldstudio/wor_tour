@@ -1,10 +1,10 @@
 import { Button, Header } from "@/home/Home";
-import { FullCard } from "../deck/CardModal";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import * as _ from "lodash";
 import { findCard } from "@/cards";
 import useRewardStore, { RewardType } from "@/home/store/rewardStore";
+import FullCard from "@/game/gui/card/FullCard";
 
 interface RewardProps {
   shardTargetIndex: number | null;
@@ -175,19 +175,20 @@ export default function Reward({
         >
           <defs>
             <linearGradient id="gradient" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="40%" stop-color="white" stopOpacity={0} />
-              <stop offset="60%" stop-color="white" stopOpacity={0.5} />
-              <stop offset="100%" stop-color="white" />
+              <stop offset="40%" stopColor="white" stopOpacity={0} />
+              <stop offset="60%" stopColor="white" stopOpacity={0.5} />
+              <stop offset="100%" stopColor="white" />
             </linearGradient>
             <linearGradient id="legendaryGradient" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="40%" stop-color="#DFFCD3" stopOpacity={0} />
-              <stop offset="60%" stop-color="#1D7BFA" stopOpacity={0.5} />
-              <stop offset="100%" stop-color="#F02BD4" />
+              <stop offset="40%" stopColor="#DFFCD3" stopOpacity={0} />
+              <stop offset="60%" stopColor="#1D7BFA" stopOpacity={0.5} />
+              <stop offset="100%" stopColor="#F02BD4" />
             </linearGradient>
           </defs>
 
           {_.range(8).map((index) => (
             <polygon
+              key={index}
               points="50,50 10,0 0,10"
               fill={`url(${
                 card.rarity !== "legendary" ? "#gradient" : "#legendaryGradient"
@@ -261,7 +262,7 @@ function ShowTitle({ title, delay }: { title: string; delay?: number }) {
     <h1 className="text-5xl text-nowrap font-stylised flex" ref={ref}>
       {title.split("").map((letter, index) =>
         letter === " " ? (
-          <div className="w-4"></div>
+          <div className="w-4" key={index}></div>
         ) : (
           <span key={index} className="relative block">
             {letter}

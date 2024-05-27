@@ -23,7 +23,7 @@ export default function DeckTab() {
   return (
     <div className="w-full grid grid-rows-[1fr_auto] absolute top-0 h-full">
       <ScrollContainer className="grow overflow-y-scroll pt-2 scrollbar-hide flex justify-center">
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {collection.map((card) => (
             <div className="w-full flex justify-center" key={card.id}>
               <DeckCard cardId={card.id} />
@@ -32,7 +32,7 @@ export default function DeckTab() {
         </div>
       </ScrollContainer>
       <div className="w-full flex justify-center relative overflow-hidden mb-2 mt-4">
-        <Box width={650} height={224} rarity="legendary">
+        <Box width={650} height={210} rarity="legendary">
           <div
             className="absolute w-full h-full top-0 left-0 blur-sm"
             style={{

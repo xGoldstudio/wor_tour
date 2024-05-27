@@ -19,7 +19,8 @@ export default function BuyCard({ card }: BuyCardProps) {
     state.collection.get(card.id)
   );
 
-  const unavalaible = hasBeenBought !== undefined || collectionCard?.level === 3;
+  const unavalaible =
+    hasBeenBought !== undefined || collectionCard?.level === 3;
 
   return (
     <div className={cn("flex flex-col gap-2", unavalaible && "brightness-50")}>
@@ -36,7 +37,17 @@ export default function BuyCard({ card }: BuyCardProps) {
           for <GoldAmount amount={priceByRarity[card.rarity]} /> ?
         </p>
       </ConfirmationModal>
-      <DeckCard card={card} size={2} />
+      <div
+        onClick={() => {
+          if (unavalaible) {
+            return;
+          }
+          setIsConfirmationOpen(true);
+        }}
+        className="cursor-pointer"
+      >
+        <DeckCard card={card} size={2} />
+      </div>
       <Button
         action={() => setIsConfirmationOpen(true)}
         full

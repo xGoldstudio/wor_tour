@@ -15,7 +15,7 @@ import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
 import { getDeathAnimationKey } from "../gui/card/GameCardDeath";
 import GameCanvas, { GameCanvasReturn } from "./animation/gameCanvas";
 import callOnce from "@/lib/callOnce";
-import useGameBaseStore from "../stores/gameStore";
+import useGameMetadataStore from "../stores/gameMetadataStore";
 
 export const FRAME_TIME = 10;
 
@@ -232,7 +232,7 @@ function useGameEvents(): GameEventsActions {
     return () => {};
   }, [gameRef.current]);
 
-  const cards = useGameBaseStore((state) => state.getCards());
+  const cards = useGameMetadataStore((state) => state.getCards());
 
   useEffect(() => {
     init(cards.player, cards.opponent);

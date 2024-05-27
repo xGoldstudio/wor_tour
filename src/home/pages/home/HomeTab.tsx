@@ -1,6 +1,9 @@
+import useGameMetadataStore from "@/game/stores/gameMetadataStore";
 import { Button } from "../../Home";
 
 export default function HomeTab() {
+  const setIsInGame = useGameMetadataStore(state => state.setIsInGame);
+
   return (
     <div className="w-full flex flex-col items-center gap-4">
       <div
@@ -14,7 +17,7 @@ export default function HomeTab() {
       <p className="font-[stylised] font-bold text-2xl text-white">
         World 1 - Level 1
       </p>
-      <Button action={() => {}}>Play</Button>
+      <Button action={() => setIsInGame(true)}>Play</Button>
     </div>
   );
 }

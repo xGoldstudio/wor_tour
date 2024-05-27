@@ -3,10 +3,12 @@ import { CollectionCard } from '@/home/store/playerStore';
 import { create } from 'zustand'
 
 interface GameInterfaceStore {
+  isInGame: boolean;
   playerCards: Map<number, CollectionCard>;
   opponentCards: Map<number, CollectionCard>;
   getCards: () => { player: number[]; opponent: number[] };
   findCard: (id: number, isPlayer: boolean) => CardType;
+  setIsInGame: (isInGame: boolean) => void;
 }
 
 const playerCards = new Map<number, CollectionCard>();
@@ -28,7 +30,8 @@ opponentCards.set(6, { id: 6, level: 1, shard: 0 });
 opponentCards.set(7, { id: 7, level: 1, shard: 0 });
 opponentCards.set(8, { id: 8, level: 1, shard: 2 });
 
-const useGameBaseStore = create<GameInterfaceStore>()((set, get) => ({
+const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
+  isInGame: false,
   playerCards: playerCards,
   opponentCards: opponentCards,
   getCards: () => ({
@@ -40,6 +43,7 @@ const useGameBaseStore = create<GameInterfaceStore>()((set, get) => ({
     if (collectionCard === undefined) throw new Error(`Card with id ${id} not found`);
     return findCard(collectionCard.id, collectionCard.level);
   },
+  setIsInGame: (isInGame: boolean) => set({ isInGame }),
 }));
 
-export default useGameBaseStore;
+export default useGameMetadataStore;

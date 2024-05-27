@@ -3,7 +3,7 @@ import ManaBar from "./ManaBar";
 import useGameStore from "@/game/stores/gameStateInterface";
 import InHandCard from "./card/InHandCard";
 import StaticCard from "./card/StaticCard";
-import useGameBaseStore from "@/game/stores/gameStore";
+import useGameMetadataStore from "@/game/stores/gameMetadataStore";
 
 interface PlayerGUIProps {
   mana: number;
@@ -24,7 +24,7 @@ function PlayerGUI({
     deck: isPlayer ? state.playerDeck : state.opponentDeck,
     hand: isPlayer ? state.playerHand : state.opponentHand,
   }));
-  const findCard = useGameBaseStore((state) => state.findCard);
+  const findCard = useGameMetadataStore((state) => state.findCard);
 
   const playerHandSanitized = hand.filter((cardId) => cardId !== null) as number[];
 

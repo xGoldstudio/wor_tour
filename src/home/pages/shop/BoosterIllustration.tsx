@@ -4,11 +4,11 @@ import * as _ from "lodash";
 export default function BoosterIllustration({
   size,
   title,
-	illustration,
+  illustration,
 }: {
   size: number;
   title: string;
-	illustration: string;
+  illustration: string;
 }) {
   return (
     <div
@@ -39,6 +39,7 @@ export default function BoosterIllustration({
             y2="15"
             stroke="black"
             strokeWidth={1}
+            key={i}
           />
         ))}
 
@@ -46,10 +47,10 @@ export default function BoosterIllustration({
         <text
           x="50%"
           y="150"
-          dominant-baseline="middle"
-          text-anchor="middle"
+          dominantBaseline="middle"
+          textAnchor="middle"
           className="font-stylised"
-					fill="white"
+          fill="white"
         >
           {title}
         </text>
@@ -70,6 +71,7 @@ export default function BoosterIllustration({
             y2="183"
             stroke="black"
             strokeWidth={1}
+            key={i}
           />
         ))}
       </svg>

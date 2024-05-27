@@ -4,11 +4,12 @@ import BoosterIllustration from "./BoosterIllustration";
 import { Button } from "@/home/Home";
 import Modal, { BackgroundModal } from "@/home/ui/modal";
 import { preventDefault } from "@/lib/eventUtils";
-import { FullCard, useScrollCardList } from "../deck/CardModal";
+import { useScrollCardList } from "../deck/CardModal";
 import usePlayerStore from "@/home/store/playerStore";
 import ConfirmationModal from "@/home/ui/ConfirmationModal";
 import { GoldAmount } from "@/home/ui/GoldAmount";
 import Box from "@/home/ui/Box";
+import FullCard from "@/game/gui/card/FullCard";
 
 interface BoosterProps {
   booster: BoosterType;
