@@ -1,6 +1,6 @@
 import HpBar from "./HpBar";
 import ManaBar from "./ManaBar";
-import useGameStore from "@/game/stores/gameStateInterface";
+import useGameStore from "@/game/stores/gameStateStore";
 import InHandCard from "./card/InHandCard";
 import StaticCard from "./card/StaticCard";
 import useGameMetadataStore from "@/game/stores/gameMetadataStore";

@@ -4,12 +4,14 @@ interface GameDebugPanelProps {
   togglePlay: () => void;
   isClockRunning: boolean;
   fastForward: (amount: number) => void;
+  destroyGame: () => void;
 }
 
 export default function GameDebugPanel({
   togglePlay,
   isClockRunning,
   fastForward,
+  destroyGame,
 }: GameDebugPanelProps) {
   if (!IS_DEBUG()) {
     return <></>;
@@ -24,6 +26,10 @@ export default function GameDebugPanel({
         <DebugButton onClick={() => fastForward(10)}>+10</DebugButton>
         <DebugButton onClick={() => fastForward(100)}>+100</DebugButton>
       </div>
+      <DebugButton onClick={() => {
+        togglePlay();
+        destroyGame();
+      }}>leave game</DebugButton>
     </div>
   );
 }

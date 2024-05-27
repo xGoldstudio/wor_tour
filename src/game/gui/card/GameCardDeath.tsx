@@ -1,7 +1,7 @@
 import useGameStore, {
   GameStore,
   InGameCardType,
-} from "@/game/stores/gameStateInterface";
+} from "@/game/stores/gameStateStore";
 import { useGameAnimation } from "@/game/gameBehavior/animation/useGameSyncAnimation";
 import { animationSteps } from "@/game/gameBehavior/animation/timeline";
 import { GameCardDesign } from "./GameCard";

@@ -2,13 +2,21 @@ import { CardType, findCard } from '@/cards';
 import { CollectionCard } from '@/home/store/playerStore';
 import { create } from 'zustand'
 
+export interface InGameInitData {
+  playerDeck: number[];
+  opponentDeck: number[];
+  playerHp: number;
+  opponentHp: number;
+}
+
 interface GameInterfaceStore {
   isInGame: boolean;
   playerCards: Map<number, CollectionCard>;
   opponentCards: Map<number, CollectionCard>;
-  getCards: () => { player: number[]; opponent: number[] };
+  getInGameInitData: () => InGameInitData;
   findCard: (id: number, isPlayer: boolean) => CardType;
   setIsInGame: (isInGame: boolean) => void;
+  reset: () => void;
 }
 
 const playerCards = new Map<number, CollectionCard>();
@@ -34,9 +42,11 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
   isInGame: false,
   playerCards: playerCards,
   opponentCards: opponentCards,
-  getCards: () => ({
-    player: Array.from(get().playerCards.keys()),
-    opponent: Array.from(get().opponentCards.keys()),
+  getInGameInitData: () => ({
+    playerDeck: Array.from(get().playerCards.keys()),
+    opponentDeck: Array.from(get().opponentCards.keys()),
+    playerHp: 3000,
+    opponentHp: 3000,
   }),
   findCard: (id: number, isPlayer: boolean) => {
     const collectionCard = isPlayer ? get().playerCards.get(id) : get().opponentCards.get(id);
@@ -44,6 +54,7 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
     return findCard(collectionCard.id, collectionCard.level);
   },
   setIsInGame: (isInGame: boolean) => set({ isInGame }),
+  reset: () => set({ isInGame: false }),
 }));
 
 export default useGameMetadataStore;

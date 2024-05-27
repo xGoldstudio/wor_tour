@@ -13,21 +13,28 @@ interface GameInterfaceStore {
   setIsClockRunning: (value: boolean) => void;
 
   getData: () => GameInterfaceStore;
+  init: () => void;
 }
 
-const useGameInterface = create<GameInterfaceStore>()((set, get) => ({
+const state = {
   cardSelected: null,
+  cardTarget: null,
+  isClockRunning: false,
+};
+
+const useGameInterface = create<GameInterfaceStore>()((set, get) => ({
+  ...state,
+
   setSelectedCard: (cardPosition: number) => set({ cardSelected: cardPosition }),
   unselectCard: () => set({ cardSelected: null }),
 
-  cardTarget: null,
   setCardTarget: (target: number) => set({ cardTarget: target }),
   removeCardTarget: () => set({ cardTarget: null }),
 
-  isClockRunning: true,
   setIsClockRunning: (value: boolean) => set({ isClockRunning: value }),
 
   getData: get,
+  init: () => set({ ...state }),
 }));
 
 export default useGameInterface;

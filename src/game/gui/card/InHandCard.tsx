@@ -1,5 +1,5 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
-import useGameStore, { GameStore } from "@/game/stores/gameStateInterface";
+import useGameStore, { GameStore } from "@/game/stores/gameStateStore";
 import { motion, useDragControls } from "framer-motion";
 import { ManaBall } from "../ManaBar";
 import { FRAME_TIME, manaSpeed } from "../../gameBehavior/useGameEvents";

@@ -1,5 +1,6 @@
-import { GameStore } from "@/game/stores/gameStateInterface";
-import { CardAttackingEvent, TriggerEventType } from "../useGameEvents";
+import { GameStore } from "@/game/stores/gameStateStore";
+import { CardAttackingEvent } from "../useGameEvents";
+import { TriggerEventType } from "../gameEventListener";
 
 export default function cardAttacking(
 	event: CardAttackingEvent,

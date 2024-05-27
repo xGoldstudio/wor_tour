@@ -22,7 +22,7 @@ const tabs: Record<Tabs, () => JSX.Element> = {
 };
 
 export default function Home() {
-  const [currentTab, setCurrentTab] = useState<Tabs>("deck");
+  const [currentTab, setCurrentTab] = useState<Tabs>("home");
 
   const TabElement = tabs[currentTab];
 

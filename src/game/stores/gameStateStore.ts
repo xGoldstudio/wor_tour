@@ -1,9 +1,10 @@
 import { CardEffects, CardRarity } from "@/cards";
 import { create } from "zustand";
 import * as _ from "lodash";
+import useGameMetadataStore, { InGameInitData } from "./gameMetadataStore";
 
 export interface GameStore {
-  init: (playerDeck: number[], opponentDeck: number[]) => void;
+  init: () => void;
 
   playerDeck: number[];
   playerHand: (number | null)[];
@@ -100,33 +101,38 @@ export type InGameCardType = {
   worldIllustration: string;
 };
 
-const useGameStore = create<GameStore>()((set, get) => ({
-  init: (playerDeck: number[], opponentDeck: number[]) => {
-    set({ playerDeck, opponentDeck });
-  },
-
-  playerDeck: [],
+const initState = ({ playerDeck, opponentDeck, playerHp, opponentHp }: InGameInitData) => ({
+  playerDeck,
   playerHand: [null, null, null, null],
   playerMana: 7,
-  playerHp: 3000,
-  playerMaxHp: 3000,
+  playerHp,
+  playerMaxHp: playerHp,
   playerTickStartEarningMana: null,
 
   playerBoard: [null, null, null],
 
-  opponentDeck: [],
+  opponentDeck,
   opponentHand: [null, null, null, null],
   opponentMana: 7,
-  opponentHp: 3000,
-  opponentMaxHp: 3000,
+  opponentHp,
+  opponentMaxHp: opponentHp,
   opponentTickStartEarningMana: null,
 
   opponentBoard: [null, null, null],
 
-  // global state
   currentWinner: null,
   currentInstanceId: 0,
 
+  animations: new Map(),
+});
+
+const useGameStore = create<GameStore>()((set, get) => ({
+  ...initState({ playerDeck: [], opponentDeck: [], playerHp: 0, opponentHp: 0 }),
+  init: () => {
+    set(initState(
+      useGameMetadataStore.getState().getInGameInitData()
+    ));
+  },
   getData: () => get(),
   startEarningMana: (isPlayer: boolean, tick: number) =>
     set(
@@ -289,7 +295,6 @@ const useGameStore = create<GameStore>()((set, get) => ({
     );
   },
 
-  animations: new Map(),
   addAnimation: (key: string, animation: GameAnimation) => {
     set((state) => {
       const animations = state.animations;

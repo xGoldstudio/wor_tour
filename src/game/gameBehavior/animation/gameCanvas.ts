@@ -1,5 +1,5 @@
 import { Point } from "@/game/TargetLine";
-import { Animation3dType } from "@/game/stores/gameStateInterface";
+import { Animation3dType } from "@/game/stores/gameStateStore";
 import * as THREE from 'three';
 import { cubicBezier } from "./timeline";
 
@@ -9,6 +9,7 @@ export interface GameCanvasReturn {
 	append: (target: HTMLDivElement) => void;
 	paint: (tick: number) => void;
 	newAnimation: (originId: string, targetId: string, type: Animation3dType, onTick: number, options?: GameCanvasAnimationOptions) => void;
+	destroy: () => void;
 }
 
 interface GameCanvasAnimationOptions {
@@ -23,13 +24,19 @@ export default function GameCanvas(): GameCanvasReturn {
 	canvas.height = window.innerHeight;
 	canvas.style.pointerEvents = "none";
 	canvas.id = "gameCanvas";
+	canvas.style.zIndex = "100";
 	const instance = setupScene(canvas);
+	let appended = false;
 
 	let animations: AnimationInstance[] = [];
 
 	function append(target: HTMLDivElement) {
+		if (appended) {
+			return;
+		}
 		target.appendChild(canvas);
 		instance.render();
+		appended = true;
 	}
 
 	function paint(tick: number) {
@@ -63,10 +70,17 @@ export default function GameCanvas(): GameCanvasReturn {
 		animations = [...animations, animationInstance];
 	}
 
+	function destroy() {
+		canvas.remove();
+		instance.destroy();
+		animations = [];
+	}
+
 	return {
 		append,
 		paint,
 		newAnimation,
+		destroy,
 	};
 }
 
@@ -192,5 +206,9 @@ function setupScene(canvas: HTMLCanvasElement) {
 		},
 		raycast,
 		initAnimation,
+		destroy: () => {
+			renderer.dispose();
+			renderer.forceContextLoss();
+		}
 	};
 }

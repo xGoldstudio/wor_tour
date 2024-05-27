@@ -1,5 +1,4 @@
-import useGameStore, { GameStore } from "@/game/stores/gameStateInterface";
-import { useRef, useState } from "react";
+import { GameStore } from "@/game/stores/gameStateStore";
 import { FRAME_TIME, manaSpeed } from "../gameBehavior/useGameEvents";
 import { useGameAnimation } from "../gameBehavior/animation/useGameSyncAnimation";
 
@@ -9,28 +8,6 @@ interface ManaBarProps {
 }
 
 function ManaBar({ isPlayer, mana }: ManaBarProps) {
-  const manaTimestamp = useGameStore((state) =>
-    isPlayer
-      ? state.playerTickStartEarningMana
-      : state.opponentTickStartEarningMana
-  );
-
-  const [oldTimestamp, setOldTimestamp] = useState(manaTimestamp);
-  const progressBarSlider = useRef<HTMLDivElement | null>(null);
-
-  const isTimeStampDifferent =
-    manaTimestamp !== oldTimestamp && manaTimestamp !== null;
-  if (isTimeStampDifferent) {
-    setOldTimestamp(manaTimestamp);
-
-    if (progressBarSlider.current) {
-      progressBarSlider.current.animate(
-        [{ transform: "scaleX(0%)" }, { transform: "scaleX(100%)" }],
-        manaSpeed
-      );
-    }
-  }
-
   return (
     <div className="gap-2 grid grid-cols-9 w-full h-[28px] relative my-[6px] pl-[30px]">
       <div className="absolute top-[-6px]">

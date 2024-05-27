@@ -1,7 +1,8 @@
-import { PlaceCardEvent, TriggerEventType } from "../useGameEvents";
-import { GameStore, InGameCardType } from "@/game/stores/gameStateInterface";
+import { PlaceCardEvent } from "../useGameEvents";
+import { GameStore, InGameCardType } from "@/game/stores/gameStateStore";
 import useGameMetadataStore from "@/game/stores/gameMetadataStore";
 import * as _ from "lodash";
+import { TriggerEventType } from "../gameEventListener";
 
 export default function cardPlacementEventManager(
 	event: PlaceCardEvent,

@@ -3,11 +3,11 @@ import {
   CardDestroyedEvent,
   EventType,
   ManaIncreaseEvent,
-  addGameEventListener,
 } from "./useGameEvents";
 import { CardType, findCard } from "@/cards";
 import * as _ from "lodash";
-import { GameStore } from "@/game/stores/gameStateInterface";
+import { GameStore } from "@/game/stores/gameStateStore";
+import { addGameEventListener } from "./gameEventListener";
 
 export default function iaAgent() {
   let nextCardToUse: { position: number; card: CardType } | null = null;
