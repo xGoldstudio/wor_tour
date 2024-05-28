@@ -11,12 +11,41 @@ import usePlayerStore from "@/home/store/playerStore"
 import { preventDefault } from "@/lib/eventUtils"
 import * as _ from "lodash"
 import Box from "@/home/ui/Box"
+import { FilterModal, SortModal } from "@/home/ui/modal"
 
-function SortAndFilterBox() {
+interface SortAndFilterBoxProps {
+  setActualSort: () => void
+  actualSort: string
+  setActualFilter: () => void
+  actualFilter: string
+}
+
+function SortAndFilterBox({
+  setActualSort,
+  actualSort,
+  setActualFilter,
+  actualFilter,
+}: SortAndFilterBoxProps) {
+  const [sortIsOpen, setSortIsOpen] = useState(false)
+  const [filterIsOpen, setFilterIsOpen] = useState(false)
   return (
-    <div className="absolute w-20 h-6 flex border-2  border-red-600 -top-4 justify-between items-center">
-      <button>Sort</button>
-      <button>Filter</button>
+    <div className="w-full h-6 flex border-2  border-red-600 -top-4 justify-center gap-4 items-center">
+      <button onClick={() => setSortIsOpen(true)}>Sort</button>
+      <button onClick={() => setFilterIsOpen(true)}>Filter</button>
+      {sortIsOpen && (
+        <SortModal
+          setActualSort={setActualSort}
+          actualSort={actualSort}
+          closeModal={() => setSortIsOpen(false)}
+        />
+      )}
+      {filterIsOpen && (
+        <FilterModal
+          setActualFilter={setActualFilter}
+          actualFilter={actualFilter}
+          closeModal={() => setFilterIsOpen(false)}
+        />
+      )}
     </div>
   )
 }
@@ -26,15 +55,67 @@ export default function DeckTab() {
     deck: state.deck,
     collection: state.getCollection(),
   }))
+  const { detailledCollection } = usePlayerStore((state) => ({
+    detailledCollection: state.getCollectionCompleteInfo(collection),
+  }))
 
   const deckArray = _.concat(deck, _.fill(Array(8 - deck.length), null))
+  const rarityOrder = { common: 1, rare: 2, epic: 3, legendary: 4 }
 
+  const [actualSort, setActualSort] = useState("Cost ↓")
+  const [actualFilter, setActualFilter] = useState("None")
+  console.log(actualSort)
+  switch (actualSort) {
+    case "Cost ↓":
+      detailledCollection.sort((a, b) => a.cost - b.cost)
+    case "Cost ↑":
+      detailledCollection.sort((a, b) => a.cost + b.cost)
+    case "Rarity ↓":
+      detailledCollection.sort(
+        (a, b) => rarityOrder[a.rarity] - rarityOrder[b.rarity]
+      )
+    case "Rarity ↑":
+      detailledCollection.sort(
+        (a, b) => rarityOrder[a.rarity] + rarityOrder[b.rarity]
+      )
+    case "World ↓":
+      detailledCollection.sort((a, b) => a.world - b.world)
+    case "World ↑":
+      detailledCollection.sort((a, b) => a.world + b.world)
+  }
+
+  // switch (actualFilter) {
+  //   case "None":
+  //     collection.filter((card) => card)
+  //   case "Level 1":
+  //     collection.filter((card) => card.level === 1)
+  //   case "Level 2":
+  //     collection.filter((card) => card.level === 2)
+  //   case "Level 3":
+  //     collection.filter((card) => card.level === 3)
+  //   case "Common":
+  //     collection.filter((card) => card.shard === 0)
+  //   case "Rare":
+  //     collection.filter((card) => card.shard === 1)
+  //   case "Epic":
+  //     collection.filter((card) => card.shard === 2)
+  //   case "Legendary":
+  //     collection.filter((card) => card.shard === 6)
+  // }
+  // console.log(actualFilter)
+  console.log(actualSort)
+  console.log(detailledCollection)
   return (
     <div className="w-full grid grid-rows-[1fr_auto] absolute top-0 h-full">
+      <SortAndFilterBox
+        setActualSort={setActualSort}
+        actualSort={actualSort}
+        setActualFilter={setActualFilter}
+        actualFilter={actualFilter}
+      />
       <ScrollContainer className="grow overflow-y-scroll pt-2 scrollbar-hide flex justify-center">
-        <SortAndFilterBox />
         <div className="grid grid-cols-3 gap-4">
-          {collection.map((card) => (
+          {detailledCollection.map((card) => (
             <div className="w-full flex justify-center" key={card.id}>
               <DeckCard cardId={card.id} />
             </div>

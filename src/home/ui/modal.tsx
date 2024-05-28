@@ -99,25 +99,90 @@ export function BackgroundModal({
   )
 }
 
-export function SortModal() {
+interface SortModalProps {
+  setActualSort: (arg: string) => void
+  actualSort: string
+  closeModal: () => void
+}
+
+export function SortModal({
+  setActualSort,
+  actualSort,
+  closeModal,
+}: SortModalProps) {
   const sortList = [
-    "Cost ↑",
     "Cost ↓",
-    "Rarity ↑",
+    "Cost ↑",
     "Rarity ↓",
-    "World ↑",
+    "Rarity ↑",
     "World ↓",
+    "World ↑",
   ]
+
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setActualSort(event.target.value)
+  }
+
   return (
-    <>
+    <div className="flex flex-col items-center justify-center w-44 h-20 bg-gray-500 absolute top-48 z-50">
       <label>Order cards by :</label>
-      <select name="criteria">
+      <select name="criteria" onChange={handleChange}>
         {sortList.map((sortCriteria, index) => (
-          <option key={index} value={sortCriteria}>
+          <option
+            key={index}
+            value={sortCriteria}
+            selected={sortCriteria === actualSort}
+            onClick={closeModal}
+          >
             {sortCriteria}
           </option>
         ))}
       </select>
-    </>
+    </div>
+  )
+}
+
+interface FilterModalProps {
+  setActualFilter: (arg: string) => void
+  actualFilter: string
+  closeModal: () => void
+}
+
+export function FilterModal({
+  setActualFilter,
+  actualFilter,
+  closeModal,
+}: FilterModalProps) {
+  const filterList = [
+    "None",
+    "Level 1",
+    "Level 2",
+    "Level 3",
+    "Common",
+    "Rare",
+    "Epic",
+    "Legendary",
+  ]
+
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setActualFilter(event.target.value)
+  }
+
+  return (
+    <div className="flex flex-col items-center justify-center w-44 h-20 bg-gray-500 absolute top-48 z-50">
+      <label>Filter cards by :</label>
+      <select name="criteria" onChange={handleChange}>
+        {filterList.map((sortFilter, index) => (
+          <option
+            key={index}
+            value={sortFilter}
+            selected={sortFilter === actualFilter}
+            onClick={closeModal}
+          >
+            {sortFilter}
+          </option>
+        ))}
+      </select>
+    </div>
   )
 }
