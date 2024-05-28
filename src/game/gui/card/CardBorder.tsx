@@ -1,5 +1,6 @@
 import { CardRarity } from "@/cards";
 import { inPx } from "@/lib/utils";
+import textureByRarity from "./utils/textureByRarity";
 
 interface CardBoardProps {
   rarity: CardRarity;
@@ -36,12 +37,7 @@ export function Borders({
   children,
   borderUnit,
 }: BordersProps) {
-  const borderTextureRarity = {
-    common: "bronze.avif",
-    rare: "silver.jpeg",
-    epic: "gold.jpeg",
-    legendary: "diamond.avif",
-  };
+
 
   return (
     <div
@@ -56,7 +52,7 @@ export function Borders({
           <div
             className="w-full h-full blur-[1px]"
             style={{
-              backgroundImage: `url(/${borderTextureRarity[rarity]})`,
+              backgroundImage: `url(/${textureByRarity(rarity)})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
