@@ -1,49 +1,49 @@
-import { useEffect } from "react";
-import { createPortal } from "react-dom";
-import { Header } from "../Home";
-import { stopPropagation } from "@/lib/eventUtils";
+import { useEffect } from "react"
+import { createPortal } from "react-dom"
+import { Header } from "../Home"
+import { stopPropagation } from "@/lib/eventUtils"
 
 interface ModalProps {
-  children: React.ReactNode;
-  closeModal: () => void;
-  title: string;
+  children: React.ReactNode
+  closeModal: () => void
+  title: string
 }
 
 export default function Modal({ children, closeModal, title }: ModalProps) {
   useEffect(() => {
     function keyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
-        closeModal();
+        closeModal()
       }
     }
-    history.pushState({}, "_", `#${title}`);
-    window.addEventListener("keydown", keyDown);
-    window.addEventListener("popstate", closeModal);
+    history.pushState({}, "_", `#${title}`)
+    window.addEventListener("keydown", keyDown)
+    window.addEventListener("popstate", closeModal)
 
     return () => {
-      window.removeEventListener("keydown", keyDown);
-      window.removeEventListener("popstate", closeModal);
+      window.removeEventListener("keydown", keyDown)
+      window.removeEventListener("popstate", closeModal)
       history.pushState(
         null,
         "",
         window.location.pathname + window.location.search
-      );
-    };
-  });
+      )
+    }
+  })
 
-  const home = document.getElementById("home");
+  const home = document.getElementById("home")
 
-  if (!home) return null;
+  if (!home) return null
 
   return createPortal(
     <div className="absolute w-full h-full top-0 z-10">{children}</div>,
     home
-  );
+  )
 }
 
 interface CoverModalProps {
-  children: React.ReactNode;
-  closeModal: () => void;
+  children: React.ReactNode
+  closeModal: () => void
 }
 
 export function CoverModal({ children, closeModal }: CoverModalProps) {
@@ -72,15 +72,18 @@ export function CoverModal({ children, closeModal }: CoverModalProps) {
         </div>
       </div>
     </>
-  );
+  )
 }
 
 interface BackgroundModalProps {
-  children: React.ReactNode;
-  closeModal: () => void;
+  children: React.ReactNode
+  closeModal: () => void
 }
 
-export function BackgroundModal({ children, closeModal }: BackgroundModalProps) {
+export function BackgroundModal({
+  children,
+  closeModal,
+}: BackgroundModalProps) {
   return (
     <>
       <div className="w-full h-full absolute bg-slate-900 opacity-80" />
@@ -93,5 +96,28 @@ export function BackgroundModal({ children, closeModal }: BackgroundModalProps) 
         {children}
       </div>
     </>
-  );
+  )
+}
+
+export function SortModal() {
+  const sortList = [
+    "Cost ↑",
+    "Cost ↓",
+    "Rarity ↑",
+    "Rarity ↓",
+    "World ↑",
+    "World ↓",
+  ]
+  return (
+    <>
+      <label>Order cards by :</label>
+      <select name="criteria">
+        {sortList.map((sortCriteria, index) => (
+          <option key={index} value={sortCriteria}>
+            {sortCriteria}
+          </option>
+        ))}
+      </select>
+    </>
+  )
 }
