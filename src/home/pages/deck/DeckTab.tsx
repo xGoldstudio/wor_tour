@@ -14,9 +14,10 @@ import Box from "@/home/ui/Box"
 import { FilterModal, SortModal } from "@/home/ui/modal"
 
 interface SortAndFilterBoxProps {
-  setActualSort: () => void
+  classNameProps: string
+  setActualSort: (sort: string) => void
   actualSort: string
-  setActualFilter: () => void
+  setActualFilter: (filter: string) => void
   actualFilter: string
 }
 
@@ -25,13 +26,23 @@ function SortAndFilterBox({
   actualSort,
   setActualFilter,
   actualFilter,
+  classNameProps,
 }: SortAndFilterBoxProps) {
   const [sortIsOpen, setSortIsOpen] = useState(false)
   const [filterIsOpen, setFilterIsOpen] = useState(false)
   return (
-    <div className="w-full h-6 flex border-2  border-red-600 -top-4 justify-center gap-4 items-center">
-      <button onClick={() => setSortIsOpen(true)}>Sort</button>
-      <button onClick={() => setFilterIsOpen(true)}>Filter</button>
+    <div className={classNameProps}>
+      <div>
+        <button onClick={() => setSortIsOpen(true)}>
+          Sort {`(${actualSort})`}
+        </button>
+      </div>
+      <div>
+        <button onClick={() => setFilterIsOpen(true)}>
+          Filter {`(${actualFilter})`}
+        </button>
+      </div>
+
       {sortIsOpen && (
         <SortModal
           setActualSort={setActualSort}
@@ -55,7 +66,7 @@ export default function DeckTab() {
     deck: state.deck,
     collection: state.getCollection(),
   }))
-  const { detailledCollection } = usePlayerStore((state) => ({
+  let { detailledCollection } = usePlayerStore((state) => ({
     detailledCollection: state.getCollectionCompleteInfo(collection),
   }))
 
@@ -64,50 +75,161 @@ export default function DeckTab() {
 
   const [actualSort, setActualSort] = useState("Cost ↓")
   const [actualFilter, setActualFilter] = useState("None")
-  console.log(actualSort)
+
+  const classNameCollections =
+    "w-full h-6 flex -top-4 justify-center items-center"
+
   switch (actualSort) {
     case "Cost ↓":
       detailledCollection.sort((a, b) => a.cost - b.cost)
+      break
     case "Cost ↑":
       detailledCollection.sort((a, b) => a.cost + b.cost)
+      break
     case "Rarity ↓":
       detailledCollection.sort(
         (a, b) => rarityOrder[a.rarity] - rarityOrder[b.rarity]
       )
+      break
     case "Rarity ↑":
       detailledCollection.sort(
         (a, b) => rarityOrder[a.rarity] + rarityOrder[b.rarity]
       )
+      break
     case "World ↓":
       detailledCollection.sort((a, b) => a.world - b.world)
+      break
     case "World ↑":
       detailledCollection.sort((a, b) => a.world + b.world)
+      break
+    default:
+      console.log("error on sort")
   }
 
-  // switch (actualFilter) {
-  //   case "None":
-  //     collection.filter((card) => card)
-  //   case "Level 1":
-  //     collection.filter((card) => card.level === 1)
-  //   case "Level 2":
-  //     collection.filter((card) => card.level === 2)
-  //   case "Level 3":
-  //     collection.filter((card) => card.level === 3)
-  //   case "Common":
-  //     collection.filter((card) => card.shard === 0)
-  //   case "Rare":
-  //     collection.filter((card) => card.shard === 1)
-  //   case "Epic":
-  //     collection.filter((card) => card.shard === 2)
-  //   case "Legendary":
-  //     collection.filter((card) => card.shard === 6)
-  // }
-  // console.log(actualFilter)
-  console.log(actualSort)
-  console.log(detailledCollection)
+  switch (actualFilter) {
+    case "None":
+      detailledCollection = detailledCollection.filter((card) => card)
+      break
+    case "Level 1":
+      detailledCollection = detailledCollection.filter(
+        (card) => card.cost === 1
+      )
+      break
+    case "Level 2":
+      detailledCollection = detailledCollection.filter(
+        (card) => card.cost === 2
+      )
+      break
+    case "Level 3":
+      detailledCollection = detailledCollection.filter(
+        (card) => card.cost === 3
+      )
+      break
+    case "Common":
+      detailledCollection = detailledCollection.filter(
+        (card) => card.rarity === "common"
+      )
+      break
+    case "Rare":
+      detailledCollection = detailledCollection.filter(
+        (card) => card.rarity === "rare"
+      )
+      break
+    case "Epic":
+      detailledCollection = detailledCollection.filter(
+        (card) => card.rarity === "epic"
+      )
+      break
+    case "Legendary":
+      detailledCollection = detailledCollection.filter(
+        (card) => card.rarity === "legendary"
+      )
+      break
+    default:
+      console.log("error on filter")
+  }
+
+  const [actualSortDeck, setActualSortDeck] = useState("Cost ↓")
+  const [actualFilterDeck, setActualFilterDeck] = useState("None")
+  let detailledDeck = []
+  const getCompleteInfo = usePlayerStore((state) => state.getCompleteInfo)
+  for (let i = 0; i < 8; i++) {
+    detailledDeck.push({
+      card: getCompleteInfo(deckArray[i]!),
+    })
+  }
+  // console.log(detailledDeck)
+  // detailledDeck = detailledDeck.flat(1)
+  // console.log(detailledDeck)
+  switch (actualSort) {
+    case "Cost ↓":
+      detailledDeck.sort((a, b) => a.card.cost - b.card.cost)
+      break
+    case "Cost ↑":
+      detailledDeck.sort((a, b) => a.card.cost + b.card.cost)
+      break
+    case "Rarity ↓":
+      detailledDeck.sort(
+        (a, b) => rarityOrder[a.card.rarity] - rarityOrder[b.card.rarity]
+      )
+      break
+    case "Rarity ↑":
+      detailledDeck.sort(
+        (a, b) => rarityOrder[a.card.rarity] + rarityOrder[b.card.rarity]
+      )
+      break
+    case "World ↓":
+      detailledDeck.sort((a, b) => a.card.world - b.card.world)
+      break
+    case "World ↑":
+      detailledDeck.sort((a, b) => a.card.world + b.card.world)
+      break
+    default:
+      console.log("error on sort")
+  }
+
+  switch (actualFilter) {
+    case "None":
+      detailledDeck = detailledDeck.filter((card) => card)
+      break
+    case "Level 1":
+      detailledDeck = detailledDeck.filter((card) => card.card.cost === 1)
+      break
+    case "Level 2":
+      detailledDeck = detailledDeck.filter((card) => card.card.cost === 2)
+      break
+    case "Level 3":
+      detailledDeck = detailledDeck.filter((card) => card.card.cost === 3)
+      break
+    case "Common":
+      detailledDeck = detailledDeck.filter(
+        (card) => card.card.rarity === "common"
+      )
+      break
+    case "Rare":
+      detailledDeck = detailledDeck.filter(
+        (card) => card.card.rarity === "rare"
+      )
+      break
+    case "Epic":
+      detailledDeck = detailledDeck.filter(
+        (card) => card.card.rarity === "epic"
+      )
+      break
+    case "Legendary":
+      detailledDeck = detailledDeck.filter(
+        (card) => card.card.rarity === "legendary"
+      )
+      break
+    default:
+      console.log("error on filter")
+  }
+  const classNameDeck =
+    "absolute -top-1 w-full flex justify-center items-center z-50 right-48"
   return (
     <div className="w-full grid grid-rows-[1fr_auto] absolute top-0 h-full">
       <SortAndFilterBox
+        classNameProps={classNameCollections}
         setActualSort={setActualSort}
         actualSort={actualSort}
         setActualFilter={setActualFilter}
@@ -131,6 +253,13 @@ export default function DeckTab() {
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
+          />
+          <SortAndFilterBox
+            classNameProps={classNameDeck}
+            setActualSort={setActualSortDeck}
+            actualSort={actualSortDeck}
+            setActualFilter={setActualFilterDeck}
+            actualFilter={actualFilterDeck}
           />
           <ScrollContainer horizontal={true} vertical={false}>
             <div className="flex gap-4 relative pt-[6px] pl-[6px] pb-[8px]">

@@ -100,7 +100,7 @@ export function BackgroundModal({
 }
 
 interface SortModalProps {
-  setActualSort: (arg: string) => void
+  setActualSort: (sort: string) => void
   actualSort: string
   closeModal: () => void
 }
@@ -138,12 +138,13 @@ export function SortModal({
           </option>
         ))}
       </select>
+      <button onClick={closeModal}>Close</button>
     </div>
   )
 }
 
 interface FilterModalProps {
-  setActualFilter: (arg: string) => void
+  setActualFilter: (filter: string) => void
   actualFilter: string
   closeModal: () => void
 }
@@ -183,6 +184,7 @@ export function FilterModal({
           </option>
         ))}
       </select>
+      <button onClick={closeModal}>Close</button>
     </div>
   )
 }
