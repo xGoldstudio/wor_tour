@@ -3,6 +3,7 @@ import { CardEffects } from "@/cards";
 export const effectsImages: Partial<Record<keyof CardEffects, string>> = {
   fightBack: "fightback.svg",
   multiAttack: "multiAttack.svg",
+  placementHeal: "heart.svg",
 };
 
 export default function getImageEffects(effects: CardEffects) {

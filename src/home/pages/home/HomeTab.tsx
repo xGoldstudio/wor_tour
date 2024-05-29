@@ -1,51 +1,91 @@
-import useGameMetadataStore from "@/game/stores/gameMetadataStore";
+import { useStartGame } from "@/game/stores/gameMetadataStore";
 import { Button } from "../../Home";
 import Badge from "@/home/ui/Badge";
 import * as _ from "lodash";
 import useScrollCardList from "../deck/useScrollCardList";
 import { preventDefault } from "@/lib/eventUtils";
-import { cn } from "@/lib/utils";
+import { cn, inPx } from "@/lib/utils";
+import Box from "@/home/ui/Box";
+import { useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import textureByRarity from "@/game/gui/card/utils/textureByRarity";
+import { useOnMount, useOnUnMount } from "@/lib/lifecycle";
+
+export const Worlds = [
+  {
+    id: 1,
+    illustration: "/worlds/1.png",
+    name: "Crabvor Island",
+    levels: [
+      { reward: { gold: 1000, xp: 10 }, strength: 8, world: 1 },
+      { reward: { gold: 1500, xp: 10 }, strength: 9, world: 1 },
+      { reward: { gold: 1500, xp: 10 }, strength: 10, world: 1 },
+      { reward: { gold: 1500, xp: 10 }, strength: 11, world: 1 },
+      { reward: { gold: 2000, xp: 10 }, strength: 12, world: 1 },
+      { reward: { gold: 2000, xp: 10 }, strength: 13, world: 1 },
+      { reward: { gold: 2000, xp: 10 }, strength: 14, world: 1 },
+      { reward: { gold: 3000, xp: 10 }, strength: 15, world: 1 },
+      { reward: { gold: 10000, xp: 50 }, strength: 20, world: 1 },
+    ] as Level[],
+  },
+];
+
+export interface Level {
+  world: 1,
+  reward: {
+    gold: number;
+    xp: number;
+  };
+  strength: number;
+}
 
 export default function HomeTab() {
-  const setIsInGame = useGameMetadataStore((state) => state.setIsInGame);
+  const startGame = useStartGame();
+  const currentWorld = Worlds[0];
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-4">
-      <div className="text-4xl font-stylised">Crabvor Island</div>
+      <div className="text-4xl font-stylised">{currentWorld.name}</div>
       <div
         className="w-1/2 aspect-square relative"
         style={{
-          backgroundImage: "url('/worlds/1.png')",
+          backgroundImage: `url('${currentWorld.illustration}')`,
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}
       >
         <Badge
           className="absolute z-10 right-0 top-0"
-          value="1"
+          value={`${currentWorld.id}`}
           rarity="epic"
         />
       </div>
-      <Levels />
-      <Button action={() => setIsInGame(true)}>New game</Button>
+      <Levels levels={currentWorld.levels} currentWorld={currentWorld.id} />
+      <Button action={() => startGame(currentWorld.levels[0])}>New game</Button>
     </div>
   );
 }
 
-function Levels() {
+function Levels({
+  levels,
+  currentWorld,
+}: {
+  levels: Level[];
+  currentWorld: number;
+}) {
   const { currentPosition, setIsPressed, changePosition } = useScrollCardList(
-    1,
-    9
+    0,
+    levels.length
   );
 
-  const currentLevel = (currentPosition % 9) + 1;
-  const currentWorld = Math.floor(currentPosition / 9) + 1;
+  const currentLevel = currentPosition + 1;
 
   return (
     <div
       className=" w-[350px] h-[105px] flex flex-col justify-end select-none relative"
       style={{
-        WebkitMaskImage: "linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%)"
+        WebkitMaskImage:
+          "linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%)",
       }}
       onMouseDown={preventDefault(() => setIsPressed(true))}
       onMouseUp={preventDefault(() => setIsPressed(false))}
@@ -63,23 +103,16 @@ function Levels() {
           className="w-full h-[10px] absolute top-[38px]"
           viewBox="0 0 1000 4"
         >
-          {_.range(76).map((index) => {
-            const start = 8 * (currentLevel - 1) - 8;
-            const end = 8 * currentLevel + 12;
-            const exact = (index: number) => index === start || index === (end -1) || index === 0 || index === 75;
-
-            return (
-              <circle
-                cx={index * 12.5 + 6}
-                cy={2}
-                r={4}
-                key={index}
-                fill="white"
-                style={{ transition: "ease-in-out 0.5s" }}
-                // opacity={exact(index) ? 0.5 : index >= start && index <= end ? 1 : 0}
-              />
-            );
-          })}
+          {_.range(76).map((index) => (
+            <circle
+              cx={index * 12.5 + 6}
+              cy={2}
+              r={4}
+              key={index}
+              fill="white"
+              style={{ transition: "ease-in-out 0.5s" }}
+            />
+          ))}
         </svg>
         {_.range(1, 10).map((level) => (
           <Level
@@ -88,6 +121,7 @@ function Levels() {
             world={currentWorld}
             distance={level - currentLevel}
             selected={level === currentLevel}
+            levelData={levels[level - 1]}
           />
         ))}
       </div>
@@ -100,10 +134,13 @@ interface LevelProps {
   world: number;
   distance: number;
   selected?: boolean;
+  levelData: Level;
 }
 
-function Level({ level, world, selected, distance }: LevelProps) {
+function Level({ level, world, selected, distance, levelData }: LevelProps) {
+  const [showPopin, setShowPopin] = useState(false);
   const outside = Math.abs(distance) > 1;
+  const ref = useRef(null);
 
   return (
     <div
@@ -116,6 +153,8 @@ function Level({ level, world, selected, distance }: LevelProps) {
         transitionProperty: "transform, opacity",
         opacity: outside ? 0 : 1,
       }}
+      onClick={() => setShowPopin(true)}
+      ref={ref}
     >
       <img
         src="/chest.png"
@@ -130,6 +169,74 @@ function Level({ level, world, selected, distance }: LevelProps) {
       <p className="text-xl font-bold text-white">
         {world} - {level}
       </p>
+      {showPopin && (
+        <Popin targetRef={ref} closePopin={() => setShowPopin(false)}>
+          <div className="absolute w-full h-full top-0 left-0 z-10 text-xs flex justify-around items-center">
+            <div className="w-[50px] h-[50px] flex justify-end items-center flex-col relative bg-yellow-300 pb-[2px] rounded-sm border-2 border-yellow-500">
+              <img
+                src="/money.png"
+                className="w-[32px] drop-shadow-[2px_1px_1px_black] absolute bottom-[10px]"
+              />
+              <p className="">+{levelData.reward.gold}</p>
+            </div>
+            <div className="w-[50px] h-[50px] flex justify-end items-center flex-col relative bg-yellow-300 pb-[2px] rounded-sm border-2 border-yellow-500">
+              <div className="w-[32px] drop-shadow-[2px_1px_1px_black] absolute bottom-[15px] font-stylised text-2xl">
+                XP
+              </div>
+              <p className="">+{levelData.reward.xp}</p>
+            </div>
+          </div>
+        </Popin>
+      )}
     </div>
+  );
+}
+
+interface PopinProps {
+  children: React.ReactNode;
+  targetRef: React.RefObject<HTMLDivElement>;
+  closePopin: () => void;
+}
+
+function Popin({ children, targetRef, closePopin }: PopinProps) {
+  const home = document.getElementById("root");
+
+  const handleClick = () => {
+    closePopin();
+  };
+
+  useOnMount(() => {
+    document.addEventListener("mousedown", handleClick);
+  });
+
+  useOnUnMount(() => {
+    document.removeEventListener("mousedown", handleClick);
+  });
+
+  if (!home || !targetRef.current) return null;
+
+  const { top, left } = targetRef.current.getBoundingClientRect();
+
+  return createPortal(
+    <div
+      className="absolute z-10 fixed -translate-y-[calc(100%_+_10px)] -translate-x-1/2"
+      style={{
+        top: inPx(top),
+        left: inPx(left + targetRef.current.offsetWidth / 2),
+      }}
+    >
+      <Box width={130} height={80} size={0.5} rarity="common">
+        <div
+          className="absolute w-full h-full z-10 blur-sm"
+          style={{
+            backgroundImage: `url('/${textureByRarity("rare")}')`,
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+          }}
+        />
+        {children}
+      </Box>
+    </div>,
+    home
   );
 }

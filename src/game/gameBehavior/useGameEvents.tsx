@@ -361,8 +361,8 @@ function useGameEvents(): GameEventsActions {
           triggerEvent({
             type: "cardDamage",
             amount: card.dmg,
-            cardPosition: event.initiator.cardPosition,
-            isPlayerCard: event.initiator.isPlayerCard,
+            cardPosition: event.initiator.initiator.cardPosition,
+            isPlayerCard: event.initiator.initiator.isPlayerCard,
             initiator: event.initiator,
             directAttack: true,
           });

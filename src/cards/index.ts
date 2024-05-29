@@ -61,7 +61,7 @@ export interface CardStatsInfo {
 	stats: [CardStatsInfoLevel, CardStatsInfoLevel, CardStatsInfoLevel];
 }
 
-interface CardStatsInfoLevel {
+export interface CardStatsInfoLevel {
 	cost: number;
 	dmg: number;
 	hp: number;
@@ -120,6 +120,58 @@ export function getCardFromLevel(card: CardStatsInfo, level: number): CardType {
 		level: level,
 		world: card.world,
 	}
+}
+
+export function isLevelValid(cardId: number, level: number): boolean {
+	const card = findCard(cardId, level);
+	const statsLevel = getRealStrength(card);
+	console.log(card.level, card.name, statsLevel, getTargetStrength(card));
+	return testIsStrengthValid(statsLevel, getTargetStrength(card));
+}
+
+export function testIsStrengthValid(statsLevel: number, targetStats: number): boolean {
+	return Math.abs(statsLevel - targetStats) < maxDelta;
+}
+
+export function getTargetStrength(card: CardType) {
+	const targetStrength = getCardStrength(card);
+	return baseStats * targetStrength;
+}
+
+// baseStats = hp: 100, dmg: 100, attackSpeed: 0.2 no effect = 1+1+1 = 3 (card level 1 common world 1)
+const baseStats = 3;
+export const maxDelta = 0.05;
+
+// * 1.5 stat per cost
+
+export function getRealStrength(card: CardType): number {
+	let statsLevel = 0;
+	statsLevel += card.hp / 100;
+	statsLevel += (card.dmg * card.attackSpeed) / 33; // survavibility ratio is 3s
+	// statsLevel += Math.min(card.attackSpeed - 1, 0) / 0.6; // high attack speed penalty
+	statsLevel /= 1.5 ** (card.cost);
+	// effects cost
+	if (card.effects.multiAttack) {
+		statsLevel += card.dmg / 100;
+	}
+	if (card.effects.placementHeal) {
+		statsLevel += card.effects.placementHeal.amount / 100;
+	}
+	if (card.effects.fightBack) {
+		statsLevel += card.dmg / 100 / 3;
+	}
+	return statsLevel;
+}
+
+const rarityStrength = {
+  common: 1,
+  rare: 1.1,
+  epic: 1.2,
+  legendary: 1.5,
+};
+
+export function getCardStrength(card: CardType) {
+  return 1 * (Math.pow(1.2, card.level - 1)) * rarityStrength[card.rarity] * (Math.pow(1.2, card.world - 1));
 }
 
 // export const cardsByRarity: CardsByRarity = cards.reduce((accu: CardsByRarity, current: CardType) => {
