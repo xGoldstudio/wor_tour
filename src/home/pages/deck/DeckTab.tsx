@@ -12,13 +12,14 @@ import { preventDefault } from "@/lib/eventUtils"
 import * as _ from "lodash"
 import Box from "@/home/ui/Box"
 import { FilterModal, SortModal } from "@/home/ui/modal"
+import { CardType } from "@/cards"
 
 interface SortAndFilterBoxProps {
   classNameProps: string
   setActualSort: (sort: string) => void
   actualSort: string
-  setActualFilter: (filter: string) => void
-  actualFilter: string
+  setActualFilter?: (filter: string) => void
+  actualFilter?: string
 }
 
 function SortAndFilterBox({
@@ -30,21 +31,34 @@ function SortAndFilterBox({
 }: SortAndFilterBoxProps) {
   const [sortIsOpen, setSortIsOpen] = useState(false)
   const [filterIsOpen, setFilterIsOpen] = useState(false)
+  const deck = !!setActualFilter
   return (
     <div className={classNameProps}>
       <div>
-        <button onClick={() => setSortIsOpen(true)}>
+        <button
+          onClick={() => {
+            setSortIsOpen(true)
+            filterIsOpen ? setFilterIsOpen(false) : null
+          }}
+        >
           Sort {`(${actualSort})`}
         </button>
       </div>
-      <div>
-        <button onClick={() => setFilterIsOpen(true)}>
-          Filter {`(${actualFilter})`}
-        </button>
-      </div>
-
+      {setActualFilter && (
+        <div>
+          <button
+            onClick={() => {
+              setFilterIsOpen(true)
+              sortIsOpen ? setSortIsOpen(false) : null
+            }}
+          >
+            Filter {`(${actualFilter})`}
+          </button>
+        </div>
+      )}
       {sortIsOpen && (
         <SortModal
+          deck={deck}
           setActualSort={setActualSort}
           actualSort={actualSort}
           closeModal={() => setSortIsOpen(false)}
@@ -56,6 +70,40 @@ function SortAndFilterBox({
           actualFilter={actualFilter}
           closeModal={() => setFilterIsOpen(false)}
         />
+      )}
+    </div>
+  )
+}
+
+function ShowStat({ detailledDeck }: (CardType & { isInDeck: boolean })[]) {
+  const [showStat, setShowStat] = useState(false)
+  let costAverage = 0
+  let dmgAverage = 0
+  let attackSpeedAverage = 0
+  let hpAverage = 0
+  for (let i = 0; i < 8; i++) {
+    costAverage += detailledDeck[i].cost
+    dmgAverage += detailledDeck[i].dmg
+    attackSpeedAverage += detailledDeck[i].attackSpeed
+    hpAverage += detailledDeck[i].hp
+  }
+  costAverage /= 8
+  dmgAverage /= 8
+  attackSpeedAverage /= 8
+  hpAverage /= 8
+  return (
+    <div>
+      <div className="absolute right-16 bottom-48">
+        <button onClick={() => setShowStat(true)}>...</button>
+      </div>
+      {showStat && (
+        <div className="absolute top-48 left-64 flex flex-col z-50 bg-gray-600">
+          <div>Average Cost : {costAverage}</div>
+          <div>Damage Average : {dmgAverage.toFixed()}</div>
+          <div>Attack Speed Average : {attackSpeedAverage.toFixed(2)}</div>
+          <div>Average HP : {hpAverage.toFixed()}</div>
+          <button onClick={() => setShowStat(false)}>Close</button>
+        </div>
       )}
     </div>
   )
@@ -73,7 +121,7 @@ export default function DeckTab() {
   const deckArray = _.concat(deck, _.fill(Array(8 - deck.length), null))
   const rarityOrder = { common: 1, rare: 2, epic: 3, legendary: 4 }
 
-  const [actualSort, setActualSort] = useState("Cost ↓")
+  const [actualSort, setActualSort] = useState("Cost ↑")
   const [actualFilter, setActualFilter] = useState("None")
 
   const classNameCollections =
@@ -149,83 +197,40 @@ export default function DeckTab() {
       console.log("error on filter")
   }
 
-  const [actualSortDeck, setActualSortDeck] = useState("Cost ↓")
-  const [actualFilterDeck, setActualFilterDeck] = useState("None")
+  const [actualSortDeck, setActualSortDeck] = useState("Cost ↑")
   let detailledDeck = []
   const getCompleteInfo = usePlayerStore((state) => state.getCompleteInfo)
-  for (let i = 0; i < 8; i++) {
-    detailledDeck.push({
-      card: getCompleteInfo(deckArray[i]!),
-    })
-  }
-  // console.log(detailledDeck)
-  // detailledDeck = detailledDeck.flat(1)
-  // console.log(detailledDeck)
-  switch (actualSort) {
+  for (let i = 0; i < 8; i++) detailledDeck.push(getCompleteInfo(deckArray[i]!))
+
+  switch (actualSortDeck) {
     case "Cost ↓":
-      detailledDeck.sort((a, b) => a.card.cost - b.card.cost)
+      detailledDeck.sort((a, b) => a.cost - b.cost)
       break
     case "Cost ↑":
-      detailledDeck.sort((a, b) => a.card.cost + b.card.cost)
+      detailledDeck.sort((a, b) => a.cost + b.cost)
       break
     case "Rarity ↓":
       detailledDeck.sort(
-        (a, b) => rarityOrder[a.card.rarity] - rarityOrder[b.card.rarity]
+        (a, b) => rarityOrder[a.rarity] - rarityOrder[b.rarity]
       )
       break
     case "Rarity ↑":
       detailledDeck.sort(
-        (a, b) => rarityOrder[a.card.rarity] + rarityOrder[b.card.rarity]
+        (a, b) => rarityOrder[a.rarity] + rarityOrder[b.rarity]
       )
       break
     case "World ↓":
-      detailledDeck.sort((a, b) => a.card.world - b.card.world)
+      detailledDeck.sort((a, b) => a.world - b.world)
       break
     case "World ↑":
-      detailledDeck.sort((a, b) => a.card.world + b.card.world)
+      detailledDeck.sort((a, b) => a.world + b.world)
       break
     default:
       console.log("error on sort")
   }
-
-  switch (actualFilter) {
-    case "None":
-      detailledDeck = detailledDeck.filter((card) => card)
-      break
-    case "Level 1":
-      detailledDeck = detailledDeck.filter((card) => card.card.cost === 1)
-      break
-    case "Level 2":
-      detailledDeck = detailledDeck.filter((card) => card.card.cost === 2)
-      break
-    case "Level 3":
-      detailledDeck = detailledDeck.filter((card) => card.card.cost === 3)
-      break
-    case "Common":
-      detailledDeck = detailledDeck.filter(
-        (card) => card.card.rarity === "common"
-      )
-      break
-    case "Rare":
-      detailledDeck = detailledDeck.filter(
-        (card) => card.card.rarity === "rare"
-      )
-      break
-    case "Epic":
-      detailledDeck = detailledDeck.filter(
-        (card) => card.card.rarity === "epic"
-      )
-      break
-    case "Legendary":
-      detailledDeck = detailledDeck.filter(
-        (card) => card.card.rarity === "legendary"
-      )
-      break
-    default:
-      console.log("error on filter")
-  }
   const classNameDeck =
-    "absolute -top-1 w-full flex justify-center items-center z-50 right-48"
+    "-mb-[4.5rem] -ml-60 w-full flex justify-center items-center z-50"
+
   return (
     <div className="w-full grid grid-rows-[1fr_auto] absolute top-0 h-full">
       <SortAndFilterBox
@@ -244,6 +249,11 @@ export default function DeckTab() {
           ))}
         </div>
       </ScrollContainer>
+      <SortAndFilterBox
+        classNameProps={classNameDeck}
+        setActualSort={setActualSortDeck}
+        actualSort={actualSortDeck}
+      />
       <div className="w-full flex justify-center relative overflow-hidden mb-2 mt-4">
         <Box width={650} height={210} rarity="legendary">
           <div
@@ -254,28 +264,22 @@ export default function DeckTab() {
               backgroundPosition: "center",
             }}
           />
-          <SortAndFilterBox
-            classNameProps={classNameDeck}
-            setActualSort={setActualSortDeck}
-            actualSort={actualSortDeck}
-            setActualFilter={setActualFilterDeck}
-            actualFilter={actualFilterDeck}
-          />
+
           <ScrollContainer horizontal={true} vertical={false}>
             <div className="flex gap-4 relative pt-[6px] pl-[6px] pb-[8px]">
-              {deckArray.map((cardId, index) => (
+              {detailledDeck.map((cardId, index) => (
                 <div
                   className="w-full flex justify-center overflow-visible"
-                  key={cardId || `index_${index}`}
+                  key={cardId.id || `index_${index}`}
                 >
                   <div className="w-[102px] h-[142px] relative rounded-md box-content">
                     <div className="w-full h-full bg-slate-900 opacity-20 absolute" />
                     <InnerBord size={1}>
                       <></>
                     </InnerBord>
-                    {cardId !== null && (
+                    {cardId.id !== null && (
                       <div className="absolute top-0 left-0">
-                        <DeckCard cardId={cardId} isHand />
+                        <DeckCard cardId={cardId.id} isHand />
                       </div>
                     )}
                   </div>
@@ -285,6 +289,7 @@ export default function DeckTab() {
           </ScrollContainer>
         </Box>
       </div>
+      <ShowStat detailledDeck={detailledDeck} />
     </div>
   )
 }
@@ -304,7 +309,6 @@ function DeckCard({ cardId, isHand, unaddble: addable }: DeckCardProps) {
       addCardToDeck: state.addCardToDeck,
       isDeckFull: state.isDeckFull(),
     }))
-
   return (
     <>
       {isDescriptionOpen && (

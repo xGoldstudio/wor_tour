@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import { createPortal } from "react-dom"
 import { Header } from "../Home"
 import { stopPropagation } from "@/lib/eventUtils"
+import { cn } from "@/lib/utils"
 
 interface ModalProps {
   children: React.ReactNode
@@ -103,12 +104,14 @@ interface SortModalProps {
   setActualSort: (sort: string) => void
   actualSort: string
   closeModal: () => void
+  deck: boolean
 }
 
 export function SortModal({
   setActualSort,
   actualSort,
   closeModal,
+  deck,
 }: SortModalProps) {
   const sortList = [
     "Cost ↓",
@@ -122,9 +125,14 @@ export function SortModal({
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setActualSort(event.target.value)
   }
-
+  console.log(deck)
   return (
-    <div className="flex flex-col items-center justify-center w-44 h-20 bg-gray-500 absolute top-48 z-50">
+    <div
+      className={cn(
+        "flex flex-col items-center justify-center w-44 h-20 bg-gray-500 absolute top-48 z-50",
+        !deck && "left-[16.37rem]"
+      )}
+    >
       <label>Order cards by :</label>
       <select name="criteria" onChange={handleChange}>
         {sortList.map((sortCriteria, index) => (
@@ -144,8 +152,8 @@ export function SortModal({
 }
 
 interface FilterModalProps {
-  setActualFilter: (filter: string) => void
-  actualFilter: string
+  setActualFilter?: (filter: string) => void
+  actualFilter?: string
   closeModal: () => void
 }
 
@@ -166,7 +174,7 @@ export function FilterModal({
   ]
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setActualFilter(event.target.value)
+    if (setActualFilter) setActualFilter(event.target.value)
   }
 
   return (
