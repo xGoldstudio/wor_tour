@@ -138,7 +138,7 @@ function StatLine({ className, title, value }: StateLineProps) {
       <InnerBord size={3}>
         <div className=" bg-slate-50 flex pb-[2px] justify-between items-center flex-col">
           <p className="text-nowrap font-stylised text-base">{title}</p>
-          <p className="font-stylised text-sm">{value}</p>
+          <p className="font-stylised text-sm">{Math.round(value * 100) / 100}</p>
         </div>
       </InnerBord>
     </div>

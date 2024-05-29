@@ -7,19 +7,16 @@ const card1: CardStatsInfo = {
 	world: 1,
 	stats: [
 		{
-			cost: 3,
+			cost: 1,
 			dmg: 150,
 			hp: 300,
 			attackSpeed: 0.6,
 			effects: {
-				placementHeal: {
-					type: "placementHeal",
-					amount: 150,
-				},
+	
 			},
 		},
 		{
-			cost: 3,
+			cost: 1,
 			dmg: 180,
 			hp: 360,
 			attackSpeed: 0.72,
@@ -31,7 +28,7 @@ const card1: CardStatsInfo = {
 			},
 		},
 		{
-			cost: 3,
+			cost: 1,
 			dmg: 185,
 			hp: 370,
 			attackSpeed: 0.8,

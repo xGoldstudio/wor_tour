@@ -1,9 +1,12 @@
 import cards, {
+  CardEffects,
   CardRarity,
   CardRarityOrder,
-  CardStatsInfo,
   CardStatsInfoLevel,
-  getCardFromLevel,
+  CardType,
+  cardCostMultiplier,
+  cardRarityMultiplier,
+  cardWorldMultiplier,
   getCardStats,
   getRealStrength,
   getTargetStrength,
@@ -15,37 +18,51 @@ import { Worlds } from "@/home/pages/home/HomeTab";
 import { cn } from "@/lib/utils";
 import { range } from "lodash";
 import { useState } from "react";
+import Ratios from "./Ratios";
+
+export interface CardStat {
+  name: string;
+  rarity: CardRarity;
+  id: number;
+  world: number;
+  attackDefenseRatio: number; // ]0,1[
+  speedDamageRatio: number; // ]0,1[
+  stats: [CardStatLevel, CardStatLevel, CardStatLevel];
+}
+
+export interface CardStatLevel {
+  cost: number;
+  effects: CardEffects;
+}
+
+function cardStateInit(card: number): CardStat {
+  const cardStats = getCardStats(card);
+  return {
+    name: cardStats.name,
+    rarity: cardStats.rarity,
+    id: cardStats.id,
+    world: cardStats.world,
+    attackDefenseRatio: 0.5,
+    speedDamageRatio: 0.5,
+    stats: cardStats.stats.map((state) => ({
+      effects: state.effects,
+      cost: state.cost,
+    })) as [CardStatLevel, CardStatLevel, CardStatLevel],
+  };
+}
 
 export default function CardEditor() {
-  const [card, setCard] = useState<CardStatsInfo>(getCardStats(1));
+  const [card, setCard] = useState<CardStat>(cardStateInit(1));
 
   function setCardLevel(level: number) {
-    return (cardLevel: Partial<CardStatsInfoLevel>) => {
+    return (cardLevel: Partial<CardStatLevel>) => {
       setCard({
         ...card,
         stats: card.stats.map((s, i) =>
           i === level - 1 ? { ...s, ...cardLevel } : s
-        ) as [CardStatsInfoLevel, CardStatsInfoLevel, CardStatsInfoLevel],
+        ) as [CardStatLevel, CardStatLevel, CardStatLevel],
       });
     };
-  }
-
-  function propagateLevel1() {
-    const level1 = card.stats[0];
-    setCard({
-      ...card,
-      stats: card.stats.map((stat, i) =>
-        i === 0
-          ? level1
-          : {
-              cost: level1.cost,
-              dmg: level1.dmg * 0.6 ** i,
-              hp: level1.hp * 1.2 ** i,
-              attackSpeed: level1.attackSpeed * 0.6 ** i, // attack speed progression is slower
-              effects: level1.effects,
-            }
-      ) as [CardStatsInfoLevel, CardStatsInfoLevel, CardStatsInfoLevel],
-    });
   }
 
   return (
@@ -54,7 +71,7 @@ export default function CardEditor() {
         <select
           value={card.id}
           onChange={(v) => {
-            setCard(getCardStats(parseInt(v.target.value)));
+            setCard(cardStateInit(parseInt(v.target.value)));
           }}
           className="border-2 border-black p-2 rounded-md"
         >
@@ -99,9 +116,10 @@ export default function CardEditor() {
         </select>
       </div>
       <div className="flex gap-4 py-4">
-        <Button action={propagateLevel1}>Propagate level 1 stats</Button>
-				<CopyButton label="Copy config" value={JSON.stringify(card)} />
+        <CopyButton label="Copy config" value={JSON.stringify(card)} />
       </div>
+      <Ratios setCard={setCard} />
+
       <div className="flex gap-8">
         <CardLevel cardStats={card} setCardLevel={setCardLevel(1)} level={1} />
         <CardLevel cardStats={card} setCardLevel={setCardLevel(2)} level={2} />
@@ -112,13 +130,59 @@ export default function CardEditor() {
 }
 
 interface CardLevelProps {
-  cardStats: CardStatsInfo;
+  cardStats: CardStat;
   setCardLevel: (card: Partial<CardStatsInfoLevel>) => void;
   level: number;
 }
 
+function cardStrengthMultiplier(card: CardStat, cost: number) {
+  return (value: number) =>
+    value *
+    cardCostMultiplier ** (cost - 1) *
+    cardRarityMultiplier[card.rarity] *
+    cardWorldMultiplier ** (card.world - 1);
+}
+
+function getStats(card: CardStat, level: number) {
+  const attackRatio = 1 - card.attackDefenseRatio;
+  const defenseRatio = card.attackDefenseRatio;
+  const speedRatio = 1 - card.speedDamageRatio;
+  const cost = card.stats[level - 1].cost;
+
+  const multiplier = cardStrengthMultiplier(card, cost);
+
+  const dps = multiplier(25 * attackRatio) * (1.2 ** (level - 1));
+  const levelDpsMult = Math.sqrt(1.2) ** (level - 1);
+  const speed = 3 * levelDpsMult * speedRatio;
+  return {
+    hp: multiplier(100 * defenseRatio) * (1.2 ** (level - 1)),
+    dmg: dps / speed,
+    attackSpeed: speed,
+  };
+}
+
+function cardStatsToCard(cardStats: CardStat, level: number): CardType {
+  const levelStat = cardStats.stats[level - 1];
+  const stats = getStats(cardStats, level);
+
+  return {
+    name: cardStats.name,
+    cost: levelStat.cost,
+    illustration: "",
+    worldIllustration: "",
+    dmg: stats.dmg,
+    hp: stats.hp,
+    attackSpeed: stats.attackSpeed,
+    rarity: cardStats.rarity,
+    id: cardStats.id,
+    effects: levelStat.effects,
+    level,
+    world: cardStats.world,
+  };
+}
+
 function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
-  const card = getCardFromLevel(cardStats, level);
+  const card = cardStatsToCard(cardStats, level);
 
   const realStrength = getRealStrength(card);
   const targetStrength = getTargetStrength(card);
@@ -126,7 +190,7 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="w-[500px] h-[500px] bg-slate-200 p-2 rounded-md grid grid-cols-[1fr_2fr] grid-rows-[repeat(15,_1fr)] gap-y-2">
+      <div className="w-[500px] h-[350px] bg-slate-200 p-2 rounded-md grid grid-cols-[1fr_2fr] grid-rows-[repeat(15,_1fr)] gap-y-2">
         <h2 className="col-span-2 text-center pt-1 text-xl font-bold">
           Level {level}
         </h2>
@@ -152,27 +216,6 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
             </option>
           ))}
         </select>
-        <NumberInput
-          card={card}
-          setCardLevel={setCardLevel}
-          property="dmg"
-          label="Damage"
-          step={50}
-        />
-        <NumberInput
-          card={card}
-          setCardLevel={setCardLevel}
-          property="hp"
-          label="Life"
-          step={50}
-        />
-        <NumberInput
-          card={card}
-          setCardLevel={setCardLevel}
-          property="attackSpeed"
-          label="Attack speed"
-          step={0.01}
-        />
         <label>Fight Back: </label>
         <input
           type="checkbox"
@@ -241,54 +284,20 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
         )}
       </div>
       <div className="relative w-full scale-[55%] translate-x-[60px] pt-4">
-        <FullCard card={getCardFromLevel(cardStats, level)} className="pt-8" />
+        <FullCard card={card} className="pt-8" />
       </div>
     </div>
   );
 }
 
-function NumberInput({
-  card,
-  setCardLevel,
-  property,
-  label,
-  step,
-}: {
-  card: CardStatsInfoLevel;
-  setCardLevel: (card: Partial<CardStatsInfoLevel>) => void;
-  property: keyof CardStatsInfoLevel;
-  label: string;
-  step: number;
-}) {
-  return (
-    <>
-      <label>{label}: </label>
-      <input
-        value={String(card[property])}
-        min={0}
-        step={step}
-        type="number"
-        className="border-2 border-black p-2 rounded-md"
-        onChange={(v) => {
-          setCardLevel({ [property]: parseFloat(v.target.value) || 0 });
-        }}
-      />
-    </>
-  );
-}
-
 export function CopyButton({ label, value }: { label: string; value: string }) {
-	const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState(false);
 
-	function copy() {
-		navigator.clipboard.writeText(value);
-		setCopied(true);
-		setTimeout(() => setCopied(false), 1000);
-	}
+  function copy() {
+    navigator.clipboard.writeText(value);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1000);
+  }
 
-	return (
-		<Button action={copy}>
-			{copied ? "Copied!" : label}
-		</Button>
-	);
+  return <Button action={copy}>{copied ? "Copied!" : label}</Button>;
 }

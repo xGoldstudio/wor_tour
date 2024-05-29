@@ -125,7 +125,6 @@ export function getCardFromLevel(card: CardStatsInfo, level: number): CardType {
 export function isLevelValid(cardId: number, level: number): boolean {
 	const card = findCard(cardId, level);
 	const statsLevel = getRealStrength(card);
-	console.log(card.level, card.name, statsLevel, getTargetStrength(card));
 	return testIsStrengthValid(statsLevel, getTargetStrength(card));
 }
 
@@ -139,47 +138,41 @@ export function getTargetStrength(card: CardType) {
 }
 
 // baseStats = hp: 100, dmg: 100, attackSpeed: 0.2 no effect = 1+1+1 = 3 (card level 1 common world 1)
-const baseStats = 3;
-export const maxDelta = 0.05;
-
-// * 1.5 stat per cost
-
-export function getRealStrength(card: CardType): number {
-	let statsLevel = 0;
-	statsLevel += card.hp / 100;
-	statsLevel += (card.dmg * card.attackSpeed) / 33; // survavibility ratio is 3s
-	// statsLevel += Math.min(card.attackSpeed - 1, 0) / 0.6; // high attack speed penalty
-	statsLevel /= 1.5 ** (card.cost);
-	// effects cost
-	if (card.effects.multiAttack) {
-		statsLevel += card.dmg / 100;
-	}
-	if (card.effects.placementHeal) {
-		statsLevel += card.effects.placementHeal.amount / 100;
-	}
-	if (card.effects.fightBack) {
-		statsLevel += card.dmg / 100 / 3;
-	}
-	return statsLevel;
-}
-
-const rarityStrength = {
+const baseStats = 1;
+export const maxDelta = 0.015;
+const survavibilityRatio = 4;
+export const cardLevelMultiplier = 1.2;
+export const cardWorldMultiplier = 1.2;
+export const cardCostMultiplier = 1.5;
+export const cardRarityMultiplier = {
   common: 1,
   rare: 1.1,
   epic: 1.2,
   legendary: 1.5,
 };
 
-export function getCardStrength(card: CardType) {
-  return 1 * (Math.pow(1.2, card.level - 1)) * rarityStrength[card.rarity] * (Math.pow(1.2, card.world - 1));
+// * 1.5 stat per cost
+
+export function getRealStrength(card: CardType): number {
+	let statsLevel = 0;
+	statsLevel += card.hp / 100;
+	statsLevel += (card.dmg * card.attackSpeed) / (100/survavibilityRatio);
+	// statsLevel += Math.min(card.attackSpeed - 1, 0) / 0.6; // high attack speed penalty
+	statsLevel /= cardCostMultiplier ** (card.cost - 1);
+	// effects cost
+	// if (card.effects.multiAttack) {
+	// 	statsLevel += card.dmg * card.attackSpeed / 100;
+	// }
+	// if (card.effects.placementHeal) {
+	// 	statsLevel += card.effects.placementHeal.amount / 100;
+	// }
+	if (card.effects.fightBack) {
+		statsLevel += card.dmg / 100 / 3;
+	}
+	return statsLevel;
 }
 
-// export const cardsByRarity: CardsByRarity = cards.reduce((accu: CardsByRarity, current: CardType) => {
-// 	accu[current.rarity].push(current);
-// 	return accu;
-// }, {
-// 	common: [],
-// 	rare: [],
-// 	epic: [],
-// 	legendary: [],
-// })
+
+export function getCardStrength(card: CardType) {
+  return 1 * (cardLevelMultiplier ** (card.level - 1)) * cardRarityMultiplier[card.rarity] * (cardWorldMultiplier ** (card.world - 1));
+}
