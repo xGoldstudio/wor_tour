@@ -13,6 +13,8 @@ import {
 import { NumberSpan } from "@/game/gui/HpBar";
 import usePlayerStore from "./store/playerStore";
 import Badge from "./ui/Badge";
+import { CardRarity } from "@/cards";
+import textureByRarity from "@/game/gui/card/utils/textureByRarity";
 
 type Tabs = "home" | "deck" | "shop";
 
@@ -120,6 +122,7 @@ interface ButtonProps {
   full?: boolean;
   small?: boolean;
   className?: string;
+  rarity?: CardRarity;
 }
 
 export function Button({
@@ -129,6 +132,7 @@ export function Button({
   small,
   disabled,
   className,
+  rarity = "rare",
 }: ButtonProps) {
   return (
     <button
@@ -143,7 +147,7 @@ export function Button({
       <div
         className="absolute w-full h-full blur-sm"
         style={{
-          backgroundImage: "url('/silver.jpeg')",
+          backgroundImage: `url(/${textureByRarity(rarity)})`,
           backgroundSize: "cover",
           backgroundPositionY: "center",
         }}

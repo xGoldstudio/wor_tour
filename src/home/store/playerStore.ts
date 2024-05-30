@@ -36,15 +36,15 @@ interface PlayerStore {
 }
 
 const defaultCollection: Map<number, CollectionCard> = new Map();
-defaultCollection.set(1, { id: 1, level: 3, shard: 0 });
-defaultCollection.set(2, { id: 2, level: 3, shard: 0 });
-defaultCollection.set(3, { id: 3, level: 3, shard: 0 });
-defaultCollection.set(4, { id: 4, level: 3, shard: 0 });
-defaultCollection.set(5, { id: 5, level: 3, shard: 0 });
-defaultCollection.set(6, { id: 6, level: 3, shard: 0 });
-defaultCollection.set(7, { id: 7, level: 3, shard: 0 });
-defaultCollection.set(8, { id: 8, level: 3, shard: 0 });
-defaultCollection.set(9, { id: 9, level: 3, shard: 0 });
+defaultCollection.set(1, { id: 1, level: 1, shard: 0 });
+defaultCollection.set(2, { id: 2, level: 1, shard: 0 });
+defaultCollection.set(3, { id: 3, level: 1, shard: 0 });
+defaultCollection.set(4, { id: 4, level: 1, shard: 0 });
+defaultCollection.set(5, { id: 5, level: 1, shard: 0 });
+defaultCollection.set(6, { id: 6, level: 1, shard: 0 });
+defaultCollection.set(7, { id: 7, level: 1, shard: 0 });
+defaultCollection.set(8, { id: 8, level: 1, shard: 0 });
+defaultCollection.set(9, { id: 9, level: 1, shard: 0 });
 
 const shardsByLevels = [3, 7];
 

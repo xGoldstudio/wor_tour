@@ -1,33 +1,23 @@
-import { useEffect, useState } from "react";
 import { CardStat } from "./CardEditor";
 
 export default function Ratios({
   setCard,
+  card,
 }: {
-  setCard: React.Dispatch<React.SetStateAction<CardStat>>;
+  card: CardStat;
+  setCard: (card: Partial<CardStat>) => void;
 }) {
-  const [ratioAttackDefense, setRatioAttackDefense] = useState(0.5);
-  const [attackSpeedDamageRatio, setAttackSpeedDamageRatio] = useState(0.5);
-
-  useEffect(() => {
-    setCard((card) => ({
-      ...card,
-      attackDefenseRatio: ratioAttackDefense,
-      speedDamageRatio: attackSpeedDamageRatio,
-    }));
-  }, [ratioAttackDefense, attackSpeedDamageRatio, setCard]);
-
   return (
     <>
       <Ratio
-        ratio={ratioAttackDefense}
-        setRatio={setRatioAttackDefense}
+        ratio={card.attackDefenseRatio}
+        setRatio={(ratio) => setCard({ attackDefenseRatio: ratio})}
         firstRatioLabel="Attack"
         secondRatioLabel="Defense"
       />
       <Ratio
-        ratio={attackSpeedDamageRatio}
-        setRatio={setAttackSpeedDamageRatio}
+        ratio={card.speedDamageRatio}
+        setRatio={(ratio) => setCard({ speedDamageRatio: ratio})}
         firstRatioLabel="Attack Speed"
         secondRatioLabel="Damage"
       />
@@ -70,4 +60,3 @@ function Ratio({
     </div>
   );
 }
-

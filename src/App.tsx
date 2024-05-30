@@ -1,17 +1,97 @@
 import CardEditor from "./cardEditor/CardEditor";
+import Editor from "./cardEditor/Editor";
 import Game from "./game/Game";
 import useGameMetadataStore from "./game/stores/gameMetadataStore";
-import Home from "./home/Home";
+import Home, { Button } from "./home/Home";
+import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useMutation,
+  useQuery,
+} from "react-query";
+import useEditorStore from "./cardEditor/EditorStore";
+
+const queryClient = new QueryClient();
 
 export default function App() {
-  const { isInGame } = useGameMetadataStore(state => ({ isInGame: state.isInGame }));
+  return (
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <AppRouter />
+      </QueryClientProvider>
+    </BrowserRouter>
+  );
+}
 
-  const url = new URL(window.location.href);
-  const path = url.pathname;
+function AppRouter() {
+  const { isInGame } = useGameMetadataStore((state) => ({
+    isInGame: state.isInGame,
+  }));
+  const { initData } = useEditorStore((state) => ({
+    initData: state.initData,
+  }));
+  const data = useQuery(
+    "repoData",
+    () => fetch("http://localhost:3000/").then((res) => res.json()),
+    { onSuccess: (stringData) => initData(JSON.parse(stringData)) }
+  );
 
-  if (path === "/editor") {
-    return <CardEditor />;
+  if (data.isLoading) {
+    return <div>Loading...</div>;
   }
 
-  return isInGame ? <Game /> : <Home />;
+  return (
+    <Routes>
+      <Route path="/" element={isInGame ? <Game /> : <Home />} />
+      <Route path="/editor" element={<EditorLayout />}>
+        <Route path="/editor" element={<Editor />} index />
+        <Route path="/editor/:cardId" element={<CardEditor />} />
+      </Route>
+    </Routes>
+  );
+}
+
+function EditorLayout() {
+  const { getEdtiorData, isEditorStale, removeStale } = useEditorStore(
+    (state) => ({
+      initData: state.initData,
+      getEdtiorData: state.getEdtiorData,
+      isEditorStale: state.isEditorStale,
+      removeStale: state.removeStale,
+    })
+  );
+  const mutation = useMutation({
+    mutationFn: () =>
+      fetch("http://localhost:3000/", {
+        method: "POST",
+        body: JSON.stringify(getEdtiorData()),
+      }),
+    onSuccess: () => removeStale(),
+  });
+
+  return (
+    <>
+      {isEditorStale && (
+        <div className="fixed bg-slate-200 left-1/2 -translate-x-1/2 bottom-8 py-4 w-[800px] flex items-center gap-4 justify-center rounded-md">
+          <p>Modifications has not been saved</p>
+          <Button
+            action={() => mutation.mutate()}
+            disabled={mutation.isLoading}
+            rarity="epic"
+          >
+            Save
+          </Button>
+          <Button
+            action={() => mutation.mutate()}
+            disabled={mutation.isLoading}
+          >
+            Reset state
+          </Button>
+        </div>
+      )}
+
+      <Outlet />
+    </>
+  );
 }

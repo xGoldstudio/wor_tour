@@ -1,12 +1,12 @@
-import cards, {
+import {
   CardEffects,
   CardRarity,
   CardRarityOrder,
   CardStatsInfoLevel,
-  CardType, findCard,
-  getCardStats,
+  CardType,
   getRealStrength,
-  getTargetStrength, testIsStrengthValid
+  getTargetStrength,
+  testIsStrengthValid,
 } from "@/cards";
 import FullCard from "@/game/gui/card/FullCard";
 import { Button } from "@/home/Home";
@@ -16,6 +16,8 @@ import { range } from "lodash";
 import { useState } from "react";
 import Ratios from "./Ratios";
 import { getStats } from "./getStats";
+import useEditorStore from "./EditorStore";
+import { useNavigate, useParams } from "react-router";
 
 export interface CardStat {
   name: string;
@@ -32,27 +34,27 @@ export interface CardStatLevel {
   effects: CardEffects;
 }
 
-function cardStateInit(card: number): CardStat {
-  const cardStats = getCardStats(card);
-  return {
-    name: cardStats.name,
-    rarity: cardStats.rarity,
-    id: cardStats.id,
-    world: cardStats.world,
-    attackDefenseRatio: 0.5,
-    speedDamageRatio: 0.5,
-    stats: cardStats.stats.map((state) => ({
-      effects: state.effects,
-      cost: state.cost,
-    })) as [CardStatLevel, CardStatLevel, CardStatLevel],
-  };
-}
-
 export default function CardEditor() {
-  const [card, setCard] = useState<CardStat>(cardStateInit(1));
+  const { cardId: cardIdParam } = useParams();
+  const navigate = useNavigate();
+
+  const cardId = cardIdParam ? parseInt(cardIdParam) : undefined;
+
+  const { card, updateCard, cards } = useEditorStore((state) => ({
+    card: cardId ? state.getCard(cardId) : undefined,
+    updateCard: state.updateCard,
+    cards: state.cards,
+  }));
+
+  if (!card || !cardId) {
+    return <div>Card not found</div>;
+  }
+
+  const setCard = updateCard(cardId);
 
   function setCardLevel(level: number) {
     return (cardLevel: Partial<CardStatLevel>) => {
+      if (!card) return;
       setCard({
         ...card,
         stats: card.stats.map((s, i) =>
@@ -65,10 +67,17 @@ export default function CardEditor() {
   return (
     <div className="flex w-full items-center flex-col pt-4 gap-2">
       <div className="flex gap-2">
+        <Button
+          action={() => {
+            navigate(`/editor`);
+          }}
+        >
+          Go back
+        </Button>
         <select
           value={card.id}
           onChange={(v) => {
-            setCard(cardStateInit(parseInt(v.target.value)));
+            navigate(`/editor/${v.target.value}`);
           }}
           className="border-2 border-black p-2 rounded-md"
         >
@@ -112,10 +121,9 @@ export default function CardEditor() {
           ))}
         </select>
       </div>
-      <div className="flex gap-4 py-4">
-        <CopyButton label="Copy config" value={JSON.stringify(card)} />
+      <div className="py-8">
+        <Ratios setCard={setCard} card={card} />
       </div>
-      <Ratios setCard={setCard} />
 
       <div className="flex gap-8">
         <CardLevel cardStats={card} setCardLevel={setCardLevel(1)} level={1} />
@@ -135,13 +143,12 @@ interface CardLevelProps {
 function cardStatsToCard(cardStats: CardStat, level: number): CardType {
   const levelStat = cardStats.stats[level - 1];
   const stats = getStats(cardStats, level);
-  const cardData = findCard(cardStats.id, level);
 
   return {
     name: cardStats.name,
     cost: levelStat.cost,
-    illustration: cardData.illustration,
-    worldIllustration: cardData.worldIllustration,
+    illustration: "",
+    worldIllustration: "",
     dmg: stats.dmg,
     hp: stats.hp,
     attackSpeed: stats.attackSpeed,

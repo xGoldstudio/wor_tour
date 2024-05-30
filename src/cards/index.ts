@@ -70,19 +70,6 @@ export interface CardStatsInfoLevel {
 	effects: CardEffects;
 }
 
-// function cardValue(card: CardStatsInfo, level: number) {
-// 	return rarityValue[card.rarity] * (level * 1.2) * (card.world * 1.2); 
-// }
-
-// const rarityValue = {
-// 	"common": 1,
-// 	"rare": 1.1,
-// 	"epic": 1.2,
-// 	"legendary": 1.5,
-// }
-
-
-
 export function findCard(id: number, level: number): CardType {
 	const card = cards.find(card => card.id === id) || cards[0];
 	return getCardFromLevel(card, level);
@@ -191,6 +178,6 @@ const cards: CardStatsInfo[] = ([
 		const s = getStats(card, index + 1);
 		return s;
 	}) as [CardStatsInfoLevel, CardStatsInfoLevel, CardStatsInfoLevel]
-}));
+})); 
 
 export default cards;
