@@ -1,3 +1,4 @@
+import { getStats } from "@/cardEditor/getStats";
 import card1 from "./1";
 import card2 from "./2";
 import card3 from "./3";
@@ -80,19 +81,7 @@ export interface CardStatsInfoLevel {
 // 	"legendary": 1.5,
 // }
 
-const cards: CardStatsInfo[] = [
-	card1,
-	card2,
-	card3,
-	card4,
-	card5,
-	card6,
-	card7,
-	card8,
-	card9,
-]
 
-export default cards;
 
 export function findCard(id: number, level: number): CardType {
 	const card = cards.find(card => card.id === id) || cards[0];
@@ -132,47 +121,76 @@ export function testIsStrengthValid(statsLevel: number, targetStats: number): bo
 	return Math.abs(statsLevel - targetStats) < maxDelta;
 }
 
-export function getTargetStrength(card: CardType) {
+export function getTargetStrength(card: { level: number, rarity: CardRarity, world: number }) {
 	const targetStrength = getCardStrength(card);
 	return baseStats * targetStrength;
 }
 
-// baseStats = hp: 100, dmg: 100, attackSpeed: 0.2 no effect = 1+1+1 = 3 (card level 1 common world 1)
 const baseStats = 1;
-export const maxDelta = 0.015;
-const survavibilityRatio = 4;
-export const cardLevelMultiplier = 1.2;
+export const maxDelta = 0.0001;
+const survavibilityRatio = 3;
+export const baseHp = 100; // card of level 1, rarity common, world 1
+export const baseDps = baseHp / survavibilityRatio;
+export const cardLevelMultiplier = 1.5;
 export const cardWorldMultiplier = 1.2;
 export const cardCostMultiplier = 1.5;
+export const speedMaxLevel1 = 2;
 export const cardRarityMultiplier = {
-  common: 1,
-  rare: 1.1,
-  epic: 1.2,
-  legendary: 1.5,
+	common: 1,
+	rare: 1.1,
+	epic: 1.2,
+	legendary: 1.5,
 };
 
-// * 1.5 stat per cost
-
-export function getRealStrength(card: CardType): number {
-	let statsLevel = 0;
-	statsLevel += card.hp / 100;
-	statsLevel += (card.dmg * card.attackSpeed) / (100/survavibilityRatio);
-	// statsLevel += Math.min(card.attackSpeed - 1, 0) / 0.6; // high attack speed penalty
-	statsLevel /= cardCostMultiplier ** (card.cost - 1);
-	// effects cost
-	// if (card.effects.multiAttack) {
-	// 	statsLevel += card.dmg * card.attackSpeed / 100;
-	// }
-	// if (card.effects.placementHeal) {
-	// 	statsLevel += card.effects.placementHeal.amount / 100;
-	// }
-	if (card.effects.fightBack) {
-		statsLevel += card.dmg / 100 / 3;
+// score is the sum of the stats
+// 4 hp = 1s
+// 1 dps = 1s
+export function getRealStrength(card: { hp: number, dmg: number, attackSpeed: number, cost: number, effects: CardEffects }): number {
+	function fightBack(score: number) {
+		return score + (card.effects.fightBack ? (dmg * 0.5) : 0);
 	}
-	return statsLevel;
+
+	function multiAttack(score: number) {
+		return score + (card.effects.multiAttack ? dps * 0.2 : 0);
+	}
+
+	function healPlacement(score: number) {
+		return score + (card.effects.placementHeal ? card.effects.placementHeal.amount / baseHp : 0);
+	}
+
+	const dmg = card.dmg / Math.sqrt(baseDps) / Math.sqrt(baseDps);
+	const speed = card.attackSpeed;
+	const dps = (dmg * speed);
+
+	const costDivisor = cardCostMultiplier ** (card.cost - 1); // to normalize the strength no matter the cost
+
+	return healPlacement(multiAttack(fightBack(card.hp / baseHp + dps))) / costDivisor;
 }
 
 
-export function getCardStrength(card: CardType) {
-  return 1 * (cardLevelMultiplier ** (card.level - 1)) * cardRarityMultiplier[card.rarity] * (cardWorldMultiplier ** (card.world - 1));
+export function getCardStrength(card: { level: number, rarity: CardRarity, world: number }) {
+	return 1 * (cardLevelMultiplier ** (card.level - 1)) * cardRarityMultiplier[card.rarity] * (cardWorldMultiplier ** (card.world - 1));
 }
+
+const cards: CardStatsInfo[] = ([
+	card1,
+	card2,
+	card3,
+	card4,
+	card5,
+	card6,
+	card7,
+	card8,
+	card9,
+]).map((card): CardStatsInfo => ({
+	name: card.name,
+	rarity: card.rarity,
+	id: card.id,
+	world: card.world,
+	stats: card.stats.map((_, index) => {
+		const s = getStats(card, index + 1);
+		return s;
+	}) as [CardStatsInfoLevel, CardStatsInfoLevel, CardStatsInfoLevel]
+}));
+
+export default cards;

@@ -27,8 +27,8 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
   isInGame: false,
   playerCards: new Map<number, CollectionCard>(),
   opponentCards: new Map<number, CollectionCard>(),
-  playerHp: 10000,
-  opponentHp: 10000,
+  playerHp: 1000,
+  opponentHp: 1000,
   setInGameData: (playerCards: Map<number, CollectionCard>, opponentCards: Map<number, CollectionCard>, playerHp: number, opponentHp: number) => {
     set({ playerCards, opponentCards, playerHp, opponentHp, isInGame: true });
   },
@@ -61,7 +61,7 @@ export function useStartGame() {
     const opponentDeck = new Map<number, CollectionCard>(playerDeck);
     // const cardsPool = cards.filter(card => card.world === level.world);
 
-    setInGameData(playerDeck, opponentDeck, 10000, 10000);
+    setInGameData(playerDeck, opponentDeck, 2000, 2000);
   }
 
   return startGame;

@@ -3,14 +3,10 @@ import cards, {
   CardRarity,
   CardRarityOrder,
   CardStatsInfoLevel,
-  CardType,
-  cardCostMultiplier,
-  cardRarityMultiplier,
-  cardWorldMultiplier,
+  CardType, findCard,
   getCardStats,
   getRealStrength,
-  getTargetStrength,
-  testIsStrengthValid,
+  getTargetStrength, testIsStrengthValid
 } from "@/cards";
 import FullCard from "@/game/gui/card/FullCard";
 import { Button } from "@/home/Home";
@@ -19,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { range } from "lodash";
 import { useState } from "react";
 import Ratios from "./Ratios";
+import { getStats } from "./getStats";
 
 export interface CardStat {
   name: string;
@@ -135,41 +132,16 @@ interface CardLevelProps {
   level: number;
 }
 
-function cardStrengthMultiplier(card: CardStat, cost: number) {
-  return (value: number) =>
-    value *
-    cardCostMultiplier ** (cost - 1) *
-    cardRarityMultiplier[card.rarity] *
-    cardWorldMultiplier ** (card.world - 1);
-}
-
-function getStats(card: CardStat, level: number) {
-  const attackRatio = 1 - card.attackDefenseRatio;
-  const defenseRatio = card.attackDefenseRatio;
-  const speedRatio = 1 - card.speedDamageRatio;
-  const cost = card.stats[level - 1].cost;
-
-  const multiplier = cardStrengthMultiplier(card, cost);
-
-  const dps = multiplier(25 * attackRatio) * (1.2 ** (level - 1));
-  const levelDpsMult = Math.sqrt(1.2) ** (level - 1);
-  const speed = 3 * levelDpsMult * speedRatio;
-  return {
-    hp: multiplier(100 * defenseRatio) * (1.2 ** (level - 1)),
-    dmg: dps / speed,
-    attackSpeed: speed,
-  };
-}
-
 function cardStatsToCard(cardStats: CardStat, level: number): CardType {
   const levelStat = cardStats.stats[level - 1];
   const stats = getStats(cardStats, level);
+  const cardData = findCard(cardStats.id, level);
 
   return {
     name: cardStats.name,
     cost: levelStat.cost,
-    illustration: "",
-    worldIllustration: "",
+    illustration: cardData.illustration,
+    worldIllustration: cardData.worldIllustration,
     dmg: stats.dmg,
     hp: stats.hp,
     attackSpeed: stats.attackSpeed,

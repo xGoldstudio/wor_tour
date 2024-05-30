@@ -1,44 +1,4 @@
-import { CardStatsInfo } from ".";
+import { CardStat } from "@/cardEditor/CardEditor";
 
-const card1: CardStatsInfo = {
-	name: "Gentil Crabvor",
-	rarity: "common",
-	id: 1,
-	world: 1,
-	stats: [
-		{
-			cost: 1,
-			dmg: 150,
-			hp: 300,
-			attackSpeed: 0.6,
-			effects: {
-	
-			},
-		},
-		{
-			cost: 1,
-			dmg: 180,
-			hp: 360,
-			attackSpeed: 0.72,
-			effects: {
-				placementHeal: {
-					type: "placementHeal",
-					amount: 150,
-				},
-			},
-		},
-		{
-			cost: 1,
-			dmg: 185,
-			hp: 370,
-			attackSpeed: 0.8,
-			effects: {
-				placementHeal: {
-					type: "placementHeal",
-					amount: 200,
-				},
-			},
-		},
-	]
-}
+const card1: CardStat = {"name":"Friendly Crabvor","rarity":"rare","id":1,"world":1,"attackDefenseRatio":0.5,"speedDamageRatio":0.5,"stats":[{"effects":{},"cost":3},{"effects":{"placementHeal":{"type":"placementHeal","amount":75}},"cost":3},{"effects":{"placementHeal":{"type":"placementHeal","amount":100}},"cost":3}]}
 export default card1;

@@ -1,4 +1,4 @@
-import { CardStatsInfo } from ".";
+import { CardStat } from "@/cardEditor/CardEditor";
 
-const card9: CardStatsInfo = {"name":"Crabvor chief","rarity":"rare","id":9,"world":1,"stats":[{"cost":4,"dmg":250,"hp":900,"attackSpeed":1,"effects":{}},{"cost":4,"dmg":300,"hp":1050,"attackSpeed":1.05,"effects":{}},{"cost":4,"dmg":360,"hp":1200,"attackSpeed":1.1025,"effects":{}}]}
+const card9: CardStat = {"name":"Gentil Crabvor","rarity":"rare","id":9,"world":1,"attackDefenseRatio":0.8,"speedDamageRatio":0.41,"stats":[{"effects":{},"cost":4},{"effects":{},"cost":4},{"effects":{},"cost":4}]}
 export default card9;

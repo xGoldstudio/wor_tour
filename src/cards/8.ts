@@ -1,4 +1,4 @@
-import { CardStatsInfo } from ".";
+import { CardStat } from "@/cardEditor/CardEditor";
 
-const card8: CardStatsInfo = { "name": "Habitant of the claw", "rarity": "common", "id": 8, "world": 1, "stats": [{ "cost": 2, "dmg": 110, "hp": 500, "attackSpeed": 0.7, "effects": {} }, { "cost": 2, "dmg": 132, "hp": 550, "attackSpeed": 0.735, "effects": {} }, { "cost": 2, "dmg": 145, "hp": 600, "attackSpeed": 0.72, "effects": { "fightBack": { "type": "fightBack" } } }] }
+const card8: CardStat = {"name":"Habitant Of The Claw","rarity":"common","id":8,"world":1,"attackDefenseRatio":0.73,"speedDamageRatio":0.67,"stats":[{"effects":{},"cost":2},{"effects":{},"cost":2},{"effects":{"fightBack":{"type":"fightBack"}},"cost":2}]}
 export default card8;
