@@ -1,8 +1,9 @@
-import { useEffect } from "react"
+import { MouseEventHandler, useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 import { Header } from "../Home"
 import { stopPropagation } from "@/lib/eventUtils"
 import { cn } from "@/lib/utils"
+import { filterList } from "../pages/deck/DeckTab"
 
 interface ModalProps {
   children: React.ReactNode
@@ -151,8 +152,8 @@ export function SortModal({
 }
 
 interface FilterModalProps {
-  setActualFilter?: (filter: string) => void
-  actualFilter?: string[]
+  setActualFilter?: (filter: filterList) => void
+  actualFilter?: filterList
   closeModal: () => void
 }
 
@@ -161,6 +162,7 @@ export function FilterModal({
   actualFilter,
   closeModal,
 }: FilterModalProps) {
+  if (!setActualFilter || !actualFilter) return null
   const filterList = [
     "Level 1",
     "Level 2",
@@ -171,47 +173,34 @@ export function FilterModal({
     "Legendary",
   ]
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { options } = event.target
-    let selectedValues: string[] = []
-    for (let i = 0; i < options.length; i++) {
-      if (
-        actualFilter?.length === 1 &&
-        options[i].selected &&
-        actualFilter?.includes(options[i].value)
-      )
-        selectedValues = []
-      else if (options[i].selected && actualFilter?.includes(options[i].value))
-        selectedValues = selectedValues.filter(
-          (value) => value !== options[i].value
-        )
-      else if (options[i].selected) selectedValues.push(options[i].value)
-      else if (actualFilter?.includes(options[i].value))
-        selectedValues.push(options[i].value)
-    }
-    if (setActualFilter) setActualFilter(selectedValues)
+  const filterKeyMapping: { [key: string]: keyof filterList } = {
+    "Level 1": "Level1",
+    "Level 2": "Level2",
+    "Level 3": "Level3",
+    Common: "Common",
+    Rare: "Rare",
+    Epic: "Epic",
+    Legendary: "Legendary",
+  }
+
+  const handleChange = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const { value } = event.currentTarget
+    const key = filterKeyMapping[value]
+    console.log(value)
+    setActualFilter({
+      ...actualFilter,
+      [key]: !actualFilter[key],
+      // [value]: !actualFilter[value as keyof filterList],
+    })
   }
 
   return (
     <div className="flex flex-col items-center justify-center w-44 h-40 bg-gray-500 absolute top-48 z-50">
-      <label>Filter cards by :</label>
-      <select
-        name="criteria"
-        value={actualFilter}
-        onChange={handleChange}
-        multiple={true}
-      >
-        {filterList.map((sortFilter, index) => (
-          <option
-            key={index}
-            value={sortFilter}
-            // selected={sortFilter === actualFilter}
-            // onClick={closeModal}
-          >
-            {sortFilter}
-          </option>
-        ))}
-      </select>
+      {filterList.map((filterCriteria, index) => (
+        <button key={index} value={filterCriteria} onClick={handleChange}>
+          {filterCriteria}
+        </button>
+      ))}
       <button onClick={closeModal}>Close</button>
     </div>
   )

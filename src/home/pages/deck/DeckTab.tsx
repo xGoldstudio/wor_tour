@@ -12,14 +12,14 @@ import { preventDefault } from "@/lib/eventUtils"
 import * as _ from "lodash"
 import Box from "@/home/ui/Box"
 import { FilterModal, SortModal } from "@/home/ui/modal"
-import { CardType } from "@/cards"
+import { CardType, findCard, getCardFromLevel, getCardStats } from "@/cards"
 
 interface SortAndFilterBoxProps {
   classNameProps: string
   setActualSort: (sort: string) => void
   actualSort: string
-  setActualFilter?: (filter: string) => void
-  actualFilter?: string[]
+  setActualFilter?: (filter: filterList) => void
+  actualFilter?: filterList
 }
 
 function SortAndFilterBox({
@@ -76,8 +76,11 @@ function SortAndFilterBox({
 }
 
 type DetailedCardType = CardType & { isInDeck: boolean }
+interface ShowStatProps {
+  detailledDeck: DetailedCardType[]
+}
 
-function ShowStat({ detailledDeck }: DetailedCardType[]) {
+function ShowStat({ detailledDeck }: ShowStatProps) {
   const [showStat, setShowStat] = useState(false)
   let costAverage = 0
   let dmgAverage = 0
@@ -111,6 +114,16 @@ function ShowStat({ detailledDeck }: DetailedCardType[]) {
   )
 }
 
+export type filterList = {
+  Level1: boolean
+  Level2: boolean
+  Level3: boolean
+  Common: boolean
+  Rare: boolean
+  Epic: boolean
+  Legendary: boolean
+}
+
 export default function DeckTab() {
   const { deck, collection } = usePlayerStore((state) => ({
     deck: state.deck,
@@ -124,17 +137,32 @@ export default function DeckTab() {
   const rarityOrder = { common: 1, rare: 2, epic: 3, legendary: 4 }
 
   const [actualSort, setActualSort] = useState("Cost ↑")
-  const [actualFilter, setActualFilter] = useState([])
+  const [actualFilter, setActualFilter] = useState<filterList>({
+    Level1: false,
+    Level2: false,
+    Level3: false,
+    Common: false,
+    Rare: false,
+    Epic: false,
+    Legendary: false,
+  })
 
   const classNameCollections =
     "w-full h-6 flex -top-4 justify-center items-center"
 
   switch (actualSort) {
     case "Cost ↓":
-      detailledCollection.sort((a, b) => a.cost - b.cost)
+      detailledCollection.sort(
+        (a, b) => findCard(a.id, a.level).cost - findCard(b.id, b.level).cost
+      )
+      debugger
       break
     case "Cost ↑":
-      detailledCollection.sort((a, b) => a.cost + b.cost)
+      detailledCollection.sort(
+        (a, b) =>
+          getCardFromLevel(getCardStats(b.id), b.level).cost -
+          getCardFromLevel(getCardStats(a.id), a.level).cost
+      )
       break
     case "Rarity ↓":
       detailledCollection.sort(
@@ -158,67 +186,58 @@ export default function DeckTab() {
   let collectionTmp: (CardType & {
     isInDeck: boolean
   })[] = []
-  for (let i = 0; i < actualFilter.length; i++) {
-    let tmp
-    switch (actualFilter[i]) {
-      case "None":
-        tmp = detailledCollection.filter((card) => card)
-        tmp.forEach((valueTmp) => {
-          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-        })
-        break
-      case "Level 1":
-        tmp = detailledCollection.filter((card) => card.cost === 1)
-        tmp.forEach((valueTmp) => {
-          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-        })
-        break
-      case "Level 2":
-        tmp = detailledCollection.filter((card) => card.cost === 2)
-        tmp.forEach((valueTmp) => {
-          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-        })
-        break
-      case "Level 3":
-        tmp = detailledCollection.filter((card) => card.cost === 3)
-        tmp.forEach((valueTmp) => {
-          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-        })
-        break
-      case "Common":
-        tmp = detailledCollection.filter((card) => card.rarity === "common")
-        tmp.forEach((valueTmp) => {
-          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-        })
-        break
-      case "Rare":
-        tmp = detailledCollection.filter((card) => card.rarity === "rare")
-        tmp.forEach((valueTmp) => {
-          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-        })
-        break
-      case "Epic":
-        tmp = detailledCollection.filter((card) => card.rarity === "epic")
-        tmp.forEach((valueTmp) => {
-          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-        })
-        break
-      case "Legendary":
-        tmp = detailledCollection.filter((card) => card.rarity === "legendary")
-        tmp.forEach((valueTmp) => {
-          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-        })
-        break
-      default:
-        console.log("error on filter")
-    }
-    if (i === actualFilter.length - 1) detailledCollection = collectionTmp
+
+  let tmp
+  if (actualFilter.Level1) {
+    console.log("hello")
+    tmp = detailledCollection.filter((card) => card.cost === 1)
+    tmp.forEach((valueTmp) => {
+      if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+    })
   }
+  if (actualFilter.Level2) {
+    tmp = detailledCollection.filter((card) => card.cost === 2)
+    tmp.forEach((valueTmp) => {
+      if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+    })
+  }
+  if (actualFilter.Level3) {
+    tmp = detailledCollection.filter((card) => card.cost === 3)
+    tmp.forEach((valueTmp) => {
+      if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+    })
+  }
+  if (actualFilter.Common) {
+    tmp = detailledCollection.filter((card) => card.rarity === "common")
+    tmp.forEach((valueTmp) => {
+      if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+    })
+  }
+  if (actualFilter.Rare) {
+    tmp = detailledCollection.filter((card) => card.rarity === "rare")
+    tmp.forEach((valueTmp) => {
+      if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+    })
+  }
+  if (actualFilter.Epic) {
+    tmp = detailledCollection.filter((card) => card.rarity === "epic")
+    tmp.forEach((valueTmp) => {
+      if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+    })
+  }
+  if (actualFilter.Legendary) {
+    tmp = detailledCollection.filter((card) => card.rarity === "legendary")
+    tmp.forEach((valueTmp) => {
+      if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+    })
+  }
+  if (Object.values(actualFilter).some((filter) => filter === true))
+    detailledCollection = collectionTmp
   const [actualSortDeck, setActualSortDeck] = useState("Cost ↑")
   let detailledDeck = []
   const getCompleteInfo = usePlayerStore((state) => state.getCompleteInfo)
-  for (let i = 0; i < 8; i++) detailledDeck.push(getCompleteInfo(deckArray[i]!))
 
+  for (let i = 0; i < 8; i++) detailledDeck.push(getCompleteInfo(deckArray[i]!))
   switch (actualSortDeck) {
     case "Cost ↓":
       detailledDeck.sort((a, b) => a.cost - b.cost)
@@ -246,8 +265,8 @@ export default function DeckTab() {
       console.log("error on sort")
   }
   const classNameDeck =
-    "-mb-[4.5rem] -ml-60 w-full flex justify-center items-center z-50"
-
+    "-mb-[4.5rem] -ml-60 w-full flex justify-center items-center z-10"
+  console.log(detailledCollection)
   return (
     <div className="w-full grid grid-rows-[1fr_auto] absolute top-0 h-full">
       <SortAndFilterBox
@@ -259,8 +278,8 @@ export default function DeckTab() {
       />
       <ScrollContainer className="grow overflow-y-scroll pt-2 scrollbar-hide flex justify-center">
         <div className="grid grid-cols-3 gap-4">
-          {detailledCollection.map((card) => (
-            <div className="w-full flex justify-center" key={card.id}>
+          {detailledCollection.map((card, index) => (
+            <div className="w-full flex justify-center" key={index}>
               <DeckCard cardId={card.id} />
             </div>
           ))}
