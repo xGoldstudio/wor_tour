@@ -19,7 +19,7 @@ interface SortAndFilterBoxProps {
   setActualSort: (sort: string) => void
   actualSort: string
   setActualFilter?: (filter: string) => void
-  actualFilter?: string
+  actualFilter?: string[]
 }
 
 function SortAndFilterBox({
@@ -75,7 +75,9 @@ function SortAndFilterBox({
   )
 }
 
-function ShowStat({ detailledDeck }: (CardType & { isInDeck: boolean })[]) {
+type DetailedCardType = CardType & { isInDeck: boolean }
+
+function ShowStat({ detailledDeck }: DetailedCardType[]) {
   const [showStat, setShowStat] = useState(false)
   let costAverage = 0
   let dmgAverage = 0
@@ -122,7 +124,7 @@ export default function DeckTab() {
   const rarityOrder = { common: 1, rare: 2, epic: 3, legendary: 4 }
 
   const [actualSort, setActualSort] = useState("Cost ↑")
-  const [actualFilter, setActualFilter] = useState("None")
+  const [actualFilter, setActualFilter] = useState([])
 
   const classNameCollections =
     "w-full h-6 flex -top-4 justify-center items-center"
@@ -153,50 +155,65 @@ export default function DeckTab() {
     default:
       console.log("error on sort")
   }
-
-  switch (actualFilter) {
-    case "None":
-      detailledCollection = detailledCollection.filter((card) => card)
-      break
-    case "Level 1":
-      detailledCollection = detailledCollection.filter(
-        (card) => card.cost === 1
-      )
-      break
-    case "Level 2":
-      detailledCollection = detailledCollection.filter(
-        (card) => card.cost === 2
-      )
-      break
-    case "Level 3":
-      detailledCollection = detailledCollection.filter(
-        (card) => card.cost === 3
-      )
-      break
-    case "Common":
-      detailledCollection = detailledCollection.filter(
-        (card) => card.rarity === "common"
-      )
-      break
-    case "Rare":
-      detailledCollection = detailledCollection.filter(
-        (card) => card.rarity === "rare"
-      )
-      break
-    case "Epic":
-      detailledCollection = detailledCollection.filter(
-        (card) => card.rarity === "epic"
-      )
-      break
-    case "Legendary":
-      detailledCollection = detailledCollection.filter(
-        (card) => card.rarity === "legendary"
-      )
-      break
-    default:
-      console.log("error on filter")
+  let collectionTmp: (CardType & {
+    isInDeck: boolean
+  })[] = []
+  for (let i = 0; i < actualFilter.length; i++) {
+    let tmp
+    switch (actualFilter[i]) {
+      case "None":
+        tmp = detailledCollection.filter((card) => card)
+        tmp.forEach((valueTmp) => {
+          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+        })
+        break
+      case "Level 1":
+        tmp = detailledCollection.filter((card) => card.cost === 1)
+        tmp.forEach((valueTmp) => {
+          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+        })
+        break
+      case "Level 2":
+        tmp = detailledCollection.filter((card) => card.cost === 2)
+        tmp.forEach((valueTmp) => {
+          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+        })
+        break
+      case "Level 3":
+        tmp = detailledCollection.filter((card) => card.cost === 3)
+        tmp.forEach((valueTmp) => {
+          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+        })
+        break
+      case "Common":
+        tmp = detailledCollection.filter((card) => card.rarity === "common")
+        tmp.forEach((valueTmp) => {
+          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+        })
+        break
+      case "Rare":
+        tmp = detailledCollection.filter((card) => card.rarity === "rare")
+        tmp.forEach((valueTmp) => {
+          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+        })
+        break
+      case "Epic":
+        tmp = detailledCollection.filter((card) => card.rarity === "epic")
+        tmp.forEach((valueTmp) => {
+          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+        })
+        break
+      case "Legendary":
+        tmp = detailledCollection.filter((card) => card.rarity === "legendary")
+        tmp.forEach((valueTmp) => {
+          if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
+        })
+        break
+      default:
+        console.log("error on filter")
+    }
+    if (i === actualFilter.length - 1) detailledCollection = collectionTmp
   }
-
   const [actualSortDeck, setActualSortDeck] = useState("Cost ↑")
   let detailledDeck = []
   const getCompleteInfo = usePlayerStore((state) => state.getCompleteInfo)
