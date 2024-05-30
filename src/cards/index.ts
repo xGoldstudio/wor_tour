@@ -12,7 +12,7 @@ import card9 from "./9";
 export type CardType = {
 	name: string;
 	cost: number;
-	illustration: string;
+	illustration: string | null;
 	worldIllustration: string;
 	dmg: number;
 	hp: number;
@@ -46,13 +46,6 @@ interface PlacementHeal {
 interface FightBackEffect {
 	type: "fightBack";
 }
-
-// interface CardsByRarity {
-// 	common: CardType[];
-// 	rare: CardType[];
-// 	epic: CardType[];
-// 	legendary: CardType[];
-// }
 
 export interface CardStatsInfo {
 	name: string;

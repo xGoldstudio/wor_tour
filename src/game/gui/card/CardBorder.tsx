@@ -14,7 +14,12 @@ export default function CardBorder({ rarity, children, size }: CardBoardProps) {
   const borderUnit = Math.min(0.5 * size, 2);
 
   return (
-    <Borders width={width} height={height} borderUnit={borderUnit} rarity={rarity}>
+    <Borders
+      width={width}
+      height={height}
+      borderUnit={borderUnit}
+      rarity={rarity}
+    >
       <CardIllustartion width={width} height={height} borderUnit={borderUnit}>
         {children}
       </CardIllustartion>
@@ -37,8 +42,6 @@ export function Borders({
   children,
   borderUnit,
 }: BordersProps) {
-
-
   return (
     <div
       className="bg-black rounded-sm relative select-none"
@@ -122,7 +125,7 @@ export function CardContentIllustartion({
   card,
   size,
 }: {
-  card: { worldIllustration: string; illustration: string };
+  card: { worldIllustration: string; illustration: string | null };
   size: number;
 }) {
   const borderUnit = Math.min(0.5 * size, 2);

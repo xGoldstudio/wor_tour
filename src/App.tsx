@@ -34,7 +34,7 @@ function AppRouter() {
   const data = useQuery(
     "repoData",
     () => fetch("http://localhost:3000/").then((res) => res.json()),
-    { onSuccess: (stringData) => initData(JSON.parse(stringData)) }
+    { onSuccess: (stringData) => initData(JSON.parse(stringData)), staleTime: 2200000, },
   );
 
   if (data.isLoading) {

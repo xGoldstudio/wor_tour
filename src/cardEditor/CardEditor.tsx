@@ -2,7 +2,6 @@ import {
   CardEffects,
   CardRarity,
   CardRarityOrder,
-  CardStatsInfoLevel,
   CardType,
   getRealStrength,
   getTargetStrength,
@@ -18,12 +17,14 @@ import Ratios from "./Ratios";
 import { getStats } from "./getStats";
 import useEditorStore from "./EditorStore";
 import { useNavigate, useParams } from "react-router";
+import ImageManager from "./ImageManager";
 
 export interface CardStat {
   name: string;
   rarity: CardRarity;
   id: number;
   world: number;
+  worldIllustration: string;
   attackDefenseRatio: number; // ]0,1[
   speedDamageRatio: number; // ]0,1[
   stats: [CardStatLevel, CardStatLevel, CardStatLevel];
@@ -32,7 +33,10 @@ export interface CardStat {
 export interface CardStatLevel {
   cost: number;
   effects: CardEffects;
+  illustration: string | null;
 }
+
+const imageManager = ImageManager();
 
 export default function CardEditor() {
   const { cardId: cardIdParam } = useParams();
@@ -136,7 +140,7 @@ export default function CardEditor() {
 
 interface CardLevelProps {
   cardStats: CardStat;
-  setCardLevel: (card: Partial<CardStatsInfoLevel>) => void;
+  setCardLevel: (card: Partial<CardStatLevel>) => void;
   level: number;
 }
 
@@ -147,8 +151,8 @@ function cardStatsToCard(cardStats: CardStat, level: number): CardType {
   return {
     name: cardStats.name,
     cost: levelStat.cost,
-    illustration: "",
-    worldIllustration: "",
+    illustration: levelStat.illustration,
+    worldIllustration: cardStats.worldIllustration,
     dmg: stats.dmg,
     hp: stats.hp,
     attackSpeed: stats.attackSpeed,
@@ -181,6 +185,14 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
           </span>{" "}
           / <span className="text-blue-500">{targetStrength}</span>
         </p>
+        <label>Illustration: </label>
+        <input
+          type="file"
+          accept="image/png, image/jpeg"
+          onChange={async (v) => {
+            setCardLevel({ illustration: await imageManager.addImage(v.target.files![0]) });
+          }}
+        />
         <label>Cost: </label>
         <select
           value={card.cost}

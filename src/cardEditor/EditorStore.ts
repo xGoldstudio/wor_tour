@@ -13,7 +13,7 @@ interface EditorStore {
 	removeStale: () => void;
 }
 
-interface EditorData {
+export interface EditorData {
 	cards: CardStat[];
 }
 
@@ -30,7 +30,22 @@ const useEditorStore = create<EditorStore>()((set, get) => ({
 	addCard: () => {
 		const id = get().cards.length + 1;
 		set((state) => ({
-			cards: [...state.cards, { id, name: "New card", rarity: "common", world: 1, attackDefenseRatio: 0.5, speedDamageRatio: 0.5, stats: [{ cost: 1, effects: {} }, { cost: 1, effects: {} }, { cost: 1, effects: {} }] }],
+			cards: [
+				...state.cards,
+				{
+					id,
+					name: "New card",
+					rarity: "common",
+					world: 1,
+					worldIllustration: "/cards/worlds/1.png",
+					attackDefenseRatio: 0.5,
+					speedDamageRatio: 0.5,
+					stats: [
+						{ cost: 1, effects: {}, illustration: null },
+						{ cost: 1, effects: {}, illustration: null },
+						{ cost: 1, effects: {}, illustration: null }
+					]
+				}],
 			isEditorStale: true,
 		}));
 		return id;
@@ -44,7 +59,6 @@ const useEditorStore = create<EditorStore>()((set, get) => ({
 		}));
 	},
 	initData: (object: Partial<EditorData>) => {
-		console.log(object);
 		set((state) => ({
 			cards: object.cards || state.cards,
 		}));
