@@ -14,7 +14,7 @@ import { getStats } from "../../getStats";
 import useEditorStore from "../../store/EditorStore";
 import { useNavigate, useParams } from "react-router";
 import { CardStat, CardStatLevel } from "../../type/type";
-import { imageManager } from "../Editor";
+import ImageManager from "@/editor/utils/ImageManager";
 
 export default function CardEditor() {
   const { cardId: cardIdParam } = useParams();
@@ -136,7 +136,7 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
           type="file"
           accept="image/png, image/jpeg"
           onChange={async (v) => {
-            setCardLevel({ illustration: await imageManager.addImage(v.target.files![0]) });
+            setCardLevel({ illustration: await ImageManager().addImage(v.target.files![0]) });
           }}
         />
         <label>Cost: </label>

@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { imageManager } from "../features/Editor";
+import ImageManager from "../utils/ImageManager";
 
 interface ImageInputProps {
   setImage: (imageUrl: string | null) => void;
@@ -19,7 +19,7 @@ export default function ImageInput({ setImage, imageUrl }: ImageInputProps) {
         onChange={async (v) => {
 					const file = v.target.files![0];
 					if (!file) return;
-          setImage(await imageManager.addImage(v.target.files![0]));
+          setImage(await ImageManager().addImage(v.target.files![0]));
         }}
       />
       <div

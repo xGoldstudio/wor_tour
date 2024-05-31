@@ -1,9 +1,6 @@
 import { Button } from "@/home/Home";
 import useEditorStore from "../store/EditorStore";
 import { useNavigate } from "react-router-dom";
-import ImageManager from "../utils/ImageManager";
-
-export const imageManager = ImageManager();
 
 export default function Editor() {
   const { worlds } = useEditorStore((state) => ({
