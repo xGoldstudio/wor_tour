@@ -15,6 +15,7 @@ export interface World {
 }
 
 export interface Level {
+  id: number,
   world: 1,
   reward: {
     gold: number;

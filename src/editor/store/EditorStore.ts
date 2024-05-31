@@ -68,7 +68,7 @@ const useEditorStore = create<EditorStore>()((set, get) => ({
 					illustration: null,
 					cardBackground: null,
 					levels: [
-						{ world: 1, reward: { gold: 0, xp: 0 }, strength: 0 }
+						{ id: 1, world: 1, reward: { gold: 0, xp: 0 }, strength: 0 }
 					],
 					description: "New world description"
 				}],

@@ -46,8 +46,6 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
   reset: () => set({ isInGame: false }),
 }));
 
-
-
 export function useStartGame() {
   const { deck } = usePlayerStore(state => ({ deck: state.deck }));
   const { setInGameData } = useGameMetadataStore(state => ({ setInGameData: state.setInGameData }));
@@ -55,7 +53,7 @@ export function useStartGame() {
   function startGame() {
     const playerDeck = new Map<number, CollectionCard>();
     deck.forEach(cardId => {
-      playerDeck.set(cardId, usePlayerStore.getState().getCollectionInfo(cardId));
+      playerDeck.set(cardId, usePlayerStore.getState().getCollectionInfo(cardId)!);
     });
     const opponentDeck = new Map<number, CollectionCard>(playerDeck);
     // const cardsPool = cards.filter(card => card.world === level.world);

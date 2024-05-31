@@ -5,7 +5,6 @@ import * as _ from "lodash";
 export default function BoosterIllustration({
   size,
   title,
-  illustration,
 }: {
   size: number;
   title: string;
@@ -21,16 +20,6 @@ export default function BoosterIllustration({
     >
       <svg className="w-full h-full" viewBox="0 0 128 178">
         <rect x="0" y="0" width="128" height="178" fill="#ADB5E0" />
-
-        {/* <image
-          href={illustration}
-          x="50%"
-          y="50%"
-          transform="translate(-63,-88.5)"
-          width="126"
-          height="177"
-        /> */}
-
         <line x1={0} y1="16" x2={128} y2="16" stroke="black" strokeWidth={2} />
         {_.range(20).map((i) => (
           <line

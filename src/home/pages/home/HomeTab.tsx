@@ -11,10 +11,11 @@ import { createPortal } from "react-dom";
 import textureByRarity from "@/game/gui/card/utils/textureByRarity";
 import { useOnMount, useOnUnMount } from "@/lib/lifecycle";
 import { Level } from "@/editor/type/type";
+import useDataStore from "@/cards/DataStore";
 
 export default function HomeTab() {
   const startGame = useStartGame();
-  const currentWorld = Worlds[0];
+  const currentWorld = useDataStore((state) => state.worlds[0]);
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center gap-4">
@@ -39,13 +40,7 @@ export default function HomeTab() {
   );
 }
 
-function Levels({
-  levels,
-  currentWorld,
-}: {
-  levels: Level[];
-  currentWorld: number;
-}) {
+function Levels({ levels }: { levels: Level[]; currentWorld: number }) {
   const { currentPosition, setIsPressed, changePosition } = useScrollCardList(
     0,
     levels.length
@@ -76,7 +71,7 @@ function Levels({
           className="w-full h-[10px] absolute top-[38px]"
           viewBox="0 0 1000 4"
         >
-          {_.range(76).map((index) => (
+          {_.range(7 * levels.length + 5).map((index) => (
             <circle
               cx={index * 12.5 + 6}
               cy={2}
@@ -87,14 +82,14 @@ function Levels({
             />
           ))}
         </svg>
-        {_.range(1, 10).map((level) => (
+        {levels.map((level) => (
           <LevelComponent
-            key={level}
-            level={level}
-            world={currentWorld}
-            distance={level - currentLevel}
-            selected={level === currentLevel}
-            levelData={levels[level - 1]}
+            key={level.id}
+            level={level.id}
+            world={level.world}
+            distance={level.id - currentLevel}
+            selected={level.id === currentLevel}
+            levelData={level}
           />
         ))}
       </div>
@@ -110,7 +105,13 @@ interface LevelProps {
   levelData: Level;
 }
 
-function LevelComponent({ level, world, selected, distance, levelData }: LevelProps) {
+function LevelComponent({
+  level,
+  world,
+  selected,
+  distance,
+  levelData,
+}: LevelProps) {
   const [showPopin, setShowPopin] = useState(false);
   const outside = Math.abs(distance) > 1;
   const ref = useRef(null);

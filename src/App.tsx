@@ -53,7 +53,7 @@ function AppRouter() {
       onSuccess: (stringData) => {
         const objectData = JSON.parse(stringData) as EditorData;
         initData(objectData);
-        // init(objectData);
+        init(objectData);
       },
       staleTime: 2200000,
     }

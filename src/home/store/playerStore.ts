@@ -45,18 +45,17 @@ defaultCollection.set(5, { id: 5, level: 1, shard: 0 });
 defaultCollection.set(6, { id: 6, level: 1, shard: 0 });
 defaultCollection.set(7, { id: 7, level: 1, shard: 0 });
 defaultCollection.set(8, { id: 8, level: 1, shard: 0 });
-defaultCollection.set(9, { id: 9, level: 1, shard: 0 });
 
 const shardsByLevels = [3, 7];
 
 const usePlayerStore = create<PlayerStore>()((set, get) => ({
 	collection: defaultCollection,
 	currentWorld: 1,
-	deck: [7, 8, 1, 2, 3, 9, 5, 6],
-	gold: 0,
+	deck: [1,2,3,4,5,6,7,8],
+	gold: 1000,
 	getCollection: () => Array.from(get().collection.values()),
 	getCollectionInfo: (id: number) => get().collection.get(id),
-	getCompleteInfo: (id: number) => ({ ...findCard(id, get().getCollectionInfo(id).level), isInDeck: get().deck.includes(id) }),
+	getCompleteInfo: (id: number) => ({ ...findCard(id, get().getCollectionInfo(id)!.level), isInDeck: get().deck.includes(id) }),
 
 	removeCardFromDeck: (id: number) => set((state) => ({ deck: state.deck.filter((cardId) => cardId !== id) })),
 	addCardToDeck: (id: number) => set((state) => ({ deck: [...state.deck, id] })),
@@ -79,7 +78,8 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
 			if (!acc[card.rarity]) {
 				acc[card.rarity] = [];
 			}
-			acc[card.rarity].push(getCardFromLevel(card, get().getCollectionInfo(card.id).level));
+			const cardLevel = get().collection.get(card.id)?.level || 1;
+			acc[card.rarity].push(getCardFromLevel(card, cardLevel));
 			return acc;
 		}, {
 			common: [],
@@ -107,7 +107,10 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
 	getAvailableBoosters: () => {
 		return Object.values(boosters).map((booster) => {
 			// if (booster.requirements.world && booster.requirements.world > get().currentWorld) return null;
-			let boosterCardsPackable = get().getAllCardsPackable().map((card) => getCardFromLevel(card, get().getCollectionInfo(card.id).level));
+			let boosterCardsPackable = get().getAllCardsPackable().map((card) => {
+				const cardLevel = get().collection.get(card.id)?.level || 1;
+				return getCardFromLevel(card, cardLevel);
+			});
 			boosterCardsPackable = boosterCardsPackable.filter((card) => {
 				if (booster.requirements.world && card.world > booster.requirements.world) return false;
 				if (booster.requirements.rarity && !booster.requirements.rarity.includes(card.rarity)) return false;
