@@ -1,7 +1,6 @@
-import cards, { CardType, findCard } from '@/cards';
-import { Level } from '@/home/pages/home/HomeTab';
+import { CardType, findCard } from '@/cards';
 import usePlayerStore, { CollectionCard } from '@/home/store/playerStore';
-import { create } from 'zustand'
+import { create } from 'zustand';
 
 export interface InGameInitData {
   playerDeck: number[];
@@ -53,7 +52,7 @@ export function useStartGame() {
   const { deck } = usePlayerStore(state => ({ deck: state.deck }));
   const { setInGameData } = useGameMetadataStore(state => ({ setInGameData: state.setInGameData }));
 
-  function startGame(level: Level) {
+  function startGame() {
     const playerDeck = new Map<number, CollectionCard>();
     deck.forEach(cardId => {
       playerDeck.set(cardId, usePlayerStore.getState().getCollectionInfo(cardId));

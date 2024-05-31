@@ -1,18 +1,9 @@
-import { getStats } from "@/cardEditor/getStats";
-import card1 from "./1";
-import card2 from "./2";
-import card3 from "./3";
-import card4 from "./4";
-import card5 from "./5";
-import card6 from "./6";
-import card7 from "./7";
-import card8 from "./8";
-import card9 from "./9";
+import useDataStore from "./DataStore";
 
 export type CardType = {
 	name: string;
 	cost: number;
-	illustration: string | null;
+	illustration: string;
 	worldIllustration: string;
 	dmg: number;
 	hp: number;
@@ -60,15 +51,18 @@ export interface CardStatsInfoLevel {
 	dmg: number;
 	hp: number;
 	attackSpeed: number;
+	illustration: string | null;
 	effects: CardEffects;
 }
 
 export function findCard(id: number, level: number): CardType {
+	const cards = useDataStore.getState().cards;
 	const card = cards.find(card => card.id === id) || cards[0];
 	return getCardFromLevel(card, level);
 }
 
 export function getCardStats(id: number): CardStatsInfo {
+	const cards = useDataStore.getState().cards;
 	return cards.find(card => card.id === id) || cards[0];
 }
 
@@ -78,7 +72,7 @@ export function getCardFromLevel(card: CardStatsInfo, level: number): CardType {
 	return {
 		name: card.name,
 		cost: card.stats[levelIndex].cost,
-		illustration: `/cards/${card.id}/level${level}.png`,
+		illustration: card.stats[levelIndex].illustration || "",
 		worldIllustration: `/cards/worlds/${card.world}.png`,
 		dmg: card.stats[levelIndex].dmg,
 		hp: card.stats[levelIndex].hp,
@@ -151,26 +145,3 @@ export function getRealStrength(card: { hp: number, dmg: number, attackSpeed: nu
 export function getCardStrength(card: { level: number, rarity: CardRarity, world: number }) {
 	return 1 * (cardLevelMultiplier ** (card.level - 1)) * cardRarityMultiplier[card.rarity] * (cardWorldMultiplier ** (card.world - 1));
 }
-
-const cards: CardStatsInfo[] = ([
-	card1,
-	card2,
-	card3,
-	card4,
-	card5,
-	card6,
-	card7,
-	card8,
-	card9,
-]).map((card): CardStatsInfo => ({
-	name: card.name,
-	rarity: card.rarity,
-	id: card.id,
-	world: card.world,
-	stats: card.stats.map((_, index) => {
-		const s = getStats(card, index + 1);
-		return s;
-	}) as [CardStatsInfoLevel, CardStatsInfoLevel, CardStatsInfoLevel]
-})); 
-
-export default cards;

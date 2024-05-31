@@ -1,4 +1,4 @@
-import { baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, cardWorldMultiplier, getRealStrength, speedMaxLevel1, testIsStrengthValid } from "@/cards";
+import { CardStatsInfoLevel, baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, cardWorldMultiplier, getRealStrength, speedMaxLevel1, testIsStrengthValid } from "@/cards";
 import { CardStat } from "./CardEditor";
 
 function cardStrengthMultiplier(card: CardStat, cost: number) {
@@ -9,7 +9,7 @@ function cardStrengthMultiplier(card: CardStat, cost: number) {
 		cardWorldMultiplier ** (card.world - 1);
 }
 
-export function getStats(card: CardStat, level: number) {
+export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
 	const attackRatio = 1 - card.attackDefenseRatio;
 	const defenseRatio = card.attackDefenseRatio;
 	const speedRatio = 1 - card.speedDamageRatio;
@@ -38,7 +38,8 @@ export function getStats(card: CardStat, level: number) {
 			attackSpeed: speed,
 			dmg: Math.floor(dps / speed),
 			cost: card.stats[level - 1].cost,
-			effects: card.stats[level - 1].effects
+			effects: card.stats[level - 1].effects,
+			illustration: card.stats[level - 1].illustration,
 		};
 	}
 

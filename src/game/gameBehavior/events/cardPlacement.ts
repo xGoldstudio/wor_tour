@@ -26,7 +26,7 @@ export default function cardPlacementEventManager(
 		instanceId: getNextInstanceId(),
 		rarity: foundCard.rarity,
 		effects: _.cloneDeep(foundCard.effects) || {},
-		illustration: foundCard.illustration,
+		illustration: foundCard.illustration || "",
 		worldIllustration: foundCard.worldIllustration,
 	};
 	triggerEvent({

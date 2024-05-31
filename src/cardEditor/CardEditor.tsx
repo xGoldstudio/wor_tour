@@ -151,7 +151,7 @@ function cardStatsToCard(cardStats: CardStat, level: number): CardType {
   return {
     name: cardStats.name,
     cost: levelStat.cost,
-    illustration: levelStat.illustration,
+    illustration: levelStat.illustration || "",
     worldIllustration: cardStats.worldIllustration,
     dmg: stats.dmg,
     hp: stats.hp,

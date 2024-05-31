@@ -10,7 +10,8 @@ import {
   useMutation,
   useQuery,
 } from "react-query";
-import useEditorStore from "./cardEditor/EditorStore";
+import useEditorStore, { EditorData } from "./cardEditor/EditorStore";
+import useDataStore from "./cards/DataStore";
 
 const queryClient = new QueryClient();
 
@@ -31,10 +32,20 @@ function AppRouter() {
   const { initData } = useEditorStore((state) => ({
     initData: state.initData,
   }));
+  const { init } = useDataStore((state) => ({
+    init: state.init,
+  }));
   const data = useQuery(
     "repoData",
     () => fetch("http://localhost:3000/").then((res) => res.json()),
-    { onSuccess: (stringData) => initData(JSON.parse(stringData)), staleTime: 2200000, },
+    {
+      onSuccess: (stringData) => {
+        const objectData = JSON.parse(stringData) as EditorData;
+        initData(objectData);
+        init(objectData);
+      },
+      staleTime: 2200000,
+    }
   );
 
   if (data.isLoading) {

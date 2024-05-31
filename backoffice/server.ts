@@ -1,10 +1,10 @@
 import Fastify from 'fastify';
 import { createWriteStream, existsSync, mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from 'fs';
-import cors from '@fastify/cors'
-import multipart from '@fastify/multipart'
+import cors from '@fastify/cors';
+import multipart from '@fastify/multipart';
 import { v4 as uuidv4 } from "uuid";
 import { pipeline } from 'stream';
-import util from 'util'
+import util from 'util';
 import { EditorData } from '../src/cardEditor/EditorStore';
 
 const dir = `${process.cwd()}/public/editor`;
@@ -38,7 +38,9 @@ fastify.post('/', async function handler(request) {
 		})
 	});
 	removeUnusedImages(allImagesSrc);
+
 	const value = JSON.stringify(request.body);
+
 	writeFileSync(`${dir}/card.json`, value);
 	content = value;
 	return { status: 'ok' };
@@ -64,7 +66,7 @@ fastify.post('/upload', async (request) => {
 	}
 	const fileName = `/editor/${uuidv4()}.${data.filename.split('.').pop()}`;
 	await pump(data.file, createWriteStream(`./public${fileName}`))
-	return { fileName : fileName }
+	return { fileName: fileName }
 });
 
 

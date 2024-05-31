@@ -1,4 +1,5 @@
-import cards, { CardRarity, CardStatsInfo, CardType, findCard, getCardFromLevel, getCardStats } from '@/cards';
+import useDataStore from '@/cards/DataStore';
+import { CardRarity, CardRarityOrder, CardStatsInfo, CardType, findCard, getCardFromLevel, getCardStats } from '@/cards';
 import { create } from 'zustand';
 import { BoosterType, boosters } from './useBooster';
 
@@ -45,6 +46,7 @@ defaultCollection.set(6, { id: 6, level: 1, shard: 0 });
 defaultCollection.set(7, { id: 7, level: 1, shard: 0 });
 defaultCollection.set(8, { id: 8, level: 1, shard: 0 });
 defaultCollection.set(9, { id: 9, level: 1, shard: 0 });
+defaultCollection.set(10, { id: 10, level: 1, shard: 0 });
 
 const shardsByLevels = [3, 7];
 
@@ -62,15 +64,15 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
 	isDeckFull: () => get().deck.length >= 8,
 	isPlayed: (cardId: number) => get().deck.includes(cardId),
 
-	isCardPackable: (id: number) => {
+	isCardPackable: (id: number) => { // todo
 		const card = getCardStats(id);
 		if (card.world > get().currentWorld) return null;
 		const collectionCard = get().getCollectionInfo(id);
 		if (!collectionCard) return findCard(id, 1);
 		return collectionCard.level < 3 ? findCard(id, collectionCard.level) : null;
 	},
-	getAllCardsPackable: () => {
-		return cards.filter((card) => get().isCardPackable(card.id));
+	getAllCardsPackable: () => { //
+		return useDataStore.getState().cards.filter((card) => get().isCardPackable(card.id));
 	},
 	getAllCardsPackableByRarity: () => {
 		const cardsPackable = get().getAllCardsPackable();
@@ -105,11 +107,17 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
 
 	getAvailableBoosters: () => {
 		return Object.values(boosters).map((booster) => {
-			if (booster.requirements.world && booster.requirements.world > get().currentWorld) return null;
-			const boosterCardsPackable = booster.cards.map((cardId) => get().isCardPackable(cardId)).filter((card) => card !== null) as CardType[];
-			if (booster.requirements.cardAvailable && !booster.requirements.cardAvailable(boosterCardsPackable)) return null;
+			// if (booster.requirements.world && booster.requirements.world > get().currentWorld) return null;
+			let boosterCardsPackable = get().getAllCardsPackable().map((card) => getCardFromLevel(card, get().getCollectionInfo(card.id)!.level));
+			boosterCardsPackable = boosterCardsPackable.filter((card) => {
+				if (booster.requirements.world && card.world > booster.requirements.world) return false;
+				if (booster.requirements.rarity && !booster.requirements.rarity.includes(card.rarity)) return false;
+				return true;
+			});
+			// sort by rarity
+			boosterCardsPackable.sort((a, b) => CardRarityOrder.indexOf(a.rarity) - CardRarityOrder.indexOf(b.rarity));
 			return { ...booster, cards: boosterCardsPackable };
-		}).filter((booster) => booster !== null) as BoosterType[];
+		});
 	},
 
 	addGold: (amount: number) => set((state) => ({ gold: state.gold + amount })),

@@ -61,7 +61,7 @@ export default function HomeTab() {
         />
       </div>
       <Levels levels={currentWorld.levels} currentWorld={currentWorld.id} />
-      <Button action={() => startGame(currentWorld.levels[0])}>New game</Button>
+      <Button action={() => startGame()}>New game</Button>
     </div>
   );
 }
@@ -219,7 +219,7 @@ function Popin({ children, targetRef, closePopin }: PopinProps) {
 
   return createPortal(
     <div
-      className="absolute z-10 fixed -translate-y-[calc(100%_+_10px)] -translate-x-1/2"
+      className="z-10 fixed -translate-y-[calc(100%_+_10px)] -translate-x-1/2"
       style={{
         top: inPx(top),
         left: inPx(left + targetRef.current.offsetWidth / 2),
