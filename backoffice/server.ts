@@ -5,7 +5,7 @@ import multipart from '@fastify/multipart';
 import { v4 as uuidv4 } from "uuid";
 import { pipeline } from 'stream';
 import util from 'util';
-import { EditorData } from '../src/cardEditor/EditorStore';
+import { EditorData } from '../src/editor/type/type';
 
 const dir = `${process.cwd()}/public/editor`;
 if (!existsSync(dir)) {
@@ -36,6 +36,10 @@ fastify.post('/', async function handler(request) {
 				allImagesSrc.add(stat.illustration);
 			}
 		})
+	});
+	valueObject.worlds?.forEach(world => {
+		world.illustration && allImagesSrc.add(world.illustration);
+		world.cardBackground && allImagesSrc.add(world.cardBackground);
 	});
 	removeUnusedImages(allImagesSrc);
 

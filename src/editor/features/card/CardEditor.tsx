@@ -1,7 +1,4 @@
 import {
-  CardEffects,
-  CardRarity,
-  CardRarityOrder,
   CardType,
   getRealStrength,
   getTargetStrength,
@@ -9,34 +6,15 @@ import {
 } from "@/cards";
 import FullCard from "@/game/gui/card/FullCard";
 import { Button } from "@/home/Home";
-import { Worlds } from "@/home/pages/home/HomeTab";
 import { cn } from "@/lib/utils";
 import { range } from "lodash";
 import { useState } from "react";
-import Ratios from "./Ratios";
-import { getStats } from "./getStats";
-import useEditorStore from "./EditorStore";
+import Ratios from "../../ui/Ratios";
+import { getStats } from "../../getStats";
+import useEditorStore from "../../store/EditorStore";
 import { useNavigate, useParams } from "react-router";
-import ImageManager from "./ImageManager";
-
-export interface CardStat {
-  name: string;
-  rarity: CardRarity;
-  id: number;
-  world: number;
-  worldIllustration: string;
-  attackDefenseRatio: number; // ]0,1[
-  speedDamageRatio: number; // ]0,1[
-  stats: [CardStatLevel, CardStatLevel, CardStatLevel];
-}
-
-export interface CardStatLevel {
-  cost: number;
-  effects: CardEffects;
-  illustration: string | null;
-}
-
-const imageManager = ImageManager();
+import { CardStat, CardStatLevel } from "../../type/type";
+import { imageManager } from "../Editor";
 
 export default function CardEditor() {
   const { cardId: cardIdParam } = useParams();
@@ -71,17 +49,10 @@ export default function CardEditor() {
   return (
     <div className="flex w-full items-center flex-col pt-4 gap-2">
       <div className="flex gap-2">
-        <Button
-          action={() => {
-            navigate(`/editor`);
-          }}
-        >
-          Go back
-        </Button>
         <select
           value={card.id}
           onChange={(v) => {
-            navigate(`/editor/${v.target.value}`);
+            navigate(`../worlds/${card.world}/${v.target.value}`);
           }}
           className="border-2 border-black p-2 rounded-md"
         >
@@ -98,32 +69,6 @@ export default function CardEditor() {
             setCard({ ...card, name: v.target.value });
           }}
         />
-        <select
-          value={card.rarity}
-          onChange={(v) => {
-            setCard({ ...card, rarity: v.target.value as CardRarity });
-          }}
-          className="border-2 border-black p-2 rounded-md"
-        >
-          {CardRarityOrder.map((rarity) => (
-            <option key={rarity} value={rarity}>
-              {rarity}
-            </option>
-          ))}
-        </select>
-        <select
-          value={card.id}
-          onChange={(v) => {
-            setCard({ ...card, world: parseInt(v.target.value) });
-          }}
-          className="border-2 border-black p-2 rounded-md"
-        >
-          {Worlds.map((world) => (
-            <option key={world.id} value={world.id}>
-              {world.name}
-            </option>
-          ))}
-        </select>
       </div>
       <div className="py-8">
         <Ratios setCard={setCard} card={card} />
@@ -147,12 +92,13 @@ interface CardLevelProps {
 function cardStatsToCard(cardStats: CardStat, level: number): CardType {
   const levelStat = cardStats.stats[level - 1];
   const stats = getStats(cardStats, level);
+  const world = useEditorStore.getState().getWorld(cardStats.world);
 
   return {
     name: cardStats.name,
     cost: levelStat.cost,
     illustration: levelStat.illustration || "",
-    worldIllustration: cardStats.worldIllustration,
+    worldIllustration: world?.cardBackground || "",
     dmg: stats.dmg,
     hp: stats.hp,
     attackSpeed: stats.attackSpeed,

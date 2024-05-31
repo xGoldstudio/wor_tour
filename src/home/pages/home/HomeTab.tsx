@@ -10,34 +10,7 @@ import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import textureByRarity from "@/game/gui/card/utils/textureByRarity";
 import { useOnMount, useOnUnMount } from "@/lib/lifecycle";
-
-export const Worlds = [
-  {
-    id: 1,
-    illustration: "/worlds/1.png",
-    name: "Crabvor Island",
-    levels: [
-      { reward: { gold: 1000, xp: 10 }, strength: 8, world: 1 },
-      { reward: { gold: 1500, xp: 10 }, strength: 9, world: 1 },
-      { reward: { gold: 1500, xp: 10 }, strength: 10, world: 1 },
-      { reward: { gold: 1500, xp: 10 }, strength: 11, world: 1 },
-      { reward: { gold: 2000, xp: 10 }, strength: 12, world: 1 },
-      { reward: { gold: 2000, xp: 10 }, strength: 13, world: 1 },
-      { reward: { gold: 2000, xp: 10 }, strength: 14, world: 1 },
-      { reward: { gold: 3000, xp: 10 }, strength: 15, world: 1 },
-      { reward: { gold: 10000, xp: 50 }, strength: 20, world: 1 },
-    ] as Level[],
-  },
-];
-
-export interface Level {
-  world: 1,
-  reward: {
-    gold: number;
-    xp: number;
-  };
-  strength: number;
-}
+import { Level } from "@/editor/type/type";
 
 export default function HomeTab() {
   const startGame = useStartGame();
@@ -115,7 +88,7 @@ function Levels({
           ))}
         </svg>
         {_.range(1, 10).map((level) => (
-          <Level
+          <LevelComponent
             key={level}
             level={level}
             world={currentWorld}
@@ -137,7 +110,7 @@ interface LevelProps {
   levelData: Level;
 }
 
-function Level({ level, world, selected, distance, levelData }: LevelProps) {
+function LevelComponent({ level, world, selected, distance, levelData }: LevelProps) {
   const [showPopin, setShowPopin] = useState(false);
   const outside = Math.abs(distance) > 1;
   const ref = useRef(null);

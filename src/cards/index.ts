@@ -107,7 +107,7 @@ export const baseHp = 100; // card of level 1, rarity common, world 1
 export const baseDps = baseHp / survavibilityRatio;
 export const cardLevelMultiplier = 1.5;
 export const cardWorldMultiplier = 1.2;
-export const cardCostMultiplier = 1.5;
+export const cardCostMultiplier = 1.3;
 export const speedMaxLevel1 = 2;
 export const cardRarityMultiplier = {
 	common: 1,

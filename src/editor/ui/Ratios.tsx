@@ -1,4 +1,4 @@
-import { CardStat } from "./CardEditor";
+import { CardStat } from "../type/type";
 
 export default function Ratios({
   setCard,
@@ -11,13 +11,13 @@ export default function Ratios({
     <>
       <Ratio
         ratio={card.attackDefenseRatio}
-        setRatio={(ratio) => setCard({ attackDefenseRatio: ratio})}
+        setRatio={(ratio) => setCard({ attackDefenseRatio: ratio })}
         firstRatioLabel="Attack"
         secondRatioLabel="Defense"
       />
       <Ratio
         ratio={card.speedDamageRatio}
-        setRatio={(ratio) => setCard({ speedDamageRatio: ratio})}
+        setRatio={(ratio) => setCard({ speedDamageRatio: ratio })}
         firstRatioLabel="Attack Speed"
         secondRatioLabel="Damage"
       />

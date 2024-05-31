@@ -1,5 +1,5 @@
 import { CardStatsInfoLevel, baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, cardWorldMultiplier, getRealStrength, speedMaxLevel1, testIsStrengthValid } from "@/cards";
-import { CardStat } from "./CardEditor";
+import { CardStat } from "./type/type";
 
 function cardStrengthMultiplier(card: CardStat, cost: number) {
 	return (value: number) =>
