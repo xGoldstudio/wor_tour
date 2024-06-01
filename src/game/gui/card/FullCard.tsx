@@ -10,13 +10,17 @@ export default function FullCard({
   card,
   position,
   cardData,
+  className,
 }: {
   card: CardType;
-  position: number;
+  position?: number;
   cardData?: CollectionCard;
+  className?: string;
 }) {
   const translateX =
-    (position !== 0 ? 50 : 0) + Math.max(0, Math.abs(position) - 1) * 65;
+    position !== undefined
+      ? (position !== 0 ? 50 : 0) + Math.max(0, Math.abs(position) - 1) * 65
+      : 0;
 
   const effectToShow = getImageEffects(card.effects);
 
@@ -32,15 +36,22 @@ export default function FullCard({
 
   return (
     <div
-      className="absolute transition-all duration-500 ease-in-out"
-      style={{
-        transform: `translateX(${
-          -50 + (position >= 0 ? translateX : -translateX)
-        }%) scale(${position === 0 ? 1 : 0.6})`,
-        zIndex: position === 0 ? 1 : 0,
-        opacity: Math.abs(position) <= 1 ? 1 : 0.5,
-        filter: `brightness(${Math.abs(position) === 0 ? 1 : 0.5})`,
-      }}
+      className={cn(
+        "absolute transition-all duration-500 ease-in-out",
+        className
+      )}
+      style={
+        position !== undefined
+          ? {
+              transform: `translateX(${
+                -50 + (position >= 0 ? translateX : -translateX)
+              }%) scale(${position === 0 ? 1 : 0.6})`,
+              zIndex: position === 0 ? 1 : 0,
+              opacity: Math.abs(position) <= 1 ? 1 : 0.5,
+              filter: `brightness(${Math.abs(position) === 0 ? 1 : 0.5})`,
+            }
+          : {}
+      }
     >
       <div className="relative select-none w-min">
         <CardBorder rarity={card.rarity} size={5}>
@@ -127,7 +138,7 @@ function StatLine({ className, title, value }: StateLineProps) {
       <InnerBord size={3}>
         <div className=" bg-slate-50 flex pb-[2px] justify-between items-center flex-col">
           <p className="text-nowrap font-stylised text-base">{title}</p>
-          <p className="font-stylised text-sm">{value}</p>
+          <p className="font-stylised text-sm">{Math.round(value * 100) / 100}</p>
         </div>
       </InnerBord>
     </div>

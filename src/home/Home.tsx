@@ -12,6 +12,9 @@ import {
 } from "@/game/gui/card/CardBorder";
 import { NumberSpan } from "@/game/gui/HpBar";
 import usePlayerStore from "./store/playerStore";
+import Badge from "./ui/Badge";
+import { CardRarity } from "@/cards";
+import textureByRarity from "@/game/gui/card/utils/textureByRarity";
 
 type Tabs = "home" | "deck" | "shop";
 
@@ -119,6 +122,7 @@ interface ButtonProps {
   full?: boolean;
   small?: boolean;
   className?: string;
+  rarity?: CardRarity;
 }
 
 export function Button({
@@ -128,6 +132,7 @@ export function Button({
   small,
   disabled,
   className,
+  rarity = "rare",
 }: ButtonProps) {
   return (
     <button
@@ -142,7 +147,7 @@ export function Button({
       <div
         className="absolute w-full h-full blur-sm"
         style={{
-          backgroundImage: "url('/silver.jpeg')",
+          backgroundImage: `url(/${textureByRarity(rarity)})`,
           backgroundSize: "cover",
           backgroundPositionY: "center",
         }}
@@ -171,17 +176,7 @@ export function Header() {
         amount={26}
         max={50}
         icon={
-          <div className="absolute z-10 left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[28px] h-[28px] flex justify-center items-center text-xl drop-shadow-[2px_1px_1px_black] font-stylised text-white rounded-full overflow-hidden bg-black">
-            <div
-              className="absolute w-full h-full blur-[1px] left-0 top-0 rounded-full"
-              style={{
-                backgroundImage: "url('/silver.jpeg')",
-                backgroundSize: "cover",
-                backgroundPositionY: "center",
-              }}
-            />
-            <p className="relative">1</p>
-          </div>
+          <Badge className="absolute z-10 left-0 top-1/2 -translate-x-1/2 -translate-y-1/2" value="1" />
         }
       />
       <RessourceCounter

@@ -23,13 +23,15 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
     isPlayed: state.isPlayed(cardId),
     isDeckFull: state.isDeckFull(),
   }));
+    
+  const level = collectionInfo ? collectionInfo.level - 1 : 1;
 
   const { currentPosition, setIsPressed, changePosition } = useScrollCardList(
-    collectionInfo.level - 1,
+    level,
     3,
   );
 
-  const isLevelOwned = collectionInfo.level > currentPosition;
+  const isLevelOwned = level > currentPosition;
 
   return (
     <Modal title={`card_${cardId}`} closeModal={closeModal}>

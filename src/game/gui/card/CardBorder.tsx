@@ -1,5 +1,6 @@
 import { CardRarity } from "@/cards";
 import { inPx } from "@/lib/utils";
+import textureByRarity from "./utils/textureByRarity";
 
 interface CardBoardProps {
   rarity: CardRarity;
@@ -13,7 +14,12 @@ export default function CardBorder({ rarity, children, size }: CardBoardProps) {
   const borderUnit = Math.min(0.5 * size, 2);
 
   return (
-    <Borders width={width} height={height} borderUnit={borderUnit} rarity={rarity}>
+    <Borders
+      width={width}
+      height={height}
+      borderUnit={borderUnit}
+      rarity={rarity}
+    >
       <CardIllustartion width={width} height={height} borderUnit={borderUnit}>
         {children}
       </CardIllustartion>
@@ -36,13 +42,6 @@ export function Borders({
   children,
   borderUnit,
 }: BordersProps) {
-  const borderTextureRarity = {
-    common: "bronze.avif",
-    rare: "silver.jpeg",
-    epic: "gold.jpeg",
-    legendary: "diamond.avif",
-  };
-
   return (
     <div
       className="bg-black rounded-sm relative select-none"
@@ -56,7 +55,7 @@ export function Borders({
           <div
             className="w-full h-full blur-[1px]"
             style={{
-              backgroundImage: `url(/${borderTextureRarity[rarity]})`,
+              backgroundImage: `url(/${textureByRarity(rarity)})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -126,7 +125,7 @@ export function CardContentIllustartion({
   card,
   size,
 }: {
-  card: { worldIllustration: string; illustration: string };
+  card: { worldIllustration: string; illustration: string | null };
   size: number;
 }) {
   const borderUnit = Math.min(0.5 * size, 2);
