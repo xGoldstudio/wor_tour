@@ -1,3 +1,5 @@
-import jestConfig from "@repo/jest-config";
-
-export default jestConfig;
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+export default {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+};
