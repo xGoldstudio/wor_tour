@@ -11,8 +11,6 @@ export default function ImageManager() {
     if (json.error) {
       return null;
     }
-    // wait 100ms to let vite the time to make the image available
-    await new Promise((resolve) => setTimeout(resolve, 200));
     return json.fileName as string;
   }
 

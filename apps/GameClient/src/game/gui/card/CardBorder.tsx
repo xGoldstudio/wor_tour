@@ -1,6 +1,7 @@
 import { CardRarity } from "@/cards";
 import { inPx } from "@/lib/utils";
 import textureByRarity from "./utils/textureByRarity";
+import getImageUrlCssValue from "./utils/getImageUrl";
 
 interface CardBoardProps {
   rarity: CardRarity;
@@ -136,7 +137,7 @@ export function CardContentIllustartion({
         <div
           className="w-full h-full grow absolute box-border"
           style={{
-            backgroundImage: `url(${card.worldIllustration})`,
+            backgroundImage: getImageUrlCssValue(card.worldIllustration),
             backgroundSize: "cover",
             backgroundPosition: "center",
             height: `calc(100% - ${7 * borderUnit}px)`,
@@ -145,7 +146,7 @@ export function CardContentIllustartion({
         <div
           className="w-full h-full grow absolute box-border"
           style={{
-            backgroundImage: `url(${card.illustration})`,
+            backgroundImage: getImageUrlCssValue(card.illustration),
             backgroundSize: "cover",
             backgroundPosition: "center",
             height: `calc(100% - ${7 * borderUnit}px)`,

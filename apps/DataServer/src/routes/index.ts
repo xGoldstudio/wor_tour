@@ -3,7 +3,6 @@ import GetGetContentHandler from "./GetContent";
 import GetPostContentHandler from "./PostContent";
 import GetPostUploadFile from "./PostUplodaFile";
 import { AppState } from "../appStore";
-import GetGetStaticFileHandler from "./GetStaticContent";
 
 export default function routes(server: FastifyInstance, state: AppState) {
 	// Get
