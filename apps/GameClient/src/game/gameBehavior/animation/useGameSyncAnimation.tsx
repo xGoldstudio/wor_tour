@@ -15,11 +15,9 @@ interface GameSyncAnimationStore<State> {
   animations: Map<string, Animation<State>>;
 }
 
-const useAnimationStore = create<GameSyncAnimationStore<unknown>>(
-  () => ({
-    animations: new Map(),
-  })
-);
+const useAnimationStore = create<GameSyncAnimationStore<unknown>>(() => ({
+  animations: new Map(),
+}));
 
 function useGameSyncAnimationStore<State>() {
   const store = useAnimationStore();
@@ -40,14 +38,17 @@ function useGameSyncAnimationStore<State>() {
 
   useOnMount(reset);
 
-  return { triggerGameSyncAnimation, reset: () => {
-    reset();
-  } };
+  return {
+    triggerGameSyncAnimation,
+    reset: () => {
+      reset();
+    },
+  };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function useGameAnimation<State, Element = any>(
-  computeAnimation: ComputeAnimation<State>
+  computeAnimation: ComputeAnimation<State>,
 ) {
   const animationRef = useRef<null | Element>(null);
   const store = useAnimationStore();
@@ -61,7 +62,7 @@ function useGameAnimation<State, Element = any>(
       });
       return key;
     }
-  
+
     function removeAnimation(key: string) {
       return store.animations.delete(key);
     }

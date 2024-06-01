@@ -3,8 +3,8 @@ import { ManaBall } from "../ManaBar";
 import CardBorder, { CardContentIllustartion } from "./CardBorder";
 
 interface DeckCardProps {
-	card: CardType;
-	size: number;
+  card: CardType;
+  size: number;
 }
 
 export function DeckCard({ card, size }: DeckCardProps) {

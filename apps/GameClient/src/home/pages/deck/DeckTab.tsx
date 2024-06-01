@@ -1,16 +1,16 @@
-import { ManaBall } from "@/game/gui/ManaBar"
+import { ManaBall } from "@/game/gui/ManaBar";
 import CardBorder, {
   CardContentIllustartion,
   InnerBord,
-} from "@/game/gui/card/CardBorder"
-import { Button } from "../../Home"
-import ScrollContainer from "react-indiana-drag-scroll"
-import { useState } from "react"
-import CardModal from "./CardModal"
-import usePlayerStore from "@/home/store/playerStore"
-import { preventDefault } from "@/lib/eventUtils"
-import * as _ from "lodash"
-import Box from "@/home/ui/Box"
+} from "@/game/gui/card/CardBorder";
+import { Button } from "../../Home";
+import ScrollContainer from "react-indiana-drag-scroll";
+import { useState } from "react";
+import CardModal from "./CardModal";
+import usePlayerStore from "@/home/store/playerStore";
+import { preventDefault } from "@/lib/eventUtils";
+import * as _ from "lodash";
+import Box from "@/home/ui/Box";
 
 function SortAndFilterBox() {
   return (
@@ -18,16 +18,16 @@ function SortAndFilterBox() {
       <button>Sort</button>
       <button>Filter</button>
     </div>
-  )
+  );
 }
 
 export default function DeckTab() {
   const { deck, collection } = usePlayerStore((state) => ({
     deck: state.deck,
     collection: state.getCollection(),
-  }))
+  }));
 
-  const deckArray = _.concat(deck, _.fill(Array(8 - deck.length), null))
+  const deckArray = _.concat(deck, _.fill(Array(8 - deck.length), null));
 
   return (
     <div className="w-full grid grid-rows-[1fr_auto] absolute top-0 h-full">
@@ -76,24 +76,24 @@ export default function DeckTab() {
         </Box>
       </div>
     </div>
-  )
+  );
 }
 
 interface DeckCardProps {
-  cardId: number
-  isHand?: boolean
-  unaddble?: boolean
+  cardId: number;
+  isHand?: boolean;
+  unaddble?: boolean;
 }
 
 function DeckCard({ cardId, isHand, unaddble: addable }: DeckCardProps) {
-  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false)
+  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
   const { card, removeCardFromDeck, addCardToDeck, isDeckFull } =
     usePlayerStore((state) => ({
       card: state.getCompleteInfo(cardId),
       removeCardFromDeck: state.removeCardFromDeck,
       addCardToDeck: state.addCardToDeck,
       isDeckFull: state.isDeckFull(),
-    }))
+    }));
 
   return (
     <>
@@ -157,5 +157,5 @@ function DeckCard({ cardId, isHand, unaddble: addable }: DeckCardProps) {
         )}
       </div>
     </>
-  )
+  );
 }

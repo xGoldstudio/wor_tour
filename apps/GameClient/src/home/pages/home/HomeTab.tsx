@@ -43,7 +43,7 @@ export default function HomeTab() {
 function Levels({ levels }: { levels: Level[]; currentWorld: number }) {
   const { currentPosition, setIsPressed, changePosition } = useScrollCardList(
     0,
-    levels.length
+    levels.length,
   );
 
   const currentLevel = currentPosition + 1;
@@ -119,7 +119,7 @@ function LevelComponent({
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-0 drop-shadow-[1px_1px_1px_black] px-[12px] w-[100px]"
+        "flex flex-col items-center gap-0 drop-shadow-[1px_1px_1px_black] px-[12px] w-[100px]",
       )}
       style={{
         transform: `translateX(${25}px)`,
@@ -211,6 +211,6 @@ function Popin({ children, targetRef, closePopin }: PopinProps) {
         {children}
       </Box>
     </div>,
-    home
+    home,
   );
 }

@@ -8,7 +8,7 @@ function numberWithCommas(x: number) {
 }
 
 export function NumberSpan({ children }: { children: number }) {
-  return <span>{numberWithCommas(children)}</span>
+  return <span>{numberWithCommas(children)}</span>;
 }
 
 interface HpBarProps {
@@ -35,7 +35,7 @@ function HpBar({ hp, maxHp, withHeart }: HpBarProps) {
         {
           x: [0, 4, -4, 4, -4, 0],
         },
-        { duration: 0.5 }
+        { duration: 0.5 },
       );
     }
     if (hp > oldHp) {
@@ -44,7 +44,7 @@ function HpBar({ hp, maxHp, withHeart }: HpBarProps) {
         {
           opacity: [0, 0.6, 0],
         },
-        { duration: 0.5 }
+        { duration: 0.5 },
       ).then(() => {
         setCanAnimate(true);
       });
@@ -54,7 +54,7 @@ function HpBar({ hp, maxHp, withHeart }: HpBarProps) {
         {
           opacity: [0, 0.6, 0],
         },
-        { duration: 0.5 }
+        { duration: 0.5 },
       ).then(() => {
         setCanAnimate(true);
       });
@@ -66,7 +66,7 @@ function HpBar({ hp, maxHp, withHeart }: HpBarProps) {
       ref={scope}
       className={cn(
         "shadow-md grid grid-cols-1 text-sm relative ",
-        !!withHeart && "my-[6px] ml-[20px]"
+        !!withHeart && "my-[6px] ml-[20px]",
       )}
     >
       {!!withHeart && (

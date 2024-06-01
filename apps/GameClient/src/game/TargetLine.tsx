@@ -17,7 +17,7 @@ function TargetLine() {
 
   const calculateDistanceAndAngle = (
     position: Point,
-    mousePosition: Point
+    mousePosition: Point,
   ): DistanceAndAngle => {
     const deltaX = mousePosition.x - position.x;
     const deltaY = mousePosition.y - position.y;
@@ -39,7 +39,7 @@ function TargetLine() {
 
       const distanceAndAngle = calculateDistanceAndAngle(
         { x: rect.left, y: rect.top },
-        { x: event.pageX, y: event.pageY }
+        { x: event.pageX, y: event.pageY },
       );
       setAngle(distanceAndAngle.angle);
       setDistance(distanceAndAngle.distance);

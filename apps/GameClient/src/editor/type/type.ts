@@ -1,22 +1,22 @@
 import { CardEffects, CardRarity } from "@/cards";
 
 export interface EditorData {
-	cards: CardStat[];
-	worlds: World[];
+  cards: CardStat[];
+  worlds: World[];
 }
 
 export interface World {
-	id: number;
-	illustration: string | null;
+  id: number;
+  illustration: string | null;
   cardBackground: string | null;
-	name: string;
+  name: string;
   description: string;
-	levels: Level[];
+  levels: Level[];
 }
 
 export interface Level {
-  id: number,
-  world: 1,
+  id: number;
+  world: 1;
   reward: {
     gold: number;
     xp: number;

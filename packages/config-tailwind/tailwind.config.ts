@@ -4,7 +4,7 @@ import type { Config } from "tailwindcss";
 const config: Omit<Config, "content"> = {
   theme: {
     fontFamily: {
-      'stylised': ["DM Serif Display", "serif"],
+      stylised: ["DM Serif Display", "serif"],
     },
     extend: {
       borderRadius: {

@@ -30,8 +30,7 @@ export const boosters: Record<BoosterName, BoosterTypeDeclartion> = {
     cost: 1000,
     description: "Contain 1 unit from any worlds among unlocked cards.",
     illustration: "/cards/7/level3.png",
-    requirements: {
-    },
+    requirements: {},
   },
   "World 1 refill": {
     name: "World 1 refill",
@@ -70,7 +69,7 @@ export default function useBooster(booster: BoosterType) {
       collection: state.collection,
       spendGold: state.spendGold,
       gold: state.gold,
-    })
+    }),
   );
   const addOrEvolve = useAddCardOrShardOrEvolve();
 

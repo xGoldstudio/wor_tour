@@ -26,10 +26,14 @@ export default function GameDebugPanel({
         <DebugButton onClick={() => fastForward(10)}>+10</DebugButton>
         <DebugButton onClick={() => fastForward(100)}>+100</DebugButton>
       </div>
-      <DebugButton onClick={() => {
-        togglePlay();
-        destroyGame();
-      }}>leave game</DebugButton>
+      <DebugButton
+        onClick={() => {
+          togglePlay();
+          destroyGame();
+        }}
+      >
+        leave game
+      </DebugButton>
     </div>
   );
 }

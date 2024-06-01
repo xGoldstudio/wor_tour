@@ -17,8 +17,8 @@ export default function ImageInput({ setImage, imageUrl }: ImageInputProps) {
         className="hidden"
         ref={imageInputRef}
         onChange={async (v) => {
-					const file = v.target.files![0];
-					if (!file) return;
+          const file = v.target.files![0];
+          if (!file) return;
           setImage(await ImageManager().addImage(v.target.files![0]));
         }}
       />

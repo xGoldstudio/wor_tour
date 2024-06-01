@@ -40,7 +40,7 @@ export default function CardEditor() {
       setCard({
         ...card,
         stats: card.stats.map((s, i) =>
-          i === level - 1 ? { ...s, ...cardLevel } : s
+          i === level - 1 ? { ...s, ...cardLevel } : s,
         ) as [CardStatLevel, CardStatLevel, CardStatLevel],
       });
     };
@@ -136,7 +136,9 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
           type="file"
           accept="image/png, image/jpeg"
           onChange={async (v) => {
-            setCardLevel({ illustration: await ImageManager().addImage(v.target.files![0]) });
+            setCardLevel({
+              illustration: await ImageManager().addImage(v.target.files![0]),
+            });
           }}
         />
         <label>Cost: </label>

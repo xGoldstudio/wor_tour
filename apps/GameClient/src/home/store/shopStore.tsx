@@ -44,7 +44,7 @@ setInterval(() => {
 
 function getCardsByRarityOrHigher(
   rarity: CardRarity,
-  cardsByRarity: Record<CardRarity, CardType[]>
+  cardsByRarity: Record<CardRarity, CardType[]>,
 ) {
   let i = CardRarityOrder.indexOf(rarity);
   for (i; i < CardRarityOrder.length; i++) {

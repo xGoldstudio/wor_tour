@@ -38,7 +38,7 @@ export default function FullCard({
     <div
       className={cn(
         "absolute transition-all duration-500 ease-in-out",
-        className
+        className,
       )}
       style={
         position !== undefined
@@ -103,7 +103,7 @@ export default function FullCard({
                           i % 2 ? "-translate-y-[3px]" : "",
                           i > cardData.shard - 1
                             ? "brightness-0"
-                            : "drop-shadow-[1px_1px_1px_black]"
+                            : "drop-shadow-[1px_1px_1px_black]",
                         )}
                       />
                     ))}
@@ -138,7 +138,9 @@ function StatLine({ className, title, value }: StateLineProps) {
       <InnerBord size={3}>
         <div className=" bg-slate-50 flex pb-[2px] justify-between items-center flex-col">
           <p className="text-nowrap font-stylised text-base">{title}</p>
-          <p className="font-stylised text-sm">{Math.round(value * 100) / 100}</p>
+          <p className="font-stylised text-sm">
+            {Math.round(value * 100) / 100}
+          </p>
         </div>
       </InnerBord>
     </div>

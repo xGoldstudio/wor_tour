@@ -16,7 +16,7 @@ export default function WorldEditor() {
           cards: state.getCardsByWorld(worldId),
           setWorld: state.setWorld(worldId),
         }
-      : null
+      : null,
   );
 
   if (!editorStore || !editorStore.world) {
@@ -47,7 +47,7 @@ export default function WorldEditor() {
           imageUrl={world.illustration}
         />
         <label>Card Background:</label>
-				<ImageInput
+        <ImageInput
           setImage={(imageUrl) => setWorld({ cardBackground: imageUrl })}
           imageUrl={world.cardBackground}
         />

@@ -10,7 +10,9 @@ export default function Editor() {
 
   return (
     <div className="w-screen h-full flex flex-col justify-center items-center pt-8 gap-4">
-      <Button action={() => navigate("/editor/worlds")}>Worlds ({worlds.length})</Button>
+      <Button action={() => navigate("/editor/worlds")}>
+        Worlds ({worlds.length})
+      </Button>
     </div>
   );
 }

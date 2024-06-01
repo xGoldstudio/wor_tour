@@ -70,7 +70,7 @@ function ManaSubBarProgress({
       return {
         transform: `scaleX(${runningManaEarningProgress * 100}%)`,
       };
-    }
+    },
   );
 
   return (

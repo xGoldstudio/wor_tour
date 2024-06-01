@@ -16,7 +16,7 @@ export default function BuyCard({ card }: BuyCardProps) {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const { buyCard, canBuy, hasBeenBought } = useBuyCard(card.id);
   const collectionCard = usePlayerStore((state) =>
-    state.collection.get(card.id)
+    state.collection.get(card.id),
   );
 
   const unavalaible =

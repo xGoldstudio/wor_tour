@@ -8,7 +8,7 @@ export type TriggerEventType = (event: EventType) => void;
 type GameEventListenerFunction = (
   e: EventType,
   data: GameStore,
-  triggerEvent: (event: EventType) => void
+  triggerEvent: (event: EventType) => void,
 ) => void;
 
 function initGameEventListeners() {
@@ -18,7 +18,7 @@ function initGameEventListeners() {
 export function addGameEventListener(
   type: EventType["type"],
   action: GameEventListenerFunction,
-  filter?: (event: EventType) => boolean
+  filter?: (event: EventType) => boolean,
 ) {
   let existingEvents = gameEventListeners.get(type);
   const actionComputed: GameEventListenerFunction =
@@ -35,7 +35,7 @@ export function runGameEventListeners(
   type: EventType["type"],
   e: EventType,
   data: GameStore,
-  triggerEvent: (event: EventType) => void
+  triggerEvent: (event: EventType) => void,
 ) {
   gameEventListeners.get(type)?.forEach((action: GameEventListenerFunction) => {
     action(e, data, triggerEvent);

@@ -18,7 +18,7 @@ export default function Badge({
       className={cn(
         "w-[28px] h-[28px] flex justify-center items-center text-xl drop-shadow-[2px_1px_1px_black] font-stylised text-white rounded-full overflow-hidden bg-black",
         rarity === "rare" && "text-slate-600",
-        className
+        className,
       )}
     >
       <div

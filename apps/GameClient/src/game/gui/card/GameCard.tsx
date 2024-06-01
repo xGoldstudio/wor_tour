@@ -32,7 +32,7 @@ function GameCard({
       return {
         transform: `scaleY(${100 - attackProgress * 100}%)`,
       };
-    }
+    },
   );
   const cardAnimationRef = useGameAnimation<
     GameStore & { currentTick: number }
@@ -73,7 +73,7 @@ function GameCard({
           ease: [0, 0.42, 1, 1],
           values: { scale: 108, y: isPlayerCard ? -15 : 15 },
         },
-      ]
+      ],
     )(elapsedFrames, requiredFrames);
   });
 

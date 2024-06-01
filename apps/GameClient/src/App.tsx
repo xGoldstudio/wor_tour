@@ -7,7 +7,7 @@ import {
   Outlet,
   Route,
   Routes,
-  useLocation
+  useLocation,
 } from "react-router-dom";
 import {
   QueryClient,
@@ -56,7 +56,7 @@ function AppRouter() {
         init(objectData);
       },
       staleTime: 2200000,
-    }
+    },
   );
 
   if (data.isLoading) {
@@ -66,7 +66,10 @@ function AppRouter() {
   return (
     <Routes>
       <Route path="/" element={isInGame ? <Game /> : <Home />} />
-      <Route path="/editor" element={<EditorLayout reloadData={data.refetch} />}>
+      <Route
+        path="/editor"
+        element={<EditorLayout reloadData={data.refetch} />}
+      >
         <Route path="/editor" element={<Editor />} index />
         <Route
           path="/editor/worlds/:worldId/:cardId"
@@ -86,7 +89,7 @@ function EditorLayout({ reloadData }: { reloadData: () => void }) {
       getEdtiorData: state.getEdtiorData,
       isEditorStale: state.isEditorStale,
       removeStale: state.removeStale,
-    })
+    }),
   );
   const mutation = useMutation({
     mutationFn: () =>
@@ -129,10 +132,7 @@ function EditorLayout({ reloadData }: { reloadData: () => void }) {
           >
             Save
           </Button>
-          <Button
-            action={() => reloadData()}
-            disabled={mutation.isLoading}
-          >
+          <Button action={() => reloadData()} disabled={mutation.isLoading}>
             Reset state
           </Button>
         </div>

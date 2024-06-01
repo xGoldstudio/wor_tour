@@ -67,7 +67,7 @@ function InHandCardIllustration({ card }: { card: CardType }) {
       return {
         transform: `scaleY(${100 - alreadyProgress * 100}%)`,
       };
-    }
+    },
   );
 
   return (

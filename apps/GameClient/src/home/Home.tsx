@@ -97,7 +97,7 @@ function RessourceCounter({ amount, max, icon }: RessourceCounterProps) {
               <p
                 className={cn(
                   "relative font-semibold",
-                  max === undefined && "text-right w-full pr-2"
+                  max === undefined && "text-right w-full pr-2",
                 )}
               >
                 <NumberSpan>{amount}</NumberSpan>
@@ -140,7 +140,7 @@ export function Button({
       className={cn(
         "rounded-sm overflow-hidden text-nowrap relative z-10 bg-black font-semibold shadow-md",
         full ? "w-full" : "w-min",
-        disabled ? "brightness-50" : "brightness-100"
+        disabled ? "brightness-50" : "brightness-100",
       )}
       disabled={disabled}
     >
@@ -156,7 +156,7 @@ export function Button({
         className={cn(
           "text-black h-full flex justify-center items-center relative",
           !small ? "px-12 py-2" : "px-2 py-1",
-          className
+          className,
         )}
       >
         {children}
@@ -176,7 +176,10 @@ export function Header() {
         amount={26}
         max={50}
         icon={
-          <Badge className="absolute z-10 left-0 top-1/2 -translate-x-1/2 -translate-y-1/2" value="1" />
+          <Badge
+            className="absolute z-10 left-0 top-1/2 -translate-x-1/2 -translate-y-1/2"
+            value="1"
+          />
         }
       />
       <RessourceCounter

@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { create } from "zustand";
 
 interface GameInterfaceStore {
   cardSelected: null | number;
@@ -25,7 +25,8 @@ const state = {
 const useGameInterface = create<GameInterfaceStore>()((set, get) => ({
   ...state,
 
-  setSelectedCard: (cardPosition: number) => set({ cardSelected: cardPosition }),
+  setSelectedCard: (cardPosition: number) =>
+    set({ cardSelected: cardPosition }),
   unselectCard: () => set({ cardSelected: null }),
 
   setCardTarget: (target: number) => set({ cardTarget: target }),
