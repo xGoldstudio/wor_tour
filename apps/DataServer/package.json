@@ -2,7 +2,7 @@
   "name": "data_server",
   "type": "module",
   "scripts": {
-    "dev": "tsx --watch server.ts"
+    "dev": "tsx --watch index.ts"
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",
