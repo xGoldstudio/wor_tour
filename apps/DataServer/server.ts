@@ -5,30 +5,35 @@ import multipart from '@fastify/multipart';
 import { v4 as uuidv4 } from "uuid";
 import { pipeline } from 'stream';
 import util from 'util';
-import { EditorData } from '../src/editor/type/type';
+import { exit } from 'process';
+// import { EditorData } from '../src/editor/type/type';
 
-const dir = `${process.cwd()}/public/editor`;
+const dir = `${process.cwd()}/data`;
+const imagesDir = `${dir}/images`;
+const dataFile = `${dir}/data.json`;
 if (!existsSync(dir)) {
 	mkdirSync(dir);
 }
+if (!existsSync(imagesDir)) {
+	mkdirSync(imagesDir);
+}
 let content = "";
 try {
-	content = await readFileSync(`${dir}/card.json`, 'utf8');
+	content = await readFileSync(dataFile, 'utf8');
 } catch (e) {
-	writeFileSync(`${dir}/card.json`, '{}');
+	writeFileSync(dataFile, '{}');
 }
 
 const fastify = Fastify({
 	logger: true
 })
 
-// Declare a route
 fastify.get('/', async function handler() {
 	return content;
 });
 
 fastify.post('/', async function handler(request) {
-	const valueObject = JSON.parse(request.body as string) as EditorData;
+	const valueObject = JSON.parse(request.body as string) as any;
 	const allImagesSrc = new Set<string>();
 	valueObject.cards.forEach(card => {
 		card.stats.forEach(stat => {
@@ -45,7 +50,7 @@ fastify.post('/', async function handler(request) {
 
 	const value = JSON.stringify(request.body);
 
-	writeFileSync(`${dir}/card.json`, value);
+	writeFileSync(`${dir}/data.json`, value);
 	content = value;
 	return { status: 'ok' };
 });
@@ -55,8 +60,8 @@ function removeUnusedImages(allImagesSrc: Set<string>) {
 	const files = readdirSync(dir).filter(file => file.endsWith('.jpg') || file.endsWith('.jpeg') || file.endsWith('.png'));
 	// remove all files that are not in the set
 	files.forEach(file => {
-		if (!allImagesSrc.has(`/editor/${file}`)) {
-			unlinkSync(`${dir}/${file}`);
+		if (!allImagesSrc.has(`${imagesDir}/${file}`)) {
+			unlinkSync(`${imagesDir}/${file}`);
 		}
 	});
 }
@@ -68,8 +73,8 @@ fastify.post('/upload', async (request) => {
 	if (!data) {
 		return { error: true };
 	}
-	const fileName = `/editor/${uuidv4()}.${data.filename.split('.').pop()}`;
-	await pump(data.file, createWriteStream(`./public${fileName}`))
+	const fileName = `${uuidv4()}.${data.filename.split('.').pop()}`;
+	await pump(data.file, createWriteStream(`data/images/${fileName}`))
 	return { fileName: fileName }
 });
 

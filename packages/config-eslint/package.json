@@ -1,0 +1,16 @@
+{
+  "name": "@repo/eslint-config",
+  "version": "0.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "type": "commonjs",
+  "private": true,
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.11.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
