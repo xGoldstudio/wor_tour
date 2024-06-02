@@ -1,7 +1,7 @@
-import initFs from "./src/initFs";
-import appStore from "./src/appStore";
-import initServer from "./src/Server";
-import routes from "./src/routes";
+import initFs from "./initFs";
+import appStore from "./appStore";
+import initServer from "./main";
+import routes from "./routes";
 
 (async function main() {
 	const { content } = initFs();

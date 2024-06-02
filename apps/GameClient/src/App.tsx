@@ -18,11 +18,11 @@ import {
 import useEditorStore from "./editor/store/EditorStore";
 import useDataStore from "./cards/DataStore";
 import WorldsEditor from "./editor/features/worlds/Worlds";
-import { EditorData } from "./editor/type/type";
 import WorldEditor from "./editor/features/worlds/World";
 import CardEditor from "./editor/features/card/CardEditor";
 import React from "react";
 import Editor from "./editor/features/Editor";
+import { EditorData } from "@repo/types";
 
 const queryClient = new QueryClient();
 

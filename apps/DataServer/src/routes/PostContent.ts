@@ -1,10 +1,12 @@
+import { EditorData } from '@repo/types';
 import { writeFileSync, readdirSync, unlinkSync } from 'fs';
 import { AppState } from "../appStore";
 import { dir, imagesDir } from '../initFs';
+import { FastifyRequest } from 'fastify';
 
 export default function GetPostContentHandler(state: AppState) {
-	return function handler(request) {
-		const valueObject = JSON.parse(request.body as string) as any;
+	return function handler(request: FastifyRequest) {
+		const valueObject = JSON.parse(request.body as string) as EditorData;
 		const allImagesSrc = new Set<string>();
 		valueObject.cards.forEach((card) => {
 			card.stats.forEach((stat) => {

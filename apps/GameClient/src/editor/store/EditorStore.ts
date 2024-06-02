@@ -1,6 +1,5 @@
-import { CardRarity } from "@/cards";
+import { CardRarity, CardStat, EditorData, World } from "@repo/types";
 import { create } from "zustand";
-import { CardStat, EditorData, World } from "../type/type";
 
 interface EditorStore {
   cards: CardStat[];

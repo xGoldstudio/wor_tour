@@ -8,7 +8,7 @@ export default async function initServer() {
 	const fastify = Fastify({
 		logger: true,
 	});
-	
+
 	fastify.register(multipart);
 	fastify.register(cors, {
 		// Set your CORS options here
@@ -18,7 +18,7 @@ export default async function initServer() {
 		root: imagesDir,
 		prefix: '/public/',
 	})
-	
+
 	async function startServer() {
 		try {
 			await fastify.listen({ port: 3000 });

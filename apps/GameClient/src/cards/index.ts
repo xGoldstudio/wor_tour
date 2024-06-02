@@ -1,3 +1,4 @@
+import { CardEffects, CardRarity } from "@repo/types";
 import useDataStore from "./DataStore";
 
 export type CardType = {
@@ -15,33 +16,12 @@ export type CardType = {
   world: number;
 };
 
-export type CardRarity = "common" | "rare" | "epic" | "legendary";
-
 export const CardRarityOrder: CardRarity[] = [
   "common",
   "rare",
   "epic",
   "legendary",
 ];
-
-export interface CardEffects {
-  multiAttack?: MultiAttackEffect;
-  placementHeal?: PlacementHeal;
-  fightBack?: FightBackEffect;
-}
-
-interface MultiAttackEffect {
-  type: "multiAttack";
-}
-
-interface PlacementHeal {
-  type: "placementHeal";
-  amount: number;
-}
-
-interface FightBackEffect {
-  type: "fightBack";
-}
 
 export interface CardStatsInfo {
   name: string;

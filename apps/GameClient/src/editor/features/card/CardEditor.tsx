@@ -13,8 +13,8 @@ import Ratios from "../../ui/Ratios";
 import { getStats } from "../../getStats";
 import useEditorStore from "../../store/EditorStore";
 import { useNavigate, useParams } from "react-router";
-import { CardStat, CardStatLevel } from "../../type/type";
-import { imageManager } from "@/editor/ui/ImageInput";
+import { CardStat, CardStatLevel } from "@repo/types";
+import ImageManager from "@/editor/utils/ImageManager";
 
 export default function CardEditor() {
   const { cardId: cardIdParam } = useParams();
@@ -137,7 +137,7 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
           accept="image/png, image/jpeg"
           onChange={async (v) => {
             setCardLevel({
-              illustration: await imageManager.addImage(v.target.files![0], `card_${card.id}_level_${level}`),
+              illustration: await ImageManager().addImage(v.target.files![0], `card_${card.id}_level_${level}`),
             });
           }}
         />

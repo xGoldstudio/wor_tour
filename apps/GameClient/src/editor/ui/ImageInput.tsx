@@ -8,8 +8,6 @@ interface ImageInputProps {
   targetName: string;
 }
 
-export const imageManager = ImageManager();
-
 export default function ImageInput({
   setImage,
   fileName,
@@ -27,7 +25,7 @@ export default function ImageInput({
         onChange={async (v) => {
           const file = v.target.files![0];
           if (!file) return;
-          const fileName = await imageManager.addImage(
+          const fileName = await ImageManager().addImage(
             v.target.files![0],
             targetName
           );

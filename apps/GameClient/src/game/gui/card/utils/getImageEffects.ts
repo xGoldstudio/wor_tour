@@ -1,4 +1,4 @@
-import { CardEffects } from "@/cards";
+import { CardEffects } from "@repo/types";
 
 export const effectsImages: Partial<Record<keyof CardEffects, string>> = {
   fightBack: "fightback.svg",

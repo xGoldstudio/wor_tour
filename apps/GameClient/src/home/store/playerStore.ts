@@ -1,6 +1,5 @@
 import useDataStore from "@/cards/DataStore";
 import {
-  CardRarity,
   CardRarityOrder,
   CardStatsInfo,
   CardType,
@@ -10,6 +9,7 @@ import {
 } from "@/cards";
 import { create } from "zustand";
 import { BoosterType, boosters } from "./useBooster";
+import { CardRarity } from "@repo/types";
 
 export interface CollectionCard {
   id: number;
