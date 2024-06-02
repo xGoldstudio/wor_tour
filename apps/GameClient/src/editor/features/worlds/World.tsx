@@ -44,12 +44,14 @@ export default function WorldEditor() {
         <label>Illustration:</label>
         <ImageInput
           setImage={(imageUrl) => setWorld({ illustration: imageUrl })}
-          imageUrl={world.illustration}
+          fileName={world.illustration}
+          targetName={`world_${world.id}_illustration`}
         />
         <label>Card Background:</label>
         <ImageInput
           setImage={(imageUrl) => setWorld({ cardBackground: imageUrl })}
-          imageUrl={world.cardBackground}
+          fileName={world.cardBackground}
+          targetName={`world_${world.id}_cardBackground`}
         />
       </div>
 

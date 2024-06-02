@@ -1,5 +1,3 @@
-import { CardEffects, CardRarity } from "@/cards";
-
 export interface EditorData {
   cards: CardStat[];
   worlds: World[];
@@ -38,4 +36,25 @@ export interface CardStatLevel {
   cost: number;
   effects: CardEffects;
   illustration: string | null;
+}
+
+export type CardRarity = "common" | "rare" | "epic" | "legendary";
+
+export interface CardEffects {
+  multiAttack?: MultiAttackEffect;
+  placementHeal?: PlacementHeal;
+  fightBack?: FightBackEffect;
+}
+
+interface MultiAttackEffect {
+  type: "multiAttack";
+}
+
+interface PlacementHeal {
+  type: "placementHeal";
+  amount: number;
+}
+
+interface FightBackEffect {
+  type: "fightBack";
 }

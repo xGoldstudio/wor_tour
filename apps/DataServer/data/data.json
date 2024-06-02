@@ -1,1 +1,456 @@
-"{\"cards\":[{\"name\":\"Multi-eyes mud\",\"rarity\":\"common\",\"id\":1,\"world\":1,\"attackDefenseRatio\":0.79,\"speedDamageRatio\":0.85,\"stats\":[{\"effects\":{},\"cost\":3,\"illustration\":\"/editor/b4147047-9ff1-4a2a-a47b-592a97adc246.png\"},{\"effects\":{},\"cost\":3,\"illustration\":\"/editor/a6c0288d-0b3f-4e62-83b6-7f66803aea3c.png\"},{\"effects\":{},\"cost\":3,\"illustration\":\"/editor/b91b2e66-ac72-4112-b2f2-e51fbbb953bf.png\"}]},{\"name\":\"Small Bitter\",\"rarity\":\"common\",\"id\":2,\"world\":1,\"attackDefenseRatio\":0.61,\"speedDamageRatio\":0.74,\"stats\":[{\"effects\":{\"multiAttack\":{\"type\":\"multiAttack\"}},\"cost\":3,\"illustration\":\"/editor/64a22304-9678-43df-b7f7-6ad26113c51a.png\"},{\"effects\":{\"multiAttack\":{\"type\":\"multiAttack\"}},\"cost\":3,\"illustration\":\"/editor/d21cf246-3e67-415f-a33e-10045b708902.png\"},{\"effects\":{\"multiAttack\":{\"type\":\"multiAttack\"}},\"cost\":3,\"illustration\":\"/editor/2ffdb0d9-0636-4582-a236-fc571650eabf.png\"}]},{\"name\":\"Medusor\",\"rarity\":\"common\",\"id\":3,\"world\":1,\"attackDefenseRatio\":0.25,\"speedDamageRatio\":0.68,\"stats\":[{\"effects\":{},\"cost\":3,\"illustration\":\"/editor/ba960c77-13a2-4b9a-b5a0-0383a1129343.png\"},{\"effects\":{\"fightBack\":{\"type\":\"fightBack\"}},\"cost\":3,\"illustration\":\"/editor/3e6f2414-a0a9-4dd2-bf71-cf111a5d2af9.png\"},{\"effects\":{\"multiAttack\":{\"type\":\"multiAttack\"},\"fightBack\":{\"type\":\"fightBack\"}},\"cost\":3,\"illustration\":\"/editor/48dfb9d9-e1d4-4dbf-905a-968b85baf478.png\"}]},{\"name\":\"Habitant Of The Claw\",\"rarity\":\"common\",\"id\":4,\"world\":1,\"attackDefenseRatio\":0.73,\"speedDamageRatio\":0.67,\"stats\":[{\"effects\":{},\"cost\":2,\"illustration\":\"/editor/eaf8414a-ce94-4913-b504-c8a8cba63ecd.png\"},{\"effects\":{},\"cost\":2,\"illustration\":\"/editor/bfc79e71-0269-4f59-9ecd-995180825537.png\"},{\"effects\":{\"fightBack\":{\"type\":\"fightBack\"}},\"cost\":2,\"illustration\":\"/editor/c8c511be-84a4-4f3b-b301-21780f2a4517.png\"}]},{\"id\":5,\"name\":\"Common 5\",\"rarity\":\"common\",\"world\":1,\"worldIllustration\":\"/cards/worlds/1.png\",\"attackDefenseRatio\":0.5,\"speedDamageRatio\":0.01,\"stats\":[{\"cost\":9,\"effects\":{},\"illustration\":null},{\"cost\":9,\"effects\":{\"fightBack\":{\"type\":\"fightBack\"}},\"illustration\":null},{\"cost\":9,\"effects\":{},\"illustration\":null}]},{\"id\":6,\"name\":\"Common 6\",\"rarity\":\"common\",\"world\":1,\"worldIllustration\":\"/cards/worlds/1.png\",\"attackDefenseRatio\":0.5,\"speedDamageRatio\":0.5,\"stats\":[{\"cost\":1,\"effects\":{},\"illustration\":null},{\"cost\":1,\"effects\":{},\"illustration\":null},{\"cost\":1,\"effects\":{},\"illustration\":null}]},{\"id\":7,\"name\":\"Common 7\",\"rarity\":\"common\",\"world\":1,\"worldIllustration\":\"/cards/worlds/1.png\",\"attackDefenseRatio\":0.5,\"speedDamageRatio\":0.5,\"stats\":[{\"cost\":1,\"effects\":{},\"illustration\":null},{\"cost\":1,\"effects\":{},\"illustration\":null},{\"cost\":1,\"effects\":{},\"illustration\":null}]},{\"id\":8,\"name\":\"Common 8\",\"rarity\":\"common\",\"world\":1,\"worldIllustration\":\"/cards/worlds/1.png\",\"attackDefenseRatio\":0.5,\"speedDamageRatio\":0.5,\"stats\":[{\"cost\":1,\"effects\":{},\"illustration\":null},{\"cost\":1,\"effects\":{},\"illustration\":null},{\"cost\":1,\"effects\":{},\"illustration\":null}]},{\"name\":\"Friendly Crabvor\",\"rarity\":\"rare\",\"id\":9,\"world\":1,\"attackDefenseRatio\":0.5,\"speedDamageRatio\":0.5,\"stats\":[{\"effects\":{},\"cost\":3,\"illustration\":\"/editor/f39c3130-ee5e-4150-ba82-9d4644e43dc5.png\"},{\"effects\":{\"placementHeal\":{\"type\":\"placementHeal\",\"amount\":75}},\"cost\":3,\"illustration\":\"/editor/71d48271-e8e2-4e06-8197-8fc8d0f1a8c5.png\"},{\"effects\":{\"placementHeal\":{\"type\":\"placementHeal\",\"amount\":100}},\"cost\":3,\"illustration\":\"/editor/607e1376-8db1-485e-a14e-03b8a7524c00.png\"}]},{\"name\":\"Crabvor Mage\",\"rarity\":\"rare\",\"id\":10,\"world\":1,\"attackDefenseRatio\":0.15,\"speedDamageRatio\":0.9,\"stats\":[{\"effects\":{},\"cost\":4,\"illustration\":\"/editor/6f8d8473-f6ec-41ec-9222-012eb2fae7dd.png\"},{\"effects\":{},\"cost\":4,\"illustration\":\"/editor/f1ee9508-6581-4f6c-b280-ed85082f0a7d.png\"},{\"effects\":{},\"cost\":4,\"illustration\":\"/editor/b7eab61b-6875-47dc-ad18-e49de0fedf47.png\"}]},{\"name\":\"Crabvor Chief\",\"rarity\":\"rare\",\"id\":11,\"world\":1,\"attackDefenseRatio\":0.8,\"speedDamageRatio\":0.41,\"stats\":[{\"effects\":{},\"cost\":4,\"illustration\":\"/editor/b1a3376c-7bc9-40f0-b0ce-d36020de579b.png\"},{\"effects\":{},\"cost\":4,\"illustration\":\"/editor/c8185349-679d-44cb-9b0a-58026008ce02.png\"},{\"effects\":{},\"cost\":4,\"illustration\":\"/editor/7602df29-dad1-43de-b2a9-94754001d7d2.png\"}]},{\"id\":12,\"name\":\"Rare 4\",\"rarity\":\"rare\",\"world\":1,\"worldIllustration\":\"/cards/worlds/1.png\",\"attackDefenseRatio\":0.5,\"speedDamageRatio\":0.5,\"stats\":[{\"cost\":1,\"effects\":{},\"illustration\":null},{\"cost\":1,\"effects\":{},\"illustration\":null},{\"cost\":1,\"effects\":{},\"illustration\":null}]},{\"name\":\"Mega crabvor\",\"rarity\":\"epic\",\"id\":13,\"world\":1,\"attackDefenseRatio\":0.67,\"speedDamageRatio\":0.8,\"stats\":[{\"effects\":{},\"cost\":4,\"illustration\":\"/editor/bc34910c-4f12-4d10-9626-7964c2940682.png\"},{\"effects\":{\"fightBack\":{\"type\":\"fightBack\"}},\"cost\":4,\"illustration\":\"/editor/03918d57-3260-4a7a-83cd-a3b5e19dc1fa.png\"},{\"effects\":{\"fightBack\":{\"type\":\"fightBack\"}},\"cost\":4,\"illustration\":\"/editor/4c00aca9-f5ad-4735-bfa4-179d56423735.png\"}]},{\"id\":14,\"name\":\"Epic 2\",\"rarity\":\"epic\",\"world\":1,\"worldIllustration\":\"/cards/worlds/1.png\",\"attackDefenseRatio\":0.01,\"speedDamageRatio\":0.01,\"stats\":[{\"cost\":9,\"effects\":{},\"illustration\":null},{\"cost\":9,\"effects\":{},\"illustration\":null},{\"cost\":9,\"effects\":{},\"illustration\":null}]},{\"name\":\"Queen crabvor\",\"rarity\":\"legendary\",\"id\":15,\"world\":1,\"attackDefenseRatio\":0.36,\"speedDamageRatio\":0.23,\"stats\":[{\"effects\":{},\"cost\":3,\"illustration\":\"/editor/bd712db6-6e5a-4920-8433-bfdfcaf031ef.png\"},{\"effects\":{},\"cost\":3,\"illustration\":\"/editor/53bd0c81-41d4-4f88-b3e8-47fb573162a3.png\"},{\"effects\":{},\"cost\":3,\"illustration\":\"/editor/58f047ec-8427-474b-92ff-a0074591705a.png\"}]}],\"worlds\":[{\"id\":1,\"name\":\"Crabvor Island\",\"illustration\":\"/editor/81df5117-472d-4b91-8902-f5b64772459d.png\",\"levels\":[{\"world\":1,\"id\":1,\"reward\":{\"gold\":0,\"xp\":0},\"strength\":0}],\"cardBackground\":\"/editor/b460dc00-776e-4dfd-bcb3-e9ef66c28bfd.png\",\"description\":\"A dangerous island where a creature from the sea can surprise you at anytime anywhere...\"}]}"
+{
+  "cards": [
+    {
+      "name": "Multi-eyes mud",
+      "rarity": "common",
+      "id": 1,
+      "world": 1,
+      "attackDefenseRatio": 0.79,
+      "speedDamageRatio": 0.85,
+      "stats": [
+        {
+          "effects": {},
+          "cost": 3,
+          "illustration": "b4147047-9ff1-4a2a-a47b-592a97adc246.png"
+        },
+        {
+          "effects": {},
+          "cost": 3,
+          "illustration": "card_1_level_2.png"
+        },
+        {
+          "effects": {},
+          "cost": 3,
+          "illustration": "b91b2e66-ac72-4112-b2f2-e51fbbb953bf.png"
+        }
+      ]
+    },
+    {
+      "name": "Small Bitter",
+      "rarity": "common",
+      "id": 2,
+      "world": 1,
+      "attackDefenseRatio": 0.61,
+      "speedDamageRatio": 0.74,
+      "stats": [
+        {
+          "effects": {
+            "multiAttack": {
+              "type": "multiAttack"
+            }
+          },
+          "cost": 3,
+          "illustration": "64a22304-9678-43df-b7f7-6ad26113c51a.png"
+        },
+        {
+          "effects": {
+            "multiAttack": {
+              "type": "multiAttack"
+            }
+          },
+          "cost": 3,
+          "illustration": "d21cf246-3e67-415f-a33e-10045b708902.png"
+        },
+        {
+          "effects": {
+            "multiAttack": {
+              "type": "multiAttack"
+            }
+          },
+          "cost": 3,
+          "illustration": "2ffdb0d9-0636-4582-a236-fc571650eabf.png"
+        }
+      ]
+    },
+    {
+      "name": "Medusor",
+      "rarity": "common",
+      "id": 3,
+      "world": 1,
+      "attackDefenseRatio": 0.25,
+      "speedDamageRatio": 0.68,
+      "stats": [
+        {
+          "effects": {},
+          "cost": 3,
+          "illustration": "card_3_level_1_1717283332492.png"
+        },
+        {
+          "effects": {
+            "fightBack": {
+              "type": "fightBack"
+            }
+          },
+          "cost": 3,
+          "illustration": "card_3_level_2_1717283337041.png"
+        },
+        {
+          "effects": {
+            "multiAttack": {
+              "type": "multiAttack"
+            },
+            "fightBack": {
+              "type": "fightBack"
+            }
+          },
+          "cost": 3,
+          "illustration": "card_3_level_3_1717283341661.png"
+        }
+      ]
+    },
+    {
+      "name": "Habitant Of The Claw",
+      "rarity": "common",
+      "id": 4,
+      "world": 1,
+      "attackDefenseRatio": 0.73,
+      "speedDamageRatio": 0.67,
+      "stats": [
+        {
+          "effects": {},
+          "cost": 2,
+          "illustration": "eaf8414a-ce94-4913-b504-c8a8cba63ecd.png"
+        },
+        {
+          "effects": {},
+          "cost": 2,
+          "illustration": "bfc79e71-0269-4f59-9ecd-995180825537.png"
+        },
+        {
+          "effects": {
+            "fightBack": {
+              "type": "fightBack"
+            }
+          },
+          "cost": 2,
+          "illustration": "c8c511be-84a4-4f3b-b301-21780f2a4517.png"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Common 5",
+      "rarity": "common",
+      "world": 1,
+      "worldIllustration": "/cards/worlds/1.png",
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.01,
+      "stats": [
+        {
+          "cost": 9,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 9,
+          "effects": {
+            "fightBack": {
+              "type": "fightBack"
+            }
+          },
+          "illustration": null
+        },
+        {
+          "cost": 9,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Common 6",
+      "rarity": "common",
+      "world": 1,
+      "worldIllustration": "/cards/worlds/1.png",
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Common 7",
+      "rarity": "common",
+      "world": 1,
+      "worldIllustration": "/cards/worlds/1.png",
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Common 8",
+      "rarity": "common",
+      "world": 1,
+      "worldIllustration": "/cards/worlds/1.png",
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "name": "Friendly Crabvor",
+      "rarity": "rare",
+      "id": 9,
+      "world": 1,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "effects": {},
+          "cost": 3,
+          "illustration": "f39c3130-ee5e-4150-ba82-9d4644e43dc5.png"
+        },
+        {
+          "effects": {
+            "placementHeal": {
+              "type": "placementHeal",
+              "amount": 75
+            }
+          },
+          "cost": 3,
+          "illustration": "71d48271-e8e2-4e06-8197-8fc8d0f1a8c5.png"
+        },
+        {
+          "effects": {
+            "placementHeal": {
+              "type": "placementHeal",
+              "amount": 100
+            }
+          },
+          "cost": 3,
+          "illustration": "607e1376-8db1-485e-a14e-03b8a7524c00.png"
+        }
+      ]
+    },
+    {
+      "name": "Crabvor Mage",
+      "rarity": "rare",
+      "id": 10,
+      "world": 1,
+      "attackDefenseRatio": 0.15,
+      "speedDamageRatio": 0.9,
+      "stats": [
+        {
+          "effects": {},
+          "cost": 4,
+          "illustration": "6f8d8473-f6ec-41ec-9222-012eb2fae7dd.png"
+        },
+        {
+          "effects": {},
+          "cost": 4,
+          "illustration": "f1ee9508-6581-4f6c-b280-ed85082f0a7d.png"
+        },
+        {
+          "effects": {},
+          "cost": 4,
+          "illustration": "b7eab61b-6875-47dc-ad18-e49de0fedf47.png"
+        }
+      ]
+    },
+    {
+      "name": "Crabvor Chief",
+      "rarity": "rare",
+      "id": 11,
+      "world": 1,
+      "attackDefenseRatio": 0.8,
+      "speedDamageRatio": 0.41,
+      "stats": [
+        {
+          "effects": {},
+          "cost": 4,
+          "illustration": "b1a3376c-7bc9-40f0-b0ce-d36020de579b.png"
+        },
+        {
+          "effects": {},
+          "cost": 4,
+          "illustration": "c8185349-679d-44cb-9b0a-58026008ce02.png"
+        },
+        {
+          "effects": {},
+          "cost": 4,
+          "illustration": "7602df29-dad1-43de-b2a9-94754001d7d2.png"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Rare 4",
+      "rarity": "rare",
+      "world": 1,
+      "worldIllustration": "/cards/worlds/1.png",
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "name": "Mega crabvor",
+      "rarity": "epic",
+      "id": 13,
+      "world": 1,
+      "attackDefenseRatio": 0.67,
+      "speedDamageRatio": 0.8,
+      "stats": [
+        {
+          "effects": {},
+          "cost": 4,
+          "illustration": "bc34910c-4f12-4d10-9626-7964c2940682.png"
+        },
+        {
+          "effects": {
+            "fightBack": {
+              "type": "fightBack"
+            }
+          },
+          "cost": 4,
+          "illustration": "03918d57-3260-4a7a-83cd-a3b5e19dc1fa.png"
+        },
+        {
+          "effects": {
+            "fightBack": {
+              "type": "fightBack"
+            }
+          },
+          "cost": 4,
+          "illustration": "4c00aca9-f5ad-4735-bfa4-179d56423735.png"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Epic 2",
+      "rarity": "epic",
+      "world": 1,
+      "worldIllustration": "/cards/worlds/1.png",
+      "attackDefenseRatio": 0.01,
+      "speedDamageRatio": 0.01,
+      "stats": [
+        {
+          "cost": 9,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 9,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 9,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "name": "Queen crabvor",
+      "rarity": "legendary",
+      "id": 15,
+      "world": 1,
+      "attackDefenseRatio": 0.36,
+      "speedDamageRatio": 0.23,
+      "stats": [
+        {
+          "effects": {},
+          "cost": 3,
+          "illustration": "bd712db6-6e5a-4920-8433-bfdfcaf031ef.png"
+        },
+        {
+          "effects": {},
+          "cost": 3,
+          "illustration": "53bd0c81-41d4-4f88-b3e8-47fb573162a3.png"
+        },
+        {
+          "effects": {},
+          "cost": 3,
+          "illustration": "58f047ec-8427-474b-92ff-a0074591705a.png"
+        }
+      ]
+    }
+  ],
+
+  "worlds": [
+    {
+      "id": 1,
+      "name": "Crabvor Island",
+      "illustration": "world_1_illustration_1717283672277.png",
+      "levels": [
+        {
+          "world": 1,
+          "id": 1,
+          "reward": {
+            "gold": 0,
+            "xp": 0
+          },
+          "strength": 0
+        }
+      ],
+
+      "cardBackground": "world_1_cardBackground_1717283375227.png",
+      "description": "A dangerous island where a creature from the sea can surprise you at anytime anywhere..."
+    }
+  ]
+}

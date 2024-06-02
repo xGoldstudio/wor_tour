@@ -2,16 +2,26 @@
   "name": "data_server",
   "type": "module",
   "scripts": {
-    "dev": "tsx --watch server.ts"
+    "clean": "rimraf dist",
+    "build": "pnpm clean & rollup -c",
+    "dev": "tsx watch src/index.ts",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "@fastify/cors": "^9.0.1",
     "@fastify/multipart": "^8.2.0",
+    "@fastify/static": "^7.0.4",
+    "@repo/types": "workspace:*",
+    "@rollup/plugin-typescript": "^11.1.6",
     "fastify": "^4.27.0",
-    "tsx": "^4.11.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@types/uuid": "^9.0.8"
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/uuid": "^9.0.8",
+    "rimraf": "^5.0.7",
+    "rollup": "^4.18.0",
+    "tsx": "^4.11.0"
   }
 }

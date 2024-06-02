@@ -29,6 +29,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@repo/types": "workspace:*",
     "@jest/globals": "^29.7.0",
     "@repo/eslint-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",

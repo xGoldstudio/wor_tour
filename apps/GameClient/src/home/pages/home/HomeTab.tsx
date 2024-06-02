@@ -10,8 +10,9 @@ import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import textureByRarity from "@/game/gui/card/utils/textureByRarity";
 import { useOnMount, useOnUnMount } from "@/lib/lifecycle";
-import { Level } from "@/editor/type/type";
 import useDataStore from "@/cards/DataStore";
+import getImageUrlCssValue from "@/game/gui/card/utils/getImageUrl";
+import { Level } from "@repo/types";
 
 export default function HomeTab() {
   const startGame = useStartGame();
@@ -23,7 +24,7 @@ export default function HomeTab() {
       <div
         className="w-1/2 aspect-square relative"
         style={{
-          backgroundImage: `url('${currentWorld.illustration}')`,
+          backgroundImage: getImageUrlCssValue(currentWorld.illustration),
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}

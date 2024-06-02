@@ -9,7 +9,6 @@ import useGameStore, {
 import iaAgent from "./aiAgent";
 import cardAttacking from "./events/cardAttacking";
 import cardPlacementEventManager from "./events/cardPlacement";
-import { CardEffects } from "@/cards";
 import Clock, { ClockReturn } from "./clock/clock";
 import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
 import GameCanvas, { GameCanvasReturn } from "./animation/gameCanvas";
@@ -19,6 +18,7 @@ import {
 } from "./gameEventListener";
 import useGameMetadataStore from "../stores/gameMetadataStore";
 import { useOnMount } from "@/lib/lifecycle";
+import { CardEffects } from "@repo/types";
 
 export const FRAME_TIME = 10;
 

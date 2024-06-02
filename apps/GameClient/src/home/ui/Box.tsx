@@ -1,9 +1,9 @@
-import { CardRarity } from "@/cards";
 import {
   Borders,
   CardIllustartion,
   InnerBord,
 } from "@/game/gui/card/CardBorder";
+import { CardRarity } from "@repo/types";
 
 interface BoxProps {
   children: React.ReactNode;

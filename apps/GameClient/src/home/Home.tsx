@@ -13,8 +13,8 @@ import {
 import { NumberSpan } from "@/game/gui/HpBar";
 import usePlayerStore from "./store/playerStore";
 import Badge from "./ui/Badge";
-import { CardRarity } from "@/cards";
 import textureByRarity from "@/game/gui/card/utils/textureByRarity";
+import { CardRarity } from "@repo/types";
 
 type Tabs = "home" | "deck" | "shop";
 

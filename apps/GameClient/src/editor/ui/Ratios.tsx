@@ -1,4 +1,4 @@
-import { CardStat } from "../type/type";
+import { CardStat } from "@repo/types";
 
 export default function Ratios({
   setCard,

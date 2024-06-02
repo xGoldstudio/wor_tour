@@ -1,6 +1,6 @@
-import { CardRarity } from "@/cards";
 import textureByRarity from "@/game/gui/card/utils/textureByRarity";
 import { cn } from "@/lib/utils";
+import { CardRarity } from "@repo/types";
 
 interface BadgeProps {
   value: string;

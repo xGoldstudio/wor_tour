@@ -10,7 +10,7 @@ import {
   speedMaxLevel1,
   testIsStrengthValid,
 } from "@/cards";
-import { CardStat } from "./type/type";
+import { CardStat } from "@repo/types";
 
 function cardStrengthMultiplier(card: CardStat, cost: number) {
   return (value: number) =>

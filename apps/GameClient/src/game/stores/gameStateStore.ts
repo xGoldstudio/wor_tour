@@ -1,7 +1,7 @@
-import { CardEffects, CardRarity } from "@/cards";
 import { create } from "zustand";
 import * as _ from "lodash";
 import useGameMetadataStore, { InGameInitData } from "./gameMetadataStore";
+import { CardEffects, CardRarity } from "@repo/types";
 
 export interface GameStore {
   init: () => void;

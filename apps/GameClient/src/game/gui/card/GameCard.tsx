@@ -3,9 +3,9 @@ import HpBar from "../HpBar";
 import CardBorder, { CardContentIllustartion, InnerBord } from "./CardBorder";
 import { GameStore, InGameCardType } from "@/game/stores/gameStateStore";
 import { FRAME_TIME } from "@/game/gameBehavior/useGameEvents";
-import { CardEffects } from "@/cards";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
 import getImageEffects from "./utils/getImageEffects";
+import { CardEffects } from "@repo/types";
 
 function GameCard({
   card,
