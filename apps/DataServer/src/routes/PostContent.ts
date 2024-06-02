@@ -21,8 +21,8 @@ export default function GetPostContentHandler(state: AppState) {
 		});
 
 		purgeImages(allImagesSrc);
-	
-		const value = JSON.stringify(request.body);
+
+		const value = beautifyJson(valueObject);
 	
 		writeFileSync(`${dir}/data.json`, value);
 		state.updateContent(value);
@@ -39,4 +39,12 @@ function purgeImages(allImagesSrc: Set<string>) {
       unlinkSync(`${imagesDir}/${file}`);
     }
   });
+}
+
+function beautifyJson(jsonObject: unknown) {
+	return JSON.stringify(jsonObject, null, 2)
+			.replace(/":\s+/g, '": ')
+			.replace(/,{/g, ',\n{')
+			.replace(/],/g, '],\n')
+			.replace(/}]/g, '}\n]');
 }

@@ -35,6 +35,9 @@ importers:
       fastify:
         specifier: ^4.27.0
         version: 4.27.0
+      json-beautify:
+        specifier: ^1.1.1
+        version: 1.1.1
       uuid:
         specifier: ^9.0.1
         version: 9.0.1
@@ -3422,6 +3425,11 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
     dev: true
+
+  /json-beautify@1.1.1:
+    resolution: {integrity: sha512-17j+Hk2lado0xqKtUcyAjK0AtoHnPSIgktWRsEXgdFQFG9UnaGw6CHa0J7xsvulxRpFl6CrkDFHght1p5ZJc4A==}
+    hasBin: true
+    dev: false
 
   /json-buffer@3.0.1:
     resolution: {integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==}
