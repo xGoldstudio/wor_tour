@@ -1,19 +1,20 @@
-import { AppState } from "../appStore";
 import { createWriteStream } from 'fs';
-import { v4 as uuidv4 } from "uuid";
 import { pipeline } from "stream";
 import util from "util";
+import { FastifyRequest } from 'fastify';
 
 const pump = util.promisify(pipeline);
 
-export default function GetPostUploadFile(state: AppState) {
-	return async function handler(request) {
+export default function GetPostUploadFile() {
+	return async function handler(request: FastifyRequest) {
+		const fileName = (request.params as { fileName: string }).fileName;
 		const data = await request.file();
 		if (!data) {
 			return { error: true };
 		}
-		const fileName = `${uuidv4()}.${data.filename.split(".").pop()}`;
-		await pump(data.file, createWriteStream(`data/images/${fileName}`));
-		return { fileName: fileName };
+		const extension = data.filename.split('.').pop();
+		const completeFileName = `${fileName}_${Date.now()}.${extension}`;
+		await pump(data.file, createWriteStream(`data/images/${completeFileName}`,));
+		return { fileName: completeFileName };
 	}
 }

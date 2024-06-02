@@ -78,7 +78,7 @@ export function getCardFromLevel(card: CardStatsInfo, level: number): CardType {
     name: card.name,
     cost: card.stats[levelIndex].cost,
     illustration: card.stats[levelIndex].illustration || "",
-    worldIllustration: `/cards/worlds/${card.world}.png`,
+    worldIllustration: useDataStore.getState().getWorld(card.world)?.cardBackground || "",
     dmg: card.stats[levelIndex].dmg,
     hp: card.stats[levelIndex].hp,
     attackSpeed: card.stats[levelIndex].attackSpeed,

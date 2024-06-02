@@ -5,9 +5,16 @@ import { getImageUrl } from "@/game/gui/card/utils/getImageUrl";
 interface ImageInputProps {
   setImage: (imageUrl: string | null) => void;
   fileName: string | null;
+  targetName: string;
 }
 
-export default function ImageInput({ setImage, fileName }: ImageInputProps) {
+export const imageManager = ImageManager();
+
+export default function ImageInput({
+  setImage,
+  fileName,
+  targetName,
+}: ImageInputProps) {
   const imageInputRef = useRef<HTMLInputElement>(null);
 
   return (
@@ -20,7 +27,11 @@ export default function ImageInput({ setImage, fileName }: ImageInputProps) {
         onChange={async (v) => {
           const file = v.target.files![0];
           if (!file) return;
-          setImage(await ImageManager().addImage(v.target.files![0]));
+          const fileName = await imageManager.addImage(
+            v.target.files![0],
+            targetName
+          );
+          setImage(`${fileName}`);
         }}
       />
       <div

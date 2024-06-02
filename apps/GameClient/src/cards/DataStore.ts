@@ -6,12 +6,16 @@ import { EditorData, World } from "@/editor/type/type";
 interface DataStore {
   cards: CardStatsInfo[];
   worlds: World[];
+  getWorld: (id: number) => World | undefined;
   init: (data: EditorData) => void;
 }
 
-const useDataStore = create<DataStore>()((set) => ({
+const useDataStore = create<DataStore>()((set, get) => ({
   cards: [],
   worlds: [],
+  getWorld: (id: number) => {
+    return get().worlds.find((w) => w.id === id);
+  },
   init: (data: EditorData) => {
     set({
       worlds: data.worlds,

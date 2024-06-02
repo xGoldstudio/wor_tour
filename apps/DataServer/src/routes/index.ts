@@ -10,5 +10,5 @@ export default function routes(server: FastifyInstance, state: AppState) {
 
 	// Post
 	server.post("/", GetPostContentHandler(state));
-	server.post("/upload", GetPostUploadFile(state));
+	server.post("/upload/:fileName", GetPostUploadFile());
 }

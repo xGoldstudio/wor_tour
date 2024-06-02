@@ -17,7 +17,8 @@ export default function GetPostContentHandler(state: AppState) {
 			world.illustration && allImagesSrc.add(world.illustration);
 			world.cardBackground && allImagesSrc.add(world.cardBackground);
 		});
-		removeUnusedImages(allImagesSrc);
+
+		purgeImages(allImagesSrc);
 	
 		const value = JSON.stringify(request.body);
 	
@@ -27,15 +28,12 @@ export default function GetPostContentHandler(state: AppState) {
 	}
 }
 
-function removeUnusedImages(allImagesSrc: Set<string>) {
+function purgeImages(allImagesSrc: Set<string>) {
   // get all files in the directory ending with jpg, jpeg or png
-  const files = readdirSync(dir).filter(
-    (file) =>
-      file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".png"),
-  );
+  const files = readdirSync(imagesDir);
   // remove all files that are not in the set
   files.forEach((file) => {
-    if (!allImagesSrc.has(`${imagesDir}/${file}`)) {
+    if (!allImagesSrc.has(file)) {
       unlinkSync(`${imagesDir}/${file}`);
     }
   });

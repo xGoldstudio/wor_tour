@@ -1,9 +1,8 @@
 export default function ImageManager() {
-  async function addImage(imageFile: File): Promise<string | null> {
+  async function addImage(imageFile: File, fileName: string): Promise<string | null> {
     const formData = new FormData();
     formData.append("file", imageFile);
-
-    const response = await fetch("http://localhost:3000/upload", {
+    const response = await fetch(`http://localhost:3000/upload/${fileName}`, {
       method: "POST",
       body: formData,
     });
