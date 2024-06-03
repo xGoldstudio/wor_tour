@@ -1,5 +1,5 @@
 import { CardEffects, CardRarity } from "@repo/types";
-import useDataStore from "./DataStore";
+import useDataStore from "../../../../apps/Editor/src/cards/DataStore";
 
 export type CardType = {
   name: string;

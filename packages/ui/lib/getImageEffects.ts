@@ -6,7 +6,7 @@ export const effectsImages: Partial<Record<keyof CardEffects, string>> = {
   placementHeal: "heart.svg",
 };
 
-export default function getImageEffects(effects: CardEffects) {
+export function getImageEffects(effects: CardEffects) {
   const effectToShow = [];
 
   for (const effect in effects) {

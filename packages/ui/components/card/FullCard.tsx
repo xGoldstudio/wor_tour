@@ -1,58 +1,34 @@
-import { CardType } from "@/cards";
-import { CollectionCard } from "@/home/store/playerStore";
-import * as _ from "lodash";
-import getImageEffects from "../../../../../../packages/ui/lib/getImageEffects";
-import { CardBorder, ManaBall, cn } from "@repo/ui";
-import { CardContentIllustartion, InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
+import { getImageEffects } from "../../lib/getImageEffects";
+import { cn, inPx } from "../../lib/utils";
+import ManaBall from "../ManaBall";
+import { CardType } from "./Card";
+import CardBorder, { CardContentIllustartion, InnerBord } from "./CardBorder";
 
 export default function FullCard({
   card,
-  position,
-  cardData,
   className,
+  size = 1,
 }: {
   card: CardType;
-  position?: number;
-  cardData?: CollectionCard;
   className?: string;
+  size: number;
 }) {
-  const translateX =
-    position !== undefined
-      ? (position !== 0 ? 50 : 0) + Math.max(0, Math.abs(position) - 1) * 65
-      : 0;
-
   const effectToShow = getImageEffects(card.effects);
-
-  let cardLevelStones: number[] = [];
-
-  if (cardData?.level === card.level) {
-    if (card.level === 1) {
-      cardLevelStones = _.range(3);
-    } else if (card.level === 2) {
-      cardLevelStones = _.range(7);
-    }
-  }
 
   return (
     <div
-      className={cn(
-        "absolute transition-all duration-500 ease-in-out",
-        className,
-      )}
-      style={
-        position !== undefined
-          ? {
-              transform: `translateX(${
-                -50 + (position >= 0 ? translateX : -translateX)
-              }%) scale(${position === 0 ? 1 : 0.6})`,
-              zIndex: position === 0 ? 1 : 0,
-              opacity: Math.abs(position) <= 1 ? 1 : 0.5,
-              filter: `brightness(${Math.abs(position) === 0 ? 1 : 0.5})`,
-            }
-          : {}
-      }
+      className={cn("box-content", className)}
+      style={{
+        width: inPx(320 * size),
+        height: inPx(445 * size),
+      }}
     >
-      <div className="relative select-none w-min">
+      <div
+        className="select-none w-min top-0 left-0 origin-top-left"
+        style={{
+          transform: `scale(${size * 100}%)`,
+        }}
+      >
         <CardBorder rarity={card.rarity} size={5}>
           <div className="w-full h-full flex flex-col">
             <div className="absolute top-0 w-full h-full flex flex-col justify-between">
@@ -89,7 +65,7 @@ export default function FullCard({
                 </div>
                 <CardContentIllustartion card={card} size={3} />
               </div>
-              {cardData && cardLevelStones.length > 0 && (
+              {/* {cardData && cardLevelStones.length > 0 && (
                 <div className="pt-2 relative">
                   <div className="flex gap-2 justify-center">
                     {cardLevelStones.map((i) => (
@@ -108,7 +84,7 @@ export default function FullCard({
                     ))}
                   </div>
                 </div>
-              )}
+              )} */}
               <div className="grid grid-cols-3 w-full pt-2 gap-2">
                 <StatLine title="Force" value={card.dmg} />
                 <StatLine title="Life" value={card.hp} />

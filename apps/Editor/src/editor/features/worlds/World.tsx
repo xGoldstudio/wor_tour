@@ -20,7 +20,7 @@ export default function WorldEditor() {
   );
 
   if (!editorStore || !editorStore.world) {
-    navigate("/editor/worlds");
+    navigate("/worlds");
     return;
   }
 

@@ -1,11 +1,3 @@
-import {
-  CardType,
-  getRealStrength,
-  getTargetStrength,
-  testIsStrengthValid,
-} from "@/cards";
-// import FullCard from "@/game/gui/card/FullCard";
-import { cn } from "@/lib/utils";
 import { range } from "lodash";
 import Ratios from "../../ui/Ratios";
 import { getStats } from "../../getStats";
@@ -13,6 +5,14 @@ import useEditorStore from "../../store/EditorStore";
 import { useNavigate, useParams } from "react-router";
 import { CardStat, CardStatLevel } from "@repo/types";
 import ImageManager from "@/editor/utils/ImageManager";
+import {
+  CardType,
+  FullCard,
+  cn,
+  getRealStrength,
+  getTargetStrength,
+  testIsStrengthValid,
+} from "@repo/ui";
 
 export default function CardEditor() {
   const { cardId: cardIdParam } = useParams();
@@ -38,7 +38,7 @@ export default function CardEditor() {
       setCard({
         ...card,
         stats: card.stats.map((s, i) =>
-          i === level - 1 ? { ...s, ...cardLevel } : s,
+          i === level - 1 ? { ...s, ...cardLevel } : s
         ) as [CardStatLevel, CardStatLevel, CardStatLevel],
       });
     };
@@ -135,7 +135,10 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
           accept="image/png, image/jpeg"
           onChange={async (v) => {
             setCardLevel({
-              illustration: await ImageManager().addImage(v.target.files![0], `card_${card.id}_level_${level}`),
+              illustration: await ImageManager().addImage(
+                v.target.files![0],
+                `card_${card.id}_level_${level}`
+              ),
             });
           }}
         />
@@ -220,9 +223,7 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
           </div>
         )}
       </div>
-      <div className="relative w-full scale-[55%] translate-x-[60px] pt-4">
-        {/* <FullCard card={card} className="pt-8" /> */}
-      </div>
+      <FullCard card={card} className="pt-8" size={0.6} />
     </div>
   );
 }

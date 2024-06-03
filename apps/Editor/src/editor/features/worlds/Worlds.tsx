@@ -20,7 +20,7 @@ export default function WorldsEditor() {
             key={world.id}
           >
             <Link
-              to={`/editor/worlds/${world.id}`}
+              to={`/worlds/${world.id}`}
               className="hover:underline decoration-solid py-1"
             >
               {world.id}: {world.name}
