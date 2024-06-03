@@ -1,10 +1,10 @@
 import { CardType } from "@/cards";
 import { CollectionCard } from "@/home/store/playerStore";
-import CardBorder, { CardContentIllustartion, InnerBord } from "./CardBorder";
-import { cn } from "@/lib/utils";
+import CardBorder, { CardContentIllustartion, InnerBord } from "../../../../../../packages/ui/card/CardBorder";
 import { ManaBall } from "../ManaBar";
 import * as _ from "lodash";
 import getImageEffects from "./utils/getImageEffects";
+import { cn } from "@repo/ui";
 
 export default function FullCard({
   card,

@@ -1,16 +1,11 @@
 import { ManaBall } from "@/game/gui/ManaBar";
-import CardBorder, {
-  CardContentIllustartion,
-  InnerBord,
-} from "@/game/gui/card/CardBorder";
-import { Button } from "../../Home";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { useState } from "react";
 import CardModal from "./CardModal";
 import usePlayerStore from "@/home/store/playerStore";
-import { preventDefault } from "@/lib/eventUtils";
 import * as _ from "lodash";
-import Box from "@/home/ui/Box";
+import { Box, Button, preventDefault } from "@repo/ui";
+import CardBorder, { CardContentIllustartion, InnerBord } from "../../../../../../packages/ui/card/CardBorder";
 
 function SortAndFilterBox() {
   return (

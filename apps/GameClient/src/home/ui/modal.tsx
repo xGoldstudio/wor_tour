@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Header } from "../Home";
-import { stopPropagation } from "@/lib/eventUtils";
+import { stopPropagation } from "@repo/ui";
 
 interface ModalProps {
   children: React.ReactNode;

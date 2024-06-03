@@ -1,10 +1,11 @@
-import { Button, Header } from "@/home/Home";
+import { Header } from "@/home/Home";
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import * as _ from "lodash";
 import { findCard } from "@/cards";
 import useRewardStore, { RewardType } from "@/home/store/rewardStore";
 import FullCard from "@/game/gui/card/FullCard";
+import { Button } from "@repo/ui";
 
 interface RewardProps {
   shardTargetIndex: number | null;

@@ -5,7 +5,7 @@ import { ManaBall } from "../ManaBar";
 import { FRAME_TIME, manaSpeed } from "../../gameBehavior/useGameEvents";
 import { CardType } from "@/cards";
 import { useGameAnimation } from "../../gameBehavior/animation/useGameSyncAnimation";
-import CardBorder, { CardContentIllustartion } from "./CardBorder";
+import CardBorder, { CardContentIllustartion } from "../../../../../../packages/ui/card/CardBorder";
 
 function InHandCard({
   card,

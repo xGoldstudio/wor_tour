@@ -1,15 +1,12 @@
 import useBooster, { BoosterType } from "@/home/store/useBooster";
 import { useState } from "react";
 import BoosterIllustration from "./BoosterIllustration";
-import { Button } from "@/home/Home";
 import Modal, { BackgroundModal } from "@/home/ui/modal";
-import { preventDefault } from "@/lib/eventUtils";
 import usePlayerStore from "@/home/store/playerStore";
 import ConfirmationModal from "@/home/ui/ConfirmationModal";
-import { GoldAmount } from "@/home/ui/GoldAmount";
-import Box from "@/home/ui/Box";
 import FullCard from "@/game/gui/card/FullCard";
 import useScrollCardList from "../deck/useScrollCardList";
+import { Box, Button, GoldAmount, preventDefault } from "@repo/ui";
 
 interface BoosterProps {
   booster: BoosterType;

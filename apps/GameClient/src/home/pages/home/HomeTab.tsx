@@ -1,18 +1,11 @@
 import { useStartGame } from "@/game/stores/gameMetadataStore";
-import { Button } from "../../Home";
-import Badge from "@/home/ui/Badge";
 import * as _ from "lodash";
 import useScrollCardList from "../deck/useScrollCardList";
-import { preventDefault } from "@/lib/eventUtils";
-import { cn, inPx } from "@/lib/utils";
-import Box from "@/home/ui/Box";
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import textureByRarity from "@/game/gui/card/utils/textureByRarity";
-import { useOnMount, useOnUnMount } from "@/lib/lifecycle";
 import useDataStore from "@/cards/DataStore";
-import getImageUrlCssValue from "@/game/gui/card/utils/getImageUrl";
 import { Level } from "@repo/types";
+import { Badge, Box, Button, cn, inPx, preventDefault, useOnMount, useOnUnMount, textureByRarity, getImageUrlCssValue } from "@repo/ui";
 
 export default function HomeTab() {
   const startGame = useStartGame();

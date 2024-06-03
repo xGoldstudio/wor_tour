@@ -1,5 +1,4 @@
-import { Button } from "../Home";
-import Box from "./Box";
+import { Box, Button } from "@repo/ui";
 import Modal, { BackgroundModal } from "./modal";
 
 interface ConfirmationModalProps {

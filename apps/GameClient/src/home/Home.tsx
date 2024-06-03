@@ -1,20 +1,14 @@
 import DebugPanel from "@/DebugPanel";
-import { cn } from "@/lib/utils";
 import HomeTab from "./pages/home/HomeTab";
 import { useState } from "react";
 import DeckTab from "./pages/deck/DeckTab";
 import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
-import {
-  Borders,
-  CardIllustartion,
-  InnerBord,
-} from "@/game/gui/card/CardBorder";
-import { NumberSpan } from "@/game/gui/HpBar";
 import usePlayerStore from "./store/playerStore";
-import Badge from "./ui/Badge";
-import textureByRarity from "@/game/gui/card/utils/textureByRarity";
-import { CardRarity } from "@repo/types";
+import Badge from "../../../../packages/ui/components/Badge";
+import { Button, NumberSpan } from "@repo/ui";
+import { cn } from "@repo/ui";
+import { Borders, CardIllustartion, InnerBord } from "../../../../packages/ui/card/CardBorder";
 
 type Tabs = "home" | "deck" | "shop";
 
@@ -112,56 +106,6 @@ function RessourceCounter({ amount, max, icon }: RessourceCounterProps) {
         </CardIllustartion>
       </Borders>
     </div>
-  );
-}
-
-interface ButtonProps {
-  children: React.ReactNode;
-  action: React.MouseEventHandler<HTMLButtonElement>;
-  disabled?: boolean;
-  full?: boolean;
-  small?: boolean;
-  className?: string;
-  rarity?: CardRarity;
-}
-
-export function Button({
-  children,
-  action,
-  full,
-  small,
-  disabled,
-  className,
-  rarity = "rare",
-}: ButtonProps) {
-  return (
-    <button
-      onClick={action}
-      className={cn(
-        "rounded-sm overflow-hidden text-nowrap relative z-10 bg-black font-semibold shadow-md",
-        full ? "w-full" : "w-min",
-        disabled ? "brightness-50" : "brightness-100",
-      )}
-      disabled={disabled}
-    >
-      <div
-        className="absolute w-full h-full blur-sm"
-        style={{
-          backgroundImage: `url(/${textureByRarity(rarity)})`,
-          backgroundSize: "cover",
-          backgroundPositionY: "center",
-        }}
-      />
-      <div
-        className={cn(
-          "text-black h-full flex justify-center items-center relative",
-          !small ? "px-12 py-2" : "px-2 py-1",
-          className,
-        )}
-      >
-        {children}
-      </div>
-    </button>
   );
 }
 

@@ -1,5 +1,5 @@
 import { CardType } from "@/cards";
-import CardBorder, { CardContentIllustartion } from "./CardBorder";
+import CardBorder, { CardContentIllustartion } from "../../../../../../packages/ui/card/CardBorder";
 
 function StaticCard({ card }: { card: CardType }) {
   const size = 1.35;

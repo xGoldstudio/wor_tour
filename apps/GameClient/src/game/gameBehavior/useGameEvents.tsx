@@ -17,8 +17,8 @@ import {
   runGameEventListeners,
 } from "./gameEventListener";
 import useGameMetadataStore from "../stores/gameMetadataStore";
-import { useOnMount } from "@/lib/lifecycle";
 import { CardEffects } from "@repo/types";
+import { useOnMount } from "@repo/ui";
 
 export const FRAME_TIME = 10;
 

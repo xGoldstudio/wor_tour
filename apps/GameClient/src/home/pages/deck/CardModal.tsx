@@ -1,11 +1,9 @@
 import { getCardFromLevel, getCardStats } from "@/cards";
 import FullCard from "@/game/gui/card/FullCard";
-import { Button } from "@/home/Home";
 import usePlayerStore from "@/home/store/playerStore";
 import Modal, { CoverModal } from "@/home/ui/modal";
-import { preventDefault } from "@/lib/eventUtils";
-import { cn } from "@/lib/utils";
 import useScrollCardList from "./useScrollCardList";
+import { Button, cn, preventDefault } from "@repo/ui";
 
 interface CardModalProps {
   cardId: number;
