@@ -1,7 +1,7 @@
-import { CardType } from "@/cards";
 import useRewardStore from "./rewardStore";
 import usePlayerStore from "./playerStore";
 import { CardRarity } from "@repo/types";
+import { CardType } from "@repo/ui";
 
 export type BoosterName =
   | "Classic refill"

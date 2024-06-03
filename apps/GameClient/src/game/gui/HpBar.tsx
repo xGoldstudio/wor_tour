@@ -1,15 +1,7 @@
 import { useAnimate } from "framer-motion";
 import { useState } from "react";
 import { EmptyBar } from "./ManaBar";
-import { cn } from "@/lib/utils";
-
-function numberWithCommas(x: number) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-}
-
-export function NumberSpan({ children }: { children: number }) {
-  return <span>{numberWithCommas(children)}</span>;
-}
+import { cn, numberWithCommas } from "@repo/ui";
 
 interface HpBarProps {
   hp: number;

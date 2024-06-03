@@ -1,8 +1,8 @@
 import { create } from "zustand";
 import usePlayerStore from "./playerStore";
-import { CardRarityOrder, CardType } from "@/cards";
 import { useAddCardOrShardOrEvolve } from "./useBooster";
 import { CardRarity } from "@repo/types";
+import { CardRarityOrder, CardType } from "@repo/ui";
 
 interface ShopStore {
   cards: CardType[];

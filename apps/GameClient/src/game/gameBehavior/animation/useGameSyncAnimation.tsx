@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 import * as CSS from "csstype";
 import { create } from "zustand";
-import { useOnMount } from "@/lib/lifecycle";
+import { useOnMount } from "@repo/ui";
 
 type ComputeAnimation<State> = (state: State) => CSS.Properties;
 

@@ -1,5 +1,6 @@
-import { CardType, findCard } from "@/cards";
+import { findCard } from "@/cards";
 import usePlayerStore, { CollectionCard } from "@/home/store/playerStore";
+import { CardType } from "@repo/ui";
 import { create } from "zustand";
 
 export interface InGameInitData {

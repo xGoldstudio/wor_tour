@@ -1,11 +1,11 @@
 import { useGameAnimation } from "@/game/gameBehavior/animation/useGameSyncAnimation";
 import HpBar from "../HpBar";
-import CardBorder, { CardContentIllustartion, InnerBord } from "./CardBorder";
+import CardBorder, { CardContentIllustartion, InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
 import { GameStore, InGameCardType } from "@/game/stores/gameStateStore";
 import { FRAME_TIME } from "@/game/gameBehavior/useGameEvents";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
-import getImageEffects from "./utils/getImageEffects";
 import { CardEffects } from "@repo/types";
+import { getImageEffects } from "@repo/ui";
 
 function GameCard({
   card,

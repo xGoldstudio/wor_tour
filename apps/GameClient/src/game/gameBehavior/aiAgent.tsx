@@ -1,13 +1,13 @@
-import { getRandomElement } from "@/lib/list";
 import {
   CardDestroyedEvent,
   EventType,
   ManaIncreaseEvent,
 } from "./useGameEvents";
-import { CardType, findCard } from "@/cards";
+import { findCard } from "@/cards";
 import * as _ from "lodash";
 import { GameStore } from "@/game/stores/gameStateStore";
 import { addGameEventListener } from "./gameEventListener";
+import { CardType, getRandomElement } from "@repo/ui";
 
 export default function iaAgent() {
   let nextCardToUse: { position: number; card: CardType } | null = null;

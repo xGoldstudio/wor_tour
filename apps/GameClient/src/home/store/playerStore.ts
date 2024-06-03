@@ -1,8 +1,5 @@
 import useDataStore from "@/cards/DataStore";
 import {
-  CardRarityOrder,
-  CardStatsInfo,
-  CardType,
   findCard,
   getCardFromLevel,
   getCardStats,
@@ -10,6 +7,7 @@ import {
 import { create } from "zustand";
 import { BoosterType, boosters } from "./useBooster";
 import { CardRarity } from "@repo/types";
+import { CardRarityOrder, CardStatsInfo, CardType } from "@repo/ui";
 
 export interface CollectionCard {
   id: number;

@@ -1,0 +1,9 @@
+{
+  "extends": "@repo/typescript-config/vite.json",
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src", "../../packages/ui/components/card/Card.ts", "../../packages/ui/lib/getStats.ts"]
+}

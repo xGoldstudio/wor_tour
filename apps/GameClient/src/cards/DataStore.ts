@@ -1,7 +1,6 @@
-import { CardStatsInfo, CardStatsInfoLevel } from ".";
 import { create } from "zustand";
-import { getStats } from "@/editor/getStats";
 import { EditorData, World } from "@repo/types";
+import { CardStatsInfo, CardStatsInfoLevel, getStats } from "@repo/ui";
 
 interface DataStore {
   cards: CardStatsInfo[];
