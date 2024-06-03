@@ -1,7 +1,7 @@
-import textureByRarity from "../lib/textureByRarity";
+import textureByRarity from "../../lib/textureByRarity";
 import { CardRarity } from "@repo/types";
-import { inPx } from "../lib/utils";
-import { getImageUrlCssValue } from "../lib/getImageUrl";
+import { inPx } from "../../lib/utils";
+import { getImageUrlCssValue } from "../../lib/getImageUrl";
 
 interface CardBoardProps {
   rarity: CardRarity;
