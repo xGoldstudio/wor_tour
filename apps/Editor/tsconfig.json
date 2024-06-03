@@ -5,5 +5,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "../../packages/ui/components/card/Card.ts"]
+  "include": ["src", "../../packages/ui/components/card/Card.ts", "../../packages/ui/lib/getStats.ts"]
 }

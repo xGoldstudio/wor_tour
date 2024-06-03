@@ -1,6 +1,5 @@
 import { range } from "lodash";
 import Ratios from "../../ui/Ratios";
-import { getStats } from "../../getStats";
 import useEditorStore from "../../store/EditorStore";
 import { useNavigate, useParams } from "react-router";
 import { CardStat, CardStatLevel } from "@repo/types";
@@ -10,6 +9,7 @@ import {
   FullCard,
   cn,
   getRealStrength,
+  getStats,
   getTargetStrength,
   testIsStrengthValid,
 } from "@repo/ui";

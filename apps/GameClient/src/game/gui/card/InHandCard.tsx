@@ -1,11 +1,10 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore, { GameStore } from "@/game/stores/gameStateStore";
 import { motion, useDragControls } from "framer-motion";
-import { ManaBall } from "../ManaBar";
 import { FRAME_TIME, manaSpeed } from "../../gameBehavior/useGameEvents";
-import { CardType } from "@/cards";
 import { useGameAnimation } from "../../gameBehavior/animation/useGameSyncAnimation";
 import CardBorder, { CardContentIllustartion } from "../../../../../../packages/ui/components/card/CardBorder";
+import { CardType, ManaBall } from "@repo/ui";
 
 function InHandCard({
   card,

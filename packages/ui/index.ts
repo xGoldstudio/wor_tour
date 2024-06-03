@@ -18,4 +18,5 @@ export * from './lib/list.ts';
 export * from './lib/lifecycle.ts';
 export * from './lib/getImageUrl.ts';
 export * from './lib/getImageEffects.ts';
+export * from './lib/getStats.ts';
 export {default as textureByRarity} from './lib/textureByRarity.ts';

@@ -1,10 +1,9 @@
-import { CardType } from "@/cards";
 import { DeckCard } from "@/game/gui/card/DeckCard";
 import ConfirmationModal from "@/home/ui/ConfirmationModal";
 import { useState } from "react";
 import { priceByRarity, useBuyCard } from "@/home/store/shopStore";
 import usePlayerStore from "@/home/store/playerStore";
-import { Button, GoldAmount, cn } from "@repo/ui";
+import { Button, CardType, GoldAmount, cn } from "@repo/ui";
 
 interface BuyCardProps {
   card: CardType;

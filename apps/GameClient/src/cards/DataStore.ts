@@ -1,6 +1,6 @@
-import { CardStatsInfo } from ".";
 import { create } from "zustand";
 import { EditorData, World } from "@repo/types";
+import { CardStatsInfo, CardStatsInfoLevel, getStats } from "@repo/ui";
 
 interface DataStore {
   cards: CardStatsInfo[];
@@ -18,13 +18,13 @@ const useDataStore = create<DataStore>()((set, get) => ({
   init: (data: EditorData) => {
     set({
       worlds: data.worlds,
-      // cards: data.cards.map((card) => ({
-      //   ...card,
-        // stats: card.stats.map((_, index) => {
-        //   const s = getStats(card, index + 1);
-        //   return s;
-        // }) as [CardStatsInfoLevel, CardStatsInfoLevel, CardStatsInfoLevel],
-      // })),
+      cards: data.cards.map((card) => ({
+        ...card,
+        stats: card.stats.map((_, index) => {
+          const s = getStats(card, index + 1);
+          return s;
+        }) as [CardStatsInfoLevel, CardStatsInfoLevel, CardStatsInfoLevel],
+      })),
     });
   },
 }));

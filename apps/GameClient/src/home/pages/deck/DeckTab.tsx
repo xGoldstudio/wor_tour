@@ -1,10 +1,9 @@
-import { ManaBall } from "@/game/gui/ManaBar";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { useState } from "react";
 import CardModal from "./CardModal";
 import usePlayerStore from "@/home/store/playerStore";
 import * as _ from "lodash";
-import { Box, Button, preventDefault } from "@repo/ui";
+import { Box, Button, ManaBall, preventDefault } from "@repo/ui";
 import CardBorder, { CardContentIllustartion, InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
 
 function SortAndFilterBox() {

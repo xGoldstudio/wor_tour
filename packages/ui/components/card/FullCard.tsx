@@ -3,15 +3,21 @@ import { cn, inPx } from "../../lib/utils";
 import ManaBall from "../ManaBall";
 import { CardType } from "./Card";
 import CardBorder, { CardContentIllustartion, InnerBord } from "./CardBorder";
+import * as _ from "lodash";
 
 export default function FullCard({
   card,
   className,
   size = 1,
+  cardShards,
 }: {
   card: CardType;
   className?: string;
   size: number;
+  cardShards?: {
+    shards: number;
+    maxShards: number;
+  }
 }) {
   const effectToShow = getImageEffects(card.effects);
 
@@ -65,10 +71,10 @@ export default function FullCard({
                 </div>
                 <CardContentIllustartion card={card} size={3} />
               </div>
-              {/* {cardData && cardLevelStones.length > 0 && (
+              {cardShards && (
                 <div className="pt-2 relative">
                   <div className="flex gap-2 justify-center">
-                    {cardLevelStones.map((i) => (
+                    {_.range(cardShards.maxShards).map((i) => (
                       <img
                         key={i}
                         id={`shard_${i}`}
@@ -76,7 +82,7 @@ export default function FullCard({
                         className={cn(
                           "w-4 h-4 bg-transparent",
                           i % 2 ? "-translate-y-[3px]" : "",
-                          i > cardData.shard - 1
+                          i > cardShards.shards - 1
                             ? "brightness-0"
                             : "drop-shadow-[1px_1px_1px_black]",
                         )}
@@ -84,7 +90,7 @@ export default function FullCard({
                     ))}
                   </div>
                 </div>
-              )} */}
+              )}
               <div className="grid grid-cols-3 w-full pt-2 gap-2">
                 <StatLine title="Force" value={card.dmg} />
                 <StatLine title="Life" value={card.hp} />

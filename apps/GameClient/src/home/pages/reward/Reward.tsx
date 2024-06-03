@@ -4,7 +4,7 @@ import gsap from "gsap";
 import * as _ from "lodash";
 import { findCard } from "@/cards";
 import useRewardStore, { RewardType } from "@/home/store/rewardStore";
-import FullCard from "@/game/gui/card/FullCard";
+import CardDisplay from "@/game/gui/card/FullCard";
 import { Button } from "@repo/ui";
 
 interface RewardProps {
@@ -217,7 +217,7 @@ export default function Reward({
             />
             <div className="relative">
               <div className="relative h-[445px] scale-0 flex" ref={cardRef}>
-                <FullCard
+                <CardDisplay
                   card={card}
                   position={0}
                   cardData={{
@@ -232,7 +232,7 @@ export default function Reward({
                 ref={evolutionCardRef}
               >
                 {evolvedCard && (
-                  <FullCard
+                  <CardDisplay
                     card={evolvedCard}
                     position={0}
                     cardData={{ id: cardId, level: level + 1, shard: 0 }}

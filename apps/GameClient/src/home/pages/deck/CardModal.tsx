@@ -1,5 +1,5 @@
 import { getCardFromLevel, getCardStats } from "@/cards";
-import FullCard from "@/game/gui/card/FullCard";
+import CardDisplay from "@/game/gui/card/FullCard";
 import usePlayerStore from "@/home/store/playerStore";
 import Modal, { CoverModal } from "@/home/ui/modal";
 import useScrollCardList from "./useScrollCardList";
@@ -49,7 +49,7 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
           </div>
           <div className="relative h-[430px]">
             {card.stats.map((_, index) => (
-              <FullCard
+              <CardDisplay
                 key={`level_${index}`}
                 card={getCardFromLevel(card, index + 1)}
                 position={index - currentPosition}

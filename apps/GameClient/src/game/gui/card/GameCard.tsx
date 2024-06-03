@@ -4,8 +4,8 @@ import CardBorder, { CardContentIllustartion, InnerBord } from "../../../../../.
 import { GameStore, InGameCardType } from "@/game/stores/gameStateStore";
 import { FRAME_TIME } from "@/game/gameBehavior/useGameEvents";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
-import getImageEffects from "../../../../../../packages/ui/lib/getImageEffects";
 import { CardEffects } from "@repo/types";
+import { getImageEffects } from "@repo/ui";
 
 function GameCard({
   card,

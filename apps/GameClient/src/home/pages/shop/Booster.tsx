@@ -4,7 +4,7 @@ import BoosterIllustration from "./BoosterIllustration";
 import Modal, { BackgroundModal } from "@/home/ui/modal";
 import usePlayerStore from "@/home/store/playerStore";
 import ConfirmationModal from "@/home/ui/ConfirmationModal";
-import FullCard from "@/game/gui/card/FullCard";
+import CardDisplay from "@/game/gui/card/FullCard";
 import useScrollCardList from "../deck/useScrollCardList";
 import { Box, Button, GoldAmount, preventDefault } from "@repo/ui";
 
@@ -67,7 +67,7 @@ export function BoosterModal({ closeModal, booster }: BoosterModalProps) {
           {isBoosterPreview ? (
             <div className="relative h-[430px]">
               {booster.cards.map((card, index) => (
-                <FullCard
+                <CardDisplay
                   key={`level_${index}`}
                   card={card}
                   position={index - currentPosition}
