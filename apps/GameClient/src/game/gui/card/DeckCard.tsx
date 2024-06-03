@@ -1,6 +1,6 @@
 import { CardType } from "@/cards";
 import { ManaBall } from "../ManaBar";
-import CardBorder, { CardContentIllustartion } from "../../../../../../packages/ui/card/CardBorder";
+import CardBorder, { CardContentIllustartion } from "../../../../../../packages/ui/components/card/CardBorder";
 
 interface DeckCardProps {
   card: CardType;

@@ -1,6 +1,6 @@
 import { useGameAnimation } from "@/game/gameBehavior/animation/useGameSyncAnimation";
 import HpBar from "../HpBar";
-import CardBorder, { CardContentIllustartion, InnerBord } from "../../../../../../packages/ui/card/CardBorder";
+import CardBorder, { CardContentIllustartion, InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
 import { GameStore, InGameCardType } from "@/game/stores/gameStateStore";
 import { FRAME_TIME } from "@/game/gameBehavior/useGameEvents";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";

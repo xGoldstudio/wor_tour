@@ -8,7 +8,7 @@ import usePlayerStore from "./store/playerStore";
 import Badge from "../../../../packages/ui/components/Badge";
 import { Button, NumberSpan } from "@repo/ui";
 import { cn } from "@repo/ui";
-import { Borders, CardIllustartion, InnerBord } from "../../../../packages/ui/card/CardBorder";
+import { Borders, CardIllustartion, InnerBord } from "../../../../packages/ui/components/card/CardBorder";
 
 type Tabs = "home" | "deck" | "shop";
 

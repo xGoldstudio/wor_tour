@@ -1,6 +1,6 @@
 import { CardType } from "@/cards";
 import { CollectionCard } from "@/home/store/playerStore";
-import CardBorder, { CardContentIllustartion, InnerBord } from "../../../../../../packages/ui/card/CardBorder";
+import CardBorder, { CardContentIllustartion, InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
 import { ManaBall } from "../ManaBar";
 import * as _ from "lodash";
 import getImageEffects from "./utils/getImageEffects";

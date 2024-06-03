@@ -1,6 +1,6 @@
 import { inPx } from "@repo/ui";
 import * as _ from "lodash";
-import { InnerBord } from "../../../../../../packages/ui/card/CardBorder";
+import { InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
 
 export default function BoosterIllustration({
   size,
