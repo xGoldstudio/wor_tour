@@ -1,25 +1,160 @@
+import { CardType } from "@/cards"
 import { ManaBall } from "@/game/gui/ManaBar"
 import CardBorder, {
   CardContentIllustartion,
   InnerBord,
 } from "@/game/gui/card/CardBorder"
-import { Button } from "../../Home"
-import ScrollContainer from "react-indiana-drag-scroll"
-import { useState } from "react"
-import CardModal from "./CardModal"
 import usePlayerStore from "@/home/store/playerStore"
-import { preventDefault } from "@/lib/eventUtils"
-import * as _ from "lodash"
 import Box from "@/home/ui/Box"
-import { FilterModal, SortModal } from "@/home/ui/modal"
-import { CardType, findCard, getCardFromLevel, getCardStats } from "@/cards"
+import { preventDefault } from "@/lib/eventUtils"
+import { cn } from "@/lib/utils"
+import * as _ from "lodash"
+import Slider from "rc-slider"
+import "rc-slider/assets/index.css"
+import { useState } from "react"
+import ScrollContainer from "react-indiana-drag-scroll"
+import { Button } from "../../Home"
+import { ActiveFilters, CardFilters, filters } from "./CardFilters"
+import CardModal from "./CardModal"
+import { CardSorts, sorts } from "./CardSorts"
+
+interface SortModalProps {
+  setActualSort: (sort: CardSorts) => void
+  actualSort: CardSorts
+  closeModal: () => void
+  deck: boolean
+}
+
+export function SortModal({
+  setActualSort,
+  actualSort,
+  closeModal,
+  deck,
+}: SortModalProps) {
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    for (const key in sorts)
+      if (sorts[key as CardSorts].label === event.target.value)
+        setActualSort(key as CardSorts)
+  }
+  return (
+    <div
+      className={cn(
+        "flex flex-col items-center justify-center w-44 h-20 bg-gray-500 absolute top-48 z-50",
+        !deck && "left-[16.37rem]"
+      )}
+    >
+      <label>Order cards by :</label>
+      <select name="criteria" onChange={handleChange}>
+        {Object.values(sorts).map((sortCriteria, index) => (
+          <option
+            key={index}
+            value={sortCriteria.label}
+            onClick={closeModal}
+            selected={sorts[actualSort].label === sortCriteria.label}
+          >
+            {sortCriteria.label}
+          </option>
+        ))}
+      </select>
+      <button onClick={closeModal}>Close</button>
+    </div>
+  )
+}
+
+interface FilterModalProps {
+  setActualFilter: (filter: ActiveFilters) => void
+  actualFilter: ActiveFilters
+  closeModal: () => void
+}
+
+export function FilterModal({
+  setActualFilter,
+  actualFilter,
+  closeModal,
+}: FilterModalProps) {
+  const handleChange = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const { value } = event.currentTarget
+    for (const key in filters) {
+      if (filters[key as CardFilters].label === value) {
+        setActualFilter({
+          ...actualFilter,
+          [key as CardFilters]: !actualFilter[key as CardFilters],
+        })
+      }
+    }
+  }
+  const [range, setRange] = useState<number[] | number>([
+    actualFilter.Cost ? filters.Cost.rangeMin! : 1,
+    actualFilter.Cost ? filters.Cost.rangeMax! : 3,
+  ])
+
+  const handleSliderChange = (newRange: number[] | number) => {
+    setRange(newRange)
+    if (Array.isArray(newRange)) {
+      filters.Cost.rangeMin = newRange[0]
+      filters.Cost.rangeMax = newRange[1]
+    }
+    if (filters.Cost.rangeMin === 1 && filters.Cost.rangeMax === 3) {
+      setActualFilter({ ...actualFilter, Cost: false })
+    } else {
+      setActualFilter({ ...actualFilter, Cost: true })
+    }
+  }
+  return (
+    <div className="flex flex-col items-center justify-center w-44 h-40 bg-gray-500 absolute top-48 z-50">
+      {Object.values(filters).map(
+        (filterCriteria, index) =>
+          index !== 0 && (
+            <button
+              key={index}
+              value={filterCriteria.label}
+              onClick={handleChange}
+              type="button"
+              style={{
+                backgroundImage: `url(${filterCriteria.style})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+              className="bg-opacity-10 w-full"
+            >
+              {filterCriteria.label}
+            </button>
+          )
+      )}
+      <Slider
+        range
+        count={1}
+        min={1}
+        max={3}
+        defaultValue={[
+          actualFilter.Cost
+            ? filters.Cost.rangeMin!
+            : Array.isArray(range)
+            ? range[0]
+            : 1,
+          actualFilter.Cost
+            ? filters.Cost.rangeMax!
+            : Array.isArray(range)
+            ? range[1]
+            : 3,
+        ]}
+        onChange={handleSliderChange}
+      />
+      <div>
+        <span>Min: {Array.isArray(range) && range[0]}</span> -{" "}
+        <span>Max: {Array.isArray(range) && range[1]}</span>
+      </div>
+      <button onClick={closeModal}>Close</button>
+    </div>
+  )
+}
 
 interface SortAndFilterBoxProps {
   classNameProps: string
-  setActualSort: (sort: string) => void
-  actualSort: string
-  setActualFilter?: (filter: filterList) => void
-  actualFilter?: filterList
+  setActualSort: (sort: CardSorts) => void
+  actualSort: CardSorts
+  setActualFilter?: (filter: ActiveFilters) => void
+  actualFilter?: ActiveFilters
 }
 
 function SortAndFilterBox({
@@ -52,7 +187,14 @@ function SortAndFilterBox({
               sortIsOpen ? setSortIsOpen(false) : null
             }}
           >
-            Filter {`(${actualFilter})`}
+            Filter{" "}
+            {`(${Object.keys(actualFilter!)
+              .filter(
+                (filter) =>
+                  actualFilter![filter as CardFilters] === true &&
+                  filters[filter as CardFilters].label
+              )
+              .join(", ")})`}
           </button>
         </div>
       )}
@@ -66,8 +208,8 @@ function SortAndFilterBox({
       )}
       {filterIsOpen && (
         <FilterModal
-          setActualFilter={setActualFilter}
-          actualFilter={actualFilter}
+          setActualFilter={setActualFilter!}
+          actualFilter={actualFilter!}
           closeModal={() => setFilterIsOpen(false)}
         />
       )}
@@ -114,16 +256,6 @@ function ShowStat({ detailledDeck }: ShowStatProps) {
   )
 }
 
-export type filterList = {
-  Level1: boolean
-  Level2: boolean
-  Level3: boolean
-  Common: boolean
-  Rare: boolean
-  Epic: boolean
-  Legendary: boolean
-}
-
 export default function DeckTab() {
   const { deck, collection } = usePlayerStore((state) => ({
     deck: state.deck,
@@ -132,141 +264,37 @@ export default function DeckTab() {
   let { detailledCollection } = usePlayerStore((state) => ({
     detailledCollection: state.getCollectionCompleteInfo(collection),
   }))
-
   const deckArray = _.concat(deck, _.fill(Array(8 - deck.length), null))
-  const rarityOrder = { common: 1, rare: 2, epic: 3, legendary: 4 }
 
-  const [actualSort, setActualSort] = useState("Cost ↑")
-  const [actualFilter, setActualFilter] = useState<filterList>({
-    Level1: false,
-    Level2: false,
-    Level3: false,
+  const [actualSort, setActualSort] = useState<CardSorts>("Cost↑")
+  const [actualFilter, setActualFilter] = useState<ActiveFilters>({
+    Cost: false,
     Common: false,
     Rare: false,
     Epic: false,
     Legendary: false,
   })
-
+  console.log(actualFilter)
   const classNameCollections =
     "w-full h-6 flex -top-4 justify-center items-center"
-
-  switch (actualSort) {
-    case "Cost ↓":
-      detailledCollection.sort(
-        (a, b) => findCard(a.id, a.level).cost - findCard(b.id, b.level).cost
-      )
-      debugger
-      break
-    case "Cost ↑":
-      detailledCollection.sort(
-        (a, b) =>
-          getCardFromLevel(getCardStats(b.id), b.level).cost -
-          getCardFromLevel(getCardStats(a.id), a.level).cost
-      )
-      break
-    case "Rarity ↓":
-      detailledCollection.sort(
-        (a, b) => rarityOrder[a.rarity] - rarityOrder[b.rarity]
-      )
-      break
-    case "Rarity ↑":
-      detailledCollection.sort(
-        (a, b) => rarityOrder[a.rarity] + rarityOrder[b.rarity]
-      )
-      break
-    case "World ↓":
-      detailledCollection.sort((a, b) => a.world - b.world)
-      break
-    case "World ↑":
-      detailledCollection.sort((a, b) => a.world + b.world)
-      break
-    default:
-      console.log("error on sort")
-  }
-  let collectionTmp: (CardType & {
-    isInDeck: boolean
-  })[] = []
-
-  let tmp
-  if (actualFilter.Level1) {
-    console.log("hello")
-    tmp = detailledCollection.filter((card) => card.cost === 1)
-    tmp.forEach((valueTmp) => {
-      if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-    })
-  }
-  if (actualFilter.Level2) {
-    tmp = detailledCollection.filter((card) => card.cost === 2)
-    tmp.forEach((valueTmp) => {
-      if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-    })
-  }
-  if (actualFilter.Level3) {
-    tmp = detailledCollection.filter((card) => card.cost === 3)
-    tmp.forEach((valueTmp) => {
-      if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-    })
-  }
-  if (actualFilter.Common) {
-    tmp = detailledCollection.filter((card) => card.rarity === "common")
-    tmp.forEach((valueTmp) => {
-      if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-    })
-  }
-  if (actualFilter.Rare) {
-    tmp = detailledCollection.filter((card) => card.rarity === "rare")
-    tmp.forEach((valueTmp) => {
-      if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-    })
-  }
-  if (actualFilter.Epic) {
-    tmp = detailledCollection.filter((card) => card.rarity === "epic")
-    tmp.forEach((valueTmp) => {
-      if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-    })
-  }
-  if (actualFilter.Legendary) {
-    tmp = detailledCollection.filter((card) => card.rarity === "legendary")
-    tmp.forEach((valueTmp) => {
-      if (!collectionTmp.includes(valueTmp)) collectionTmp.push(valueTmp)
-    })
-  }
-  if (Object.values(actualFilter).some((filter) => filter === true))
-    detailledCollection = collectionTmp
-  const [actualSortDeck, setActualSortDeck] = useState("Cost ↑")
-  let detailledDeck = []
-  const getCompleteInfo = usePlayerStore((state) => state.getCompleteInfo)
-
-  for (let i = 0; i < 8; i++) detailledDeck.push(getCompleteInfo(deckArray[i]!))
-  switch (actualSortDeck) {
-    case "Cost ↓":
-      detailledDeck.sort((a, b) => a.cost - b.cost)
-      break
-    case "Cost ↑":
-      detailledDeck.sort((a, b) => a.cost + b.cost)
-      break
-    case "Rarity ↓":
-      detailledDeck.sort(
-        (a, b) => rarityOrder[a.rarity] - rarityOrder[b.rarity]
-      )
-      break
-    case "Rarity ↑":
-      detailledDeck.sort(
-        (a, b) => rarityOrder[a.rarity] + rarityOrder[b.rarity]
-      )
-      break
-    case "World ↓":
-      detailledDeck.sort((a, b) => a.world - b.world)
-      break
-    case "World ↑":
-      detailledDeck.sort((a, b) => a.world + b.world)
-      break
-    default:
-      console.log("error on sort")
-  }
   const classNameDeck =
     "-mb-[4.5rem] -ml-60 w-full flex justify-center items-center z-10"
-  console.log(detailledCollection)
+  Object.keys(actualFilter).forEach((filter) => {
+    actualFilter[filter as keyof ActiveFilters] === true &&
+      (detailledCollection =
+        filters[filter as keyof ActiveFilters].filterFunction(
+          detailledCollection
+        ))
+  })
+  detailledCollection = sorts[actualSort].sortFunction(detailledCollection)
+
+  const [actualSortDeck, setActualSortDeck] = useState<CardSorts>("Cost↑")
+
+  let detailledDeck = []
+  const getCompleteInfo = usePlayerStore((state) => state.getCompleteInfo)
+  for (let i = 0; i < 8; i++) detailledDeck.push(getCompleteInfo(deckArray[i]!))
+  detailledDeck = sorts[actualSortDeck].sortFunction(detailledDeck)
+
   return (
     <div className="w-full grid grid-rows-[1fr_auto] absolute top-0 h-full">
       <SortAndFilterBox

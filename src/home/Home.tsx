@@ -1,30 +1,30 @@
-import DebugPanel from "@/DebugPanel";
-import { cn } from "@/lib/utils";
-import HomeTab from "./pages/home/HomeTab";
-import { useState } from "react";
-import DeckTab from "./pages/deck/DeckTab";
-import ShopTab from "./pages/shop/ShopTab";
-import { RewardBlockWithContext } from "./pages/reward/Reward";
+import DebugPanel from "@/DebugPanel"
+import { cn } from "@/lib/utils"
+import HomeTab from "./pages/home/HomeTab"
+import { useState } from "react"
+import DeckTab from "./pages/deck/DeckTab"
+import ShopTab from "./pages/shop/ShopTab"
+import { RewardBlockWithContext } from "./pages/reward/Reward"
 import {
   Borders,
   CardIllustartion,
   InnerBord,
-} from "@/game/gui/card/CardBorder";
-import { NumberSpan } from "@/game/gui/HpBar";
-import usePlayerStore from "./store/playerStore";
+} from "@/game/gui/card/CardBorder"
+import { NumberSpan } from "@/game/gui/HpBar"
+import usePlayerStore from "./store/playerStore"
 
-type Tabs = "home" | "deck" | "shop";
+type Tabs = "home" | "deck" | "shop"
 
 const tabs: Record<Tabs, () => JSX.Element> = {
   home: HomeTab,
   deck: DeckTab,
   shop: ShopTab,
-};
+}
 
 export default function Home() {
-  const [currentTab, setCurrentTab] = useState<Tabs>("home");
+  const [currentTab, setCurrentTab] = useState<Tabs>("home")
 
-  const TabElement = tabs[currentTab];
+  const TabElement = tabs[currentTab]
 
   return (
     <div className="w-screen h-screen justify-center bg-black relative flex">
@@ -64,13 +64,13 @@ export default function Home() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 interface RessourceCounterProps {
-  amount: number;
-  max?: number;
-  icon: React.ReactNode;
+  amount: number
+  max?: number
+  icon: React.ReactNode
 }
 
 function RessourceCounter({ amount, max, icon }: RessourceCounterProps) {
@@ -109,16 +109,16 @@ function RessourceCounter({ amount, max, icon }: RessourceCounterProps) {
         </CardIllustartion>
       </Borders>
     </div>
-  );
+  )
 }
 
 interface ButtonProps {
-  children: React.ReactNode;
-  action: React.MouseEventHandler<HTMLButtonElement>;
-  disabled?: boolean;
-  full?: boolean;
-  small?: boolean;
-  className?: string;
+  children: React.ReactNode
+  action: React.MouseEventHandler<HTMLButtonElement>
+  disabled?: boolean
+  full?: boolean
+  small?: boolean
+  className?: string
 }
 
 export function Button({
@@ -157,13 +157,13 @@ export function Button({
         {children}
       </div>
     </button>
-  );
+  )
 }
 
 export function Header() {
   const { gold } = usePlayerStore((state) => ({
     gold: state.gold,
-  }));
+  }))
 
   return (
     <div className="flex gap-4 px-8 py-4 w-full justify-center">
@@ -204,5 +204,5 @@ export function Header() {
         }
       />
     </div>
-  );
+  )
 }

@@ -1,9 +1,8 @@
-import { MouseEventHandler, useEffect, useState } from "react"
+import { stopPropagation } from "@/lib/eventUtils"
+import "rc-slider/assets/index.css"
+import { useEffect } from "react"
 import { createPortal } from "react-dom"
 import { Header } from "../Home"
-import { stopPropagation } from "@/lib/eventUtils"
-import { cn } from "@/lib/utils"
-import { filterList } from "../pages/deck/DeckTab"
 
 interface ModalProps {
   children: React.ReactNode
@@ -98,110 +97,5 @@ export function BackgroundModal({
         {children}
       </div>
     </>
-  )
-}
-
-interface SortModalProps {
-  setActualSort: (sort: string) => void
-  actualSort: string
-  closeModal: () => void
-  deck: boolean
-}
-
-export function SortModal({
-  setActualSort,
-  actualSort,
-  closeModal,
-  deck,
-}: SortModalProps) {
-  const sortList = [
-    "Cost ↓",
-    "Cost ↑",
-    "Rarity ↓",
-    "Rarity ↑",
-    "World ↓",
-    "World ↑",
-  ]
-
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setActualSort(event.target.value)
-  }
-  return (
-    <div
-      className={cn(
-        "flex flex-col items-center justify-center w-44 h-20 bg-gray-500 absolute top-48 z-50",
-        !deck && "left-[16.37rem]"
-      )}
-    >
-      <label>Order cards by :</label>
-      <select name="criteria" onChange={handleChange}>
-        {sortList.map((sortCriteria, index) => (
-          <option
-            key={index}
-            value={sortCriteria}
-            selected={sortCriteria === actualSort}
-            onClick={closeModal}
-          >
-            {sortCriteria}
-          </option>
-        ))}
-      </select>
-      <button onClick={closeModal}>Close</button>
-    </div>
-  )
-}
-
-interface FilterModalProps {
-  setActualFilter?: (filter: filterList) => void
-  actualFilter?: filterList
-  closeModal: () => void
-}
-
-export function FilterModal({
-  setActualFilter,
-  actualFilter,
-  closeModal,
-}: FilterModalProps) {
-  if (!setActualFilter || !actualFilter) return null
-  const filterList = [
-    "Level 1",
-    "Level 2",
-    "Level 3",
-    "Common",
-    "Rare",
-    "Epic",
-    "Legendary",
-  ]
-
-  const filterKeyMapping: { [key: string]: keyof filterList } = {
-    "Level 1": "Level1",
-    "Level 2": "Level2",
-    "Level 3": "Level3",
-    Common: "Common",
-    Rare: "Rare",
-    Epic: "Epic",
-    Legendary: "Legendary",
-  }
-
-  const handleChange = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { value } = event.currentTarget
-    const key = filterKeyMapping[value]
-    console.log(value)
-    setActualFilter({
-      ...actualFilter,
-      [key]: !actualFilter[key],
-      // [value]: !actualFilter[value as keyof filterList],
-    })
-  }
-
-  return (
-    <div className="flex flex-col items-center justify-center w-44 h-40 bg-gray-500 absolute top-48 z-50">
-      {filterList.map((filterCriteria, index) => (
-        <button key={index} value={filterCriteria} onClick={handleChange}>
-          {filterCriteria}
-        </button>
-      ))}
-      <button onClick={closeModal}>Close</button>
-    </div>
   )
 }

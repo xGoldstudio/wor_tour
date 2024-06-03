@@ -23,6 +23,7 @@
     "gsap": "^3.12.5",
     "lodash": "^4.17.21",
     "lucide-react": "^0.376.0",
+    "rc-slider": "^10.6.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-indiana-drag-scroll": "^2.2.0",
