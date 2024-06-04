@@ -5,12 +5,12 @@ import usePlayerStore from "./playerStore";
 export type BoosterName =
   | "Classic refill"
   | "World 1 refill"
-	| "Common refill"
+  | "Common refill"
   | "Legendary refill";
 
 export type BoosterType = Omit<BoosterTypeDeclartion, "cards"> & {
   cards: CardType[];
-}
+};
 
 export interface BoosterTypeDeclartion {
   name: BoosterName;
@@ -43,18 +43,16 @@ export const boosters: Record<BoosterName, BoosterTypeDeclartion> = {
       world: 1,
     },
   },
-	"Common refill": {
+  "Common refill": {
     name: "Common refill",
     cost: 800,
-    description:
-      "Contain 1 common unit from any worlds among unlocked cards.",
+    description: "Contain 1 common unit from any worlds among unlocked cards.",
     illustration: "/cards/8/level1.png",
     cards: cards
       .filter((card) => card.rarity === "common")
       .map((card) => card.id),
     requirements: {
-      cardAvailable: (cards) =>
-        cards.some((card) => card.rarity === "common"),
+      cardAvailable: (cards) => cards.some((card) => card.rarity === "common"),
     },
   },
   "Legendary refill": {
@@ -74,19 +72,22 @@ export const boosters: Record<BoosterName, BoosterTypeDeclartion> = {
 };
 
 export default function useBooster(booster: BoosterType) {
-  const { addCardOrShardOrEvolve, spendGold, gold } = usePlayerStore((state) => ({
-    addCardOrShardOrEvolve: state.addCardOrShardOrEvolve,
-    collection: state.collection,
-		spendGold: state.spendGold,
-		gold: state.gold,
-  }));
+  const { addCardOrShardOrEvolve, spendGold, gold } = usePlayerStore(
+    (state) => ({
+      addCardOrShardOrEvolve: state.addCardOrShardOrEvolve,
+      collection: state.collection,
+      spendGold: state.spendGold,
+      gold: state.gold,
+    })
+  );
   const addOrEvolve = useAddCardOrShardOrEvolve();
 
   return function buyBooster() {
-		if (gold < booster.cost) return;
-    const card = booster.cards[Math.floor(Math.random() * booster.cards.length)];
-    addOrEvolve(card.id)
-		spendGold(booster.cost);
+    if (gold < booster.cost) return;
+    const card =
+      booster.cards[Math.floor(Math.random() * booster.cards.length)];
+    addOrEvolve(card.id);
+    spendGold(booster.cost);
     addCardOrShardOrEvolve(card.id);
   };
 }

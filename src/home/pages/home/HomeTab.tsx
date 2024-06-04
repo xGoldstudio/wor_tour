@@ -2,7 +2,7 @@ import useGameMetadataStore from "@/game/stores/gameMetadataStore";
 import { Button } from "../../Home";
 
 export default function HomeTab() {
-  const setIsInGame = useGameMetadataStore(state => state.setIsInGame);
+  const setIsInGame = useGameMetadataStore((state) => state.setIsInGame);
 
   return (
     <div className="w-full flex flex-col items-center gap-4">
