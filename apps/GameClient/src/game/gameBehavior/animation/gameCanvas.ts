@@ -1,9 +1,13 @@
-import { Point } from "@/game/TargetLine";
 import { Animation3dType } from "@/game/stores/gameStateStore";
 import * as THREE from "three";
 import { cubicBezier } from "./timeline";
 
 const ATTACK_ANIMATION_TIMING = 20;
+
+interface Point {
+  x: number;
+  y: number;
+}
 
 export interface GameCanvasReturn {
   append: (target: HTMLDivElement) => void;
