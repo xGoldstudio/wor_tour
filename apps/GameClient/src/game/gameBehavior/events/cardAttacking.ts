@@ -5,7 +5,7 @@ import { TriggerEventType } from "../gameEventListener";
 export default function cardAttacking(
   event: CardAttackingEvent,
   data: GameStore,
-  triggerEvent: TriggerEventType,
+  triggerEvent: TriggerEventType
 ) {
   const attakerCard = event.isPlayer
     ? data.playerBoard[event.cardPosition]

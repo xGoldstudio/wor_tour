@@ -36,7 +36,7 @@ export default function iaAgent() {
   function computeMove(
     _: EventType,
     data: GameStore,
-    triggerEvent: (event: EventType) => void,
+    triggerEvent: (event: EventType) => void
   ) {
     if (nextCardToUse === null) {
       setNextCardToUse(data);
@@ -60,12 +60,12 @@ export default function iaAgent() {
   addGameEventListener(
     "manaIncrease",
     computeMove,
-    (event) => !(event as ManaIncreaseEvent).isPlayer,
+    (event) => !(event as ManaIncreaseEvent).isPlayer
   );
   addGameEventListener(
     "cardDestroyed",
     computeMove,
-    (event) => !(event as CardDestroyedEvent).initiator.isPlayerCard,
+    (event) => !(event as CardDestroyedEvent).initiator.isPlayerCard
   );
 
   // addGameEventListener("startEarningMana", (_, data, triggerEvent) => {

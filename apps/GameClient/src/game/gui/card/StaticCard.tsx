@@ -1,5 +1,7 @@
 import { CardType } from "@repo/ui";
-import CardBorder, { CardContentIllustartion } from "../../../../../../packages/ui/components/card/CardBorder";
+import CardBorder, {
+  CardContentIllustartion,
+} from "../../../../../../packages/ui/components/card/CardBorder";
 
 function StaticCard({ card }: { card: CardType }) {
   const size = 1.35;

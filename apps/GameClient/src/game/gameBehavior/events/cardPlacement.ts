@@ -12,8 +12,8 @@ export default function cardPlacementEventManager(
   placeCardBoard: (
     isPlayer: boolean,
     position: number,
-    card: InGameCardType,
-  ) => void,
+    card: InGameCardType
+  ) => void
 ) {
   const foundCard = useGameMetadataStore
     .getState()

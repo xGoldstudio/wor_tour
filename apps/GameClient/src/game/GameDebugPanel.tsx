@@ -1,7 +1,5 @@
 import { IS_DEBUG } from "@/isDebug";
-import {
-  TriggerGameEvent
-} from "./gameBehavior/useGameEvents";
+import { TriggerGameEvent } from "./gameBehavior/useGameEvents";
 
 interface GameDebugPanelProps {
   togglePlay: () => void;
@@ -40,7 +38,7 @@ export default function GameDebugPanel({
               isPlayer: true,
               cardPosition: 1,
               instanceId: 1,
-            }
+            },
           });
         }}
       >
@@ -57,7 +55,7 @@ export default function GameDebugPanel({
               isPlayer: true,
               cardPosition: 1,
               instanceId: 1,
-            }
+            },
           });
         }}
       >

@@ -64,14 +64,12 @@ export const boosters: Record<BoosterName, BoosterTypeDeclartion> = {
 };
 
 export default function useBooster(booster: BoosterType) {
-  const { spendGold, gold } = usePlayerStore(
-    (state) => ({
-      addCardOrShardOrEvolve: state.addCardOrShardOrEvolve,
-      collection: state.collection,
-      spendGold: state.spendGold,
-      gold: state.gold,
-    }),
-  );
+  const { spendGold, gold } = usePlayerStore((state) => ({
+    addCardOrShardOrEvolve: state.addCardOrShardOrEvolve,
+    collection: state.collection,
+    spendGold: state.spendGold,
+    gold: state.gold,
+  }));
   const addOrEvolve = useAddCardOrShardOrEvolve();
 
   return function buyBooster() {

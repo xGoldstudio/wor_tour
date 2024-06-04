@@ -48,7 +48,7 @@ function useGameSyncAnimationStore<State>() {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function useGameAnimation<State, Element = any>(
-  computeAnimation: ComputeAnimation<State>,
+  computeAnimation: ComputeAnimation<State>
 ) {
   const animationRef = useRef<null | Element>(null);
   const store = useAnimationStore();

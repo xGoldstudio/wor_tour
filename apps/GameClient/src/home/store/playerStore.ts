@@ -1,9 +1,5 @@
 import useDataStore from "@/cards/DataStore";
-import {
-  findCard,
-  getCardFromLevel,
-  getCardStats,
-} from "@/cards";
+import { findCard, getCardFromLevel, getCardStats } from "@/cards";
 import { create } from "zustand";
 import { BoosterType, boosters } from "./useBooster";
 import { CardRarity } from "@repo/types";
@@ -103,7 +99,7 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
         rare: [],
         epic: [],
         legendary: [],
-      } as Record<CardRarity, CardType[]>,
+      } as Record<CardRarity, CardType[]>
     );
     return cardsByRarity;
   },
@@ -154,7 +150,7 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
       // sort by rarity
       boosterCardsPackable.sort(
         (a, b) =>
-          CardRarityOrder.indexOf(a.rarity) - CardRarityOrder.indexOf(b.rarity),
+          CardRarityOrder.indexOf(a.rarity) - CardRarityOrder.indexOf(b.rarity)
       );
       return { ...booster, cards: boosterCardsPackable };
     });

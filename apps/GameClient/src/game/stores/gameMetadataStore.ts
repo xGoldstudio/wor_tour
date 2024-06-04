@@ -23,7 +23,7 @@ interface GameInterfaceStore {
     playerCards: Map<number, CollectionCard>,
     opponentCards: Map<number, CollectionCard>,
     playerHp: number,
-    opponentHp: number,
+    opponentHp: number
   ) => void;
   reset: () => void;
 }
@@ -38,7 +38,7 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
     playerCards: Map<number, CollectionCard>,
     opponentCards: Map<number, CollectionCard>,
     playerHp: number,
-    opponentHp: number,
+    opponentHp: number
   ) => {
     set({ playerCards, opponentCards, playerHp, opponentHp, isInGame: true });
   },
@@ -71,7 +71,7 @@ export function useStartGame() {
     deck.forEach((cardId) => {
       playerDeck.set(
         cardId,
-        usePlayerStore.getState().getCollectionInfo(cardId)!,
+        usePlayerStore.getState().getCollectionInfo(cardId)!
       );
     });
     const opponentDeck = new Map<number, CollectionCard>(playerDeck);

@@ -197,7 +197,7 @@ function useGameEvents(): GameEventsActions {
   } = useGameInterface();
   const gameRef = useRef<null | HTMLDivElement>(null);
   const [clock] = useState<ClockReturn<EventType>>(() =>
-    Clock(internalTriggerEvent),
+    Clock(internalTriggerEvent)
   );
   const [gameCanvas] = useState<GameCanvasReturn>(() => GameCanvas());
   const { triggerGameSyncAnimation, reset: resetGameSyncAnimationStore } =
@@ -310,7 +310,7 @@ function useGameEvents(): GameEventsActions {
         data,
         triggerEvent,
         getNextInstanceId,
-        placeCardBoard,
+        placeCardBoard
       );
     } else if (event.type === "cardStartAttacking") {
       const usingCard = event.isPlayer
@@ -337,13 +337,13 @@ function useGameEvents(): GameEventsActions {
         {
           onAnimationEnd: () =>
             triggerEvent({ type: "cardDamageResolve", initiator: event }),
-        },
+        }
       );
     } else if (event.type === "cardDamageResolve") {
       const isDead = dealDamageToCard(
         event.initiator.isPlayerCard,
         event.initiator.amount,
-        event.initiator.cardPosition,
+        event.initiator.cardPosition
       );
       if (event.initiator.directAttack) {
         const card = (
@@ -378,7 +378,7 @@ function useGameEvents(): GameEventsActions {
       addNewAnimation(
         getDeathAnimationKey(
           event.initiator.isPlayerCard,
-          event.initiator.cardPosition,
+          event.initiator.cardPosition
         ),
         {
           onTick: clock.getImmutableInternalState().currentFrame,
@@ -387,10 +387,10 @@ function useGameEvents(): GameEventsActions {
             card: getCardFromState(
               event.initiator.isPlayerCard,
               event.initiator.cardPosition,
-              data,
+              data
             )!,
           },
-        },
+        }
       );
       destroyCard(event.initiator.isPlayerCard, event.initiator.cardPosition);
     } else if (event.type === "playerDamage") {
@@ -403,7 +403,7 @@ function useGameEvents(): GameEventsActions {
           onAnimationEnd: () =>
             triggerEvent({ type: "playerDamageResolve", initiator: event }),
           sameX: true,
-        },
+        }
       );
     } else if (event.type === "playerDamageResolve") {
       dealDamageToPlayer(event.initiator.isPlayer, event.initiator.damage);
@@ -431,13 +431,13 @@ function useGameEvents(): GameEventsActions {
         `card_${event.cardInitiator.isPlayerCard}_${event.cardInitiator.cardPosition}`,
         `card_${event.isPlayerCard}_${event.cardPosition}`,
         "heal",
-        clock.getImmutableInternalState().currentFrame,
+        clock.getImmutableInternalState().currentFrame
       );
     } else if (event.type === "removeEffect") {
       removeEffect(
         event.isPlayerCard,
         event.cardPosition,
-        event.effectToRemove,
+        event.effectToRemove
       );
     } else if (event.type === "removeAnimation") {
       removeAnimation(event.key);
@@ -454,7 +454,7 @@ function useGameEvents(): GameEventsActions {
         type: "removeAnimation",
         key,
       },
-      animation.animationDuration,
+      animation.animationDuration
     );
   }
 
@@ -465,7 +465,7 @@ function useGameEvents(): GameEventsActions {
         type: "manaIncrease",
         isPlayer,
       },
-      manaSpeed / FRAME_TIME,
+      manaSpeed / FRAME_TIME
     );
   }
 
@@ -500,7 +500,7 @@ function useGameEvents(): GameEventsActions {
     startAttacking(
       isPlayer,
       cardPosition,
-      clock.getImmutableInternalState().currentFrame,
+      clock.getImmutableInternalState().currentFrame
     );
     clock.setGameEventTimeout(
       {
@@ -509,7 +509,7 @@ function useGameEvents(): GameEventsActions {
         instanceId,
         cardPosition,
       },
-      1000 / attackSpeed / FRAME_TIME,
+      1000 / attackSpeed / FRAME_TIME
     );
   }
 
