@@ -12,7 +12,6 @@ interface CardModalProps {
   closeModal: () => void;
 }
 
-
 export default function CardModal({ closeModal, cardId }: CardModalProps) {
   const card = getCardStats(cardId);
   const collectionInfo = usePlayerStore((state) =>
@@ -26,7 +25,7 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
 
   const { currentPosition, setIsPressed, changePosition } = useScrollCardList(
     collectionInfo.level - 1,
-    3,
+    3
   );
 
   const isLevelOwned = collectionInfo.level > currentPosition;
@@ -42,7 +41,10 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
         >
           <div className="flex gap-3 rounded-sm bg-slate-900 px-3 py-2">
             {card.stats.map((_, index) => (
-              <BulletPosition selected={index === currentPosition} key={`${_.cost}_${index}`} />
+              <BulletPosition
+                selected={index === currentPosition}
+                key={`${_.cost}_${index}`}
+              />
             ))}
           </div>
           <div className="relative h-[430px]">
@@ -91,4 +93,3 @@ function BulletPosition({ selected }: { selected: boolean }) {
     ></div>
   );
 }
-

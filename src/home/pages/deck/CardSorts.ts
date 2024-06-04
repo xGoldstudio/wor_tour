@@ -1,20 +1,20 @@
-import { findCard } from "@/cards"
-import { Card } from "./CardFilters"
+import { findCard } from "@/cards";
+import { Card } from "./CardFilters";
 
-export type Sorts = Record<CardSorts, CardSort>
+export type Sorts = Record<CardSorts, CardSort>;
 export type CardSorts =
   | "Cost↑"
   | "Cost↓"
   | "Rarity↑"
   | "Rarity↓"
   | "World↑"
-  | "World↓"
+  | "World↓";
 export interface CardSort {
-  label: string
-  sortFunction: (detailledCollection: Card[]) => Card[]
+  label: string;
+  sortFunction: (detailledCollection: Card[]) => Card[];
 }
 
-const rarityOrder = { common: 1, rare: 2, epic: 3, legendary: 4 }
+const rarityOrder = { common: 1, rare: 2, epic: 3, legendary: 4 };
 
 export const sorts: Sorts = {
   "Cost↑": {
@@ -55,4 +55,4 @@ export const sorts: Sorts = {
     sortFunction: (detailledCollection) =>
       detailledCollection.sort((a, b) => b.world - a.world),
   },
-}
+};

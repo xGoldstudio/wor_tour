@@ -1,17 +1,17 @@
-import { CardType } from "@/cards"
+import { CardType } from "@/cards";
 
-export type Card = CardType & { isInDeck: boolean }
+export type Card = CardType & { isInDeck: boolean };
 
-export type Filters = Record<CardFilters, CardFilter>
-export type CardFilters = "Cost" | "Common" | "Rare" | "Epic" | "Legendary"
+export type Filters = Record<CardFilters, CardFilter>;
+export type CardFilters = "Cost" | "Common" | "Rare" | "Epic" | "Legendary";
 export interface CardFilter {
-  label?: string
-  style?: string
-  rangeMin?: number
-  rangeMax?: number
-  filterFunction: (card: Card[]) => Card[]
+  label?: string;
+  style?: string;
+  rangeMin?: number;
+  rangeMax?: number;
+  filterFunction: (card: Card[]) => Card[];
 }
-export type ActiveFilters = Record<CardFilters, boolean>
+export type ActiveFilters = Record<CardFilters, boolean>;
 
 export const filters: Filters = {
   Cost: {
@@ -46,4 +46,4 @@ export const filters: Filters = {
     filterFunction: (card) =>
       card.filter((card) => card.rarity === "legendary"),
   },
-}
+};

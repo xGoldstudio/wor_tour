@@ -1,28 +1,28 @@
-import { CardType } from "@/cards"
-import { ManaBall } from "@/game/gui/ManaBar"
+import { CardType } from "@/cards";
+import { ManaBall } from "@/game/gui/ManaBar";
 import CardBorder, {
   CardContentIllustartion,
   InnerBord,
-} from "@/game/gui/card/CardBorder"
-import usePlayerStore from "@/home/store/playerStore"
-import Box from "@/home/ui/Box"
-import { preventDefault } from "@/lib/eventUtils"
-import { cn } from "@/lib/utils"
-import * as _ from "lodash"
-import Slider from "rc-slider"
-import "rc-slider/assets/index.css"
-import { useState } from "react"
-import ScrollContainer from "react-indiana-drag-scroll"
-import { Button } from "../../Home"
-import { ActiveFilters, CardFilters, filters } from "./CardFilters"
-import CardModal from "./CardModal"
-import { CardSorts, sorts } from "./CardSorts"
+} from "@/game/gui/card/CardBorder";
+import usePlayerStore from "@/home/store/playerStore";
+import Box from "@/home/ui/Box";
+import { preventDefault } from "@/lib/eventUtils";
+import { cn } from "@/lib/utils";
+import * as _ from "lodash";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
+import { useState } from "react";
+import ScrollContainer from "react-indiana-drag-scroll";
+import { Button } from "../../Home";
+import { ActiveFilters, CardFilters, filters } from "./CardFilters";
+import CardModal from "./CardModal";
+import { CardSorts, sorts } from "./CardSorts";
 
 interface SortModalProps {
-  setActualSort: (sort: CardSorts) => void
-  actualSort: CardSorts
-  closeModal: () => void
-  deck: boolean
+  setActualSort: (sort: CardSorts) => void;
+  actualSort: CardSorts;
+  closeModal: () => void;
+  deck: boolean;
 }
 
 export function SortModal({
@@ -34,8 +34,8 @@ export function SortModal({
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     for (const key in sorts)
       if (sorts[key as CardSorts].label === event.target.value)
-        setActualSort(key as CardSorts)
-  }
+        setActualSort(key as CardSorts);
+  };
   return (
     <div
       className={cn(
@@ -58,13 +58,13 @@ export function SortModal({
       </select>
       <button onClick={closeModal}>Close</button>
     </div>
-  )
+  );
 }
 
 interface FilterModalProps {
-  setActualFilter: (filter: ActiveFilters) => void
-  actualFilter: ActiveFilters
-  closeModal: () => void
+  setActualFilter: (filter: ActiveFilters) => void;
+  actualFilter: ActiveFilters;
+  closeModal: () => void;
 }
 
 export function FilterModal({
@@ -73,33 +73,33 @@ export function FilterModal({
   closeModal,
 }: FilterModalProps) {
   const handleChange = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { value } = event.currentTarget
+    const { value } = event.currentTarget;
     for (const key in filters) {
       if (filters[key as CardFilters].label === value) {
         setActualFilter({
           ...actualFilter,
           [key as CardFilters]: !actualFilter[key as CardFilters],
-        })
+        });
       }
     }
-  }
+  };
   const [range, setRange] = useState<number[] | number>([
     actualFilter.Cost ? filters.Cost.rangeMin! : 1,
     actualFilter.Cost ? filters.Cost.rangeMax! : 3,
-  ])
+  ]);
 
   const handleSliderChange = (newRange: number[] | number) => {
-    setRange(newRange)
+    setRange(newRange);
     if (Array.isArray(newRange)) {
-      filters.Cost.rangeMin = newRange[0]
-      filters.Cost.rangeMax = newRange[1]
+      filters.Cost.rangeMin = newRange[0];
+      filters.Cost.rangeMax = newRange[1];
     }
     if (filters.Cost.rangeMin === 1 && filters.Cost.rangeMax === 3) {
-      setActualFilter({ ...actualFilter, Cost: false })
+      setActualFilter({ ...actualFilter, Cost: false });
     } else {
-      setActualFilter({ ...actualFilter, Cost: true })
+      setActualFilter({ ...actualFilter, Cost: true });
     }
-  }
+  };
   return (
     <div className="flex flex-col items-center justify-center w-44 h-40 bg-gray-500 absolute top-48 z-50">
       {Object.values(filters).map(
@@ -146,15 +146,15 @@ export function FilterModal({
       </div>
       <button onClick={closeModal}>Close</button>
     </div>
-  )
+  );
 }
 
 interface SortAndFilterBoxProps {
-  classNameProps: string
-  setActualSort: (sort: CardSorts) => void
-  actualSort: CardSorts
-  setActualFilter?: (filter: ActiveFilters) => void
-  actualFilter?: ActiveFilters
+  classNameProps: string;
+  setActualSort: (sort: CardSorts) => void;
+  actualSort: CardSorts;
+  setActualFilter?: (filter: ActiveFilters) => void;
+  actualFilter?: ActiveFilters;
 }
 
 function SortAndFilterBox({
@@ -164,16 +164,16 @@ function SortAndFilterBox({
   actualFilter,
   classNameProps,
 }: SortAndFilterBoxProps) {
-  const [sortIsOpen, setSortIsOpen] = useState(false)
-  const [filterIsOpen, setFilterIsOpen] = useState(false)
-  const deck = !!setActualFilter
+  const [sortIsOpen, setSortIsOpen] = useState(false);
+  const [filterIsOpen, setFilterIsOpen] = useState(false);
+  const deck = !!setActualFilter;
   return (
     <div className={classNameProps}>
       <div>
         <button
           onClick={() => {
-            setSortIsOpen(true)
-            filterIsOpen ? setFilterIsOpen(false) : null
+            setSortIsOpen(true);
+            filterIsOpen ? setFilterIsOpen(false) : null;
           }}
         >
           Sort {`(${actualSort})`}
@@ -183,8 +183,8 @@ function SortAndFilterBox({
         <div>
           <button
             onClick={() => {
-              setFilterIsOpen(true)
-              sortIsOpen ? setSortIsOpen(false) : null
+              setFilterIsOpen(true);
+              sortIsOpen ? setSortIsOpen(false) : null;
             }}
           >
             Filter{" "}
@@ -214,30 +214,30 @@ function SortAndFilterBox({
         />
       )}
     </div>
-  )
+  );
 }
 
-type DetailedCardType = CardType & { isInDeck: boolean }
+type DetailedCardType = CardType & { isInDeck: boolean };
 interface ShowStatProps {
-  detailledDeck: DetailedCardType[]
+  detailledDeck: DetailedCardType[];
 }
 
 function ShowStat({ detailledDeck }: ShowStatProps) {
-  const [showStat, setShowStat] = useState(false)
-  let costAverage = 0
-  let dmgAverage = 0
-  let attackSpeedAverage = 0
-  let hpAverage = 0
+  const [showStat, setShowStat] = useState(false);
+  let costAverage = 0;
+  let dmgAverage = 0;
+  let attackSpeedAverage = 0;
+  let hpAverage = 0;
   for (let i = 0; i < 8; i++) {
-    costAverage += detailledDeck[i].cost
-    dmgAverage += detailledDeck[i].dmg
-    attackSpeedAverage += detailledDeck[i].attackSpeed
-    hpAverage += detailledDeck[i].hp
+    costAverage += detailledDeck[i].cost;
+    dmgAverage += detailledDeck[i].dmg;
+    attackSpeedAverage += detailledDeck[i].attackSpeed;
+    hpAverage += detailledDeck[i].hp;
   }
-  costAverage /= 8
-  dmgAverage /= 8
-  attackSpeedAverage /= 8
-  hpAverage /= 8
+  costAverage /= 8;
+  dmgAverage /= 8;
+  attackSpeedAverage /= 8;
+  hpAverage /= 8;
   return (
     <div>
       <div className="absolute right-16 bottom-48">
@@ -253,47 +253,48 @@ function ShowStat({ detailledDeck }: ShowStatProps) {
         </div>
       )}
     </div>
-  )
+  );
 }
 
 export default function DeckTab() {
   const { deck, collection } = usePlayerStore((state) => ({
     deck: state.deck,
     collection: state.getCollection(),
-  }))
+  }));
   let { detailledCollection } = usePlayerStore((state) => ({
     detailledCollection: state.getCollectionCompleteInfo(collection),
-  }))
-  const deckArray = _.concat(deck, _.fill(Array(8 - deck.length), null))
+  }));
+  const deckArray = _.concat(deck, _.fill(Array(8 - deck.length), null));
 
-  const [actualSort, setActualSort] = useState<CardSorts>("Cost↑")
+  const [actualSort, setActualSort] = useState<CardSorts>("Cost↑");
   const [actualFilter, setActualFilter] = useState<ActiveFilters>({
     Cost: false,
     Common: false,
     Rare: false,
     Epic: false,
     Legendary: false,
-  })
-  console.log(actualFilter)
+  });
+  console.log(actualFilter);
   const classNameCollections =
-    "w-full h-6 flex -top-4 justify-center items-center"
+    "w-full h-6 flex -top-4 justify-center items-center";
   const classNameDeck =
-    "-mb-[4.5rem] -ml-60 w-full flex justify-center items-center z-10"
+    "-mb-[4.5rem] -ml-60 w-full flex justify-center items-center z-10";
   Object.keys(actualFilter).forEach((filter) => {
     actualFilter[filter as keyof ActiveFilters] === true &&
       (detailledCollection =
         filters[filter as keyof ActiveFilters].filterFunction(
           detailledCollection
-        ))
-  })
-  detailledCollection = sorts[actualSort].sortFunction(detailledCollection)
+        ));
+  });
+  detailledCollection = sorts[actualSort].sortFunction(detailledCollection);
 
-  const [actualSortDeck, setActualSortDeck] = useState<CardSorts>("Cost↑")
+  const [actualSortDeck, setActualSortDeck] = useState<CardSorts>("Cost↑");
 
-  let detailledDeck = []
-  const getCompleteInfo = usePlayerStore((state) => state.getCompleteInfo)
-  for (let i = 0; i < 8; i++) detailledDeck.push(getCompleteInfo(deckArray[i]!))
-  detailledDeck = sorts[actualSortDeck].sortFunction(detailledDeck)
+  let detailledDeck = [];
+  const getCompleteInfo = usePlayerStore((state) => state.getCompleteInfo);
+  for (let i = 0; i < 8; i++)
+    detailledDeck.push(getCompleteInfo(deckArray[i]!));
+  detailledDeck = sorts[actualSortDeck].sortFunction(detailledDeck);
 
   return (
     <div className="w-full grid grid-rows-[1fr_auto] absolute top-0 h-full">
@@ -355,24 +356,24 @@ export default function DeckTab() {
       </div>
       <ShowStat detailledDeck={detailledDeck} />
     </div>
-  )
+  );
 }
 
 interface DeckCardProps {
-  cardId: number
-  isHand?: boolean
-  unaddble?: boolean
+  cardId: number;
+  isHand?: boolean;
+  unaddble?: boolean;
 }
 
 function DeckCard({ cardId, isHand, unaddble: addable }: DeckCardProps) {
-  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false)
+  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
   const { card, removeCardFromDeck, addCardToDeck, isDeckFull } =
     usePlayerStore((state) => ({
       card: state.getCompleteInfo(cardId),
       removeCardFromDeck: state.removeCardFromDeck,
       addCardToDeck: state.addCardToDeck,
       isDeckFull: state.isDeckFull(),
-    }))
+    }));
   return (
     <>
       {isDescriptionOpen && (
@@ -435,5 +436,5 @@ function DeckCard({ cardId, isHand, unaddble: addable }: DeckCardProps) {
         )}
       </div>
     </>
-  )
+  );
 }
