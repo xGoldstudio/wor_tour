@@ -16,7 +16,6 @@ import {
   resetAllGameEventListeners,
   runGameEventListeners,
 } from "./gameEventListener";
-import useGameMetadataStore from "../stores/gameMetadataStore";
 import { CardEffects } from "@repo/types";
 import { useOnMount } from "@repo/ui";
 
@@ -161,6 +160,10 @@ export interface RemoveAnimationEvent {
 export function getDeathAnimationKey(isPlayerCard: boolean, position: number) {
   return `death_${isPlayerCard}_${position}`;
 }
+
+// should be use only for debug
+export let TriggerGameEvent: null | ((event: EventType) => void) = null;
+
 // all game logic here
 // todo to guaranteed fairness, we must wrap setTimeout in a custom gameLoop
 function useGameEvents(): GameEventsActions {
@@ -192,9 +195,6 @@ function useGameEvents(): GameEventsActions {
     removeCardTarget,
     init: initGameInterfaceStore,
   } = useGameInterface();
-  const { reset: resetMetadata } = useGameMetadataStore((state) => ({
-    reset: state.reset,
-  }));
   const gameRef = useRef<null | HTMLDivElement>(null);
   const [clock] = useState<ClockReturn<EventType>>(() =>
     Clock(internalTriggerEvent),
@@ -226,6 +226,7 @@ function useGameEvents(): GameEventsActions {
     }
     resume();
     setIsInit(true);
+    TriggerGameEvent = internalTriggerEvent;
   });
 
   function destroyGame() {
@@ -236,7 +237,7 @@ function useGameEvents(): GameEventsActions {
     pause();
     gameCanvas.destroy();
     resetGameSyncAnimationStore();
-    resetMetadata();
+    TriggerGameEvent = null;
   }
 
   function nextTick() {
@@ -286,7 +287,6 @@ function useGameEvents(): GameEventsActions {
   function internalTriggerEvent(event: EventType) {
     const data = getData();
     if (data.currentWinner) {
-      // some events may be triggered after the end of the game due to timers
       return null;
     }
     if (event.type === "startEarningMana") {

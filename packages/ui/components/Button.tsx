@@ -10,6 +10,7 @@ interface ButtonProps {
   small?: boolean;
   className?: string;
   rarity?: CardRarity;
+  forwardRef?: React.RefObject<HTMLButtonElement>;
 }
 
 export default function Button({
@@ -20,6 +21,7 @@ export default function Button({
   disabled,
   className,
   rarity = "rare",
+  forwardRef,
 }: ButtonProps) {
   return (
     <button
@@ -30,6 +32,7 @@ export default function Button({
         disabled ? "brightness-50" : "brightness-100"
       )}
       disabled={disabled}
+      ref={forwardRef}
     >
       <div
         className="absolute w-full h-full blur-sm"
