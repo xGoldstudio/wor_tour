@@ -4,7 +4,10 @@ import CardModal from "./CardModal";
 import usePlayerStore from "@/home/store/playerStore";
 import * as _ from "lodash";
 import { Box, Button, ManaBall, preventDefault } from "@repo/ui";
-import CardBorder, { CardContentIllustartion, InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
+import CardBorder, {
+  CardContentIllustartion,
+  InnerBord,
+} from "../../../../../../packages/ui/components/card/CardBorder";
 
 function SortAndFilterBox() {
   return (

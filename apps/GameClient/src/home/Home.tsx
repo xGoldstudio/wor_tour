@@ -8,7 +8,11 @@ import usePlayerStore from "./store/playerStore";
 import Badge from "../../../../packages/ui/components/Badge";
 import { Button, NumberSpan } from "@repo/ui";
 import { cn } from "@repo/ui";
-import { Borders, CardIllustartion, InnerBord } from "../../../../packages/ui/components/card/CardBorder";
+import {
+  Borders,
+  CardIllustartion,
+  InnerBord,
+} from "../../../../packages/ui/components/card/CardBorder";
 
 type Tabs = "home" | "deck" | "shop";
 
@@ -91,7 +95,7 @@ function RessourceCounter({ amount, max, icon }: RessourceCounterProps) {
               <p
                 className={cn(
                   "relative font-semibold",
-                  max === undefined && "text-right w-full pr-2",
+                  max === undefined && "text-right w-full pr-2"
                 )}
               >
                 <NumberSpan>{amount}</NumberSpan>

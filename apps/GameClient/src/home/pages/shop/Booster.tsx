@@ -46,7 +46,7 @@ interface BoosterModalProps {
 export function BoosterModal({ closeModal, booster }: BoosterModalProps) {
   const { currentPosition, setIsPressed, changePosition } = useScrollCardList(
     0,
-    booster.cards.length,
+    booster.cards.length
   );
   const { gold } = usePlayerStore((state) => ({
     gold: state.gold,

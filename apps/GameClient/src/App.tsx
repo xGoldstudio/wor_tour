@@ -1,13 +1,8 @@
 import Game from "./game/Game";
 import useGameMetadataStore from "./game/stores/gameMetadataStore";
 import Home from "./home/Home";
-import {
-  BrowserRouter
-} from "react-router-dom";
-import {
-  QueryClient,
-  QueryClientProvider, useQuery
-} from "react-query";
+import { BrowserRouter } from "react-router-dom";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import useDataStore from "./cards/DataStore";
 import { EditorData } from "@repo/types";
 
@@ -39,7 +34,7 @@ function AppRouter() {
         init(objectData);
       },
       staleTime: 2200000,
-    },
+    }
   );
 
   if (data.isLoading) {

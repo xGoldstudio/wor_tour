@@ -1,6 +1,9 @@
 import { useGameAnimation } from "@/game/gameBehavior/animation/useGameSyncAnimation";
 import HpBar from "../HpBar";
-import CardBorder, { CardContentIllustartion, InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
+import CardBorder, {
+  CardContentIllustartion,
+  InnerBord,
+} from "../../../../../../packages/ui/components/card/CardBorder";
 import { GameStore, InGameCardType } from "@/game/stores/gameStateStore";
 import { FRAME_TIME } from "@/game/gameBehavior/useGameEvents";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
@@ -32,7 +35,7 @@ function GameCard({
       return {
         transform: `scaleY(${100 - attackProgress * 100}%)`,
       };
-    },
+    }
   );
   const cardAnimationRef = useGameAnimation<
     GameStore & { currentTick: number }
@@ -73,7 +76,7 @@ function GameCard({
           ease: [0, 0.42, 1, 1],
           values: { scale: 108, y: isPlayerCard ? -15 : 15 },
         },
-      ],
+      ]
     )(elapsedFrames, requiredFrames);
   });
 

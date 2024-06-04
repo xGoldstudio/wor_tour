@@ -53,7 +53,7 @@ test("trigger event futur tick", () => {
       queue[0].frame === 1 &&
       queue[0].events.length === 1 &&
       queue[1].frame === 2 &&
-      queue[1].events.length === 2,
+      queue[1].events.length === 2
   ).toBeTruthy();
 
   clock.nextTick();

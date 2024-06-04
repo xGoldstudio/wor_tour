@@ -3,7 +3,7 @@ export function cubicBezier(
   p0: number,
   p1: number,
   p2: number,
-  p3: number,
+  p3: number
 ): number {
   // Cubic bezier equation: B(t) = (1-t)^3 * P0 + 3 * (1-t)^2 * t * P1 + 3 * (1-t) * t^2 * P2 + t^3 * P3
   return (
@@ -29,7 +29,7 @@ interface Sequence {
 
 export default function animationTimeline(
   initialValues: AnimationValues,
-  sequences: Sequence[],
+  sequences: Sequence[]
 ) {
   return (elapsedFrames: number, requiredFrames: number) => {
     const remainingFrames = requiredFrames - elapsedFrames;
@@ -55,8 +55,8 @@ export default function animationTimeline(
           computeValues(
             getValues(i),
             seq.values,
-            easeOrValue(normalizedProgress, seq.ease),
-          ),
+            easeOrValue(normalizedProgress, seq.ease)
+          )
         );
       }
     }
@@ -70,7 +70,7 @@ export default function animationTimeline(
   function computeValues(
     from: AnimationValues,
     to: AnimationValues,
-    normalizedProgress: number,
+    normalizedProgress: number
   ) {
     const res: AnimationValues = { ...to, ...from };
     for (const key in from) {
@@ -107,13 +107,13 @@ type AnimationByStepsOptions = {
 
 export function animationSteps(
   steps: AnimationValuesBySteps,
-  options: AnimationByStepsOptions,
+  options: AnimationByStepsOptions
 ) {
   return (elapsedTicks: number) => {
     const t = easeOrValue(
       (options.duration - Math.max(options.duration - elapsedTicks, 0)) /
         options.duration,
-      options.ease,
+      options.ease
     ); // [0,1]
     const values: AnimationValues = {};
 

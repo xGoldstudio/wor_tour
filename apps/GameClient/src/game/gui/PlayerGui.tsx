@@ -27,7 +27,7 @@ function PlayerGUI({
   const findCard = useGameMetadataStore((state) => state.findCard);
 
   const playerHandSanitized = hand.filter(
-    (cardId) => cardId !== null,
+    (cardId) => cardId !== null
   ) as number[];
 
   const reverseDeck = [...deck].reverse();

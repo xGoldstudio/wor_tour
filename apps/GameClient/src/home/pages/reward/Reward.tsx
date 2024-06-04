@@ -81,23 +81,23 @@ export default function Reward({
       tl.to(
         evolutionCardRef.current,
         { x: 0, duration: 1, delay: 3, ease: "bounce" },
-        "evolution",
+        "evolution"
       );
       tl.to(
         evolutionCardRef.current,
         { opacity: 1, duration: 0.5, delay: 3 },
-        "evolution",
+        "evolution"
       );
 
       tl.to(
         cardRef.current,
         { x: 0, opacity: 0, duration: 0.5, delay: 3 },
-        "evolution",
+        "evolution"
       );
       tl.to(
         shardRef.current,
         { x: 0, opacity: 0, duration: 0.5, delay: 3 },
-        "evolution",
+        "evolution"
       );
     }
 
@@ -105,13 +105,13 @@ export default function Reward({
       buttonRef.current,
       { x: -100, opacity: 0 },
       { x: 0, opacity: 1, duration: 0.4 },
-      "preview",
+      "preview"
     );
     tl.fromTo(
       shinyRef.current,
       { opacity: 1, scale: 0 },
       { opacity: 1, scale: 1, duration: 0.4 },
-      "preview",
+      "preview"
     );
     gsap.to(shinyRef.current, {
       rotate: 360,
@@ -127,7 +127,7 @@ export default function Reward({
     if (shardTargetIndex !== null) {
       setTimeout(() => {
         const shardTarget = document.getElementById(
-          `shard_${shardTargetIndex}`,
+          `shard_${shardTargetIndex}`
         );
         if (!shardTarget || !shardRef.current) return;
         const tl = gsap.timeline({});
@@ -276,7 +276,7 @@ function ShowTitle({ title, delay }: { title: string; delay?: number }) {
           <span key={index} className="relative block">
             {letter}
           </span>
-        ),
+        )
       )}
     </h1>
   );

@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export default function useScrollCardList(
   defaultPosition: number,
-  maximumPosition: number,
+  maximumPosition: number
 ) {
   const [isPressed, setIsPressed] = useState(false);
   const [currentPosition, setCurrentPosition] = useState(defaultPosition);
@@ -20,7 +20,7 @@ export default function useScrollCardList(
 
   function updatePosition(value: number) {
     setCurrentPosition((prev) =>
-      Math.max(0, Math.min(maximumPosition - 1, prev + value)),
+      Math.max(0, Math.min(maximumPosition - 1, prev + value))
     );
     setIsPressed(false);
   }

@@ -13,7 +13,7 @@ interface CardModalProps {
 export default function CardModal({ closeModal, cardId }: CardModalProps) {
   const card = getCardStats(cardId);
   const collectionInfo = usePlayerStore((state) =>
-    state.getCollectionInfo(cardId),
+    state.getCollectionInfo(cardId)
   );
 
   const { isPlayed, isDeckFull } = usePlayerStore((state) => ({
@@ -25,7 +25,7 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
 
   const { currentPosition, setIsPressed, changePosition } = useScrollCardList(
     level,
-    3,
+    3
   );
 
   const isLevelOwned = level > currentPosition;
@@ -88,7 +88,7 @@ function BulletPosition({ selected }: { selected: boolean }) {
     <div
       className={cn(
         "w-4 h-4 bg-slate-50 rounded-full shadow-[0px_0px_5px_0px_#fca5a5] ",
-        !selected && "bg-slate-500 shadow-none",
+        !selected && "bg-slate-500 shadow-none"
       )}
     ></div>
   );

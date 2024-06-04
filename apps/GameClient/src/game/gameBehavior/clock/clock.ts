@@ -19,7 +19,7 @@ export interface ClockReturn<EventType> {
 }
 
 export default function Clock<EventType>(
-  onTriggerEvent: (e: EventType) => void,
+  onTriggerEvent: (e: EventType) => void
 ): ClockReturn<EventType> {
   let timeoutQueue: FrameObject[] = [];
   let isRunningEvent = false;

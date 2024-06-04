@@ -26,7 +26,7 @@ export default function Modal({ children, closeModal, title }: ModalProps) {
       history.pushState(
         null,
         "",
-        window.location.pathname + window.location.search,
+        window.location.pathname + window.location.search
       );
     };
   });
@@ -37,7 +37,7 @@ export default function Modal({ children, closeModal, title }: ModalProps) {
 
   return createPortal(
     <div className="absolute w-full h-full top-0 z-10">{children}</div>,
-    home,
+    home
   );
 }
 

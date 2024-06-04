@@ -17,7 +17,7 @@ export interface GameCanvasReturn {
     targetId: string,
     type: Animation3dType,
     onTick: number,
-    options?: GameCanvasAnimationOptions,
+    options?: GameCanvasAnimationOptions
   ) => void;
   destroy: () => void;
 }
@@ -67,7 +67,7 @@ export default function GameCanvas(): GameCanvasReturn {
     targetId: string,
     type: Animation3dType,
     onTick: number,
-    options?: GameCanvasAnimationOptions,
+    options?: GameCanvasAnimationOptions
   ) {
     const origin = document.getElementById(originId)?.getBoundingClientRect();
     const target = document.getElementById(targetId)?.getBoundingClientRect();
@@ -77,21 +77,21 @@ export default function GameCanvas(): GameCanvasReturn {
     const fromPoint = instance.raycast(
       new THREE.Vector2(
         origin.left + origin.width / 2 + window.pageXOffset,
-        origin.top + origin.height / 2 + window.pageYOffset,
-      ),
+        origin.top + origin.height / 2 + window.pageYOffset
+      )
     );
     const toPoint = instance.raycast(
       new THREE.Vector2(
         target.left + target.width / 2 + window.pageXOffset,
-        target.top + target.height / 2 + window.pageYOffset,
-      ),
+        target.top + target.height / 2 + window.pageYOffset
+      )
     );
     const animationInstance = instance.initAnimation(
       fromPoint,
       toPoint,
       type,
       onTick,
-      options,
+      options
     );
     animations = [...animations, animationInstance];
   }
@@ -129,7 +129,7 @@ function setupScene(canvas: HTMLCanvasElement) {
     75,
     sizes.width / sizes.height,
     0.1,
-    100,
+    100
   );
   camera.position.x = 0;
   camera.position.y = 0;
@@ -209,7 +209,7 @@ function setupScene(canvas: HTMLCanvasElement) {
     end: Point,
     type: Animation3dType,
     onTick: number,
-    options?: GameCanvasAnimationOptions,
+    options?: GameCanvasAnimationOptions
   ): AnimationInstance {
     const texture = new THREE.MeshMatcapMaterial({
       matcap: textures[type],
@@ -235,7 +235,7 @@ function setupScene(canvas: HTMLCanvasElement) {
           0,
           0.6,
           1,
-          1,
+          1
         );
         projectile.position.x = options?.sameX
           ? start.x

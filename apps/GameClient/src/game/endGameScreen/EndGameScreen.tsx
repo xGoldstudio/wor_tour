@@ -56,9 +56,15 @@ export default function EndGameScreen() {
       nextLevelRef: nextLevelRef.current,
       setCurrentLevel,
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [boxRef.current, shinyRef.current, buttonRef.current, xpBarRef.current, rewardsRef.current, nextLevelRef.current]);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    boxRef.current,
+    shinyRef.current,
+    buttonRef.current,
+    xpBarRef.current,
+    rewardsRef.current,
+    nextLevelRef.current,
+  ]);
 
   if (!currentWinner) {
     return null;

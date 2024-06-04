@@ -1,4 +1,10 @@
-import { CardStatsInfo, CardType, getRealStrength, getTargetStrength, testIsStrengthValid } from "@repo/ui";
+import {
+  CardStatsInfo,
+  CardType,
+  getRealStrength,
+  getTargetStrength,
+  testIsStrengthValid,
+} from "@repo/ui";
 import useDataStore from "./DataStore";
 
 export function findCard(id: number, level: number): CardType {
@@ -19,7 +25,8 @@ export function getCardFromLevel(card: CardStatsInfo, level: number): CardType {
     name: card.name,
     cost: card.stats[levelIndex].cost,
     illustration: card.stats[levelIndex].illustration || "",
-    worldIllustration: useDataStore.getState().getWorld(card.world)?.cardBackground || "",
+    worldIllustration:
+      useDataStore.getState().getWorld(card.world)?.cardBackground || "",
     dmg: card.stats[levelIndex].dmg,
     hp: card.stats[levelIndex].hp,
     attackSpeed: card.stats[levelIndex].attackSpeed,

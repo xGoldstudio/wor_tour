@@ -41,7 +41,7 @@ interface TimerProps {
 
 function Timer({ targetTimestamp }: TimerProps) {
   const [timeRemaining, setTimeRemaining] = useState(
-    targetTimestamp - Date.now(),
+    targetTimestamp - Date.now()
   );
 
   useEffect(() => {

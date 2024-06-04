@@ -17,7 +17,7 @@ export default function GameCardDeath({
   position,
 }: GameCardDeathProps) {
   const animation = useGameStore((state) =>
-    state.animations.get(getDeathAnimationKey(isPlayerCard, position)),
+    state.animations.get(getDeathAnimationKey(isPlayerCard, position))
   );
 
   if (!animation) {
@@ -54,7 +54,7 @@ function GameCardDeathAnimated({
       {
         ease: [0, 1, 1, 1],
         duration: animationDuration,
-      },
+      }
     )(elapsedFrames);
   });
 

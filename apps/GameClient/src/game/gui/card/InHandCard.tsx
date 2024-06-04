@@ -3,7 +3,9 @@ import useGameStore, { GameStore } from "@/game/stores/gameStateStore";
 import { motion, useDragControls } from "framer-motion";
 import { FRAME_TIME, manaSpeed } from "../../gameBehavior/useGameEvents";
 import { useGameAnimation } from "../../gameBehavior/animation/useGameSyncAnimation";
-import CardBorder, { CardContentIllustartion } from "../../../../../../packages/ui/components/card/CardBorder";
+import CardBorder, {
+  CardContentIllustartion,
+} from "../../../../../../packages/ui/components/card/CardBorder";
 import { CardType, ManaBall } from "@repo/ui";
 
 function InHandCard({
@@ -66,7 +68,7 @@ function InHandCardIllustration({ card }: { card: CardType }) {
       return {
         transform: `scaleY(${100 - alreadyProgress * 100}%)`,
       };
-    },
+    }
   );
 
   return (
