@@ -18,7 +18,7 @@ function initGameEventListeners() {
 export function addGameEventListener(
   type: EventType["type"],
   action: GameEventListenerFunction,
-  filter?: (event: EventType) => boolean,
+  filter?: (event: EventType) => boolean, // filter allow to listen only to specific event
 ) {
   let existingEvents = gameEventListeners.get(type);
   const actionComputed: GameEventListenerFunction =

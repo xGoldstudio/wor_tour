@@ -7,6 +7,7 @@ import useGameEvents from "./gameBehavior/useGameEvents";
 import GameDebugPanel from "./GameDebugPanel";
 import GameCard from "./gui/card/GameCard";
 import GameCardDeath from "./gui/card/GameCardDeath";
+import EndGameScreen from "./endGameScreen/EndGameScreen";
 
 export default function Game() {
   const {
@@ -106,6 +107,7 @@ export default function Game() {
           <div className="bg-black h-full w-full"></div>
         </>
       )}
+      <EndGameScreen />
     </div>
   );
 }

@@ -1,4 +1,7 @@
 import { IS_DEBUG } from "@/isDebug";
+import {
+  TriggerGameEvent
+} from "./gameBehavior/useGameEvents";
 
 interface GameDebugPanelProps {
   togglePlay: () => void;
@@ -26,6 +29,40 @@ export default function GameDebugPanel({
         <DebugButton onClick={() => fastForward(10)}>+10</DebugButton>
         <DebugButton onClick={() => fastForward(100)}>+100</DebugButton>
       </div>
+      <DebugButton
+        onClick={() => {
+          TriggerGameEvent?.({
+            type: "playerDamage",
+            damage: 999999,
+            isPlayer: false,
+            initiator: {
+              type: "cardAttacking",
+              isPlayer: true,
+              cardPosition: 1,
+              instanceId: 1,
+            }
+          });
+        }}
+      >
+        Kill opponent
+      </DebugButton>
+      <DebugButton
+        onClick={() => {
+          TriggerGameEvent?.({
+            type: "playerDamage",
+            damage: 999999,
+            isPlayer: true,
+            initiator: {
+              type: "cardAttacking",
+              isPlayer: true,
+              cardPosition: 1,
+              instanceId: 1,
+            }
+          });
+        }}
+      >
+        Kill yourself
+      </DebugButton>
       <DebugButton
         onClick={() => {
           togglePlay();

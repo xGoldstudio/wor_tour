@@ -5,7 +5,16 @@ import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import useDataStore from "@/cards/DataStore";
 import { Level } from "@repo/types";
-import { Badge, Box, Button, cn, inPx, preventDefault, useOnMount, useOnUnMount, textureByRarity, getImageUrlCssValue } from "@repo/ui";
+import {
+  Badge,
+  Box,
+  Button,
+  cn,
+  inPx,
+  preventDefault,
+  useOnMount,
+  useOnUnMount, getImageUrlCssValue
+} from "@repo/ui";
 
 export default function HomeTab() {
   const startGame = useStartGame();
@@ -37,7 +46,7 @@ export default function HomeTab() {
 function Levels({ levels }: { levels: Level[]; currentWorld: number }) {
   const { currentPosition, setIsPressed, changePosition } = useScrollCardList(
     0,
-    levels.length,
+    levels.length
   );
 
   const currentLevel = currentPosition + 1;
@@ -113,7 +122,7 @@ function LevelComponent({
   return (
     <div
       className={cn(
-        "flex flex-col items-center gap-0 drop-shadow-[1px_1px_1px_black] px-[12px] w-[100px]",
+        "flex flex-col items-center gap-0 drop-shadow-[1px_1px_1px_black] px-[12px] w-[100px]"
       )}
       style={{
         transform: `translateX(${25}px)`,
@@ -193,18 +202,10 @@ function Popin({ children, targetRef, closePopin }: PopinProps) {
         left: inPx(left + targetRef.current.offsetWidth / 2),
       }}
     >
-      <Box width={130} height={80} size={0.5} rarity="common">
-        <div
-          className="absolute w-full h-full z-10 blur-sm"
-          style={{
-            backgroundImage: `url('/${textureByRarity("rare")}')`,
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-          }}
-        />
+      <Box width={130} height={80} size={0.5} rarity="common" cover="rare">
         {children}
       </Box>
     </div>,
-    home,
+    home
   );
 }
