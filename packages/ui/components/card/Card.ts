@@ -86,7 +86,7 @@ export function getRealStrength(card: {
   }
 
   function multiAttack(score: number) {
-    return score + (card.effects.multiAttack ? dps * 0.8 : 0);
+    return score + (card.effects.multiAttack ? dps * 2.5 : 0);
   }
 
   function healPlacement(score: number) {
