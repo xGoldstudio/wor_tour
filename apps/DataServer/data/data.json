@@ -1,7 +1,7 @@
 {
   "cards": [
     {
-      "name": "Multi-eyes mud",
+      "name": "Multi-eyes Mud",
       "rarity": "common",
       "id": 1,
       "world": 1,
@@ -11,17 +11,17 @@
         {
           "effects": {},
           "cost": 3,
-          "illustration": "b4147047-9ff1-4a2a-a47b-592a97adc246.png"
+          "illustration": "card_1_level_1_1717529721890.png"
         },
         {
           "effects": {},
           "cost": 3,
-          "illustration": "card_1_level_2.png"
+          "illustration": "card_1_level_2_1717530044081.png"
         },
         {
           "effects": {},
           "cost": 3,
-          "illustration": "b91b2e66-ac72-4112-b2f2-e51fbbb953bf.png"
+          "illustration": "card_1_level_3_1717530116564.png"
         }
       ]
     },
@@ -40,7 +40,7 @@
             }
           },
           "cost": 3,
-          "illustration": "64a22304-9678-43df-b7f7-6ad26113c51a.png"
+          "illustration": "card_2_level_1_1717531255144.png"
         },
         {
           "effects": {
@@ -49,7 +49,7 @@
             }
           },
           "cost": 3,
-          "illustration": "d21cf246-3e67-415f-a33e-10045b708902.png"
+          "illustration": "card_2_level_2_1717531258110.png"
         },
         {
           "effects": {
@@ -58,7 +58,7 @@
             }
           },
           "cost": 3,
-          "illustration": "2ffdb0d9-0636-4582-a236-fc571650eabf.png"
+          "illustration": "card_2_level_3_1717531263090.png"
         }
       ]
     },
@@ -109,12 +109,12 @@
         {
           "effects": {},
           "cost": 2,
-          "illustration": "eaf8414a-ce94-4913-b504-c8a8cba63ecd.png"
+          "illustration": "card_4_level_1_1717531357516.png"
         },
         {
           "effects": {},
           "cost": 2,
-          "illustration": "bfc79e71-0269-4f59-9ecd-995180825537.png"
+          "illustration": "card_4_level_2_1717531361979.png"
         },
         {
           "effects": {
@@ -123,115 +123,126 @@
             }
           },
           "cost": 2,
-          "illustration": "c8c511be-84a4-4f3b-b301-21780f2a4517.png"
+          "illustration": "card_4_level_3_1717531367194.png"
         }
       ]
     },
     {
       "id": 5,
-      "name": "Common 5",
+      "name": "Crabvor Recruit",
       "rarity": "common",
       "world": 1,
       "worldIllustration": "/cards/worlds/1.png",
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.01,
+      "attackDefenseRatio": 0.2,
+      "speedDamageRatio": 0.4,
       "stats": [
         {
-          "cost": 9,
+          "cost": 3,
           "effects": {},
-          "illustration": null
+          "illustration": "card_5_level_1_1717532787493.png"
         },
         {
-          "cost": 9,
+          "cost": 3,
+          "effects": {},
+          "illustration": "card_5_level_2_1717532831361.png"
+        },
+        {
+          "cost": 3,
           "effects": {
-            "fightBack": {
-              "type": "fightBack"
+            "placementHeal": {
+              "type": "placementHeal",
+              "amount": 35
             }
           },
-          "illustration": null
-        },
-        {
-          "cost": 9,
-          "effects": {},
-          "illustration": null
+          "illustration": "card_5_level_3_1717532794506.png"
         }
       ]
     },
     {
       "id": 6,
-      "name": "Common 6",
+      "name": "Psychalgua Exo Mana",
       "rarity": "common",
       "world": 1,
       "worldIllustration": "/cards/worlds/1.png",
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.41,
+      "speedDamageRatio": 0.42,
       "stats": [
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_6_level_1_1717534152341.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_6_level_2_1717534163302.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_6_level_3_1717534167407.png"
         }
       ]
     },
     {
       "id": 7,
-      "name": "Common 7",
+      "name": "Crabvor Preceptor",
       "rarity": "common",
       "world": 1,
       "worldIllustration": "/cards/worlds/1.png",
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.4,
+      "speedDamageRatio": 0.85,
       "stats": [
         {
-          "cost": 1,
+          "cost": 5,
           "effects": {},
-          "illustration": null
+          "illustration": "card_7_level_1_1717535727870.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 5,
+          "effects": {
+            "placementHeal": {
+              "type": "placementHeal",
+              "amount": 60
+            }
+          },
+          "illustration": "card_7_level_2_1717535731862.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 5,
+          "effects": {
+            "placementHeal": {
+              "type": "placementHeal",
+              "amount": 100
+            }
+          },
+          "illustration": "card_7_level_3_1717535735398.png"
         }
       ]
     },
     {
       "id": 8,
-      "name": "Common 8",
+      "name": "Crabvor Elite",
       "rarity": "common",
       "world": 1,
       "worldIllustration": "/cards/worlds/1.png",
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.74,
+      "speedDamageRatio": 0.8,
       "stats": [
         {
-          "cost": 1,
+          "cost": 4,
           "effects": {},
-          "illustration": null
+          "illustration": "card_8_level_1_1717546932368.png"
         },
         {
-          "cost": 1,
+          "cost": 4,
           "effects": {},
-          "illustration": null
+          "illustration": "card_8_level_2_1717546935760.png"
         },
         {
-          "cost": 1,
+          "cost": 4,
           "effects": {},
-          "illustration": null
+          "illustration": "card_8_level_3_1717546938522.png"
         }
       ]
     },
@@ -306,17 +317,17 @@
         {
           "effects": {},
           "cost": 4,
-          "illustration": "b1a3376c-7bc9-40f0-b0ce-d36020de579b.png"
+          "illustration": "card_11_level_1_1717534294464.png"
         },
         {
           "effects": {},
           "cost": 4,
-          "illustration": "c8185349-679d-44cb-9b0a-58026008ce02.png"
+          "illustration": "card_11_level_2_1717534301963.png"
         },
         {
           "effects": {},
           "cost": 4,
-          "illustration": "7602df29-dad1-43de-b2a9-94754001d7d2.png"
+          "illustration": "card_11_level_3_1717534307249.png"
         }
       ]
     },
