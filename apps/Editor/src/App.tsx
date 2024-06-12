@@ -7,10 +7,8 @@ import {
   QueryClientProvider, useQuery
 } from "react-query";
 import useEditorStore from "./editor/store/EditorStore";
-import WorldsEditor from "./editor/features/worlds/Worlds";
 import WorldEditor from "./editor/features/worlds/World";
 import CardEditor from "./editor/features/card/CardEditor";
-import Editor from "./editor/features/Editor";
 import { EditorData } from "@repo/types";
 import EditorLayout from "./editor/Layout";
 import Progression from "./editor/features/progression/Progression";
@@ -53,14 +51,12 @@ function AppRouter() {
         path="/"
         element={<EditorLayout reloadData={data.refetch} />}
       >
-        <Route path="/" element={<Editor />} index />
+        <Route path="/" element={<Progression />} index />
         <Route
-          path="/worlds/:worldId/:cardId"
+          path="/:worldId/:cardId"
           element={<CardEditor />}
         />
-        <Route path="/worlds" element={<WorldsEditor />} />
-        <Route path="/worlds/:worldId" element={<WorldEditor />} />
-        <Route path="/progression" element={<Progression />} />
+        <Route path="/:worldId" element={<WorldEditor />} />
       </Route>
     </Routes>
   );

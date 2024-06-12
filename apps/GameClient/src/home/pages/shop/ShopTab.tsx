@@ -5,6 +5,7 @@ import useShopeStore from "@/home/store/shopStore";
 import Ribbon from "@/home/ui/Ribbon";
 import { Booster } from "./Booster";
 import { useEffect, useState } from "react";
+import { formatTime } from "@repo/ui";
 
 export default function ShopTab() {
   const boosters = usePlayerStore((state) => state.getAvailableBoosters());
@@ -52,17 +53,7 @@ function Timer({ targetTimestamp }: TimerProps) {
     return () => clearInterval(interval);
   }, [targetTimestamp]);
 
-  const formatTime = (time: number) => {
-    if (time <= 0) {
-      return "00:00:00";
-    }
-    const hours = Math.floor(time / 3600000);
-    const minutes = Math.floor((time % 3600000) / 60000);
-    const seconds = Math.floor((time % 60000) / 1000);
-    return `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-  };
+
 
   return <span>{formatTime(timeRemaining)}</span>;
 }

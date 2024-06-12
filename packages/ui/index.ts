@@ -21,5 +21,6 @@ export * from './lib/getImageUrl.ts';
 export * from './lib/getImageEffects.ts';
 export * from './lib/getStats.ts';
 export * from './lib/transformLevelStatInlevels.ts';
+export * from './lib/time.ts';
 export {default as textureByRarity} from './lib/textureByRarity.ts';
 export * from './lib/cubicBezier.ts';

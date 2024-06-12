@@ -1,9 +1,9 @@
-import { CardRarity, CardStat, EditorData, World } from "@repo/types";
+import { CardRarity, CardStat, EditorData, WorldStats } from "@repo/types";
 import { create } from "zustand";
 
 interface EditorStore {
   cards: CardStat[];
-  worlds: World[];
+  worlds: WorldStats[];
   getCard: (id: number) => CardStat | undefined;
   updateCard: (id: number) => (card: Partial<CardStat>) => void;
   deleteCard: (id: number) => void;
@@ -16,8 +16,8 @@ interface EditorStore {
 
   addWorld: () => number;
   removeLastWorld: (id: number) => void;
-  setWorld: (id: number) => (world: Partial<World>) => void;
-  getWorld: (id: number) => World | undefined;
+  setWorld: (id: number) => (world: Partial<WorldStats>) => void;
+  getWorld: (id: number) => WorldStats | undefined;
 }
 
 const useEditorStore = create<EditorStore>()((set, get) => ({
@@ -68,8 +68,10 @@ const useEditorStore = create<EditorStore>()((set, get) => ({
           name: "New world",
           illustration: null,
           cardBackground: null,
+          numberOfLevels: 0,
+          baseGoldReward: 1,
+          baseXpReward: 1,
           levels: [
-            { id: 1, world: 1, reward: { gold: 0, xp: 0 }, strength: 0 },
           ],
           description: "New world description",
         },
@@ -94,7 +96,7 @@ const useEditorStore = create<EditorStore>()((set, get) => ({
   },
   getWorld: (id: number) => get().worlds.find((world) => world.id === id),
   setWorld: (id: number) => {
-    return (world: Partial<World>) =>
+    return (world: Partial<WorldStats>) =>
       set((state) => ({
         worlds: state.worlds.map((w) => (w.id === id ? { ...w, ...world } : w)),
         isEditorStale: true,

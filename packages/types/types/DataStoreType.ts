@@ -1,20 +1,19 @@
 export interface EditorData {
   cards: CardStat[];
-  worlds: World[];
+  worlds: WorldStats[];
 }
 
-export interface World {
+export interface WorldStats {
   id: number;
   illustration: string | null;
   cardBackground: string | null;
   name: string;
   description: string;
-  levels: Level[];
 }
 
 export interface Level {
   id: number;
-  world: 1;
+  world: number;
   reward: {
     gold: number;
     xp: number;

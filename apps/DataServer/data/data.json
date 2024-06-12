@@ -448,18 +448,6 @@
       "id": 1,
       "name": "Crabvor Island",
       "illustration": "world_1_illustration_1717283672277.png",
-      "levels": [
-        {
-          "world": 1,
-          "id": 1,
-          "reward": {
-            "gold": 0,
-            "xp": 0
-          },
-          "strength": 0
-        }
-      ],
-
       "cardBackground": "world_1_cardBackground_1717283375227.png",
       "description": "A dangerous island where a creature from the sea can surprise you at anytime anywhere..."
     }

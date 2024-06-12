@@ -1,29 +1,38 @@
-import { cubicBezier, getStrengthMax, getStrengthMin } from "@repo/ui";
+import { ceilToValue, cubicBezier, getStrengthMax, getStrengthMin } from "@repo/ui";
 import * as _ from "lodash";
+import { BoosterTypeDeclartion, boosters, getAmountBoosterName, getRarityBoosterName, getWorldBoosterName } from "./ComputeBoosterProgress";
+import { numberOfLevels } from "./consts";
 
 interface World {
-  id: number;
-  minLevel: number;
-  maxLevel: number;
+	id: number;
+	minLevel: number;
+	maxLevel: number;
 }
 
 function buildLevel(word: number) {
-  return {
-    id: word,
-    minLevel: getStrengthMin(word),
-    maxLevel: getStrengthMax(word),
-  };
+	return {
+		id: word,
+		minLevel: getStrengthMin(word),
+		maxLevel: getStrengthMax(word),
+	};
 }
 
 const worlds: World[] = _.range(1, 6).map(buildLevel);
-
-const numberOfLevels = 20;
 
 const endPercentage = 0.45;
 const beginPercentage = 0.06;
 const gapPercentage = (1 - endPercentage) / (worlds.length - 1);
 
-const levels: { strength: number, world: number, level: number, id: number }[] = [];
+const baseGoldReward = 1500;
+const baseXpReward = 0;
+
+const levels: {
+	strength: number, world: number, level: number, id: number, reward: {
+		gold: number,
+		xp: number,
+		booster: BoosterTypeDeclartion | null,
+	}
+}[] = [];
 
 worlds.forEach((world) => {
 	// world 1 have a different begin percentage and a different easing
@@ -40,8 +49,8 @@ worlds.forEach((world) => {
 			usingI = numberOfLevels;
 		}
 		return world.id === 1
-		? cubicBezier(usingI / numberOfLevels, 0, 0.1, 0.3, 1)
-		: cubicBezier(usingI / numberOfLevels, 0, 0.5, 0.2, 1);
+			? cubicBezier(usingI / numberOfLevels, 0, 0.1, 0.3, 1)
+			: cubicBezier(usingI / numberOfLevels, 0, 0.5, 0.2, 1);
 	};
 	{
 		_.range(numberOfLevels).map((i) => {
@@ -53,9 +62,32 @@ worlds.forEach((world) => {
 
 			const strength = minWorld + (maxWorld - minWorld) * progress;
 
-			levels.push({ id: (world.id - 1) * numberOfLevels + i, world: world.id, level: i + 1, strength: strength });
+			const isBoss = i === numberOfLevels - 1;
+			const isSemiBoss = i === numberOfLevels / 2 - 1;
+			let goldReward = baseGoldReward;
+			if (isSemiBoss) {
+				goldReward = baseGoldReward * 5;
+			} else if (isBoss) {
+				goldReward = baseGoldReward * 7;
+			}
+
+			levels.push({
+				id: (world.id - 1) * numberOfLevels + i, world: world.id, level: i + 1, strength: strength, reward: {
+					gold: ceilToValue(100)(goldReward * 1.2 ** (world.id - 1)),
+					xp: baseXpReward,
+					booster: boosters.find((booster) => {
+						let boosterName = getWorldBoosterName(world.id);
+						if (isSemiBoss) {
+							boosterName = getRarityBoosterName(world.id);
+						} else if (isBoss) {
+							boosterName = getAmountBoosterName(world.id);
+						}
+						return booster.name === boosterName;
+					}) || null,
+				}
+			});
 		});
 	}
 });
 
-export { worlds, numberOfLevels, levels};
+export { worlds, levels };

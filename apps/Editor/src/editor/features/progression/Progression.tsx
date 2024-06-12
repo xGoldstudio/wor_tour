@@ -1,25 +1,43 @@
-import { inPx } from "@repo/ui";
+import { formatTime, inPx, textureByRarity } from "@repo/ui";
 import React, { useMemo, useState } from "react";
 import * as _ from "lodash";
-import { levels, numberOfLevels, worlds } from "./ComputeProgressionLevels";
+import { levels, worlds } from "./ComputeProgressionLevels";
+import {
+  BoosterTypeDeclartion,
+  allRarites,
+  unlockedIndex,
+} from "./ComputeBoosterProgress";
+import { numberOfLevels } from "./consts";
+import { Link } from "react-router-dom";
 
 export default function Progression() {
   const [currentLevelHover, setCurrentLevelHover] = useState<null | number>(
     null
   );
-  const width = 1300;
-  const height = width / 2;
+  const [currentUnlockBoosterHover, setCurrentUnlockBoosterHover] =
+    useState<null | {
+      booster: BoosterTypeDeclartion;
+      coords: { x: number; y: number };
+    }>(null);
+  const padding = 15;
+  const width = 1300 + padding * 2;
+  const height = width / 2 + padding * 2;
   const w = 10;
   const h = 2;
-  const top = 20;
-  const bottom = height - h;
-  const worldW = width / worlds.length;
+  const top = 20 + padding;
+  const left = padding;
+  const bottom = height - h - padding;
+  const worldW = (width - padding * 2) / worlds.length;
   const min = _.minBy(worlds, "minLevel")?.minLevel || 0;
   const max = _.maxBy(worlds, "maxLevel")?.maxLevel || 0;
   const range = max - min;
   const scale = (bottom - top) / range;
   function computePositionFromValue(value: number) {
     return bottom + (min - value) * scale;
+  }
+
+  function getX(world: number) {
+    return left + (world - 1) * worldW;
   }
 
   function Value(x: number, y: number, value: number) {
@@ -50,7 +68,7 @@ export default function Progression() {
   const allPoints: { x: number; y: number }[] = useMemo(
     () =>
       levels.map((level) => {
-        const startX = (level.world - 1) * worldW;
+        const startX = getX(level.world);
         const x = startX + ((level.level - 1) / numberOfLevels) * worldW;
         const y = computePositionFromValue(level.strength);
         return { x, y };
@@ -62,8 +80,7 @@ export default function Progression() {
 
   return (
     <div className="flex items-center justify-center gap-8 flex-col pt-8">
-      <h2 className="text-2xl">Levels Progression</h2>
-      <div className="mt-16 bg-slate-100 rounded-md p-4">
+      <div className="mt-16 bg-slate-100 rounded-md">
         <div className="relative">
           {currentLevelHover !== null && (
             <div
@@ -78,6 +95,69 @@ export default function Progression() {
               <p>World {levels[currentLevelHover].world}</p>
               <p>Level {levels[currentLevelHover].level}</p>
               <p>Strength {levels[currentLevelHover].strength}</p>
+              <div className="w-full h-[1px] bg-black my-1" />
+              <p>Gold: {levels[currentLevelHover].reward.gold}</p>
+              <p>Xp: {levels[currentLevelHover].reward.xp}</p>
+              <p>Booster: {levels[currentLevelHover].reward.booster?.name}</p>
+            </div>
+          )}
+          {currentUnlockBoosterHover !== null && (
+            <div
+              className="absolute top-0 left-0 bg-slate-50 pointer-events-none p-2 rounded-md text-xs"
+              style={{
+                left: inPx(currentUnlockBoosterHover.coords.x),
+                top: inPx(currentUnlockBoosterHover.coords.y),
+                transform: "translate(-50%, calc(-100% - 10px))",
+              }}
+            >
+              <p className="font-bold">
+                {currentUnlockBoosterHover.booster.name}
+              </p>
+              <p>{currentUnlockBoosterHover.booster.description}</p>
+              <p>Cost: {currentUnlockBoosterHover.booster.cost}</p>
+              <p>
+                Worlds: [
+                {currentUnlockBoosterHover.booster.contain.worlds.join(",")}]
+              </p>
+              {currentUnlockBoosterHover.booster.purchaseDelayInMs !==
+                undefined && (
+                <p>
+                  Purchase Delay:{" "}
+                  {formatTime(
+                    currentUnlockBoosterHover.booster.purchaseDelayInMs
+                  )}
+                </p>
+              )}
+              <div className="flex items-center w-full gap-2">
+                <p>Rarities Drop:</p>
+                <div className="w-[200px] h-[16px] flex gap-1 bg-slate-500 p-[2px] px-1 rounded-sm">
+                  {allRarites.map((rarity) => (
+                    <React.Fragment key={rarity}>
+                      {currentUnlockBoosterHover.booster.contain.rarities[
+                        rarity
+                      ] ? (
+                        <div
+                          className="h-full rounded-sm relative overflow-hidden bg-white"
+                          style={{
+                            width: `${currentUnlockBoosterHover.booster.contain.rarities[rarity]}%`,
+                          }}
+                        >
+                          <div
+                            className="absolute w-full h-full top-0 left-0 blur-[1px]"
+                            style={{
+                              backgroundImage: `url(/${textureByRarity(rarity)})`,
+                              backgroundSize: "cover",
+                              backgroundPosition: "center",
+                            }}
+                          />
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
           <svg
@@ -87,29 +167,39 @@ export default function Progression() {
             }}
             viewBox={`0 0 ${width} ${height}`}
           >
-            {worlds.map((level) => {
-              const startX = (level.id - 1) * worldW;
-              const endY = computePositionFromValue(level.minLevel);
-              const startY = computePositionFromValue(level.maxLevel);
+            {worlds.map((world) => {
+              const startX = getX(world.id);
+              const endY = computePositionFromValue(world.minLevel);
+              const startY = computePositionFromValue(world.maxLevel);
               return (
-                <React.Fragment key={level.id}>
+                <React.Fragment key={world.id}>
                   <rect
                     x={startX}
                     y={startY}
                     width={worldW}
                     height={endY - startY}
-                    fill={`rgba(${142}, ${175}, ${214}, ${(level.maxLevel - min) / range})`}
+                    fill={`rgba(${142}, ${175}, ${214}, ${(world.maxLevel - min) / range})`}
                   />
-                  <text x={startX + worldW / 2} y={top - 5} textAnchor="middle">
-                    World {level.id}
-                  </text>
-                  {Value(startX, startY, level.maxLevel)}
-                  {Value(startX, endY, level.minLevel)}
+                  <Link
+                    to={`/${world.id}`}
+                    className="hover:underline decoration-solid py-1"
+                  >
+                    <text
+                      x={startX + worldW / 2}
+                      y={top - 5}
+                      textAnchor="middle"
+                    >
+                      World {world.id}
+                    </text>
+                  </Link>
+                  {Value(startX, startY - h / 2, world.maxLevel)}
+                  {Value(startX, endY - h / 2, world.minLevel)}
                 </React.Fragment>
               );
             })}
             {allPoints.map((point, i) => {
               const nextPoint = allPoints[i + 1];
+              const unlockedBoosters = unlockedIndex[levels[i].id] || [];
 
               return (
                 <React.Fragment key={`${point.x}_${point.y}`}>
@@ -123,6 +213,25 @@ export default function Progression() {
                     />
                   )}
                   <Point key={i} x={point.x} y={point.y} id={i} />
+                  {unlockedBoosters.map((booster, i) => {
+                    const coords = {
+                      x: point.x,
+                      y: point.y - (i + 1) * 20,
+                    };
+                    return (
+                      <circle
+                        onMouseEnter={() =>
+                          setCurrentUnlockBoosterHover({ booster, coords })
+                        }
+                        onMouseLeave={() => setCurrentUnlockBoosterHover(null)}
+                        key={booster.name}
+                        cx={coords.x}
+                        cy={coords.y}
+                        r={4.5}
+                        fill="blue"
+                      />
+                    );
+                  })}
                 </React.Fragment>
               );
             })}
