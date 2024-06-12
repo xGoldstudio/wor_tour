@@ -1,6 +1,6 @@
+import { cubicBezier } from '@repo/ui';
 import { Animation3dType } from "@/game/stores/gameStateStore";
 import * as THREE from "three";
-import { cubicBezier } from "./timeline";
 
 const ATTACK_ANIMATION_TIMING = 20;
 

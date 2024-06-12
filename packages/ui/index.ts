@@ -20,4 +20,6 @@ export * from './lib/lifecycle.ts';
 export * from './lib/getImageUrl.ts';
 export * from './lib/getImageEffects.ts';
 export * from './lib/getStats.ts';
+export * from './lib/transformLevelStatInlevels.ts';
 export {default as textureByRarity} from './lib/textureByRarity.ts';
+export * from './lib/cubicBezier.ts';

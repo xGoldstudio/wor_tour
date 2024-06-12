@@ -13,6 +13,9 @@ export default function Editor() {
       <Button action={() => navigate("/worlds")}>
         Worlds ({worlds.length})
       </Button>
+      <Button action={() => navigate("/progression")}>
+        Progression
+      </Button>
     </div>
   );
 }
