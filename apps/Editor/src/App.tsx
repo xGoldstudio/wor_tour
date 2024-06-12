@@ -13,6 +13,7 @@ import CardEditor from "./editor/features/card/CardEditor";
 import Editor from "./editor/features/Editor";
 import { EditorData } from "@repo/types";
 import EditorLayout from "./editor/Layout";
+import Progression from "./editor/features/progression/Progression";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +60,7 @@ function AppRouter() {
         />
         <Route path="/worlds" element={<WorldsEditor />} />
         <Route path="/worlds/:worldId" element={<WorldEditor />} />
+        <Route path="/progression" element={<Progression />} />
       </Route>
     </Routes>
   );

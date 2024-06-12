@@ -1,38 +1,26 @@
-import { cubicBezier, getStrengthMax, getStrengthMin, inPx } from "@repo/ui";
-import React, { useState } from "react";
+import { inPx } from "@repo/ui";
+import React, { useMemo, useState } from "react";
 import * as _ from "lodash";
-
-interface Level {
-  id: number;
-  minLevel: number;
-  maxLevel: number;
-}
-
-function buildLevel(word: number) {
-  return {
-    id: word,
-    minLevel: getStrengthMin(word),
-    maxLevel: getStrengthMax(word),
-  };
-}
+import { levels, numberOfLevels, worlds } from "./ComputeProgressionLevels";
 
 export default function Progression() {
-  const [levels, setLevels] = useState<Level[]>(_.range(1, 6).map(buildLevel));
   const [currentLevelHover, setCurrentLevelHover] = useState<null | number>(
     null
   );
-  const [numberOfLevels, setNumberOfLevels] = useState(20);
   const width = 1300;
   const height = width / 2;
   const w = 10;
   const h = 2;
   const top = 20;
   const bottom = height - h;
-  const worldW = width / levels.length;
-  const min = _.minBy(levels, "minLevel")?.minLevel || 0;
-  const max = _.maxBy(levels, "maxLevel")?.maxLevel || 0;
+  const worldW = width / worlds.length;
+  const min = _.minBy(worlds, "minLevel")?.minLevel || 0;
+  const max = _.maxBy(worlds, "maxLevel")?.maxLevel || 0;
   const range = max - min;
   const scale = (bottom - top) / range;
+  function computePositionFromValue(value: number) {
+    return bottom + (min - value) * scale;
+  }
 
   function Value(x: number, y: number, value: number) {
     return (
@@ -59,51 +47,18 @@ export default function Progression() {
     );
   }
 
-  const allPoints: { x: number; y: number }[] = [];
-
-  const endPercentage = 0.45;
-  const beginPercentage = 0.06;
-  const gapPercentage = (1 - endPercentage) / (levels.length - 1);
-
-  levels.forEach((level) => {
-    const startX = (level.id - 1) * worldW;
-    const startY = bottom + (min - level.minLevel) * scale;
-    const endY = bottom + (min - level.maxLevel) * scale;
-
-    // world 1 have a different begin percentage and a different easing
-    const computedBeginPercentage =
-      (level.id > 1 ? beginPercentage : 0) + gapPercentage * (level.id - 1);
-    const computedEndPercentage =
-      endPercentage + gapPercentage * (level.id - 1);
-
-    const ajustedStartY = startY - (startY - endY) * computedBeginPercentage;
-    const ajustedEndY = endY + (startY - endY) * (1 - computedEndPercentage);
-
-    const worldRange = ajustedStartY - ajustedEndY;
-    const worldScale = worldRange / (numberOfLevels - 1);
-
-    const getProgress = (i: number) => {
-      const t =
-        level.id === 1
-          ? cubicBezier(i / numberOfLevels, 0, 0.1, 0.3, 1)
-          : cubicBezier(i / numberOfLevels, 0, 0.5, 0.2, 1);
-      return Math.min(t * numberOfLevels, numberOfLevels - 1);
-    };
-    {
-      _.range(numberOfLevels).map((i) => {
-        const x = startX + (i / numberOfLevels) * worldW;
-        let y = ajustedStartY - worldScale * getProgress(i);
-        if (i + 1 === numberOfLevels / 2) {
-          y =
-            ajustedStartY -
-            worldScale * getProgress(i + (level.id === 1 ? 2 : 3));
-        } else if (i + 1 === numberOfLevels) {
-          y = ajustedEndY;
-        }
-        allPoints.push({ x, y });
-      });
-    }
-  });
+  const allPoints: { x: number; y: number }[] = useMemo(
+    () =>
+      levels.map((level) => {
+        const startX = (level.world - 1) * worldW;
+        const x = startX + ((level.level - 1) / numberOfLevels) * worldW;
+        const y = computePositionFromValue(level.strength);
+        return { x, y };
+      }),
+    // since levels is a const it should only trigger once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [levels]
+  );
 
   return (
     <div className="flex items-center justify-center gap-8 flex-col pt-8">
@@ -119,9 +74,10 @@ export default function Progression() {
                 transform: "translate(-50%, calc(-100% - 10px))",
               }}
             >
-              <p>World {Math.ceil(currentLevelHover / numberOfLevels)}</p>
-              <p>Level {(currentLevelHover % numberOfLevels) + 1}</p>
-              <p>Strength {1}</p>
+              <p>Id {levels[currentLevelHover].id}</p>
+              <p>World {levels[currentLevelHover].world}</p>
+              <p>Level {levels[currentLevelHover].level}</p>
+              <p>Strength {levels[currentLevelHover].strength}</p>
             </div>
           )}
           <svg
@@ -131,10 +87,10 @@ export default function Progression() {
             }}
             viewBox={`0 0 ${width} ${height}`}
           >
-            {levels.map((level) => {
+            {worlds.map((level) => {
               const startX = (level.id - 1) * worldW;
-              const endY = bottom + (min - level.minLevel) * scale;
-              const startY = bottom + (min - level.maxLevel) * scale;
+              const endY = computePositionFromValue(level.minLevel);
+              const startY = computePositionFromValue(level.maxLevel);
               return (
                 <React.Fragment key={level.id}>
                   <rect
@@ -156,7 +112,7 @@ export default function Progression() {
               const nextPoint = allPoints[i + 1];
 
               return (
-                <>
+                <React.Fragment key={`${point.x}_${point.y}`}>
                   {nextPoint && (
                     <line
                       x1={point.x}
@@ -167,7 +123,7 @@ export default function Progression() {
                     />
                   )}
                   <Point key={i} x={point.x} y={point.y} id={i} />
-                </>
+                </React.Fragment>
               );
             })}
           </svg>
