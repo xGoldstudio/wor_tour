@@ -16,7 +16,7 @@ export default function WorldEditor() {
           cards: state.getCardsByWorld(worldId),
           setWorld: state.setWorld(worldId),
         }
-      : null,
+      : null
   );
 
   if (!editorStore || !editorStore.world) {

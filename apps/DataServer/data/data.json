@@ -440,6 +440,1506 @@
           "illustration": "58f047ec-8427-474b-92ff-a0074591705a.png"
         }
       ]
+    },
+    {
+      "id": 16,
+      "name": "common card 1",
+      "rarity": "common",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "common card 2",
+      "rarity": "common",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "common card 3",
+      "rarity": "common",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "name": "common card 4",
+      "rarity": "common",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "name": "common card 5",
+      "rarity": "common",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "common card 6",
+      "rarity": "common",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "name": "common card 7",
+      "rarity": "common",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "name": "common card 8",
+      "rarity": "common",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "name": "rare card 1",
+      "rarity": "rare",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "name": "rare card 2",
+      "rarity": "rare",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "name": "rare card 3",
+      "rarity": "rare",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "name": "rare card 4",
+      "rarity": "rare",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "name": "epic card 1",
+      "rarity": "epic",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "name": "epic card 2",
+      "rarity": "epic",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "name": "legendary card 1",
+      "rarity": "legendary",
+      "world": 2,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "name": "common card 1",
+      "rarity": "common",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "name": "common card 2",
+      "rarity": "common",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "name": "common card 3",
+      "rarity": "common",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "name": "common card 4",
+      "rarity": "common",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "name": "common card 5",
+      "rarity": "common",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "name": "common card 6",
+      "rarity": "common",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "name": "common card 7",
+      "rarity": "common",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "name": "common card 8",
+      "rarity": "common",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "name": "rare card 1",
+      "rarity": "rare",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "name": "rare card 2",
+      "rarity": "rare",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "name": "rare card 3",
+      "rarity": "rare",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "name": "rare card 4",
+      "rarity": "rare",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "name": "epic card 1",
+      "rarity": "epic",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "name": "epic card 2",
+      "rarity": "epic",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "name": "legendary card 1",
+      "rarity": "legendary",
+      "world": 3,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "name": "common card 1",
+      "rarity": "common",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "name": "common card 2",
+      "rarity": "common",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "name": "common card 3",
+      "rarity": "common",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "name": "common card 4",
+      "rarity": "common",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "name": "common card 5",
+      "rarity": "common",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "name": "common card 6",
+      "rarity": "common",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "name": "common card 7",
+      "rarity": "common",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "name": "common card 8",
+      "rarity": "common",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "name": "rare card 1",
+      "rarity": "rare",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "name": "rare card 2",
+      "rarity": "rare",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "name": "rare card 3",
+      "rarity": "rare",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "name": "rare card 4",
+      "rarity": "rare",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "name": "epic card 1",
+      "rarity": "epic",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "name": "epic card 2",
+      "rarity": "epic",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "name": "legendary card 1",
+      "rarity": "legendary",
+      "world": 4,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "name": "common card 1",
+      "rarity": "common",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "name": "common card 2",
+      "rarity": "common",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 63,
+      "name": "common card 3",
+      "rarity": "common",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 64,
+      "name": "common card 4",
+      "rarity": "common",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "name": "common card 5",
+      "rarity": "common",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "name": "common card 6",
+      "rarity": "common",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "name": "common card 7",
+      "rarity": "common",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "name": "common card 8",
+      "rarity": "common",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "name": "rare card 1",
+      "rarity": "rare",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "name": "rare card 2",
+      "rarity": "rare",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "name": "rare card 3",
+      "rarity": "rare",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 72,
+      "name": "rare card 4",
+      "rarity": "rare",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "name": "epic card 1",
+      "rarity": "epic",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 74,
+      "name": "epic card 2",
+      "rarity": "epic",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "name": "legendary card 1",
+      "rarity": "legendary",
+      "world": 5,
+      "attackDefenseRatio": 0.5,
+      "speedDamageRatio": 0.5,
+      "stats": [
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        },
+        {
+          "cost": 1,
+          "effects": {},
+          "illustration": null
+        }
+      ]
     }
   ],
 
@@ -448,20 +1948,56 @@
       "id": 1,
       "name": "Crabvor Island",
       "illustration": "world_1_illustration_1717283672277.png",
-      "levels": [
-        {
-          "world": 1,
-          "id": 1,
-          "reward": {
-            "gold": 0,
-            "xp": 0
-          },
-          "strength": 0
-        }
-      ],
-
       "cardBackground": "world_1_cardBackground_1717283375227.png",
       "description": "A dangerous island where a creature from the sea can surprise you at anytime anywhere..."
+    },
+    {
+      "id": 2,
+      "name": "Krag Desert",
+      "illustration": "world_2_illustration_1718289710898.png",
+      "cardBackground": null,
+      "numberOfLevels": 0,
+      "baseGoldReward": 1,
+      "baseXpReward": 1,
+      "levels": [],
+
+      "description": "New world description"
+    },
+    {
+      "id": 3,
+      "name": "Human Kingdom",
+      "illustration": null,
+      "cardBackground": null,
+      "numberOfLevels": 0,
+      "baseGoldReward": 1,
+      "baseXpReward": 1,
+      "levels": [],
+
+      "description": "New world description"
+    },
+    {
+      "id": 4,
+      "name": "Mutant Underworld",
+      "illustration": null,
+      "cardBackground": null,
+      "numberOfLevels": 0,
+      "baseGoldReward": 1,
+      "baseXpReward": 1,
+      "levels": [],
+
+      "description": "New world description"
+    },
+    {
+      "id": 5,
+      "name": "Dark Magic Cult Castle",
+      "illustration": null,
+      "cardBackground": null,
+      "numberOfLevels": 0,
+      "baseGoldReward": 1,
+      "baseXpReward": 1,
+      "levels": [],
+
+      "description": "New world description"
     }
   ]
 }

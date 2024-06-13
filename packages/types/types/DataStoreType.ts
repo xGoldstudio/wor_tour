@@ -1,25 +1,43 @@
 export interface EditorData {
   cards: CardStat[];
-  worlds: World[];
+  worlds: WorldStats[];
 }
 
-export interface World {
+export interface WorldStats {
   id: number;
   illustration: string | null;
   cardBackground: string | null;
   name: string;
   description: string;
-  levels: Level[];
+}
+
+export interface BoosterTypeDeclartion {
+	name: string;
+	cost: number;
+	description: string;
+	purchaseDelayInMs?: number;
+	unlockCondition: {
+		world: number;
+		level?: number;
+	};
+	contain: {
+		worlds: number[];
+		rarities: Record<CardRarity, number>;
+		unitAmount: number;
+	};
 }
 
 export interface Level {
-  id: number;
-  world: 1;
+  strength: number,
+  world: number,
+  level: number,
+  id: number,
+	chest: "common" | "rare" | "epic",
   reward: {
-    gold: number;
-    xp: number;
-  };
-  strength: number;
+    gold: number,
+    xp: number,
+    booster: BoosterTypeDeclartion | null,
+  }
 }
 
 export interface CardStat {
