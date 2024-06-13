@@ -36,6 +36,9 @@ interface PlayerStore {
 
   addGold: (amount: number) => void;
   spendGold: (amount: number) => void;
+
+  lastCompletedLevel: number;
+  completeNextLevel: () => void;
 }
 
 const defaultCollection: Map<number, CollectionCard> = new Map();
@@ -61,6 +64,7 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
     ...findCard(id, get().getCollectionInfo(id)!.level),
     isInDeck: get().deck.includes(id),
   }),
+  lastCompletedLevel: -1,
 
   removeCardFromDeck: (id: number) =>
     set((state) => ({ deck: state.deck.filter((cardId) => cardId !== id) })),
@@ -159,6 +163,8 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   addGold: (amount: number) => set((state) => ({ gold: state.gold + amount })),
   spendGold: (amount: number) =>
     set((state) => ({ gold: state.gold - amount })),
+
+  completeNextLevel: () => set((state) => ({ lastCompletedLevel: state.lastCompletedLevel + 1 })),
 }));
 
 export default usePlayerStore;

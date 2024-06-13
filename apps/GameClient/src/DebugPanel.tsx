@@ -2,7 +2,10 @@ import { DebugButton } from "./game/GameDebugPanel";
 import usePlayerStore from "./home/store/playerStore";
 
 export default function DebugPanel() {
-  const { addGold } = usePlayerStore((state) => ({ addGold: state.addGold }));
+  const { addGold, completeNextLevel } = usePlayerStore((state) => ({
+    addGold: state.addGold,
+    completeNextLevel: state.completeNextLevel,
+  }));
 
   return (
     <div className="fixed right-2 top-2 border-2 border-white text-white px-4 py-2 flex flex-col gap-4">
@@ -11,6 +14,9 @@ export default function DebugPanel() {
         <DebugButton onClick={() => addGold(1000000)}>
           Give 1 000 000 gold
         </DebugButton>
+      </div>
+      <div className="flex gap-4">
+        <DebugButton onClick={completeNextLevel}>Complete next level</DebugButton>
       </div>
     </div>
   );

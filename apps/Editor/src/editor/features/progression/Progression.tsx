@@ -1,14 +1,9 @@
-import { formatTime, inPx, textureByRarity } from "@repo/ui";
+import { allRarites, formatTime, inPx, levels, textureByRarity, unlockedIndex, worlds } from "@repo/ui";
 import React, { useMemo, useState } from "react";
 import * as _ from "lodash";
-import { levels, worlds } from "./ComputeProgressionLevels";
-import {
-  BoosterTypeDeclartion,
-  allRarites,
-  unlockedIndex,
-} from "./ComputeBoosterProgress";
 import { numberOfLevels } from "./consts";
 import { Link } from "react-router-dom";
+import { BoosterTypeDeclartion } from "@repo/types";
 
 export default function Progression() {
   const [currentLevelHover, setCurrentLevelHover] = useState<null | number>(

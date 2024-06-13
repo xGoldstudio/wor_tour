@@ -1,23 +1,7 @@
-import { CardRarity } from "@repo/types";
+import { BoosterTypeDeclartion, CardRarity } from "@repo/types";
 import { ceilToValue } from "@repo/ui";
 import * as _ from "lodash";
-import { numberOfLevels } from "./consts";
-
-export interface BoosterTypeDeclartion {
-	name: string;
-	cost: number;
-	description: string;
-	purchaseDelayInMs?: number;
-	unlockCondition: {
-		world: number;
-		level?: number;
-	};
-	contain: {
-		worlds: number[];
-		rarities: Record<CardRarity, number>;
-		unitAmount: number;
-	};
-}
+import { numberOfLevels } from "../../../apps/Editor/src/editor/features/progression/consts";
 
 const baseCost = 1000;
 const ordinals = ["first", "second", "third", "fourth", "fifth"];

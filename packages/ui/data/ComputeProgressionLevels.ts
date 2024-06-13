@@ -1,7 +1,8 @@
 import { ceilToValue, cubicBezier, getStrengthMax, getStrengthMin } from "@repo/ui";
 import * as _ from "lodash";
-import { BoosterTypeDeclartion, boosters, getAmountBoosterName, getRarityBoosterName, getWorldBoosterName } from "./ComputeBoosterProgress";
-import { numberOfLevels } from "./consts";
+import { boosters, getAmountBoosterName, getRarityBoosterName, getWorldBoosterName } from "./ComputeBoosterProgress";
+import { numberOfLevels } from "../../../apps/Editor/src/editor/features/progression/consts";
+import { Level } from "@repo/types";
 
 interface World {
 	id: number;
@@ -26,13 +27,7 @@ const gapPercentage = (1 - endPercentage) / (worlds.length - 1);
 const baseGoldReward = 1500;
 const baseXpReward = 0;
 
-const levels: {
-	strength: number, world: number, level: number, id: number, reward: {
-		gold: number,
-		xp: number,
-		booster: BoosterTypeDeclartion | null,
-	}
-}[] = [];
+const levels: Level[] = [];
 
 worlds.forEach((world) => {
 	// world 1 have a different begin percentage and a different easing
@@ -72,7 +67,11 @@ worlds.forEach((world) => {
 			}
 
 			levels.push({
-				id: (world.id - 1) * numberOfLevels + i, world: world.id, level: i + 1, strength: strength, reward: {
+				id: (world.id - 1) * numberOfLevels + i,
+				world: world.id, level: i + 1,
+				strength: strength,
+				chest: isBoss ? "epic" : isSemiBoss ? "rare" : "common",
+				reward: {
 					gold: ceilToValue(100)(goldReward * 1.2 ** (world.id - 1)),
 					xp: baseXpReward,
 					booster: boosters.find((booster) => {

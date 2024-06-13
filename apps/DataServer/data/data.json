@@ -1954,7 +1954,7 @@
     {
       "id": 2,
       "name": "Krag Desert",
-      "illustration": null,
+      "illustration": "world_2_illustration_1718289710898.png",
       "cardBackground": null,
       "numberOfLevels": 0,
       "baseGoldReward": 1,
