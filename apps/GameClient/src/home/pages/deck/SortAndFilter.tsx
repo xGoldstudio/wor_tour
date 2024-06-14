@@ -4,9 +4,6 @@ import "rc-slider/assets/index.css";
 import { useState } from "react";
 import { ActiveFilters, CardFilters, filters } from "./cardFilters";
 import { CardSorts, sorts } from "./cardSorts";
-import { CoverModal } from "@/home/ui/modal";
-import { CardIllustartion } from "../../../../../../packages/ui/components/card/CardBorder";
-import { div } from "three/examples/jsm/nodes/Nodes.js";
 
 interface SortModalProps {
   setActualSort: (sort: CardSorts) => void;
@@ -161,9 +158,10 @@ export function SortAndFilterBox({
 }: SortAndFilterBoxProps) {
   const [sortIsOpen, setSortIsOpen] = useState(false);
   const [filterIsOpen, setFilterIsOpen] = useState(false);
+  const isFIlter = !!setActualFilter;
   return (
     <div
-      className={`${!!setActualFilter ? "w-full h-6 flex -top-4 justify-center items-center" : "-mb-[4.5rem] -ml-60 w-full flex justify-center items-center z-10"}`}
+      className={`${isFIlter ? "w-full h-6 flex -top-4 justify-center items-center" : "-mb-[4.5rem] -ml-60 w-full flex justify-center items-center z-10"}`}
     >
       <div>
         <button
@@ -196,7 +194,7 @@ export function SortAndFilterBox({
       )}
       {sortIsOpen && (
         <SortModal
-          deck={!!setActualFilter}
+          deck={isFIlter}
           setActualSort={setActualSort}
           actualSort={actualSort}
           closeModal={() => setSortIsOpen(false)}
