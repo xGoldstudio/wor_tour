@@ -1,43 +1,72 @@
-import ScrollContainer from "react-indiana-drag-scroll";
-import { useState } from "react";
-import CardModal from "./CardModal";
 import usePlayerStore from "@/home/store/playerStore";
-import * as _ from "lodash";
 import { Box, Button, ManaBall, preventDefault } from "@repo/ui";
+import * as _ from "lodash";
+import "rc-slider/assets/index.css";
+import { useState } from "react";
+import ScrollContainer from "react-indiana-drag-scroll";
 import CardBorder, {
   CardContentIllustartion,
   InnerBord,
 } from "../../../../../../packages/ui/components/card/CardBorder";
-
-function SortAndFilterBox() {
-  return (
-    <div className="absolute w-20 h-6 flex border-2  border-red-600 -top-4 justify-between items-center">
-      <button>Sort</button>
-      <button>Filter</button>
-    </div>
-  );
-}
+import { ActiveFilters, filters } from "./cardFilters";
+import CardModal from "./CardModal";
+import { CardSorts, sorts } from "./cardSorts";
+import { ShowStat } from "./ShowStat";
+import { SortAndFilterBox } from "./SortAndFilter";
 
 export default function DeckTab() {
   const { deck, collection } = usePlayerStore((state) => ({
     deck: state.deck,
     collection: state.getCollection(),
   }));
-
+  let { detailledCollection } = usePlayerStore((state) => ({
+    detailledCollection: state.getCollectionCompleteInfo(collection),
+  }));
   const deckArray = _.concat(deck, _.fill(Array(8 - deck.length), null));
+  const [actualSort, setActualSort] = useState<CardSorts>("Cost↑");
+  const [actualFilter, setActualFilter] = useState<ActiveFilters>({
+    Cost: false,
+    Common: false,
+    Rare: false,
+    Epic: false,
+    Legendary: false,
+  });
+  Object.keys(actualFilter).forEach((filter) => {
+    actualFilter[filter as keyof ActiveFilters] === true &&
+      (detailledCollection =
+        filters[filter as keyof ActiveFilters].filterFunction(
+          detailledCollection
+        ));
+  });
+  detailledCollection = sorts[actualSort].sortFunction(detailledCollection);
 
+  const [actualSortDeck, setActualSortDeck] = useState<CardSorts>("Cost↑");
+  let detailledDeck = [];
+  const getCompleteInfo = usePlayerStore((state) => state.getCompleteInfo);
+  for (let i = 0; i < 8; i++)
+    detailledDeck.push(getCompleteInfo(deckArray[i]!));
+  detailledDeck = sorts[actualSortDeck].sortFunction(detailledDeck);
   return (
     <div className="w-full grid grid-rows-[1fr_auto] absolute top-0 h-full">
+      <SortAndFilterBox
+        setActualSort={setActualSort}
+        actualSort={actualSort}
+        setActualFilter={setActualFilter}
+        actualFilter={actualFilter}
+      />
       <ScrollContainer className="grow overflow-y-scroll pt-2 scrollbar-hide flex justify-center">
-        <SortAndFilterBox />
         <div className="grid grid-cols-3 gap-4">
-          {collection.map((card) => (
+          {detailledCollection.map((card) => (
             <div className="w-full flex justify-center" key={card.id}>
               <DeckCard cardId={card.id} />
             </div>
           ))}
         </div>
       </ScrollContainer>
+      <SortAndFilterBox
+        setActualSort={setActualSortDeck}
+        actualSort={actualSortDeck}
+      />
       <div className="w-full flex justify-center relative overflow-hidden mb-2 mt-4">
         <Box width={650} height={210} rarity="legendary">
           <div
@@ -50,10 +79,10 @@ export default function DeckTab() {
           />
           <ScrollContainer horizontal={true} vertical={false}>
             <div className="flex gap-4 relative pt-[6px] pl-[6px] pb-[8px]">
-              {deckArray.map((cardId, index) => (
+              {detailledDeck.map((cardId, index) => (
                 <div
                   className="w-full flex justify-center overflow-visible"
-                  key={cardId || `index_${index}`}
+                  key={cardId.id || `index_${index}`}
                 >
                   <div className="w-[102px] h-[142px] relative rounded-md box-content">
                     <div className="w-full h-full bg-slate-900 opacity-20 absolute" />
@@ -62,7 +91,7 @@ export default function DeckTab() {
                     </InnerBord>
                     {cardId !== null && (
                       <div className="absolute top-0 left-0">
-                        <DeckCard cardId={cardId} isHand />
+                        <DeckCard cardId={cardId.id} isHand />
                       </div>
                     )}
                   </div>
@@ -72,6 +101,7 @@ export default function DeckTab() {
           </ScrollContainer>
         </Box>
       </div>
+      <ShowStat detailledDeck={detailledDeck} />
     </div>
   );
 }
