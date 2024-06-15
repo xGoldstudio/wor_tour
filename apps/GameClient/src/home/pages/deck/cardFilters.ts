@@ -3,7 +3,13 @@ import { CardType } from "@repo/ui";
 export type Card = CardType & { isInDeck: boolean };
 
 export type Filters = Record<CardFilters, CardFilter>;
-export type CardFilters = "Cost" | "Common" | "Rare" | "Epic" | "Legendary";
+export type CardFilters =
+  | "Cost"
+  | "Common"
+  | "Rare"
+  | "Epic"
+  | "Legendary"
+  | "Level";
 export interface CardFilter {
   label?: string;
   style?: string;
@@ -45,5 +51,16 @@ export const filters: Filters = {
     style: "diamond.avif",
     filterFunction: (card) =>
       card.filter((card) => card.rarity === "legendary"),
+  },
+  Level: {
+    label: "Level",
+    rangeMin: 1,
+    rangeMax: 3,
+    filterFunction: (card) =>
+      card.filter(
+        (card) =>
+          card.level >= filters.Level.rangeMin! &&
+          card.level <= filters.Level.rangeMax!
+      ),
   },
 };

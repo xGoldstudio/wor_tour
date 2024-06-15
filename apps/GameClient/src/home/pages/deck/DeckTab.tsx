@@ -15,21 +15,29 @@ import { ShowStat } from "./ShowStat";
 import { SortAndFilterBox } from "./SortAndFilter";
 
 export default function DeckTab() {
-  const { deck, collection } = usePlayerStore((state) => ({
-    deck: state.deck,
-    collection: state.getCollection(),
-  }));
+  const { deck, collection, NUMBER_OF_CARD_IN_DECK } = usePlayerStore(
+    (state) => ({
+      deck: state.deck,
+      collection: state.getCollection(),
+      NUMBER_OF_CARD_IN_DECK: state.NUMBER_OF_CARD_IN_DECK,
+    })
+  );
   let { detailledCollection } = usePlayerStore((state) => ({
     detailledCollection: state.getCollectionCompleteInfo(collection),
   }));
-  const deckArray = _.concat(deck, _.fill(Array(8 - deck.length), null));
-  const [actualSort, setActualSort] = useState<CardSorts>("Cost↑");
+  const deckArray = _.concat(
+    deck,
+    _.fill(Array(NUMBER_OF_CARD_IN_DECK - deck.length), null)
+  );
+  const defaultSort: CardSorts = "cost_asc";
+  const [actualSort, setActualSort] = useState<CardSorts>(defaultSort);
   const [actualFilter, setActualFilter] = useState<ActiveFilters>({
     Cost: false,
     Common: false,
     Rare: false,
     Epic: false,
     Legendary: false,
+    Level: false,
   });
   Object.keys(actualFilter).forEach((filter) => {
     actualFilter[filter as keyof ActiveFilters] === true &&
@@ -40,10 +48,10 @@ export default function DeckTab() {
   });
   detailledCollection = sorts[actualSort].sortFunction(detailledCollection);
 
-  const [actualSortDeck, setActualSortDeck] = useState<CardSorts>("Cost↑");
+  const [actualSortDeck, setActualSortDeck] = useState<CardSorts>(defaultSort);
   let detailledDeck = [];
   const getCompleteInfo = usePlayerStore((state) => state.getCompleteInfo);
-  for (let i = 0; i < 8; i++)
+  for (let i = 0; i < NUMBER_OF_CARD_IN_DECK; i++)
     detailledDeck.push(getCompleteInfo(deckArray[i]!));
   detailledDeck = sorts[actualSortDeck].sortFunction(detailledDeck);
   return (

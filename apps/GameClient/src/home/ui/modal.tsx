@@ -98,26 +98,3 @@ export function BackgroundModal({
     </>
   );
 }
-
-export function SortModal() {
-  const sortList = [
-    "Cost ↑",
-    "Cost ↓",
-    "Rarity ↑",
-    "Rarity ↓",
-    "World ↑",
-    "World ↓",
-  ];
-  return (
-    <>
-      <label>Order cards by :</label>
-      <select name="criteria">
-        {sortList.map((sortCriteria, index) => (
-          <option key={index} value={sortCriteria}>
-            {sortCriteria}
-          </option>
-        ))}
-      </select>
-    </>
-  );
-}

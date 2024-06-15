@@ -1,3 +1,4 @@
+import usePlayerStore from "@/home/store/playerStore";
 import { CardType } from "@repo/ui";
 import { useState } from "react";
 
@@ -8,24 +9,27 @@ interface ShowStatProps {
 }
 
 export function ShowStat({ detailledDeck }: ShowStatProps) {
+  const { NUMBER_OF_CARD_IN_DECK } = usePlayerStore((state) => ({
+    NUMBER_OF_CARD_IN_DECK: state.NUMBER_OF_CARD_IN_DECK,
+  }));
   const [showStat, setShowStat] = useState(false);
   let costAverage = 0;
   let dmgAverage = 0;
   let attackSpeedAverage = 0;
   let hpAverage = 0;
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < NUMBER_OF_CARD_IN_DECK; i++) {
     costAverage += detailledDeck[i].cost;
     dmgAverage += detailledDeck[i].dmg;
     attackSpeedAverage += detailledDeck[i].attackSpeed;
     hpAverage += detailledDeck[i].hp;
   }
-  costAverage /= 8;
-  dmgAverage /= 8;
-  attackSpeedAverage /= 8;
-  hpAverage /= 8;
+  costAverage /= NUMBER_OF_CARD_IN_DECK;
+  dmgAverage /= NUMBER_OF_CARD_IN_DECK;
+  attackSpeedAverage /= NUMBER_OF_CARD_IN_DECK;
+  hpAverage /= NUMBER_OF_CARD_IN_DECK;
   return (
     <div>
-      <div className="absolute right-16 bottom-48">
+      <div className="absolute right-16 bottom-4NUMBER_OF_CARD_IN_DECK">
         <button onClick={() => setShowStat(true)}>...</button>
       </div>
       {showStat && (
