@@ -6,26 +6,27 @@ import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore";
 import Badge from "../../../../packages/ui/components/Badge";
-import { Button, NumberSpan } from "@repo/ui";
+import { NumberSpan } from "@repo/ui";
 import { cn } from "@repo/ui";
 import {
   Borders,
   CardIllustartion,
   InnerBord,
 } from "../../../../packages/ui/components/card/CardBorder";
+import Cover from "./ui/Cover";
 
 type Tabs = "home" | "deck" | "shop";
 
-const tabs: Record<Tabs, () => JSX.Element> = {
-  home: HomeTab,
-  deck: DeckTab,
-  shop: ShopTab,
+const tabs: (() => JSX.Element)[] = [ShopTab, HomeTab, DeckTab];
+
+const tabsPosition: Record<Tabs, number> = {
+  shop: 0,
+  home: 1,
+  deck: 2,
 };
 
 export default function Home() {
   const [currentTab, setCurrentTab] = useState<Tabs>("home");
-
-  const TabElement = tabs[currentTab];
 
   return (
     <div className="w-screen h-screen justify-center bg-black relative flex">
@@ -36,9 +37,9 @@ export default function Home() {
       >
         <RewardBlockWithContext />
         <div
-          className="w-full h-full absolute brightness-75"
+          className="w-full h-full absolute brightness-75 blur-sm"
           style={{
-            backgroundImage: "url('/homeBg.png')",
+            backgroundImage: "url('/bgTexture.jpg')",
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}
@@ -47,23 +48,96 @@ export default function Home() {
         </div>
         <div className="w-full h-full relative flex flex-col items-center justify-between">
           <Header />
-          <div className="grow relative w-full">
-            <TabElement />
+          <div
+            className={cn(`grow overflow-hidden relative w-[${100 * tabs.length}%] flex transition-transform`)}
+            style={{
+              alignSelf: "flex-start",
+              transform: `translateX(${-(tabsPosition[currentTab] * (100 / tabs.length))}%)`,
+            }}
+          >
+            {tabs.map((Tab) => (
+              <div className="w-full h-full relative">
+                <Tab />
+              </div>
+            ))}
           </div>
 
-          <div className="flex gap-4 w-[500px] px-4 pt-2 pb-4">
-            <Button action={() => setCurrentTab("shop")} full className="py-4">
-              Shop
-            </Button>
-            <Button action={() => setCurrentTab("deck")} full>
-              Deck
-            </Button>
-            <Button action={() => setCurrentTab("home")} full>
-              Home
-            </Button>
+          <div className="flex w-full bg-black relative z-10">
+            <div className="w-full h-full absolute flex overflow-hidden">
+              <div className="grow h-full bg-slate-600 relative">
+                <Cover cardRarity="rare" />
+              </div>
+              <div className="grow h-full bg-slate-600 relative">
+                <Cover cardRarity="rare" />
+              </div>
+              <div className="grow h-full bg-slate-600 relative">
+                <Cover cardRarity="rare" />
+              </div>
+            </div>
+            <div
+              className="w-1/3 h-full absolute transition-transform overflow-hidden"
+              style={{
+                transform: `translateX(${100 * tabsPosition[currentTab]}%)`,
+              }}
+            >
+              <Cover cardRarity="epic" />
+            </div>
+            <FooterButton
+              onClick={() => setCurrentTab("shop")}
+              label="Shop"
+              selected={currentTab === "shop"}
+              imageUrl="footer/backpack.png"
+            />
+            <FooterButton
+              onClick={() => setCurrentTab("home")}
+              label="Battle"
+              selected={currentTab === "home"}
+              imageUrl="fightback.png"
+            />
+            <FooterButton
+              onClick={() => setCurrentTab("deck")}
+              label="Collection"
+              selected={currentTab === "deck"}
+              imageUrl="footer/collection.png"
+            />
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+interface FooterButtonProps {
+  onClick: () => void;
+  label: string;
+  selected?: boolean;
+  imageUrl?: string;
+}
+
+function FooterButton({ onClick, label, selected, imageUrl }: FooterButtonProps) {
+  return (
+    <div
+      className="relative grow font-semibold text-xl flex justify-center items-center flex-col h-[70px] cursor-pointer select-none"
+      onClick={onClick}
+    >
+      <img
+        src={imageUrl}
+        alt="chest"
+        className={cn(
+          "w-[64px] aspect-square relative transition-transform",
+          selected && "scale-110 -translate-y-6"
+        )}
+      />
+      {selected && (
+        <p
+          className={cn(
+            "absolute bottom-[3px] opacity-0 transition-opacity",
+            selected && "opacity-100"
+          )}
+        >
+          {label}
+        </p>
+      )}
     </div>
   );
 }
