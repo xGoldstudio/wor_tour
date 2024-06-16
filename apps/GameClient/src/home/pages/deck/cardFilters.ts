@@ -23,7 +23,7 @@ export const filters: Filters = {
   Cost: {
     label: "Cost",
     rangeMin: 1,
-    rangeMax: 3,
+    rangeMax: 9,
     filterFunction: (card) =>
       card.filter(
         (card) =>

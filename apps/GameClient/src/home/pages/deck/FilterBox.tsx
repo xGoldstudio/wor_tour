@@ -27,7 +27,7 @@ export function FilterModal({
   };
   const [range, setRange] = useState<number[] | number>([
     actualFilter.Cost ? filters.Cost.rangeMin! : 1,
-    actualFilter.Cost ? filters.Cost.rangeMax! : 3,
+    actualFilter.Cost ? filters.Cost.rangeMax! : 9,
   ]);
   const [rangeLevel, setRangeLevel] = useState<number[] | number>([
     actualFilter.Level ? filters.Level.rangeMin! : 1,
@@ -40,7 +40,7 @@ export function FilterModal({
       filters.Cost.rangeMin = newRange[0];
       filters.Cost.rangeMax = newRange[1];
     }
-    if (filters.Cost.rangeMin === 1 && filters.Cost.rangeMax === 3) {
+    if (filters.Cost.rangeMin === 1 && filters.Cost.rangeMax === 9) {
       setActualFilter({ ...actualFilter, Cost: false });
     } else {
       setActualFilter({ ...actualFilter, Cost: true });
