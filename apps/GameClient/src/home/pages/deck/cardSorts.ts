@@ -8,7 +8,9 @@ export type CardSorts =
   | "rarity_asc"
   | "rarity_desc"
   | "world_asc"
-  | "world_desc";
+  | "world_desc"
+  | "level_asc"
+  | "level_desc";
 export interface CardSort {
   label: string;
   sortFunction: (detailledCollection: Card[]) => Card[];
@@ -54,5 +56,15 @@ export const sorts: Sorts = {
     label: "World ↓",
     sortFunction: (detailledCollection) =>
       detailledCollection.sort((a, b) => b.world - a.world),
+  },
+  level_asc: {
+    label: "Level ↑",
+    sortFunction: (detailledCollection) =>
+      detailledCollection.sort((a, b) => a.level - b.level),
+  },
+  level_desc: {
+    label: "Level ↓",
+    sortFunction: (detailledCollection) =>
+      detailledCollection.sort((a, b) => b.level - a.level),
   },
 };

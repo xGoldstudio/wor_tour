@@ -15,9 +15,10 @@ export function SortModal({
   deck,
 }: SortModalProps) {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    for (const key in sorts)
+    for (const key in sorts) {
       if (sorts[key as CardSorts].label === event.target.value)
         setActualSort(key as CardSorts);
+    }
   };
   return (
     <div
