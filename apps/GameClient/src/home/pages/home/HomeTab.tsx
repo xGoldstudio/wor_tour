@@ -1,23 +1,24 @@
 import { useStartGame } from "@/game/stores/gameMetadataStore";
 import * as _ from "lodash";
-import useScrollCardList from "../deck/useScrollCardList";
-import { useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useState } from "react";
 import useDataStore from "@/cards/DataStore";
-import { Level } from "@repo/types";
 import {
-  Badge,
-  Box,
-  Button,
-  cn,
-  inPx,
-  preventDefault,
-  useOnMount,
-  useOnUnMount,
-  getImageUrlCssValue,
+  Box, getImageUrl,
+  textureByRarity,
+  Badge
 } from "@repo/ui";
-import { numberOfLevels } from "../../../../../Editor/src/editor/features/progression/consts";
 import usePlayerStore from "@/home/store/playerStore";
+import Cover from "@/home/ui/Cover";
+import { EmptyBar } from "@/game/gui/ManaBar";
+import {
+  Borders,
+  CardIllustartion,
+  InnerBord,
+} from "../../../../../../packages/ui/components/card/CardBorder";
+import Modal from "@/home/ui/modal";
+import Ribbon from "@/home/ui/Ribbon";
+import { DeckCard } from "../deck/DeckTab";
+import ScrollContainer from "react-indiana-drag-scroll";
 
 export default function HomeTab() {
   const startGame = useStartGame();
@@ -26,269 +27,238 @@ export default function HomeTab() {
     world: state.worlds[currentWorld],
     levels: state.levels,
   }));
+  const [profileOpen, setProfileOpen] = useState(false);
+
+  const { deck } = usePlayerStore((state) => ({
+    deck: state.deck,
+  }));
+
+  const deckArray = _.concat(deck, _.fill(Array(8 - deck.length), null));
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center gap-4">
-      <div className="text-4xl font-stylised">{world.name}</div>
-      <div
-        className="w-1/2 aspect-square relative"
-        style={{
-          backgroundImage: getImageUrlCssValue(world.illustration),
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-        }}
-      >
-        <Badge
-          className="absolute z-10 right-0 top-0"
-          value={`${world.id}`}
-          rarity="epic"
-        />
-      </div>
-      <Levels
-        levels={levels.filter((level) => world.id === level.world)}
-        nextWorldLevel={
-          levels.find(
-            (level) => world.id + 1 === level.world && level.level === 1
-          ) || null
-        }
-        previousWorldLevel={
-          levels.find(
-            (level) =>
-              world.id - 1 === level.world && level.level === numberOfLevels
-          ) || null
-        }
-        onPageChange={(newPage: number) => setCurrentWorld(newPage)}
-      />
-      <Button action={() => startGame()}>New game</Button>
-    </div>
-  );
-}
-
-function Levels({
-  levels,
-  onPageChange,
-  previousWorldLevel,
-  nextWorldLevel,
-}: {
-  levels: Level[];
-  onPageChange: (newPage: number) => void;
-  previousWorldLevel: Level | null;
-  nextWorldLevel: Level | null;
-}) {
-  const lastCompletedLevel = usePlayerStore(
-    (state) => state.lastCompletedLevel + 1
-  );
-  const lastCompletedWorld = Math.floor(lastCompletedLevel / numberOfLevels) + 1;
-  const lastCompletedLevelInWorld = lastCompletedLevel % numberOfLevels + 1;
-  const { currentPosition, setIsPressed, changePosition } = useScrollCardList(
-    0,
-    numberOfLevels,
-    {
-      onLastPage: lastCompletedLevelInWorld,
-      pages: lastCompletedWorld,
-      onPageChange,
-    }
-  );
-
-  const currentLevel = currentPosition;
-
-  return (
-    <div
-      className=" w-[350px] h-[118px] flex flex-col justify-end select-none relative"
-      style={{
-        WebkitMaskImage:
-          "linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 20%, rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%)",
-      }}
-      onMouseDown={preventDefault(() => setIsPressed(true))}
-      onMouseUp={preventDefault(() => setIsPressed(false))}
-      onMouseMove={changePosition}
-    >
-      <div
-        className="h-auto relative flex"
-        style={{
-          transform: `translateX(${currentLevel * -100 + 25}px)`,
-          transition: "ease-in-out 0.5s",
-          transitionProperty: "transform, opacity",
-          width: inPx((levels.length + 3) * 100),
-        }}
-      >
-        <svg
-          className="w-full h-[10px] absolute top-[38px]"
-          viewBox={`0 0 ${100 * (levels.length + 3)} 4`}
-        >
-          {_.range(6.66 * (levels.length + 3)).map((index) => (
-            <circle
-              cx={index * 15 + 5}
-              cy={2}
-              r={4}
-              key={index}
-              fill="white"
-              style={{ transition: "ease-in-out 0.5s" }}
-            />
-          ))}
-        </svg>
-        {previousWorldLevel ? (
-          <LevelComponent level={previousWorldLevel} />
-        ) : (
-          <div className="w-[100px]" />
-        )}
-        {levels.map((level) => (
-          <LevelComponent
-            level={level}
-            selected={level.level === currentLevel + 1}
-          />
-        ))}
-        {nextWorldLevel ? (
-          <LevelComponent level={nextWorldLevel} />
-        ) : (
-          <div className="w-[100px]" />
-        )}
-      </div>
-    </div>
-  );
-}
-
-interface LevelProps {
-  level: Level;
-  selected?: boolean;
-}
-
-const glowChestImageByLevel = {
-  common: "/chests/common_yellow_glow.png",
-  rare: "/chests/rare_yellow_glow.png",
-  epic: "/chests/mythical_yellow_glow.png",
-};
-
-const chestImageByLevel = {
-  common: "/chests/common_no_glow.png",
-  rare: "/chests/rare_no_glow.png",
-  epic: "/chests/mythical_no_glow.png",
-};
-
-const emptyGlowChestImageByLevel = {
-  common: "chests/common_empty_yellow_glow.png",
-  rare: "chests/rare_empty_yellow_glow.png",
-  epic: "chests/mythical_empty_yellow_glow.png",
-};
-
-const emptyChestImageByLevel = {
-  common: "/chests/common_empty_no_glow.png",
-  rare: "/chests/rare_empty_no_glow.png",
-  epic: "/chests/mythical_empty_no_glow.png",
-};
-
-function LevelComponent({ level, selected }: LevelProps) {
-  const [showPopin, setShowPopin] = useState(false);
-  const ref = useRef(null);
-  const isCompleted = usePlayerStore(
-    (state) => state.lastCompletedLevel >= level.id
-  );
-
-  return (
-    <div
-      className={cn(
-        "flex flex-col items-center gap-0 drop-shadow-[1px_1px_1px_black] px-[12px] w-[100px]"
-      )}
-      ref={ref}
-    >
-      <div
-        className="w-[64px] h-[64px] relative"
-        // onMouseEnter={() => setShowPopin(true)}
-        // onMouseLeave={() => setShowPopin(false)}
-      >
-        <img
-          src={
-            isCompleted
-              ? emptyChestImageByLevel[level.chest]
-              : chestImageByLevel[level.chest]
-          }
-          alt="chest"
-          className="absolute left-0 top-0 w-[64px] aspect-square"
-          style={{
-            transform: ` translateY(${selected ? -15 : 0}%) scale(160%)`,
-            transition: "ease-in-out 0.5s",
-            transitionProperty: "transform, opacity",
-          }}
-        />
-        <img
-          src={
-            isCompleted
-              ? emptyGlowChestImageByLevel[level.chest]
-              : glowChestImageByLevel[level.chest]
-          }
-          alt="chest"
-          className="w-[64px] aspect-square"
-          style={{
-            transform: `translateY(${selected ? -15 : 0}%) scale(160%)`,
-            opacity: selected ? 1 : 0,
-            transition: "ease-in-out 0.5s",
-            transitionProperty: "transform, opacity",
-          }}
-        />
-      </div>
-      <p className="text-xl font-bold text-white">
-        {level.world} - {level.level}
-      </p>
-      {showPopin && (
-        <Popin targetRef={ref} closePopin={() => setShowPopin(false)}>
-          <div className="absolute w-full h-full top-0 left-0 z-10 text-xs flex justify-around items-center">
-            <div className="w-[50px] h-[50px] flex justify-end items-center flex-col relative bg-yellow-300 pb-[2px] rounded-sm border-2 border-yellow-500">
+    <div className="w-full h-full flex flex-col items-center">
+      {profileOpen && (
+        <Modal title="profile" closeModal={() => setProfileOpen(false)}>
+          <div className="w-full h-full bg-slate-900 opacity-80 absolute"></div>
+          <div className="w-full h-full relative flex flex-col items-center justify-center">
+            <Box rarity="epic" height={800} width={600} size={1.5}>
               <img
-                src="/money.png"
-                className="w-[32px] drop-shadow-[2px_1px_1px_black] absolute bottom-[10px]"
+                src="/cross.svg"
+                className="absolute top-3 right-3 w-8 h-8 cursor-pointer z-10 drop-shadow-[2px_1px_1px_black]"
+                onClick={() => setProfileOpen(false)}
               />
-              <p className="">+{level.reward.gold}</p>
-            </div>
-            <div className="w-[50px] h-[50px] flex justify-end items-center flex-col relative bg-yellow-300 pb-[2px] rounded-sm border-2 border-yellow-500">
-              <div className="w-[32px] drop-shadow-[2px_1px_1px_black] absolute bottom-[15px] font-stylised text-2xl">
-                XP
+              <div
+                className="w-full h-full absolute brightness-75 top-0 left-0"
+                style={{
+                  backgroundImage: "url('/homeBg.jpeg')",
+                  backgroundPosition: "center",
+                  backgroundSize: "cover",
+                }}
+              />
+              <ScrollContainer className="w-full h-full flex">
+                <div className="w-full h-max flex flex-col items-center relative pb-8">
+                  <p className="text-4xl font-semibold text-white py-16 relative drop-shadow-[2px_2px_1px_black]">
+                    Goldaxe
+                  </p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Borders
+                      width={191}
+                      height={55}
+                      borderUnit={1}
+                      rarity={"epic"}
+                    >
+                      <CardIllustartion
+                        width={191}
+                        height={55}
+                        borderUnit={0.6}
+                      >
+                        <InnerBord size={1}>
+                          <div className="flex w-full items-center justify-start pl-2 gap-2 relative bg-slate-600 h-full">
+                            <div
+                              className="absolute top-0 left-0 w-full h-full blur-sm"
+                              style={{ backgroundImage: "url(/silver.jpeg)" }}
+                            />
+                            <Badge value="45" />
+                            <p className="relative font-semibold">Level</p>
+                          </div>
+                        </InnerBord>
+                      </CardIllustartion>
+                    </Borders>
+                    <Borders
+                      width={191}
+                      height={55}
+                      borderUnit={1}
+                      rarity={"epic"}
+                    >
+                      <CardIllustartion
+                        width={191}
+                        height={55}
+                        borderUnit={0.6}
+                      >
+                        <InnerBord size={1}>
+                          <div className="flex w-full items-center justify-start pl-2 gap-2 relative bg-slate-600 h-full">
+                            <div
+                              className="absolute top-0 left-0 w-full h-full blur-sm"
+                              style={{ backgroundImage: "url(/silver.jpeg)" }}
+                            />
+                            <img
+                              className="w-[32px] aspect-square relative"
+                              src={getImageUrl(world.illustration)}
+                            />
+                            <p className="relative font-semibold">World 1</p>
+                          </div>
+                        </InnerBord>
+                      </CardIllustartion>
+                    </Borders>
+                    <Borders
+                      width={191}
+                      height={55}
+                      borderUnit={1}
+                      rarity={"epic"}
+                    >
+                      <CardIllustartion
+                        width={191}
+                        height={55}
+                        borderUnit={0.6}
+                      >
+                        <InnerBord size={1}>
+                          <div className="flex w-full items-center justify-start pl-2 gap-2 relative bg-slate-600 h-full">
+                            <div
+                              className="absolute top-0 left-0 w-full h-full blur-sm"
+                              style={{ backgroundImage: "url(/silver.jpeg)" }}
+                            />
+                            <img
+                              src="/trophy.png"
+                              className="w-[32px] drop-shadow-[2px_1px_1px_black]"
+                            />
+                            <p className="relative font-semibold">450</p>
+                          </div>
+                        </InnerBord>
+                      </CardIllustartion>
+                    </Borders>
+                    <Stat label="Victory" value="45" />
+                  </div>
+                  <Ribbon className="mt-16 px-16">Deck</Ribbon>
+                  <div className="grid grid-cols-4 w-auto gap-3">
+                    {deckArray.map((cardId, index) => (
+                      <DeckCard cardId={cardId!} size={1.4} unaddble />
+                    ))}
+                  </div>
+                  <Ribbon className="mt-16 px-16">Stats</Ribbon>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Stat label="Victory" value="45" />
+                    <Stat label="Winrate" value="62%" />
+                    <Stat label="Damage dealt" value="62 862 710" />
+                    <Stat label="Card destroyed" value="4 598" />
+                    <Stat label="Biggest Attack" value="7 981" />
+                    <Stat label="Most played" value="Crabvor Queen" />
+                    <Stat label="Cards unlocked" value="9/75" />
+                    <Stat label="Highest trophies" value="975" />
+                  </div>
+                </div>
+              </ScrollContainer>
+            </Box>
+          </div>
+        </Modal>
+      )}
+      <div
+        className="flex items-center gap-2 relative w-full px-12"
+        onClick={() => setProfileOpen(true)}
+      >
+        <div className="relative flex items-center justify-between gap-4 px-4 py-4 pr-20">
+          <div className="absolute top-0 left-0 w-full h-full">
+            <svg width="100%" height="100%">
+              <mask id="svgmask1">
+                <rect fill="#ffffff" x={0} y={0} width="85%" height="100%" />
+                <polygon fill="#ffffff" points="324 0, 383 0, 324 84"></polygon>
+              </mask>
+              <image
+                className="blur-[6px]"
+                href={textureByRarity("legendary")}
+                x="0"
+                y="0"
+                width="100%"
+                height="100%"
+                preserveAspectRatio="xMidYMid slice"
+                mask="url(#svgmask1)"
+              />
+            </svg>
+          </div>
+          <div className="flex flex-col h-min w-[160px] text-slate-100">
+            <p className="relative font-semibold text-xl leading-2">Goldaxe</p>
+            <p className="relative text-sm  leading-2">World 1</p>
+          </div>
+          <div className="relative w-[110px] h-[32px]">
+            <img
+              src="/trophy.png"
+              className="absolute z-10 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[48px] drop-shadow-[2px_1px_1px_black]"
+            />
+            <InnerBord size={1.5}>
+              <div className="w-full h-full relative bg-slate-600 flex items-center justify-end pr-2">
+                <Cover cardRarity="rare" />
+                <p className="relative font-semibold">40</p>
               </div>
-              <p className="">+{level.reward.xp}</p>
+            </InnerBord>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col gap-16 items-center grow pt-20">
+        <div className="relative w-1/2">
+          <img
+            className="w-full aspect-square relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)]"
+            src={getImageUrl(world.illustration)}
+          />
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-md overflow-hidden">
+            <Borders width={160} height={32} borderUnit={0.5} rarity={"rare"}>
+              <CardIllustartion width={160} height={32} borderUnit={0.5}>
+                <InnerBord size={0.5}>
+                  <EmptyBar />
+                </InnerBord>
+              </CardIllustartion>
+            </Borders>
+          </div>
+        </div>
+        <div
+          className="relative rounded-sm flex p-1 flex-col items-center font-slate-600 cursor-pointer"
+          onClick={() => startGame()}
+        >
+          <div className="w-[calc(100%_+_6px)] h-[calc(100%_+_6px)] absolute top-[-3px] left-[-3px] blur-sm rounded-sm  bg-amber-100 animate-pulse"></div>
+          <Cover cardRarity="epic" className="rounded-sm" />
+          <div className="relative rounded-sm w-full flex justify-center py-2 mx-4">
+            <div className="bg-white w-full h-full absolute top-0 backdrop-blur-sm opacity-50 rounded-sm"></div>
+            <p className="text-2xl relative font-bold">Battle</p>
+          </div>
+          <div className="relative flex items-center gap-3 justify-center px-16">
+            <img
+              src="/money.png"
+              className="h-[48px] drop-shadow-[2px_1px_1px_black]"
+            />
+            <div className="relative">
+              <p className="text-sm font-semibold leading-4">900/5000</p>
+              <p className="text-sm leading-4">reset in: 2h50</p>
             </div>
           </div>
-        </Popin>
-      )}
+        </div>
+      </div>
     </div>
   );
 }
 
-interface PopinProps {
-  children: React.ReactNode;
-  targetRef: React.RefObject<HTMLDivElement>;
-  closePopin: () => void;
-}
-
-function Popin({ children, targetRef, closePopin }: PopinProps) {
-  const home = document.getElementById("root");
-
-  const handleClick = () => {
-    closePopin();
-  };
-
-  useOnMount(() => {
-    document.addEventListener("mousedown", handleClick);
-  });
-
-  useOnUnMount(() => {
-    document.removeEventListener("mousedown", handleClick);
-  });
-
-  if (!home || !targetRef.current) return null;
-
-  const { top, left } = targetRef.current.getBoundingClientRect();
-
-  return createPortal(
-    <div
-      className="z-10 fixed -translate-y-[calc(100%_+_10px)] -translate-x-1/2 pointer-events-none"
-      style={{
-        top: inPx(top),
-        left: inPx(left + targetRef.current.offsetWidth / 2),
-      }}
-    >
-      <Box width={130} height={80} size={0.5} rarity="common" cover="rare">
-        {children}
-      </Box>
-    </div>,
-    home
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <Borders width={191} height={55} borderUnit={1} rarity={"epic"}>
+      <CardIllustartion width={191} height={55} borderUnit={0.6}>
+        <InnerBord size={1}>
+          <div className="flex w-full items-center justify-center pl-2 relative bg-slate-600 h-full flex-col">
+            <div
+              className="absolute top-0 left-0 w-full h-full blur-sm"
+              style={{ backgroundImage: "url(/silver.jpeg)" }}
+            />
+            <p className="relative font-semibold leading-5">{label}</p>
+            <p className="relative text-sm leading-4">{value}</p>
+          </div>
+        </InnerBord>
+      </CardIllustartion>
+    </Borders>
   );
 }

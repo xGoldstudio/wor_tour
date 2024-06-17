@@ -167,7 +167,7 @@ export default function Reward({
       <div
         className="w-full h-full absolute brightness-75"
         style={{
-          backgroundImage: "url('/homeBg.png')",
+          backgroundImage: "url('/homeBg.jpeg')",
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}

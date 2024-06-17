@@ -32,19 +32,19 @@ export default function Home() {
     <div className="w-screen h-screen justify-center bg-black relative flex">
       <DebugPanel />
       <div
-        className="w-[700px] h-full relative overflow-hidden bg-slate-400"
+        className="w-[700px] h-full relative overflow-hidden bg-slate-900"
         id="home"
       >
         <RewardBlockWithContext />
         <div
-          className="w-full h-full absolute brightness-75 blur-sm"
+          className="w-full h-full absolute brightness-75 "
           style={{
-            backgroundImage: "url('/bgTexture.jpg')",
+            backgroundImage: "url('/homeBg.jpeg')",
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}
         >
-          <div className="w-full h-full absolute bg-[linear-gradient(0deg,_rgba(226,232,240,0.2)_0%,_rgba(226,232,240,0)_100%),_linear-gradient(0deg,_rgba(226,232,240,0)_50%,_rgba(226,232,240,1)_70%)]" />
+          <div className="w-full h-full absolute bg-[radial-gradient(circle,_rgba(226,232,240,0.1)_40%,_rgba(0,0,0,0.4)_100%)]" />
         </div>
         <div className="w-full h-full relative flex flex-col items-center justify-between">
           <Header />
@@ -146,14 +146,15 @@ interface RessourceCounterProps {
   amount: number;
   max?: number;
   icon: React.ReactNode;
+  width?: number;
 }
 
-function RessourceCounter({ amount, max, icon }: RessourceCounterProps) {
+export function RessourceCounter({ amount, max, icon, width = 191 }: RessourceCounterProps) {
   return (
     <div className="relative">
       {icon}
-      <Borders width={191} height={45} borderUnit={1} rarity={"common"}>
-        <CardIllustartion width={191} height={45} borderUnit={0.6}>
+      <Borders width={width} height={45} borderUnit={1} rarity={"epic"}>
+        <CardIllustartion width={width} height={45} borderUnit={0.6}>
           <InnerBord size={1}>
             <div className="w-full h-full relative flex items-center justify-center bg-black overflow-hidden">
               <div

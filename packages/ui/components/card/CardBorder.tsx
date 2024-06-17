@@ -54,7 +54,7 @@ export function Borders({
           style={{ width: inPx(width), height: inPx(height) }}
         >
           <div
-            className="w-full h-full blur-[1px]"
+            className="w-full h-full blur-sm"
             style={{
               backgroundImage: `url(/${textureByRarity(rarity)})`,
               backgroundSize: "cover",

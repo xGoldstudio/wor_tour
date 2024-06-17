@@ -33,7 +33,7 @@ export default function DeckTab() {
         <div className="grid grid-cols-3 gap-4">
           {collection.map((card) => (
             <div className="w-full flex justify-center" key={card.id}>
-              <DeckCard cardId={card.id} />
+              <DeckCard cardId={card.id} size={2} />
             </div>
           ))}
         </div>
@@ -62,7 +62,7 @@ export default function DeckTab() {
                     </InnerBord>
                     {cardId !== null && (
                       <div className="absolute top-0 left-0">
-                        <DeckCard cardId={cardId} isHand />
+                        <DeckCard cardId={cardId} size={1.6} />
                       </div>
                     )}
                   </div>
@@ -78,11 +78,11 @@ export default function DeckTab() {
 
 interface DeckCardProps {
   cardId: number;
-  isHand?: boolean;
+  size: number;
   unaddble?: boolean;
 }
 
-function DeckCard({ cardId, isHand, unaddble: addable }: DeckCardProps) {
+export function DeckCard({ cardId, size, unaddble: addable }: DeckCardProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
   const { card, removeCardFromDeck, addCardToDeck, isDeckFull } =
     usePlayerStore((state) => ({
@@ -102,9 +102,9 @@ function DeckCard({ cardId, isHand, unaddble: addable }: DeckCardProps) {
       )}
       <div className="relative select-none h-min">
         <div className="" onClick={() => setIsDescriptionOpen(true)}>
-          <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>
+          <CardBorder rarity={card.rarity} size={size}>
             <div className="w-full h-full flex flex-col relative">
-              <CardContentIllustartion card={card} size={isHand ? 1.6 : 2} />
+              <CardContentIllustartion card={card} size={size} />
               <div className="absolute top-0 right-0">
                 <svg
                   className="h-full absolute left-0 -translate-x-full"
