@@ -25,7 +25,7 @@ export function FilterModal({
       }
     }
   };
-  const [range, setRange] = useState<number[] | number>([
+  const [rangeCost, setRangeCost] = useState<number[] | number>([
     actualFilter.Cost ? filters.Cost.rangeMin! : 1,
     actualFilter.Cost ? filters.Cost.rangeMax! : 9,
   ]);
@@ -34,11 +34,11 @@ export function FilterModal({
     actualFilter.Level ? filters.Level.rangeMax! : 3,
   ]);
 
-  const handleSliderChange = (newRange: number[] | number) => {
-    setRange(newRange);
-    if (Array.isArray(newRange)) {
-      filters.Cost.rangeMin = newRange[0];
-      filters.Cost.rangeMax = newRange[1];
+  const handleSliderCostChange = (rangeCost: number[] | number) => {
+    setRangeCost(rangeCost);
+    if (Array.isArray(rangeCost)) {
+      filters.Cost.rangeMin = rangeCost[0];
+      filters.Cost.rangeMax = rangeCost[1];
     }
     if (filters.Cost.rangeMin === 1 && filters.Cost.rangeMax === 9) {
       setActualFilter({ ...actualFilter, Cost: false });
@@ -47,11 +47,11 @@ export function FilterModal({
     }
   };
 
-  const handleSliderChange2 = (newRange: number[] | number) => {
-    setRange(newRange);
-    if (Array.isArray(newRange)) {
-      filters.Level.rangeMin = newRange[0];
-      filters.Level.rangeMax = newRange[1];
+  const handleSliderLevelChange = (rangeLevel: number[] | number) => {
+    setRangeLevel(rangeLevel);
+    if (Array.isArray(rangeLevel)) {
+      filters.Level.rangeMin = rangeLevel[0];
+      filters.Level.rangeMax = rangeLevel[1];
     }
     if (filters.Level.rangeMin === 1 && filters.Level.rangeMax === 3) {
       setActualFilter({ ...actualFilter, Level: false });
@@ -84,24 +84,24 @@ export function FilterModal({
         range
         count={1}
         min={1}
-        max={3}
+        max={9}
         defaultValue={[
           actualFilter.Cost
             ? filters.Cost.rangeMin!
-            : Array.isArray(range)
-              ? range[0]
+            : Array.isArray(rangeCost)
+              ? rangeCost[0]
               : 1,
           actualFilter.Cost
             ? filters.Cost.rangeMax!
-            : Array.isArray(range)
-              ? range[1]
+            : Array.isArray(rangeCost)
+              ? rangeCost[1]
               : 3,
         ]}
-        onChange={handleSliderChange}
+        onChange={handleSliderCostChange}
       />
       <div>
-        <span>Min: {Array.isArray(range) && range[0]}</span> -{" "}
-        <span>Max: {Array.isArray(range) && range[1]}</span>
+        <span>Min: {Array.isArray(rangeCost) && rangeCost[0]}</span> -{" "}
+        <span>Max: {Array.isArray(rangeCost) && rangeCost[1]}</span>
       </div>
       <Slider
         range
@@ -120,7 +120,7 @@ export function FilterModal({
               ? rangeLevel[1]
               : 3,
         ]}
-        onChange={handleSliderChange2}
+        onChange={handleSliderLevelChange}
       />
       <div>
         <span>Min: {Array.isArray(rangeLevel) && rangeLevel[0]}</span> -{" "}
