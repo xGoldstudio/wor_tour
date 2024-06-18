@@ -1,5 +1,5 @@
 import usePlayerStore from "@/home/store/playerStore";
-import { Box, Button, ManaBall, preventDefault } from "@repo/ui";
+import { Box, Button, CardType, ManaBall, preventDefault } from "@repo/ui";
 import * as _ from "lodash";
 import "rc-slider/assets/index.css";
 import { useState } from "react";
@@ -8,7 +8,7 @@ import CardBorder, {
   CardContentIllustartion,
   InnerBord,
 } from "../../../../../../packages/ui/components/card/CardBorder";
-import { ActiveFilters, filters } from "./cardFilters";
+import { ActiveFilters, Card, filters } from "./cardFilters";
 import CardModal from "./CardModal";
 import { CardSorts, sorts } from "./cardSorts";
 import { ShowStat } from "./ShowStat";
@@ -39,12 +39,19 @@ export default function DeckTab() {
     Legendary: false,
     Level: false,
   });
+  let tmp2: Card[] = detailledCollection;
   Object.keys(actualFilter).forEach((filter) => {
-    actualFilter[filter as keyof ActiveFilters] === true &&
-      (detailledCollection =
+    if (actualFilter[filter as keyof ActiveFilters] === true) {
+      const tmp: Card[] =
         filters[filter as keyof ActiveFilters].filterFunction(
           detailledCollection
-        ));
+        );
+      if (tmp.length > 0 && detailledCollection.length > 0) {
+        detailledCollection.forEach((card) => {
+          if (!tmp.includes(card)) detailledCollection.pop();
+        });
+      } else detailledCollection = [];
+    }
   });
   detailledCollection = sorts[actualSort].sortFunction(detailledCollection);
 
