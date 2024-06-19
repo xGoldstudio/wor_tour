@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ActiveFilters, CardFilters, filters } from "./cardFilters";
+import { ActiveFilters, CardFilters, FiltersDescription } from "./cardFilters";
 import { CardSorts } from "./cardSorts";
 import { FilterModal } from "./FilterBox";
 import { SortModal } from "./SortBox";
@@ -55,7 +55,7 @@ export function SortAndFilterBox({
               .filter(
                 (filter) =>
                   actualFilter![filter as CardFilters] === true &&
-                  filters[filter as CardFilters].label
+                  FiltersDescription[filter as CardFilters].label
               )
               .join(", ")})`}
           </button>

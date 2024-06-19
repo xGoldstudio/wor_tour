@@ -8,7 +8,13 @@ import CardBorder, {
   CardContentIllustartion,
   InnerBord,
 } from "../../../../../../packages/ui/components/card/CardBorder";
-import { ActiveFilters, Card, filters } from "./cardFilters";
+import {
+  ActiveFilters,
+  Card,
+  CardFilter,
+  CardFilters,
+  FiltersDescription,
+} from "./cardFilters";
 import CardModal from "./CardModal";
 import { CardSorts, sorts } from "./cardSorts";
 import { ShowStat } from "./ShowStat";
@@ -39,20 +45,17 @@ export default function DeckTab() {
     Legendary: false,
     Level: false,
   });
-  let tmp2: Card[] = detailledCollection;
-  Object.keys(actualFilter).forEach((filter) => {
-    if (actualFilter[filter as keyof ActiveFilters] === true) {
-      const tmp: Card[] =
-        filters[filter as keyof ActiveFilters].filterFunction(
-          detailledCollection
-        );
-      if (tmp.length > 0 && detailledCollection.length > 0) {
-        detailledCollection.forEach((card) => {
-          if (!tmp.includes(card)) detailledCollection.pop();
-        });
-      } else detailledCollection = [];
-    }
-  });
+  console.log(actualFilter);
+  for (const filter in FiltersDescription) {
+    const typedFilter = FiltersDescription[filter as CardFilters];
+    const tmp = typedFilter.filterFunction(
+      detailledCollection,
+      actualFilter[filter as CardFilters]
+    );
+    detailledCollection = detailledCollection.filter((card) =>
+      tmp.includes(card)
+    );
+  }
   detailledCollection = sorts[actualSort].sortFunction(detailledCollection);
 
   const [actualSortDeck, setActualSortDeck] = useState<CardSorts>(defaultSort);
