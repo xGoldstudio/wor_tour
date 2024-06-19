@@ -3,9 +3,7 @@ import CardBorder, {
   CardContentIllustartion,
 } from "../../../../../../packages/ui/components/card/CardBorder";
 
-function StaticCard({ card }: { card: CardType }) {
-  const size = 1.35;
-
+function StaticCard({ card, size = 1.35 }: { card: CardType, size?: number}) {
   return (
     <CardBorder rarity={card.rarity} size={size}>
       <CardContentIllustartion card={card} size={size} />

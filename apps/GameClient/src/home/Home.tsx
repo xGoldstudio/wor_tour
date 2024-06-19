@@ -14,6 +14,7 @@ import {
   InnerBord,
 } from "../../../../packages/ui/components/card/CardBorder";
 import Cover from "./ui/Cover";
+import AllWorlds from "./pages/home/AllWorlds";
 
 type Tabs = "home" | "deck" | "shop";
 
@@ -35,22 +36,17 @@ export default function Home() {
         className="w-[700px] h-full relative overflow-hidden bg-slate-900"
         id="home"
       >
+        <AllWorlds />
         <RewardBlockWithContext />
-        <div
-          className="w-full h-full absolute brightness-75 "
-          style={{
-            backgroundImage: "url('/homeBg.jpeg')",
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-          }}
-        >
-          <div className="w-full h-full absolute bg-[radial-gradient(circle,_rgba(226,232,240,0.1)_40%,_rgba(0,0,0,0.4)_100%)]" />
-        </div>
+        <HomeBg />
         <div className="w-full h-full relative flex flex-col items-center justify-between">
           <Header />
           <div
-            className={cn(`grow overflow-hidden relative w-[${100 * tabs.length}%] flex transition-transform`)}
+            className={cn(
+              `grow overflow-hidden relative grid grid-cols-${tabs.length} transition-transform`
+            )}
             style={{
+              width: tabs.length * 100 + "%",
               alignSelf: "flex-start",
               transform: `translateX(${-(tabsPosition[currentTab] * (100 / tabs.length))}%)`,
             }}
@@ -114,7 +110,12 @@ interface FooterButtonProps {
   imageUrl?: string;
 }
 
-function FooterButton({ onClick, label, selected, imageUrl }: FooterButtonProps) {
+function FooterButton({
+  onClick,
+  label,
+  selected,
+  imageUrl,
+}: FooterButtonProps) {
   return (
     <div
       className="relative grow font-semibold text-xl flex justify-center items-center flex-col h-[70px] cursor-pointer select-none"
@@ -142,6 +143,21 @@ function FooterButton({ onClick, label, selected, imageUrl }: FooterButtonProps)
   );
 }
 
+export function HomeBg() {
+  return (
+    <div
+      className="w-full h-full absolute brightness-75 "
+      style={{
+        backgroundImage: "url('/homeBg.jpeg')",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+      }}
+    >
+      <div className="w-full h-full absolute bg-[radial-gradient(circle,_rgba(226,232,240,0.1)_40%,_rgba(0,0,0,0.4)_100%)]" />
+    </div>
+  );
+}
+
 interface RessourceCounterProps {
   amount: number;
   max?: number;
@@ -149,7 +165,12 @@ interface RessourceCounterProps {
   width?: number;
 }
 
-export function RessourceCounter({ amount, max, icon, width = 191 }: RessourceCounterProps) {
+export function RessourceCounter({
+  amount,
+  max,
+  icon,
+  width = 191,
+}: RessourceCounterProps) {
   return (
     <div className="relative">
       {icon}

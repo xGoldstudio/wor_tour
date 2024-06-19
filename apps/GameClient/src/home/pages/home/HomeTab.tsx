@@ -140,8 +140,8 @@ export default function HomeTab() {
                   </div>
                   <Ribbon className="mt-16 px-16">Deck</Ribbon>
                   <div className="grid grid-cols-4 w-auto gap-3">
-                    {deckArray.map((cardId, index) => (
-                      <DeckCard cardId={cardId!} size={1.4} unaddble />
+                    {deckArray.map((cardId) => (
+                      <DeckCard cardId={cardId!} size={1.4} unaddble key={cardId} />
                     ))}
                   </div>
                   <Ribbon className="mt-16 px-16">Stats</Ribbon>
