@@ -170,7 +170,7 @@ function WorldPreview({ world }: { world: World }) {
     <div className="flex flex-col relative items-center w-full justify-center">
       <div className="flex gap-8 flex-col py-8 w-[350px] ">
         {_.range(1, 10).map((i) => (
-          <LevelPreview i={10 - i} worldTrophies={worldTrophies} />
+          <LevelPreview i={10 - i} worldTrophies={worldTrophies} key={i} />
         ))}
       </div>
       <div className="flex flex-col relative items-center gap-2 w-full py-4 justify-center">
@@ -206,7 +206,7 @@ function WorldPreview({ world }: { world: World }) {
           <p className="text-white">Cards unlocked</p>
           <div className="flex gap-2 flex-wrap w-full justify-center">
             {cards.map((card) => (
-              <StaticCard card={card} size={0.65} />
+              <StaticCard card={card} size={0.65} key={card.id} />
             ))}
           </div>
         </div>

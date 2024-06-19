@@ -133,6 +133,7 @@ export default function TrophyBar({
         <div
           className="absolute left-0 z-10 w-full"
           style={{ top: inPx(field.yPosition) }}
+          key={field.trophies}
         >
           <div className="w-full h-[2px] bg-gradient-to-b from-[rgb(88,88,89)] via-[rgb(177,177,178)] via-[37%] to-[rgb(88,88,80)] opacity-60" />
           <div className="absolute top-0 -translate-y-1/2 -right-2 translate-x-full text-slate-100 text-sm drop-shadow-[1px_1px_1px_black]">

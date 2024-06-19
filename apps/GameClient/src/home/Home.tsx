@@ -52,7 +52,7 @@ export default function Home() {
             }}
           >
             {tabs.map((Tab) => (
-              <div className="w-full h-full relative">
+              <div className="w-full h-full relative" key={Tab.name}>
                 <Tab />
               </div>
             ))}
