@@ -1,5 +1,5 @@
 import { CardRarity } from "@repo/types";
-import { inPx } from "../../lib/utils";
+import { cn, inPx } from "../../lib/utils";
 import textureByRarity from "../../lib/textureByRarity";
 import { getImageUrlCssValue } from "../../lib/getImageUrl";
 
@@ -125,9 +125,11 @@ export function CardIllustartion({
 export function CardContentIllustartion({
   card,
   size,
+  isDisabled = false,
 }: {
   card: { worldIllustration: string; illustration: string | null };
   size: number;
+  isDisabled?: boolean;
 }) {
   const borderUnit = Math.min(0.5 * size, 2);
 
@@ -135,7 +137,7 @@ export function CardContentIllustartion({
     <>
       <InnerBord size={size}>
         <div
-          className="w-full h-full grow absolute box-border"
+          className={cn("w-full h-full grow absolute box-border", isDisabled && "grayscale")}
           style={{
             backgroundImage: getImageUrlCssValue(card.worldIllustration),
             backgroundSize: "cover",
@@ -144,7 +146,7 @@ export function CardContentIllustartion({
           }}
         ></div>
         <div
-          className="w-full h-full grow absolute box-border"
+          className={cn("w-full h-full grow absolute box-border", isDisabled && "grayscale")}
           style={{
             backgroundImage: getImageUrlCssValue(card.illustration),
             backgroundSize: "cover",

@@ -1,10 +1,9 @@
 import useDataStore, { World } from "@/cards/DataStore";
 import { HomeBg } from "@/home/Home";
 import Cover from "@/home/ui/Cover";
-import { Badge, Button, cn, getImageUrl } from "@repo/ui";
+import { Badge, Button, cn, getImageUrl, useOnMount } from "@repo/ui";
 import { getCardFromLevel } from "@/cards";
 import StaticCard from "@/game/gui/card/StaticCard";
-import ScrollContainer from "react-indiana-drag-scroll";
 import _ from "lodash";
 import TrophyBar from "./trophyBar/TrophyBar";
 import TrophyBarProvider, {
@@ -13,6 +12,10 @@ import TrophyBarProvider, {
   TrophyBarContextType,
 } from "./trophyBar/TrophyBarContext";
 import { useContext, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import usePlayerStore from "@/home/store/playerStore";
+import ScrollContainer from "react-indiana-drag-scroll";
+import gsap from "gsap";
 
 const glowChestImageByLevel = {
   common: "/chests/common_yellow_glow.png",
@@ -38,17 +41,25 @@ const emptyChestImageByLevel = {
   epic: "/chests/mythical_empty_no_glow.png",
 };
 
-export default function AllWorlds() {
-  return (
+export default function AllWorlds({ closeModal }: { closeModal: () => void }) {
+  const home = document.getElementById("home");
+
+  if (!home) return null;
+
+  return createPortal(
     <TrophyBarProvider>
-      <AllWorldsInner />
-    </TrophyBarProvider>
+      <AllWorldsInner closeModal={closeModal} />
+    </TrophyBarProvider>,
+    home
   );
 }
 
-function AllWorldsInner() {
+function AllWorldsInner({ closeModal }: { closeModal: () => void }) {
   const { worlds } = useDataStore((state) => ({
     worlds: [...state.worlds].reverse(),
+  }));
+  const { trophies } = usePlayerStore((state) => ({
+    trophies: state.trophies,
   }));
 
   const ref = useRef<null | HTMLDivElement>(null);
@@ -57,25 +68,19 @@ function AllWorldsInner() {
     TrophyBarContext
   ) as TrophyBarContextType;
 
-  const sortedTrophiesFields = [...trophiesFields].sort(
-    (a, b) => a.trophies - b.trophies
-  );
-
-  const currentTrophies = 2075;
-
   // get the range of the current trophies
   const currentRange: [TrophiesField, TrophiesField] = [
-    sortedTrophiesFields[0] ?? { trophies: 0, yPosition: 0 },
-    sortedTrophiesFields[1] ?? { trophies: 0, yPosition: 0 },
+    trophiesFields[0] ?? { trophies: 0, yPosition: 0 },
+    trophiesFields[1] ?? { trophies: 0, yPosition: 0 },
   ];
 
-  for (let i = 0; i < sortedTrophiesFields.length; ++i) {
-    const currentTrophiesField = sortedTrophiesFields[i];
-    const nextTrophiesField = sortedTrophiesFields[i + 1];
+  for (let i = 0; i < trophiesFields.length; ++i) {
+    const currentTrophiesField = trophiesFields[i];
+    const nextTrophiesField = trophiesFields[i + 1];
 
     if (
-      currentTrophiesField.trophies <= currentTrophies &&
-      nextTrophiesField.trophies >= currentTrophies
+      currentTrophiesField.trophies <= trophies &&
+      nextTrophiesField.trophies >= trophies
     ) {
       currentRange[0] = currentTrophiesField;
       currentRange[1] = nextTrophiesField;
@@ -88,7 +93,7 @@ function AllWorldsInner() {
   const currentPositionRange =
     currentRange[1].yPosition - currentRange[0].yPosition;
   const currentTrophiesPosition =
-    (currentTrophies - currentRange[0].trophies) / currentTrophiesRange;
+    (trophies - currentRange[0].trophies) / currentTrophiesRange;
   const targetYPosition =
     currentRange[0].yPosition + currentTrophiesPosition * currentPositionRange;
 
@@ -96,7 +101,8 @@ function AllWorldsInner() {
 
   function setScrollDistancePosition() {
     if (ref.current) {
-      const allowedDistanceTop = ref.current.getBoundingClientRect().height - 150;
+      const allowedDistanceTop =
+        ref.current.getBoundingClientRect().height - 150;
       const allowedDistanceBottom = -50;
       const scrollPosition = ref.current.scrollTop;
       const distance = scrollPosition - targetYPosition;
@@ -104,20 +110,99 @@ function AllWorldsInner() {
         setDistanceFromTrophies(1);
         return;
       } else if (distance < -allowedDistanceTop) {
-        setDistanceFromTrophies(scrollPosition - targetYPosition);
+        setDistanceFromTrophies(-1);
         return;
       }
       setDistanceFromTrophies(0);
     }
   }
 
+  const [currentTrophiesField, setCurrentTrophiesField] = useState(0);
+  const revealLevelQueue = useRef<(() => void)[]>([]).current;
+  const [_, setIsRevealRunning] = useState(false);
+
+  function revealLevelsRunner() {
+    // ensure that the runner is not running
+    setIsRevealRunning((isRunning) => {
+      if (isRunning) {
+        return isRunning;
+      }
+      function nextReveal() {
+        setTimeout(() => {
+          if (revealLevelQueue.length) {
+            revealLevelQueue.shift()?.();
+            nextReveal();
+          } else {
+            setIsRevealRunning(false);
+          }
+        }, 50);
+      }
+      nextReveal();
+      return true;
+    });
+  }
+
+  function revealLevels() {
+    if (!ref.current || currentTrophiesField >= trophiesFields.length) {
+      return;
+    }
+    const scrollPosition = ref.current.scrollTop;
+    const animations: (() => void)[] = [];
+    setCurrentTrophiesField((initIndex) => {
+      let index = initIndex;
+      let trophieFieldPosition = trophiesFields[index].yPosition;
+      function nextReveal() {
+        if (scrollPosition < trophieFieldPosition) {
+          animations.push(trophiesFields[index].animate);
+          index++;
+          if (index < trophiesFields.length) {
+            trophieFieldPosition = trophiesFields[index].yPosition;
+            nextReveal();
+          }
+        }
+      }
+      nextReveal();
+      if (index !== initIndex) {
+        animations.forEach((animation) => {
+          revealLevelQueue.push(animation);
+          revealLevelsRunner();
+        });
+      }
+      return index;
+    });
+  }
+
+  function onScroll() {
+    setScrollDistancePosition();
+    revealLevels();
+  }
+
+  // allow first render to set the scroll distance and reveal levels
+  useEffect(() => {
+    onScroll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trophiesFields]);
+
+  const [hasRendered, setHasRendered] = useState(false);
+  useOnMount(() => {
+    setHasRendered(true);
+  });
+
   return (
-    <div className="absolute w-full h-full grid grid-cols-1 grid-rows-[1fr_66px] items-center justify-end z-20 select-none">
+    <div
+      className={cn(
+        "absolute top-0 w-full h-full grid grid-cols-1 grid-rows-[1fr_66px] items-center justify-end z-20 select-none opacity-0 transition-opacity",
+        hasRendered && "opacity-100"
+      )}
+    >
+      <div className="absolute w-full h-full z-20 hidden" id="scrollBlocker" />
       <HomeBg />
       <ScrollContainer
-        className="max-h-[100%] overflow-hidden w-full flex flex-col relative"
+        className={cn(
+          "max-h-[100%] overflow-hidden w-full flex flex-col relative"
+        )}
         innerRef={ref}
-        onScroll={setScrollDistancePosition}
+        onScroll={onScroll}
       >
         <div className="relative">
           {ref.current && (
@@ -125,17 +210,17 @@ function AllWorldsInner() {
               scrollRef={ref.current}
               targetYPosition={targetYPosition}
               distanceFromTrophies={distanceFromTrophies}
-              numberOfTrophies={currentTrophies}
+              numberOfTrophies={trophies}
             />
           )}
           {worlds.map((world) => (
-            <WorldPreview world={world} key={world.id} />
+            <WorldPreview world={world} key={world.id} scroller={ref.current} />
           ))}
         </div>
       </ScrollContainer>
-      <div className="w-full h-full relative bg-slate-600 flex justify-center items-center">
+      <div className="w-full h-full relative bg-slate-600 flex justify-center items-center z-20">
         <Cover cardRarity="rare" />
-        <Button action={() => {}} rarity="epic" className="px-20 text-white">
+        <Button action={closeModal} rarity="epic" className="px-20 text-white">
           Ok
         </Button>
       </div>
@@ -143,10 +228,18 @@ function AllWorldsInner() {
   );
 }
 
-function WorldPreview({ world }: { world: World }) {
+function WorldPreview({
+  world,
+}: {
+  world: World;
+  scroller: HTMLDivElement | null;
+}) {
   const cards = useDataStore((state) => state.cards)
     .filter((card) => card.world === world.id)
     .map((card) => getCardFromLevel(card, 3));
+  const { playerTrophies } = usePlayerStore((state) => ({
+    playerTrophies: state.trophies,
+  }));
 
   const worldTrophies = (world.id - 1) * 1000;
 
@@ -160,11 +253,14 @@ function WorldPreview({ world }: { world: World }) {
       addTrophiesField(
         worldTrophies,
         worldRef.current.getBoundingClientRect().top +
-          worldRef.current.clientHeight / 2
+          worldRef.current.clientHeight / 2,
+        () => {}
       );
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [worldRef, world.id, addTrophiesField]);
+
+  const isUnlocked = worldTrophies <= playerTrophies;
 
   return (
     <div className="flex flex-col relative items-center w-full justify-center">
@@ -177,7 +273,10 @@ function WorldPreview({ world }: { world: World }) {
         <div className="absolute w-full h-full bg-slate-400 opacity-20" />
         <div className="flex flex-col relative items-center gap-2 w-[400px]">
           <img
-            className="w-[250px] aspect-square relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)]"
+            className={cn(
+              "w-[250px] aspect-square relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)]",
+              !isUnlocked && "grayscale-[80%]"
+            )}
             src={getImageUrl(world.illustration)}
           />
           <p className="text-3xl text-white font-stylised pb-4 drop-shadow-[2px_2px_1px_black]">
@@ -206,7 +305,7 @@ function WorldPreview({ world }: { world: World }) {
           <p className="text-white">Cards unlocked</p>
           <div className="flex gap-2 flex-wrap w-full justify-center">
             {cards.map((card) => (
-              <StaticCard card={card} size={0.65} key={card.id} />
+              <StaticCard card={card} size={0.65} key={card.id} isDisabled={!isUnlocked} />
             ))}
           </div>
         </div>
@@ -225,21 +324,39 @@ function LevelPreview({
   const { addTrophiesField } = useContext(
     TrophyBarContext
   ) as TrophyBarContextType;
+  const { playerTrophies } = usePlayerStore((state) => ({
+    playerTrophies: state.trophies,
+  }));
   const levelRef = useRef<HTMLDivElement | null>(null);
+
+  const levelTrophies = worldTrophies + i * 100;
 
   useEffect(() => {
     if (levelRef.current) {
       addTrophiesField(
-        worldTrophies + i * 100,
+        levelTrophies,
         levelRef.current.getBoundingClientRect().top +
-          levelRef.current.clientHeight / 2
+          levelRef.current.clientHeight / 2,
+        () =>
+          gsap.to(levelRef.current, {
+            opacity: 1,
+            scale: 1,
+            x: 0,
+            duration: 0.5,
+            ease: "back.out(1.7)",
+          })
       );
     }
   }, [levelRef, i, addTrophiesField]);
 
+  const isUnlocked = levelTrophies <= playerTrophies;
+
   return (
     <div
-      className="w-full flex justify-center items-center relative h-[80px]"
+      className={cn(
+        "w-full flex justify-center items-center relative h-[80px] opacity-0 scale-[20%]",
+        !isUnlocked && "grayscale-[80%]"
+      )}
       ref={levelRef}
     >
       <div className="absolute w-full h-full bg-slate-400 opacity-60 rounded-md" />
@@ -259,7 +376,7 @@ function LevelPreview({
       >
         <Cover cardRarity="rare" className="opacity-80 bg-slate-50" />
         <img
-          src={chestImageByLevel["rare"]}
+          src={isUnlocked ? glowChestImageByLevel["rare"] : chestImageByLevel["rare"]}
           alt="chest"
           className="left-0 top-0 w-[80px] aspect-square relative"
         />

@@ -37,8 +37,9 @@ interface PlayerStore {
   addGold: (amount: number) => void;
   spendGold: (amount: number) => void;
 
-  lastCompletedLevel: number;
-  completeNextLevel: () => void;
+  trophies: number;
+  addTrophies: (amount: number) => void;
+  removeTrohpies: (amount: number) => void;
 }
 
 const defaultCollection: Map<number, CollectionCard> = new Map();
@@ -64,7 +65,7 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
     ...findCard(id, get().getCollectionInfo(id)!.level),
     isInDeck: get().deck.includes(id),
   }),
-  lastCompletedLevel: -1,
+  trophies: 0,
 
   removeCardFromDeck: (id: number) =>
     set((state) => ({ deck: state.deck.filter((cardId) => cardId !== id) })),
@@ -164,7 +165,8 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   spendGold: (amount: number) =>
     set((state) => ({ gold: state.gold - amount })),
 
-  completeNextLevel: () => set((state) => ({ lastCompletedLevel: state.lastCompletedLevel + 1 })),
+  addTrophies: (amount: number) => set((state) => ({ trophies: state.trophies + amount })),
+  removeTrohpies: (amount: number) => set((state) => ({ trophies: Math.max(0, state.trophies - amount) })),
 }));
 
 export default usePlayerStore;

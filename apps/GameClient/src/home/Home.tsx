@@ -14,7 +14,6 @@ import {
   InnerBord,
 } from "../../../../packages/ui/components/card/CardBorder";
 import Cover from "./ui/Cover";
-import AllWorlds from "./pages/home/AllWorlds";
 
 type Tabs = "home" | "deck" | "shop";
 
@@ -36,7 +35,6 @@ export default function Home() {
         className="w-[700px] h-full relative overflow-hidden bg-slate-900"
         id="home"
       >
-        <AllWorlds />
         <RewardBlockWithContext />
         <HomeBg />
         <div className="w-full h-full relative flex flex-col items-center justify-between">

@@ -1948,14 +1948,14 @@
       "id": 1,
       "name": "Crabvor Island",
       "illustration": "world_1_illustration_1718482725169.png",
-      "cardBackground": "world_1_cardBackground_1717283375227.png",
+      "cardBackground": "world_1_cardBackground_1718815100412.jpeg",
       "description": "A dangerous island where a creature from the sea can surprise you at anytime anywhere..."
     },
     {
       "id": 2,
       "name": "Krag Desert",
       "illustration": "world_2_illustration_1718289710898.png",
-      "cardBackground": null,
+      "cardBackground": "world_2_cardBackground_1718900878033.jpeg",
       "numberOfLevels": 0,
       "baseGoldReward": 1,
       "baseXpReward": 1,

@@ -2,11 +2,7 @@ import { useStartGame } from "@/game/stores/gameMetadataStore";
 import * as _ from "lodash";
 import { useState } from "react";
 import useDataStore from "@/cards/DataStore";
-import {
-  Box, getImageUrl,
-  textureByRarity,
-  Badge
-} from "@repo/ui";
+import { Box, getImageUrl, textureByRarity, Badge } from "@repo/ui";
 import usePlayerStore from "@/home/store/playerStore";
 import Cover from "@/home/ui/Cover";
 import { EmptyBar } from "@/game/gui/ManaBar";
@@ -19,6 +15,7 @@ import Modal from "@/home/ui/modal";
 import Ribbon from "@/home/ui/Ribbon";
 import { DeckCard } from "../deck/DeckTab";
 import ScrollContainer from "react-indiana-drag-scroll";
+import AllWorlds from "./AllWorlds";
 
 export default function HomeTab() {
   const startGame = useStartGame();
@@ -28,15 +25,18 @@ export default function HomeTab() {
     levels: state.levels,
   }));
   const [profileOpen, setProfileOpen] = useState(false);
+  const [worldsModalOpen, setWorldsModalOpen] = useState(false);
 
-  const { deck } = usePlayerStore((state) => ({
+  const { deck, trophies } = usePlayerStore((state) => ({
     deck: state.deck,
+    trophies: state.trophies,
   }));
 
   const deckArray = _.concat(deck, _.fill(Array(8 - deck.length), null));
 
   return (
     <div className="w-full h-full flex flex-col items-center">
+      {worldsModalOpen && <AllWorlds closeModal={() => setWorldsModalOpen(false)} />}
       {profileOpen && (
         <Modal title="profile" closeModal={() => setProfileOpen(false)}>
           <div className="w-full h-full bg-slate-900 opacity-80 absolute"></div>
@@ -141,7 +141,12 @@ export default function HomeTab() {
                   <Ribbon className="mt-16 px-16">Deck</Ribbon>
                   <div className="grid grid-cols-4 w-auto gap-3">
                     {deckArray.map((cardId) => (
-                      <DeckCard cardId={cardId!} size={1.4} unaddble key={cardId} />
+                      <DeckCard
+                        cardId={cardId!}
+                        size={1.4}
+                        unaddble
+                        key={cardId}
+                      />
                     ))}
                   </div>
                   <Ribbon className="mt-16 px-16">Stats</Ribbon>
@@ -196,14 +201,14 @@ export default function HomeTab() {
             <InnerBord size={1.5}>
               <div className="w-full h-full relative bg-slate-600 flex items-center justify-end pr-2">
                 <Cover cardRarity="rare" />
-                <p className="relative font-semibold">40</p>
+                <p className="relative font-semibold">{trophies}</p>
               </div>
             </InnerBord>
           </div>
         </div>
       </div>
       <div className="flex flex-col gap-16 items-center grow pt-20">
-        <div className="relative w-1/2">
+        <div className="relative w-1/2" onClick={() => setWorldsModalOpen(true)}>
           <img
             className="w-full aspect-square relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)]"
             src={getImageUrl(world.illustration)}

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import { TrophyBarContext, TrophyBarContextType } from "./TrophyBarContext";
 import { inPx, textureByRarity } from "@repo/ui";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -24,8 +24,7 @@ export default function TrophyBar({
     TrophyBarContext
   ) as TrophyBarContextType;
 
-  const startTrophies =
-    trophiesFields.find((tr) => tr.trophies === 0)?.yPosition ?? 0;
+  const startTrophies = trophiesFields[0].yPosition;
 
   const height = startTrophies - targetYPosition + 7;
 
@@ -40,10 +39,16 @@ export default function TrophyBar({
         innerBarRef.style.transform = `scaleY(${progress * 100}%) translateX(-50%)`;
       }
     },
-    duration: 1000,
-    ease: cubicBezier(0.25, 1, 0.81, 1.05),
+    duration: 1400,
+    ease: cubicBezier(0.5, 0.15, 0.34, 0.5),
     waitFor: !!innerBarRef,
+    onStart: () => document.getElementById("scrollBlocker")?.setAttribute("style", "display: block"),
+    onEnd: () => document.getElementById("scrollBlocker")?.setAttribute("style", "display: hidden"),
   });
+
+  useLayoutEffect(() => {
+    scrollRef.scrollTo({ top: currentY });
+  }, []);
 
   const trigger = useTriggerCustomAnimation();
 
@@ -55,8 +60,10 @@ export default function TrophyBar({
         const newY = currentScrollPosition + diff * progress;
         scrollRef.scrollTo({ top: newY });
       },
-      duration: 1000,
-      ease: cubicBezier(0.25, 1, 0.25, 1.0),
+      duration: 600,
+      ease: cubicBezier(0.25, 0.6, 0.25, 0.6),
+      onStart: () => document.getElementById("scrollBlocker")?.setAttribute("style", "display: block"),
+      onEnd: () => document.getElementById("scrollBlocker")?.setAttribute("style", "display: hidden"),
     });
   }
 
@@ -88,28 +95,26 @@ export default function TrophyBar({
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <mask id="svgmask1">
+          <mask id="svgmask">
             <rect
               x="7"
               y="0"
               width={113}
               height={50}
-              fill="#ffffff"
+              fill="white"
               rx="4"
               ry="4"
             ></rect>
-            <polygon points="0,25 7,35 7,15" fill="#ffffff" />
+            <polygon points="0,25 7,35 7,15" fill="white" />
           </mask>
           <rect
-            x="7"
+            x="0"
             y="0"
-            width={113}
+            width={120}
             height={50}
             fill="#ffffff"
-            rx="4"
-            ry="4"
+            mask="url(#svgmask)"
           ></rect>
-          <polygon points="0,25 7,35 7,15" fill="#ffffff" />
           <image
             className="blur-[6px]"
             href={textureByRarity("legendary")}
@@ -118,7 +123,7 @@ export default function TrophyBar({
             width="100%"
             height="100%"
             preserveAspectRatio="xMidYMid slice"
-            mask="url(#svgmask1)"
+            mask="url(#svgmask)"
           />
         </svg>
         <div className="w-full h-full absolute top-1/2 -translate-x-3 -translate-y-1/2 flex justify-center items-center">
@@ -126,7 +131,9 @@ export default function TrophyBar({
             src="/trophy.png"
             className="w-[28px] drop-shadow-[2px_1px_1px_black]"
           />
-          <p className="text-slate-100 drop-shadow-[1px_1px_1px_black]">{numberOfTrophies}</p>
+          <p className="text-slate-100 drop-shadow-[1px_1px_1px_black]">
+            {numberOfTrophies}
+          </p>
         </div>
       </div>
       {trophiesFields.map((field) => (
