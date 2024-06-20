@@ -2,11 +2,12 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import {
   ActiveFilters,
+  CardFilter,
   CardFilters,
-  CardFilterState,
+  CardFilterSliderStyles,
+  CardFiltersStyles,
   FiltersDescription,
 } from "./cardFilters";
-import { bool } from "three/examples/jsm/nodes/Nodes.js";
 
 interface FilterModalProps {
   setActualFilter: (filter: ActiveFilters) => void;
@@ -30,6 +31,11 @@ export function FilterModal({
       }
     }
   };
+
+  function getStyleForSlider(filterCriteria: CardFiltersStyles) {
+    return CardFilterSliderStyles[filterCriteria];
+  }
+
   return (
     <div className="flex flex-col items-center justify-center w-44 h-40 bg-white absolute border-white top-48 z-50 p-2 pt-4 rounded-lg">
       {Object.values(FiltersDescription).map((filterCriteria, index) =>
@@ -70,6 +76,9 @@ export function FilterModal({
                     [filterCriteria.label]: { min: value[0], max: value[1] },
                   });
               }}
+              styles={getStyleForSlider(
+                filterCriteria.label as CardFiltersStyles
+              )}
             />
             <div>
               <span>

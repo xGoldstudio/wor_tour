@@ -45,7 +45,7 @@ interface PlayerStore {
 }
 
 const defaultCollection: Map<number, CollectionCard> = new Map();
-defaultCollection.set(1, { id: 1, level: 1, shard: 0 });
+defaultCollection.set(1, { id: 1, level: 1, shard: 1 });
 defaultCollection.set(2, { id: 2, level: 1, shard: 0 });
 defaultCollection.set(3, { id: 3, level: 1, shard: 0 });
 defaultCollection.set(4, { id: 4, level: 1, shard: 0 });
