@@ -27,9 +27,10 @@ export default function Button({
     <button
       onClick={action}
       className={cn(
-        "rounded-sm overflow-hidden text-nowrap relative z-10 bg-black font-semibold shadow-md",
+        "rounded-sm overflow-hidden text-nowrap relative z-10 font-semibold shadow-md",
         full ? "w-full" : "w-min",
-        disabled ? "brightness-50" : "brightness-100"
+        disabled ? "brightness-50" : "brightness-100",
+        rarity === "epic" ? "bg-slate-100" : "bg-black"
       )}
       disabled={disabled}
       ref={forwardRef}

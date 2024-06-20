@@ -305,7 +305,12 @@ function WorldPreview({
           <p className="text-white">Cards unlocked</p>
           <div className="flex gap-2 flex-wrap w-full justify-center">
             {cards.map((card) => (
-              <StaticCard card={card} size={0.65} key={card.id} isDisabled={!isUnlocked} />
+              <StaticCard
+                card={card}
+                size={0.65}
+                key={card.id}
+                isDisabled={!isUnlocked}
+              />
             ))}
           </div>
         </div>
@@ -324,12 +329,15 @@ function LevelPreview({
   const { addTrophiesField } = useContext(
     TrophyBarContext
   ) as TrophyBarContextType;
-  const { playerTrophies } = usePlayerStore((state) => ({
-    playerTrophies: state.trophies,
-  }));
-  const levelRef = useRef<HTMLDivElement | null>(null);
-
   const levelTrophies = worldTrophies + i * 100;
+  const { playerTrophies, isCollected, collectReward } = usePlayerStore(
+    (state) => ({
+      playerTrophies: state.trophies,
+      isCollected: state.getCollectedTrophiesReward(levelTrophies),
+      collectReward: () => state.setCollectedTrophiesReward(levelTrophies),
+    })
+  );
+  const levelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (levelRef.current) {
@@ -350,14 +358,17 @@ function LevelPreview({
   }, [levelRef, i, addTrophiesField]);
 
   const isUnlocked = levelTrophies <= playerTrophies;
+  const isReadyToCollect = isUnlocked && !isCollected;
 
   return (
     <div
       className={cn(
         "w-full flex justify-center items-center relative h-[80px] opacity-0 scale-[20%]",
-        !isUnlocked && "grayscale-[80%]"
+        !isUnlocked && "grayscale-[80%]",
+        isReadyToCollect && "animate-[collectable_2s_ease-in-out_infinite] cursor-pointer"
       )}
       ref={levelRef}
+      onClick={isReadyToCollect ? collectReward : () => {}}
     >
       <div className="absolute w-full h-full bg-slate-400 opacity-60 rounded-md" />
       <div
@@ -370,16 +381,36 @@ function LevelPreview({
       ></div>
       <div
         className={cn(
-          "absolute  bottom-[15px] rounded-sm overflow-hidden",
+          "flex items-center flex-col gap-2 absolute top-[-20px]",
           i % 2 ? "right-[50px]" : "left-[50px]"
         )}
       >
-        <Cover cardRarity="rare" className="opacity-80 bg-slate-50" />
-        <img
-          src={isUnlocked ? glowChestImageByLevel["rare"] : chestImageByLevel["rare"]}
-          alt="chest"
-          className="left-0 top-0 w-[80px] aspect-square relative"
-        />
+        <div className={cn("rounded-sm overflow-hidden relative")}>
+          <Cover cardRarity="rare" className="opacity-80 bg-slate-50" />
+          <img
+            src={chestImageByLevel["rare"]}
+            alt="chest"
+            className="left-0 top-0 w-[80px] aspect-square relative"
+          />
+          {isReadyToCollect && (
+            <img
+              src={glowChestImageByLevel["rare"]}
+              alt="chest"
+              className="left-0 top-0 w-[80px] aspect-square absolute animate-[shiny_2s_ease-in-out_infinite]"
+            />
+          )}
+        </div>
+        {isReadyToCollect && (
+          <Button
+            action={() => {}}
+            rarity="epic"
+            full
+            small
+            className="text-slate-100"
+          >
+            Collect
+          </Button>
+        )}
       </div>
     </div>
   );

@@ -36,7 +36,9 @@ export default function HomeTab() {
 
   return (
     <div className="w-full h-full flex flex-col items-center">
-      {worldsModalOpen && <AllWorlds closeModal={() => setWorldsModalOpen(false)} />}
+      {worldsModalOpen && (
+        <AllWorlds closeModal={() => setWorldsModalOpen(false)} />
+      )}
       {profileOpen && (
         <Modal title="profile" closeModal={() => setProfileOpen(false)}>
           <div className="w-full h-full bg-slate-900 opacity-80 absolute"></div>
@@ -177,9 +179,17 @@ export default function HomeTab() {
                 <rect fill="#ffffff" x={0} y={0} width="85%" height="100%" />
                 <polygon fill="#ffffff" points="324 0, 383 0, 324 84"></polygon>
               </mask>
+              <rect
+                fill="black"
+                x={0}
+                y={0}
+                width="100%"
+                height="100%"
+                mask="url(#svgmask1)"
+              />
               <image
                 className="blur-[6px]"
-                href={textureByRarity("legendary")}
+                href={textureByRarity("common")}
                 x="0"
                 y="0"
                 width="100%"
@@ -208,7 +218,10 @@ export default function HomeTab() {
         </div>
       </div>
       <div className="flex flex-col gap-16 items-center grow pt-20">
-        <div className="relative w-1/2" onClick={() => setWorldsModalOpen(true)}>
+        <div
+          className="relative w-1/2"
+          onClick={() => setWorldsModalOpen(true)}
+        >
           <img
             className="w-full aspect-square relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)]"
             src={getImageUrl(world.illustration)}

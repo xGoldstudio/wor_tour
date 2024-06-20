@@ -40,6 +40,10 @@ interface PlayerStore {
   trophies: number;
   addTrophies: (amount: number) => void;
   removeTrohpies: (amount: number) => void;
+
+  collectedTrophiesRewards: Set<number>;
+  setCollectedTrophiesReward: (reward: number) => void;
+  getCollectedTrophiesReward: (reward: number) => boolean;
 }
 
 const defaultCollection: Map<number, CollectionCard> = new Map();
@@ -66,6 +70,7 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
     isInDeck: get().deck.includes(id),
   }),
   trophies: 0,
+  collectedTrophiesRewards: new Set(),
 
   removeCardFromDeck: (id: number) =>
     set((state) => ({ deck: state.deck.filter((cardId) => cardId !== id) })),
@@ -167,6 +172,14 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
 
   addTrophies: (amount: number) => set((state) => ({ trophies: state.trophies + amount })),
   removeTrohpies: (amount: number) => set((state) => ({ trophies: Math.max(0, state.trophies - amount) })),
+
+  setCollectedTrophiesReward: (reward: number) => {
+    set((state) => {
+      state.collectedTrophiesRewards.add(reward);
+      return { collectedTrophiesRewards: new Set(state.collectedTrophiesRewards) };
+    });
+  },
+  getCollectedTrophiesReward: (reward: number) => get().collectedTrophiesRewards.has(reward),
 }));
 
 export default usePlayerStore;

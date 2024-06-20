@@ -144,7 +144,7 @@ function FooterButton({
 export function HomeBg() {
   return (
     <div
-      className="w-full h-full absolute brightness-75 "
+      className="w-full h-full absolute"
       style={{
         backgroundImage: "url('/homeBg.jpeg')",
         backgroundPosition: "center",
