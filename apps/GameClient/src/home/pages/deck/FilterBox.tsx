@@ -49,6 +49,7 @@ export function FilterModal({
               backgroundImage: `url(${filterCriteria.style})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
+              opacity: actualFilter[filterCriteria.label] ? 1 : 0.6,
             }}
             className="bg-opacity-10 w-full"
           >
