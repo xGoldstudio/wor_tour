@@ -37,7 +37,7 @@ export function FilterModal({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-44 h-40 bg-white absolute border-white top-48 z-50 p-2 pt-4 rounded-lg">
+    <div className="flex flex-col items-center justify-center w-44 h-64 bg-white absolute border-white top-48 z-50 p-2 pt-4 rounded-lg">
       {Object.values(FiltersDescription).map((filterCriteria, index) =>
         filterCriteria.isButton ? (
           <button
