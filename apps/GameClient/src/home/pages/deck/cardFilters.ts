@@ -16,15 +16,9 @@ export interface CardFilter {
   rangeMin?: number;
   rangeMax?: number;
   isButton: boolean;
-  filterFunction: (
-    cards: Card[],
-    state: boolean | { min: number; max: number }
-  ) => Card[];
+  filterFunction: (cards: Card[], state: CardFilterState) => Card[];
 }
-export type ActiveFilters = Record<
-  CardFilters,
-  boolean | { min: number; max: number }
->;
+export type ActiveFilters = Record<CardFilters, CardFilterState>;
 
 export const FiltersDescription: Filters = {
   Common: {
@@ -79,9 +73,7 @@ export const FiltersDescription: Filters = {
     filterFunction: (cards, state) =>
       typeof state === "object" && typeof state.min === "number"
         ? cards.filter(
-            (card) =>
-              card.level >= FiltersDescription.Level.rangeMin! &&
-              card.level <= FiltersDescription.Level.rangeMax!
+            (card) => card.level >= state.min && card.level <= state.max
           )
         : cards,
   },

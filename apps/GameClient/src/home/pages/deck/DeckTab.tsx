@@ -38,22 +38,28 @@ export default function DeckTab() {
   const defaultSort: CardSorts = "cost_asc";
   const [actualSort, setActualSort] = useState<CardSorts>(defaultSort);
   const [actualFilter, setActualFilter] = useState<ActiveFilters>({
-    Cost: false,
+    Cost: {
+      min: FiltersDescription.Cost.rangeMin!,
+      max: FiltersDescription.Cost.rangeMax!,
+    },
     Common: false,
     Rare: false,
     Epic: false,
     Legendary: false,
-    Level: false,
+    Level: {
+      min: FiltersDescription.Level.rangeMin!,
+      max: FiltersDescription.Level.rangeMax!,
+    },
   });
-  console.log(actualFilter);
   for (const filter in FiltersDescription) {
     const typedFilter = FiltersDescription[filter as CardFilters];
-    const tmp = typedFilter.filterFunction(
-      detailledCollection,
-      actualFilter[filter as CardFilters]
-    );
     detailledCollection = detailledCollection.filter((card) =>
-      tmp.includes(card)
+      typedFilter
+        .filterFunction(
+          detailledCollection,
+          actualFilter[filter as CardFilters]
+        )
+        .includes(card)
     );
   }
   detailledCollection = sorts[actualSort].sortFunction(detailledCollection);

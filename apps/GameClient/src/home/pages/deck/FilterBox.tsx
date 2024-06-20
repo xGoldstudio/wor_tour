@@ -1,6 +1,12 @@
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import { ActiveFilters, CardFilters, FiltersDescription } from "./cardFilters";
+import {
+  ActiveFilters,
+  CardFilters,
+  CardFilterState,
+  FiltersDescription,
+} from "./cardFilters";
+import { bool } from "three/examples/jsm/nodes/Nodes.js";
 
 interface FilterModalProps {
   setActualFilter: (filter: ActiveFilters) => void;
@@ -53,27 +59,15 @@ export function FilterModal({
               defaultValue={[
                 typeof actualFilter[filterCriteria.label] === "object" &&
                 typeof actualFilter[filterCriteria.label].min === "number"
-                  ? FiltersDescription[filterCriteria.label].rangeMin
-                  : actualFilter[filterCriteria.label].min,
-                actualFilter[filterCriteria.label] === false
-                  ? FiltersDescription[filterCriteria.label].rangeMax
-                  : actualFilter[filterCriteria.label].max,
+                  ? actualFilter[filterCriteria.label].min
+                  : FiltersDescription[filterCriteria.label].rangeMin,
+                actualFilter[filterCriteria.label].max,
               ]}
               onChange={(value) => {
                 if (Array.isArray(value))
                   setActualFilter({
                     ...actualFilter,
                     [filterCriteria.label]: { min: value[0], max: value[1] },
-                  });
-                if (
-                  actualFilter[filterCriteria.label].min ===
-                    FiltersDescription[filterCriteria.label].rangeMin &&
-                  actualFilter[filterCriteria.label].max ===
-                    FiltersDescription[filterCriteria.label].rangeMax
-                )
-                  setActualFilter({
-                    ...actualFilter,
-                    [filterCriteria.label]: false,
                   });
               }}
             />
