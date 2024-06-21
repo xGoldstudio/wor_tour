@@ -53,7 +53,5 @@ function Timer({ targetTimestamp }: TimerProps) {
     return () => clearInterval(interval);
   }, [targetTimestamp]);
 
-
-
   return <span>{formatTime(timeRemaining)}</span>;
 }

@@ -1,11 +1,10 @@
 import { create } from "zustand";
-import { EditorData, Level } from "@repo/types";
-import { CardStatsInfo, CardStatsInfoLevel, getStats, levels } from "@repo/ui";
+import { EditorData } from "@repo/types";
+import { CardStatsInfo, CardStatsInfoLevel, getStats } from "@repo/ui";
 
 interface DataStore {
   cards: CardStatsInfo[];
   worlds: World[];
-  levels: Level[];
   getWorld: (id: number) => World | undefined;
   init: (data: EditorData) => void;
 }
@@ -22,7 +21,6 @@ export interface World {
 const useDataStore = create<DataStore>()((set, get) => ({
   cards: [],
   worlds: [],
-  levels: levels,
   getWorld: (id: number) => {
     return get().worlds.find((w) => w.id === id);
   },

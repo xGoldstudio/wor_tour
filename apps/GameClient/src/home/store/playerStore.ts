@@ -170,8 +170,8 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   spendGold: (amount: number) =>
     set((state) => ({ gold: state.gold - amount })),
 
-  addTrophies: (amount: number) => set((state) => ({ trophies: state.trophies + amount })),
-  removeTrohpies: (amount: number) => set((state) => ({ trophies: Math.max(0, state.trophies - amount) })),
+  addTrophies: (amount: number) => set((state) => updateTrophies(state.trophies, amount)),
+  removeTrohpies: (amount: number) => set((state) => updateTrophies(state.trophies, -amount)),
 
   setCollectedTrophiesReward: (reward: number) => {
     set((state) => {
@@ -181,5 +181,10 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   },
   getCollectedTrophiesReward: (reward: number) => get().collectedTrophiesRewards.has(reward),
 }));
+
+function updateTrophies(currentTrophies: number, difference: number) {
+  const nextTrophies = Math.max(0, currentTrophies + difference);
+  return ({ trophies: nextTrophies, currentWorld: Math.min(4, Math.floor((nextTrophies) / 1000)) + 1});
+}
 
 export default usePlayerStore;

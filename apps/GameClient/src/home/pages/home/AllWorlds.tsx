@@ -16,6 +16,7 @@ import { createPortal } from "react-dom";
 import usePlayerStore from "@/home/store/playerStore";
 import ScrollContainer from "react-indiana-drag-scroll";
 import gsap from "gsap";
+import WorldModal from "./modals/WorldModal";
 
 const glowChestImageByLevel = {
   common: "/chests/common_yellow_glow.png",
@@ -261,9 +262,11 @@ function WorldPreview({
   }, [worldRef, world.id, addTrophiesField]);
 
   const isUnlocked = worldTrophies <= playerTrophies;
+  const [isWorldModalOpen, setIsWorldModalOpen] = useState(false);
 
   return (
     <div className="flex flex-col relative items-center w-full justify-center">
+      {isWorldModalOpen && <WorldModal closeModal={() => setIsWorldModalOpen(false)} />}
       <div className="flex gap-8 flex-col py-8 w-[350px] ">
         {_.range(1, 10).map((i) => (
           <LevelPreview i={10 - i} worldTrophies={worldTrophies} key={i} />
@@ -274,17 +277,19 @@ function WorldPreview({
         <div className="flex flex-col relative items-center gap-2 w-[400px]">
           <img
             className={cn(
-              "w-[250px] aspect-square relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)]",
+              "w-[250px] aspect-square relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)] cursor-pointer",
               !isUnlocked && "grayscale-[80%]"
             )}
+            onClick={() => setIsWorldModalOpen(true)}
             src={getImageUrl(world.illustration)}
           />
           <p className="text-3xl text-white font-stylised pb-4 drop-shadow-[2px_2px_1px_black]">
             {world.name}
           </p>
           <div
-            className="flex items-center justify-between w-full bg-slate-50 px-4 py-2 rounded-sm relative"
+            className="flex items-center justify-between w-full bg-slate-50 px-4 py-2 rounded-sm relative cursor-pointer"
             ref={worldRef}
+            onClick={() => setIsWorldModalOpen(true)}
           >
             <Cover cardRarity="rare" />
             <div className="flex items-center gap-2 relative">
@@ -298,7 +303,7 @@ function WorldPreview({
               />
               <p className="relative font-semibold">{worldTrophies}</p>
             </div>
-            <Button action={() => {}} rarity="rare" small>
+            <Button action={() => setIsWorldModalOpen(true)} rarity="rare" small>
               i
             </Button>
           </div>
@@ -359,6 +364,7 @@ function LevelPreview({
 
   const isUnlocked = levelTrophies <= playerTrophies;
   const isReadyToCollect = isUnlocked && !isCollected;
+  const isEmpty = isUnlocked && isCollected;
 
   return (
     <div
@@ -388,7 +394,7 @@ function LevelPreview({
         <div className={cn("rounded-sm overflow-hidden relative")}>
           <Cover cardRarity="rare" className="opacity-80 bg-slate-50" />
           <img
-            src={chestImageByLevel["rare"]}
+            src={isEmpty ? emptyChestImageByLevel["rare"] : chestImageByLevel["rare"]}
             alt="chest"
             className="left-0 top-0 w-[80px] aspect-square relative"
           />
