@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ActiveFilters, CardFilters, FiltersDescription } from "./cardFilters";
-import { CardSorts } from "./cardSorts";
+import { CardSorts, sorts } from "./cardSorts";
 import { FilterModal } from "./FilterBox";
 import { SortModal } from "./SortBox";
-import { sorts } from "./cardSorts";
 
 interface SortAndFilterBoxProps {
   setActualSort: (sort: CardSorts) => void;
@@ -11,6 +10,29 @@ interface SortAndFilterBoxProps {
   setActualFilter?: (filter: ActiveFilters) => void;
   actualFilter?: ActiveFilters;
 }
+
+const OutsideClickHandler = ({ children, onOutsideClick }) => {
+  const wrapperRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+      onOutsideClick();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <div className="absolute flex items-center justify-center" ref={wrapperRef}>
+      {children}
+    </div>
+  );
+};
 
 export function SortAndFilterBox({
   setActualSort,
@@ -70,11 +92,13 @@ export function SortAndFilterBox({
         />
       )}
       {filterIsOpen && (
-        <FilterModal
-          setActualFilter={setActualFilter!}
-          actualFilter={actualFilter!}
-          closeModal={() => setFilterIsOpen(false)}
-        />
+        <OutsideClickHandler onOutsideClick={() => setFilterIsOpen(false)}>
+          <FilterModal
+            setActualFilter={setActualFilter!}
+            actualFilter={actualFilter!}
+            closeModal={() => setFilterIsOpen(false)}
+          />
+        </OutsideClickHandler>
       )}
     </div>
   );

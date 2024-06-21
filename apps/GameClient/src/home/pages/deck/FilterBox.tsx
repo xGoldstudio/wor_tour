@@ -1,13 +1,14 @@
+import { Box } from "@repo/ui";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import {
   ActiveFilters,
-  CardFilter,
   CardFilters,
   CardFilterSliderStyles,
   CardFiltersStyles,
   FiltersDescription,
 } from "./cardFilters";
+import { useEffect } from "react";
 
 interface FilterModalProps {
   setActualFilter: (filter: ActiveFilters) => void;
@@ -37,68 +38,78 @@ export function FilterModal({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-44 h-64 bg-white absolute border-white top-48 z-50 p-2 pt-4 rounded-lg">
-      {Object.values(FiltersDescription).map((filterCriteria, index) =>
-        filterCriteria.isButton ? (
-          <button
-            key={index}
-            value={filterCriteria.label}
-            onClick={handleChange}
-            type="button"
-            style={{
-              backgroundImage: `url(${filterCriteria.style})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              opacity: actualFilter[filterCriteria.label] ? 1 : 0.6,
-            }}
-            className="bg-opacity-10 w-full"
-          >
-            {filterCriteria.label}
-          </button>
-        ) : (
-          <div key={index}>
-            <span>{filterCriteria.label}</span>
-            <Slider
-              range
-              count={1}
-              min={FiltersDescription[filterCriteria.label].rangeMin}
-              max={FiltersDescription[filterCriteria.label].rangeMax}
-              defaultValue={[
-                typeof actualFilter[filterCriteria.label] === "object" &&
-                typeof actualFilter[filterCriteria.label].min === "number"
-                  ? actualFilter[filterCriteria.label].min
-                  : FiltersDescription[filterCriteria.label].rangeMin,
-                actualFilter[filterCriteria.label].max,
-              ]}
-              onChange={(value) => {
-                if (Array.isArray(value))
-                  setActualFilter({
-                    ...actualFilter,
-                    [filterCriteria.label]: { min: value[0], max: value[1] },
-                  });
+    <div className="absolute top-32 z-50  rounded-lg">
+      <Box
+        width={270}
+        height={380}
+        rarity="legendary"
+        className="flex items-center justify-center"
+      >
+        {Object.values(FiltersDescription).map((filterCriteria, index) =>
+          filterCriteria.isButton ? (
+            <button
+              key={index}
+              value={filterCriteria.label}
+              onClick={handleChange}
+              type="button"
+              style={{
+                backgroundImage: `url(${filterCriteria.style})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                opacity: actualFilter[filterCriteria.label] ? 1 : 0.6,
               }}
-              styles={getStyleForSlider(
-                filterCriteria.label as CardFiltersStyles
-              )}
-            />
-            <div>
-              <span>
-                Min:{" "}
-                {actualFilter[filterCriteria.label] === false
-                  ? FiltersDescription[filterCriteria.label].rangeMin
-                  : actualFilter[filterCriteria.label].min}{" "}
-                - Max:{" "}
-                {actualFilter[filterCriteria.label] === false
-                  ? FiltersDescription[filterCriteria.label].rangeMax
-                  : actualFilter[filterCriteria.label].max}
-              </span>
+              className="w-full shadow-lg p-1 my-1 rounded-lg text-center"
+            >
+              {filterCriteria.label}
+            </button>
+          ) : (
+            <div key={index} className="px-3 pb-3 ">
+              <span>{filterCriteria.label}</span>
+              <Slider
+                range
+                count={1}
+                min={FiltersDescription[filterCriteria.label].rangeMin}
+                max={FiltersDescription[filterCriteria.label].rangeMax}
+                defaultValue={[
+                  typeof actualFilter[filterCriteria.label] === "object" &&
+                  typeof actualFilter[filterCriteria.label].min === "number"
+                    ? actualFilter[filterCriteria.label].min
+                    : FiltersDescription[filterCriteria.label].rangeMin,
+                  actualFilter[filterCriteria.label].max,
+                ]}
+                onChange={(value) => {
+                  if (Array.isArray(value))
+                    setActualFilter({
+                      ...actualFilter,
+                      [filterCriteria.label]: { min: value[0], max: value[1] },
+                    });
+                }}
+                styles={getStyleForSlider(
+                  filterCriteria.label as CardFiltersStyles
+                )}
+              />
+              <div>
+                <span>
+                  Min:{" "}
+                  {actualFilter[filterCriteria.label] === false
+                    ? FiltersDescription[filterCriteria.label].rangeMin
+                    : actualFilter[filterCriteria.label].min}{" "}
+                  - Max:{" "}
+                  {actualFilter[filterCriteria.label] === false
+                    ? FiltersDescription[filterCriteria.label].rangeMax
+                    : actualFilter[filterCriteria.label].max}
+                </span>
+              </div>
             </div>
-          </div>
-        )
-      )}
-      <button onClick={closeModal}>close</button>
+          )
+        )}
+        <button
+          onClick={closeModal}
+          className="bg-red-200 hover:bg-red-400 w-full rounded-lg shadow-lg"
+        >
+          X
+        </button>
+      </Box>
     </div>
   );
 }
-
-// TD: factoriser les sliders
