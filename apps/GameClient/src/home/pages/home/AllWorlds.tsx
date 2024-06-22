@@ -55,21 +55,7 @@ export default function AllWorlds({ closeModal }: { closeModal: () => void }) {
   );
 }
 
-function AllWorldsInner({ closeModal }: { closeModal: () => void }) {
-  const { worlds } = useDataStore((state) => ({
-    worlds: [...state.worlds].reverse(),
-  }));
-  const { trophies } = usePlayerStore((state) => ({
-    trophies: state.trophies,
-  }));
-
-  const ref = useRef<null | HTMLDivElement>(null);
-
-  const { trophiesFields } = useContext(
-    TrophyBarContext
-  ) as TrophyBarContextType;
-
-  // get the range of the current trophies
+function findPosition(trophiesFields: TrophiesField[], trophies: number) {
   const currentRange: [TrophiesField, TrophiesField] = [
     trophiesFields[0] ?? { trophies: 0, yPosition: 0 },
     trophiesFields[1] ?? { trophies: 0, yPosition: 0 },
@@ -98,6 +84,28 @@ function AllWorldsInner({ closeModal }: { closeModal: () => void }) {
   const targetYPosition =
     currentRange[0].yPosition + currentTrophiesPosition * currentPositionRange;
 
+  return targetYPosition;
+}
+
+function AllWorldsInner({ closeModal }: { closeModal: () => void }) {
+  const { worlds } = useDataStore((state) => ({
+    worlds: [...state.worlds].reverse(),
+  }));
+  const { trophies, maxTrophies } = usePlayerStore((state) => ({
+    trophies: state.trophies,
+    maxTrophies: state.maxTrophies,
+  }));
+
+  const ref = useRef<null | HTMLDivElement>(null);
+
+  const { trophiesFields } = useContext(
+    TrophyBarContext
+  ) as TrophyBarContextType;
+
+  // get the range of the current trophies
+  const targetYPosition = findPosition(trophiesFields, trophies);
+  const maxTargetYPosition = findPosition(trophiesFields, maxTrophies);
+
   const [distanceFromTrophies, setDistanceFromTrophies] = useState(0);
 
   function setScrollDistancePosition() {
@@ -120,7 +128,7 @@ function AllWorldsInner({ closeModal }: { closeModal: () => void }) {
 
   const [currentTrophiesField, setCurrentTrophiesField] = useState(0);
   const revealLevelQueue = useRef<(() => void)[]>([]).current;
-  const [_, setIsRevealRunning] = useState(false);
+  const [,setIsRevealRunning] = useState(false);
 
   function revealLevelsRunner() {
     // ensure that the runner is not running
@@ -210,6 +218,7 @@ function AllWorldsInner({ closeModal }: { closeModal: () => void }) {
             <TrophyBar
               scrollRef={ref.current}
               targetYPosition={targetYPosition}
+              maxTargetYPosition={maxTargetYPosition}
               distanceFromTrophies={distanceFromTrophies}
               numberOfTrophies={trophies}
             />
@@ -266,7 +275,9 @@ function WorldPreview({
 
   return (
     <div className="flex flex-col relative items-center w-full justify-center">
-      {isWorldModalOpen && <WorldModal closeModal={() => setIsWorldModalOpen(false)} />}
+      {isWorldModalOpen && (
+        <WorldModal closeModal={() => setIsWorldModalOpen(false)} />
+      )}
       <div className="flex gap-8 flex-col py-8 w-[350px] ">
         {_.range(1, 10).map((i) => (
           <LevelPreview i={10 - i} worldTrophies={worldTrophies} key={i} />
@@ -303,7 +314,11 @@ function WorldPreview({
               />
               <p className="relative font-semibold">{worldTrophies}</p>
             </div>
-            <Button action={() => setIsWorldModalOpen(true)} rarity="rare" small>
+            <Button
+              action={() => setIsWorldModalOpen(true)}
+              rarity="rare"
+              small
+            >
               i
             </Button>
           </div>
@@ -335,11 +350,11 @@ function LevelPreview({
     TrophyBarContext
   ) as TrophyBarContextType;
   const levelTrophies = worldTrophies + i * 100;
-  const { playerTrophies, isCollected, collectReward } = usePlayerStore(
+  const { maxTrophies, isToCollect, collectReward } = usePlayerStore(
     (state) => ({
-      playerTrophies: state.trophies,
-      isCollected: state.getCollectedTrophiesReward(levelTrophies),
-      collectReward: () => state.setCollectedTrophiesReward(levelTrophies),
+      maxTrophies: state.maxTrophies,
+      isToCollect: state.getIsToCollectTrophiesReward(levelTrophies),
+      collectReward: () => state.collectedTrophiesReward(levelTrophies),
     })
   );
   const levelRef = useRef<HTMLDivElement | null>(null);
@@ -362,19 +377,19 @@ function LevelPreview({
     }
   }, [levelRef, i, addTrophiesField]);
 
-  const isUnlocked = levelTrophies <= playerTrophies;
-  const isReadyToCollect = isUnlocked && !isCollected;
-  const isEmpty = isUnlocked && isCollected;
+  const isUnlocked = levelTrophies <= maxTrophies;
+  const isEmpty = isUnlocked && !isToCollect;
 
   return (
     <div
       className={cn(
         "w-full flex justify-center items-center relative h-[80px] opacity-0 scale-[20%]",
         !isUnlocked && "grayscale-[80%]",
-        isReadyToCollect && "animate-[collectable_2s_ease-in-out_infinite] cursor-pointer"
+        isToCollect &&
+          "animate-[collectable_2s_ease-in-out_infinite] cursor-pointer"
       )}
       ref={levelRef}
-      onClick={isReadyToCollect ? collectReward : () => {}}
+      onClick={isToCollect ? collectReward : () => {}}
     >
       <div className="absolute w-full h-full bg-slate-400 opacity-60 rounded-md" />
       <div
@@ -394,11 +409,15 @@ function LevelPreview({
         <div className={cn("rounded-sm overflow-hidden relative")}>
           <Cover cardRarity="rare" className="opacity-80 bg-slate-50" />
           <img
-            src={isEmpty ? emptyChestImageByLevel["rare"] : chestImageByLevel["rare"]}
+            src={
+              isEmpty
+                ? emptyChestImageByLevel["rare"]
+                : chestImageByLevel["rare"]
+            }
             alt="chest"
             className="left-0 top-0 w-[80px] aspect-square relative"
           />
-          {isReadyToCollect && (
+          {isToCollect && (
             <img
               src={glowChestImageByLevel["rare"]}
               alt="chest"
@@ -406,7 +425,7 @@ function LevelPreview({
             />
           )}
         </div>
-        {isReadyToCollect && (
+        {isToCollect && (
           <Button
             action={() => {}}
             rarity="epic"

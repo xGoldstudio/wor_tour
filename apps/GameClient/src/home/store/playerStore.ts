@@ -38,12 +38,13 @@ interface PlayerStore {
   spendGold: (amount: number) => void;
 
   trophies: number;
+  maxTrophies: number;
   addTrophies: (amount: number) => void;
   removeTrohpies: (amount: number) => void;
 
-  collectedTrophiesRewards: Set<number>;
-  setCollectedTrophiesReward: (reward: number) => void;
-  getCollectedTrophiesReward: (reward: number) => boolean;
+  toCollectTrophiesRewards: Set<number>;
+  collectedTrophiesReward: (reward: number) => void;
+  getIsToCollectTrophiesReward: (reward: number) => boolean;
 }
 
 const defaultCollection: Map<number, CollectionCard> = new Map();
@@ -70,7 +71,8 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
     isInDeck: get().deck.includes(id),
   }),
   trophies: 0,
-  collectedTrophiesRewards: new Set(),
+  maxTrophies: 0,
+  toCollectTrophiesRewards: new Set(),
 
   removeCardFromDeck: (id: number) =>
     set((state) => ({ deck: state.deck.filter((cardId) => cardId !== id) })),
@@ -170,21 +172,29 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   spendGold: (amount: number) =>
     set((state) => ({ gold: state.gold - amount })),
 
-  addTrophies: (amount: number) => set((state) => updateTrophies(state.trophies, amount)),
-  removeTrohpies: (amount: number) => set((state) => updateTrophies(state.trophies, -amount)),
+  addTrophies: (amount: number) => set((state) => updateTrophies(state, amount)),
+  removeTrohpies: (amount: number) => set((state) => updateTrophies(state, -amount)),
 
-  setCollectedTrophiesReward: (reward: number) => {
+  collectedTrophiesReward: (reward: number) => {
     set((state) => {
-      state.collectedTrophiesRewards.add(reward);
-      return { collectedTrophiesRewards: new Set(state.collectedTrophiesRewards) };
+      const toCollectTrophiesRewards = new Set(state.toCollectTrophiesRewards);
+      toCollectTrophiesRewards.delete(reward);
+      return { toCollectTrophiesRewards };
     });
   },
-  getCollectedTrophiesReward: (reward: number) => get().collectedTrophiesRewards.has(reward),
+  getIsToCollectTrophiesReward: (reward: number) => get().toCollectTrophiesRewards.has(reward),
 }));
 
-function updateTrophies(currentTrophies: number, difference: number) {
-  const nextTrophies = Math.max(0, currentTrophies + difference);
-  return ({ trophies: nextTrophies, currentWorld: Math.min(4, Math.floor((nextTrophies) / 1000)) + 1});
+function updateTrophies(state: PlayerStore, difference: number) {
+  const nextTrophies = Math.max(0, state.trophies + difference);
+  const resObject = ({ trophies: nextTrophies, currentWorld: Math.min(4, Math.floor((nextTrophies) / 1000)) + 1, maxTrophies: Math.max(nextTrophies, state.maxTrophies) });
+  const nextStage = Math.floor(nextTrophies / 100);
+  const maxStage = Math.floor(state.maxTrophies / 100);
+  if (nextTrophies > state.maxTrophies && nextStage > maxStage) {
+    const stageDiff = nextStage - maxStage;
+    return ({ ...resObject, toCollectTrophiesRewards: new Set([...state.toCollectTrophiesRewards, ...Array.from({ length: stageDiff }, (_, i) => (maxStage + i + 1) * 100)]) });
+  }
+  return resObject;
 }
 
 export default usePlayerStore;

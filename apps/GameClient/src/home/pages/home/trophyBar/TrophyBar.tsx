@@ -10,16 +10,21 @@ import { cubicBezier } from "framer-motion";
 export default function TrophyBar({
   scrollRef,
   targetYPosition,
+  maxTargetYPosition,
   distanceFromTrophies,
   numberOfTrophies,
 }: {
   targetYPosition: number;
+  maxTargetYPosition: number;
   scrollRef: HTMLDivElement;
   distanceFromTrophies: number;
   numberOfTrophies: number;
 }) {
   const [barRef, setBarRef] = useState<HTMLDivElement | null>(null);
   const [innerBarRef, setInnerBarRef] = useState<HTMLDivElement | null>(null);
+  const [innerMaxBarRef, setInnerMaxBarRef] = useState<HTMLDivElement | null>(
+    null
+  );
   const { trophiesFields } = useContext(
     TrophyBarContext
   ) as TrophyBarContextType;
@@ -27,6 +32,7 @@ export default function TrophyBar({
   const startTrophies = trophiesFields[0].yPosition;
 
   const height = startTrophies - targetYPosition + 7;
+  const maxHeight = startTrophies - maxTargetYPosition + 7;
 
   const targetY = targetYPosition - 150;
   const currentY = startTrophies;
@@ -42,8 +48,26 @@ export default function TrophyBar({
     duration: 1400,
     ease: cubicBezier(0.5, 0.15, 0.34, 0.5),
     waitFor: !!innerBarRef,
-    onStart: () => document.getElementById("scrollBlocker")?.setAttribute("style", "display: block"),
-    onEnd: () => document.getElementById("scrollBlocker")?.setAttribute("style", "display: hidden"),
+    onStart: () =>
+      document
+        .getElementById("scrollBlocker")
+        ?.setAttribute("style", "display: block"),
+    onEnd: () =>
+      document
+        .getElementById("scrollBlocker")
+        ?.setAttribute("style", "display: hidden"),
+  });
+
+  useCustomAnimation({
+    compute: (progress: number) => {
+      if (innerMaxBarRef) {
+        innerMaxBarRef.style.opacity = `${progress * 30}%`;
+      }
+    },
+    duration: 1400,
+    ease: cubicBezier(0.5, 0.15, 0.34, 0.5),
+    waitFor: !!innerMaxBarRef,
+    delay: 500,
   });
 
   useLayoutEffect(() => {
@@ -62,8 +86,14 @@ export default function TrophyBar({
       },
       duration: 600,
       ease: cubicBezier(0.25, 0.6, 0.25, 0.6),
-      onStart: () => document.getElementById("scrollBlocker")?.setAttribute("style", "display: block"),
-      onEnd: () => document.getElementById("scrollBlocker")?.setAttribute("style", "display: hidden"),
+      onStart: () =>
+        document
+          .getElementById("scrollBlocker")
+          ?.setAttribute("style", "display: block"),
+      onEnd: () =>
+        document
+          .getElementById("scrollBlocker")
+          ?.setAttribute("style", "display: hidden"),
     });
   }
 
@@ -74,7 +104,16 @@ export default function TrophyBar({
     >
       <div className="absolute w-full h-full bg-gradient-to-r  from-[rgb(88,88,89)] via-[rgb(177,177,178)] via-[37%] to-[rgb(88,88,80)] opacity-60" />
       <div
-        className="absolute left-1/2 -translate-x-1/2 w-[60%] rounded-sm bg-gradient-to-r from-[#88157F] via-[#D464CB] via-[37%] to-[#88157F]"
+        className="absolute left-1/2 -translate-x-1/2 w-[60%] rounded-sm bg-gradient-to-r from-[#88157F] via-[#D464CB] via-[37%] to-[#88157F] brightness-200 opacity-30"
+        style={{
+          height: inPx(maxHeight),
+          transformOrigin: "bottom",
+          bottom: `calc(100% - ${startTrophies + 7}px`,
+        }}
+        ref={(ref) => setInnerMaxBarRef(ref)}
+      ></div>
+      <div
+        className="absolute left-1/2 -translate-x-1/2 w-[60%] rounded-sm bg-gradient-to-r from-[#88157F] via-[#D464CB] via-[37%] to-[#88157F] brightness-125"
         style={{
           height: inPx(height),
           transformOrigin: "bottom",
