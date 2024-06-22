@@ -1,7 +1,7 @@
 import { useStartGame } from "@/game/stores/gameMetadataStore";
 import { useState } from "react";
 import useDataStore from "@/cards/DataStore";
-import { getImageUrl, textureByRarity } from "@repo/ui";
+import { getImageUrl, numberWithCommas, textureByRarity } from "@repo/ui";
 import usePlayerStore from "@/home/store/playerStore";
 import Cover from "@/home/ui/Cover";
 import { EmptyBar } from "@/game/gui/ManaBar";
@@ -36,6 +36,7 @@ export default function HomeTab() {
       <div
         className="flex items-center gap-2 relative w-full px-12"
         onClick={() => setProfileOpen(true)}
+        id="trophyCount"
       >
         <div className="relative flex items-center justify-between gap-4 px-4 py-4 pr-20">
           <div className="absolute top-0 left-0 w-full h-full">
@@ -68,15 +69,16 @@ export default function HomeTab() {
             <p className="relative font-semibold text-xl leading-2">Goldaxe</p>
             <p className="relative text-sm  leading-2">World 1</p>
           </div>
-          <div className="relative w-[110px] h-[32px]">
+          <div className="relative w-[110px] h-[32px]" x-id="trophyCountInput">
             <img
+              id="trophyCountIcon"
               src="/trophy.png"
               className="absolute z-10 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[48px] drop-shadow-[2px_1px_1px_black]"
             />
             <InnerBord size={1.5}>
               <div className="w-full h-full relative bg-slate-600 flex items-center justify-end pr-2">
                 <Cover cardRarity="rare" />
-                <p className="relative font-semibold">{trophies}</p>
+                <p className="relative font-semibold"  x-id="trophyCountInputTrophies">{numberWithCommas(trophies)}</p>
               </div>
             </InnerBord>
           </div>
@@ -94,6 +96,7 @@ export default function HomeTab() {
           <CurrentWorldProgress />
         </div>
         <div
+          id="battleButton"
           className="relative rounded-sm flex p-1 flex-col items-center font-slate-600 cursor-pointer"
           onClick={() => startGame()}
         >
@@ -174,6 +177,7 @@ function CurrentWorldProgress() {
               <mask id="trophiesMask">
                 {_.range(9).map((i) => (
                   <rect
+                    key={i}
                     x={(i + 1) * 10}
                     y={0}
                     width={1}

@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { BoosterType, boosters } from "./useBooster";
 import { CardRarity } from "@repo/types";
 import { CardRarityOrder, CardStatsInfo, CardType } from "@repo/ui";
+import useAnimationStore from "./animationStore";
 
 export interface CollectionCard {
   id: number;
@@ -168,11 +169,25 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
     });
   },
 
-  addGold: (amount: number) => set((state) => ({ gold: state.gold + amount })),
+  addGold: (amount: number) => {
+    useAnimationStore.getState().addAnimation({
+      type: "money",
+      previousValue: get().gold,
+      amount,
+    });
+    set((state) => ({ gold: state.gold + amount }));
+  },
   spendGold: (amount: number) =>
     set((state) => ({ gold: state.gold - amount })),
 
-  addTrophies: (amount: number) => set((state) => updateTrophies(state, amount)),
+  addTrophies: (amount: number) => {
+    useAnimationStore.getState().addAnimation({
+      type: "trophy",
+      previousValue: get().trophies,
+      amount,
+    });
+    set((state) => updateTrophies(state, amount))
+  },
   removeTrohpies: (amount: number) => set((state) => updateTrophies(state, -amount)),
 
   collectedTrophiesReward: (reward: number) => {

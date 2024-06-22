@@ -6,7 +6,7 @@ import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore";
 import Badge from "../../../../packages/ui/components/Badge";
-import { NumberSpan } from "@repo/ui";
+import { NumberSpan, numberWithCommas } from "@repo/ui";
 import { cn } from "@repo/ui";
 import {
   Borders,
@@ -14,6 +14,7 @@ import {
   InnerBord,
 } from "../../../../packages/ui/components/card/CardBorder";
 import Cover from "./ui/Cover";
+import AnimationContainer from "./animations/AnimationContainer";
 
 type Tabs = "home" | "deck" | "shop";
 
@@ -35,6 +36,7 @@ export default function Home() {
         className="w-[700px] h-full relative overflow-hidden bg-slate-900"
         id="home"
       >
+        <AnimationContainer />
         <RewardBlockWithContext />
         <HomeBg />
         <div className="w-full h-full relative flex flex-col items-center justify-between">
@@ -161,6 +163,7 @@ interface RessourceCounterProps {
   max?: number;
   icon: React.ReactNode;
   width?: number;
+  name: string;
 }
 
 export function RessourceCounter({
@@ -168,9 +171,10 @@ export function RessourceCounter({
   max,
   icon,
   width = 191,
+  name,
 }: RessourceCounterProps) {
   return (
-    <div className="relative">
+    <div className="relative" x-id={`${name}CountInput`} id={`${name}Count`}>
       {icon}
       <Borders width={width} height={45} borderUnit={1} rarity={"epic"}>
         <CardIllustartion width={width} height={45} borderUnit={0.6}>
@@ -192,7 +196,9 @@ export function RessourceCounter({
                   max === undefined && "text-right w-full pr-2"
                 )}
               >
-                <NumberSpan>{amount}</NumberSpan>
+                <span x-id={`${name}CountInputValue`}>
+                  {numberWithCommas(amount)}
+                </span>
                 {max !== undefined && (
                   <>
                     /<NumberSpan>{max}</NumberSpan>
@@ -223,6 +229,7 @@ export function Header() {
             value="1"
           />
         }
+        name="xp"
       />
       <RessourceCounter
         amount={4}
@@ -233,15 +240,18 @@ export function Header() {
             className="absolute z-10 left-[3px] top-1/2 -translate-x-1/2 -translate-y-1/2 h-[32px] drop-shadow-[2px_1px_1px_black] rotate-[25deg] contrast-150"
           />
         }
+        name="keys"
       />
       <RessourceCounter
         amount={gold}
         icon={
           <img
+            id="moneyCountIcon"
             src="/money.png"
             className="absolute z-10 left-[3px] top-1/2 -translate-x-1/2 -translate-y-1/2 w-[32px] drop-shadow-[2px_1px_1px_black]"
           />
         }
+        name="money"
       />
     </div>
   );
