@@ -27,6 +27,7 @@ export default function Game() {
     fastForward,
     gameRef,
     destroyGame,
+    isInit,
   } = useGameEvents();
 
   useEffect(() => {
@@ -67,44 +68,46 @@ export default function Game() {
         fastForward={fastForward}
         destroyGame={destroyGame}
       />
-      <>
-        <div className="bg-black h-full w-full"></div>
-        <div className="h-screen flex flex-col gap-4 justify-between relative overflow-hidden w-[700px]">
-          <div
-            className="w-full h-full absolute blur-sm"
-            style={{
-              backgroundImage: "url('/bgTexture.jpg')",
-              backgroundPosition: "center",
-              backgroundSize: "cover",
-            }}
-          ></div>
-          <PlayerGUI
-            mana={opponentMana}
-            hp={opponentHp}
-            maxHp={opponentMaxHp}
-            isPlayer={false}
-            userPlaceNewCard={userPlaceNewCard}
-          />
-          <div className="w-full flex justify-center relative">
-            <div className="grid grid-cols-3 gap-4 px-8">
-              <CardPlaceholder position={0} isPlayer={false} />
-              <CardPlaceholder position={1} isPlayer={false} />
-              <CardPlaceholder position={2} isPlayer={false} />
-              <CardPlaceholder position={0} isPlayer />
-              <CardPlaceholder position={1} isPlayer />
-              <CardPlaceholder position={2} isPlayer />
+      {isInit && (
+        <>
+          <div className="bg-black h-full w-full"></div>
+          <div className="h-screen flex flex-col gap-4 justify-between relative overflow-hidden w-[700px]">
+            <div
+              className="w-full h-full absolute blur-sm"
+              style={{
+                backgroundImage: "url('/bgTexture.jpg')",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+              }}
+            ></div>
+            <PlayerGUI
+              mana={opponentMana}
+              hp={opponentHp}
+              maxHp={opponentMaxHp}
+              isPlayer={false}
+              userPlaceNewCard={userPlaceNewCard}
+            />
+            <div className="w-full flex justify-center relative">
+              <div className="grid grid-cols-3 gap-4 px-8">
+                <CardPlaceholder position={0} isPlayer={false} />
+                <CardPlaceholder position={1} isPlayer={false} />
+                <CardPlaceholder position={2} isPlayer={false} />
+                <CardPlaceholder position={0} isPlayer />
+                <CardPlaceholder position={1} isPlayer />
+                <CardPlaceholder position={2} isPlayer />
+              </div>
             </div>
+            <PlayerGUI
+              mana={playerMana}
+              hp={playerHp}
+              maxHp={playerMaxHp}
+              isPlayer
+              userPlaceNewCard={userPlaceNewCard}
+            />
           </div>
-          <PlayerGUI
-            mana={playerMana}
-            hp={playerHp}
-            maxHp={playerMaxHp}
-            isPlayer
-            userPlaceNewCard={userPlaceNewCard}
-          />
-        </div>
-        <div className="bg-black h-full w-full"></div>
-      </>
+          <div className="bg-black h-full w-full"></div>
+        </>
+      )}
       {currentWinner && <EndGameScreen />}
     </div>
   );

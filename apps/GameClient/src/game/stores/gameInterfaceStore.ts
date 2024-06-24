@@ -22,6 +22,7 @@ const state = {
   isClockRunning: false,
 };
 
+// This store is used to manage the game interface state (data exclusively and uniquely to the client side)
 const useGameInterface = create<GameInterfaceStore>()((set, get) => ({
   ...state,
 

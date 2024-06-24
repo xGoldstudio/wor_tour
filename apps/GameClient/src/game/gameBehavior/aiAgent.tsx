@@ -9,6 +9,10 @@ import { GameStore } from "@/game/stores/gameStateStore";
 import { addGameEventListener } from "./gameEventListener";
 import { CardType, getRandomElement } from "@repo/ui";
 
+export const botOptions = {
+  disabled: false,
+};
+
 export default function iaAgent() {
   let nextCardToUse: { position: number; card: CardType } | null = null;
 
@@ -38,6 +42,9 @@ export default function iaAgent() {
     data: GameStore,
     triggerEvent: (event: EventType) => void
   ) {
+    if (botOptions.disabled) {
+      return;
+    }
     if (nextCardToUse === null) {
       setNextCardToUse(data);
     }

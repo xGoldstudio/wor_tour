@@ -69,6 +69,9 @@ export interface GameStore {
     effectToRemove: keyof CardEffects
   ) => void;
 
+  isInteractive: boolean;
+  setIsInteractive: (value: boolean) => void;
+
   // animations
   addAnimation: (key: string, animation: GameAnimation) => void;
   removeAnimation: (key: string) => boolean;
@@ -109,7 +112,7 @@ const initState = ({
 }: InGameInitData) => ({
   playerDeck,
   playerHand: [null, null, null, null],
-  playerMana: 7,
+  playerMana: 0,
   playerHp,
   playerMaxHp: playerHp,
   playerTickStartEarningMana: null,
@@ -118,7 +121,7 @@ const initState = ({
 
   opponentDeck,
   opponentHand: [null, null, null, null],
-  opponentMana: 7,
+  opponentMana: 0,
   opponentHp,
   opponentMaxHp: opponentHp,
   opponentTickStartEarningMana: null,
@@ -128,6 +131,7 @@ const initState = ({
   currentWinner: null,
   currentInstanceId: 0,
 
+  isInteractive: false,
   animations: new Map(),
 });
 
@@ -323,6 +327,7 @@ const useGameStore = create<GameStore>()((set, get) => ({
     });
     return isRemoved;
   },
+  setIsInteractive: (value: boolean) => set({ isInteractive: value }),
 }));
 
 export default useGameStore;

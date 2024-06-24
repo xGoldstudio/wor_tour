@@ -1,5 +1,6 @@
 import { IS_DEBUG } from "@/isDebug";
 import { TriggerGameEvent } from "./gameBehavior/useGameEvents";
+import { botOptions } from "./gameBehavior/aiAgent";
 
 interface GameDebugPanelProps {
   togglePlay: () => void;
@@ -12,7 +13,6 @@ export default function GameDebugPanel({
   togglePlay,
   isClockRunning,
   fastForward,
-  destroyGame,
 }: GameDebugPanelProps) {
   if (!IS_DEBUG()) {
     return <></>;
@@ -61,14 +61,7 @@ export default function GameDebugPanel({
       >
         Kill yourself
       </DebugButton>
-      <DebugButton
-        onClick={() => {
-          togglePlay();
-          destroyGame();
-        }}
-      >
-        leave game
-      </DebugButton>
+      <DebugButton onClick={() => botOptions.disabled = !botOptions.disabled}>Toggle bot activation</DebugButton>
     </div>
   );
 }

@@ -187,6 +187,7 @@ function useGameEvents(): GameEventsActions {
     removeEffect,
     addAnimation,
     removeAnimation,
+    setIsInteractive,
   } = useGameStore();
   const {
     getData: getUserInterfaceData,
@@ -212,9 +213,8 @@ function useGameEvents(): GameEventsActions {
   }, [gameCanvas]);
 
   useOnMount(() => {
-    initGameStore();
     initGameInterfaceStore();
-
+    initGameStore();
     iaAgent();
     shuffleDeck(true);
     shuffleDeck(false);
@@ -226,6 +226,7 @@ function useGameEvents(): GameEventsActions {
     }
     resume();
     setIsInit(true);
+    setIsInteractive(true);
     TriggerGameEvent = internalTriggerEvent;
   });
 
@@ -304,7 +305,7 @@ function useGameEvents(): GameEventsActions {
     } else if (event.type === "manaConsume") {
       consumeMana(event.isPlayer, event.delta);
       triggerEvent({ type: "startEarningMana", isPlayer: event.isPlayer });
-    } else if (event.type === "placeCard") {
+    } else if (event.type === "placeCard" && data.isInteractive) {
       cardPlacementEventManager(
         event,
         data,
