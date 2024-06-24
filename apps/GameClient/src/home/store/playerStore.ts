@@ -62,7 +62,7 @@ const shardsByLevels = [3, 7];
 
 const usePlayerStore = create<PlayerStore>()((set, get) => ({
   collection: defaultCollection,
-  currentWorld: 1,
+  currentWorld: 2,
   deck: [1, 2, 3, 4, 5, 6, 7, 8],
   gold: 1000,
   getCollection: () => Array.from(get().collection.values()),
@@ -71,8 +71,8 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
     ...findCard(id, get().getCollectionInfo(id)!.level),
     isInDeck: get().deck.includes(id),
   }),
-  trophies: 0,
-  maxTrophies: 0,
+  trophies: 1100,
+  maxTrophies: 1100,
   toCollectTrophiesRewards: new Set(),
 
   removeCardFromDeck: (id: number) =>

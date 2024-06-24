@@ -10,7 +10,7 @@ import {
   CardIllustartion,
   InnerBord,
 } from "../../../../../../packages/ui/components/card/CardBorder";
-import AllWorlds from "./AllWorlds";
+import AllWorlds from "./allWorlds/AllWorlds";
 import ProfileModal from "./modals/ProfileModal";
 import _ from "lodash";
 
@@ -90,6 +90,7 @@ export default function HomeTab() {
           onClick={() => setWorldsModalOpen(true)}
         >
           <img
+            id="worldIllustration"
             className="w-full aspect-square relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)]"
             src={getImageUrl(world.illustration)}
           />
