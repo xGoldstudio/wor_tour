@@ -253,6 +253,7 @@ export default function AnimationContainer() {
       };
       nextAnimation();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animationsQueue, isAnimating, container]);
 
   return (
