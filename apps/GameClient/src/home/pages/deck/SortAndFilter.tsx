@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ActiveFilters, CardFilters, FiltersDescription } from "./cardFilters";
 import { CardSorts, sorts } from "./cardSorts";
 import { FilterModal } from "./FilterBox";
 import { SortModal } from "./SortBox";
+import { motion } from "framer-motion";
 
 interface SortAndFilterBoxProps {
   setActualSort: (sort: CardSorts) => void;
@@ -11,19 +12,35 @@ interface SortAndFilterBoxProps {
   actualFilter?: ActiveFilters;
 }
 
-const OutsideClickHandler = ({ children, onOutsideClick }) => {
-  const wrapperRef = useRef(null);
-
-  const handleClickOutside = (event) => {
-    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-      onOutsideClick();
-    }
-  };
+interface OutsideClickHandlerProps {
+  children: React.ReactNode;
+  onOutsideClick: () => void;
+}
+const OutsideClickHandler = ({
+  children,
+  onOutsideClick,
+}: OutsideClickHandlerProps) => {
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(e.target as Node)
+      ) {
+        onOutsideClick();
+      }
+    };
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onOutsideClick();
+      }
+    };
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
     };
   }, []);
 

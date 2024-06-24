@@ -8,7 +8,6 @@ import {
   CardFiltersStyles,
   FiltersDescription,
 } from "./cardFilters";
-import { useEffect } from "react";
 
 interface FilterModalProps {
   setActualFilter: (filter: ActiveFilters) => void;
@@ -36,9 +35,34 @@ export function FilterModal({
   function getStyleForSlider(filterCriteria: CardFiltersStyles) {
     return CardFilterSliderStyles[filterCriteria];
   }
+  function getdefaultValuesForSlider(filterCriteria: CardFiltersStyles) {
+    return [
+      typeof actualFilter[filterCriteria] === "object" &&
+      typeof actualFilter[filterCriteria].min === "number"
+        ? actualFilter[filterCriteria].min
+        : FiltersDescription[filterCriteria].rangeMin!,
+      typeof actualFilter[filterCriteria] === "object" &&
+      typeof actualFilter[filterCriteria].max === "number"
+        ? actualFilter[filterCriteria].max
+        : FiltersDescription[filterCriteria].rangeMax!,
+    ];
+  }
+
+  function getMinValueForSlider(filterCriteria: CardFiltersStyles) {
+    return typeof actualFilter[filterCriteria] === "object" &&
+      typeof actualFilter[filterCriteria].min === "number"
+      ? actualFilter[filterCriteria].min
+      : FiltersDescription[filterCriteria].rangeMin;
+  }
+  function getMaxValueForSlider(filterCriteria: CardFiltersStyles) {
+    return typeof actualFilter[filterCriteria] === "object" &&
+      typeof actualFilter[filterCriteria].max === "number"
+      ? actualFilter[filterCriteria].max
+      : FiltersDescription[filterCriteria].rangeMax;
+  }
 
   return (
-    <div className="absolute top-32 z-50  rounded-lg">
+    <div className="absolute top-32 z-50 rounded-lg">
       <Box
         width={270}
         height={380}
@@ -70,13 +94,9 @@ export function FilterModal({
                 count={1}
                 min={FiltersDescription[filterCriteria.label].rangeMin}
                 max={FiltersDescription[filterCriteria.label].rangeMax}
-                defaultValue={[
-                  typeof actualFilter[filterCriteria.label] === "object" &&
-                  typeof actualFilter[filterCriteria.label].min === "number"
-                    ? actualFilter[filterCriteria.label].min
-                    : FiltersDescription[filterCriteria.label].rangeMin,
-                  actualFilter[filterCriteria.label].max,
-                ]}
+                defaultValue={getdefaultValuesForSlider(
+                  filterCriteria.label as CardFiltersStyles
+                )}
                 onChange={(value) => {
                   if (Array.isArray(value))
                     setActualFilter({
@@ -91,13 +111,13 @@ export function FilterModal({
               <div>
                 <span>
                   Min:{" "}
-                  {actualFilter[filterCriteria.label] === false
-                    ? FiltersDescription[filterCriteria.label].rangeMin
-                    : actualFilter[filterCriteria.label].min}{" "}
+                  {getMinValueForSlider(
+                    filterCriteria.label as CardFiltersStyles
+                  )}{" "}
                   - Max:{" "}
-                  {actualFilter[filterCriteria.label] === false
-                    ? FiltersDescription[filterCriteria.label].rangeMax
-                    : actualFilter[filterCriteria.label].max}
+                  {getMaxValueForSlider(
+                    filterCriteria.label as CardFiltersStyles
+                  )}
                 </span>
               </div>
             </div>
