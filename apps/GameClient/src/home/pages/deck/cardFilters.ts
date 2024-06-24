@@ -1,6 +1,4 @@
 import { CardType } from "@repo/ui";
-import React from "react";
-import { string } from "three/examples/jsm/nodes/Nodes.js";
 
 export type Card = CardType & { isInDeck: boolean };
 export type Filters = Record<CardFilters, CardFilter>;

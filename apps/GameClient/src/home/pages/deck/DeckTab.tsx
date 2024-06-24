@@ -1,5 +1,5 @@
 import usePlayerStore from "@/home/store/playerStore";
-import { Box, Button, CardType, ManaBall, preventDefault } from "@repo/ui";
+import { Box, Button, ManaBall, preventDefault } from "@repo/ui";
 import * as _ from "lodash";
 import "rc-slider/assets/index.css";
 import { useState } from "react";
@@ -8,13 +8,7 @@ import CardBorder, {
   CardContentIllustartion,
   InnerBord,
 } from "../../../../../../packages/ui/components/card/CardBorder";
-import {
-  ActiveFilters,
-  Card,
-  CardFilter,
-  CardFilters,
-  FiltersDescription,
-} from "./cardFilters";
+import { ActiveFilters, CardFilters, FiltersDescription } from "./cardFilters";
 import CardModal from "./CardModal";
 import { CardSorts, sorts } from "./cardSorts";
 import { ShowStat } from "./ShowStat";

@@ -3,7 +3,6 @@ import { ActiveFilters, CardFilters, FiltersDescription } from "./cardFilters";
 import { CardSorts, sorts } from "./cardSorts";
 import { FilterModal } from "./FilterBox";
 import { SortModal } from "./SortBox";
-import { motion } from "framer-motion";
 
 interface SortAndFilterBoxProps {
   setActualSort: (sort: CardSorts) => void;
@@ -16,10 +15,11 @@ interface OutsideClickHandlerProps {
   children: React.ReactNode;
   onOutsideClick: () => void;
 }
-const OutsideClickHandler = ({
+
+function OutsideClickHandler({
   children,
   onOutsideClick,
-}: OutsideClickHandlerProps) => {
+}: OutsideClickHandlerProps) {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -42,14 +42,14 @@ const OutsideClickHandler = ({
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscape);
     };
-  }, []);
+  });
 
   return (
     <div className="absolute flex items-center justify-center" ref={wrapperRef}>
       {children}
     </div>
   );
-};
+}
 
 export function SortAndFilterBox({
   setActualSort,
@@ -76,7 +76,7 @@ export function SortAndFilterBox({
             sorts[
               Object.keys(sorts)
                 .filter((sort) => (sort as CardSorts) === actualSort)
-                .find((sort) => (sort = actualSort)) as CardSorts
+                .find((sort) => sort === actualSort) as CardSorts
             ].label
           })`}
         </button>
