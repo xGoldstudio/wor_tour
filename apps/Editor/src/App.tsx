@@ -1,11 +1,5 @@
-import {
-  BrowserRouter, Route,
-  Routes
-} from "react-router-dom";
-import {
-  QueryClient,
-  QueryClientProvider, useQuery
-} from "react-query";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import useEditorStore from "./editor/store/EditorStore";
 import WorldEditor from "./editor/features/worlds/World";
 import CardEditor from "./editor/features/card/CardEditor";
@@ -38,7 +32,7 @@ function AppRouter() {
         initData(objectData);
       },
       staleTime: 2200000,
-    },
+    }
   );
 
   if (data.isLoading) {
@@ -47,15 +41,9 @@ function AppRouter() {
 
   return (
     <Routes>
-      <Route
-        path="/"
-        element={<EditorLayout reloadData={data.refetch} />}
-      >
+      <Route path="/" element={<EditorLayout reloadData={data.refetch} />}>
         <Route path="/" element={<Progression />} index />
-        <Route
-          path="/:worldId/:cardId"
-          element={<CardEditor />}
-        />
+        <Route path="/:worldId/:cardId" element={<CardEditor />} />
         <Route path="/:worldId" element={<WorldEditor />} />
       </Route>
     </Routes>
