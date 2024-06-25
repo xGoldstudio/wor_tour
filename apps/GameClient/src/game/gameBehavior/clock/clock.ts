@@ -19,11 +19,20 @@ export interface ClockReturn<EventType> {
 }
 
 export default function Clock<EventType>(
-  onTriggerEvent: (e: EventType) => void
+  onTriggerEvent: (e: EventType, clock: ClockReturn<EventType>) => void
 ): ClockReturn<EventType> {
   let timeoutQueue: FrameObject[] = [];
   let isRunningEvent = false;
   let currentFrame = 0;
+
+  const state = {
+    triggerEvent,
+    getCurrentFrameObject,
+    setGameEventTimeout,
+    addEventToNextFrame,
+    nextTick,
+    getImmutableInternalState,
+  };
 
   function getCurrentFrameObject(): FrameObject | null {
     return timeoutQueue.length >= 1 && timeoutQueue[0].frame === currentFrame
@@ -40,7 +49,7 @@ export default function Clock<EventType>(
     const targetFrame = currentFrame + usingFrame;
     for (let i = 0; i < timeoutQueue.length; i++) {
       if (timeoutQueue[i].frame === targetFrame) {
-        timeoutQueue[i].events.push(() => onTriggerEvent(event));
+        timeoutQueue[i].events.push(() => onTriggerEvent(event, state));
         return;
       } else if (
         i + 1 < timeoutQueue.length &&
@@ -49,7 +58,7 @@ export default function Clock<EventType>(
         // case 2, frame in between two frames
         timeoutQueue.splice(i + 1, 0, {
           frame: targetFrame,
-          events: [() => onTriggerEvent(event)],
+          events: [() => onTriggerEvent(event, state)],
         });
         return;
       }
@@ -57,17 +66,17 @@ export default function Clock<EventType>(
     // the element should happened at the end of the list anyway
     timeoutQueue.push({
       frame: targetFrame,
-      events: [() => onTriggerEvent(event)],
+      events: [() => onTriggerEvent(event, state)],
     });
   }
 
   function addEventToNextFrame(event: EventType) {
     const currentFrameObject = getCurrentFrameObject();
     if (currentFrameObject) {
-      currentFrameObject.events.push(() => onTriggerEvent(event));
+      currentFrameObject.events.push(() => onTriggerEvent(event, state));
     } else {
       timeoutQueue = [
-        { frame: currentFrame, events: [() => onTriggerEvent(event)] },
+        { frame: currentFrame, events: [() => onTriggerEvent(event, state)] },
         ...timeoutQueue,
       ];
     }
@@ -84,8 +93,9 @@ export default function Clock<EventType>(
     currentFrame = currentFrame + 1;
   }
 
+  // it means the event will be fully completed before the parent end
   function triggerEvent(event: EventType) {
-    isRunningEvent ? onTriggerEvent(event) : addEventToNextFrame(event);
+    isRunningEvent ? onTriggerEvent(event, state) : addEventToNextFrame(event);
   }
 
   function getImmutableInternalState() {
@@ -96,12 +106,5 @@ export default function Clock<EventType>(
     };
   }
 
-  return {
-    triggerEvent,
-    getCurrentFrameObject,
-    setGameEventTimeout,
-    addEventToNextFrame,
-    nextTick,
-    getImmutableInternalState,
-  };
+  return state;
 }

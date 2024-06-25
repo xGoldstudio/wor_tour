@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore, {
-  GameAnimation,
-  GameStore,
-  getCardFromState,
-  getHandFromState,
+  GameStore, getHandFromState
 } from "@/game/stores/gameStateStore";
 import iaAgent from "./aiAgent";
 import cardAttacking from "./events/cardAttacking";
@@ -47,7 +44,7 @@ export type EventType =
   | DrawCardEvent
   | HealCardEvent
   | RemoveEffectEvent
-  | RemoveAnimationEvent
+  // | RemoveAnimationEvent
   | CardDamagResolveEvent
   | PlayerDamageResolveEvent;
 
@@ -72,7 +69,6 @@ export interface PlaceCardEvent {
   isPlayer: boolean;
   targetPosition: number;
   cardInHandPosition: number;
-  cardId: number;
 }
 
 export interface CardStartAttackingEvent {
@@ -152,10 +148,10 @@ export interface RemoveEffectEvent {
   effectToRemove: keyof CardEffects;
 }
 
-export interface RemoveAnimationEvent {
-  type: "removeAnimation";
-  key: string;
-}
+// export interface RemoveAnimationEvent {
+//   type: "removeAnimation";
+//   key: string;
+// }
 
 export function getDeathAnimationKey(isPlayerCard: boolean, position: number) {
   return `death_${isPlayerCard}_${position}`;
@@ -185,8 +181,8 @@ function useGameEvents(): GameEventsActions {
     startAttacking,
     healCard,
     removeEffect,
-    addAnimation,
-    removeAnimation,
+    // addAnimation,
+    // removeAnimation,
     setIsInteractive,
   } = useGameStore();
   const {
@@ -330,15 +326,21 @@ function useGameEvents(): GameEventsActions {
       cardAttacking(event, data, triggerEvent);
     } else if (event.type === "cardDamage") {
       // animation
-      gameCanvas?.newAnimation(
-        `card_${event.initiator.isPlayerCard}_${event.initiator.cardPosition}`,
-        `card_${event.isPlayerCard}_${event.cardPosition}`,
-        "attack",
-        clock.getImmutableInternalState().currentFrame,
+      // gameCanvas?.newAnimation(
+      //   `card_${event.initiator.isPlayerCard}_${event.initiator.cardPosition}`,
+      //   `card_${event.isPlayerCard}_${event.cardPosition}`,
+      //   "attack",
+      //   clock.getImmutableInternalState().currentFrame,
+      //   {
+      //     onAnimationEnd: () =>
+      //       triggerEvent({ type: "cardDamageResolve", initiator: event }),
+      //   }
+      // );
+      clock.setGameEventTimeout(
         {
-          onAnimationEnd: () =>
-            triggerEvent({ type: "cardDamageResolve", initiator: event }),
-        }
+          type: "cardDamageResolve", initiator: event,
+        },
+        20
       );
     } else if (event.type === "cardDamageResolve") {
       const isDead = dealDamageToCard(
@@ -376,35 +378,41 @@ function useGameEvents(): GameEventsActions {
         });
       }
     } else if (event.type === "cardDestroyed") {
-      addNewAnimation(
-        getDeathAnimationKey(
-          event.initiator.isPlayerCard,
-          event.initiator.cardPosition
-        ),
-        {
-          onTick: clock.getImmutableInternalState().currentFrame,
-          animationDuration: 75,
-          data: {
-            card: getCardFromState(
-              event.initiator.isPlayerCard,
-              event.initiator.cardPosition,
-              data
-            )!,
-          },
-        }
-      );
+      // addNewAnimation(
+      //   getDeathAnimationKey(
+      //     event.initiator.isPlayerCard,
+      //     event.initiator.cardPosition
+      //   ),
+      //   {
+      //     onTick: clock.getImmutableInternalState().currentFrame,
+      //     animationDuration: 75,
+      //     data: {
+      //       card: getCardFromState(
+      //         event.initiator.isPlayerCard,
+      //         event.initiator.cardPosition,
+      //         data
+      //       )!,
+      //     },
+      //   }
+      // );
       destroyCard(event.initiator.isPlayerCard, event.initiator.cardPosition);
     } else if (event.type === "playerDamage") {
-      gameCanvas?.newAnimation(
-        `card_${event.initiator.isPlayer}_${event.initiator.cardPosition}`,
-        `hpBar_${event.isPlayer}`,
-        "attack",
-        clock.getImmutableInternalState().currentFrame,
+      // gameCanvas?.newAnimation(
+      //   `card_${event.initiator.isPlayer}_${event.initiator.cardPosition}`,
+      //   `hpBar_${event.isPlayer}`,
+      //   "attack",
+      //   clock.getImmutableInternalState().currentFrame,
+      //   {
+      //     onAnimationEnd: () =>
+      //       triggerEvent({ type: "playerDamageResolve", initiator: event }),
+      //     sameX: true,
+      //   }
+      // );
+      clock.setGameEventTimeout(
         {
-          onAnimationEnd: () =>
-            triggerEvent({ type: "playerDamageResolve", initiator: event }),
-          sameX: true,
-        }
+          type: "playerDamageResolve", initiator: event,
+        },
+        20
       );
     } else if (event.type === "playerDamageResolve") {
       dealDamageToPlayer(event.initiator.isPlayer, event.initiator.damage);
@@ -420,7 +428,7 @@ function useGameEvents(): GameEventsActions {
       }
     } else if (event.type === "gameOver") {
       setGameOver(event.winnerIsPlayer);
-      destroyGame();
+      // destroyGame();
     } else if (event.type === "drawCard") {
       if (getHandFromState(event.isPlayer, data)[event.handPosition] !== null) {
         cardHandToDeck(event.isPlayer, event.handPosition);
@@ -428,36 +436,79 @@ function useGameEvents(): GameEventsActions {
       cardDeckToHand(event.isPlayer, event.handPosition);
     } else if (event.type === "healCard") {
       healCard(event.isPlayerCard, event.cardPosition, event.amount);
-      gameCanvas.newAnimation(
-        `card_${event.cardInitiator.isPlayerCard}_${event.cardInitiator.cardPosition}`,
-        `card_${event.isPlayerCard}_${event.cardPosition}`,
-        "heal",
-        clock.getImmutableInternalState().currentFrame
-      );
     } else if (event.type === "removeEffect") {
       removeEffect(
         event.isPlayerCard,
         event.cardPosition,
         event.effectToRemove
       );
-    } else if (event.type === "removeAnimation") {
-      removeAnimation(event.key);
     }
+    if (event.type === "gameOver") {
+      destroyGame();
+    }
+    animationReactionToEvent(event);
 
     // we rerun getData to have the updated data
     runGameEventListeners(event.type, event, getData(), triggerEvent);
   }
 
-  function addNewAnimation(key: string, animation: GameAnimation) {
-    addAnimation(key, animation);
-    clock.setGameEventTimeout(
-      {
-        type: "removeAnimation",
-        key,
-      },
-      animation.animationDuration
-    );
+  function animationReactionToEvent(event: EventType) {
+    if (event.type === "cardDamage") {
+      gameCanvas?.newAnimation(
+        `card_${event.initiator.isPlayerCard}_${event.initiator.cardPosition}`,
+        `card_${event.isPlayerCard}_${event.cardPosition}`,
+        "attack",
+        clock.getImmutableInternalState().currentFrame,
+      );
+    } else if (event.type === "cardDestroyed") {
+      // addNewAnimation(
+      //   getDeathAnimationKey(
+      //     event.initiator.isPlayerCard,
+      //     event.initiator.cardPosition
+      //   ),
+      //   {
+      //     onTick: clock.getImmutableInternalState().currentFrame,
+      //     animationDuration: 75,
+      //     data: {
+      //       card: getCardFromState(
+      //         event.initiator.isPlayerCard,
+      //         event.initiator.cardPosition,
+      //         data
+      //       )!,
+      //     },
+      //   }
+      // );
+      destroyCard(event.initiator.isPlayerCard, event.initiator.cardPosition);
+    } else if (event.type === "playerDamage") {
+      gameCanvas?.newAnimation(
+        `card_${event.initiator.isPlayer}_${event.initiator.cardPosition}`,
+        `hpBar_${event.isPlayer}`,
+        "attack",
+        clock.getImmutableInternalState().currentFrame,
+        {
+          sameX: true,
+        }
+      );
+    } else if (event.type === "healCard") {
+      gameCanvas.newAnimation(
+        `card_${event.cardInitiator.isPlayerCard}_${event.cardInitiator.cardPosition}`,
+        `card_${event.isPlayerCard}_${event.cardPosition}`,
+        "heal",
+        clock.getImmutableInternalState().currentFrame
+      );
+    }
   }
+
+  // function addNewAnimation(key: string, animation: GameAnimation) {
+  //   addAnimation(key, animation);
+  //   clock.setGameEventTimeout(
+  //     {
+  //       type: "removeAnimation",
+  //       key,
+  //     },
+  //     animation.animationDuration
+  //   );
+  // }
 
   function increaseManaTimer(isPlayer: boolean) {
     startEarningMana(isPlayer, clock.getImmutableInternalState().currentFrame);

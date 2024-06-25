@@ -164,7 +164,8 @@ function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
             position={position}
           />
         ) : (
-          <GameCardDeath isPlayerCard={isPlayer} position={position} />
+          <></>
+          // <GameCardDeath isPlayerCard={isPlayer} position={position} />
         )}
       </div>
     </div>

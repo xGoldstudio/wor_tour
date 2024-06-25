@@ -73,9 +73,9 @@ export interface GameStore {
   setIsInteractive: (value: boolean) => void;
 
   // animations
-  addAnimation: (key: string, animation: GameAnimation) => void;
-  removeAnimation: (key: string) => boolean;
-  animations: Map<string, GameAnimation>;
+  // addAnimation: (key: string, animation: GameAnimation) => void;
+  // removeAnimation: (key: string) => boolean;
+  // animations: Map<string, GameAnimation>;
 }
 
 export interface GameAnimation {
@@ -132,7 +132,7 @@ const initState = ({
   currentInstanceId: 0,
 
   isInteractive: false,
-  animations: new Map(),
+  // animations: new Map(),
 });
 
 const useGameStore = create<GameStore>()((set, get) => ({
@@ -307,26 +307,26 @@ const useGameStore = create<GameStore>()((set, get) => ({
     );
   },
 
-  addAnimation: (key: string, animation: GameAnimation) => {
-    set((state) => {
-      const animations = state.animations;
-      animations.set(key, animation);
-      return {
-        animations,
-      };
-    });
-  },
-  removeAnimation: (key: string) => {
-    let isRemoved = false;
-    set((state) => {
-      const animations = state.animations;
-      isRemoved = animations.delete(key);
-      return {
-        animations,
-      };
-    });
-    return isRemoved;
-  },
+  // addAnimation: (key: string, animation: GameAnimation) => {
+  //   set((state) => {
+  //     const animations = state.animations;
+  //     animations.set(key, animation);
+  //     return {
+  //       animations,
+  //     };
+  //   });
+  // },
+  // removeAnimation: (key: string) => {
+  //   let isRemoved = false;
+  //   set((state) => {
+  //     const animations = state.animations;
+  //     isRemoved = animations.delete(key);
+  //     return {
+  //       animations,
+  //     };
+  //   });
+  //   return isRemoved;
+  // },
   setIsInteractive: (value: boolean) => set({ isInteractive: value }),
 }));
 
