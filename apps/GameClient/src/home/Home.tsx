@@ -1,7 +1,7 @@
 import DebugPanel from "@/DebugPanel";
 import HomeTab from "./pages/home/HomeTab";
 import { useState } from "react";
-import DeckTab from "./pages/deck/DeckTab";
+import DeckInterface from "./pages/deck/DeckInterface";
 import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore";
@@ -18,7 +18,7 @@ type Tabs = "home" | "deck" | "shop";
 
 const tabs: Record<Tabs, () => JSX.Element> = {
   home: HomeTab,
-  deck: DeckTab,
+  deck: DeckInterface,
   shop: ShopTab,
 };
 

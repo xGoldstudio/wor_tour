@@ -65,7 +65,7 @@ export default function DeckTab() {
     detailledDeck.push(getCompleteInfo(deckArray[i]!));
   detailledDeck = sorts[actualSortDeck].sortFunction(detailledDeck);
   return (
-    <div className="w-full grid grid-rows-[1fr_auto] absolute top-0 h-full">
+    <div className="w-full grid grid-rows-[1fr_auto] top-0 h-full">
       <SortAndFilterBox
         setActualSort={setActualSort}
         actualSort={actualSort}
@@ -73,7 +73,7 @@ export default function DeckTab() {
         actualFilter={actualFilter}
       />
       <ScrollContainer className="grow overflow-y-scroll pt-2 scrollbar-hide flex justify-center">
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-4 gap-8">
           {detailledCollection.map((card) => (
             <div className="w-full flex justify-center" key={card.id}>
               <DeckCard cardId={card.id} />
