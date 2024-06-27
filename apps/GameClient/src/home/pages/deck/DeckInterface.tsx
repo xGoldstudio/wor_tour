@@ -1,8 +1,7 @@
-import React from "react";
-import DeckTab from "./DeckTab";
+import { cn } from "@repo/ui";
+import React, { useState } from "react";
 import CollectionTab from "./CollectionTab";
-import { useState } from "react";
-import { Box, cn } from "@repo/ui";
+import DeckTab from "./DeckTab";
 
 type Tabs = "Deck" | "Collection";
 
@@ -27,7 +26,10 @@ function TabModal({ children, currentTab, setCurrentTab }: TabModalProps) {
       style={{
         backgroundImage: "url(/wood-vertical.jpg)",
         backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundPosition: cn(
+          "bottom 50px right 100px",
+          children?.toString() === "Deck" ? "bottom 0px" : null
+        ),
       }}
       onClick={() => setCurrentTab(children?.toString() as Tabs)}
     >

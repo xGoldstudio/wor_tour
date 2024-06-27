@@ -53,6 +53,7 @@ defaultCollection.set(5, { id: 5, level: 1, shard: 0 });
 defaultCollection.set(6, { id: 6, level: 1, shard: 0 });
 defaultCollection.set(7, { id: 7, level: 1, shard: 0 });
 defaultCollection.set(8, { id: 8, level: 1, shard: 0 });
+defaultCollection.set(9, { id: 8, level: 1, shard: 0 });
 
 const shardsByLevels = [3, 7];
 
