@@ -4,6 +4,7 @@ import ScrollContainer from "react-indiana-drag-scroll";
 import { ActiveFilters, CardFilters, FiltersDescription } from "./cardFilters";
 import { CardSorts, sorts } from "./cardSorts";
 import { CardUI } from "./CardUI";
+import { SortAndFIlter } from "./SortAndFilter";
 
 export default function CollectionTab() {
   const { collection } = usePlayerStore((state) => ({
@@ -42,8 +43,9 @@ export default function CollectionTab() {
   detailledCollection = sorts[actualSort].sortFunction(detailledCollection);
   return (
     <ScrollContainer className="grow overflow-y-scroll scrollbar-hide flex justify-center">
-      <div className="w-[650px] grid grid-rows-[1fr_auto] top-0 h-full">
-        <div className="grid grid-cols-4 gap-y-8 pt-8">
+      <div className="w-[650px] h-[650px] grid grid-rows-[1fr_auto] top-0 ">
+        <SortAndFIlter />
+        <div className="grid grid-cols-4 gap-y-8 pt-4">
           {detailledCollection.map((card) => (
             <div className="w-full flex justify-center" key={card.id}>
               <CardUI cardId={card.id} />
