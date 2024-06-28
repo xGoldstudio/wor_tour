@@ -25,6 +25,8 @@ export class GameStateObject {
 		this.playerHp = playerHp;
 		this.opponentHp = opponentHp;
 		this.currentWinner = null;
+		this.playerMaxHp = playerHp;
+		this.opponentMaxHp = opponentHp;
 	}
 
 	// state (nested properties are forbidden)
@@ -40,6 +42,8 @@ export class GameStateObject {
 	opponentBoard: (InGameCardType | null)[];
 	playerHp: number;
 	opponentHp: number;
+	playerMaxHp: number;
+	opponentMaxHp: number;
 
 	currentInstanceId: number;
 	currentWinner: "player" | "opponent" | null = null;

@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore, {
-  GameStore, getHandFromState
+  GameStore,
+  InGameCardType,
 } from "@/game/stores/gameStateStore";
 import iaAgent from "./aiAgent";
-import cardAttacking from "./events/cardAttacking";
-import cardPlacementEventManager from "./events/cardPlacement";
 import Clock, { ClockReturn } from "./clock/clock";
-import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
 import GameCanvas, { GameCanvasReturn } from "./animation/gameCanvas";
 import {
   resetAllGameEventListeners,
@@ -15,6 +13,9 @@ import {
 } from "./gameEventListener";
 import { CardEffects } from "@repo/types";
 import { useOnMount } from "@repo/ui";
+import { computeNextFrameState } from "./gameEngine/gameEngine";
+import _ from "lodash";
+import gsap from "gsap";
 
 export const FRAME_TIME = 10;
 
@@ -163,28 +164,7 @@ export let TriggerGameEvent: null | ((event: EventType) => void) = null;
 // all game logic here
 // todo to guaranteed fairness, we must wrap setTimeout in a custom gameLoop
 function useGameEvents(): GameEventsActions {
-  const {
-    init: initGameStore,
-    increaseMana,
-    getData,
-    placeCardBoard,
-    consumeMana,
-    startEarningMana,
-    dealDamageToPlayer,
-    dealDamageToCard,
-    destroyCard,
-    setGameOver,
-    getNextInstanceId,
-    cardDeckToHand,
-    cardHandToDeck,
-    shuffleDeck,
-    startAttacking,
-    healCard,
-    removeEffect,
-    // addAnimation,
-    // removeAnimation,
-    setIsInteractive,
-  } = useGameStore();
+  const initGameStore = useGameStore((s) => s.init);
   const {
     getData: getUserInterfaceData,
     isClockRunning,
@@ -197,8 +177,8 @@ function useGameEvents(): GameEventsActions {
     Clock(internalTriggerEvent)
   );
   const [gameCanvas] = useState<GameCanvasReturn>(() => GameCanvas());
-  const { triggerGameSyncAnimation, reset: resetGameSyncAnimationStore } =
-    useGameSyncAnimationStore<GameStore & { currentTick: number }>();
+  // const { triggerGameSyncAnimation, reset: resetGameSyncAnimationStore } =
+  //   useGameSyncAnimationStore<GameStore & { currentTick: number }>();
   const [isInit, setIsInit] = useState(false);
 
   useEffect(() => {
@@ -212,18 +192,22 @@ function useGameEvents(): GameEventsActions {
     initGameInterfaceStore();
     initGameStore();
     iaAgent();
-    shuffleDeck(true);
-    shuffleDeck(false);
+    // shuffleDeck(true); // todo
+    // shuffleDeck(false);
     triggerEvent({ type: "startEarningMana", isPlayer: true });
     triggerEvent({ type: "startEarningMana", isPlayer: false });
+    // for (let i = 0; i < 7; i++) {
+    //   triggerEvent({ type: "manaIncrease", isPlayer: false });
+    //   triggerEvent({ type: "manaIncrease", isPlayer: false });
+    // }
     for (let i = 0; i < 4; i++) {
       triggerEvent({ type: "drawCard", isPlayer: true, handPosition: i });
       triggerEvent({ type: "drawCard", isPlayer: false, handPosition: i });
     }
     resume();
     setIsInit(true);
-    setIsInteractive(true);
-    TriggerGameEvent = internalTriggerEvent;
+    // setIsInteractive(true);
+    TriggerGameEvent = (event: EventType) => internalTriggerEvent(event, clock);
   });
 
   function destroyGame() {
@@ -233,7 +217,7 @@ function useGameEvents(): GameEventsActions {
     // stop the clock (tick still exist but will be gc, no next tick are going to be triggered)
     pause();
     gameCanvas.destroy();
-    resetGameSyncAnimationStore();
+    // resetGameSyncAnimationStore();
     TriggerGameEvent = null;
   }
 
@@ -250,10 +234,10 @@ function useGameEvents(): GameEventsActions {
     const currentFrame = clock.getImmutableInternalState().currentFrame;
     gameCanvas?.paint(currentFrame);
     clock.nextTick();
-    triggerGameSyncAnimation({
-      ...getData(),
-      currentTick: currentFrame,
-    });
+    // triggerGameSyncAnimation({
+    //   ...getData(),
+    //   currentTick: currentFrame,
+    // });
   }
 
   function resume() {
@@ -281,175 +265,84 @@ function useGameEvents(): GameEventsActions {
 
   const triggerEvent = clock.triggerEvent;
 
-  function internalTriggerEvent(event: EventType) {
-    const data = getData();
-    if (data.currentWinner) {
-      return null;
+  function internalTriggerEvent(
+    event: EventType,
+    clock: ClockReturn<EventType>
+  ) {
+    const { state: usingState } = useGameStore.getState();
+    if (!usingState) {
+      return;
     }
-    if (event.type === "startEarningMana") {
-      if (
-        (event.isPlayer ? data.playerMana : data.opponentMana) < 9 &&
-        (event.isPlayer
-          ? data.playerTickStartEarningMana
-          : data.opponentTickStartEarningMana) === null
-      ) {
-        increaseManaTimer(event.isPlayer);
+    computeNextFrameState(usingState, event, clock);
+    animationReactionToEvent(event);
+    // if (event.type === "gameOver") { // is it necessary?
+    //   destroyGame();
+    // }
+    // we rerun getData to have the updated data
+    updateStoreFromEvent(event, useGameStore.getState());
+    useGameStore.setState({ state: usingState });
+    runGameEventListeners(event.type, event, usingState, triggerEvent);
+  }
+
+  function updateStoreFromEvent(event: EventType, data: GameStore) {
+    if (event.type === "manaIncrease" || event.type === "manaConsume") {
+      if (event.isPlayer) {
+        data.playerMana = data.state.playerMana;
+      } else {
+        data.opponentMana = data.state.opponentMana;
       }
-    } else if (event.type === "manaIncrease") {
-      increaseMana(event.isPlayer);
-      triggerEvent({ type: "startEarningMana", isPlayer: event.isPlayer });
-    } else if (event.type === "manaConsume") {
-      consumeMana(event.isPlayer, event.delta);
-      triggerEvent({ type: "startEarningMana", isPlayer: event.isPlayer });
-    } else if (event.type === "placeCard" && data.isInteractive) {
-      cardPlacementEventManager(
-        event,
-        data,
-        triggerEvent,
-        getNextInstanceId,
-        placeCardBoard
-      );
-    } else if (event.type === "cardStartAttacking") {
-      const usingCard = event.isPlayer
-        ? data.playerBoard[event.cardPosition]
-        : data.opponentBoard[event.cardPosition];
-      if (!usingCard) {
-        return;
-      }
-      startAttackTimer({
-        attackSpeed: usingCard.attackSpeed,
-        cardPosition: event.cardPosition,
-        instanceId: event.instanceId,
-        isPlayer: event.isPlayer,
-      });
-    } else if (event.type === "cardAttacking") {
-      cardAttacking(event, data, triggerEvent);
-    } else if (event.type === "cardDamage") {
-      // animation
-      // gameCanvas?.newAnimation(
-      //   `card_${event.initiator.isPlayerCard}_${event.initiator.cardPosition}`,
-      //   `card_${event.isPlayerCard}_${event.cardPosition}`,
-      //   "attack",
-      //   clock.getImmutableInternalState().currentFrame,
-      //   {
-      //     onAnimationEnd: () =>
-      //       triggerEvent({ type: "cardDamageResolve", initiator: event }),
-      //   }
-      // );
-      clock.setGameEventTimeout(
-        {
-          type: "cardDamageResolve", initiator: event,
-        },
-        20
-      );
-    } else if (event.type === "cardDamageResolve") {
-      const isDead = dealDamageToCard(
-        event.initiator.isPlayerCard,
-        event.initiator.amount,
-        event.initiator.cardPosition
-      );
-      if (event.initiator.directAttack) {
-        const card = (
-          event.initiator.isPlayerCard ? data.playerBoard : data.opponentBoard
-        )[event.initiator.cardPosition];
-        if (card?.effects.fightBack) {
-          // attack before destroying the card
-          triggerEvent({
-            // to avoid infinite ping pong
-            type: "removeEffect",
-            isPlayerCard: event.initiator.isPlayerCard,
-            cardPosition: event.initiator.cardPosition,
-            effectToRemove: "fightBack",
-          });
-          triggerEvent({
-            type: "cardDamage",
-            amount: card.dmg,
-            cardPosition: event.initiator.initiator.cardPosition,
-            isPlayerCard: event.initiator.initiator.isPlayerCard,
-            initiator: event.initiator,
-            directAttack: true,
-          });
-        }
-      }
-      if (isDead) {
-        triggerEvent({
-          type: "cardDestroyed",
-          initiator: event.initiator,
-        });
-      }
-    } else if (event.type === "cardDestroyed") {
-      // addNewAnimation(
-      //   getDeathAnimationKey(
-      //     event.initiator.isPlayerCard,
-      //     event.initiator.cardPosition
-      //   ),
-      //   {
-      //     onTick: clock.getImmutableInternalState().currentFrame,
-      //     animationDuration: 75,
-      //     data: {
-      //       card: getCardFromState(
-      //         event.initiator.isPlayerCard,
-      //         event.initiator.cardPosition,
-      //         data
-      //       )!,
-      //     },
-      //   }
-      // );
-      destroyCard(event.initiator.isPlayerCard, event.initiator.cardPosition);
-    } else if (event.type === "playerDamage") {
-      // gameCanvas?.newAnimation(
-      //   `card_${event.initiator.isPlayer}_${event.initiator.cardPosition}`,
-      //   `hpBar_${event.isPlayer}`,
-      //   "attack",
-      //   clock.getImmutableInternalState().currentFrame,
-      //   {
-      //     onAnimationEnd: () =>
-      //       triggerEvent({ type: "playerDamageResolve", initiator: event }),
-      //     sameX: true,
-      //   }
-      // );
-      clock.setGameEventTimeout(
-        {
-          type: "playerDamageResolve", initiator: event,
-        },
-        20
-      );
-    } else if (event.type === "playerDamageResolve") {
-      dealDamageToPlayer(event.initiator.isPlayer, event.initiator.damage);
-      if (
-        (event.initiator.isPlayer ? data.playerHp : data.opponentHp) -
-          event.initiator.damage <=
-        0
-      ) {
-        triggerEvent({
-          type: "gameOver",
-          winnerIsPlayer: !event.initiator.isPlayer,
-        });
-      }
-    } else if (event.type === "gameOver") {
-      setGameOver(event.winnerIsPlayer);
-      // destroyGame();
     } else if (event.type === "drawCard") {
-      if (getHandFromState(event.isPlayer, data)[event.handPosition] !== null) {
-        cardHandToDeck(event.isPlayer, event.handPosition);
-      }
-      cardDeckToHand(event.isPlayer, event.handPosition);
-    } else if (event.type === "healCard") {
-      healCard(event.isPlayerCard, event.cardPosition, event.amount);
+      data.playerHand = data.state.playerHand;
+      data.playerDeck = data.state.playerDeck;
+    } else if (event.type === "playerDamageResolve") {
+      data.playerHp = data.state.playerHp;
+      data.opponentHp = data.state.opponentHp;
+    } else if (event.type === "cardDamageResolve") {
+      updateCardProperty(
+        event.initiator.isPlayerCard,
+        event.initiator.cardPosition,
+        data,
+        (card, ref) => {
+          card.hp = ref.hp;
+        }
+      );
     } else if (event.type === "removeEffect") {
-      removeEffect(
+      updateCardProperty(
         event.isPlayerCard,
         event.cardPosition,
-        event.effectToRemove
+        data,
+        (card) => {
+          card.effects[event.effectToRemove] = undefined;
+        }
       );
+    } else if (event.type === "placeCard") {
+      const card = event.isPlayer
+        ? data.state.playerBoard[event.targetPosition]
+        : data.state.opponentBoard[event.targetPosition];
+      if (event.isPlayer) {
+        data.playerBoard[event.targetPosition] = _.cloneDeep(card);
+      } else {
+        data.opponentBoard[event.targetPosition] = _.cloneDeep(card);
+      }
     }
-    if (event.type === "gameOver") {
-      destroyGame();
-    }
-    animationReactionToEvent(event);
+  }
 
-    // we rerun getData to have the updated data
-    runGameEventListeners(event.type, event, getData(), triggerEvent);
+  function updateCardProperty(
+    isPlayerCard: boolean,
+    cardPosition: number,
+    data: GameStore,
+    transform: (card: InGameCardType, ref: InGameCardType) => void
+  ) {
+    const refCard = isPlayerCard
+      ? data.playerBoard[cardPosition]
+      : data.opponentBoard[cardPosition];
+    const stateCard = isPlayerCard
+      ? data.state.playerBoard[cardPosition]
+      : data.state.opponentBoard[cardPosition];
+    if (!refCard || !stateCard) {
+      return;
+    }
+    transform(refCard, stateCard);
   }
 
   function animationReactionToEvent(event: EventType) {
@@ -458,9 +351,24 @@ function useGameEvents(): GameEventsActions {
         `card_${event.initiator.isPlayerCard}_${event.initiator.cardPosition}`,
         `card_${event.isPlayerCard}_${event.cardPosition}`,
         "attack",
-        clock.getImmutableInternalState().currentFrame,
+        clock.getImmutableInternalState().currentFrame
       );
+    } else if (event.type === "placeCard") {
+      gsap.to(
+        `#card_${event.isPlayer}_${event.targetPosition}`,
+        {
+          duration: 0.5,
+          opacity: 1,
+        }
+      )
     } else if (event.type === "cardDestroyed") {
+      gsap.to(
+        `#card_${event.initiator.isPlayerCard}_${event.initiator.cardPosition}`,
+        {
+          duration: 0.5,
+          opacity: 0,
+        }
+      )
       // addNewAnimation(
       //   getDeathAnimationKey(
       //     event.initiator.isPlayerCard,
@@ -478,7 +386,7 @@ function useGameEvents(): GameEventsActions {
       //     },
       //   }
       // );
-      destroyCard(event.initiator.isPlayerCard, event.initiator.cardPosition);
+      // destroyCard(event.initiator.isPlayerCard, event.initiator.cardPosition);
     } else if (event.type === "playerDamage") {
       gameCanvas?.newAnimation(
         `card_${event.initiator.isPlayer}_${event.initiator.cardPosition}`,
@@ -499,70 +407,22 @@ function useGameEvents(): GameEventsActions {
     }
   }
 
-  // function addNewAnimation(key: string, animation: GameAnimation) {
-  //   addAnimation(key, animation);
-  //   clock.setGameEventTimeout(
-  //     {
-  //       type: "removeAnimation",
-  //       key,
-  //     },
-  //     animation.animationDuration
-  //   );
-  // }
-
-  function increaseManaTimer(isPlayer: boolean) {
-    startEarningMana(isPlayer, clock.getImmutableInternalState().currentFrame);
-    clock.setGameEventTimeout(
-      {
-        type: "manaIncrease",
-        isPlayer,
-      },
-      manaSpeed / FRAME_TIME
-    );
-  }
-
   function placeNewCard(cardInHandPosition: number) {
-    const playerHand = getData().playerHand;
+    const state = useGameStore.getState().state;
+    if (!state) {
+      return;
+    }
     const targetPosition = getUserInterfaceData().cardTarget;
-    const handCard = playerHand[cardInHandPosition];
-    if (targetPosition === null || handCard === null) {
+    if (targetPosition === null) {
       return;
     }
     triggerEvent({
       type: "placeCard",
       isPlayer: true,
-      cardId: handCard,
       targetPosition,
       cardInHandPosition: cardInHandPosition,
     });
     removeCardTarget();
-  }
-
-  function startAttackTimer({
-    attackSpeed,
-    cardPosition,
-    instanceId,
-    isPlayer,
-  }: {
-    attackSpeed: number;
-    cardPosition: number;
-    isPlayer: boolean;
-    instanceId: number;
-  }) {
-    startAttacking(
-      isPlayer,
-      cardPosition,
-      clock.getImmutableInternalState().currentFrame
-    );
-    clock.setGameEventTimeout(
-      {
-        type: "cardAttacking",
-        isPlayer,
-        instanceId,
-        cardPosition,
-      },
-      1000 / attackSpeed / FRAME_TIME
-    );
   }
 
   return {

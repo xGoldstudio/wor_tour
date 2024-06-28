@@ -48,6 +48,12 @@ export default function placeCardEvent({ event, gameState, clock }: ComputeEvent
 				amount: cardInGame.effects.placementHeal!.amount,
 			});
 		});
+		clock.triggerEvent({
+			type: "removeEffect",
+			isPlayerCard: event.isPlayer,
+			cardPosition: event.targetPosition,
+			effectToRemove: "placementHeal",
+		});
 	}
 	clock.triggerEvent({
 		type: "cardStartAttacking",

@@ -1,27 +1,28 @@
 import * as _ from "lodash";
 
-interface FrameObject {
+interface FrameObject<EventType> {
   frame: number;
-  events: (() => void)[];
+  events: EventType[];
 }
 
 export interface ClockReturn<EventType> {
   triggerEvent: (event: EventType) => void;
-  getCurrentFrameObject: () => FrameObject | null;
+  getCurrentFrameObject: () => FrameObject<EventType> | null;
   setGameEventTimeout: (event: EventType, timeoutFrame: number) => void;
   addEventToNextFrame: (event: EventType) => void;
   nextTick: () => void;
   getImmutableInternalState: () => {
     currentFrame: number;
     isRunningEvent: boolean;
-    timeoutQueue: FrameObject[];
+    timeoutQueue: FrameObject<EventType>[];
   };
 }
 
 export default function Clock<EventType>(
   onTriggerEvent: (e: EventType, clock: ClockReturn<EventType>) => void
 ): ClockReturn<EventType> {
-  let timeoutQueue: FrameObject[] = [];
+
+  let timeoutQueue: FrameObject<EventType>[] = [];
   let isRunningEvent = false;
   let currentFrame = 0;
 
@@ -34,7 +35,7 @@ export default function Clock<EventType>(
     getImmutableInternalState,
   };
 
-  function getCurrentFrameObject(): FrameObject | null {
+  function getCurrentFrameObject(): FrameObject<EventType> | null {
     return timeoutQueue.length >= 1 && timeoutQueue[0].frame === currentFrame
       ? timeoutQueue[0]
       : null;
@@ -49,7 +50,7 @@ export default function Clock<EventType>(
     const targetFrame = currentFrame + usingFrame;
     for (let i = 0; i < timeoutQueue.length; i++) {
       if (timeoutQueue[i].frame === targetFrame) {
-        timeoutQueue[i].events.push(() => onTriggerEvent(event, state));
+        timeoutQueue[i].events.push(event);
         return;
       } else if (
         i + 1 < timeoutQueue.length &&
@@ -58,7 +59,7 @@ export default function Clock<EventType>(
         // case 2, frame in between two frames
         timeoutQueue.splice(i + 1, 0, {
           frame: targetFrame,
-          events: [() => onTriggerEvent(event, state)],
+          events: [event],
         });
         return;
       }
@@ -66,19 +67,34 @@ export default function Clock<EventType>(
     // the element should happened at the end of the list anyway
     timeoutQueue.push({
       frame: targetFrame,
-      events: [() => onTriggerEvent(event, state)],
+      events: [event],
     });
   }
 
   function addEventToNextFrame(event: EventType) {
     const currentFrameObject = getCurrentFrameObject();
     if (currentFrameObject) {
-      currentFrameObject.events.push(() => onTriggerEvent(event, state));
+      currentFrameObject.events.push(event);
     } else {
       timeoutQueue = [
-        { frame: currentFrame, events: [() => onTriggerEvent(event, state)] },
+        { frame: currentFrame, events: [event] },
         ...timeoutQueue,
       ];
+    }
+  }
+
+  let nextEventQueue: EventType[] = [];
+
+  function addEventToCurrentFrame(event: EventType) {
+    nextEventQueue.push(event);
+  }
+  
+  function runAllEventsSync(event: EventType) {
+    nextEventQueue = [event];
+    while (nextEventQueue.length > 0) {
+      const event = nextEventQueue[0];
+      nextEventQueue = nextEventQueue.slice(1);
+      onTriggerEvent(event, state);
     }
   }
 
@@ -86,7 +102,7 @@ export default function Clock<EventType>(
     isRunningEvent = true;
     const currentFrameObject = getCurrentFrameObject();
     if (currentFrameObject) {
-      currentFrameObject.events.forEach((event) => event()); // still running in sync of order calling
+      currentFrameObject.events.forEach(runAllEventsSync); // still running in sync of order calling
       timeoutQueue = timeoutQueue.slice(1); // remove current event
     }
     isRunningEvent = false;
@@ -95,7 +111,7 @@ export default function Clock<EventType>(
 
   // it means the event will be fully completed before the parent end
   function triggerEvent(event: EventType) {
-    isRunningEvent ? onTriggerEvent(event, state) : addEventToNextFrame(event);
+    isRunningEvent ? addEventToCurrentFrame(event) : addEventToNextFrame(event);
   }
 
   function getImmutableInternalState() {

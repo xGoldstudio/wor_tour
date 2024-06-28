@@ -1,4 +1,4 @@
-import { GameStore } from "../stores/gameStateStore";
+import { GameStateObject } from "./gameEngine/gameState";
 import { EventType } from "./useGameEvents";
 
 let gameEventListeners = initGameEventListeners();
@@ -7,7 +7,7 @@ export type TriggerEventType = (event: EventType) => void;
 
 type GameEventListenerFunction = (
   e: EventType,
-  data: GameStore,
+  data: GameStateObject,
   triggerEvent: (event: EventType) => void
 ) => void;
 
@@ -34,7 +34,7 @@ export function addGameEventListener(
 export function runGameEventListeners(
   type: EventType["type"],
   e: EventType,
-  data: GameStore,
+  data: GameStateObject,
   triggerEvent: (event: EventType) => void
 ) {
   gameEventListeners.get(type)?.forEach((action: GameEventListenerFunction) => {

@@ -20,7 +20,7 @@ function InHandCard({
   const dragControls = useDragControls();
 
   const { setSelectedCard, unselectCard } = useGameInterface();
-  const { playerMana } = useGameStore();
+  const playerMana = useGameStore(s => s.state.playerMana);
 
   function onUnselectCard() {
     userPlaceNewCard(position!);

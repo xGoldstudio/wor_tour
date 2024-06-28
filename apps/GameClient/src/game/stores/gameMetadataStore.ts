@@ -4,8 +4,8 @@ import { CardType } from "@repo/ui";
 import { create } from "zustand";
 
 export interface InGameInitData {
-  playerDeck: number[];
-  opponentDeck: number[];
+  playerDeck: CardType[];
+  opponentDeck: CardType[];
   playerHp: number;
   opponentHp: number;
 }
@@ -43,8 +43,8 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
     set({ playerCards, opponentCards, playerHp, opponentHp, isInGame: true });
   },
   getInGameInitData: () => ({
-    playerDeck: Array.from(get().playerCards.keys()),
-    opponentDeck: Array.from(get().opponentCards.keys()),
+    playerDeck: [...get().playerCards.values()].map((card) => findCard(card.id, card.level)),
+    opponentDeck: [...get().opponentCards.values()].map((card) => findCard(card.id, card.level)),
     playerHp: get().playerHp,
     opponentHp: get().opponentHp,
   }),

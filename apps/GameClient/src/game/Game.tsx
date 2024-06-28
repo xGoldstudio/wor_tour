@@ -1,25 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore from "@/game/stores/gameStateStore";
-import PlayerGUI from "./gui/PlayerGui";
 import * as _ from "lodash";
 import useGameEvents from "./gameBehavior/useGameEvents";
 import GameDebugPanel from "./GameDebugPanel";
 import GameCard from "./gui/card/GameCard";
-import GameCardDeath from "./gui/card/GameCardDeath";
-import EndGameScreen from "./endGameScreen/EndGameScreen";
+import PlayerGUI from "./gui/PlayerGui";
+import { useShallow } from "zustand/react/shallow";
 
 export default function Game() {
-  const {
-    playerMana,
-    playerHp,
-    playerMaxHp,
-    opponentHp,
-    opponentMana,
-    opponentMaxHp,
-    currentWinner,
-  } = useGameStore();
-  const { cardSelected, setCardTarget, removeCardTarget } = useGameInterface();
+  // const {
+  //   playerMana,
+  //   playerHp,
+  //   playerMaxHp,
+  //   opponentHp,
+  //   opponentMana,
+  //   opponentMaxHp,
+  //   currentWinner,
+  // } = useGameStore();
+  // const { state } = useGameStore();
+  const { cardSelected, setCardTarget, removeCardTarget, cardTarget } =
+    useGameInterface();
   const {
     userPlaceNewCard,
     togglePlay,
@@ -30,6 +31,7 @@ export default function Game() {
     isInit,
   } = useGameEvents();
 
+  // we must manually check for card placement
   useEffect(() => {
     function watchCardPlacement(event: MouseEvent) {
       const elementIds = _.range(3).map((position) =>
@@ -46,7 +48,9 @@ export default function Game() {
           }
         }
       }
-      removeCardTarget();
+      if (cardTarget !== null) {
+        removeCardTarget();
+      }
     }
 
     if (cardSelected !== null) {
@@ -56,6 +60,8 @@ export default function Game() {
       };
     }
   }, [cardSelected, removeCardTarget, setCardTarget]);
+
+  console.log("game render", "state?.playerMan");
 
   return (
     <div
@@ -80,13 +86,7 @@ export default function Game() {
                 backgroundSize: "cover",
               }}
             ></div>
-            <PlayerGUI
-              mana={opponentMana}
-              hp={opponentHp}
-              maxHp={opponentMaxHp}
-              isPlayer={false}
-              userPlaceNewCard={userPlaceNewCard}
-            />
+            <PlayerGUI userPlaceNewCard={userPlaceNewCard} isPlayer={false} />
             <div className="w-full flex justify-center relative">
               <div className="grid grid-cols-3 gap-4 px-8">
                 <CardPlaceholder position={0} isPlayer={false} />
@@ -97,18 +97,12 @@ export default function Game() {
                 <CardPlaceholder position={2} isPlayer />
               </div>
             </div>
-            <PlayerGUI
-              mana={playerMana}
-              hp={playerHp}
-              maxHp={playerMaxHp}
-              isPlayer
-              userPlaceNewCard={userPlaceNewCard}
-            />
+            <PlayerGUI userPlaceNewCard={userPlaceNewCard} isPlayer />
           </div>
           <div className="bg-black h-full w-full"></div>
         </>
       )}
-      {currentWinner && <EndGameScreen />}
+      {/* {currentWinner && <EndGameScreen />} */}
     </div>
   );
 }
@@ -121,8 +115,11 @@ interface CardPlaceholderProps {
 function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
   const cardTarget = useGameInterface((s) => s.cardTarget);
   const isTarget = cardTarget === position && isPlayer;
-  const getBoardCurrentCard = useGameStore((s) => s.getBoardCurrentCard);
-  const currentCard = getBoardCurrentCard(!!isPlayer, position);
+  const currentCard = useGameStore(
+    useShallow((s) =>
+      isPlayer ? s.playerBoard[position] : s.opponentBoard[position]
+    )
+  );
   const attackRef = useRef<null | HTMLDivElement>(null);
 
   const [startAttackTimestamp, setStartAttackTimestamp] = useState(
@@ -156,17 +153,10 @@ function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
       id={getBoardTileId(!!isPlayer, position)}
     >
       <div id={`card_${isPlayer}_${position}`}>
-        {currentCard ? (
-          <GameCard
-            card={currentCard}
-            key={currentCard.instanceId}
-            isPlayerCard={isPlayer}
-            position={position}
-          />
-        ) : (
-          <></>
-          // <GameCardDeath isPlayerCard={isPlayer} position={position} />
-        )}
+        <GameCard
+          isPlayerCard={isPlayer}
+          position={position}
+        />
       </div>
     </div>
   );
