@@ -7,6 +7,8 @@
 
 import { cn } from "@repo/ui";
 import React from "react";
+import { CardSorts, sorts } from "./cardSorts";
+import { numberOfLevels } from "../../../../../Editor/src/editor/features/progression/consts";
 
 // interface SortAndFilterBoxProps {
 //   setActualSort: (sort: CardSorts) => void;
@@ -127,10 +129,35 @@ import React from "react";
 
 interface BoxProps {
   children: React.ReactNode;
-  box: boolean;
+  box?: boolean;
+  isAscending?: boolean;
+  setIsAscending?: (isAscending: boolean) => void;
+  currentSort?: CardSorts;
+  setCurrentSort?: (sort: CardSorts) => void;
+  currentSortNumber?: number;
+  setCurrentSortNumber?: (currentSortNumber: number) => void;
 }
 
-function Box({ children, box }: BoxProps) {
+function Box({
+  children,
+  box = false,
+  isAscending = false,
+  setIsAscending,
+  setCurrentSort,
+  currentSortNumber,
+  setCurrentSortNumber,
+}: BoxProps) {
+  const getNextSort: Record<number, CardSorts> = {
+    0: "cost",
+    1: "rarity",
+    2: "world",
+    3: "level",
+  };
+  const nextSort =
+    currentSortNumber! < 3
+      ? currentSortNumber! + 1
+      : // setCurrentSortNumber((prevSortNumber) => prevSortNumber + 1)
+        0;
   return (
     <div
       className={cn(
@@ -141,20 +168,81 @@ function Box({ children, box }: BoxProps) {
       <div className="absolute w-full h-8 rounded-sm bg-blue-500">
         <div className=" rounded-sm w-full h-4 bg-blue-300 bg-opacity-30 mt-[2px] mx-auto" />
       </div>
-      <div className="whitespace-nowrap z-10">{children}</div>
+      <div
+        className={cn("whitespace-nowrap z-10 transition-all", {
+          "-rotate-180": isAscending,
+        })}
+      >
+        {setIsAscending && (
+          <button onClick={() => setIsAscending(!isAscending)}>
+            {children}
+          </button>
+        )}
+        {setCurrentSort &&
+          typeof currentSortNumber !== "undefined" &&
+          setCurrentSortNumber && (
+            <button
+              onClick={() => {
+                currentSortNumber! < 3
+                  ? setCurrentSortNumber(currentSortNumber + 1)
+                  : // setCurrentSortNumber((prevSortNumber) => prevSortNumber + 1)
+                    setCurrentSortNumber(0);
+                setCurrentSort(getNextSort[nextSort]);
+              }}
+            >
+              {children}
+            </button>
+          )}
+      </div>
     </div>
   );
 }
 
-export function SortAndFIlter() {
+interface SortAndFilterProps {
+  currentSort: CardSorts;
+  setCurrentSort: (sort: CardSorts) => void;
+  isAscending: boolean;
+  setIsAscending: (isAscending: boolean) => void;
+  currentSortNumber: number;
+  setCurrentSortNumber: (currentSortNumber: number) => void;
+}
+
+export function SortAndFilter({
+  currentSort,
+  setCurrentSort,
+  isAscending,
+  setIsAscending,
+  currentSortNumber,
+  setCurrentSortNumber,
+}: SortAndFilterProps) {
   return (
     <div className="px-4">
       <div className="h-12 bg-black bg-opacity-30 mt-4 rounded-lg flex items-center px-4 justify-between">
         <div className="">Cards found : 8 / 9</div>
         <div className="flex flex-row space-x-4">
           <Box box={true}> Filtre</Box>
-          <Box box={true}> Sort</Box>
-          <Box box={false}> By level</Box>
+          <Box
+            box={true}
+            isAscending={isAscending}
+            setIsAscending={setIsAscending}
+          >
+            {" "}
+            Sort
+          </Box>
+          <Box
+            setCurrentSort={setCurrentSort}
+            currentSortNumber={currentSortNumber}
+            setCurrentSortNumber={setCurrentSortNumber}
+          >
+            {" "}
+            {
+              sorts[
+                Object.keys(sorts).find(
+                  (sort) => sort.toString() === currentSort
+                ) as CardSorts
+              ].label
+            }
+          </Box>
         </div>
       </div>
     </div>
