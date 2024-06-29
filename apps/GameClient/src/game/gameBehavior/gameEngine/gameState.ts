@@ -19,8 +19,8 @@ export class GameStateObject {
 		this.opponentHand = [null, null, null, null];
 		this.playerDeck = [...playerDeck];
 		this.opponentDeck = [...opponentDeck];
-		this.playerBoard = [null, null, null, null];
-		this.opponentBoard = [null, null, null, null];
+		this.playerBoard = [null, null, null];
+		this.opponentBoard = [null, null, null];
 		this.currentInstanceId = 0;
 		this.playerHp = playerHp;
 		this.opponentHp = opponentHp;
