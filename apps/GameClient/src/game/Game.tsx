@@ -1,10 +1,8 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
-import useGameStore from "@/game/stores/gameStateStore";
 import useGameEvents from "./gameBehavior/useGameEvents";
 import GameDebugPanel from "./GameDebugPanel";
 import GameCard from "./gui/card/GameCard";
 import PlayerGUI from "./gui/PlayerGui";
-import { useShallow } from "zustand/react/shallow";
 
 export default function Game() {
   const {
@@ -71,11 +69,6 @@ interface CardPlaceholderProps {
 function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
   const { setCardTarget, removeCardTarget, cardTarget, cardSelected } = useGameInterface();
   const isSelected = isPlayer && cardTarget === position;
-  const currentCard = useGameStore(
-    useShallow((s) =>
-      isPlayer ? s.state.playerBoard[position] : s.state.opponentBoard[position]
-    )
-  );
 
   function onEnter() {
     if (!isPlayer || cardSelected === null) {
@@ -85,7 +78,9 @@ function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
   }
 
   function onLeave() {
-    removeCardTarget();
+    if (!isPlayer || cardSelected !== null) {
+      removeCardTarget();
+    }
   }
 
   return (
@@ -100,11 +95,10 @@ function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
       onMouseLeave={onLeave}
     >
       <div id={`card_${isPlayer}_${position}`}>
-        {currentCard && <GameCard
-          card={currentCard}
+        <GameCard
           isPlayerCard={isPlayer}
           position={position}
-        />}
+        />
       </div>
     </div>
   );

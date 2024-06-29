@@ -11,17 +11,16 @@ interface PlayerGUIProps {
   userPlaceNewCard: (cardInHandPosition: number) => void;
 }
 
-function PlayerGUI({
-  isPlayer,
-  userPlaceNewCard,
-}: PlayerGUIProps) {
-  const { deck, hand, mana, hp, maxHp } = useGameStore(useShallow((s) => ({
-    deck: s.state.playerDeck,
-    hand: s.state.playerHand,
-    mana: isPlayer ? s.state.playerMana : s.state.opponentMana,
-    hp: isPlayer ? s.state.playerHp : s.state.opponentHp,
-    maxHp: isPlayer ? s.state.playerMaxHp : s.state.opponentMaxHp,
-  })));
+function PlayerGUI({ isPlayer, userPlaceNewCard }: PlayerGUIProps) {
+  const { deck, hand, hp, maxHp } = useGameStore(
+    useShallow((s) => ({
+      deck: s.state.playerDeck,
+      hand: s.state.playerHand,
+      mana: isPlayer ? s.state.playerMana : s.state.opponentMana,
+      hp: isPlayer ? s.state.playerHp : s.state.opponentHp,
+      maxHp: isPlayer ? s.state.playerMaxHp : s.state.opponentMaxHp,
+    }))
+  );
 
   const playerHandSanitized = hand.filter(
     (card) => card !== null
@@ -62,7 +61,7 @@ function PlayerGUI({
           )}
           {isPlayer && <ManaBar />}
           <div id={`hpBar_${isPlayer}`} className="w-full">
-            <HpBar hp={hp} maxHp={maxHp} withHeart />
+            <HpBar hp={hp} maxHp={maxHp} withHeart isPlayer={isPlayer} />
           </div>
         </div>
       </div>

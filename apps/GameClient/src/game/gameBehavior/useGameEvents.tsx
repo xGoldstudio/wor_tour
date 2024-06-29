@@ -12,7 +12,6 @@ import { CardEffects } from "@repo/types";
 import { useOnMount } from "@repo/ui";
 import { computeNextFrameState } from "./gameEngine/gameEngine";
 import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
-import { GameStateObject } from "./gameEngine/gameState";
 
 export const FRAME_TIME = 10;
 
@@ -175,7 +174,7 @@ function useGameEvents(): GameEventsActions {
   );
   const [gameCanvas] = useState<GameCanvasReturn>(() => GameCanvas());
   const { triggerGameSyncAnimation, reset: resetGameSyncAnimationStore } =
-    useGameSyncAnimationStore<GameStateObject>();
+    useGameSyncAnimationStore();
   const [isInit, setIsInit] = useState(false);
 
   useEffect(() => {
@@ -271,7 +270,7 @@ function useGameEvents(): GameEventsActions {
     animationReactionToEvent(event);
     // we rerun getData to have the updated data
     useGameStore.setState({ state: usingState });
-    runGameEventListeners(event.type, event, usingState, triggerEvent);
+    runGameEventListeners(event.type, event, usingState, triggerEvent, clock);
     if (event.type === "gameOver") {
       // is it necessary?
       destroyGame();

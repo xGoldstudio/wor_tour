@@ -14,7 +14,7 @@ interface Sequence {
 }
 
 export interface AnimationTimeline {
-  add: (element: HTMLElement | string, initialValues: AnimationValues, sequences: Sequence[] | Sequence) => AnimationTimeline;
+  add: (element: HTMLElement | string | null, initialValues: AnimationValues, sequences: Sequence[] | Sequence) => AnimationTimeline;
   progress: (elapsedFrames: number) => AnimationTimeline;
 }
 
@@ -27,9 +27,13 @@ export interface AnimationSequence {
 export default function animationTimeline(requiredFrames: number): AnimationTimeline {
   const allAnimations: AnimationSequence[] = [];
 
-  function add(element: HTMLElement | string,
+  function add(element: HTMLElement | string | null,
     initialValues: AnimationValues,
     sequences: Sequence[] | Sequence) {
+    if (element === null) {
+      console.warn("Element is null");
+      return state;
+    }
     const elt = typeof element === "string" ? document.querySelector<HTMLElement>(element) : element;
     if (!elt) {
       console.warn("Element not found", element);

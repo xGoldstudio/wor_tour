@@ -8,7 +8,7 @@ import { useState } from "react";
 
 function ManaBar() {
   const [mana, setMana] = useState(0);
-  const animationRef = useGameAnimation<GameStateObject>({
+  const animationRef = useGameAnimation({
     tl: (ref) =>
       animationTimeline(manaSpeed / FRAME_TIME).add(
         ref,
@@ -45,8 +45,6 @@ function ManaBar() {
       return 0;
     },
   });
-
-  console.log("render")
 
   return (
     <div className="gap-2 grid grid-cols-9 w-full h-[28px] relative my-[6px] pl-[30px]">
