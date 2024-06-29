@@ -1,9 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import useGameInterface from "@/game/stores/gameInterfaceStore";
-import useGameStore, {
-  GameStore,
-  InGameCardType,
-} from "@/game/stores/gameStateStore";
+import useGameStore from "@/game/stores/gameStateStore";
 import iaAgent from "./aiAgent";
 import Clock, { ClockReturn } from "./clock/clock";
 import GameCanvas, { GameCanvasReturn } from "./animation/gameCanvas";
@@ -14,8 +11,8 @@ import {
 import { CardEffects } from "@repo/types";
 import { useOnMount } from "@repo/ui";
 import { computeNextFrameState } from "./gameEngine/gameEngine";
-import _ from "lodash";
-import gsap from "gsap";
+import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
+import { GameStateObject } from "./gameEngine/gameState";
 
 export const FRAME_TIME = 10;
 
@@ -177,8 +174,8 @@ function useGameEvents(): GameEventsActions {
     Clock(internalTriggerEvent)
   );
   const [gameCanvas] = useState<GameCanvasReturn>(() => GameCanvas());
-  // const { triggerGameSyncAnimation, reset: resetGameSyncAnimationStore } =
-  //   useGameSyncAnimationStore<GameStore & { currentTick: number }>();
+  const { triggerGameSyncAnimation, reset: resetGameSyncAnimationStore } =
+    useGameSyncAnimationStore<GameStateObject>();
   const [isInit, setIsInit] = useState(false);
 
   useEffect(() => {
@@ -217,7 +214,7 @@ function useGameEvents(): GameEventsActions {
     // stop the clock (tick still exist but will be gc, no next tick are going to be triggered)
     pause();
     gameCanvas.destroy();
-    // resetGameSyncAnimationStore();
+    resetGameSyncAnimationStore();
     TriggerGameEvent = null;
   }
 
@@ -234,10 +231,7 @@ function useGameEvents(): GameEventsActions {
     const currentFrame = clock.getImmutableInternalState().currentFrame;
     gameCanvas?.paint(currentFrame);
     clock.nextTick();
-    // triggerGameSyncAnimation({
-    //   ...getData(),
-    //   currentTick: currentFrame,
-    // });
+    triggerGameSyncAnimation(useGameStore.getState().state, currentFrame);
   }
 
   function resume() {
@@ -270,79 +264,18 @@ function useGameEvents(): GameEventsActions {
     clock: ClockReturn<EventType>
   ) {
     const { state: usingState } = useGameStore.getState();
-    if (!usingState) {
+    if (!usingState || usingState.currentWinner) {
       return;
     }
     computeNextFrameState(usingState, event, clock);
     animationReactionToEvent(event);
-    // if (event.type === "gameOver") { // is it necessary?
-    //   destroyGame();
-    // }
     // we rerun getData to have the updated data
-    updateStoreFromEvent(event, useGameStore.getState());
     useGameStore.setState({ state: usingState });
     runGameEventListeners(event.type, event, usingState, triggerEvent);
-  }
-
-  function updateStoreFromEvent(event: EventType, data: GameStore) {
-    if (event.type === "manaIncrease" || event.type === "manaConsume") {
-      if (event.isPlayer) {
-        data.playerMana = data.state.playerMana;
-      } else {
-        data.opponentMana = data.state.opponentMana;
-      }
-    } else if (event.type === "drawCard") {
-      data.playerHand = data.state.playerHand;
-      data.playerDeck = data.state.playerDeck;
-    } else if (event.type === "playerDamageResolve") {
-      data.playerHp = data.state.playerHp;
-      data.opponentHp = data.state.opponentHp;
-    } else if (event.type === "cardDamageResolve") {
-      updateCardProperty(
-        event.initiator.isPlayerCard,
-        event.initiator.cardPosition,
-        data,
-        (card, ref) => {
-          card.hp = ref.hp;
-        }
-      );
-    } else if (event.type === "removeEffect") {
-      updateCardProperty(
-        event.isPlayerCard,
-        event.cardPosition,
-        data,
-        (card) => {
-          card.effects[event.effectToRemove] = undefined;
-        }
-      );
-    } else if (event.type === "placeCard") {
-      const card = event.isPlayer
-        ? data.state.playerBoard[event.targetPosition]
-        : data.state.opponentBoard[event.targetPosition];
-      if (event.isPlayer) {
-        data.playerBoard[event.targetPosition] = _.cloneDeep(card);
-      } else {
-        data.opponentBoard[event.targetPosition] = _.cloneDeep(card);
-      }
+    if (event.type === "gameOver") {
+      // is it necessary?
+      destroyGame();
     }
-  }
-
-  function updateCardProperty(
-    isPlayerCard: boolean,
-    cardPosition: number,
-    data: GameStore,
-    transform: (card: InGameCardType, ref: InGameCardType) => void
-  ) {
-    const refCard = isPlayerCard
-      ? data.playerBoard[cardPosition]
-      : data.opponentBoard[cardPosition];
-    const stateCard = isPlayerCard
-      ? data.state.playerBoard[cardPosition]
-      : data.state.opponentBoard[cardPosition];
-    if (!refCard || !stateCard) {
-      return;
-    }
-    transform(refCard, stateCard);
   }
 
   function animationReactionToEvent(event: EventType) {
@@ -354,21 +287,18 @@ function useGameEvents(): GameEventsActions {
         clock.getImmutableInternalState().currentFrame
       );
     } else if (event.type === "placeCard") {
-      gsap.to(
-        `#card_${event.isPlayer}_${event.targetPosition}`,
-        {
-          duration: 0.5,
-          opacity: 1,
-        }
-      )
+      // gsap.to(`#card_${event.isPlayer}_${event.targetPosition}`, {
+      //   duration: 0.5,
+      //   opacity: 1,
+      // });
     } else if (event.type === "cardDestroyed") {
-      gsap.to(
-        `#card_${event.initiator.isPlayerCard}_${event.initiator.cardPosition}`,
-        {
-          duration: 0.5,
-          opacity: 0,
-        }
-      )
+      // gsap.to(
+      //   `#card_${event.initiator.isPlayerCard}_${event.initiator.cardPosition}`,
+      //   {
+      //     duration: 0.5,
+      //     opacity: 0,
+      //   }
+      // );
       // addNewAnimation(
       //   getDeathAnimationKey(
       //     event.initiator.isPlayerCard,

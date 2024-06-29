@@ -1,14 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import * as CSS from "csstype";
 import { create } from "zustand";
-import { useOnMount } from "@repo/ui";
+import { useOnMount, useOnUnMount } from "@repo/ui";
+import { AnimationTimeline } from "./timeline";
 
-type ComputeAnimation<State> = (state: State) => CSS.Properties;
+type ComputeAnimation<State> = (state: State, frame: number, ref: HTMLElement) => number;
 
 type Animation<State> = {
-  compute: ComputeAnimation<State>;
+  tl: AnimationTimeline;
+  getProgress: ComputeAnimation<State>;
   element: HTMLElement;
+  prevProgress: number;
 };
 
 interface GameSyncAnimationStore<State> {
@@ -22,13 +24,13 @@ const useAnimationStore = create<GameSyncAnimationStore<unknown>>(() => ({
 function useGameSyncAnimationStore<State>() {
   const store = useAnimationStore();
 
-  function triggerGameSyncAnimation(state: State) {
+  function triggerGameSyncAnimation(state: State, frame: number) {
     store.animations.forEach((animation) => {
-      const styleToChange = animation.compute(state);
-      for (const key in styleToChange) {
-        // @ts-expect-error key is bugged
-        animation.element.style[key] = styleToChange[key];
-      }
+      animation.tl.progress(animation.getProgress(state, frame, animation.element));
+      // for (const key in styleToChange) {
+      //   // @ts-expect-error key is bugged
+      //   animation.element.style[key] = styleToChange[key];
+      // }
     });
   }
 
@@ -47,34 +49,62 @@ function useGameSyncAnimationStore<State>() {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function useGameAnimation<State, Element = any>(
-  computeAnimation: ComputeAnimation<State>
-) {
-  const animationRef = useRef<null | Element>(null);
+function useGameAnimation<State>({
+  getProgress,
+  tl,
+  deps,
+}: {
+  getProgress: ComputeAnimation<State>;
+  tl: (element: HTMLElement) => AnimationTimeline;
+  deps?: React.DependencyList;
+}) {
+  const [animationRef, setAnimationRef] = useState<null | HTMLElement>(null);
   const store = useAnimationStore();
+  const [isSet, setIsSet] = useState<false | string>(false);
+
+  useOnUnMount(() => {
+    removeAnimation();
+  });
 
   useEffect(() => {
-    function registerAnimation(element: Element) {
-      const key = uuidv4();
-      store.animations.set(key, {
-        element: element as HTMLElement,
-        compute: computeAnimation as ComputeAnimation<unknown>,
-      });
-      return key;
+    if (animationRef === null) {
+      removeAnimation();
+      return;
     }
-
-    function removeAnimation(key: string) {
-      return store.animations.delete(key);
+    if (isSet && animationRef === store.animations.get(isSet)?.element) {
+      return;
     }
+    registerAnimation(animationRef);
+  }, [animationRef]);
 
-    if (animationRef.current === null) {
-      return () => {};
+  useEffect(() => {
+    if (!deps || !isSet || !animationRef) {
+      return;
     }
-    const key = registerAnimation(animationRef.current);
-    return () => removeAnimation(key);
-  }, [animationRef, computeAnimation, store.animations]);
+    registerAnimation(animationRef);
+  }, deps ?? []);
 
-  return animationRef;
+  function removeAnimation() {
+    const key = isSet;
+    if (!key) {
+      return;
+    }
+    setIsSet(false);
+    return store.animations.delete(key);
+  }
+  function registerAnimation(element: HTMLElement) {
+    removeAnimation();
+    const key = uuidv4();
+    store.animations.set(key, {
+      element: element,
+      getProgress: getProgress as ComputeAnimation<unknown>,
+      tl: tl(element),
+      prevProgress: -1,
+    });
+    setIsSet(key);
+  }
+
+  return setAnimationRef;
 }
 
 export { useGameSyncAnimationStore, useGameAnimation };

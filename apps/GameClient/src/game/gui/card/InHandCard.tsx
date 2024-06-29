@@ -1,5 +1,5 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
-import useGameStore, { GameStore } from "@/game/stores/gameStateStore";
+import useGameStore from "@/game/stores/gameStateStore";
 import { motion, useDragControls } from "framer-motion";
 import { FRAME_TIME, manaSpeed } from "../../gameBehavior/useGameEvents";
 import { useGameAnimation } from "../../gameBehavior/animation/useGameSyncAnimation";
@@ -7,6 +7,8 @@ import CardBorder, {
   CardContentIllustartion,
 } from "../../../../../../packages/ui/components/card/CardBorder";
 import { CardType, ManaBall } from "@repo/ui";
+import { GameStateObject } from "@/game/gameBehavior/gameEngine/gameState";
+import animationTimeline from "@/game/gameBehavior/animation/timeline";
 
 function InHandCard({
   card,
@@ -17,10 +19,9 @@ function InHandCard({
   position?: number;
   userPlaceNewCard: (cardInHandPosition: number) => void;
 }) {
-  const dragControls = useDragControls();
-
   const { setSelectedCard, unselectCard } = useGameInterface();
-  const playerMana = useGameStore(s => s.state.playerMana);
+  const dragControls = useDragControls();
+  const playerMana = useGameStore((s) => s.state.playerMana);
 
   function onUnselectCard() {
     userPlaceNewCard(position!);
@@ -38,7 +39,7 @@ function InHandCard({
       dragSnapToOrigin
       onDragStart={onSelectCard}
       onDragEnd={onUnselectCard}
-      whileDrag={{ zIndex: 9999, scale: 1.2 }}
+      whileDrag={{ zIndex: 9999, scale: 1.2, pointerEvents: "none", }}
       dragControls={dragControls}
     >
       <CardBorder rarity={card.rarity} size={1.8}>
@@ -51,25 +52,18 @@ function InHandCard({
   );
 }
 
-function InHandCardIllustration({ card }: { card: CardType }) {
-  const animationRef = useGameAnimation<GameStore & { currentTick: number }>(
-    (state) => {
-      if (card.cost !== null && state.playerMana >= card.cost) {
-        return {
-          transform: `scaleY(0%)`,
-        };
-      }
-      const runningManaEarningProgress =
-        (state.currentTick - state.playerTickStartEarningMana!) /
-        (manaSpeed / FRAME_TIME);
-      const alreadyProgress =
-        (state.playerMana + runningManaEarningProgress) / (card.cost || 0);
+const manaFrames = manaSpeed / FRAME_TIME;
 
-      return {
-        transform: `scaleY(${100 - alreadyProgress * 100}%)`,
-      };
-    }
-  );
+function InHandCardIllustration({ card }: { card: CardType }) {
+  const animationRef = useGameAnimation<GameStateObject>({
+    tl: (ref) => animationTimeline(card.cost * manaFrames).add(ref, { scaleY: 1, }, { values: { scaleY: 0 } }),
+    getProgress: (state, currentTick) => {
+      if (card.cost !== null && state.playerMana > card.cost || state.playerTickStartEarningMana === null) {
+        return -1;
+      }
+      return (state.playerMana * manaFrames) + (currentTick - state.playerTickStartEarningMana!);
+    },
+  });
 
   return (
     <div className="relative w-full h-full">

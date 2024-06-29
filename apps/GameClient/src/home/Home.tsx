@@ -146,7 +146,7 @@ function FooterButton({
 export function HomeBg() {
   return (
     <div
-      className="w-full h-full absolute"
+      className="w-full h-full absolute blur-sm"
       style={{
         backgroundImage: "url('/homeBg.jpeg')",
         backgroundPosition: "center",

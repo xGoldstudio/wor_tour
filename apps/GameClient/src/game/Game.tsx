@@ -1,7 +1,5 @@
-import { useEffect, useRef, useState } from "react";
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore from "@/game/stores/gameStateStore";
-import * as _ from "lodash";
 import useGameEvents from "./gameBehavior/useGameEvents";
 import GameDebugPanel from "./GameDebugPanel";
 import GameCard from "./gui/card/GameCard";
@@ -9,18 +7,6 @@ import PlayerGUI from "./gui/PlayerGui";
 import { useShallow } from "zustand/react/shallow";
 
 export default function Game() {
-  // const {
-  //   playerMana,
-  //   playerHp,
-  //   playerMaxHp,
-  //   opponentHp,
-  //   opponentMana,
-  //   opponentMaxHp,
-  //   currentWinner,
-  // } = useGameStore();
-  // const { state } = useGameStore();
-  const { cardSelected, setCardTarget, removeCardTarget, cardTarget } =
-    useGameInterface();
   const {
     userPlaceNewCard,
     togglePlay,
@@ -30,36 +16,6 @@ export default function Game() {
     destroyGame,
     isInit,
   } = useGameEvents();
-
-  // we must manually check for card placement
-  useEffect(() => {
-    function watchCardPlacement(event: MouseEvent) {
-      const elementIds = _.range(3).map((position) =>
-        getBoardTileId(true, position)
-      );
-      const overlapped = document.elementsFromPoint(event.pageX, event.pageY);
-      for (let i = 0; i < overlapped.length; i++) {
-        if (overlapped[i].id.startsWith("board_player_")) {
-          for (let y = 0; y < elementIds.length; y++) {
-            if (overlapped[i].id === elementIds[y]) {
-              setCardTarget(y);
-              return;
-            }
-          }
-        }
-      }
-      if (cardTarget !== null) {
-        removeCardTarget();
-      }
-    }
-
-    if (cardSelected !== null) {
-      window.addEventListener("mousemove", watchCardPlacement);
-      return () => {
-        window.removeEventListener("mousemove", watchCardPlacement);
-      };
-    }
-  }, [cardSelected, removeCardTarget, setCardTarget]);
 
   console.log("game render", "state?.playerMan");
 
@@ -81,7 +37,7 @@ export default function Game() {
             <div
               className="w-full h-full absolute blur-sm"
               style={{
-                backgroundImage: "url('/bgTexture.jpg')",
+                backgroundImage: "url('/homeBg.jpeg')",
                 backgroundPosition: "center",
                 backgroundSize: "cover",
               }}
@@ -113,50 +69,42 @@ interface CardPlaceholderProps {
 }
 
 function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
-  const cardTarget = useGameInterface((s) => s.cardTarget);
-  const isTarget = cardTarget === position && isPlayer;
+  const { setCardTarget, removeCardTarget, cardTarget, cardSelected } = useGameInterface();
+  const isSelected = isPlayer && cardTarget === position;
   const currentCard = useGameStore(
     useShallow((s) =>
-      isPlayer ? s.playerBoard[position] : s.opponentBoard[position]
+      isPlayer ? s.state.playerBoard[position] : s.state.opponentBoard[position]
     )
   );
-  const attackRef = useRef<null | HTMLDivElement>(null);
 
-  const [startAttackTimestamp, setStartAttackTimestamp] = useState(
-    currentCard?.startAttackingTick
-  );
-
-  if (
-    startAttackTimestamp !== currentCard?.startAttackingTick &&
-    attackRef.current
-  ) {
-    setStartAttackTimestamp(currentCard?.startAttackingTick);
-  }
-
-  useEffect(() => {
-    if (!attackRef.current || !currentCard) {
+  function onEnter() {
+    if (!isPlayer || cardSelected === null) {
       return;
     }
-    attackRef.current.animate(
-      [{ transform: "scaleX(0%)" }, { transform: "scaleX(100%)" }],
-      1000 / currentCard.attackSpeed
-    );
-  }, [attackRef, currentCard, startAttackTimestamp]);
+    setCardTarget(position);
+  }
+
+  function onLeave() {
+    removeCardTarget();
+  }
 
   return (
     <div
       className="p-1 border-2 rounded-md ring-2 ring-black w-[160px] h-[222.5px] box-content"
       style={{
-        boxShadow: isTarget ? "0px 0px 5px 1px rgba(0,0,0,0.75)" : "none",
+        boxShadow: isSelected ? "0px 0px 5px 1px rgba(0,0,0,0.75)" : "none",
         borderColor: "#cbd5e1",
       }}
       id={getBoardTileId(!!isPlayer, position)}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
     >
       <div id={`card_${isPlayer}_${position}`}>
-        <GameCard
+        {currentCard && <GameCard
+          card={currentCard}
           isPlayerCard={isPlayer}
           position={position}
-        />
+        />}
       </div>
     </div>
   );

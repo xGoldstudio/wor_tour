@@ -60,7 +60,7 @@ function PlayerGUI({
               ))}
             </div>
           )}
-          <ManaBar isPlayer={isPlayer} mana={mana} />
+          {isPlayer && <ManaBar />}
           <div id={`hpBar_${isPlayer}`} className="w-full">
             <HpBar hp={hp} maxHp={maxHp} withHeart />
           </div>

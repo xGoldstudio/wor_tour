@@ -3,88 +3,70 @@ import CardBorder, {
   CardContentIllustartion,
   InnerBord,
 } from "../../../../../../packages/ui/components/card/CardBorder";
-import useGameStore from "@/game/stores/gameStateStore";
+import useGameStore, { InGameCardType } from "@/game/stores/gameStateStore";
 import { CardEffects } from "@repo/types";
 import { getImageEffects } from "@repo/ui";
+import { GameStateObject } from "@/game/gameBehavior/gameEngine/gameState";
+import { useGameAnimation } from "@/game/gameBehavior/animation/useGameSyncAnimation";
+import animationTimeline from "@/game/gameBehavior/animation/timeline";
+import { FRAME_TIME } from "@/game/gameBehavior/useGameEvents";
 
 function GameCard({
   isPlayerCard,
   position,
+  card,
 }: {
   isPlayerCard: boolean;
   position: number;
+  card: InGameCardType;
 }) {
-  // const animationRef = useGameAnimation<GameStore & { currentTick: number }>(
-  //   (state) => {
-  //     const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
-  //       position
-  //     ];
-  //     if (typeof card?.startAttackingTick !== "number") {
-  //       return {
-  //         transform: `scaleY(100%)`,
-  //       };
-  //     }
-  //     const attackProgress =
-  //       (state.currentTick - card.startAttackingTick) /
-  //       (1000 / card.attackSpeed / FRAME_TIME);
-  //     return {
-  //       transform: `scaleY(${100 - attackProgress * 100}%)`,
-  //     };
-  //   }
-  // );
-  // const cardAnimationRef = useGameAnimation<
-  //   GameStore & { currentTick: number }
-  // >((state) => {
-  //   const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
-  //     position
-  //   ];
-  //   if (!card?.startAttackingTick) {
-  //     return {
-  //       transform: "",
-  //     };
-  //   }
+  const animationRef = useGameAnimation<GameStateObject>({
+    tl: (ref) =>
+      animationTimeline(1000 / (card.attackSpeed ?? 1) / FRAME_TIME)
+        .add(`#animationProgress_${card.instanceId}`, { scaleY: 1 }, { values: { scaleY: 0 } })
+        .add(ref, { scale: 1.08, y: isPlayerCard ? -15 : 15 }, [
+          {
+            from: 0,
+            to: 15,
+            ease: [0, 0.42, 1, 1],
+            values: { scale: 1, y: 0 },
+          },
+          {
+            from: -35,
+            to: -5,
+            ease: [0, 1, 1, 1],
+            values: { scale: 1.08, y: isPlayerCard ? 15 : -15 },
+          },
+          {
+            ease: [0, 0.42, 1, 1],
+            values: { scale: 1.08, y: isPlayerCard ? -15 : 15 },
+          },
+        ]),
+    getProgress: (state, currentTick) => {
+      const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
+        position
+      ];
+      if (typeof card?.startAttackingTick !== "number") {
+        return -1;
+      }
+      return currentTick - card.startAttackingTick;
+    },
+    deps: [card],
+  });
 
-  //   const elapsedFrames = state.currentTick - card.startAttackingTick;
-  //   const requiredFrames = 1000 / card.attackSpeed / FRAME_TIME;
-
-  //   return animationTimeline(
-  //     {
-  //       scale: 108,
-  //       y: isPlayerCard ? -15 : 15,
-  //     },
-  //     [
-  //       {
-  //         from: 0,
-  //         to: 15,
-  //         ease: [0, 0.42, 1, 1],
-  //         values: { scale: 100, y: 0 },
-  //       },
-  //       {
-  //         from: -35,
-  //         to: -5,
-  //         ease: [0, 1, 1, 1],
-  //         values: { scale: 108, y: isPlayerCard ? 15 : -15 },
-  //       },
-  //       {
-  //         from: -5,
-  //         to: 0,
-  //         ease: [0, 0.42, 1, 1],
-  //         values: { scale: 108, y: isPlayerCard ? -15 : 15 },
-  //       },
-  //     ]
-  //   )(elapsedFrames, requiredFrames);
-  // });
+  if (!card) {
+    return null;
+  }
 
   return (
     <div
+      ref={animationRef}
       style={{
         transform: `translateY(${isPlayerCard ? -15 : 15}px) scale(108%)`,
       }}
     >
-      <GameCardDesign isPlayerCard={isPlayerCard} position={position} size={2.5}>
-        <div
-          className="absolute top-0 w-full h-full bg-slate-600 opacity-40 origin-top"
-        />
+      <GameCardDesign card={card} size={2.5} isPlayerCard={isPlayerCard} position={position}>
+        <div className="absolute top-0 w-full h-full bg-slate-600 opacity-40 origin-top" id={`animationProgress_${card.instanceId}`} />
       </GameCardDesign>
     </div>
   );
@@ -112,22 +94,12 @@ export default GameCard;
 interface GameCardDesign {
   size: number;
   children?: React.ReactNode;
-  isPlayerCard: boolean;
   position: number;
+  isPlayerCard: boolean;
+  card: InGameCardType;
 }
 
-export function GameCardDesign({ size, isPlayerCard, position , children }: GameCardDesign) {
-  const { card, hp } = useGameStore((state) => {
-    const card = isPlayerCard ? state.playerBoard[position] : state.opponentBoard[position];
-    return {
-      card,
-      hp: card?.hp ?? 0
-    } 
-  });
-
-  if (!card) {
-    return null;
-  }
+export function GameCardDesign({ size, card, position, isPlayerCard, children }: GameCardDesign) {
 
   return (
     <CardBorder rarity={card.rarity} size={size}>
@@ -138,11 +110,23 @@ export function GameCardDesign({ size, isPlayerCard, position , children }: Game
         </div>
         <div className="w-full h-min">
           <InnerBord size={size}>
-            <HpBar hp={hp} maxHp={card.maxHp} />
+            <GameCardHpBar position={position} isPlayerCard={isPlayerCard} maxHp={card.hp} />
           </InnerBord>
         </div>
         <CardEffectsElements effects={card.effects} />
       </div>
     </CardBorder>
   );
+}
+
+function GameCardHpBar({position, isPlayerCard, maxHp}: {
+  position: number;
+  isPlayerCard: boolean;
+  maxHp: number;
+}) {
+  const hp = useGameStore((s) => isPlayerCard ? s.state.playerBoard[position]?.hp : s.state.opponentBoard[position]?.hp);
+
+  return (
+    <HpBar hp={hp ?? maxHp} maxHp={maxHp} />
+  )
 }
