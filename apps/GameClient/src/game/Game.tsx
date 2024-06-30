@@ -3,6 +3,8 @@ import useGameEvents from "./gameBehavior/useGameEvents";
 import GameDebugPanel from "./GameDebugPanel";
 import GameCard from "./gui/card/GameCard";
 import PlayerGUI from "./gui/PlayerGui";
+import FlashDamage from "./FlashDamage";
+import AmountEffectOrDamage from "./AmountEffectOrDamage";
 
 export default function Game() {
   const {
@@ -32,6 +34,8 @@ export default function Game() {
         <>
           <div className="bg-black h-full w-full"></div>
           <div className="h-screen flex flex-col gap-4 justify-between relative overflow-hidden w-[700px]">
+            <FlashDamage />
+            <AmountEffectOrDamage />
             <div
               className="w-full h-full absolute blur-sm"
               style={{

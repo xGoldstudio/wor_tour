@@ -1,8 +1,8 @@
 import { CardEffects } from "@repo/types";
 
 export const effectsImages: Partial<Record<keyof CardEffects, string>> = {
-  fightBack: "fightback.png",
-  multiAttack: "multiAttack.svg",
+  fightBack: "sword.png",
+  multiAttack: "fightback.png",
   placementHeal: "heart.png",
 };
 

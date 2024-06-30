@@ -85,7 +85,6 @@ function HpBar({ isPlayer, maxHp, withHeart }: HpBarProps) {
       }
     },
     filter: (event) => (event as PlayerDamageResolveEvent).initiator.isPlayer === isPlayer,
-    deps: [],
   });
 
   return (
@@ -111,7 +110,7 @@ function HpBar({ isPlayer, maxHp, withHeart }: HpBarProps) {
           ref={bloodRef}
         />
         <div
-          className="w-full h-full absolute origin-left bg-gradient-to-b  from-[#2105ad] via-[#4b429d] via-[37%] to-[#2105ad] duration-500 opacity-0"
+          className="w-full h-full absolute origin-left bg-gradient-to-b  from-[#2105ad] via-[#4b429d] via-[37%] to-[#2105ad] opacity-0"
           // ref={healScope}
         />
         <p

@@ -22,12 +22,36 @@ export function ceilToValue(ceil: number) {
 }
 
 export function getCenterOfBoundingElement(queryOrElement: string | HTMLElement) {
-  const element = typeof (queryOrElement) === "string" ? document.querySelector(queryOrElement) : queryOrElement;
+  const element = getElement(queryOrElement);
   if (!element) {
-    return { x: 0, y: 0 };
+    return { x: 0, y: 0};
   }
-  const { top, left, width, height } = element.getBoundingClientRect();
-  return { x: left + width / 2, y: top + height / 2 };
+  return {
+    x: getXCenterBoudingOfElement(element),
+    y: getYCenterBoudingOfElement(element),
+  };
+}
+
+export function getXCenterBoudingOfElement(queryOrElement: string | HTMLElement) {
+  const element = getElement(queryOrElement);
+  if (!element) {
+    return 0;
+  }
+  const { left, width } = element.getBoundingClientRect();
+  return left + width / 2;
+}
+
+export function getYCenterBoudingOfElement(queryOrElement: string | HTMLElement) {
+  const element = getElement(queryOrElement);
+  if (!element) {
+    return 0;
+  }
+  const { top, height } = element.getBoundingClientRect();
+  return top + height / 2;
+}
+
+function getElement(queryOrElement: string | HTMLElement) {
+  return typeof (queryOrElement) === "string" ? document.querySelector<HTMLElement>(queryOrElement) : queryOrElement;
 }
 
 // get top center position relative to parent

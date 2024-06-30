@@ -46,6 +46,50 @@ function useGameSyncAnimationStore() {
   };
 }
 
+// same as useGameSyncAnimationStore but can run multiple animations at the same time
+export function useRegisterAnimation() {
+  const store = useAnimationStore();
+  const removeListeners = useRef<Map<string, (() => void)>>(new Map());
+
+  function registerAnimation({
+    duration,
+    computeStyle,
+    onEnd,
+  }: {
+    duration: number;
+    computeStyle: (progress: number) => void;
+    onEnd?: () => void;
+  }) {
+    const key = uuidv4();
+    let firstFrame: null | number = null;
+    removeListeners.current.set(key, () => {
+      store.animations.delete(key);
+      removeListeners.current.delete(key);
+      onEnd?.();
+    });
+    store.animations.set(key, {
+      progress: (frame) => {
+        if (firstFrame === null) {
+          firstFrame = frame;
+        }
+        computeStyle(frame - firstFrame);
+        if (frame - firstFrame > duration) {
+          removeListeners.current.get(key)?.();
+        }
+      },
+    });
+  }
+
+  useOnUnMount(() => {
+    // remove all existing liteners
+    removeListeners.current.forEach((remove) => remove());
+  });
+
+  return {
+    registerAnimation,
+  };
+}
+
 export function useSyncGameAnimation() {
   const store = useAnimationStore();
   const removeListener = useRef<null | (() => void)>(null);
@@ -74,6 +118,7 @@ export function useSyncGameAnimation() {
     removeListener.current = () => {
       store.animations.delete(key);
       removeListener.current = null;
+      onEnd?.();
     };
     store.animations.set(key, {
       progress: (frame) => {
@@ -82,7 +127,6 @@ export function useSyncGameAnimation() {
         }
         computeStyle(frame - firstFrame);
         if (frame - firstFrame > duration) {
-          onEnd?.();
           removeListener.current?.();
         }
       },
