@@ -13,7 +13,6 @@ export default function Game() {
     isClockRunning,
     fastForward,
     gameRef,
-    destroyGame,
     isInit,
   } = useGameEvents();
   console.log("game render");
@@ -27,7 +26,6 @@ export default function Game() {
         togglePlay={togglePlay}
         isClockRunning={isClockRunning}
         fastForward={fastForward}
-        destroyGame={destroyGame}
       />
       {isInit && (
         <>

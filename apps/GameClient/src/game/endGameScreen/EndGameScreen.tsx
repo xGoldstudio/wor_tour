@@ -5,10 +5,11 @@ import { EmptyBar } from "../gui/ManaBar";
 import BoosterIllustration from "@/home/pages/shop/BoosterIllustration";
 import * as _ from "lodash";
 import RewardBox from "./RewardBox";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import endGameScreenAnimation from "./animation";
 import { CurrentWinner } from "../gameBehavior/gameEngine/gameState";
 import useGameEventListener from "../gameBehavior/useGameEventListener";
+import { useGSAP } from "@gsap/react";
 
 export default function EndGameScreen() {
   const { reset: resetMetadata } = useGameMetadataStore((state) => ({
@@ -21,7 +22,7 @@ export default function EndGameScreen() {
     action: (_, state) => {
       setCurrentWinner(state.currentWinner);
     },
-  })
+  });
 
   const isWinner = currentWinner === "player";
   const currentXpProgress = 0.5;
@@ -37,41 +38,46 @@ export default function EndGameScreen() {
   const nextLevelRef = useRef<HTMLDivElement>(null);
 
   const [isAnimationRunning, setIsAnimationRunning] = useState(false);
-  useEffect(() => {
-    if (
-      isAnimationRunning ||
-      !boxRef.current ||
-      !buttonRef.current ||
-      !rewardsRef.current ||
-      !xpBarRef.current ||
-      !nextLevelRef.current
-    ) {
-      return;
+  useGSAP(
+    () => {
+      if (
+        isAnimationRunning ||
+        !boxRef.current ||
+        !buttonRef.current ||
+        !rewardsRef.current ||
+        !xpBarRef.current ||
+        !nextLevelRef.current
+      ) {
+        return;
+      }
+      setIsAnimationRunning(true);
+      endGameScreenAnimation({
+        boxRef: boxRef.current,
+        currentXpProgress,
+        targetXpProgress,
+        currentLevel,
+        targetLevel,
+        rewardsRef: rewardsRef.current,
+        xpBarRef: xpBarRef.current,
+        shinyRef: shinyRef.current,
+        buttonRef: buttonRef.current,
+        nextLevelRef: nextLevelRef.current,
+        setCurrentLevel,
+      });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    {
+      dependencies: [
+        boxRef.current,
+        shinyRef.current,
+        buttonRef.current,
+        xpBarRef.current,
+        rewardsRef.current,
+        nextLevelRef.current,
+        currentWinner,
+      ],
     }
-    setIsAnimationRunning(true);
-    endGameScreenAnimation({
-      boxRef: boxRef.current,
-      currentXpProgress,
-      targetXpProgress,
-      currentLevel,
-      targetLevel,
-      rewardsRef: rewardsRef.current,
-      xpBarRef: xpBarRef.current,
-      shinyRef: shinyRef.current,
-      buttonRef: buttonRef.current,
-      nextLevelRef: nextLevelRef.current,
-      setCurrentLevel,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    boxRef.current,
-    shinyRef.current,
-    buttonRef.current,
-    xpBarRef.current,
-    rewardsRef.current,
-    nextLevelRef.current,
-    currentWinner,
-  ]);
+  );
 
   if (!currentWinner) {
     return null;

@@ -9,7 +9,7 @@ import {
   runGameEventListeners,
 } from "./gameEventListener";
 import { CardEffects } from "@repo/types";
-import { useOnMount } from "@repo/ui";
+import { useOnMount, useOnUnMount } from "@repo/ui";
 import { computeNextFrameState } from "./gameEngine/gameEngine";
 import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
 import { useShallow } from "zustand/react/shallow";
@@ -23,7 +23,6 @@ interface GameEventsActions {
   isClockRunning: boolean;
   fastForward: (amount: number) => void;
   gameRef: React.MutableRefObject<HTMLDivElement | null>;
-  destroyGame: () => void;
   isInit: boolean;
 }
 
@@ -160,14 +159,16 @@ function useGameEvents(): GameEventsActions {
     isClockRunning,
     setIsClockRunning,
     init: initGameInterfaceStore,
-  } = useGameInterface(useShallow((state) => {
-    return {
-      getData: state.getData,
-      isClockRunning: state.isClockRunning,
-      setIsClockRunning: state.setIsClockRunning,
-      init: state.init,
-    };
-  }));
+  } = useGameInterface(
+    useShallow((state) => {
+      return {
+        getData: state.getData,
+        isClockRunning: state.isClockRunning,
+        setIsClockRunning: state.setIsClockRunning,
+        init: state.init,
+      };
+    })
+  );
   const gameRef = useRef<null | HTMLDivElement>(null);
   const [clock] = useState<ClockReturn<EventType>>(() =>
     Clock(internalTriggerEvent)
@@ -189,7 +190,6 @@ function useGameEvents(): GameEventsActions {
       triggerEvent,
     });
     initGameStore();
-    iaAgent();
     // shuffleDeck(true); // todo
     // shuffleDeck(false);
     triggerEvent({ type: "startEarningMana", isPlayer: true });
@@ -205,11 +205,15 @@ function useGameEvents(): GameEventsActions {
     resume();
     setIsInit(true);
     // setIsInteractive(true);
+    iaAgent();
     TriggerGameEvent = (event: EventType) => internalTriggerEvent(event, clock);
   });
 
+  useOnUnMount(() => {
+    destroyGame();
+  });
+
   function destroyGame() {
-    console.log("destroy game");
     setIsInit(false);
     // remove all events
     resetAllGameEventListeners();
@@ -222,6 +226,9 @@ function useGameEvents(): GameEventsActions {
 
   function nextTick() {
     setTimeout(() => {
+      if (useGameStore.getState().state.currentWinner) {
+        return;
+      }
       if (getUserInterfaceData().isClockRunning) {
         triggerTickEffects();
         nextTick();
@@ -266,9 +273,6 @@ function useGameEvents(): GameEventsActions {
     clock: ClockReturn<EventType>
   ) {
     const { state: usingState } = useGameStore.getState();
-    if (!usingState || usingState.currentWinner) {
-      return;
-    }
     computeNextFrameState(usingState, event, clock);
     animationReactionToEvent(event);
     // we rerun getData to have the updated data
@@ -309,7 +313,6 @@ function useGameEvents(): GameEventsActions {
     isClockRunning,
     fastForward,
     gameRef,
-    destroyGame,
     isInit,
   };
 }

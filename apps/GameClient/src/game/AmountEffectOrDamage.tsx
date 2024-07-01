@@ -103,7 +103,7 @@ export default function AmountEffectOrDamage() {
 
   return (
     <div
-      className="left-0 fixed w-full h-full pointer-events-none z-20"
+      className="left-0 fixed w-full h-full pointer-events-none z-10"
       ref={wrapperRef}
     ></div>
   );

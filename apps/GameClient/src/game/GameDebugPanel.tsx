@@ -6,7 +6,6 @@ interface GameDebugPanelProps {
   togglePlay: () => void;
   isClockRunning: boolean;
   fastForward: (amount: number) => void;
-  destroyGame: () => void;
 }
 
 export default function GameDebugPanel({
