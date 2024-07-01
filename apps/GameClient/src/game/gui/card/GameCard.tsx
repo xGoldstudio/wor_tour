@@ -4,7 +4,7 @@ import CardBorder, {
 } from "../../../../../../packages/ui/components/card/CardBorder";
 import { InGameCardType } from "@/game/stores/gameStateStore";
 import { CardEffects } from "@repo/types";
-import { getImageEffects, numberWithCommas } from "@repo/ui";
+import { cn, getImageEffects, numberWithCommas } from "@repo/ui";
 import { useSyncGameAnimation } from "@/game/gameBehavior/animation/useGameSyncAnimation";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
 import {
@@ -48,6 +48,7 @@ function GameCard({
     worldIllustration: "",
   });
   const cardRef = useRef<HTMLDivElement>(null);
+  const [isShown, setIsShown] = useState(false);
   const { triggerAnimation: triggerAttackAnimation } = useSyncGameAnimation();
   const { triggerAnimation: triggerBloodAnimation } = useSyncGameAnimation();
   const { triggerAnimation: triggerHealAnimation } = useSyncGameAnimation();
@@ -59,6 +60,7 @@ function GameCard({
       ];
       if (card && cardRef.current) {
         cardRef.current.style.display = "block";
+        setIsShown(true);
         const animationDuration =
           1000 / (card.attackSpeed ?? 1) / FRAME_TIME - 1;
         triggerAttackAnimation({
@@ -139,6 +141,7 @@ function GameCard({
         onEnd: () => {
           if (cardRef.current) {
             cardRef.current.style.display = "none";
+            setIsShown(false);
           }
         },
       });
@@ -213,7 +216,7 @@ function GameCard({
   }
 
   return (
-    <div className="hidden" ref={cardRef}>
+    <div className={cn(isShown ? "block" : "hidden")} ref={cardRef}>
       <div className="cardHeal rounded-sm z-10 absolute top-0 w-full h-full bg-gradient-to-b  from-[#2105ad] via-[#4b429d] via-[37%] to-[#2105ad] opacity-0 origin-top" />
       <div className="cardDamage rounded-sm z-10 absolute top-0 w-full h-full bg-gradient-to-b  from-[#FF0000] via-[#ff6e6e] via-[37%] to-[#FF0000] opacity-0 origin-top" />
       <GameCardDesign

@@ -7,7 +7,6 @@ import { useSyncGameAnimation } from "../gameBehavior/animation/useGameSyncAnima
 import animationTimeline from "../gameBehavior/animation/timeline";
 
 interface HpBarProps {
-  hp: number;
   maxHp: number;
   withHeart?: boolean;
   isPlayer: boolean;
@@ -28,7 +27,7 @@ function HpBar({ isPlayer, maxHp, withHeart }: HpBarProps) {
       if (scope.current && hpBarRef.current) {
         const lifeBar = scope.current.querySelector<HTMLElement>(".lifeBar");
         if (lifeBar) {
-          lifeBar.style.transform = `scaleX(${nextHp / maxHp})`;
+          lifeBar.style.transform = `scaleX(${Math.max(0, nextHp / maxHp)})`;
         }
         hpBarRef.current.innerHTML = numberWithCommas(nextHp);
         triggerAnimation({

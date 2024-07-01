@@ -9,6 +9,8 @@ interface GameStateObjectConstructor {
 	opponentHp: number;
 }
 
+export type CurrentWinner = "player" | "opponent" | null;
+
 export class GameStateObject {
 	constructor({ playerDeck, opponentDeck, playerHp, opponentHp }: GameStateObjectConstructor) {
 		this.playerMana = 0;
@@ -27,6 +29,7 @@ export class GameStateObject {
 		this.currentWinner = null;
 		this.playerMaxHp = playerHp;
 		this.opponentMaxHp = opponentHp;
+		this.currentWinner = null;
 	}
 
 	// state (nested properties are forbidden)
@@ -46,7 +49,7 @@ export class GameStateObject {
 	opponentMaxHp: number;
 
 	currentInstanceId: number;
-	currentWinner: "player" | "opponent" | null = null;
+	currentWinner: CurrentWinner;
 
 	// methods
 	startEarningMana(isPlayer: boolean, tick: number) {

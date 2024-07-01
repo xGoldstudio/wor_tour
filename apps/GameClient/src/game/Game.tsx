@@ -5,10 +5,10 @@ import GameCard from "./gui/card/GameCard";
 import PlayerGUI from "./gui/PlayerGui";
 import FlashDamage from "./FlashDamage";
 import AmountEffectOrDamage from "./AmountEffectOrDamage";
+import EndGameScreen from "./endGameScreen/EndGameScreen";
 
 export default function Game() {
   const {
-    userPlaceNewCard,
     togglePlay,
     isClockRunning,
     fastForward,
@@ -16,8 +16,7 @@ export default function Game() {
     destroyGame,
     isInit,
   } = useGameEvents();
-
-  console.log("game render", "state?.playerMan");
+  console.log("game render");
 
   return (
     <div
@@ -44,7 +43,7 @@ export default function Game() {
                 backgroundSize: "cover",
               }}
             ></div>
-            <PlayerGUI userPlaceNewCard={userPlaceNewCard} isPlayer={false} />
+            <PlayerGUI isPlayer={false} />
             <div className="w-full flex justify-center relative">
               <div className="grid grid-cols-3 gap-4 px-8">
                 <CardPlaceholder position={0} isPlayer={false} />
@@ -55,12 +54,12 @@ export default function Game() {
                 <CardPlaceholder position={2} isPlayer />
               </div>
             </div>
-            <PlayerGUI userPlaceNewCard={userPlaceNewCard} isPlayer />
+            <PlayerGUI isPlayer />
           </div>
           <div className="bg-black h-full w-full"></div>
         </>
       )}
-      {/* {currentWinner && <EndGameScreen />} */}
+      <EndGameScreen />
     </div>
   );
 }

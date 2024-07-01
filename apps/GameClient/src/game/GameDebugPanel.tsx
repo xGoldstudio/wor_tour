@@ -30,15 +30,18 @@ export default function GameDebugPanel({
       <DebugButton
         onClick={() => {
           TriggerGameEvent?.({
-            type: "playerDamage",
-            damage: 999999,
-            isPlayer: false,
+            type: "playerDamageResolve",
             initiator: {
-              type: "cardAttacking",
-              isPlayer: true,
-              cardPosition: 1,
-              instanceId: 1,
-            },
+              type: "playerDamage",
+              isPlayer: false,
+              damage: 99999,
+              initiator: {
+                  type: "cardAttacking",
+                  isPlayer: true,
+                  cardPosition: 1,
+                  instanceId: 1,
+              }
+            }
           });
         }}
       >
@@ -47,15 +50,18 @@ export default function GameDebugPanel({
       <DebugButton
         onClick={() => {
           TriggerGameEvent?.({
-            type: "playerDamage",
-            damage: 999999,
-            isPlayer: true,
+            type: "playerDamageResolve",
             initiator: {
-              type: "cardAttacking",
+              type: "playerDamage",
               isPlayer: true,
-              cardPosition: 1,
-              instanceId: 1,
-            },
+              damage: 99999,
+              initiator: {
+                  type: "cardAttacking",
+                  isPlayer: false,
+                  cardPosition: 1,
+                  instanceId: 1,
+              }
+            }
           });
         }}
       >

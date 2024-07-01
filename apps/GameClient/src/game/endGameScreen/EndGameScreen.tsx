@@ -1,6 +1,5 @@
 import { Badge, Button, textureByRarity } from "@repo/ui";
 import useGameMetadataStore from "../stores/gameMetadataStore";
-import useGameStore from "../stores/gameStateStore";
 import Ribbon from "@/home/ui/Ribbon";
 import { EmptyBar } from "../gui/ManaBar";
 import BoosterIllustration from "@/home/pages/shop/BoosterIllustration";
@@ -8,14 +7,21 @@ import * as _ from "lodash";
 import RewardBox from "./RewardBox";
 import { useEffect, useRef, useState } from "react";
 import endGameScreenAnimation from "./animation";
+import { CurrentWinner } from "../gameBehavior/gameEngine/gameState";
+import useGameEventListener from "../gameBehavior/useGameEventListener";
 
 export default function EndGameScreen() {
   const { reset: resetMetadata } = useGameMetadataStore((state) => ({
     reset: state.reset,
   }));
-  const { currentWinner } = useGameStore((state) => ({
-    currentWinner: state.currentWinner,
-  }));
+  const [currentWinner, setCurrentWinner] = useState<CurrentWinner>(null);
+
+  useGameEventListener({
+    type: "gameOver",
+    action: (_, state) => {
+      setCurrentWinner(state.currentWinner);
+    },
+  })
 
   const isWinner = currentWinner === "player";
   const currentXpProgress = 0.5;
@@ -64,6 +70,7 @@ export default function EndGameScreen() {
     xpBarRef.current,
     rewardsRef.current,
     nextLevelRef.current,
+    currentWinner,
   ]);
 
   if (!currentWinner) {

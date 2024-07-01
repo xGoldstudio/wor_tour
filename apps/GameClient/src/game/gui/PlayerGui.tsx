@@ -8,16 +8,13 @@ import { useShallow } from "zustand/react/shallow";
 
 interface PlayerGUIProps {
   isPlayer: boolean;
-  userPlaceNewCard: (cardInHandPosition: number) => void;
 }
 
-function PlayerGUI({ isPlayer, userPlaceNewCard }: PlayerGUIProps) {
-  const { deck, hand, hp, maxHp } = useGameStore(
+function PlayerGUI({ isPlayer }: PlayerGUIProps) {
+  const { deck, hand, maxHp } = useGameStore(
     useShallow((s) => ({
       deck: s.state.playerDeck,
       hand: s.state.playerHand,
-      mana: isPlayer ? s.state.playerMana : s.state.opponentMana,
-      hp: isPlayer ? s.state.playerHp : s.state.opponentHp,
       maxHp: isPlayer ? s.state.playerMaxHp : s.state.opponentMaxHp,
     }))
   );
@@ -27,6 +24,8 @@ function PlayerGUI({ isPlayer, userPlaceNewCard }: PlayerGUIProps) {
   ) as CardType[];
 
   const reverseDeck = [...deck].reverse();
+
+  console.log("render player gui")
 
   return (
     <div className="relative">
@@ -54,14 +53,13 @@ function PlayerGUI({ isPlayer, userPlaceNewCard }: PlayerGUIProps) {
                   card={card}
                   position={index}
                   key={`${card.id}_${index}`}
-                  userPlaceNewCard={userPlaceNewCard}
                 />
               ))}
             </div>
           )}
           {isPlayer && <ManaBar />}
           <div id={`hpBar_${isPlayer}`} className="w-full">
-            <HpBar hp={hp} maxHp={maxHp} withHeart isPlayer={isPlayer} />
+            <HpBar maxHp={maxHp} withHeart isPlayer={isPlayer} />
           </div>
         </div>
       </div>

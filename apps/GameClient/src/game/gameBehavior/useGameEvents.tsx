@@ -12,13 +12,13 @@ import { CardEffects } from "@repo/types";
 import { useOnMount } from "@repo/ui";
 import { computeNextFrameState } from "./gameEngine/gameEngine";
 import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
+import { useShallow } from "zustand/react/shallow";
 
 export const FRAME_TIME = 10;
 
 export const manaSpeed = 1500;
 
 interface GameEventsActions {
-  userPlaceNewCard: (cardInHandPosition: number) => void;
   togglePlay: () => void;
   isClockRunning: boolean;
   fastForward: (amount: number) => void;
@@ -41,7 +41,6 @@ export type EventType =
   | DrawCardEvent
   | HealCardEvent
   | RemoveEffectEvent
-  // | RemoveAnimationEvent
   | CardDamagResolveEvent
   | PlayerDamageResolveEvent;
 
@@ -145,11 +144,6 @@ export interface RemoveEffectEvent {
   effectToRemove: keyof CardEffects;
 }
 
-// export interface RemoveAnimationEvent {
-//   type: "removeAnimation";
-//   key: string;
-// }
-
 export function getDeathAnimationKey(isPlayerCard: boolean, position: number) {
   return `death_${isPlayerCard}_${position}`;
 }
@@ -165,9 +159,15 @@ function useGameEvents(): GameEventsActions {
     getData: getUserInterfaceData,
     isClockRunning,
     setIsClockRunning,
-    removeCardTarget,
     init: initGameInterfaceStore,
-  } = useGameInterface();
+  } = useGameInterface(useShallow((state) => {
+    return {
+      getData: state.getData,
+      isClockRunning: state.isClockRunning,
+      setIsClockRunning: state.setIsClockRunning,
+      init: state.init,
+    };
+  }));
   const gameRef = useRef<null | HTMLDivElement>(null);
   const [clock] = useState<ClockReturn<EventType>>(() =>
     Clock(internalTriggerEvent)
@@ -185,7 +185,9 @@ function useGameEvents(): GameEventsActions {
   }, [gameCanvas]);
 
   useOnMount(() => {
-    initGameInterfaceStore();
+    initGameInterfaceStore({
+      triggerEvent,
+    });
     initGameStore();
     iaAgent();
     // shuffleDeck(true); // todo
@@ -207,6 +209,7 @@ function useGameEvents(): GameEventsActions {
   });
 
   function destroyGame() {
+    console.log("destroy game");
     setIsInit(false);
     // remove all events
     resetAllGameEventListeners();
@@ -271,10 +274,6 @@ function useGameEvents(): GameEventsActions {
     // we rerun getData to have the updated data
     useGameStore.setState({ state: usingState });
     runGameEventListeners(event.type, event, usingState, triggerEvent, clock);
-    if (event.type === "gameOver") {
-      // is it necessary?
-      destroyGame();
-    }
   }
 
   function animationReactionToEvent(event: EventType) {
@@ -285,37 +284,6 @@ function useGameEvents(): GameEventsActions {
         "attack",
         clock.getImmutableInternalState().currentFrame
       );
-    } else if (event.type === "placeCard") {
-      // gsap.to(`#card_${event.isPlayer}_${event.targetPosition}`, {
-      //   duration: 0.5,
-      //   opacity: 1,
-      // });
-    } else if (event.type === "cardDestroyed") {
-      // gsap.to(
-      //   `#card_${event.initiator.isPlayerCard}_${event.initiator.cardPosition}`,
-      //   {
-      //     duration: 0.5,
-      //     opacity: 0,
-      //   }
-      // );
-      // addNewAnimation(
-      //   getDeathAnimationKey(
-      //     event.initiator.isPlayerCard,
-      //     event.initiator.cardPosition
-      //   ),
-      //   {
-      //     onTick: clock.getImmutableInternalState().currentFrame,
-      //     animationDuration: 75,
-      //     data: {
-      //       card: getCardFromState(
-      //         event.initiator.isPlayerCard,
-      //         event.initiator.cardPosition,
-      //         data
-      //       )!,
-      //     },
-      //   }
-      // );
-      // destroyCard(event.initiator.isPlayerCard, event.initiator.cardPosition);
     } else if (event.type === "playerDamage") {
       gameCanvas?.newAnimation(
         `card_${event.initiator.isPlayer}_${event.initiator.cardPosition}`,
@@ -336,26 +304,7 @@ function useGameEvents(): GameEventsActions {
     }
   }
 
-  function placeNewCard(cardInHandPosition: number) {
-    const state = useGameStore.getState().state;
-    if (!state) {
-      return;
-    }
-    const targetPosition = getUserInterfaceData().cardTarget;
-    if (targetPosition === null) {
-      return;
-    }
-    triggerEvent({
-      type: "placeCard",
-      isPlayer: true,
-      targetPosition,
-      cardInHandPosition: cardInHandPosition,
-    });
-    removeCardTarget();
-  }
-
   return {
-    userPlaceNewCard: placeNewCard,
     togglePlay,
     isClockRunning,
     fastForward,
@@ -363,6 +312,11 @@ function useGameEvents(): GameEventsActions {
     destroyGame,
     isInit,
   };
+}
+
+export function useTriggerEvent() {
+  const { triggerEvent } = useGameInterface();
+  return triggerEvent;
 }
 
 export default useGameEvents;
