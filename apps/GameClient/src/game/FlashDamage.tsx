@@ -31,7 +31,6 @@ export default function FlashDamage() {
       }
     },
     filter: (event) => (event as PlayerDamageResolveEvent).initiator.isPlayer,
-    deps: [],
   });
 
   return (

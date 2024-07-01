@@ -32,7 +32,6 @@ function HpBar({ isPlayer, maxHp, withHeart }: HpBarProps) {
         }
         hpBarRef.current.innerHTML = numberWithCommas(nextHp);
         triggerAnimation({
-          replace: true,
           duration: 50,
           computeStyle: animationTimeline(50)
             .add(hpBarRef.current, { scaleX: 1 }, [

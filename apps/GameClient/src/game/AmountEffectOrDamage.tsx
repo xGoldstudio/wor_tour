@@ -89,7 +89,7 @@ export default function AmountEffectOrDamage() {
 		dmgText.classList.add(
 			"absolute",
 			"font-bold",
-			dmg < 0 ? "text-[red]" : "text-[blue]",
+			dmg < 0 ? "text-[red]" : "text-[green]",
 			"drop-shadow-[2px_1px_1px_black]",
 			"text-2xl",
 			"transform",

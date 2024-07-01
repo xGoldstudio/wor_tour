@@ -212,10 +212,6 @@ function GameCard({
     );
   }
 
-  if (!card) {
-    return null;
-  }
-
   return (
     <div className="hidden" ref={cardRef}>
       <div className="cardHeal rounded-sm z-10 absolute top-0 w-full h-full bg-gradient-to-b  from-[#2105ad] via-[#4b429d] via-[37%] to-[#2105ad] opacity-0 origin-top" />
@@ -330,7 +326,6 @@ function GameCardHpBar({
 }) {
   const [hp, setHp] = useState(0);
   const hpBarRef = useRef<HTMLDivElement | null>(null);
-  const bloodRef = useRef<HTMLDivElement | null>(null);
   const scope = useRef<HTMLDivElement | null>(null);
   const { triggerAnimation } = useSyncGameAnimation();
 
@@ -405,17 +400,7 @@ function GameCardHpBar({
               from: -15,
               ease: [0, 0.42, 1, 1],
             },
-          ])
-          .add(
-            bloodRef.current,
-            {
-              opacity: 0,
-            },
-            [
-              { values: { opacity: 60 }, to: 20, ease: [0, 0.42, 1, 1] },
-              { values: { opacity: 0 }, ease: [0, 0.42, 1, 1] },
-            ]
-          ).progress,
+          ]).progress,
       });
     }
   }
