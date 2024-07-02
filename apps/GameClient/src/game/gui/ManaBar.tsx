@@ -1,6 +1,4 @@
-import { FRAME_TIME, manaSpeed } from "../gameBehavior/useGameEvents";
 import { useGameAnimation } from "../gameBehavior/animation/useGameSyncAnimation";
-import { GameStateObject } from "../gameBehavior/gameEngine/gameState";
 import animationTimeline from "../gameBehavior/animation/timeline";
 import _ from "lodash";
 import { ManaBallWrapper } from "../../../../../packages/ui/components/ManaBall";
@@ -8,9 +6,10 @@ import { useState } from "react";
 
 function ManaBar() {
   const [mana, setMana] = useState(0);
+
   const animationRef = useGameAnimation({
-    tl: (ref) =>
-      animationTimeline(manaSpeed / FRAME_TIME).add(
+    tl: (ref, state) =>
+      animationTimeline(state.playerManaSpeed).add(
         ref,
         { scaleX: 1},
         [
@@ -36,7 +35,7 @@ function ManaBar() {
       if (startEarningMana !== null) {
         const progress = currentTick - startEarningMana;
         const manaTarget = state.playerMana + 1;
-        if (mana !== manaTarget && progress > (manaSpeed / FRAME_TIME - 50)) {
+        if (mana !== manaTarget && progress > (state.playerManaSpeed - 50)) {
           ref.innerHTML = String(manaTarget); // the inner html ensure that the content is frame perfect, react will then do its job normally
           setMana(manaTarget);
         }
@@ -73,9 +72,9 @@ function ManaSubBarProgress({
 }: {
   manaIndex: number;
 }) {
-  const animationRef = useGameAnimation<GameStateObject>({
-    tl: (ref) =>
-      animationTimeline(manaSpeed / FRAME_TIME)
+  const animationRef = useGameAnimation({
+    tl: (ref, state) =>
+      animationTimeline(state.playerManaSpeed)
         .add(ref, { scaleX: 0 }, { values: { scaleX: 1 }, to: -50 })
         .add(`#manaBar_bg_${manaIndex}`, { scaleX: 0 }, [
           { values: { scaleX: 1.05 }, from: -50, ease: [0, 1, 1, 1] },

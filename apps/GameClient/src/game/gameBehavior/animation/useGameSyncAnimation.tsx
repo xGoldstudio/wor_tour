@@ -148,7 +148,7 @@ function useGameAnimation({
   deps,
 }: {
   getProgress: ComputeAnimation;
-  tl: (element: HTMLElement) => AnimationTimeline;
+  tl: (element: HTMLElement, state: GameStateObject) => AnimationTimeline;
   deps?: React.DependencyList;
 }) {
   const [animationRef, setAnimationRef] = useState<null | HTMLElement>(null);
@@ -188,7 +188,7 @@ function useGameAnimation({
     const key = uuidv4();
     store.animations.set(key, {
       progress: (frame, state) =>
-        tl(element).progress(getProgress(state, frame, element)),
+        tl(element, state).progress(getProgress(state, frame, element)),
     });
     isSet.current = key;
   }

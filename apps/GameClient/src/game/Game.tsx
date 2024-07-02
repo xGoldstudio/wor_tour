@@ -6,6 +6,7 @@ import PlayerGUI from "./gui/PlayerGui";
 import FlashDamage from "./FlashDamage";
 import AmountEffectOrDamage from "./AmountEffectOrDamage";
 import EndGameScreen from "./endGameScreen/EndGameScreen";
+import StartSequence from "./StartSequence";
 
 export default function Game() {
   const {
@@ -33,6 +34,7 @@ export default function Game() {
           <div className="h-screen flex flex-col gap-4 justify-between relative overflow-hidden w-[700px]">
             <FlashDamage />
             <AmountEffectOrDamage />
+            <StartSequence />
             <div
               className="w-full h-full absolute blur-sm"
               style={{

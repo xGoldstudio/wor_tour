@@ -1,4 +1,4 @@
-import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, RemoveEffectEvent, StartEarningMana } from './../useGameEvents';
+import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, RemoveEffectEvent, StartEarningMana, SetManaIncreaseSpeed, StartGameSequence, StartGame } from './../useGameEvents';
 import startEarningManaEvent from "./events/startEarningMana";
 import manaIncreaseEvent from './events/manaIncrease';
 import { GameStateObject } from './gameState';
@@ -16,6 +16,9 @@ import cardDestroyedEvent from './events/cardDestroyed';
 import gameOverEvent from './events/gameOverEvent';
 import healCardEvent from './events/healCard';
 import removeEffectEvent from './events/removeEffect';
+import setManaIncreaseSpeed from './events/setManaIncreaseSpeed';
+import startGameSequence from './events/startGameSequence';
+import startGame from './events/startGame';
 
 export const FRAME_TIME = 10;
 
@@ -26,8 +29,11 @@ export interface ComputeEventProps<E extends EventType> {
 }
 
 type EventTypeMap = {
+	startGameSequence: StartGameSequence;
+	startGame: StartGame;
 	manaIncrease: ManaIncreaseEvent;
 	manaConsume: ManaConsumeEvent;
+	setManaIncreaseSpeed: SetManaIncreaseSpeed;
 	placeCard: PlaceCardEvent;
 	startEarningMana: StartEarningMana;
 	cardStartAttacking: CardStartAttackingEvent;
@@ -48,8 +54,11 @@ type EventHandlers = {
 };
 
 const EventsCompute: EventHandlers = {
+	startGameSequence: startGameSequence,
+	startGame: startGame,
 	manaIncrease: manaIncreaseEvent,
 	startEarningMana: startEarningManaEvent,
+	setManaIncreaseSpeed: setManaIncreaseSpeed,
 	manaConsume: manaConsumeEvent,
 	drawCard: drawCardEvent,
 	placeCard: placeCardEvent,

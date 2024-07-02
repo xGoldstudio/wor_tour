@@ -11,6 +11,8 @@ interface GameStateObjectConstructor {
 
 export type CurrentWinner = "player" | "opponent" | null;
 
+export const defaultManaSpeed = 150;
+
 export class GameStateObject {
 	constructor({ playerDeck, opponentDeck, playerHp, opponentHp }: GameStateObjectConstructor) {
 		this.playerMana = 0;
@@ -30,6 +32,9 @@ export class GameStateObject {
 		this.playerMaxHp = playerHp;
 		this.opponentMaxHp = opponentHp;
 		this.currentWinner = null;
+		this.playerManaSpeed = defaultManaSpeed;
+		this.opponentManaSpeed = defaultManaSpeed;
+		this.isStarted = false;
 	}
 
 	// state (nested properties are forbidden)
@@ -47,16 +52,30 @@ export class GameStateObject {
 	opponentHp: number;
 	playerMaxHp: number;
 	opponentMaxHp: number;
+	playerManaSpeed: number;
+	opponentManaSpeed: number;
 
 	currentInstanceId: number;
 	currentWinner: CurrentWinner;
 
+	isStarted: boolean;
+
 	// methods
+	startGame() {
+		this.isStarted = true;
+	}
 	startEarningMana(isPlayer: boolean, tick: number) {
 		if (isPlayer) {
 			this.playerTickStartEarningMana = tick;
 		} else {
 			this.opponentTickStartEarningMana = tick;
+		}
+	}
+	setIncreaseManaSpeed(isPlayer: boolean, speed: number) {
+		if (isPlayer) {
+			this.playerManaSpeed = speed;
+		} else {
+			this.opponentManaSpeed = speed;
 		}
 	}
 	increaseMana(isPlayer: boolean) {

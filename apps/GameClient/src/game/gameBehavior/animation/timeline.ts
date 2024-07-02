@@ -11,6 +11,7 @@ interface Sequence {
   to?: number;
   values: AnimationValues;
   ease?: Ease;
+  onStart?: () => void;
 }
 
 export interface AnimationTimeline {
@@ -77,12 +78,12 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
   function progress(elapsedFrames: number) {
     const frameProgress = elapsedFrames < 0 ? requiredFrames : elapsedFrames;
     allAnimations.forEach((animation) => {
-      computeAnimation(frameProgress, animation);
+      computeAnimation(elapsedFrames, frameProgress, animation);
     });
     return state;
   }
 
-  function computeAnimation(frameProgress: number, animation: AnimationSequence) {
+  function computeAnimation(elapsedFrames: number, frameProgress: number, animation: AnimationSequence) {
     if (frameProgress === 0) {
       setValues(animation.element, transformValues(animation.initialValues));
       return;
@@ -99,7 +100,7 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
       return;
     }
     let prevState = animation.initialValues;
-    const state: { values: AnimationValues, ease: Ease | undefined } = { values: prevState, ease: undefined };
+    const state: { values: AnimationValues, ease: Ease | undefined, onStart: (() => void) | undefined } = { values: prevState, ease: undefined, onStart: undefined };
     let normalizedProgress = 1;
 
     let i = 0;
@@ -112,6 +113,11 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
       const sequence = animation.sequences[i];
       state.values = sequence.values;
       state.ease = sequence.ease;
+      if (sequence.from === (elapsedFrames - 1)) {
+        state.onStart = sequence.onStart;
+      } else {
+        state.onStart = undefined;
+      }
       i++;
     }
     if (i > 0) {
@@ -121,6 +127,7 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
         normalizedProgress = (frameProgress - sequence.from!) / duration;
       }
     }
+    state.onStart?.();
     setValues(animation.element, transformValues(
       computeValues(
         prevState,
@@ -175,7 +182,7 @@ function transformValues(values: AnimationValues) {
   const x = values.x !== undefined ? `translateX(${values.x}px)` : "";
   const y = values.y !== undefined ? `translateY(${values.y}px)` : "";
   return {
-    transform: `${scale} ${x} ${y} ${scaleX} ${scaleY}`,
+    transform: `${x} ${y} ${scaleX} ${scaleY} ${scale} `,
     opacity: values.opacity !== undefined ? `${values.opacity}%` : "",
   };
 }

@@ -1,8 +1,6 @@
 import { StartEarningMana } from "../../useGameEvents";
 import { ComputeEventProps } from "../gameEngine";
 
-export const START_EARNING_MANA_TIMEOUT = 150;
-
 export default function startEarningManaEvent({ event, gameState, clock }: ComputeEventProps<StartEarningMana>) {
 	if (
 		(event.isPlayer ? gameState.playerMana : gameState.opponentMana) < 9 &&
@@ -16,7 +14,7 @@ export default function startEarningManaEvent({ event, gameState, clock }: Compu
 				type: "manaIncrease",
         isPlayer: event.isPlayer,
       },
-      START_EARNING_MANA_TIMEOUT
+      gameState[event.isPlayer ? "playerManaSpeed" : "opponentManaSpeed"]
     );
 	}
 }

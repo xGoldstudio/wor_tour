@@ -13,10 +13,9 @@ import { useOnMount, useOnUnMount } from "@repo/ui";
 import { computeNextFrameState } from "./gameEngine/gameEngine";
 import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
 import { useShallow } from "zustand/react/shallow";
+import { defaultManaSpeed } from "./gameEngine/gameState";
 
 export const FRAME_TIME = 10;
-
-export const manaSpeed = 1500;
 
 interface GameEventsActions {
   togglePlay: () => void;
@@ -27,7 +26,10 @@ interface GameEventsActions {
 }
 
 export type EventType =
+  StartGameSequence
+  | StartGame
   | ManaIncreaseEvent
+  | SetManaIncreaseSpeed
   | ManaConsumeEvent
   | PlaceCardEvent
   | StartEarningMana
@@ -43,6 +45,14 @@ export type EventType =
   | CardDamagResolveEvent
   | PlayerDamageResolveEvent;
 
+export interface StartGameSequence {
+  type: "startGameSequence";
+}
+
+export interface StartGame {
+  type: "startGame";
+}
+
 export interface ManaConsumeEvent {
   type: "manaConsume";
   isPlayer: boolean;
@@ -52,6 +62,12 @@ export interface ManaConsumeEvent {
 export interface StartEarningMana {
   type: "startEarningMana";
   isPlayer: boolean;
+}
+
+export interface SetManaIncreaseSpeed {
+  type: "setManaIncreaseSpeed";
+  isPlayer: boolean;
+  speed: number;
 }
 
 export interface ManaIncreaseEvent {
@@ -192,19 +208,21 @@ function useGameEvents(): GameEventsActions {
     initGameStore();
     // shuffleDeck(true); // todo
     // shuffleDeck(false);
-    triggerEvent({ type: "startEarningMana", isPlayer: true });
-    triggerEvent({ type: "startEarningMana", isPlayer: false });
-    // for (let i = 0; i < 7; i++) {
-    //   triggerEvent({ type: "manaIncrease", isPlayer: false });
-    //   triggerEvent({ type: "manaIncrease", isPlayer: false });
-    // }
+    const time = 30;
+    triggerEvent({ type: "setManaIncreaseSpeed", isPlayer: true, speed: time });
+    triggerEvent({ type: "startGameSequence" });
+    clock.setGameEventTimeout({ type: "startEarningMana", isPlayer: true }, time);
+    clock.setGameEventTimeout({ type: "startEarningMana", isPlayer: false }, time);
+    clock.setGameEventTimeout({ type: "setManaIncreaseSpeed", isPlayer: true, speed: defaultManaSpeed }, time * 8);
+    const drawCardTime = time * 8 / 5;
     for (let i = 0; i < 4; i++) {
-      triggerEvent({ type: "drawCard", isPlayer: true, handPosition: i });
-      triggerEvent({ type: "drawCard", isPlayer: false, handPosition: i });
+      const delay = drawCardTime * (i + 1);
+      clock.setGameEventTimeout({ type: "drawCard", isPlayer: true, handPosition: i }, delay);
+      clock.setGameEventTimeout({ type: "drawCard", isPlayer: false, handPosition: i }, delay);
     }
+    clock.setGameEventTimeout({ type: "startGame" }, time * 8);
     resume();
     setIsInit(true);
-    // setIsInteractive(true);
     iaAgent();
     TriggerGameEvent = (event: EventType) => internalTriggerEvent(event, clock);
   });

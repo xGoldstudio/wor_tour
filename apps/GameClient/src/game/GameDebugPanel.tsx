@@ -24,7 +24,8 @@ export default function GameDebugPanel({
       <div className="flex gap-4">
         <DebugButton onClick={() => fastForward(1)}>+1</DebugButton>
         <DebugButton onClick={() => fastForward(10)}>+10</DebugButton>
-        <DebugButton onClick={() => fastForward(100)}>+100</DebugButton>
+        <DebugButton onClick={() => fastForward(100)}>+100 (1s)</DebugButton>
+        <DebugButton onClick={() => fastForward(6000)}>+6000 (1m)</DebugButton>
       </div>
       <DebugButton
         onClick={() => {

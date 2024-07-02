@@ -1,31 +1,25 @@
 import HpBar from "./HpBar";
 import ManaBar from "./ManaBar";
 import useGameStore from "@/game/stores/gameStateStore";
-import InHandCard from "./card/InHandCard";
+import InHandCard, { dummyCard } from "./card/InHandCard";
 import StaticCard from "./card/StaticCard";
 import { CardType } from "@repo/ui";
 import { useShallow } from "zustand/react/shallow";
+import _ from "lodash";
+import { useState } from "react";
+import useGameEventListener from "../gameBehavior/useGameEventListener";
 
 interface PlayerGUIProps {
   isPlayer: boolean;
 }
 
 function PlayerGUI({ isPlayer }: PlayerGUIProps) {
-  const { deck, hand, maxHp } = useGameStore(
+  const { deck, maxHp } = useGameStore(
     useShallow((s) => ({
       deck: s.state.playerDeck,
-      hand: s.state.playerHand,
       maxHp: isPlayer ? s.state.playerMaxHp : s.state.opponentMaxHp,
     }))
   );
-
-  const playerHandSanitized = hand.filter(
-    (card) => card !== null
-  ) as CardType[];
-
-  const reverseDeck = [...deck].reverse();
-
-  console.log("render player gui")
 
   return (
     <div className="relative">
@@ -37,23 +31,26 @@ function PlayerGUI({ isPlayer }: PlayerGUIProps) {
         >
           {isPlayer && (
             <div className="flex gap-4 mb-3 h-[120px] -translate-y-1/3">
-              <div className="relative w-[113px] h-[160px] translate-y-[12%]">
-                {reverseDeck.map((card, index) => (
+              <div
+                id="staticCardWrapper"
+                className="relative w-[113px] h-[160px] translate-y-[12%]"
+              >
+                {_.times(4).map((index) => (
                   <div
-                    className="absolute"
-                    style={{ top: `${-index * 5}px`, left: `${-index * 5}px` }}
-                    key={`${card.id}_${index}`}
+                    className="staticCard absolute"
+                    style={{
+                      top: `${(-3 + index) * 5}px`,
+                      left: `${(-3 + index) * 5}px`,
+                      zIndex: deck.length - index,
+                    }}
+                    key={`${index}`}
                   >
-                    <StaticCard card={card} />
+                    <GuiDeckCard position={index} />
                   </div>
                 ))}
               </div>
-              {playerHandSanitized?.map((card, index) => (
-                <InHandCard
-                  card={card}
-                  position={index}
-                  key={`${card.id}_${index}`}
-                />
+              {_.times(4).map((index) => (
+                <InHandCard position={index} key={index} />
               ))}
             </div>
           )}
@@ -72,3 +69,20 @@ function getPlayerGuiId(isPlayer: boolean) {
 }
 
 export default PlayerGUI;
+
+function GuiDeckCard({ position }: { position: number }) {
+  const [card, setCard] = useState<CardType>(useGameStore.getState().state.playerDeck[position] || dummyCard);
+
+  useGameEventListener({
+    type: "drawCard",
+    action: (_, data) => {
+      const currentCard = data.playerDeck[position];
+      if (!currentCard) return;
+      setCard(currentCard);
+    },
+  });
+
+  return (
+    <StaticCard card={card} />
+  )
+}
