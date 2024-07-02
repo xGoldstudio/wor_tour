@@ -1,23 +1,19 @@
-import usePlayerStore from "@/home/store/playerStore";
-import * as _ from "lodash";
-import "rc-slider/assets/index.css";
-import { useState } from "react";
-import { CardSorts, sorts } from "./cardSorts";
-import { CardUI } from "./CardUI";
+// import usePlayerStore from "@/home/store/playerStore";
+// import * as _ from "lodash";
 
 export default function DeckTab() {
-  const { deck, NUMBER_OF_CARD_IN_DECK } = usePlayerStore((state) => ({
-    deck: state.deck,
-    NUMBER_OF_CARD_IN_DECK: state.NUMBER_OF_CARD_IN_DECK,
-  }));
+  // const { deck, NUMBER_OF_CARD_IN_DECK } = usePlayerStore((state) => ({
+  //   deck: state.deck,
+  //   NUMBER_OF_CARD_IN_DECK: state.NUMBER_OF_CARD_IN_DECK,
+  // }));
 
-  const deckArray = _.concat(
-    deck,
-    _.fill(Array(NUMBER_OF_CARD_IN_DECK - deck.length), null)
-  );
+  // const deckArray = _.concat(
+  //   deck,
+  //   _.fill(Array(NUMBER_OF_CARD_IN_DECK - deck.length), null)
+  // );
   // const defaultSort: CardSorts = "cost_asc";
   // const [actualSortDeck, setActualSortDeck] = useState<CardSorts>(defaultSort);
-  let detailledDeck = [];
+  // let detailledDeck = [];
   // const getCompleteInfo = usePlayerStore((state) => state.getCompleteInfo);
   // for (let i = 0; i < NUMBER_OF_CARD_IN_DECK; i++)
   //   detailledDeck.push(getCompleteInfo(deckArray[i]!));

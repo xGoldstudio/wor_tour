@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { stopPropagation } from "@repo/ui";
+import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Header } from "../Home";
-import { stopPropagation } from "@repo/ui";
 
 interface ModalProps {
   children: React.ReactNode;
@@ -96,5 +96,26 @@ export function BackgroundModal({
         {children}
       </div>
     </>
+  );
+}
+
+interface BoxModalProps {
+  children: React.ReactNode;
+  width?: string;
+}
+
+export function BoxModal({ children, width = "w-9" }: BoxModalProps) {
+  return (
+    <div
+      className={`
+        " justify-center items-center relative w-9 h-9 rounded-sm z-20 bg-blue-600 flex border-[1px] border-opacity-70 border-blue-950 drop-shadow-lg  shadow-sky-900 shadow-2xl",
+        ${width}
+      `}
+    >
+      <div className="absolute w-full h-8 rounded-sm bg-blue-500 -z-10">
+        <div className=" rounded-sm w-full h-4 bg-blue-300 bg-opacity-30 mt-[2px] mx-auto" />
+      </div>
+      {children}
+    </div>
   );
 }

@@ -4,7 +4,7 @@ import ScrollContainer from "react-indiana-drag-scroll";
 import { ActiveFilters, CardFilters, FiltersDescription } from "./cardFilters";
 import { CardSorts, sorts } from "./cardSorts";
 import { CardUI } from "./CardUI";
-import { SortAndFilter } from "./SortAndFilter";
+import { SortAndFilterBox } from "./SortAndFilterBox";
 
 export default function CollectionTab() {
   const { collection } = usePlayerStore((state) => ({
@@ -16,7 +16,6 @@ export default function CollectionTab() {
   const defaultSort: CardSorts = "cost";
   const [currentSort, setcurrentSort] = useState<CardSorts>(defaultSort);
   const [isAscending, setIsAscending] = useState<boolean>(true);
-  const [currentSortNumber, setcurrentSortNumber] = useState<number>(0);
 
   const [currentFilter, setCurrentFilter] = useState<ActiveFilters>({
     Cost: {
@@ -51,13 +50,11 @@ export default function CollectionTab() {
   return (
     <ScrollContainer className="grow overflow-y-scroll scrollbar-hide flex justify-center">
       <div className="w-[650px] h-[650px] grid grid-rows-[1fr_auto] top-0 ">
-        <SortAndFilter
+        <SortAndFilterBox
           currentSort={currentSort}
           setCurrentSort={setcurrentSort}
           isAscending={isAscending}
           setIsAscending={setIsAscending}
-          currentSortNumber={currentSortNumber}
-          setCurrentSortNumber={setcurrentSortNumber}
           currentFilter={currentFilter}
           setCurrentFilter={setCurrentFilter}
         />
