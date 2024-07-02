@@ -100,24 +100,11 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
       return;
     }
     let prevState = animation.initialValues;
-    const state: { values: AnimationValues, ease: Ease | undefined, onStart: (() => void) | undefined } = { values: prevState, ease: undefined, onStart: undefined };
+    const state: { id: number, values: AnimationValues, ease: Ease | undefined } = { id: -1, values: prevState, ease: undefined };
     let normalizedProgress = 1;
 
     let i = 0;
     while (i < animation.sequences.length && frameProgress > animation.sequences[i].from!) {
-      if (i === 0) {
-        prevState = animation.initialValues;
-      } else {
-        prevState = animation.sequences[i - 1].values;
-      }
-      const sequence = animation.sequences[i];
-      state.values = sequence.values;
-      state.ease = sequence.ease;
-      if (sequence.from === (elapsedFrames - 1)) {
-        state.onStart = sequence.onStart;
-      } else {
-        state.onStart = undefined;
-      }
       i++;
     }
     if (i > 0) {
@@ -126,8 +113,18 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
         const duration = sequence.to! - sequence.from!;
         normalizedProgress = (frameProgress - sequence.from!) / duration;
       }
+      state.values = animation.sequences[i - 1].values;
+      state.ease = animation.sequences[i - 1].ease;
+      if (sequence.onStart) {
+        sequence.onStart();
+        sequence.onStart = undefined;
+      }
+      if (i > 1) {
+        prevState = animation.sequences[i - 2].values;
+      } else {
+        prevState = animation.initialValues;
+      }
     }
-    state.onStart?.();
     setValues(animation.element, transformValues(
       computeValues(
         prevState,

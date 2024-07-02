@@ -84,7 +84,7 @@ export default function EndGameScreen() {
   }
 
   return (
-    <div className="w-screen h-full flex justify-center fixed top-0 z-10">
+    <div className="w-screen h-full flex justify-center fixed top-0 z-20">
       <div className="w-[700px] h-full overflow-hidden flex flex-col items-center relative">
         <div className="bg-slate-800 w-full h-full absolute brightness-75 opacity-50"></div>
         <div

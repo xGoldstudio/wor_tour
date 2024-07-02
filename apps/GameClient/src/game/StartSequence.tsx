@@ -8,7 +8,6 @@ export default function StartSequence() {
   const wrapperRef = useRef<null | HTMLDivElement>(null);
 	const [isStarted, setIsStarted] = useState(false);
   const { registerAnimation } = useRegisterAnimation();
-  const { registerAnimation: opacityAnimation } = useRegisterAnimation();
   useGameEventListener({
     type: "startGameSequence",
     action: () => {
@@ -40,7 +39,7 @@ export default function StartSequence() {
           ]
         ).progress,
       });
-			opacityAnimation({
+			registerAnimation({
 				duration: 240,
 				computeStyle: animationTimeline(240).add(
 					wrapperRef.current,

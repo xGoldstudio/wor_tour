@@ -1,6 +1,7 @@
 import { IS_DEBUG } from "@/isDebug";
-import { TriggerGameEvent } from "./gameBehavior/useGameEvents";
+import { GAME_OPTS, TriggerGameEvent } from "./gameBehavior/useGameEvents";
 import { botOptions } from "./gameBehavior/aiAgent";
+import FpsPrint from "./FpsPrint";
 
 interface GameDebugPanelProps {
   togglePlay: () => void;
@@ -18,6 +19,7 @@ export default function GameDebugPanel({
   }
   return (
     <div className="fixed right-2 top-2 border-2 border-white text-white px-4 py-2 flex flex-col gap-4">
+      <FpsPrint />
       <DebugButton onClick={togglePlay}>
         {isClockRunning ? "pause" : "play"}
       </DebugButton>
@@ -68,7 +70,8 @@ export default function GameDebugPanel({
         Kill yourself
       </DebugButton>
       <DebugButton onClick={() => botOptions.disabled = !botOptions.disabled}>Toggle bot activation</DebugButton>
-    </div>
+      <DebugButton onClick={() => GAME_OPTS.simulateBadPerformance = !GAME_OPTS.simulateBadPerformance}>Toggle bad perf</DebugButton>
+   </div>
   );
 }
 

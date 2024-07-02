@@ -14,6 +14,8 @@ import { computeNextFrameState } from "./gameEngine/gameEngine";
 import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
 import { useShallow } from "zustand/react/shallow";
 import useGameEventListener from "./useGameEventListener";
+import { IS_DEBUG } from "@/isDebug";
+import _ from "lodash";
 
 export const FRAME_TIME = 10;
 
@@ -26,7 +28,7 @@ interface GameEventsActions {
 }
 
 export type EventType =
-  StartGameSequence
+  | StartGameSequence
   | StartGame
   | ManaIncreaseEvent
   | SetManaIncreaseSpeed
@@ -166,6 +168,23 @@ export function getDeathAnimationKey(isPlayerCard: boolean, position: number) {
 // should be use only for debug
 export let TriggerGameEvent: null | ((event: EventType) => void) = null;
 
+export const GAME_OPTS = {
+  simulateBadPerformance: false,
+};
+
+export const FPS_OBJ = {
+  pointer: 0,
+  array: _.fill(new Array<number>(100), 0),
+  register(value: number) {
+    this.array[this.pointer] = value;
+    this.pointer = this.pointer === 99 ? 0 : this.pointer + 1;
+  },
+  getFps() {
+    const total = this.array.reduce((acc, curr) => acc + curr, 0);
+    return 1000 / (total / 100);
+  }
+}
+
 // all game logic here
 // todo to guaranteed fairness, we must wrap setTimeout in a custom gameLoop
 function useGameEvents(): GameEventsActions {
@@ -219,7 +238,7 @@ function useGameEvents(): GameEventsActions {
     action: () => {
       iaAgent();
     },
-  })
+  });
 
   useOnUnMount(() => {
     destroyGame();
@@ -236,23 +255,41 @@ function useGameEvents(): GameEventsActions {
     TriggerGameEvent = null;
   }
 
+  const lastTickTiming = useRef<number | null>(null);
+
   function nextTick() {
-    setTimeout(() => {
+    window.requestAnimationFrame(async () => {
       if (useGameStore.getState().state.currentWinner) {
         return;
       }
-      if (getUserInterfaceData().isClockRunning) {
-        triggerTickEffects();
-        nextTick();
+      const now = Date.now();
+      const prev = lastTickTiming.current ?? now;
+      
+      const timeSinceLastTick = now - prev;
+      const tickToDo = Math.floor(timeSinceLastTick / FRAME_TIME);
+      lastTickTiming.current = prev + tickToDo * FRAME_TIME;
+      if (tickToDo > 0 && getUserInterfaceData().isClockRunning) {
+        for (let i = 0; i < tickToDo; i++) {
+          triggerTickEffects(i === 0);
+        }
       }
-    }, FRAME_TIME);
+      if (GAME_OPTS.simulateBadPerformance) {
+        await new Promise((resolve) => setTimeout(resolve, Math.random() * 200));
+      }
+      if (IS_DEBUG()) {
+        FPS_OBJ.register(timeSinceLastTick);
+      }
+      nextTick();
+    });
   }
 
-  function triggerTickEffects() {
-    const currentFrame = clock.getImmutableInternalState().currentFrame;
-    gameCanvas?.paint(currentFrame);
+  function triggerTickEffects(shouldAnimate: boolean) {
+    if (shouldAnimate) {
+      const currentFrame = clock.getImmutableInternalState().currentFrame;
+      gameCanvas?.paint(currentFrame);
+      triggerGameSyncAnimation(useGameStore.getState().state, currentFrame);
+    }
     clock.nextTick();
-    triggerGameSyncAnimation(useGameStore.getState().state, currentFrame);
   }
 
   function resume() {
@@ -274,7 +311,7 @@ function useGameEvents(): GameEventsActions {
 
   function fastForward(amount: number) {
     for (let i = 0; i < amount; i++) {
-      triggerTickEffects();
+      triggerTickEffects(i === 0);
     }
   }
 
