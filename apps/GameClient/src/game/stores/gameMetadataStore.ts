@@ -2,6 +2,7 @@ import { findCard } from "@/cards";
 import usePlayerStore, { CollectionCard } from "@/home/store/playerStore";
 import { CardType } from "@repo/ui";
 import { create } from "zustand";
+import useGameStore from "./gameStateStore";
 
 export interface InGameInitData {
   playerDeck: CardType[];
@@ -16,6 +17,16 @@ interface GameInterfaceStore {
   opponentCards: Map<number, CollectionCard>;
   playerHp: number;
   opponentHp: number;
+  rewards: {
+    win: {
+      money: number;
+      trophies: number;
+    },
+    lose: {
+      money: number;
+      trophies: number;
+    }
+  },
   getInGameInitData: () => InGameInitData;
   findCard: (id: number, isPlayer: boolean) => CardType;
   setIsInGame: (isInGame: boolean) => void;
@@ -25,6 +36,7 @@ interface GameInterfaceStore {
     playerHp: number,
     opponentHp: number
   ) => void;
+  collectRewards: () => void;
   reset: () => void;
 }
 
@@ -34,13 +46,23 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
   opponentCards: new Map<number, CollectionCard>(),
   playerHp: 1000,
   opponentHp: 1000,
+  rewards: {
+    win: {
+      money: 0,
+      trophies: 0
+    },
+    lose: {
+      money: 0,
+      trophies: 0
+    }
+  },
   setInGameData: (
     playerCards: Map<number, CollectionCard>,
     opponentCards: Map<number, CollectionCard>,
     playerHp: number,
     opponentHp: number
   ) => {
-    set({ playerCards, opponentCards, playerHp, opponentHp, isInGame: true });
+    set({ playerCards, opponentCards, playerHp, opponentHp, isInGame: true, rewards: { win: { money: 250, trophies: 40 }, lose: { money: 50, trophies: -40 } } });
   },
   getInGameInitData: () => ({
     playerDeck: [...get().playerCards.values()].map((card) => findCard(card.id, card.level)),
@@ -57,6 +79,15 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
     return findCard(collectionCard.id, collectionCard.level);
   },
   setIsInGame: (isInGame: boolean) => set({ isInGame }),
+  collectRewards: () => {
+    const rewards = get().rewards[useGameStore.getState().state.currentWinner === "player" ? "win" : "lose"];
+    usePlayerStore.getState().addGold(rewards.money);
+    if (rewards.trophies > 0) {
+      usePlayerStore.getState().addTrophies(rewards.trophies);
+    } else {
+      usePlayerStore.getState().removeTrophies(rewards.trophies);
+    }
+  },
   reset: () => set({ isInGame: false }),
 }));
 

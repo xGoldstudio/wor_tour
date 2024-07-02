@@ -4,6 +4,7 @@ import { AllWorldsAnimationContext, AllWorldsAnimationContextType } from "./trop
 import { useGSAP } from "@gsap/react";
 import { Button, cn } from "@repo/ui";
 import Cover from "@/home/ui/Cover";
+import gsap from "gsap";
 
 const glowChestImageByLevel = {
   common: "/chests/common_yellow_glow.png",

@@ -5,7 +5,7 @@ export default function DebugPanel() {
   const { addGold, addTrophies, removeTrophies } = usePlayerStore((state) => ({
     addGold: state.addGold,
     addTrophies: state.addTrophies,
-    removeTrophies: state.removeTrohpies,
+    removeTrophies: state.removeTrophies,
   }));
 
   return (
