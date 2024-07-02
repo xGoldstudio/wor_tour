@@ -27,8 +27,10 @@ function useGameSyncAnimationStore() {
   const store = useAnimationStore();
 
   function triggerGameSyncAnimation(state: GameStateObject, frame: number) {
-    store.animations.forEach((animation) => {
-      animation.progress(frame, state);
+    window.requestAnimationFrame(() => {
+      store.animations.forEach((animation) => {
+        animation.progress(frame, state);
+      });
     });
   }
 
@@ -49,7 +51,7 @@ function useGameSyncAnimationStore() {
 // same as useGameSyncAnimationStore but can run multiple animations at the same time
 export function useRegisterAnimation() {
   const store = useAnimationStore();
-  const removeListeners = useRef<Map<string, (() => void)>>(new Map());
+  const removeListeners = useRef<Map<string, () => void>>(new Map());
 
   function registerAnimation({
     duration,
@@ -109,7 +111,7 @@ export function useSyncGameAnimation() {
       if (replace) {
         removeListener.current?.();
       } else {
-        console.log("already have an animation running")
+        console.log("already have an animation running");
         return;
       }
     }

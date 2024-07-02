@@ -10,7 +10,7 @@ import { CardType, getRandomElement } from "@repo/ui";
 import { GameStateObject } from "./gameEngine/gameState";
 
 export const botOptions = {
-  disabled: true,
+  disabled: false,
 };
 
 export default function iaAgent() {

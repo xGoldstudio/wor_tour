@@ -1,6 +1,6 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore from "@/game/stores/gameStateStore";
-import { motion, useDragControls } from "framer-motion";
+import { useDragControls } from "framer-motion";
 import {
   DrawCardEvent,
   useTriggerEvent,
@@ -12,7 +12,7 @@ import {
 import CardBorder, {
   CardContentIllustartion,
 } from "../../../../../../packages/ui/components/card/CardBorder";
-import { CardType, ManaBall } from "@repo/ui";
+import { CardType, ManaBall, getCenterOfBoundingElement } from "@repo/ui";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
 import { useRef, useState } from "react";
 import useGameEventListener from "@/game/gameBehavior/useGameEventListener";
@@ -55,7 +55,8 @@ function InHandCard({ position }: { position: number }) {
         staticCardTarget.getBoundingClientRect().left -
         ref.current.getBoundingClientRect().left;
       const originTransformY =
-        staticCardTarget.getBoundingClientRect().top - ref.current.getBoundingClientRect().top;
+        staticCardTarget.getBoundingClientRect().top -
+        ref.current.getBoundingClientRect().top;
       triggerDrawAnimation({
         duration: 10,
         computeStyle: animationTimeline(10).add(
@@ -111,51 +112,92 @@ function InHandCard({ position }: { position: number }) {
     removeCardTarget();
   }
 
-  function startDrag(e: React.PointerEvent) {
+  function canStartDrag() {
     const mana = useGameStore.getState().state.playerMana;
     const card = useGameStore.getState().state.playerHand[position];
-    if (!card || card.cost > mana) {
+    return card && card.cost <= mana;
+  }
+
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const dragRef = useRef<HTMLDivElement | null>(null);
+  const isPressed = useRef(false);
+
+  function tryToMoveCard() {
+    if (isPressed.current || !canStartDrag()) {
       return;
     }
-    dragControls.start(e, { snapToCursor: true });
+    function onMove(e: MouseEvent) {
+      if (cardRef.current && ref.current && dragRef.current) {
+        // we compare mouse position with ref bouding box
+        const centers = getCenterOfBoundingElement(ref.current);
+        dragRef.current.style.transform = `translate(${e.clientX - centers.x}px, ${e.clientY - centers.y}px)`;
+      }
+    }
+    function mouseUp() {
+      document.removeEventListener("mouseup", mouseUp);
+      document.removeEventListener("mousemove", onMove);
+      isPressed.current = false;
+      onUnselectCard();
+      if (cardRef.current && ref.current && dragRef.current) {
+        cardRef.current.style.transform = "";
+        cardRef.current.style.transition = "";
+        cardRef.current.style.zIndex = "1";
+        dragRef.current.style.pointerEvents = "all";
+        dragRef.current.style.transform = "";
+      }
+    }
+    onSelectCard();
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", mouseUp);
+    if (cardRef.current && dragRef.current) {
+      cardRef.current.style.zIndex = "9999";
+      cardRef.current.style.transform = "scale(1.2)";
+      cardRef.current.style.transition = "transform 0.2s";
+      dragRef.current.style.pointerEvents = "none";
+    }
   }
 
   return (
-    <div onPointerDown={startDrag} className="relative h-fit w-fit opacity-0" ref={ref}>
-      <motion.div
-        className="w-fit h-fit bg-black rounded-sm select-none relative"
-        dragSnapToOrigin
-        onDragStart={onSelectCard}
-        onDragEnd={onUnselectCard}
-        drag={true}
-        whileDrag={{ zIndex: 9999, scale: 1.2, pointerEvents: "none" }}
-        dragControls={dragControls}
-        dragListener={false}
-      >
-        <CardBorder rarity={card.rarity} size={1.8}>
-          <InHandCardIllustration card={card} />
-        </CardBorder>
-        <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 scale-75">
-          <ManaBall mana={card.cost} />
+    <>
+      <div className="relative h-fit w-fit opacity-0" ref={ref}>
+        <div ref={dragRef}>
+          <div
+            className="w-fit h-fit bg-black rounded-sm select-none relative"
+            onMouseDown={tryToMoveCard}
+            ref={cardRef}
+          >
+            <CardBorder rarity={card.rarity} size={1.8}>
+              <InHandCardIllustration card={card} position={position} />
+            </CardBorder>
+            <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 scale-75">
+              <ManaBall mana={card.cost} />
+            </div>
+          </div>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </>
   );
 }
 
-function InHandCardIllustration({ card }: { card: CardType }) {
-  // const manaSpeed = 0;
-
+function InHandCardIllustration({
+  card,
+  position,
+}: {
+  card: CardType;
+  position: number;
+}) {
   const animationRef = useGameAnimation({
-    tl: (ref, state) =>
-      animationTimeline(card.cost * state.playerManaSpeed).add(
-        ref,
-        { scaleY: 1 },
-        { values: { scaleY: 0 } }
-      ),
+    tl: (ref, state) => {
+      const usingCard = state.playerHand[position];
+      return animationTimeline(
+        (usingCard?.cost ?? 0) * state.playerManaSpeed
+      ).add(ref, { scaleY: 1 }, { values: { scaleY: 0 } });
+    },
     getProgress: (state, currentTick) => {
+      const usingCard = state.playerHand[position];
       if (
-        (card.cost !== null && state.playerMana > card.cost) ||
+        !usingCard ||
+        (usingCard.cost !== null && state.playerMana > usingCard.cost) ||
         state.playerTickStartEarningMana === null
       ) {
         return -1;
