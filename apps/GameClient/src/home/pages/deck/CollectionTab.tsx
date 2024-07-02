@@ -17,31 +17,33 @@ export default function CollectionTab() {
   const [currentSort, setcurrentSort] = useState<CardSorts>(defaultSort);
   const [isAscending, setIsAscending] = useState<boolean>(true);
   const [currentSortNumber, setcurrentSortNumber] = useState<number>(0);
-  // const [currentFilter, setCurrentFilter] = useState<ActiveFilters>({
-  //   Cost: {
-  //     min: FiltersDescription.Cost.rangeMin!,
-  //     max: FiltersDescription.Cost.rangeMax!,
-  //   },
-  //   Common: false,
-  //   Rare: false,
-  //   Epic: false,
-  //   Legendary: false,
-  //   Level: {
-  //     min: FiltersDescription.Level.rangeMin!,
-  //     max: FiltersDescription.Level.rangeMax!,
-  //   },
-  // });
-  // for (const filter in FiltersDescription) {
-  //   const typedFilter = FiltersDescription[filter as CardFilters];
-  //   detailledCollection = detailledCollection.filter((card) =>
-  //     typedFilter
-  //       .filterFunction(
-  //         detailledCollection,
-  //         currentFilter[filter as CardFilters]
-  //       )
-  //       .includes(card)
-  //   );
-  // }
+
+  const [currentFilter, setCurrentFilter] = useState<ActiveFilters>({
+    Cost: {
+      min: FiltersDescription.Cost.rangeMin!,
+      max: FiltersDescription.Cost.rangeMax!,
+    },
+    Common: false,
+    Rare: false,
+    Epic: false,
+    Legendary: false,
+    Level: {
+      min: FiltersDescription.Level.rangeMin!,
+      max: FiltersDescription.Level.rangeMax!,
+    },
+  });
+  for (const filter in FiltersDescription) {
+    const typedFilter = FiltersDescription[filter as CardFilters];
+    detailledCollection = detailledCollection.filter((card) =>
+      typedFilter
+        .filterFunction(
+          detailledCollection,
+          currentFilter[filter as CardFilters]
+        )
+        .includes(card)
+    );
+  }
+
   detailledCollection = sorts[currentSort].sortFunction(
     detailledCollection,
     isAscending
@@ -56,6 +58,8 @@ export default function CollectionTab() {
           setIsAscending={setIsAscending}
           currentSortNumber={currentSortNumber}
           setCurrentSortNumber={setcurrentSortNumber}
+          currentFilter={currentFilter}
+          setCurrentFilter={setCurrentFilter}
         />
         <div className="grid grid-cols-4 gap-y-8 pt-4">
           {detailledCollection.map((card) => (

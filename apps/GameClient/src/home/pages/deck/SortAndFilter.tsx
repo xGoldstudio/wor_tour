@@ -9,6 +9,8 @@ import { cn } from "@repo/ui";
 import React from "react";
 import { CardSorts, sorts } from "./cardSorts";
 import { numberOfLevels } from "../../../../../Editor/src/editor/features/progression/consts";
+import { div } from "three/examples/jsm/nodes/Nodes.js";
+import { ActiveFilters, CardFilters, FiltersDescription } from "./cardFilters";
 
 // interface SortAndFilterBoxProps {
 //   setActualSort: (sort: CardSorts) => void;
@@ -205,6 +207,8 @@ interface SortAndFilterProps {
   setIsAscending: (isAscending: boolean) => void;
   currentSortNumber: number;
   setCurrentSortNumber: (currentSortNumber: number) => void;
+  currentFilter: ActiveFilters;
+  setCurrentFilter: (filter: ActiveFilters) => void;
 }
 
 export function SortAndFilter({
@@ -214,13 +218,19 @@ export function SortAndFilter({
   setIsAscending,
   currentSortNumber,
   setCurrentSortNumber,
+  currentFilter,
+  setCurrentFilter,
 }: SortAndFilterProps) {
   return (
     <div className="px-4">
       <div className="h-12 bg-black bg-opacity-30 mt-4 rounded-lg flex items-center px-4 justify-between">
         <div className="">Cards found : 8 / 9</div>
-        <div className="flex flex-row space-x-4">
+        <div className="flex flex-row space-x-4 relative">
           <Box box={true}> Filtre</Box>
+          <FilterBox
+            currentFilter={currentFilter}
+            setCurrentFilter={setCurrentFilter}
+          />
           <Box
             box={true}
             isAscending={isAscending}
@@ -248,3 +258,59 @@ export function SortAndFilter({
     </div>
   );
 }
+
+interface FilterBoxProps {
+  setCurrentFilter: (filter: ActiveFilters) => void;
+  currentFilter: ActiveFilters;
+}
+
+function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
+  const handleChange = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const { value } = event.currentTarget;
+    for (const key in FiltersDescription) {
+      if (FiltersDescription[key as CardFilters].label === value) {
+        setCurrentFilter({
+          ...currentFilter,
+          [key as CardFilters]: !currentFilter[key as CardFilters],
+        });
+      }
+    }
+  };
+  const isActiveFilter = (filterCriteria: CardFilters) => {
+    if (currentFilter[filterCriteria] === true) {
+      return {
+        backgroundImage: `url(valid.png)`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      };
+    }
+    return;
+  };
+  return (
+    <div className="absolute top-10 right-[81px] z-10 flex flex-col items-center -mt-4 ">
+      <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-b-[16px] border-transparent border-b-white " />
+      <div className="h-[300px] w-[170px] bg-[#406799] border-white border-2 rounded-md flex flex-col gap-2 items-center text-white">
+        Filtre
+        {Object.values(FiltersDescription).map((filterCriteria, index) =>
+          filterCriteria.isButton ? (
+            <div className="flex justify-start items-center gap-2 border-t-[1px] border-opacity-30 border-t-neutral-300 w-full pl-1 pt-1">
+              <button
+                key={index}
+                value={filterCriteria.label}
+                onClick={handleChange}
+                style={isActiveFilter(filterCriteria.label as CardFilters)}
+                className="flex items-center justify-center p-3 mt-1 bg-[#284673] rounded-lg hover:bg-blue-700"
+              />
+              <div className="">{filterCriteria.label}</div>
+            </div>
+          ) : (
+            <></>
+          )
+        )}
+      </div>
+    </div>
+  );
+}
+
+//TD : ajouter un logo validé sur les filtres
+//
