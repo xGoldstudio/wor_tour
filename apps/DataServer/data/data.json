@@ -358,7 +358,7 @@
       ]
     },
     {
-      "name": "Mega crabvor",
+      "name": "Gigrabvor",
       "rarity": "epic",
       "id": 13,
       "world": 1,
@@ -368,7 +368,7 @@
         {
           "effects": {},
           "cost": 4,
-          "illustration": "bc34910c-4f12-4d10-9626-7964c2940682.png"
+          "illustration": "card_13_level_1_1719956460438.png"
         },
         {
           "effects": {
@@ -377,7 +377,7 @@
             }
           },
           "cost": 4,
-          "illustration": "03918d57-3260-4a7a-83cd-a3b5e19dc1fa.png"
+          "illustration": "card_13_level_2_1719956464360.png"
         },
         {
           "effects": {
@@ -386,7 +386,7 @@
             }
           },
           "cost": 4,
-          "illustration": "4c00aca9-f5ad-4735-bfa4-179d56423735.png"
+          "illustration": "card_13_level_3_1719956467507.png"
         }
       ]
     },
