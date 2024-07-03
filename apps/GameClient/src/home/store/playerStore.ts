@@ -41,7 +41,7 @@ interface PlayerStore {
   trophies: number;
   maxTrophies: number;
   addTrophies: (amount: number) => void;
-  removeTrohpies: (amount: number) => void;
+  removeTrophies: (amount: number) => void;
 
   toCollectTrophiesRewards: Set<number>;
   collectedTrophiesReward: (reward: number) => void;
@@ -62,17 +62,17 @@ const shardsByLevels = [3, 7];
 
 const usePlayerStore = create<PlayerStore>()((set, get) => ({
   collection: defaultCollection,
-  currentWorld: 2,
+  currentWorld: 1,
   deck: [1, 2, 3, 4, 5, 6, 7, 8],
-  gold: 1000,
+  gold: 0,
   getCollection: () => Array.from(get().collection.values()),
   getCollectionInfo: (id: number) => get().collection.get(id),
   getCompleteInfo: (id: number) => ({
     ...findCard(id, get().getCollectionInfo(id)!.level),
     isInDeck: get().deck.includes(id),
   }),
-  trophies: 1100,
-  maxTrophies: 1100,
+  trophies: 0,
+  maxTrophies: 0,
   toCollectTrophiesRewards: new Set(),
 
   removeCardFromDeck: (id: number) =>
@@ -188,7 +188,7 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
     });
     set((state) => updateTrophies(state, amount))
   },
-  removeTrohpies: (amount: number) => set((state) => updateTrophies(state, -amount)),
+  removeTrophies: (amount: number) => set((state) => updateTrophies(state, -amount)),
 
   collectedTrophiesReward: (reward: number) => {
     set((state) => {

@@ -5,22 +5,26 @@ import {
 } from "./useGameEvents";
 import { findCard } from "@/cards";
 import * as _ from "lodash";
-import { GameStore } from "@/game/stores/gameStateStore";
 import { addGameEventListener } from "./gameEventListener";
 import { CardType, getRandomElement } from "@repo/ui";
+import { GameStateObject } from "./gameEngine/gameState";
+
+export const botOptions = {
+  disabled: false,
+};
 
 export default function iaAgent() {
   let nextCardToUse: { position: number; card: CardType } | null = null;
 
-  function setNextCardToUse(data: GameStore) {
+  function setNextCardToUse(data: GameStateObject) {
     const position = getRandomElement(_.range(4));
     nextCardToUse = {
       position,
-      card: findCard(data.opponentHand[position]!, 1),
+      card: findCard(data.opponentHand[position]!.id, 1),
     };
   }
 
-  function getEmptyTarget(data: GameStore): number | null {
+  function getEmptyTarget(data: GameStateObject): number | null {
     const freeZone: number[] = [];
     data.opponentBoard.forEach((card, position) => {
       if (card === null) {
@@ -35,9 +39,12 @@ export default function iaAgent() {
 
   function computeMove(
     _: EventType,
-    data: GameStore,
+    data: GameStateObject,
     triggerEvent: (event: EventType) => void
   ) {
+    if (botOptions.disabled) {
+      return;
+    }
     if (nextCardToUse === null) {
       setNextCardToUse(data);
     }
@@ -51,7 +58,6 @@ export default function iaAgent() {
         isPlayer: false,
         targetPosition: target,
         cardInHandPosition: nextCardToUse.position,
-        cardId: nextCardToUse.card.id,
       });
       setNextCardToUse(data);
     }

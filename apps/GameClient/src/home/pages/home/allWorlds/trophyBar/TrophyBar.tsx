@@ -89,7 +89,6 @@ export default function TrophyBar({
         (nextState.scrollContainer?.getBoundingClientRect()?.height || 0) / 2; // position center of the screen
       return nextState;
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [numberOfTrophies]);
 
   const startTrophiesY2 =
@@ -354,7 +353,6 @@ function ScrollBack({
     return () => {
       scrollContainer.removeEventListener("scroll", handleScroll);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function setScrollDistancePosition() {

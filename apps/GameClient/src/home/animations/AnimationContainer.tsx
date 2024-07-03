@@ -232,28 +232,30 @@ export default function AnimationContainer() {
 
   useEffect(() => {
     if (
+      container.current !== null &&
       animationsQueue.length > 0 &&
-      !isAnimating &&
-      container.current !== null
+      !isAnimating
     ) {
       setIsAnimating(true);
       const copyQueue = clearQueue().reverse();
       const nextAnimation = () => {
+        if (container.current === null) {
+          return;
+        }
         const currentAnimation = copyQueue.pop();
         if (currentAnimation) {
           animation({
             animationObject: currentAnimation,
             nextAnimation,
-            container: container.current!,
+            container: container.current,
           });
         } else {
           setIsAnimating(false);
-          clearContainer(container.current!);
+          clearContainer(container.current);
         }
       };
       nextAnimation();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animationsQueue, isAnimating, container]);
 
   return (

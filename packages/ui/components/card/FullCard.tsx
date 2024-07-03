@@ -62,10 +62,9 @@ export default function FullCard({
                 <div className="flex flex-col items-end gap-2 absolute top-5 z-10 right-2">
                   {effectToShow.map((effectSrc) => (
                     <div
-                      className="p-2 bg-slate-100 border-2 border-black rounded-full shadow-[0px_0px_5px_0px_#fca5a5]"
                       key={effectSrc}
                     >
-                      <img src={`/${effectSrc}`} width={22} height={22} />
+                      <img src={`/${effectSrc}`} width={48} height={48} />
                     </div>
                   ))}
                 </div>

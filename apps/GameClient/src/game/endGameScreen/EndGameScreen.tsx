@@ -1,27 +1,35 @@
-import { Badge, Button, textureByRarity } from "@repo/ui";
+import { Badge, Button, cn, textureByRarity } from "@repo/ui";
 import useGameMetadataStore from "../stores/gameMetadataStore";
-import useGameStore from "../stores/gameStateStore";
 import Ribbon from "@/home/ui/Ribbon";
 import { EmptyBar } from "../gui/ManaBar";
-import BoosterIllustration from "@/home/pages/shop/BoosterIllustration";
 import * as _ from "lodash";
 import RewardBox from "./RewardBox";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import endGameScreenAnimation from "./animation";
+import { CurrentWinner } from "../gameBehavior/gameEngine/gameState";
+import useGameEventListener from "../gameBehavior/useGameEventListener";
+import { useGSAP } from "@gsap/react";
 
 export default function EndGameScreen() {
-  const { reset: resetMetadata } = useGameMetadataStore((state) => ({
+  const [currentWinner, setCurrentWinner] = useState<CurrentWinner>(null);
+  const { reset: resetMetadata, rewards, collectRewards } = useGameMetadataStore((state) => ({
     reset: state.reset,
+    rewards: state.rewards[currentWinner === "player" ? "win" : "lose"],
+    collectRewards: state.collectRewards,
   }));
-  const { currentWinner } = useGameStore((state) => ({
-    currentWinner: state.currentWinner,
-  }));
+
+  useGameEventListener({
+    type: "gameOver",
+    action: (_, state) => {
+      setCurrentWinner(state.currentWinner);
+    },
+  });
 
   const isWinner = currentWinner === "player";
   const currentXpProgress = 0.5;
   const targetXpProgress = 0.8;
   const [currentLevel, setCurrentLevel] = useState(1);
-  const targetLevel = 2;
+  const targetLevel = 1;
 
   const boxRef = useRef<HTMLDivElement>(null);
   const shinyRef = useRef<HTMLDivElement>(null);
@@ -31,47 +39,57 @@ export default function EndGameScreen() {
   const nextLevelRef = useRef<HTMLDivElement>(null);
 
   const [isAnimationRunning, setIsAnimationRunning] = useState(false);
-  useEffect(() => {
-    if (
-      isAnimationRunning ||
-      !boxRef.current ||
-      !buttonRef.current ||
-      !rewardsRef.current ||
-      !xpBarRef.current ||
-      !nextLevelRef.current
-    ) {
-      return;
+  useGSAP(
+    () => {
+      if (
+        isAnimationRunning ||
+        !boxRef.current ||
+        !buttonRef.current ||
+        !rewardsRef.current ||
+        !xpBarRef.current ||
+        !nextLevelRef.current
+      ) {
+        return;
+      }
+      setIsAnimationRunning(true);
+      endGameScreenAnimation({
+        boxRef: boxRef.current,
+        currentXpProgress,
+        targetXpProgress,
+        currentLevel,
+        targetLevel,
+        rewardsRef: rewardsRef.current,
+        xpBarRef: xpBarRef.current,
+        shinyRef: shinyRef.current,
+        buttonRef: buttonRef.current,
+        nextLevelRef: nextLevelRef.current,
+        setCurrentLevel,
+      });
+    },
+    {
+      dependencies: [
+        boxRef.current,
+        shinyRef.current,
+        buttonRef.current,
+        xpBarRef.current,
+        rewardsRef.current,
+        nextLevelRef.current,
+        currentWinner,
+      ],
     }
-    setIsAnimationRunning(true);
-    endGameScreenAnimation({
-      boxRef: boxRef.current,
-      currentXpProgress,
-      targetXpProgress,
-      currentLevel,
-      targetLevel,
-      rewardsRef: rewardsRef.current,
-      xpBarRef: xpBarRef.current,
-      shinyRef: shinyRef.current,
-      buttonRef: buttonRef.current,
-      nextLevelRef: nextLevelRef.current,
-      setCurrentLevel,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    boxRef.current,
-    shinyRef.current,
-    buttonRef.current,
-    xpBarRef.current,
-    rewardsRef.current,
-    nextLevelRef.current,
-  ]);
+  );
 
   if (!currentWinner) {
     return null;
   }
 
+  function onContinue() {
+    collectRewards();
+    resetMetadata();
+  }
+
   return (
-    <div className="w-screen h-full flex justify-center fixed top-0 z-10">
+    <div className="w-screen h-full flex justify-center fixed top-0 z-30">
       <div className="w-[700px] h-full overflow-hidden flex flex-col items-center relative">
         <div className="bg-slate-800 w-full h-full absolute brightness-75 opacity-50"></div>
         <div
@@ -82,7 +100,7 @@ export default function EndGameScreen() {
           <Ribbon className="mb-0 relative top-[1px] z-10">
             {isWinner ? "Victory" : "Defeat"}
           </Ribbon>
-          <div className="flex flex-col gap-8 items-center mb-6 py-8 w-[450px] rounded-b-sm relative bg-slate-100 overflow-hidden">
+          <div className={cn("flex flex-col gap-8 items-center mb-6 py-8 w-[450px] rounded-b-sm relative overflow-hidden", isWinner ? "bg-slate-100" : "bg-slate-800")}>
             <div
               className="absolute w-full h-full top-0 left-0 blur-sm"
               style={{
@@ -92,19 +110,16 @@ export default function EndGameScreen() {
               }}
             />
             <div className="flex gap-6 items-center relative" ref={rewardsRef}>
-              <RewardBox amount={1}>
-                <BoosterIllustration
-                  size={0.4}
-                  title="Victory reward"
-                  illustration=""
-                />
+              <RewardBox amount={rewards.money}>
+                <img src="/money.png" className="h-[64px]" />
               </RewardBox>
-              <RewardBox amount={15000}>
-                <img src="/money.png" className="h-[100px]" />
+              <RewardBox amount={rewards.trophies}>
+                <img src="/trophy.png" className="h-[64px]" />
               </RewardBox>
             </div>
             <div className="flex gap-2 w-[350px] items-center relative">
               <Badge value={String(currentLevel)} />
+
               <div className="grow h-6 bg-slate-50 rounded-sm overflow-hidden relative">
                 <div
                   className="absolute right-2 z-10 text-white font opacity-0"
@@ -124,11 +139,7 @@ export default function EndGameScreen() {
               </div>
             </div>
           </div>
-          <Button
-            action={resetMetadata}
-            className="w-[450px]"
-            forwardRef={buttonRef}
-          >
+          <Button action={onContinue} forwardRef={buttonRef}>
             Continue
           </Button>
         </div>
@@ -149,7 +160,7 @@ function ShinyRotator({
     >
       <svg
         viewBox="0 0 100 100"
-        className="absolute top-0 left-1/2 h-full -translate-x-1/2 drop-shadow-[0px_0px_15px_white] scale-150"
+        className="absolute top-0 left-1/2 h-full -translate-x-1/2 drop-shadow-[0px_0px_15px_white] scale-150 opacity-50"
       >
         <defs>
           <linearGradient id="gradient" x1="0" x2="1" y1="0" y2="1">
