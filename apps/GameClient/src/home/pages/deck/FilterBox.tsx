@@ -111,16 +111,22 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
 
   return (
     <BoxModal>
-      <button onClick={() => setFilterIsOpen(!filterIsOpen)}>Test</button>
+      <button
+        onClick={() => {
+          setFilterIsOpen(!filterIsOpen);
+        }}
+      >
+        Test
+      </button>
       {filterIsOpen && (
         <OutsideClickHandler onOutsideClick={() => setFilterIsOpen(false)}>
-          <div className="absolute top-10 z-10 flex flex-col items-center -mt-4 ">
+          <div className="absolute top-10 z-10 flex flex-col items-center justify-center -mt-8 ">
             <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-b-[16px] border-transparent border-b-white " />
-            <div className="h-[379px] w-[170px] bg-[#406799] border-white border-2 rounded-md flex flex-col gap-2 items-center text-white">
-              Filtre
+            <div className="h-[371px] w-[170px] bg-[#406799] border-white border-2 rounded-md flex flex-col gap-2 items-center text-white">
+              <span className="pr-11 pt-2">Filter</span>
               {Object.values(FiltersDescription).map((filterCriteria, index) =>
                 filterCriteria.isButton ? (
-                  <div className="flex justify-start items-center gap-2 border-t-[1px] border-opacity-30 border-t-neutral-300 w-full pl-1 pt-1">
+                  <div className="flex justify-start items-center gap-2 border-t-[1px] border-opacity-30 border-t-neutral-300 w-full pl-2 pt-2">
                     <button
                       key={index}
                       value={filterCriteria.label}
@@ -128,40 +134,48 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
                       style={isActiveFilter(
                         filterCriteria.label as CardFilters
                       )}
-                      className="flex items-center justify-center p-3 mt-1 bg-[#284673] rounded-lg hover:bg-blue-700"
+                      className="p-3 bg-[#284673] rounded-lg hover:bg-blue-700"
                     />
-                    <div className="">{filterCriteria.label}</div>
+                    <div className="pl-1 pb-1">{filterCriteria.label}</div>
                   </div>
                 ) : (
                   <div
                     key={index}
-                    className="px-3  gap-2 border-t-[1px] border-opacity-30 border-t-neutral-300 w-full pl-1 pt-1 "
+                    className="px-3 gap-2 border-t-[1px] border-opacity-30 border-t-neutral-300 w-full pl-1 pt-1"
                   >
-                    <span className="ml-8">{filterCriteria.label}</span>
-                    <Slider
-                      className="w-4/5 mx-auto"
-                      range
-                      count={1}
-                      min={FiltersDescription[filterCriteria.label].rangeMin}
-                      max={FiltersDescription[filterCriteria.label].rangeMax}
-                      defaultValue={getdefaultValuesForSlider(
+                    <span className="ml-10">{filterCriteria.label}</span>
+                    <div className="flex mx-2 justify-center items-center">
+                      {getMinValueForSlider(
                         filterCriteria.label as CardFiltersStyles
                       )}
-                      onChange={(value) => {
-                        if (Array.isArray(value))
-                          setCurrentFilter({
-                            ...currentFilter,
-                            [filterCriteria.label]: {
-                              min: value[0],
-                              max: value[1],
-                            },
-                          });
-                      }}
-                      styles={getStyleForSlider(
+                      <Slider
+                        className="w-8/12 mx-auto"
+                        range
+                        count={1}
+                        min={FiltersDescription[filterCriteria.label].rangeMin}
+                        max={FiltersDescription[filterCriteria.label].rangeMax}
+                        defaultValue={getdefaultValuesForSlider(
+                          filterCriteria.label as CardFiltersStyles
+                        )}
+                        onChange={(value) => {
+                          if (Array.isArray(value))
+                            setCurrentFilter({
+                              ...currentFilter,
+                              [filterCriteria.label]: {
+                                min: value[0],
+                                max: value[1],
+                              },
+                            });
+                        }}
+                        styles={getStyleForSlider(
+                          filterCriteria.label as CardFiltersStyles
+                        )}
+                      />
+                      {getMaxValueForSlider(
                         filterCriteria.label as CardFiltersStyles
                       )}
-                    />
-                    <div className="text-center">
+                    </div>
+                    {/* <div className="text-center">
                       <span>
                         Min:{" "}
                         {getMinValueForSlider(
@@ -172,16 +186,13 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
                           filterCriteria.label as CardFiltersStyles
                         )}
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                 )
               )}
-              <div className="w-full flex justify-center border-t-neutral-300 border-t-[1px] border-opacity-30 pt-[2px] bg-[#1E3E5B]">
-                <button
-                  onClick={() => setFilterIsOpen(false)}
-                  className=" w-3/5 rounded-lg "
-                >
-                  Delete
+              <div className="w-full h-full flex justify-center items-center border-t-neutral-300 border-t-[1px] border-opacity-30 bg-[#1E3E5B] rounded-b-md">
+                <button className="" onClick={() => setFilterIsOpen(false)}>
+                  <span>Clear</span>
                 </button>
               </div>
             </div>

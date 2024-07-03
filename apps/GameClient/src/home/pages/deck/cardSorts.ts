@@ -12,7 +12,7 @@ const rarityOrder = { common: 1, rare: 2, epic: 3, legendary: 4 };
 
 export const sorts: Sorts = {
   cost: {
-    label: "Cost",
+    label: "By Cost",
     sortFunction: (detailledCollection, isAscending) =>
       detailledCollection.sort(
         isAscending
@@ -23,7 +23,7 @@ export const sorts: Sorts = {
       ),
   },
   rarity: {
-    label: "Rarity",
+    label: "By Rarity",
     sortFunction: (detailledCollection, isAscending) =>
       detailledCollection.sort(
         isAscending
@@ -32,14 +32,14 @@ export const sorts: Sorts = {
       ),
   },
   world: {
-    label: "World",
+    label: "By World",
     sortFunction: (detailledCollection, isAscending) =>
       detailledCollection.sort((a, b) =>
         isAscending ? a.world - b.world : b.world - a.world
       ),
   },
   level: {
-    label: "Level",
+    label: "By Level",
     sortFunction: (detailledCollection, isAscending) =>
       detailledCollection.sort((a, b) =>
         isAscending ? a.level - b.level : b.level - a.level

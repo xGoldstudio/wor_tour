@@ -108,7 +108,7 @@ export function BoxModal({ children, width = "w-9" }: BoxModalProps) {
   return (
     <div
       className={`
-        " justify-center items-center relative w-9 h-9 rounded-sm z-20 bg-blue-600 flex border-[1px] border-opacity-70 border-blue-950 drop-shadow-lg  shadow-sky-900 shadow-2xl",
+        " justify-center items-center relative h-9 rounded-sm z-20 bg-blue-600 flex border-[1px] border-opacity-70 border-blue-950 drop-shadow-lg  shadow-sky-900 shadow-2xl",
         ${width}
       `}
     >

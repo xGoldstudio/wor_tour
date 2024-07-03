@@ -20,7 +20,7 @@ function TabModal({ children, currentTab, setCurrentTab }: TabModalProps) {
   return (
     <div
       className={cn(
-        "h-[35px] w-[200px] bg-blue-300 flex justify-center items rounded-t-lg text-xl hover:cursor-pointer",
+        "h-[35px] w-[200px] bg-blue-300 flex justify-center items-center rounded-t-lg text-xl hover:cursor-pointer",
         currentTab !== children?.toString() ? "opacity-50" : null
       )}
       style={{

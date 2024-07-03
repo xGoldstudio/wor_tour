@@ -88,7 +88,7 @@ export function SortBox({
     }
   }
   return (
-    <BoxModal width="w-14">
+    <BoxModal width="w-20">
       <div className="">
         <button onClick={() => getNextSort()}>{children}</button>
       </div>
