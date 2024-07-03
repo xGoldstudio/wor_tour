@@ -69,7 +69,6 @@ export default function Progression() {
         return { x, y };
       }),
     // since levels is a const it should only trigger once
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [levels]
   );
 
