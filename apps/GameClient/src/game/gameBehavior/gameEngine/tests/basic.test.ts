@@ -1,8 +1,7 @@
 import Clock from "../../clock/clock";
 import { EventType } from "../../useGameEvents";
-import { START_EARNING_MANA_TIMEOUT } from "../events/startEarningMana";
 import { computeNextFrameState } from "../gameEngine";
-import { GameStateObject } from "../gameState";
+import { GameStateObject, defaultManaSpeed } from "../gameState";
 
 test("base state", () => {
 	const state = new GameStateObject({ playerDeck: [], opponentDeck: [], playerHp: 0, opponentHp: 0});
@@ -37,7 +36,7 @@ test("earning mana", () => {
 	clock.nextTick();
 	expect(state.playerMana).toBe(0);
 	expect(state.opponentMana).toBe(0);
-	for (let i = 0; i < START_EARNING_MANA_TIMEOUT - 3; i++) {
+	for (let i = 0; i < defaultManaSpeed - 3; i++) {
 		clock.nextTick();
 	}
 	expect(state.playerMana).toBe(0);
@@ -51,7 +50,7 @@ test("earning mana", () => {
 	expect(state.opponentTickStartEarningMana).toBe(150);
 
 	// caped to 9
-	for (let i = 0; i < START_EARNING_MANA_TIMEOUT*20; i++) {
+	for (let i = 0; i < defaultManaSpeed*20; i++) {
 		clock.nextTick();
 	}
 	expect(state.playerMana).toBe(9);

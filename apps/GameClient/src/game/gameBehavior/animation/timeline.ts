@@ -78,12 +78,12 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
   function progress(elapsedFrames: number) {
     const frameProgress = elapsedFrames < 0 ? requiredFrames : elapsedFrames;
     allAnimations.forEach((animation) => {
-      computeAnimation(elapsedFrames, frameProgress, animation);
+      computeAnimation(frameProgress, animation);
     });
     return state;
   }
 
-  function computeAnimation(elapsedFrames: number, frameProgress: number, animation: AnimationSequence) {
+  function computeAnimation(frameProgress: number, animation: AnimationSequence) {
     if (frameProgress === 0) {
       setValues(animation.element, transformValues(animation.initialValues));
       return;

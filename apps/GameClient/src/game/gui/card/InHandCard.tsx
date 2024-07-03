@@ -1,6 +1,5 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore from "@/game/stores/gameStateStore";
-import { useDragControls } from "framer-motion";
 import {
   DrawCardEvent,
   useTriggerEvent,
@@ -16,21 +15,7 @@ import { CardType, ManaBall, getCenterOfBoundingElement } from "@repo/ui";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
 import { useRef, useState } from "react";
 import useGameEventListener from "@/game/gameBehavior/useGameEventListener";
-
-export const dummyCard: CardType = {
-  name: "string",
-  cost: 0,
-  illustration: "string",
-  worldIllustration: "string",
-  dmg: 0,
-  hp: 0,
-  attackSpeed: 0,
-  rarity: "common",
-  id: 0,
-  effects: {},
-  level: 1,
-  world: 1,
-};
+import { dummyCard } from "./const";
 
 function InHandCard({ position }: { position: number }) {
   const setSelectedCard = useGameInterface((state) => state.setSelectedCard);
@@ -39,7 +24,6 @@ function InHandCard({ position }: { position: number }) {
   const [card, setCard] = useState<CardType>(dummyCard);
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const dragControls = useDragControls();
   const { triggerAnimation: triggerDrawAnimation } = useSyncGameAnimation();
 
   useGameEventListener({

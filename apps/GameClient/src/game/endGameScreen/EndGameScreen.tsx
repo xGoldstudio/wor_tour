@@ -65,7 +65,6 @@ export default function EndGameScreen() {
         nextLevelRef: nextLevelRef.current,
         setCurrentLevel,
       });
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     {
       dependencies: [
