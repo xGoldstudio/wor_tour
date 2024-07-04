@@ -3,15 +3,12 @@ import { useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { ActiveFilters, CardFilters, FiltersDescription } from "./cardFilters";
 import { CardSorts, sorts } from "./cardSorts";
-import { CardUI } from "./CardUI";
+import { DeckCardUI } from "./DeckCardUI";
 import { SortAndFilterBox } from "./SortAndFilterBox";
 
 export default function CollectionTab() {
-  const { collection } = usePlayerStore((state) => ({
-    collection: state.getCollection(),
-  }));
   let { detailledCollection } = usePlayerStore((state) => ({
-    detailledCollection: state.getCollectionCompleteInfo(collection),
+    detailledCollection: state.getCollectionCompleteInfo(state.getCollection()),
   }));
   const defaultSort: CardSorts = "cost";
   const [currentSort, setcurrentSort] = useState<CardSorts>(defaultSort);
@@ -61,7 +58,7 @@ export default function CollectionTab() {
         <div className="grid grid-cols-4 gap-y-8 pt-4">
           {detailledCollection.map((card) => (
             <div className="w-full flex justify-center" key={card.id}>
-              <CardUI cardId={card.id} />
+              <DeckCardUI cardId={card.id} />
             </div>
           ))}
         </div>

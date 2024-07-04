@@ -1,10 +1,3 @@
-// import React, { useEffect, useRef, useState } from "react";
-// import { ActiveFilters, CardFilters, FiltersDescription } from "./cardFilters";
-// import { CardSorts, sorts } from "./cardSorts";
-// import { FilterModal } from "./FilterBox";
-// import { SortModal } from "./SortBox";
-// import { div } from "three/examples/jsm/nodes/Nodes.js";
-
 import { ActiveFilters } from "./cardFilters";
 import { CardSorts, sorts } from "./cardSorts";
 import { FilterBox } from "./FilterBox";
@@ -28,6 +21,12 @@ export function SortAndFilterBox({
   currentFilter,
   setCurrentFilter,
 }: SortAndFilterProps) {
+  function findValueInRecordByKey<Key extends CardSorts, Value>(
+    record: Record<Key, Value>,
+    key: Key
+  ): Value | undefined {
+    return record[key];
+  }
   return (
     <div className="px-4">
       <div className="h-12 bg-black bg-opacity-30 mt-4 rounded-lg flex items-center px-4 justify-between">
@@ -39,13 +38,7 @@ export function SortAndFilterBox({
           />
           <OrderBox isAscending={isAscending} setIsAscending={setIsAscending} />{" "}
           <SortBox setCurrentSort={setCurrentSort} currentSort={currentSort}>
-            {
-              sorts[
-                Object.keys(sorts).find(
-                  (sort) => sort.toString() === currentSort
-                ) as CardSorts
-              ].label
-            }
+            {findValueInRecordByKey(sorts, currentSort)?.label}
           </SortBox>
         </div>
       </div>

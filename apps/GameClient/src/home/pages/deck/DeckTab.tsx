@@ -1,26 +1,24 @@
 import * as _ from "lodash";
 import usePlayerStore from "@/home/store/playerStore";
-import { CardUI } from "./CardUI";
+import { DeckCardUI } from "./DeckCardUI";
 import ScrollContainer from "react-indiana-drag-scroll";
 
 export default function DeckTab() {
-  const { deck, NUMBER_OF_CARD_IN_DECK } = usePlayerStore((state) => ({
-    deck: state.deck,
-    NUMBER_OF_CARD_IN_DECK: state.NUMBER_OF_CARD_IN_DECK,
-  }));
+  const { deck, NUMBER_OF_CARD_IN_DECK, getCompleteInfo } = usePlayerStore(
+    (state) => ({
+      deck: state.deck,
+      NUMBER_OF_CARD_IN_DECK: state.NUMBER_OF_CARD_IN_DECK,
+      getCompleteInfo: state.getCompleteInfo,
+    })
+  );
 
   const deckArray = _.concat(
     deck,
     _.fill(Array(NUMBER_OF_CARD_IN_DECK - deck.length), null)
   );
-  // const defaultSort: CardSorts = "cost_asc";
-  // const [actualSortDeck, setActualSortDeck] = useState<CardSorts>(defaultSort);
   const detailledDeck = [];
-  const getCompleteInfo = usePlayerStore((state) => state.getCompleteInfo);
   for (let i = 0; i < NUMBER_OF_CARD_IN_DECK; i++)
     detailledDeck.push(getCompleteInfo(deckArray[i]!));
-  // detailledDeck = sorts[actualSortDeck].sortFunction(detailledDeck);
-
   const { collection } = usePlayerStore((state) => ({
     collection: state.getCollection(),
   }));
@@ -33,7 +31,7 @@ export default function DeckTab() {
         <div className="grid grid-cols-4 gap-y-8 pt-8">
           {detailledDeck.map((card) => (
             <div className="w-full flex justify-center" key={card.id}>
-              <CardUI cardId={card.id} />
+              <DeckCardUI cardId={card.id} />
             </div>
           ))}
         </div>
@@ -41,21 +39,10 @@ export default function DeckTab() {
         <div className="grid grid-cols-4 gap-y-8 pt-8">
           {detailledCollection.map((card) => (
             <div className="w-full flex justify-center" key={card.id}>
-              <CardUI cardId={card.id} />
+              <DeckCardUI cardId={card.id} />
             </div>
           ))}
         </div>
-        {/* <SortAndFilterBox
-        setActualSort={setActualSort}
-        actualSort={actualSort}
-        setActualFilter={setActualFilter}
-        actualFilter={actualFilter}
-      /> */}
-        {/* <SortAndFilterBox
-        setActualSort={setActualSortDeck}
-        actualSort={actualSortDeck}
-      /> */}
-        {/* <ShowStat detailledDeck={detailledDeck} /> */}
       </div>
     </ScrollContainer>
   );

@@ -1,6 +1,5 @@
 import usePlayerStore from "@/home/store/playerStore";
 import { Button, ManaBall, preventDefault } from "@repo/ui";
-import "rc-slider/assets/index.css";
 import { useState } from "react";
 import CardBorder, {
   CardContentIllustartion,
@@ -13,7 +12,7 @@ interface CardUIProps {
   unaddble?: boolean;
 }
 
-export function CardUI({ cardId, isHand, unaddble: addable }: CardUIProps) {
+export function DeckCardUI({ cardId, isHand, unaddble: addable }: CardUIProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
   const { card, removeCardFromDeck, addCardToDeck, isDeckFull } =
     usePlayerStore((state) => ({

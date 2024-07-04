@@ -11,7 +11,7 @@ const tabs: Record<Tabs, () => JSX.Element> = {
 };
 
 interface TabModalProps {
-  children: React.ReactNode;
+  children: string;
   currentTab: Tabs;
   setCurrentTab: (tab: Tabs) => void;
 }
@@ -38,7 +38,7 @@ function TabModal({ children, currentTab, setCurrentTab }: TabModalProps) {
   );
 }
 
-export default function DeckInterface() {
+export function DeckInterface() {
   const [currentTab, setCurrentTab] = useState<Tabs>("Deck");
   const TabElement = tabs[currentTab];
 

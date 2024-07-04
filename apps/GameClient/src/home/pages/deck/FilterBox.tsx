@@ -9,6 +9,7 @@ import {
   CardFiltersStyles,
   FiltersDescription,
 } from "./cardFilters";
+import { filter } from "lodash";
 
 interface OutsideClickHandlerProps {
   children: React.ReactNode;
@@ -58,16 +59,11 @@ interface FilterBoxProps {
 export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
   const [filterIsOpen, setFilterIsOpen] = useState(false);
 
-  const handleChange = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { value } = event.currentTarget;
-    for (const key in FiltersDescription) {
-      if (FiltersDescription[key as CardFilters].label === value) {
-        setCurrentFilter({
-          ...currentFilter,
-          [key as CardFilters]: !currentFilter[key as CardFilters],
-        });
-      }
-    }
+  const handleChange = (filterCriteria: CardFilters) => {
+    setCurrentFilter({
+      ...currentFilter,
+      [filterCriteria]: !currentFilter[filterCriteria],
+    });
   };
   const isActiveFilter = (filterCriteria: CardFilters) => {
     if (currentFilter[filterCriteria] === true) {
@@ -84,28 +80,29 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
     return CardFilterSliderStyles[filterCriteria];
   }
   function getdefaultValuesForSlider(filterCriteria: CardFiltersStyles) {
+    const usingFilter = currentFilter[filterCriteria];
     return [
-      typeof currentFilter[filterCriteria] === "object" &&
-      typeof currentFilter[filterCriteria].min === "number"
-        ? currentFilter[filterCriteria].min
+      typeof usingFilter === "object" && typeof usingFilter.min === "number"
+        ? usingFilter.min
         : FiltersDescription[filterCriteria].rangeMin!,
-      typeof currentFilter[filterCriteria] === "object" &&
-      typeof currentFilter[filterCriteria].max === "number"
-        ? currentFilter[filterCriteria].max
+      typeof usingFilter === "object" && typeof usingFilter.max === "number"
+        ? usingFilter.max
         : FiltersDescription[filterCriteria].rangeMax!,
     ];
   }
 
   function getMinValueForSlider(filterCriteria: CardFiltersStyles) {
-    return typeof currentFilter[filterCriteria] === "object" &&
-      typeof currentFilter[filterCriteria].min === "number"
-      ? currentFilter[filterCriteria].min
+    const usingFilter = currentFilter[filterCriteria];
+    return typeof usingFilter === "object" &&
+      typeof usingFilter.min === "number"
+      ? usingFilter.min
       : FiltersDescription[filterCriteria].rangeMin;
   }
   function getMaxValueForSlider(filterCriteria: CardFiltersStyles) {
-    return typeof currentFilter[filterCriteria] === "object" &&
-      typeof currentFilter[filterCriteria].max === "number"
-      ? currentFilter[filterCriteria].max
+    const usingFilter = currentFilter[filterCriteria];
+    return typeof usingFilter === "object" &&
+      typeof usingFilter.max === "number"
+      ? usingFilter.max
       : FiltersDescription[filterCriteria].rangeMax;
   }
 
@@ -130,7 +127,7 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
                     <button
                       key={index}
                       value={filterCriteria.label}
-                      onClick={handleChange}
+                      onClick={() => handleChange(filterCriteria.label)}
                       style={isActiveFilter(
                         filterCriteria.label as CardFilters
                       )}
@@ -175,18 +172,6 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
                         filterCriteria.label as CardFiltersStyles
                       )}
                     </div>
-                    {/* <div className="text-center">
-                      <span>
-                        Min:{" "}
-                        {getMinValueForSlider(
-                          filterCriteria.label as CardFiltersStyles
-                        )}{" "}
-                        - Max:{" "}
-                        {getMaxValueForSlider(
-                          filterCriteria.label as CardFiltersStyles
-                        )}
-                      </span>
-                    </div> */}
                   </div>
                 )
               )}
