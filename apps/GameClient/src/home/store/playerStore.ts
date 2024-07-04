@@ -12,6 +12,7 @@ export interface CollectionCard {
 }
 
 interface PlayerStore {
+  NUMBER_OF_CARD_IN_DECK: number;
   collection: Map<number, CollectionCard>;
   deck: number[];
   currentWorld: number;
@@ -44,7 +45,7 @@ interface PlayerStore {
 }
 
 const defaultCollection: Map<number, CollectionCard> = new Map();
-defaultCollection.set(1, { id: 1, level: 1, shard: 0 });
+defaultCollection.set(1, { id: 1, level: 1, shard: 1 });
 defaultCollection.set(2, { id: 2, level: 1, shard: 0 });
 defaultCollection.set(3, { id: 3, level: 1, shard: 0 });
 defaultCollection.set(4, { id: 4, level: 1, shard: 0 });
@@ -56,6 +57,7 @@ defaultCollection.set(8, { id: 8, level: 1, shard: 0 });
 const shardsByLevels = [3, 7];
 
 const usePlayerStore = create<PlayerStore>()((set, get) => ({
+  NUMBER_OF_CARD_IN_DECK: 8,
   collection: defaultCollection,
   currentWorld: 1,
   deck: [1, 2, 3, 4, 5, 6, 7, 8],
@@ -168,7 +170,8 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   spendGold: (amount: number) =>
     set((state) => ({ gold: state.gold - amount })),
 
-  completeNextLevel: () => set((state) => ({ lastCompletedLevel: state.lastCompletedLevel + 1 })),
+  completeNextLevel: () =>
+    set((state) => ({ lastCompletedLevel: state.lastCompletedLevel + 1 })),
 }));
 
 export default usePlayerStore;
