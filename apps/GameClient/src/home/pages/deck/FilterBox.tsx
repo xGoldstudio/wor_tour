@@ -9,7 +9,6 @@ import {
   CardFiltersStyles,
   FiltersDescription,
 } from "./cardFilters";
-import { filter } from "lodash";
 
 interface OutsideClickHandlerProps {
   children: React.ReactNode;
