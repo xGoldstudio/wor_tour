@@ -1,5 +1,5 @@
 import { cn } from "@repo/ui";
-import React, { useState } from "react";
+import { useState } from "react";
 import CollectionTab from "./CollectionTab";
 import DeckTab from "./DeckTab";
 
