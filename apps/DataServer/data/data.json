@@ -292,17 +292,17 @@
         {
           "effects": {},
           "cost": 4,
-          "illustration": "6f8d8473-f6ec-41ec-9222-012eb2fae7dd.png"
+          "illustration": "card_10_level_1_1720023182860.png"
         },
         {
           "effects": {},
           "cost": 4,
-          "illustration": "f1ee9508-6581-4f6c-b280-ed85082f0a7d.png"
+          "illustration": "card_10_level_2_1720024251885.png"
         },
         {
           "effects": {},
           "cost": 4,
-          "illustration": "b7eab61b-6875-47dc-ad18-e49de0fedf47.png"
+          "illustration": "card_10_level_3_1720024380213.png"
         }
       ]
     },
@@ -333,27 +333,39 @@
     },
     {
       "id": 12,
-      "name": "Rare 4",
+      "name": "Primal Crabvor",
       "rarity": "rare",
       "world": 1,
       "worldIllustration": "/cards/worlds/1.png",
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.9,
+      "speedDamageRatio": 0.75,
       "stats": [
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 6,
+          "effects": {
+            "fightBack": {
+              "type": "fightBack"
+            }
+          },
+          "illustration": "card_12_level_1_1720034721455.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 6,
+          "effects": {
+            "fightBack": {
+              "type": "fightBack"
+            }
+          },
+          "illustration": "card_12_level_2_1720034153300.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 6,
+          "effects": {
+            "fightBack": {
+              "type": "fightBack"
+            }
+          },
+          "illustration": "card_12_level_3_1720034142219.png"
         }
       ]
     },
@@ -392,27 +404,31 @@
     },
     {
       "id": 14,
-      "name": "Epic 2",
+      "name": "Hero Crabvor",
       "rarity": "epic",
       "world": 1,
       "worldIllustration": "/cards/worlds/1.png",
-      "attackDefenseRatio": 0.01,
-      "speedDamageRatio": 0.01,
+      "attackDefenseRatio": 0.2,
+      "speedDamageRatio": 0.21,
       "stats": [
         {
-          "cost": 9,
+          "cost": 2,
           "effects": {},
-          "illustration": null
+          "illustration": "card_14_level_1_1720028759577.png"
         },
         {
-          "cost": 9,
+          "cost": 2,
           "effects": {},
-          "illustration": null
+          "illustration": "card_14_level_2_1720027978144.png"
         },
         {
-          "cost": 9,
-          "effects": {},
-          "illustration": null
+          "cost": 2,
+          "effects": {
+            "fightBack": {
+              "type": "fightBack"
+            }
+          },
+          "illustration": "card_14_level_3_1720028021115.png"
         }
       ]
     },
