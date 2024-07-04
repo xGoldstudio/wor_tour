@@ -1,3 +1,4 @@
+import { BoxModal } from "@/home/ui/modal";
 import { cn } from "@repo/ui";
 import { CardSorts, sorts } from "./cardSorts";
 
@@ -49,5 +50,48 @@ export function SortModal({
         <button onClick={closeModal}>Close</button>
       </div>
     </div>
+  );
+}
+
+interface SortBoxProps {
+  children: React.ReactNode;
+  currentSort: CardSorts;
+  setCurrentSort: (sort: CardSorts) => void;
+}
+
+export function SortBox({
+  children,
+  setCurrentSort,
+  currentSort,
+}: SortBoxProps) {
+  const getNextSortByNumber: Record<number, CardSorts> = {
+    0: "cost",
+    1: "rarity",
+    2: "world",
+    3: "level",
+  };
+
+  const getnextSortByCardSorts: Record<CardSorts, number> = {
+    cost: 0,
+    rarity: 1,
+    world: 2,
+    level: 3,
+  };
+
+  function getNextSort() {
+    if (getnextSortByCardSorts[currentSort] < 3) {
+      setCurrentSort(
+        getNextSortByNumber[getnextSortByCardSorts[currentSort] + 1]
+      );
+    } else {
+      setCurrentSort("cost");
+    }
+  }
+  return (
+    <BoxModal width="w-20">
+      <div className="">
+        <button onClick={() => getNextSort()}>{children}</button>
+      </div>
+    </BoxModal>
   );
 }

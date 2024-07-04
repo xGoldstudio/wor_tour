@@ -2,69 +2,47 @@ import { findCard } from "@/cards";
 import { Card } from "./cardFilters";
 
 export type Sorts = Record<CardSorts, CardSort>;
-export type CardSorts =
-  | "cost_asc"
-  | "cost_desc"
-  | "rarity_asc"
-  | "rarity_desc"
-  | "world_asc"
-  | "world_desc"
-  | "level_asc"
-  | "level_desc";
+export type CardSorts = "cost" | "rarity" | "world" | "level";
 export interface CardSort {
   label: string;
-  sortFunction: (detailledCollection: Card[]) => Card[];
+  sortFunction: (detailledCollection: Card[], isAcending: boolean) => Card[];
 }
 
 const rarityOrder = { common: 1, rare: 2, epic: 3, legendary: 4 };
 
 export const sorts: Sorts = {
-  cost_asc: {
-    label: "Cost ↑",
-    sortFunction: (detailledCollection) =>
+  cost: {
+    label: "By Cost",
+    sortFunction: (detailledCollection, isAscending) =>
       detailledCollection.sort(
-        (a, b) => findCard(a.id, a.level).cost - findCard(b.id, b.level).cost
+        isAscending
+          ? (a, b) =>
+              findCard(a.id, a.level).cost - findCard(b.id, b.level).cost
+          : (a, b) =>
+              findCard(b.id, b.level).cost - findCard(a.id, a.level).cost
       ),
   },
-  cost_desc: {
-    label: "Cost ↓",
-    sortFunction: (detailledCollection) =>
+  rarity: {
+    label: "By Rarity",
+    sortFunction: (detailledCollection, isAscending) =>
       detailledCollection.sort(
-        (a, b) => findCard(b.id, b.level).cost - findCard(a.id, a.level).cost
+        isAscending
+          ? (a, b) => rarityOrder[a.rarity] - rarityOrder[b.rarity]
+          : (a, b) => rarityOrder[b.rarity] - rarityOrder[a.rarity]
       ),
   },
-  rarity_asc: {
-    label: "Rarity ↑",
-    sortFunction: (detailledCollection) =>
-      detailledCollection.sort(
-        (a, b) => rarityOrder[a.rarity] - rarityOrder[b.rarity]
+  world: {
+    label: "By World",
+    sortFunction: (detailledCollection, isAscending) =>
+      detailledCollection.sort((a, b) =>
+        isAscending ? a.world - b.world : b.world - a.world
       ),
   },
-  rarity_desc: {
-    label: "Rarity ↓",
-    sortFunction: (detailledCollection) =>
-      detailledCollection.sort(
-        (a, b) => rarityOrder[b.rarity] - rarityOrder[a.rarity]
+  level: {
+    label: "By Level",
+    sortFunction: (detailledCollection, isAscending) =>
+      detailledCollection.sort((a, b) =>
+        isAscending ? a.level - b.level : b.level - a.level
       ),
-  },
-  world_asc: {
-    label: "World ↑",
-    sortFunction: (detailledCollection) =>
-      detailledCollection.sort((a, b) => a.world - b.world),
-  },
-  world_desc: {
-    label: "World ↓",
-    sortFunction: (detailledCollection) =>
-      detailledCollection.sort((a, b) => b.world - a.world),
-  },
-  level_asc: {
-    label: "Level ↑",
-    sortFunction: (detailledCollection) =>
-      detailledCollection.sort((a, b) => a.level - b.level),
-  },
-  level_desc: {
-    label: "Level ↓",
-    sortFunction: (detailledCollection) =>
-      detailledCollection.sort((a, b) => b.level - a.level),
   },
 };

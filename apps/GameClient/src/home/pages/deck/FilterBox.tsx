@@ -1,6 +1,7 @@
-import { Box } from "@repo/ui";
+import { BoxModal } from "@/home/ui/modal";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import { useEffect, useRef, useState } from "react";
 import {
   ActiveFilters,
   CardFilters,
@@ -9,127 +10,179 @@ import {
   FiltersDescription,
 } from "./cardFilters";
 
-interface FilterModalProps {
-  setActualFilter: (filter: ActiveFilters) => void;
-  actualFilter: ActiveFilters;
-  closeModal: () => void;
+interface OutsideClickHandlerProps {
+  children: React.ReactNode;
+  onOutsideClick: () => void;
 }
 
-export function FilterModal({
-  setActualFilter,
-  actualFilter,
-  closeModal,
-}: FilterModalProps) {
-  const handleChange = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { value } = event.currentTarget;
-    for (const key in FiltersDescription) {
-      if (FiltersDescription[key as CardFilters].label === value) {
-        setActualFilter({
-          ...actualFilter,
-          [key as CardFilters]: !actualFilter[key as CardFilters],
-        });
+function OutsideClickHandler({
+  children,
+  onOutsideClick,
+}: OutsideClickHandlerProps) {
+  const wrapperRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(e.target as Node)
+      ) {
+        onOutsideClick();
       }
+    };
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onOutsideClick();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  });
+
+  return (
+    <div className="absolute flex items-center justify-center" ref={wrapperRef}>
+      {children}
+    </div>
+  );
+}
+
+interface FilterBoxProps {
+  setCurrentFilter: (filter: ActiveFilters) => void;
+  currentFilter: ActiveFilters;
+}
+
+export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
+  const [filterIsOpen, setFilterIsOpen] = useState(false);
+
+  const handleChange = (filterCriteria: CardFilters) => {
+    setCurrentFilter({
+      ...currentFilter,
+      [filterCriteria]: !currentFilter[filterCriteria],
+    });
+  };
+  const isActiveFilter = (filterCriteria: CardFilters) => {
+    if (currentFilter[filterCriteria] === true) {
+      return {
+        backgroundImage: `url(valid.png)`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      };
     }
+    return;
   };
 
   function getStyleForSlider(filterCriteria: CardFiltersStyles) {
     return CardFilterSliderStyles[filterCriteria];
   }
   function getdefaultValuesForSlider(filterCriteria: CardFiltersStyles) {
+    const usingFilter = currentFilter[filterCriteria];
     return [
-      typeof actualFilter[filterCriteria] === "object" &&
-      typeof actualFilter[filterCriteria].min === "number"
-        ? actualFilter[filterCriteria].min
+      typeof usingFilter === "object" && typeof usingFilter.min === "number"
+        ? usingFilter.min
         : FiltersDescription[filterCriteria].rangeMin!,
-      typeof actualFilter[filterCriteria] === "object" &&
-      typeof actualFilter[filterCriteria].max === "number"
-        ? actualFilter[filterCriteria].max
+      typeof usingFilter === "object" && typeof usingFilter.max === "number"
+        ? usingFilter.max
         : FiltersDescription[filterCriteria].rangeMax!,
     ];
   }
 
   function getMinValueForSlider(filterCriteria: CardFiltersStyles) {
-    return typeof actualFilter[filterCriteria] === "object" &&
-      typeof actualFilter[filterCriteria].min === "number"
-      ? actualFilter[filterCriteria].min
+    const usingFilter = currentFilter[filterCriteria];
+    return typeof usingFilter === "object" &&
+      typeof usingFilter.min === "number"
+      ? usingFilter.min
       : FiltersDescription[filterCriteria].rangeMin;
   }
   function getMaxValueForSlider(filterCriteria: CardFiltersStyles) {
-    return typeof actualFilter[filterCriteria] === "object" &&
-      typeof actualFilter[filterCriteria].max === "number"
-      ? actualFilter[filterCriteria].max
+    const usingFilter = currentFilter[filterCriteria];
+    return typeof usingFilter === "object" &&
+      typeof usingFilter.max === "number"
+      ? usingFilter.max
       : FiltersDescription[filterCriteria].rangeMax;
   }
 
   return (
-    <div className="absolute top-32 z-50 rounded-lg">
-      <Box
-        width={270}
-        height={380}
-        rarity="legendary"
-        className="flex items-center justify-center"
+    <BoxModal>
+      <button
+        onClick={() => {
+          setFilterIsOpen(!filterIsOpen);
+        }}
       >
-        {Object.values(FiltersDescription).map((filterCriteria, index) =>
-          filterCriteria.isButton ? (
-            <button
-              key={index}
-              value={filterCriteria.label}
-              onClick={handleChange}
-              type="button"
-              style={{
-                backgroundImage: `url(${filterCriteria.style})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                opacity: actualFilter[filterCriteria.label] ? 1 : 0.6,
-              }}
-              className="w-full shadow-lg p-1 my-1 rounded-lg text-center"
-            >
-              {filterCriteria.label}
-            </button>
-          ) : (
-            <div key={index} className="px-3 pb-3 ">
-              <span>{filterCriteria.label}</span>
-              <Slider
-                range
-                count={1}
-                min={FiltersDescription[filterCriteria.label].rangeMin}
-                max={FiltersDescription[filterCriteria.label].rangeMax}
-                defaultValue={getdefaultValuesForSlider(
-                  filterCriteria.label as CardFiltersStyles
-                )}
-                onChange={(value) => {
-                  if (Array.isArray(value))
-                    setActualFilter({
-                      ...actualFilter,
-                      [filterCriteria.label]: { min: value[0], max: value[1] },
-                    });
-                }}
-                styles={getStyleForSlider(
-                  filterCriteria.label as CardFiltersStyles
-                )}
-              />
-              <div>
-                <span>
-                  Min:{" "}
-                  {getMinValueForSlider(
-                    filterCriteria.label as CardFiltersStyles
-                  )}{" "}
-                  - Max:{" "}
-                  {getMaxValueForSlider(
-                    filterCriteria.label as CardFiltersStyles
-                  )}
-                </span>
+        Test
+      </button>
+      {filterIsOpen && (
+        <OutsideClickHandler onOutsideClick={() => setFilterIsOpen(false)}>
+          <div className="absolute top-10 z-10 flex flex-col items-center justify-center -mt-8 ">
+            <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-b-[16px] border-transparent border-b-white " />
+            <div className="h-[371px] w-[170px] bg-[#406799] border-white border-2 rounded-md flex flex-col gap-2 items-center text-white">
+              <span className="pr-11 pt-2">Filter</span>
+              {Object.values(FiltersDescription).map((filterCriteria, index) =>
+                filterCriteria.isButton ? (
+                  <div className="flex justify-start items-center gap-2 border-t-[1px] border-opacity-30 border-t-neutral-300 w-full pl-2 pt-2">
+                    <button
+                      key={index}
+                      value={filterCriteria.label}
+                      onClick={() => handleChange(filterCriteria.label)}
+                      style={isActiveFilter(
+                        filterCriteria.label as CardFilters
+                      )}
+                      className="p-3 bg-[#284673] rounded-lg hover:bg-blue-700"
+                    />
+                    <div className="pl-1 pb-1">{filterCriteria.label}</div>
+                  </div>
+                ) : (
+                  <div
+                    key={index}
+                    className="px-3 gap-2 border-t-[1px] border-opacity-30 border-t-neutral-300 w-full pl-1 pt-1"
+                  >
+                    <span className="ml-10">{filterCriteria.label}</span>
+                    <div className="flex mx-2 justify-center items-center">
+                      {getMinValueForSlider(
+                        filterCriteria.label as CardFiltersStyles
+                      )}
+                      <Slider
+                        className="w-8/12 mx-auto"
+                        range
+                        count={1}
+                        min={FiltersDescription[filterCriteria.label].rangeMin}
+                        max={FiltersDescription[filterCriteria.label].rangeMax}
+                        defaultValue={getdefaultValuesForSlider(
+                          filterCriteria.label as CardFiltersStyles
+                        )}
+                        onChange={(value) => {
+                          if (Array.isArray(value))
+                            setCurrentFilter({
+                              ...currentFilter,
+                              [filterCriteria.label]: {
+                                min: value[0],
+                                max: value[1],
+                              },
+                            });
+                        }}
+                        styles={getStyleForSlider(
+                          filterCriteria.label as CardFiltersStyles
+                        )}
+                      />
+                      {getMaxValueForSlider(
+                        filterCriteria.label as CardFiltersStyles
+                      )}
+                    </div>
+                  </div>
+                )
+              )}
+              <div className="w-full h-full flex justify-center items-center border-t-neutral-300 border-t-[1px] border-opacity-30 bg-[#1E3E5B] rounded-b-md">
+                <button className="" onClick={() => setFilterIsOpen(false)}>
+                  <span>Clear</span>
+                </button>
               </div>
             </div>
-          )
-        )}
-        <button
-          onClick={closeModal}
-          className="bg-red-200 hover:bg-red-400 w-full rounded-lg shadow-lg"
-        >
-          X
-        </button>
-      </Box>
-    </div>
+          </div>
+        </OutsideClickHandler>
+      )}
+    </BoxModal>
   );
 }

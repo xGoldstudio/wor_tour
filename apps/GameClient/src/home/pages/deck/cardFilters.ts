@@ -13,7 +13,6 @@ export type CardFiltersStyles = "Cost" | "Level";
 export type CardFilterState = boolean | { min: number; max: number };
 export interface CardFilter {
   label: CardFilters;
-  style?: string;
   rangeMin?: number;
   rangeMax?: number;
   isButton: boolean;
@@ -40,7 +39,6 @@ export type FilterSliderStyles = Record<
 export const FiltersDescription: Filters = {
   Common: {
     label: "Common",
-    style: "bronze.avif",
     isButton: true,
     filterFunction: (cards: Card[], state: CardFilterState) =>
       state === false
@@ -49,21 +47,18 @@ export const FiltersDescription: Filters = {
   },
   Rare: {
     label: "Rare",
-    style: "silver.jpeg",
     isButton: true,
     filterFunction: (cards, state) =>
       state === false ? cards : cards.filter((card) => card.rarity === "rare"),
   },
   Epic: {
     label: "Epic",
-    style: "gold.jpeg",
     isButton: true,
     filterFunction: (cards, state) =>
       state === false ? cards : cards.filter((card) => card.rarity === "epic"),
   },
   Legendary: {
     label: "Legendary",
-    style: "diamond.avif",
     isButton: true,
     filterFunction: (cards, state) =>
       state === false
