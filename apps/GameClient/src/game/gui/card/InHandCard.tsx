@@ -1,75 +1,197 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
-import useGameStore, { GameStore } from "@/game/stores/gameStateStore";
-import { motion, useDragControls } from "framer-motion";
-import { FRAME_TIME, manaSpeed } from "../../gameBehavior/useGameEvents";
-import { useGameAnimation } from "../../gameBehavior/animation/useGameSyncAnimation";
+import useGameStore from "@/game/stores/gameStateStore";
+import {
+  DrawCardEvent,
+  useTriggerEvent,
+} from "../../gameBehavior/useGameEvents";
+import {
+  useGameAnimation,
+  useSyncGameAnimation,
+} from "../../gameBehavior/animation/useGameSyncAnimation";
 import CardBorder, {
   CardContentIllustartion,
 } from "../../../../../../packages/ui/components/card/CardBorder";
-import { CardType, ManaBall } from "@repo/ui";
+import { CardType, ManaBall, getCenterOfBoundingElement } from "@repo/ui";
+import animationTimeline from "@/game/gameBehavior/animation/timeline";
+import { useRef, useState } from "react";
+import useGameEventListener from "@/game/gameBehavior/useGameEventListener";
+import { dummyCard } from "./const";
 
-function InHandCard({
-  card,
-  position,
-  userPlaceNewCard,
-}: {
-  card: CardType;
-  position?: number;
-  userPlaceNewCard: (cardInHandPosition: number) => void;
-}) {
-  const dragControls = useDragControls();
+function InHandCard({ position }: { position: number }) {
+  const setSelectedCard = useGameInterface((state) => state.setSelectedCard);
+  const removeCardTarget = useGameInterface((state) => state.removeCardTarget);
+  const unselectCard = useGameInterface((state) => state.unselectCard);
+  const [card, setCard] = useState<CardType>(dummyCard);
+  const ref = useRef<HTMLDivElement | null>(null);
 
-  const { setSelectedCard, unselectCard } = useGameInterface();
-  const { playerMana } = useGameStore();
+  const { triggerAnimation: triggerDrawAnimation } = useSyncGameAnimation();
+
+  useGameEventListener({
+    type: "drawCard",
+    action: (_, data) => {
+      const drawedCard = data.playerHand[position];
+      const staticCardTarget = document
+        .getElementById("staticCardWrapper")
+        ?.querySelector(".staticCard") as HTMLDivElement;
+      if (!drawedCard || !ref.current || !staticCardTarget) return;
+      setCard(drawedCard);
+      const originTransformX =
+        staticCardTarget.getBoundingClientRect().left -
+        ref.current.getBoundingClientRect().left;
+      const originTransformY =
+        staticCardTarget.getBoundingClientRect().top -
+        ref.current.getBoundingClientRect().top;
+      triggerDrawAnimation({
+        duration: 10,
+        computeStyle: animationTimeline(10).add(
+          ref.current,
+          {
+            opacity: 100,
+            scale: 0.75,
+            x: originTransformX,
+            y: originTransformY,
+          },
+          {
+            values: {
+              opacity: 100,
+              scale: 1,
+              x: 0,
+              y: 0,
+            },
+            ease: [0, 0.42, 1, 1],
+          }
+        ).progress,
+      });
+    },
+    filter: (e) =>
+      (e as DrawCardEvent).handPosition === position &&
+      (e as DrawCardEvent).isPlayer,
+  });
 
   function onUnselectCard() {
-    userPlaceNewCard(position!);
+    const cardTarget = useGameInterface.getState().cardTarget;
+    placeNewCard(position, cardTarget);
     unselectCard();
   }
 
   function onSelectCard() {
-    setSelectedCard(position!);
+    setSelectedCard(position);
+  }
+
+  const triggerEvent = useTriggerEvent();
+
+  function placeNewCard(
+    cardInHandPosition: number,
+    targetPosition: number | null
+  ) {
+    if (targetPosition === null) {
+      return;
+    }
+    triggerEvent({
+      type: "placeCard",
+      isPlayer: true,
+      targetPosition,
+      cardInHandPosition,
+    });
+    removeCardTarget();
+  }
+
+  function canStartDrag() {
+    const mana = useGameStore.getState().state.playerMana;
+    const card = useGameStore.getState().state.playerHand[position];
+    return card && card.cost <= mana;
+  }
+
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const dragRef = useRef<HTMLDivElement | null>(null);
+  const isPressed = useRef(false);
+
+  function tryToMoveCard() {
+    if (isPressed.current || !canStartDrag()) {
+      return;
+    }
+    function onMove(e: MouseEvent) {
+      if (cardRef.current && ref.current && dragRef.current) {
+        // we compare mouse position with ref bouding box
+        const centers = getCenterOfBoundingElement(ref.current);
+        dragRef.current.style.transform = `translate(${e.clientX - centers.x}px, ${e.clientY - centers.y}px)`;
+      }
+    }
+    function mouseUp() {
+      document.removeEventListener("mouseup", mouseUp);
+      document.removeEventListener("mousemove", onMove);
+      isPressed.current = false;
+      onUnselectCard();
+      if (cardRef.current && ref.current && dragRef.current) {
+        cardRef.current.style.transform = "";
+        cardRef.current.style.transition = "";
+        cardRef.current.style.zIndex = "1";
+        dragRef.current.style.pointerEvents = "all";
+        dragRef.current.style.transform = "";
+      }
+    }
+    onSelectCard();
+    document.addEventListener("mousemove", onMove);
+    document.addEventListener("mouseup", mouseUp);
+    if (cardRef.current && dragRef.current) {
+      cardRef.current.style.zIndex = "9999";
+      cardRef.current.style.transform = "scale(1.2)";
+      cardRef.current.style.transition = "transform 0.2s";
+      dragRef.current.style.pointerEvents = "none";
+    }
   }
 
   return (
-    <motion.div
-      className="w-fit h-fit bg-black rounded-sm relative select-none"
-      drag={card.cost <= playerMana}
-      dragSnapToOrigin
-      onDragStart={onSelectCard}
-      onDragEnd={onUnselectCard}
-      whileDrag={{ zIndex: 9999, scale: 1.2 }}
-      dragControls={dragControls}
-    >
-      <CardBorder rarity={card.rarity} size={1.8}>
-        <InHandCardIllustration card={card} />
-      </CardBorder>
-      <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 scale-75">
-        <ManaBall mana={card.cost} />
+    <>
+      <div className="relative h-fit w-fit opacity-0" ref={ref}>
+        <div ref={dragRef}>
+          <div
+            className="w-fit h-fit bg-black rounded-sm select-none relative"
+            onMouseDown={tryToMoveCard}
+            ref={cardRef}
+          >
+            <CardBorder rarity={card.rarity} size={1.8}>
+              <InHandCardIllustration card={card} position={position} />
+            </CardBorder>
+            <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 scale-75">
+              <ManaBall mana={card.cost} />
+            </div>
+          </div>
+        </div>
       </div>
-    </motion.div>
+    </>
   );
 }
 
-function InHandCardIllustration({ card }: { card: CardType }) {
-  const animationRef = useGameAnimation<GameStore & { currentTick: number }>(
-    (state) => {
-      if (card.cost !== null && state.playerMana >= card.cost) {
-        return {
-          transform: `scaleY(0%)`,
-        };
+function InHandCardIllustration({
+  card,
+  position,
+}: {
+  card: CardType;
+  position: number;
+}) {
+  const animationRef = useGameAnimation({
+    tl: (ref, state) => {
+      const usingCard = state.playerHand[position];
+      return animationTimeline(
+        (usingCard?.cost ?? 0) * state.playerManaSpeed
+      ).add(ref, { scaleY: 1 }, { values: { scaleY: 0 } });
+    },
+    getProgress: (state, currentTick) => {
+      const usingCard = state.playerHand[position];
+      if (
+        !usingCard ||
+        (usingCard.cost !== null && state.playerMana > usingCard.cost) ||
+        state.playerTickStartEarningMana === null
+      ) {
+        return -1;
       }
-      const runningManaEarningProgress =
-        (state.currentTick - state.playerTickStartEarningMana!) /
-        (manaSpeed / FRAME_TIME);
-      const alreadyProgress =
-        (state.playerMana + runningManaEarningProgress) / (card.cost || 0);
-
-      return {
-        transform: `scaleY(${100 - alreadyProgress * 100}%)`,
-      };
-    }
-  );
+      return (
+        state.playerMana * state.playerManaSpeed +
+        (currentTick - state.playerTickStartEarningMana!)
+      );
+    },
+  });
 
   return (
     <div className="relative w-full h-full">

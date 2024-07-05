@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { EventType } from "../gameBehavior/useGameEvents";
 
 interface GameInterfaceStore {
   cardSelected: null | number;
@@ -13,7 +14,11 @@ interface GameInterfaceStore {
   setIsClockRunning: (value: boolean) => void;
 
   getData: () => GameInterfaceStore;
-  init: () => void;
+
+  triggerEvent: (event: EventType) => void;
+  init: ({
+    triggerEvent
+  }: { triggerEvent: (event: EventType) => void }) => void;
 }
 
 const state = {
@@ -22,8 +27,10 @@ const state = {
   isClockRunning: false,
 };
 
+// This store is used to manage the game interface state (data exclusively and uniquely to the client side)
 const useGameInterface = create<GameInterfaceStore>()((set, get) => ({
   ...state,
+  triggerEvent: () => {},
 
   setSelectedCard: (cardPosition: number) =>
     set({ cardSelected: cardPosition }),
@@ -35,7 +42,9 @@ const useGameInterface = create<GameInterfaceStore>()((set, get) => ({
   setIsClockRunning: (value: boolean) => set({ isClockRunning: value }),
 
   getData: get,
-  init: () => set({ ...state }),
+  init: ({
+    triggerEvent
+  }: { triggerEvent: (event: EventType) => void }) => set({ ...state, triggerEvent }),
 }));
 
 export default useGameInterface;

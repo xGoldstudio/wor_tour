@@ -36,7 +36,7 @@ export default function Modal({ children, closeModal, title }: ModalProps) {
   if (!home) return null;
 
   return createPortal(
-    <div className="absolute w-full h-full top-0 z-10">{children}</div>,
+    <div className="absolute w-full h-full top-0 z-20">{children}</div>,
     home
   );
 }
@@ -52,7 +52,7 @@ export function CoverModal({ children, closeModal }: CoverModalProps) {
       <div
         className="w-full h-full absolute brightness-75"
         style={{
-          backgroundImage: "url('/homeBg.png')",
+          backgroundImage: "url('/homeBg.jpeg')",
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}

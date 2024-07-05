@@ -2,9 +2,10 @@ import { DebugButton } from "./game/GameDebugPanel";
 import usePlayerStore from "./home/store/playerStore";
 
 export default function DebugPanel() {
-  const { addGold, completeNextLevel } = usePlayerStore((state) => ({
+  const { addGold, addTrophies, removeTrophies } = usePlayerStore((state) => ({
     addGold: state.addGold,
-    completeNextLevel: state.completeNextLevel,
+    addTrophies: state.addTrophies,
+    removeTrophies: state.removeTrophies,
   }));
 
   return (
@@ -15,8 +16,16 @@ export default function DebugPanel() {
           Give 1 000 000 gold
         </DebugButton>
       </div>
-      <div className="flex gap-4">
-        <DebugButton onClick={completeNextLevel}>Complete next level</DebugButton>
+      <p>Trophies: </p>
+      <div className="grid grid-cols-4 gap-4">
+        <DebugButton onClick={() => addTrophies(1000)}>+1000</DebugButton>
+        <DebugButton onClick={() => addTrophies(100)}>+100</DebugButton>
+        <DebugButton onClick={() => addTrophies(10)}>+10</DebugButton>
+        <DebugButton onClick={() => addTrophies(1)}>+1</DebugButton>
+        <DebugButton onClick={() => removeTrophies(1000)}>-1000</DebugButton>
+        <DebugButton onClick={() => removeTrophies(100)}>-100</DebugButton>
+        <DebugButton onClick={() => removeTrophies(10)}>-10</DebugButton>
+        <DebugButton onClick={() => removeTrophies(1)}>-1</DebugButton>
       </div>
     </div>
   );

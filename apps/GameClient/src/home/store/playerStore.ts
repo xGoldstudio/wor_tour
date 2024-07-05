@@ -4,6 +4,7 @@ import { create } from "zustand";
 import { BoosterType, boosters } from "./useBooster";
 import { CardRarity } from "@repo/types";
 import { CardRarityOrder, CardStatsInfo, CardType } from "@repo/ui";
+import useAnimationStore from "./animationStore";
 
 export interface CollectionCard {
   id: number;
@@ -40,19 +41,22 @@ interface PlayerStore {
   addGold: (amount: number) => void;
   spendGold: (amount: number) => void;
 
-  lastCompletedLevel: number;
-  completeNextLevel: () => void;
+  trophies: number;
+  maxTrophies: number;
+  addTrophies: (amount: number) => void;
+  removeTrophies: (amount: number) => void;
+
+  toCollectTrophiesRewards: Set<number>;
+  collectedTrophiesReward: (reward: number) => void;
+  getIsToCollectTrophiesReward: (reward: number) => boolean;
 }
 
 const defaultCollection: Map<number, CollectionCard> = new Map();
-defaultCollection.set(1, { id: 1, level: 1, shard: 1 });
-defaultCollection.set(2, { id: 2, level: 1, shard: 0 });
-defaultCollection.set(3, { id: 3, level: 1, shard: 0 });
-defaultCollection.set(4, { id: 4, level: 1, shard: 0 });
-defaultCollection.set(5, { id: 5, level: 1, shard: 0 });
-defaultCollection.set(6, { id: 6, level: 1, shard: 0 });
-defaultCollection.set(7, { id: 7, level: 1, shard: 0 });
-defaultCollection.set(8, { id: 8, level: 1, shard: 0 });
+// to 75
+for (let i = 1; i <= 75; i++) {
+  defaultCollection.set(i, { id: i, level: 1, shard: 0 });
+}
+
 
 const shardsByLevels = [3, 7];
 
@@ -61,7 +65,7 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   collection: defaultCollection,
   currentWorld: 1,
   deck: [1, 2, 3, 4, 5, 6, 7, 8],
-  gold: 1000,
+  gold: 0,
   getCollection: () => Array.from(get().collection.values()),
   getCollectionInfo: (id: number) => get().collection.get(id),
   getCompleteInfo: (id: number) => ({
@@ -71,6 +75,9 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   getCollectionCompleteInfo: (collection: CollectionCard[]) =>
     collection.map((card) => get().getCompleteInfo(card.id)),
   lastCompletedLevel: -1,
+  trophies: 0,
+  maxTrophies: 0,
+  toCollectTrophiesRewards: new Set(),
 
   removeCardFromDeck: (id: number) =>
     set((state) => ({ deck: state.deck.filter((cardId) => cardId !== id) })),
@@ -166,12 +173,49 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
     });
   },
 
-  addGold: (amount: number) => set((state) => ({ gold: state.gold + amount })),
+  addGold: (amount: number) => {
+    useAnimationStore.getState().addAnimation({
+      type: "money",
+      previousValue: get().gold,
+      amount,
+    });
+    set((state) => ({ gold: state.gold + amount }));
+  },
   spendGold: (amount: number) =>
     set((state) => ({ gold: state.gold - amount })),
 
   completeNextLevel: () =>
     set((state) => ({ lastCompletedLevel: state.lastCompletedLevel + 1 })),
+  addTrophies: (amount: number) => {
+    useAnimationStore.getState().addAnimation({
+      type: "trophy",
+      previousValue: get().trophies,
+      amount,
+    });
+    set((state) => updateTrophies(state, amount))
+  },
+  removeTrophies: (amount: number) => set((state) => updateTrophies(state, -amount)),
+
+  collectedTrophiesReward: (reward: number) => {
+    set((state) => {
+      const toCollectTrophiesRewards = new Set(state.toCollectTrophiesRewards);
+      toCollectTrophiesRewards.delete(reward);
+      return { toCollectTrophiesRewards };
+    });
+  },
+  getIsToCollectTrophiesReward: (reward: number) => get().toCollectTrophiesRewards.has(reward),
 }));
+
+function updateTrophies(state: PlayerStore, difference: number) {
+  const nextTrophies = Math.max(0, state.trophies + difference);
+  const resObject = ({ trophies: nextTrophies, currentWorld: Math.min(4, Math.floor((nextTrophies) / 1000)) + 1, maxTrophies: Math.max(nextTrophies, state.maxTrophies) });
+  const nextStage = Math.floor(nextTrophies / 100);
+  const maxStage = Math.floor(state.maxTrophies / 100);
+  if (nextTrophies > state.maxTrophies && nextStage > maxStage) {
+    const stageDiff = nextStage - maxStage;
+    return ({ ...resObject, toCollectTrophiesRewards: new Set([...state.toCollectTrophiesRewards, ...Array.from({ length: stageDiff }, (_, i) => (maxStage + i + 1) * 100)]) });
+  }
+  return resObject;
+}
 
 export default usePlayerStore;

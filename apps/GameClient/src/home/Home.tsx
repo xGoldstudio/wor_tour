@@ -6,64 +6,154 @@ import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore";
 import Badge from "../../../../packages/ui/components/Badge";
-import { Button, NumberSpan } from "@repo/ui";
+import { NumberSpan, numberWithCommas } from "@repo/ui";
 import { cn } from "@repo/ui";
 import {
   Borders,
   CardIllustartion,
   InnerBord,
 } from "../../../../packages/ui/components/card/CardBorder";
+import Cover from "./ui/Cover";
+import AnimationContainer from "./animations/AnimationContainer";
 
 type Tabs = "home" | "deck" | "shop";
 
-const tabs: Record<Tabs, () => JSX.Element> = {
-  home: HomeTab,
-  deck: DeckTab,
-  shop: ShopTab,
+const tabs: (() => JSX.Element)[] = [ShopTab, HomeTab, DeckTab];
+
+const tabsPosition: Record<Tabs, number> = {
+  shop: 0,
+  home: 1,
+  deck: 2,
 };
 
 export default function Home() {
   const [currentTab, setCurrentTab] = useState<Tabs>("home");
 
-  const TabElement = tabs[currentTab];
-
   return (
     <div className="w-screen h-screen justify-center bg-black relative flex">
       <DebugPanel />
       <div
-        className="w-[700px] h-full relative overflow-hidden bg-slate-400"
+        className="w-[700px] h-full relative overflow-hidden bg-slate-900"
         id="home"
       >
+        <AnimationContainer />
         <RewardBlockWithContext />
-        <div
-          className="w-full h-full absolute brightness-75"
-          style={{
-            backgroundImage: "url('/homeBg.png')",
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-          }}
-        >
-          <div className="w-full h-full absolute bg-[linear-gradient(0deg,_rgba(226,232,240,0.2)_0%,_rgba(226,232,240,0)_100%),_linear-gradient(0deg,_rgba(226,232,240,0)_50%,_rgba(226,232,240,1)_70%)]" />
-        </div>
+        <HomeBg />
         <div className="w-full h-full relative flex flex-col items-center justify-between">
           <Header />
-          <div className="grow relative w-full">
-            <TabElement />
+          <div
+            className={cn(
+              `grow overflow-hidden relative grid grid-cols-${tabs.length} transition-transform`
+            )}
+            style={{
+              width: tabs.length * 100 + "%",
+              alignSelf: "flex-start",
+              transform: `translateX(${-(tabsPosition[currentTab] * (100 / tabs.length))}%)`,
+            }}
+          >
+            {tabs.map((Tab) => (
+              <div className="w-full h-full relative" key={Tab.name}>
+                <Tab />
+              </div>
+            ))}
           </div>
 
-          <div className="flex gap-4 w-[500px] px-4 pt-2 pb-4">
-            <Button action={() => setCurrentTab("shop")} full className="py-4">
-              Shop
-            </Button>
-            <Button action={() => setCurrentTab("deck")} full>
-              Deck
-            </Button>
-            <Button action={() => setCurrentTab("home")} full>
-              Home
-            </Button>
+          <div className="flex w-full bg-black relative z-10">
+            <div className="w-full h-full absolute flex overflow-hidden">
+              <div className="grow h-full bg-slate-600 relative">
+                <Cover cardRarity="rare" />
+              </div>
+              <div className="grow h-full bg-slate-600 relative">
+                <Cover cardRarity="rare" />
+              </div>
+              <div className="grow h-full bg-slate-600 relative">
+                <Cover cardRarity="rare" />
+              </div>
+            </div>
+            <div
+              className="w-1/3 h-full absolute transition-transform overflow-hidden"
+              style={{
+                transform: `translateX(${100 * tabsPosition[currentTab]}%)`,
+              }}
+            >
+              <Cover cardRarity="epic" />
+            </div>
+            <FooterButton
+              onClick={() => setCurrentTab("shop")}
+              label="Shop"
+              selected={currentTab === "shop"}
+              imageUrl="footer/backpack.png"
+            />
+            <FooterButton
+              onClick={() => setCurrentTab("home")}
+              label="Battle"
+              selected={currentTab === "home"}
+              imageUrl="fightback.png"
+            />
+            <FooterButton
+              onClick={() => setCurrentTab("deck")}
+              label="Collection"
+              selected={currentTab === "deck"}
+              imageUrl="footer/collection.png"
+            />
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+interface FooterButtonProps {
+  onClick: () => void;
+  label: string;
+  selected?: boolean;
+  imageUrl?: string;
+}
+
+function FooterButton({
+  onClick,
+  label,
+  selected,
+  imageUrl,
+}: FooterButtonProps) {
+  return (
+    <div
+      className="relative grow font-semibold text-xl flex justify-center items-center flex-col h-[70px] cursor-pointer select-none"
+      onClick={onClick}
+    >
+      <img
+        src={imageUrl}
+        alt="chest"
+        className={cn(
+          "w-[64px] aspect-square relative transition-transform",
+          selected && "scale-110 -translate-y-6"
+        )}
+      />
+      {selected && (
+        <p
+          className={cn(
+            "absolute bottom-[3px] opacity-0 transition-opacity",
+            selected && "opacity-100"
+          )}
+        >
+          {label}
+        </p>
+      )}
+    </div>
+  );
+}
+
+export function HomeBg() {
+  return (
+    <div
+      className="w-full h-full absolute blur-sm"
+      style={{
+        backgroundImage: "url('/homeBg.jpeg')",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+      }}
+    >
+      <div className="w-full h-full absolute bg-[radial-gradient(circle,_rgba(226,232,240,0.1)_40%,_rgba(0,0,0,0.4)_100%)]" />
     </div>
   );
 }
@@ -72,14 +162,22 @@ interface RessourceCounterProps {
   amount: number;
   max?: number;
   icon: React.ReactNode;
+  width?: number;
+  name: string;
 }
 
-function RessourceCounter({ amount, max, icon }: RessourceCounterProps) {
+export function RessourceCounter({
+  amount,
+  max,
+  icon,
+  width = 191,
+  name,
+}: RessourceCounterProps) {
   return (
-    <div className="relative">
+    <div className="relative" x-id={`${name}CountInput`} id={`${name}Count`}>
       {icon}
-      <Borders width={191} height={45} borderUnit={1} rarity={"common"}>
-        <CardIllustartion width={191} height={45} borderUnit={0.6}>
+      <Borders width={width} height={45} borderUnit={1} rarity={"epic"}>
+        <CardIllustartion width={width} height={45} borderUnit={0.6}>
           <InnerBord size={1}>
             <div className="w-full h-full relative flex items-center justify-center bg-black overflow-hidden">
               <div
@@ -98,7 +196,9 @@ function RessourceCounter({ amount, max, icon }: RessourceCounterProps) {
                   max === undefined && "text-right w-full pr-2"
                 )}
               >
-                <NumberSpan>{amount}</NumberSpan>
+                <span x-id={`${name}CountInputValue`}>
+                  {numberWithCommas(amount)}
+                </span>
                 {max !== undefined && (
                   <>
                     /<NumberSpan>{max}</NumberSpan>
@@ -129,6 +229,7 @@ export function Header() {
             value="1"
           />
         }
+        name="xp"
       />
       <RessourceCounter
         amount={4}
@@ -139,15 +240,18 @@ export function Header() {
             className="absolute z-10 left-[3px] top-1/2 -translate-x-1/2 -translate-y-1/2 h-[32px] drop-shadow-[2px_1px_1px_black] rotate-[25deg] contrast-150"
           />
         }
+        name="keys"
       />
       <RessourceCounter
         amount={gold}
         icon={
           <img
+            id="moneyCountIcon"
             src="/money.png"
             className="absolute z-10 left-[3px] top-1/2 -translate-x-1/2 -translate-y-1/2 w-[32px] drop-shadow-[2px_1px_1px_black]"
           />
         }
+        name="money"
       />
     </div>
   );

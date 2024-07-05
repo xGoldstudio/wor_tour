@@ -1,40 +1,37 @@
 import { useEffect, useRef, useState } from "react";
 import useGameInterface from "@/game/stores/gameInterfaceStore";
-import useGameStore, {
-  GameAnimation,
-  GameStore,
-  getCardFromState,
-  getHandFromState,
-} from "@/game/stores/gameStateStore";
+import useGameStore from "@/game/stores/gameStateStore";
 import iaAgent from "./aiAgent";
-import cardAttacking from "./events/cardAttacking";
-import cardPlacementEventManager from "./events/cardPlacement";
 import Clock, { ClockReturn } from "./clock/clock";
-import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
 import GameCanvas, { GameCanvasReturn } from "./animation/gameCanvas";
 import {
   resetAllGameEventListeners,
   runGameEventListeners,
 } from "./gameEventListener";
 import { CardEffects } from "@repo/types";
-import { useOnMount } from "@repo/ui";
+import { useOnMount, useOnUnMount } from "@repo/ui";
+import { computeNextFrameState } from "./gameEngine/gameEngine";
+import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
+import { useShallow } from "zustand/react/shallow";
+import useGameEventListener from "./useGameEventListener";
+import { IS_DEBUG } from "@/isDebug";
+import _ from "lodash";
 
 export const FRAME_TIME = 10;
 
-export const manaSpeed = 1500;
-
 interface GameEventsActions {
-  userPlaceNewCard: (cardInHandPosition: number) => void;
   togglePlay: () => void;
   isClockRunning: boolean;
   fastForward: (amount: number) => void;
   gameRef: React.MutableRefObject<HTMLDivElement | null>;
-  destroyGame: () => void;
   isInit: boolean;
 }
 
 export type EventType =
+  | StartGameSequence
+  | StartGame
   | ManaIncreaseEvent
+  | SetManaIncreaseSpeed
   | ManaConsumeEvent
   | PlaceCardEvent
   | StartEarningMana
@@ -47,9 +44,16 @@ export type EventType =
   | DrawCardEvent
   | HealCardEvent
   | RemoveEffectEvent
-  | RemoveAnimationEvent
   | CardDamagResolveEvent
   | PlayerDamageResolveEvent;
+
+export interface StartGameSequence {
+  type: "startGameSequence";
+}
+
+export interface StartGame {
+  type: "startGame";
+}
 
 export interface ManaConsumeEvent {
   type: "manaConsume";
@@ -62,6 +66,12 @@ export interface StartEarningMana {
   isPlayer: boolean;
 }
 
+export interface SetManaIncreaseSpeed {
+  type: "setManaIncreaseSpeed";
+  isPlayer: boolean;
+  speed: number;
+}
+
 export interface ManaIncreaseEvent {
   type: "manaIncrease";
   isPlayer: boolean;
@@ -72,7 +82,6 @@ export interface PlaceCardEvent {
   isPlayer: boolean;
   targetPosition: number;
   cardInHandPosition: number;
-  cardId: number;
 }
 
 export interface CardStartAttackingEvent {
@@ -152,11 +161,6 @@ export interface RemoveEffectEvent {
   effectToRemove: keyof CardEffects;
 }
 
-export interface RemoveAnimationEvent {
-  type: "removeAnimation";
-  key: string;
-}
-
 export function getDeathAnimationKey(isPlayerCard: boolean, position: number) {
   return `death_${isPlayerCard}_${position}`;
 }
@@ -164,44 +168,49 @@ export function getDeathAnimationKey(isPlayerCard: boolean, position: number) {
 // should be use only for debug
 export let TriggerGameEvent: null | ((event: EventType) => void) = null;
 
+export const GAME_OPTS = {
+  simulateBadPerformance: false,
+};
+
+export const FPS_OBJ = {
+  pointer: 0,
+  array: _.fill(new Array<number>(100), 0),
+  register(value: number) {
+    this.array[this.pointer] = value;
+    this.pointer = this.pointer === 99 ? 0 : this.pointer + 1;
+  },
+  getFps() {
+    const total = this.array.reduce((acc, curr) => acc + curr, 0);
+    return 1000 / (total / 100);
+  }
+}
+
 // all game logic here
 // todo to guaranteed fairness, we must wrap setTimeout in a custom gameLoop
 function useGameEvents(): GameEventsActions {
-  const {
-    init: initGameStore,
-    increaseMana,
-    getData,
-    placeCardBoard,
-    consumeMana,
-    startEarningMana,
-    dealDamageToPlayer,
-    dealDamageToCard,
-    destroyCard,
-    setGameOver,
-    getNextInstanceId,
-    cardDeckToHand,
-    cardHandToDeck,
-    shuffleDeck,
-    startAttacking,
-    healCard,
-    removeEffect,
-    addAnimation,
-    removeAnimation,
-  } = useGameStore();
+  const initGameStore = useGameStore((s) => s.init);
   const {
     getData: getUserInterfaceData,
     isClockRunning,
     setIsClockRunning,
-    removeCardTarget,
     init: initGameInterfaceStore,
-  } = useGameInterface();
+  } = useGameInterface(
+    useShallow((state) => {
+      return {
+        getData: state.getData,
+        isClockRunning: state.isClockRunning,
+        setIsClockRunning: state.setIsClockRunning,
+        init: state.init,
+      };
+    })
+  );
   const gameRef = useRef<null | HTMLDivElement>(null);
   const [clock] = useState<ClockReturn<EventType>>(() =>
     Clock(internalTriggerEvent)
   );
   const [gameCanvas] = useState<GameCanvasReturn>(() => GameCanvas());
   const { triggerGameSyncAnimation, reset: resetGameSyncAnimationStore } =
-    useGameSyncAnimationStore<GameStore & { currentTick: number }>();
+    useGameSyncAnimationStore();
   const [isInit, setIsInit] = useState(false);
 
   useEffect(() => {
@@ -212,21 +221,27 @@ function useGameEvents(): GameEventsActions {
   }, [gameCanvas]);
 
   useOnMount(() => {
+    initGameInterfaceStore({
+      triggerEvent,
+    });
     initGameStore();
-    initGameInterfaceStore();
-
-    iaAgent();
-    shuffleDeck(true);
-    shuffleDeck(false);
-    triggerEvent({ type: "startEarningMana", isPlayer: true });
-    triggerEvent({ type: "startEarningMana", isPlayer: false });
-    for (let i = 0; i < 4; i++) {
-      triggerEvent({ type: "drawCard", isPlayer: true, handPosition: i });
-      triggerEvent({ type: "drawCard", isPlayer: false, handPosition: i });
-    }
+    // shuffleDeck(true); // todo
+    // shuffleDeck(false);
+    triggerEvent({ type: "startGameSequence" });
     resume();
     setIsInit(true);
-    TriggerGameEvent = internalTriggerEvent;
+    TriggerGameEvent = (event: EventType) => internalTriggerEvent(event, clock);
+  });
+
+  useGameEventListener({
+    type: "startGame",
+    action: () => {
+      iaAgent();
+    },
+  });
+
+  useOnUnMount(() => {
+    destroyGame();
   });
 
   function destroyGame() {
@@ -240,23 +255,41 @@ function useGameEvents(): GameEventsActions {
     TriggerGameEvent = null;
   }
 
+  const lastTickTiming = useRef<number | null>(null);
+
   function nextTick() {
-    setTimeout(() => {
-      if (getUserInterfaceData().isClockRunning) {
-        triggerTickEffects();
-        nextTick();
+    window.requestAnimationFrame(async () => {
+      if (useGameStore.getState().state.currentWinner) {
+        return;
       }
-    }, FRAME_TIME);
+      const now = Date.now();
+      const prev = lastTickTiming.current ?? now;
+      
+      const timeSinceLastTick = now - prev;
+      const tickToDo = Math.floor(timeSinceLastTick / FRAME_TIME);
+      lastTickTiming.current = prev + tickToDo * FRAME_TIME;
+      if (tickToDo > 0 && getUserInterfaceData().isClockRunning) {
+        for (let i = 0; i < tickToDo; i++) {
+          triggerTickEffects(i === 0);
+        }
+      }
+      if (GAME_OPTS.simulateBadPerformance) {
+        await new Promise((resolve) => setTimeout(resolve, Math.random() * 200));
+      }
+      if (IS_DEBUG()) {
+        FPS_OBJ.register(timeSinceLastTick);
+      }
+      nextTick();
+    });
   }
 
-  function triggerTickEffects() {
-    const currentFrame = clock.getImmutableInternalState().currentFrame;
-    gameCanvas?.paint(currentFrame);
+  function triggerTickEffects(shouldAnimate: boolean) {
+    if (shouldAnimate) {
+      const currentFrame = clock.getImmutableInternalState().currentFrame;
+      gameCanvas?.paint(currentFrame);
+      triggerGameSyncAnimation(useGameStore.getState().state, currentFrame);
+    }
     clock.nextTick();
-    triggerGameSyncAnimation({
-      ...getData(),
-      currentTick: currentFrame,
-    });
   }
 
   function resume() {
@@ -278,121 +311,32 @@ function useGameEvents(): GameEventsActions {
 
   function fastForward(amount: number) {
     for (let i = 0; i < amount; i++) {
-      triggerTickEffects();
+      triggerTickEffects(i === 0);
     }
   }
 
   const triggerEvent = clock.triggerEvent;
 
-  function internalTriggerEvent(event: EventType) {
-    const data = getData();
-    if (data.currentWinner) {
-      return null;
-    }
-    if (event.type === "startEarningMana") {
-      if (
-        (event.isPlayer ? data.playerMana : data.opponentMana) < 9 &&
-        (event.isPlayer
-          ? data.playerTickStartEarningMana
-          : data.opponentTickStartEarningMana) === null
-      ) {
-        increaseManaTimer(event.isPlayer);
-      }
-    } else if (event.type === "manaIncrease") {
-      increaseMana(event.isPlayer);
-      triggerEvent({ type: "startEarningMana", isPlayer: event.isPlayer });
-    } else if (event.type === "manaConsume") {
-      consumeMana(event.isPlayer, event.delta);
-      triggerEvent({ type: "startEarningMana", isPlayer: event.isPlayer });
-    } else if (event.type === "placeCard") {
-      cardPlacementEventManager(
-        event,
-        data,
-        triggerEvent,
-        getNextInstanceId,
-        placeCardBoard
-      );
-    } else if (event.type === "cardStartAttacking") {
-      const usingCard = event.isPlayer
-        ? data.playerBoard[event.cardPosition]
-        : data.opponentBoard[event.cardPosition];
-      if (!usingCard) {
-        return;
-      }
-      startAttackTimer({
-        attackSpeed: usingCard.attackSpeed,
-        cardPosition: event.cardPosition,
-        instanceId: event.instanceId,
-        isPlayer: event.isPlayer,
-      });
-    } else if (event.type === "cardAttacking") {
-      cardAttacking(event, data, triggerEvent);
-    } else if (event.type === "cardDamage") {
-      // animation
+  function internalTriggerEvent(
+    event: EventType,
+    clock: ClockReturn<EventType>
+  ) {
+    const { state: usingState } = useGameStore.getState();
+    computeNextFrameState(usingState, event, clock);
+    animationReactionToEvent(event);
+    // we rerun getData to have the updated data
+    useGameStore.setState({ state: usingState });
+    runGameEventListeners(event.type, event, usingState, triggerEvent, clock);
+  }
+
+  function animationReactionToEvent(event: EventType) {
+    if (event.type === "cardDamage") {
       gameCanvas?.newAnimation(
         `card_${event.initiator.isPlayerCard}_${event.initiator.cardPosition}`,
         `card_${event.isPlayerCard}_${event.cardPosition}`,
         "attack",
-        clock.getImmutableInternalState().currentFrame,
-        {
-          onAnimationEnd: () =>
-            triggerEvent({ type: "cardDamageResolve", initiator: event }),
-        }
+        clock.getImmutableInternalState().currentFrame
       );
-    } else if (event.type === "cardDamageResolve") {
-      const isDead = dealDamageToCard(
-        event.initiator.isPlayerCard,
-        event.initiator.amount,
-        event.initiator.cardPosition
-      );
-      if (event.initiator.directAttack) {
-        const card = (
-          event.initiator.isPlayerCard ? data.playerBoard : data.opponentBoard
-        )[event.initiator.cardPosition];
-        if (card?.effects.fightBack) {
-          // attack before destroying the card
-          triggerEvent({
-            // to avoid infinite ping pong
-            type: "removeEffect",
-            isPlayerCard: event.initiator.isPlayerCard,
-            cardPosition: event.initiator.cardPosition,
-            effectToRemove: "fightBack",
-          });
-          triggerEvent({
-            type: "cardDamage",
-            amount: card.dmg,
-            cardPosition: event.initiator.initiator.cardPosition,
-            isPlayerCard: event.initiator.initiator.isPlayerCard,
-            initiator: event.initiator,
-            directAttack: true,
-          });
-        }
-      }
-      if (isDead) {
-        triggerEvent({
-          type: "cardDestroyed",
-          initiator: event.initiator,
-        });
-      }
-    } else if (event.type === "cardDestroyed") {
-      addNewAnimation(
-        getDeathAnimationKey(
-          event.initiator.isPlayerCard,
-          event.initiator.cardPosition
-        ),
-        {
-          onTick: clock.getImmutableInternalState().currentFrame,
-          animationDuration: 75,
-          data: {
-            card: getCardFromState(
-              event.initiator.isPlayerCard,
-              event.initiator.cardPosition,
-              data
-            )!,
-          },
-        }
-      );
-      destroyCard(event.initiator.isPlayerCard, event.initiator.cardPosition);
     } else if (event.type === "playerDamage") {
       gameCanvas?.newAnimation(
         `card_${event.initiator.isPlayer}_${event.initiator.cardPosition}`,
@@ -400,128 +344,31 @@ function useGameEvents(): GameEventsActions {
         "attack",
         clock.getImmutableInternalState().currentFrame,
         {
-          onAnimationEnd: () =>
-            triggerEvent({ type: "playerDamageResolve", initiator: event }),
           sameX: true,
         }
       );
-    } else if (event.type === "playerDamageResolve") {
-      dealDamageToPlayer(event.initiator.isPlayer, event.initiator.damage);
-      if (
-        (event.initiator.isPlayer ? data.playerHp : data.opponentHp) -
-          event.initiator.damage <=
-        0
-      ) {
-        triggerEvent({
-          type: "gameOver",
-          winnerIsPlayer: !event.initiator.isPlayer,
-        });
-      }
-    } else if (event.type === "gameOver") {
-      setGameOver(event.winnerIsPlayer);
-      destroyGame();
-    } else if (event.type === "drawCard") {
-      if (getHandFromState(event.isPlayer, data)[event.handPosition] !== null) {
-        cardHandToDeck(event.isPlayer, event.handPosition);
-      }
-      cardDeckToHand(event.isPlayer, event.handPosition);
     } else if (event.type === "healCard") {
-      healCard(event.isPlayerCard, event.cardPosition, event.amount);
       gameCanvas.newAnimation(
         `card_${event.cardInitiator.isPlayerCard}_${event.cardInitiator.cardPosition}`,
         `card_${event.isPlayerCard}_${event.cardPosition}`,
         "heal",
         clock.getImmutableInternalState().currentFrame
       );
-    } else if (event.type === "removeEffect") {
-      removeEffect(
-        event.isPlayerCard,
-        event.cardPosition,
-        event.effectToRemove
-      );
-    } else if (event.type === "removeAnimation") {
-      removeAnimation(event.key);
     }
-
-    // we rerun getData to have the updated data
-    runGameEventListeners(event.type, event, getData(), triggerEvent);
-  }
-
-  function addNewAnimation(key: string, animation: GameAnimation) {
-    addAnimation(key, animation);
-    clock.setGameEventTimeout(
-      {
-        type: "removeAnimation",
-        key,
-      },
-      animation.animationDuration
-    );
-  }
-
-  function increaseManaTimer(isPlayer: boolean) {
-    startEarningMana(isPlayer, clock.getImmutableInternalState().currentFrame);
-    clock.setGameEventTimeout(
-      {
-        type: "manaIncrease",
-        isPlayer,
-      },
-      manaSpeed / FRAME_TIME
-    );
-  }
-
-  function placeNewCard(cardInHandPosition: number) {
-    const playerHand = getData().playerHand;
-    const targetPosition = getUserInterfaceData().cardTarget;
-    const handCard = playerHand[cardInHandPosition];
-    if (targetPosition === null || handCard === null) {
-      return;
-    }
-    triggerEvent({
-      type: "placeCard",
-      isPlayer: true,
-      cardId: handCard,
-      targetPosition,
-      cardInHandPosition: cardInHandPosition,
-    });
-    removeCardTarget();
-  }
-
-  function startAttackTimer({
-    attackSpeed,
-    cardPosition,
-    instanceId,
-    isPlayer,
-  }: {
-    attackSpeed: number;
-    cardPosition: number;
-    isPlayer: boolean;
-    instanceId: number;
-  }) {
-    startAttacking(
-      isPlayer,
-      cardPosition,
-      clock.getImmutableInternalState().currentFrame
-    );
-    clock.setGameEventTimeout(
-      {
-        type: "cardAttacking",
-        isPlayer,
-        instanceId,
-        cardPosition,
-      },
-      1000 / attackSpeed / FRAME_TIME
-    );
   }
 
   return {
-    userPlaceNewCard: placeNewCard,
     togglePlay,
     isClockRunning,
     fastForward,
     gameRef,
-    destroyGame,
     isInit,
   };
+}
+
+export function useTriggerEvent() {
+  const { triggerEvent } = useGameInterface();
+  return triggerEvent;
 }
 
 export default useGameEvents;

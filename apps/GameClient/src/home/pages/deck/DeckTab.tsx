@@ -43,7 +43,9 @@ export default function DeckTab() {
             </div>
           ))}
         </div>
-      </div>
-    </ScrollContainer>
+      </ScrollContainer>
+    </div>
   );
 }
+
+

@@ -1,60 +1,22 @@
-import { useEffect, useRef, useState } from "react";
 import useGameInterface from "@/game/stores/gameInterfaceStore";
-import useGameStore from "@/game/stores/gameStateStore";
-import PlayerGUI from "./gui/PlayerGui";
-import * as _ from "lodash";
 import useGameEvents from "./gameBehavior/useGameEvents";
 import GameDebugPanel from "./GameDebugPanel";
 import GameCard from "./gui/card/GameCard";
-import GameCardDeath from "./gui/card/GameCardDeath";
+import PlayerGUI from "./gui/PlayerGui";
+import FlashDamage from "./FlashDamage";
+import AmountEffectOrDamage from "./AmountEffectOrDamage";
 import EndGameScreen from "./endGameScreen/EndGameScreen";
+import StartSequence from "./StartSequence";
 
 export default function Game() {
   const {
-    playerMana,
-    playerHp,
-    playerMaxHp,
-    opponentHp,
-    opponentMana,
-    opponentMaxHp,
-    currentWinner,
-  } = useGameStore();
-  const { cardSelected, setCardTarget, removeCardTarget } = useGameInterface();
-  const {
-    userPlaceNewCard,
     togglePlay,
     isClockRunning,
     fastForward,
     gameRef,
-    destroyGame,
+    isInit,
   } = useGameEvents();
-
-  useEffect(() => {
-    function watchCardPlacement(event: MouseEvent) {
-      const elementIds = _.range(3).map((position) =>
-        getBoardTileId(true, position)
-      );
-      const overlapped = document.elementsFromPoint(event.pageX, event.pageY);
-      for (let i = 0; i < overlapped.length; i++) {
-        if (overlapped[i].id.startsWith("board_player_")) {
-          for (let y = 0; y < elementIds.length; y++) {
-            if (overlapped[i].id === elementIds[y]) {
-              setCardTarget(y);
-              return;
-            }
-          }
-        }
-      }
-      removeCardTarget();
-    }
-
-    if (cardSelected !== null) {
-      window.addEventListener("mousemove", watchCardPlacement);
-      return () => {
-        window.removeEventListener("mousemove", watchCardPlacement);
-      };
-    }
-  }, [cardSelected, removeCardTarget, setCardTarget]);
+  console.log("game render");
 
   return (
     <div
@@ -65,47 +27,39 @@ export default function Game() {
         togglePlay={togglePlay}
         isClockRunning={isClockRunning}
         fastForward={fastForward}
-        destroyGame={destroyGame}
       />
-      <>
-        <div className="bg-black h-full w-full"></div>
-        <div className="h-screen flex flex-col gap-4 justify-between relative overflow-hidden w-[700px]">
-          <div
-            className="w-full h-full absolute blur-sm"
-            style={{
-              backgroundImage: "url('/bgTexture.jpg')",
-              backgroundPosition: "center",
-              backgroundSize: "cover",
-            }}
-          ></div>
-          <PlayerGUI
-            mana={opponentMana}
-            hp={opponentHp}
-            maxHp={opponentMaxHp}
-            isPlayer={false}
-            userPlaceNewCard={userPlaceNewCard}
-          />
-          <div className="w-full flex justify-center relative">
-            <div className="grid grid-cols-3 gap-4 px-8">
-              <CardPlaceholder position={0} isPlayer={false} />
-              <CardPlaceholder position={1} isPlayer={false} />
-              <CardPlaceholder position={2} isPlayer={false} />
-              <CardPlaceholder position={0} isPlayer />
-              <CardPlaceholder position={1} isPlayer />
-              <CardPlaceholder position={2} isPlayer />
+      {isInit && (
+        <>
+          <div className="bg-black h-full w-full"></div>
+          <div className="h-screen flex flex-col gap-4 justify-between relative overflow-hidden w-[700px]">
+            <FlashDamage />
+            <AmountEffectOrDamage />
+            <StartSequence />
+            <div
+              className="w-full h-full absolute blur-sm"
+              style={{
+                backgroundImage: "url('/homeBg.jpeg')",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+              }}
+            ></div>
+            <PlayerGUI isPlayer={false} />
+            <div className="w-full flex justify-center relative">
+              <div className="grid grid-cols-3 gap-4 px-8">
+                <CardPlaceholder position={0} isPlayer={false} />
+                <CardPlaceholder position={1} isPlayer={false} />
+                <CardPlaceholder position={2} isPlayer={false} />
+                <CardPlaceholder position={0} isPlayer />
+                <CardPlaceholder position={1} isPlayer />
+                <CardPlaceholder position={2} isPlayer />
+              </div>
             </div>
+            <PlayerGUI isPlayer />
           </div>
-          <PlayerGUI
-            mana={playerMana}
-            hp={playerHp}
-            maxHp={playerMaxHp}
-            isPlayer
-            userPlaceNewCard={userPlaceNewCard}
-          />
-        </div>
-        <div className="bg-black h-full w-full"></div>
-      </>
-      {currentWinner && <EndGameScreen />}
+          <div className="bg-black h-full w-full"></div>
+        </>
+      )}
+      <EndGameScreen />
     </div>
   );
 }
@@ -116,53 +70,38 @@ interface CardPlaceholderProps {
 }
 
 function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
-  const cardTarget = useGameInterface((s) => s.cardTarget);
-  const isTarget = cardTarget === position && isPlayer;
-  const getBoardCurrentCard = useGameStore((s) => s.getBoardCurrentCard);
-  const currentCard = getBoardCurrentCard(!!isPlayer, position);
-  const attackRef = useRef<null | HTMLDivElement>(null);
+  const { setCardTarget, removeCardTarget, cardTarget, cardSelected } = useGameInterface();
+  const isSelected = isPlayer && cardTarget === position;
 
-  const [startAttackTimestamp, setStartAttackTimestamp] = useState(
-    currentCard?.startAttackingTick
-  );
-
-  if (
-    startAttackTimestamp !== currentCard?.startAttackingTick &&
-    attackRef.current
-  ) {
-    setStartAttackTimestamp(currentCard?.startAttackingTick);
-  }
-
-  useEffect(() => {
-    if (!attackRef.current || !currentCard) {
+  function onEnter() {
+    if (!isPlayer || cardSelected === null) {
       return;
     }
-    attackRef.current.animate(
-      [{ transform: "scaleX(0%)" }, { transform: "scaleX(100%)" }],
-      1000 / currentCard.attackSpeed
-    );
-  }, [attackRef, currentCard, startAttackTimestamp]);
+    setCardTarget(position);
+  }
+
+  function onLeave() {
+    if (!isPlayer || cardSelected !== null) {
+      removeCardTarget();
+    }
+  }
 
   return (
     <div
       className="p-1 border-2 rounded-md ring-2 ring-black w-[160px] h-[222.5px] box-content"
       style={{
-        boxShadow: isTarget ? "0px 0px 5px 1px rgba(0,0,0,0.75)" : "none",
+        boxShadow: isSelected ? "0px 0px 5px 1px rgba(0,0,0,0.75)" : "none",
         borderColor: "#cbd5e1",
       }}
       id={getBoardTileId(!!isPlayer, position)}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
     >
       <div id={`card_${isPlayer}_${position}`}>
-        {currentCard ? (
-          <GameCard
-            card={currentCard}
-            key={currentCard.instanceId}
-            isPlayerCard={isPlayer}
-            position={position}
-          />
-        ) : (
-          <GameCardDeath isPlayerCard={isPlayer} position={position} />
-        )}
+        <GameCard
+          isPlayerCard={isPlayer}
+          position={position}
+        />
       </div>
     </div>
   );

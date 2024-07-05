@@ -1,57 +1,89 @@
-import { useAnimate } from "framer-motion";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { EmptyBar } from "./ManaBar";
 import { cn, numberWithCommas } from "@repo/ui";
+import useGameEventListener from "../gameBehavior/useGameEventListener";
+import { PlayerDamageResolveEvent } from "../gameBehavior/useGameEvents";
+import { useSyncGameAnimation } from "../gameBehavior/animation/useGameSyncAnimation";
+import animationTimeline from "../gameBehavior/animation/timeline";
 
 interface HpBarProps {
-  hp: number;
   maxHp: number;
   withHeart?: boolean;
+  isPlayer: boolean;
 }
 
-function HpBar({ hp, maxHp, withHeart }: HpBarProps) {
-  const [oldHp, setOldHp] = useState(hp);
+function HpBar({ isPlayer, maxHp, withHeart }: HpBarProps) {
+  const [hp, setHp] = useState(maxHp);
+  const hpBarRef = useRef<HTMLDivElement | null>(null);
+  const bloodRef = useRef<HTMLDivElement | null>(null);
+  const scope = useRef<HTMLDivElement | null>(null);
+  const { triggerAnimation } = useSyncGameAnimation();
 
-  const [scope, animate] = useAnimate();
-  const [bloodScope, animateBlood] = useAnimate();
-  const [healScope, animateHeal] = useAnimate();
-  const [canAnimate, setCanAnimate] = useState(true);
-  if (oldHp !== hp) {
-    setOldHp(hp);
-
-    if (!canAnimate) return;
-    setCanAnimate(false);
-    if (withHeart) {
-      animate(
-        scope.current,
-        {
-          x: [0, 4, -4, 4, -4, 0],
-        },
-        { duration: 0.5 }
-      );
-    }
-    if (hp > oldHp) {
-      animateHeal(
-        healScope.current,
-        {
-          opacity: [0, 0.6, 0],
-        },
-        { duration: 0.5 }
-      ).then(() => {
-        setCanAnimate(true);
-      });
-    } else {
-      animateBlood(
-        bloodScope.current,
-        {
-          opacity: [0, 0.6, 0],
-        },
-        { duration: 0.5 }
-      ).then(() => {
-        setCanAnimate(true);
-      });
-    }
-  }
+  useGameEventListener({
+    type: "playerDamageResolve",
+    action: (_, state) => {
+      const nextHp = isPlayer ? state.playerHp : state.opponentHp;
+      setHp(nextHp);
+      if (scope.current && hpBarRef.current) {
+        const lifeBar = scope.current.querySelector<HTMLElement>(".lifeBar");
+        if (lifeBar) {
+          lifeBar.style.transform = `scaleX(${Math.max(0, nextHp / maxHp)})`;
+        }
+        hpBarRef.current.innerHTML = numberWithCommas(nextHp);
+        triggerAnimation({
+          duration: 50,
+          computeStyle: animationTimeline(50)
+            .add(hpBarRef.current, { scaleX: 1 }, [
+              {
+                values: { scaleX: 1.2 },
+                ease: [0, 1, 1, 1],
+              },
+              {
+                values: { scaleX: 0.85 },
+                from: -30,
+                ease: [0, 1, 1, 1],
+              },
+              {
+                values: { scaleX: 1 },
+                from: -15,
+                ease: [0, 0.42, 1, 1],
+              },
+            ])
+            .add(
+              bloodRef.current,
+              {
+                opacity: 0,
+              },
+              [
+                { values: { opacity: 60 }, to: 20, ease: [0, 0.42, 1, 1] },
+                { values: { opacity: 0 }, ease: [0, 0.42, 1, 1] },
+              ]
+            )
+            .add(
+              scope.current,
+              { scaleX: 1 },
+              [
+                {
+                  values: { scaleX: 1.02 },
+                  ease: [0, 1, 1, 1],
+                },
+                {
+                  values: { scaleX: 0.98 },
+                  from: -30,
+                  ease: [0, 1, 1, 1],
+                },
+                {
+                  values: { scaleX: 1 },
+                  from: -15,
+                  ease: [0, 0.42, 1, 1],
+                },
+              ]
+            ).progress,
+        });
+      }
+    },
+    filter: (event) => (event as PlayerDamageResolveEvent).initiator.isPlayer === isPlayer,
+  });
 
   return (
     <div
@@ -63,26 +95,26 @@ function HpBar({ hp, maxHp, withHeart }: HpBarProps) {
     >
       {!!withHeart && (
         <img
-          className="absolute z-10 left-[-20px] top-[-6px]"
-          src="/heart.svg"
-          width={40}
-          height={40}
+          className="absolute z-10 left-[-25px] top-[-10px]"
+          src="/heart.png"
+          width={50}
+          height={50}
         />
       )}
       <EmptyBar>
+        <div className="lifeBar w-full h-full absolute origin-left bg-gradient-to-b  from-[#0fad05] via-[#74cc6f] via-[37%] to-[#0fad05]" />
         <div
-          className="w-full h-full absolute origin-left bg-gradient-to-b  from-[#0fad05] via-[#74cc6f] via-[37%] to-[#0fad05] transition-transform duration-500"
-          style={{ transform: `scaleX(${hp > 0 ? (hp / maxHp) * 100 : 0}%)` }}
+          className="damageFlashBar w-full h-full absolute origin-left bg-gradient-to-b  from-[#FF0000] via-[#ff6e6e] via-[37%] to-[#FF0000] opacity-0"
+          ref={bloodRef}
         />
         <div
-          className="w-full h-full absolute origin-left bg-gradient-to-b  from-[#FF0000] via-[#ff6e6e] via-[37%] to-[#FF0000] transition-transform duration-500 opacity-0"
-          ref={bloodScope}
+          className="w-full h-full absolute origin-left bg-gradient-to-b  from-[#2105ad] via-[#4b429d] via-[37%] to-[#2105ad] opacity-0"
+          // ref={healScope}
         />
-        <div
-          className="w-full h-full absolute origin-left bg-gradient-to-b  from-[#2105ad] via-[#4b429d] via-[37%] to-[#2105ad] transition-transform duration-500 opacity-0"
-          ref={healScope}
-        />
-        <p className="text-xl text-center text-white font-[stylised] relative">
+        <p
+          className="text-xl text-center text-white font-[stylised] relative"
+          ref={hpBarRef}
+        >
           {numberWithCommas(hp)}
         </p>
       </EmptyBar>

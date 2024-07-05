@@ -1,14 +1,16 @@
-import { GameStore } from "../stores/gameStateStore";
+import { ClockReturn } from "./clock/clock";
+import { GameStateObject } from "./gameEngine/gameState";
 import { EventType } from "./useGameEvents";
 
 let gameEventListeners = initGameEventListeners();
 
 export type TriggerEventType = (event: EventType) => void;
 
-type GameEventListenerFunction = (
+export type GameEventListenerFunction = (
   e: EventType,
-  data: GameStore,
-  triggerEvent: (event: EventType) => void
+  data: GameStateObject,
+  triggerEvent: (event: EventType) => void,
+  clock: ClockReturn<EventType>, 
 ) => void;
 
 function initGameEventListeners() {
@@ -16,7 +18,7 @@ function initGameEventListeners() {
 }
 
 export function addGameEventListener(
-  type: EventType["type"],
+  type: EventType["type"], // null is a wildcard
   action: GameEventListenerFunction,
   filter?: (event: EventType) => boolean // filter allow to listen only to specific event
 ) {
@@ -24,21 +26,38 @@ export function addGameEventListener(
   const actionComputed: GameEventListenerFunction =
     filter === undefined
       ? action
-      : (e, data, triggerEvent) => filter(e) && action(e, data, triggerEvent);
+      : (e, data, triggerEvent, clock) => filter(e) && action(e, data, triggerEvent, clock);
   existingEvents = existingEvents
     ? [...existingEvents, actionComputed]
     : [actionComputed];
   gameEventListeners.set(type, existingEvents);
+  return () => removeGameEventListener(type, actionComputed);
+}
+
+export function removeGameEventListener(
+  type: EventType["type"],
+  action: GameEventListenerFunction,
+) {
+  const existingEvents = gameEventListeners.get(type);
+  if (existingEvents) {
+    const newEvents = existingEvents.filter((e) => e !== action);
+    if (newEvents.length === 0) {
+      gameEventListeners.delete(type);
+    } else {
+      gameEventListeners.set(type, newEvents);
+    }
+  }
 }
 
 export function runGameEventListeners(
   type: EventType["type"],
   e: EventType,
-  data: GameStore,
-  triggerEvent: (event: EventType) => void
+  data: GameStateObject,
+  triggerEvent: (event: EventType) => void,
+  clock: ClockReturn<EventType>,
 ) {
   gameEventListeners.get(type)?.forEach((action: GameEventListenerFunction) => {
-    action(e, data, triggerEvent);
+    action(e, data, triggerEvent, clock);
   });
 }
 
