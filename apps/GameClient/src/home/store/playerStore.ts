@@ -13,7 +13,6 @@ export interface CollectionCard {
 }
 
 interface PlayerStore {
-  NUMBER_OF_CARD_IN_DECK: number;
   collection: Map<number, CollectionCard>;
   deck: number[];
   currentWorld: number;
@@ -60,7 +59,6 @@ for (let i = 1; i <= 75; i++) {
 const shardsByLevels = [3, 7];
 
 const usePlayerStore = create<PlayerStore>()((set, get) => ({
-  NUMBER_OF_CARD_IN_DECK: 8,
   collection: defaultCollection,
   currentWorld: 1,
   deck: [1, 2, 3, 4, 5, 6, 7, 8],

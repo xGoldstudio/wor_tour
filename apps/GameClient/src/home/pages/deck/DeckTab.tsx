@@ -3,11 +3,11 @@ import usePlayerStore from "@/home/store/playerStore";
 import { DeckCardUI } from "./DeckCardUI";
 import ScrollContainer from "react-indiana-drag-scroll";
 
+export const NUMBER_OF_CARD_IN_DECK: number = 8;
 export default function DeckTab() {
   const { deck, NUMBER_OF_CARD_IN_DECK, getCompleteInfo } = usePlayerStore(
     (state) => ({
       deck: state.deck,
-      NUMBER_OF_CARD_IN_DECK: state.NUMBER_OF_CARD_IN_DECK,
       getCompleteInfo: state.getCompleteInfo,
     })
   );
