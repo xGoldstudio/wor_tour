@@ -1,23 +1,26 @@
-import { BoxModal } from "@/home/ui/modal";
-import { cn } from "@repo/ui";
+import { Button, cn } from "@repo/ui";
 
 interface OrderBoxProps {
-  isAscending?: boolean;
-  setIsAscending?: (isAscending: boolean) => void;
+  isAscending: boolean;
+  setIsAscending: (isAscending: boolean) => void;
 }
 
 export function OrderBox({ isAscending, setIsAscending }: OrderBoxProps) {
   return (
-    <BoxModal>
+    <Button
+      action={() => setIsAscending(!isAscending)}
+      small={true}
+      full={false}
+    >
       <div
         className={cn("whitespace-nowrap z-10 transition-all", {
           "-rotate-180": isAscending,
         })}
       >
-        {setIsAscending && (
-          <button onClick={() => setIsAscending(!isAscending)}>Sort</button>
-        )}
+        <div className="h-6 w-6 flex justify-center items-center ">
+          <img src="/arrow.png" alt="arrow" width={40} height={40} />
+        </div>
       </div>
-    </BoxModal>
+    </Button>
   );
 }

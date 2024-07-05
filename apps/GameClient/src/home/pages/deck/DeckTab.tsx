@@ -17,16 +17,13 @@ export default function DeckTab() {
   const detailledDeck = [];
   for (let i = 0; i < NUMBER_OF_CARD_IN_DECK; i++)
     detailledDeck.push(getCompleteInfo(deckArray[i]!));
-  const { collection } = usePlayerStore((state) => ({
-    collection: state.getCollection(),
-  }));
   const { detailledCollection } = usePlayerStore((state) => ({
-    detailledCollection: state.getCollectionCompleteInfo(collection),
+    detailledCollection: state.getCollectionCompleteInfo(state.getCollection()),
   }));
   return (
     <div>
-      <ScrollContainer className="grow overflow-y-scroll scrollbar-hide flex justify-center">
-        <div className="w-[650px] grid grid-rows-[1fr_auto] top-0 h-[650px]">
+      <ScrollContainer className="grow overflow-y-scroll scrollbar-hiden flex flex-col h-[674px] w-[650px]">
+        <div className="grid grid-rows-[1fr_auto] top-0 ">
           <div className="grid grid-cols-4 gap-y-8 pt-8">
             {detailledDeck.map((card) => (
               <div className="w-full flex justify-center" key={card.id}>

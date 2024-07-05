@@ -1,9 +1,9 @@
+import { findValueInRecordByKey } from "../../ui/utils/findValueInRecordByKey";
 import { ActiveFilters } from "./cardFilters";
 import { CardSorts, sorts } from "./cardSorts";
 import { FilterBox } from "./FilterBox";
 import { OrderBox } from "./OrderBox";
 import { SortBox } from "./SortBox";
-import { findValueInRecordByKey } from "../../ui/utils/findValueInRecordByKey";
 
 interface SortAndFilterProps {
   currentSort: CardSorts;
