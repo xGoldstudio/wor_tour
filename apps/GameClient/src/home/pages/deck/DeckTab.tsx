@@ -5,12 +5,10 @@ import ScrollContainer from "react-indiana-drag-scroll";
 
 export const NUMBER_OF_CARD_IN_DECK: number = 8;
 export default function DeckTab() {
-  const { deck, NUMBER_OF_CARD_IN_DECK, getCompleteInfo } = usePlayerStore(
-    (state) => ({
-      deck: state.deck,
-      getCompleteInfo: state.getCompleteInfo,
-    })
-  );
+  const { deck, getCompleteInfo } = usePlayerStore((state) => ({
+    deck: state.deck,
+    getCompleteInfo: state.getCompleteInfo,
+  }));
 
   const deckArray = _.concat(
     deck,
