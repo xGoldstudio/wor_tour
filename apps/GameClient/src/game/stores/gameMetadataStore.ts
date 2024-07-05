@@ -3,6 +3,7 @@ import usePlayerStore, { CollectionCard } from "@/home/store/playerStore";
 import { CardType } from "@repo/ui";
 import { create } from "zustand";
 import useGameStore from "./gameStateStore";
+import useAnimationStore from "@/home/store/animationStore";
 
 export interface InGameInitData {
   playerDeck: CardType[];
@@ -81,11 +82,19 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
   setIsInGame: (isInGame: boolean) => set({ isInGame }),
   collectRewards: () => {
     const rewards = get().rewards[useGameStore.getState().state.currentWinner === "player" ? "win" : "lose"];
-    usePlayerStore.getState().addGold(rewards.money);
+    useAnimationStore.getState().addAnimation({
+      type: "money",
+      previousValue: usePlayerStore.getState().gold,
+      amount: rewards.money,
+    });
     if (rewards.trophies > 0) {
-      usePlayerStore.getState().addTrophies(rewards.trophies);
+      useAnimationStore.getState().addAnimation({
+        type: "trophy",
+        previousValue: usePlayerStore.getState().trophies,
+        amount: rewards.trophies,
+      });
     } else {
-      usePlayerStore.getState().removeTrophies(rewards.trophies);
+      usePlayerStore.getState().setTrophies(rewards.trophies);
     }
   },
   reset: () => set({ isInGame: false }),

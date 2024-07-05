@@ -437,21 +437,33 @@
       "rarity": "legendary",
       "id": 15,
       "world": 1,
-      "attackDefenseRatio": 0.36,
-      "speedDamageRatio": 0.23,
+      "attackDefenseRatio": 0.01,
+      "speedDamageRatio": 0.01,
       "stats": [
         {
-          "effects": {},
+          "effects": {
+            "multiAttack": {
+              "type": "multiAttack"
+            }
+          },
           "cost": 3,
           "illustration": "card_15_level_1_1720100170687.png"
         },
         {
-          "effects": {},
+          "effects": {
+            "multiAttack": {
+              "type": "multiAttack"
+            }
+          },
           "cost": 3,
           "illustration": "card_15_level_2_1720100176579.png"
         },
         {
-          "effects": {},
+          "effects": {
+            "multiAttack": {
+              "type": "multiAttack"
+            }
+          },
           "cost": 3,
           "illustration": "card_15_level_3_1720100190398.png"
         }
