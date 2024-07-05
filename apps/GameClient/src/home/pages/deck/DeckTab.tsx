@@ -26,14 +26,16 @@ export default function DeckTab() {
     detailledCollection: state.getCollectionCompleteInfo(collection),
   }));
   return (
-    <ScrollContainer className="grow overflow-y-scroll scrollbar-hide flex justify-center">
-      <div className="w-[650px] grid grid-rows-[1fr_auto] top-0 h-[650px]">
-        <div className="grid grid-cols-4 gap-y-8 pt-8">
-          {detailledDeck.map((card) => (
-            <div className="w-full flex justify-center" key={card.id}>
-              <DeckCardUI cardId={card.id} />
-            </div>
-          ))}
+    <div>
+      <ScrollContainer className="grow overflow-y-scroll scrollbar-hide flex justify-center">
+        <div className="w-[650px] grid grid-rows-[1fr_auto] top-0 h-[650px]">
+          <div className="grid grid-cols-4 gap-y-8 pt-8">
+            {detailledDeck.map((card) => (
+              <div className="w-full flex justify-center" key={card.id}>
+                <DeckCardUI cardId={card.id} />
+              </div>
+            ))}
+          </div>
         </div>
         Collection :
         <div className="grid grid-cols-4 gap-y-8 pt-8">
@@ -47,5 +49,3 @@ export default function DeckTab() {
     </div>
   );
 }
-
-
