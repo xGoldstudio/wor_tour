@@ -7,10 +7,10 @@ import {
 } from "../../../../../../../packages/ui/components/card/CardBorder";
 import { Badge, Box, getImageUrl } from "@repo/ui";
 import Ribbon from "@/home/ui/Ribbon";
-import { DeckCard } from "../../deck/DeckTab";
 import usePlayerStore from "@/home/store/playerStore";
 import useDataStore from "@/cards/DataStore";
 import _ from "lodash";
+import { DeckCardUI } from "../../deck/DeckCardUI";
 
 interface ProfileModalProps {
   closeModal: () => void;
@@ -19,7 +19,7 @@ interface ProfileModalProps {
 export default function ProfileModal({ closeModal }: ProfileModalProps) {
   const { deck, currentWorld } = usePlayerStore((state) => ({
     deck: state.deck,
-		currentWorld: state.currentWorld,
+    currentWorld: state.currentWorld,
   }));
   const { world } = useDataStore((state) => ({
     world: state.worlds[currentWorld - 1],
@@ -104,7 +104,7 @@ export default function ProfileModal({ closeModal }: ProfileModalProps) {
               <Ribbon className="mt-16 px-16">Deck</Ribbon>
               <div className="grid grid-cols-4 w-auto gap-3">
                 {deckArray.map((cardId) => (
-                  <DeckCard cardId={cardId!} size={1.4} unaddble key={cardId} />
+                  <DeckCardUI cardId={cardId!} unaddble key={cardId} />
                 ))}
               </div>
               <Ribbon className="mt-16 px-16">Stats</Ribbon>

@@ -57,7 +57,6 @@ for (let i = 1; i <= 75; i++) {
   defaultCollection.set(i, { id: i, level: 1, shard: 0 });
 }
 
-
 const shardsByLevels = [3, 7];
 
 const usePlayerStore = create<PlayerStore>()((set, get) => ({
@@ -184,17 +183,16 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   spendGold: (amount: number) =>
     set((state) => ({ gold: state.gold - amount })),
 
-  completeNextLevel: () =>
-    set((state) => ({ lastCompletedLevel: state.lastCompletedLevel + 1 })),
   addTrophies: (amount: number) => {
     useAnimationStore.getState().addAnimation({
       type: "trophy",
       previousValue: get().trophies,
       amount,
     });
-    set((state) => updateTrophies(state, amount))
+    set((state) => updateTrophies(state, amount));
   },
-  removeTrophies: (amount: number) => set((state) => updateTrophies(state, -amount)),
+  removeTrophies: (amount: number) =>
+    set((state) => updateTrophies(state, -amount)),
 
   collectedTrophiesReward: (reward: number) => {
     set((state) => {
@@ -203,17 +201,31 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
       return { toCollectTrophiesRewards };
     });
   },
-  getIsToCollectTrophiesReward: (reward: number) => get().toCollectTrophiesRewards.has(reward),
+  getIsToCollectTrophiesReward: (reward: number) =>
+    get().toCollectTrophiesRewards.has(reward),
 }));
 
 function updateTrophies(state: PlayerStore, difference: number) {
   const nextTrophies = Math.max(0, state.trophies + difference);
-  const resObject = ({ trophies: nextTrophies, currentWorld: Math.min(4, Math.floor((nextTrophies) / 1000)) + 1, maxTrophies: Math.max(nextTrophies, state.maxTrophies) });
+  const resObject = {
+    trophies: nextTrophies,
+    currentWorld: Math.min(4, Math.floor(nextTrophies / 1000)) + 1,
+    maxTrophies: Math.max(nextTrophies, state.maxTrophies),
+  };
   const nextStage = Math.floor(nextTrophies / 100);
   const maxStage = Math.floor(state.maxTrophies / 100);
   if (nextTrophies > state.maxTrophies && nextStage > maxStage) {
     const stageDiff = nextStage - maxStage;
-    return ({ ...resObject, toCollectTrophiesRewards: new Set([...state.toCollectTrophiesRewards, ...Array.from({ length: stageDiff }, (_, i) => (maxStage + i + 1) * 100)]) });
+    return {
+      ...resObject,
+      toCollectTrophiesRewards: new Set([
+        ...state.toCollectTrophiesRewards,
+        ...Array.from(
+          { length: stageDiff },
+          (_, i) => (maxStage + i + 1) * 100
+        ),
+      ]),
+    };
   }
   return resObject;
 }
