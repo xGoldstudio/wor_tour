@@ -2,7 +2,7 @@ import { ChestRewardType } from "@/home/store/rewardStore";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { useRef } from "react";
-import { chestImageByLevel, emptyChestImageByLevel } from "../home/allWorlds/LevelPreview";
+import { chestImageByLevel, emptyChestImageByLevel } from "../home/allWorlds/chestsImages";
 
 interface GoldRewardProps {
   reward: ChestRewardType;
