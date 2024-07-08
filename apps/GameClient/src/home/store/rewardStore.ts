@@ -1,9 +1,21 @@
 import { create } from "zustand";
 
-export interface RewardType {
+export type RewardType = CardRewardType | GoldRewardType | ChestRewardType;
+
+export interface CardRewardType {
+  type: "card";
   cardId: number;
   level: number;
   shardTargetIndex: number | null;
+}
+
+export interface GoldRewardType {
+  type: "gold";
+  amount: number;
+}
+
+export interface ChestRewardType {
+  type: "chest";
 }
 
 interface RewardStore {

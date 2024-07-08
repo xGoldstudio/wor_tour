@@ -8,6 +8,10 @@ export interface Tier {
   isOpen: boolean;
 	isWorld: boolean;
 	world: number;
+	reward: {
+		gold: number;
+		// booster: string;
+	}
 }
 
 export const allTiers: Tier[] = _.times(50).map(i => {
@@ -19,5 +23,9 @@ export const allTiers: Tier[] = _.times(50).map(i => {
 		isOpen: false,
 		isWorld: i % 10 === 0,
 		world: Math.floor(i / 10) + 1,
+		reward: {
+			gold: 1000,
+			// booster: "Classic
+		}
 	};
 });

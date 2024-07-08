@@ -9,6 +9,7 @@ import { Button, cn } from "@repo/ui";
 import Cover from "@/home/ui/Cover";
 import gsap from "gsap";
 import { Tier } from "@/home/store/tiers";
+import useCollectTierReward from "./useCollectTierReward";
 
 const glowChestImageByLevel = {
   common: "/chests/common_yellow_glow.png",
@@ -16,13 +17,13 @@ const glowChestImageByLevel = {
   epic: "/chests/mythical_yellow_glow.png",
 };
 
-const chestImageByLevel = {
+export const chestImageByLevel = {
   common: "/chests/common_no_glow.png",
   rare: "/chests/rare_no_glow.png",
   epic: "/chests/mythical_no_glow.png",
 };
 
-const emptyChestImageByLevel = {
+export const emptyChestImageByLevel = {
   common: "/chests/common_empty_no_glow.png",
   rare: "/chests/rare_empty_no_glow.png",
   epic: "/chests/mythical_empty_no_glow.png",
@@ -34,9 +35,7 @@ export default function LevelPreview({ tier }: { tier: Tier }) {
     AllWorldsAnimationContext
   ) as AllWorldsAnimationContextType;
   const isLast = usePlayerStore((state) => state.currentTier) === tier.tier;
-  const collectReward = () => {
-    console.log("collect reward");
-  };
+  const collectReward = useCollectTierReward(tier.tier);
   const isAnimationFired = useRef(false);
   const isToCollect = tier.isUnlocked && !tier.isOpen;
 

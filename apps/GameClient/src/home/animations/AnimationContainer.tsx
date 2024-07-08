@@ -118,6 +118,7 @@ function orchestrateTrophyAnimation({
   const tl = gsap.timeline({
     onComplete: () => {
       nextAnimation();
+      animationObject.onEnd?.();
       if (animationObject.type === "money") {
         usePlayerStore.getState().addGold(animationObject.amount);
       } else if (animationObject.type === "trophy") {
@@ -196,7 +197,7 @@ function animation({
   setWorldsModalOpen: (value: "tier" | "world" | false) => void;
 }) {
   if (animationObject.type === "money") {
-    const origin = document.getElementById("battleButton");
+    const origin = animationObject.originRef ?? document.getElementById("battleButton");
     const target = document.getElementById("moneyCountIcon");
 
     if (origin && target) {
@@ -283,7 +284,7 @@ export default function AnimationContainer({
 
   return createPortal(
     <div
-      className="fixed top-0 left-0 w-full h-full flex justify-center items-center z-20 pointer-events-none"
+      className="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[9999] pointer-events-none"
       id="animationsContainer"
       ref={container}
     ></div>,
