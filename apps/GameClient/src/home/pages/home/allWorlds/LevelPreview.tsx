@@ -38,11 +38,16 @@ export default function LevelPreview({ tier }: { tier: Tier }) {
   const collectReward = useCollectTierReward(tier.tier);
   const isAnimationFired = useRef(false);
   const isToCollect = tier.isUnlocked && !tier.isOpen;
+  const loopAnimation = useRef<gsap.core.Tween | null>(null);
 
   useGSAP(
     () => {
+      if (loopAnimation.current && !isToCollect) {
+        loopAnimation.current.kill();
+        return;
+      }
       if (
-        appearedTrophiesFields.has(tier.beginTrophies) &&
+        appearedTrophiesFields.has(tier.level.trophyStart) &&
         isToCollect &&
         ref.current &&
         isAnimationFired.current === false
@@ -50,7 +55,7 @@ export default function LevelPreview({ tier }: { tier: Tier }) {
         isAnimationFired.current = true;
         setTimeout(() => {
           const animation = () => {
-            gsap.to(ref.current, {
+            loopAnimation.current = gsap.to(ref.current, {
               scale: 1.05,
               duration: 2,
               ease: "power2.inOut",
@@ -108,7 +113,7 @@ export default function LevelPreview({ tier }: { tier: Tier }) {
 
   return (
     <div
-      x-data-trophies={tier.beginTrophies}
+      x-data-trophies={tier.level.trophyStart}
       className={cn(
         "trophiesField levelTrophiesField",
         "flex justify-center items-center relative h-[80px] w-[350px] opacity-0",

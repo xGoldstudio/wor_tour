@@ -40,7 +40,7 @@ function AllWorldsInner({ closeModal }: { closeModal: () => void }) {
     currentWorld: state.currentWorld,
   }));
   const tiers = [
-    ...usePlayerStore((state) => state.tierState).values(),
+    ...usePlayerStore((state) => state.tiers).values(),
   ].reverse();
   const { state } = useContext(
     AllWorldsAnimationContext

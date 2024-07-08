@@ -3,8 +3,8 @@ import { findCard, getCardFromLevel, getCardStats } from "@/cards";
 import { create } from "zustand";
 import { BoosterType, boosters } from "./useBooster";
 import { CardRarity } from "@repo/types";
-import { CardRarityOrder, CardStatsInfo, CardType } from "@repo/ui";
-import { Tier, allTiers } from "./tiers";
+import { CardRarityOrder, CardStatsInfo, CardType, levels } from "@repo/ui";
+import { Tier, getTierFromLevel } from "./tiers";
 
 export interface CollectionCard {
   id: number;
@@ -42,16 +42,15 @@ interface PlayerStore {
   maxTrophies: number;
   setTrophies: (amount: number) => false | "tier" | "world";
 
-  tierState: Map<number, Tier>;
+  tiers: Map<number, Tier>;
   currentTier: number;
-  collectedTrophiesReward: (reward: number) => void;
-  getIsToCollectTrophiesReward: (reward: number) => boolean;
+  collectTierReward: (tierNumber: number) => Tier | null;
 }
 
 const defaultCollection: Map<number, CollectionCard> = new Map();
 // to 75
 for (let i = 1; i <= 75; i++) {
-  defaultCollection.set(i, { id: i, level: 3, shard: 0 });
+  defaultCollection.set(i, { id: i, level: 1, shard: 0 });
 }
 
 const shardsByLevels = [3, 7];
@@ -69,10 +68,10 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   }),
   trophies: 0,
   maxTrophies: 0,
-  tierState: (() => {
+  tiers: (() => {
     const tierState = new Map<number, Tier>();
-    allTiers.forEach((tier) => {
-      tierState.set(tier.tier, { ...tier });
+    levels.forEach((level) => {
+      tierState.set(level.id, getTierFromLevel(level));
     });
     return tierState;
   })(),
@@ -180,36 +179,40 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
 
   setTrophies: (amount: number) => updateTrophies(set, amount),
 
-  collectedTrophiesReward: (reward: number) => {
-    // set((state) => {
-    //   const toCollectTrophiesRewards = new Set(state.tierState);
-    //   toCollectTrophiesRewards.delete(reward);
-    //   return { tierState: toCollectTrophiesRewards };
-    // });
-  },
-  getIsToCollectTrophiesReward: (reward: number) => get().tierState.has(reward),
+  collectTierReward: (tierNumber: number) => {
+    let result: Tier | null = null;
+    set((state) => {
+      let tier = state.tiers.get(tierNumber);
+      if (!tier || !tier.isUnlocked || tier.isOpen) return {};
+      result = tier;
+      tier.isOpen = true;
+      tier = { ...tier };
+      return { tiers: new Map(state.tiers) };
+    });
+    return result;
+  }
 }));
 
 function updateTrophies(set: (state: (s: PlayerStore) => Partial<PlayerStore>) => void, difference: number): false | "tier" | "world" {
   let result: false | "tier" | "world" = false;
   set((state) => {
     const nextTrophies = Math.max(0, state.trophies + difference);
-    const currentTierValue = state.tierState.get(state.currentTier);
-    const nextTierValue = state.tierState.get(state.currentTier + 1);
-    const previousTierValue = state.tierState.get(state.currentTier - 1);
+    const currentTierValue = state.tiers.get(state.currentTier);
+    const nextTierValue = state.tiers.get(state.currentTier + 1);
+    const previousTierValue = state.tiers.get(state.currentTier - 1);
     let nextTier = state.currentTier;
-    let tierState = state.tierState;
-    if (currentTierValue && nextTierValue && nextTierValue.beginTrophies <= nextTrophies) {
+    let tierState = state.tiers;
+    if (currentTierValue && nextTierValue && nextTierValue.level.trophyStart <= nextTrophies) {
       nextTier = nextTierValue.tier;
       nextTierValue.isUnlocked = true;
       tierState = new Map(tierState);
-      if (state.maxTrophies < nextTierValue.beginTrophies) {
+      if (state.maxTrophies < nextTierValue.level.trophyStart) {
         result = nextTierValue.isWorld ? "world" : "tier";
       }
-    } else if (currentTierValue && previousTierValue && currentTierValue.beginTrophies > nextTrophies) {
+    } else if (currentTierValue && previousTierValue && currentTierValue.level.trophyStart > nextTrophies) {
       nextTier = previousTierValue.tier;
     }
-    return ({ trophies: nextTrophies, maxTrophies: Math.max(nextTrophies, state.maxTrophies), currentTier: nextTier, tierState, currentWorld: tierState.get(nextTier)!.world });
+    return ({ trophies: nextTrophies, maxTrophies: Math.max(nextTrophies, state.maxTrophies), currentTier: nextTier, tiers: tierState, currentWorld: tierState.get(nextTier)!.world });
   });
   return result;
 }

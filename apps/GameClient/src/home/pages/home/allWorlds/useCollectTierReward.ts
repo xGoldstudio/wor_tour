@@ -2,15 +2,17 @@ import usePlayerStore from "@/home/store/playerStore";
 import useRewardStore from "@/home/store/rewardStore";
 
 export default function useCollectTierReward(tierNumber: number) {
-	const tier = usePlayerStore((state) => state.tierState.get(tierNumber));
+	const collectTierReward = usePlayerStore((state) => state.collectTierReward);
 	const addReward = useRewardStore(s => s.addReward);
 
-	if (!tier || !tier.isUnlocked || tier.isOpen) {
-		return () => {};
-	}
-
 	return () => {
+		const tier = collectTierReward(tierNumber);
+		console.log(tier)
+		if (!tier) {
+			return;
+		}
 		addReward({ type: "chest" });
 		addReward({ type: "gold", amount: tier.level.reward.gold });
+		// booster
 	};
 }

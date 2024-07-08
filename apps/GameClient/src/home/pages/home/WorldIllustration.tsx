@@ -52,7 +52,7 @@ function CurrentWorldProgress() {
       currentTrophies: state.trophies,
       maxTrophies: state.maxTrophies,
       // get the amount of rewards to collect
-      rewardToCollect: [...state.tierState.values()].reduce((acc, tier) => {
+      rewardToCollect: [...state.tiers.values()].reduce((acc, tier) => {
         if (!tier.isWorld && tier.isUnlocked && !tier.isOpen) {
           return acc + 1;
         }
