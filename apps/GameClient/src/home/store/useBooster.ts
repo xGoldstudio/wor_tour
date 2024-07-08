@@ -93,12 +93,13 @@ export function useAddCardOrShardOrEvolve() {
     if (collectionCard) {
       if (collectionCard.level === 3) return;
       addReward({
+        type: "card",
         cardId: collectionCard.id,
         level: collectionCard.level,
         shardTargetIndex: collectionCard.shard,
       });
     } else {
-      addReward({ cardId: cardId, level: 1, shardTargetIndex: null });
+      addReward({ type: "card", cardId: cardId, level: 1, shardTargetIndex: null });
     }
     addCardOrShardOrEvolve(cardId);
   };

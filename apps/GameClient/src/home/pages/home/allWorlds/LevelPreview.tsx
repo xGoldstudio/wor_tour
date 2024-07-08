@@ -1,98 +1,132 @@
 import usePlayerStore from "@/home/store/playerStore";
 import { useContext, useRef } from "react";
-import { AllWorldsAnimationContext, AllWorldsAnimationContextType } from "./trophyBar/TrophyBarContext";
+import {
+  AllWorldsAnimationContext,
+  AllWorldsAnimationContextType,
+} from "./trophyBar/TrophyBarContext";
 import { useGSAP } from "@gsap/react";
 import { Button, cn } from "@repo/ui";
 import Cover from "@/home/ui/Cover";
 import gsap from "gsap";
+import { Tier } from "@/home/store/tiers";
+import useCollectTierReward from "./useCollectTierReward";
+import { chestImageByLevel, emptyChestImageByLevel, glowChestImageByLevel } from "./chestsImages";
 
-const glowChestImageByLevel = {
-  common: "/chests/common_yellow_glow.png",
-  rare: "/chests/rare_yellow_glow.png",
-  epic: "/chests/mythical_yellow_glow.png",
-};
-
-const chestImageByLevel = {
-  common: "/chests/common_no_glow.png",
-  rare: "/chests/rare_no_glow.png",
-  epic: "/chests/mythical_no_glow.png",
-};
-
-const emptyChestImageByLevel = {
-  common: "/chests/common_empty_no_glow.png",
-  rare: "/chests/rare_empty_no_glow.png",
-  epic: "/chests/mythical_empty_no_glow.png",
-};
-
-export default function LevelPreview({
-  i,
-  worldTrophies,
-}: {
-  i: number;
-  worldTrophies: number;
-}) {
+export default function LevelPreview({ tier }: { tier: Tier }) {
   const ref = useRef<HTMLDivElement>(null);
-  const levelTrophies = worldTrophies + i * 100;
-  const { maxTrophies, isToCollect, collectReward } = usePlayerStore(
-    (state) => ({
-      maxTrophies: state.maxTrophies,
-      isToCollect: state.getIsToCollectTrophiesReward(levelTrophies),
-      collectReward: () => state.collectedTrophiesReward(levelTrophies),
-    })
-  );
-  const { appearedTrophiesFields } = useContext(AllWorldsAnimationContext) as AllWorldsAnimationContextType;
+  const { appearedTrophiesFields, state } = useContext(
+    AllWorldsAnimationContext
+  ) as AllWorldsAnimationContextType;
+  const isLast = usePlayerStore((state) => state.currentTier) === tier.tier;
+  const collectReward = useCollectTierReward(tier.tier);
+  const isAnimationFired = useRef(false);
+  const isToCollect = tier.isUnlocked && !tier.isOpen;
+  const loopAnimation = useRef<gsap.core.Tween | null>(null);
 
-  const isUnlocked = levelTrophies <= maxTrophies;
-  const isEmpty = isUnlocked && !isToCollect;
-
-  useGSAP(() => {
-    if (isToCollect && appearedTrophiesFields.has(levelTrophies) && ref.current) {
-      gsap.to(
-        ref.current,
-        {
-          scale: 1.05,
-          duration: 2,
-          ease: "power2.inOut",
-          yoyo: true,
-          repeat: -1,
-        }
-      )
+  useGSAP(
+    () => {
+      if (loopAnimation.current && !isToCollect) {
+        loopAnimation.current.kill();
+        return;
+      }
+      if (
+        appearedTrophiesFields.has(tier.level.trophyStart) &&
+        isToCollect &&
+        ref.current &&
+        isAnimationFired.current === false
+      ) {
+        isAnimationFired.current = true;
+        setTimeout(() => {
+          const animation = () => {
+            loopAnimation.current = gsap.to(ref.current, {
+              scale: 1.05,
+              duration: 2,
+              ease: "power2.inOut",
+              yoyo: true,
+              repeat: -1,
+            });
+          };
+          if (isLast && state === "tier") {
+            // is last
+            const tl = gsap.timeline({
+              onComplete: () => {
+                animation();
+              },
+            });
+            tl.fromTo(
+              ref.current,
+              {
+                scale: 1,
+              },
+              {
+                scale: 1.2,
+                duration: 1,
+                ease: "elastic.inOut",
+              }
+            )
+              .fromTo(
+                ref.current!.querySelector(".lastTierUnlocked"),
+                {
+                  opacity: 1,
+                  scale: 0,
+                },
+                {
+                  opacity: 1,
+                  scale: 1,
+                  duration: 1,
+                  ease: "elastic.inOut",
+                }
+              )
+              .to(ref.current, {
+                scale: 1,
+                duration: 1,
+                ease: "elastic.inOut",
+              });
+          } else {
+            animation();
+          }
+        }, 0);
+      }
+    },
+    {
+      dependencies: [appearedTrophiesFields, ref, isToCollect],
+      revertOnUpdate: true,
     }
-  }, { dependencies: [appearedTrophiesFields, ref, isToCollect], revertOnUpdate: true})
+  );
 
   return (
     <div
-      x-data-trophies={levelTrophies}
+      x-data-trophies={tier.level.trophyStart}
       className={cn(
         "trophiesField levelTrophiesField",
         "flex justify-center items-center relative h-[80px] w-[350px] opacity-0",
-        !isUnlocked && "grayscale-[80%]"
+        !tier.isUnlocked && "grayscale-[80%]",
+        isLast && state === "tier" && "z-10"
       )}
       onClick={isToCollect ? collectReward : () => {}}
       ref={ref}
     >
       <div className="absolute w-full h-full bg-slate-400 opacity-60 rounded-md" />
       <div
-        className={cn(
-          "absolute w-full h-full rounded-md",
-        )}
+        className={cn("absolute w-full h-full rounded-md")}
         style={{
           backgroundImage: `url(homeBg.jpeg)`,
           backgroundSize: "100%",
-          backgroundPositionY: `${100 - i * 10}%`,
+          backgroundPositionY: `${100 - (tier.tier % 10) * 10}%`,
         }}
       ></div>
       <div
         className={cn(
           "flex items-center flex-col gap-2 absolute top-[-20px]",
-          i % 2 ? "right-[50px]" : "left-[50px]"
+          tier.tier % 2 ? "right-[50px]" : "left-[50px]",
+          isLast && state === "tier" && "opacity-0 lastTierUnlocked"
         )}
       >
         <div className={cn("rounded-sm overflow-hidden relative")}>
           <Cover cardRarity="rare" className="opacity-80 bg-slate-50" />
           <img
             src={
-              isEmpty
+              tier.isUnlocked && tier.isOpen
                 ? emptyChestImageByLevel["rare"]
                 : chestImageByLevel["rare"]
             }

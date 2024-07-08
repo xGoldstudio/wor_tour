@@ -41,5 +41,5 @@ function AppRouter() {
     return <div>Loading...</div>;
   }
 
-  return isInGame ? <Game /> : <Home />;
+  return <div id="app">{isInGame ? <Game /> : <Home />}</div>;
 }

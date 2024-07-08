@@ -89,9 +89,10 @@ export default function Progression() {
               <p>World {levels[currentLevelHover].world}</p>
               <p>Level {levels[currentLevelHover].level}</p>
               <p>Strength {levels[currentLevelHover].strength}</p>
+              <p>Trophies Range {levels[currentLevelHover].trophyStart} - {levels[currentLevelHover].trophyEnd}</p>
               <div className="w-full h-[1px] bg-black my-1" />
               <p>Gold: {levels[currentLevelHover].reward.gold}</p>
-              <p>Xp: {levels[currentLevelHover].reward.xp}</p>
+              <p>Xp: {levels[currentLevelHover].reward.xp}</p>∏
               <p>Booster: {levels[currentLevelHover].reward.booster?.name}</p>
             </div>
           )}

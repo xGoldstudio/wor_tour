@@ -46,8 +46,8 @@ test("earning mana", () => {
 	clock.nextTick();
 	expect(state.playerMana).toBe(1);
 	expect(state.opponentMana).toBe(1);
-	expect(state.playerTickStartEarningMana).toBe(150);
-	expect(state.opponentTickStartEarningMana).toBe(150);
+	expect(state.playerTickStartEarningMana).toBe(defaultManaSpeed);
+	expect(state.opponentTickStartEarningMana).toBe(defaultManaSpeed);
 
 	// caped to 9
 	for (let i = 0; i < defaultManaSpeed*20; i++) {
