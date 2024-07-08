@@ -35,7 +35,7 @@ export function getDistribution(luckImprove: number) {
 }
 
 export const boosters: BoosterTypeDeclartion[] = [
-	...(allWorlds.map(amountBooster)),
+	// ...(allWorlds.map(amountBooster)),
 	...(allWorlds.map(worldBooster)),
 	...(allWorlds.map(rarityBooster)),
 ];
@@ -50,23 +50,6 @@ boosters.forEach((booster) => {
 
 export function getAmountBoosterName(world: number) {
 	return `${amountNames[world - 1]} refill`;
-}
-
-function amountBooster(world: number): BoosterTypeDeclartion {
-	const amount = world;
-	return {
-		name: getAmountBoosterName(world),
-		cost: amount === 1 ? baseCost : ceilToValue(100)(baseCost * (1.65 ** amount)),
-		description: `Contain ${amount} time the same unit from any worlds among unlocked cards.`,
-		contain: {
-			worlds: allWorlds,
-			rarities: classicRarityDistribution,
-			unitAmount: amount,
-		},
-		unlockCondition: {
-			world: amount,
-		},
-	}
 }
 
 export function getWorldBoosterName(world: number) {
@@ -102,7 +85,6 @@ function rarityBooster(world: number): BoosterTypeDeclartion {
 		purchaseDelayInMs: purchaseDelayInMs,
 		unlockCondition: {
 			world: world,
-			level: numberOfLevels / 2,
 		},
 		contain: {
 			worlds: allWorlds,

@@ -1,1 +1,1 @@
-export const numberOfLevels = 20;
+export const numberOfLevels = 10;

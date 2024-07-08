@@ -11,6 +11,6 @@ export default function useCollectTierReward(tierNumber: number) {
 
 	return () => {
 		addReward({ type: "chest" });
-		addReward({ type: "gold", amount: tier.reward.gold });
+		addReward({ type: "gold", amount: tier.level.reward.gold });
 	};
 }

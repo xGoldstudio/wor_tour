@@ -33,6 +33,8 @@ export interface Level {
   level: number,
   id: number,
 	chest: "common" | "rare" | "epic",
+  trophyStart: number,
+  trophyEnd: number,
   reward: {
     gold: number,
     xp: number,
