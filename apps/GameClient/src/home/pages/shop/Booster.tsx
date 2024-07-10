@@ -55,7 +55,7 @@ export function BoosterModal({ closeModal, booster }: BoosterModalProps) {
   }));
   const [isBoosterPreview, setIsBoosterPreview] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
-  const buyBooster = useBooster(booster);
+  const buyBooster = useBooster();
 
   return (
     <Modal closeModal={closeModal} title="booster">
@@ -66,9 +66,6 @@ export function BoosterModal({ closeModal, booster }: BoosterModalProps) {
           onMouseUp={preventDefault(() => setIsPressed(false))}
           onMouseMove={changePosition}
         >
-          {/* <Box cover="rare" rarity="epic" height={80} className="bg-black"> */}
-
-          {/* </Box> */}
           {isBoosterPreview ? (
             <div className="relative h-[430px]">
               {booster.cards.map((card, index) => (
@@ -118,7 +115,7 @@ export function BoosterModal({ closeModal, booster }: BoosterModalProps) {
         <ConfirmationModal
           isOpen={isConfirmationOpen}
           closeModal={() => setIsConfirmationOpen(false)}
-          onConfirm={buyBooster}
+          onConfirm={() => buyBooster(booster.name, true)}
         >
           <Box cover="rare" rarity="legendary" height={150}>
             <div className="flex items-center justify-center p-4">

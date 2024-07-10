@@ -4,12 +4,11 @@ import useShopStore from "@/home/store/shopStore";
 import Ribbon from "@/home/ui/Ribbon";
 import { useEffect, useState } from "react";
 import { formatTime } from "@repo/ui";
-import { boostersObservable } from "@/home/store/boosterStore";
-import { useObservableState } from 'observable-hooks';
 import { Booster } from "./Booster";
+import { useBoosterStore } from "@/home/store/boosterStore";
 
 export default function ShopTab() {
-  const boosters = useObservableState(boostersObservable, []);
+  const boosters = useBoosterStore((state) => state.boosters);
   const buyableCards = useShopStore((state) => state.cards);
   const targetTimestamp = useShopStore((state) => state.nextTimestamp);
 

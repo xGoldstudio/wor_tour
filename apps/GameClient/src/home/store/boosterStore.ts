@@ -97,7 +97,7 @@ interface BoosterStore {
 	boosters: BoosterType[];
 }
 
-const useBoosterStore = create<BoosterStore>(() => ({
+export const useBoosterStore = create<BoosterStore>(() => ({
 	boosters: [],
 }));
 

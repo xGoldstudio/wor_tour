@@ -2,6 +2,7 @@ import useRewardStore from "./rewardStore";
 import usePlayerStore from "./playerStore";
 import { BoosterTypeDeclartion } from "@repo/types";
 import { CardType } from "@repo/ui";
+import { useBoosterStore } from "./boosterStore";
 
 export type BoosterName =
   | "Classic refill"
@@ -13,7 +14,7 @@ export type BoosterType = BoosterTypeDeclartion & {
   cards: CardType[];
 };
 
-export default function useBooster(booster: BoosterType) {
+export default function useBooster() {
   const { spendGold, gold } = usePlayerStore((state) => ({
     addCardOrShardOrEvolve: state.addCardOrShardOrEvolve,
     collection: state.collection,
@@ -21,13 +22,18 @@ export default function useBooster(booster: BoosterType) {
     gold: state.gold,
   }));
   const addOrEvolve = useAddCardOrShardOrEvolve();
+  const boosters = useBoosterStore((state) => state.boosters);
 
-  return function buyBooster() {
-    if (gold < booster.cost) return;
+  return function openBooster(boosterName: string, isBuying: boolean) {
+    const booster = boosters.find((b) => b.name === boosterName);
+    if (!booster) return;
+    if (isBuying) {
+      if (gold < booster.cost) return;
+      spendGold(booster.cost);
+    }
     const card =
       booster.cards[Math.floor(Math.random() * booster.cards.length)];
     addOrEvolve(card.id);
-    spendGold(booster.cost);
   };
 }
 
