@@ -3,8 +3,8 @@ import { useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { ActiveFilters, CardFilters, FiltersDescription } from "./cardFilters";
 import { CardSorts, defaultSort, sorts } from "./cardSorts";
-import { DeckCardUI } from "./DeckCardUI";
 import { SortAndFilterBox } from "./SortAndFilterBox";
+import Collection from "./Collection";
 
 export default function CollectionTab() {
   let { detailledCollection } = usePlayerStore((state) => ({
@@ -27,6 +27,9 @@ export default function CollectionTab() {
       max: FiltersDescription.Level.rangeMax!,
     },
   });
+
+  const collectionLength = detailledCollection.length;
+
   for (const filter in FiltersDescription) {
     const typedFilter = FiltersDescription[filter as CardFilters];
     detailledCollection = detailledCollection.filter((card) =>
@@ -47,6 +50,7 @@ export default function CollectionTab() {
     <ScrollContainer className="grow overflow-y-scroll scrollbar-hide flex justify-center">
       <div className="w-[650px] h-[674px] grid grid-rows-[1fr_auto] top-0 ">
         <SortAndFilterBox
+          collectionLength={collectionLength}
           currentSort={currentSort}
           setCurrentSort={setcurrentSort}
           isAscending={isAscending}
@@ -54,13 +58,7 @@ export default function CollectionTab() {
           currentFilter={currentFilter}
           setCurrentFilter={setCurrentFilter}
         />
-        <div className="grid grid-cols-4 gap-y-8 pt-4">
-          {detailledCollection.map((card) => (
-            <div className="w-full flex justify-center" key={card.id}>
-              <DeckCardUI cardId={card.id} />
-            </div>
-          ))}
-        </div>
+        <Collection detailledCollection={detailledCollection} />
       </div>
     </ScrollContainer>
   );

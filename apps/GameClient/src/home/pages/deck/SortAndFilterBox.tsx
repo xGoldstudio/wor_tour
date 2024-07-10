@@ -6,6 +6,7 @@ import { OrderBox } from "./OrderBox";
 import { SortBox } from "./SortBox";
 
 interface SortAndFilterProps {
+  collectionLength: number;
   currentSort: CardSorts;
   setCurrentSort: (sort: CardSorts) => void;
   isAscending: boolean;
@@ -15,6 +16,7 @@ interface SortAndFilterProps {
 }
 
 export function SortAndFilterBox({
+  collectionLength,
   currentSort,
   setCurrentSort,
   isAscending,
@@ -24,8 +26,8 @@ export function SortAndFilterBox({
 }: SortAndFilterProps) {
   return (
     <div className="px-4">
-      <div className="h-12 bg-black bg-opacity-30 mt-4 rounded-lg flex items-center px-4 justify-between">
-        <div className="">Cards found : 8 / 9</div>
+      <div className="h-16 bg-black bg-opacity-30 mt-4 rounded-lg flex items-center px-4 justify-between">
+        <div className="">Cards found : {collectionLength} / 75</div>
         <div className="flex flex-row space-x-4 relative">
           <FilterBox
             currentFilter={currentFilter}

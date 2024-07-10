@@ -20,36 +20,24 @@ function TabModal({ children, currentTab, setCurrentTab }: TabModalProps) {
   return (
     <div
       className={cn(
-        currentTab !== children?.toString() ? "opacity-50" : null,
+        currentTab !== children?.toString() ? "opacity-70" : null,
         "w-[200px] h-[45px] hover:cursor-pointer"
       )}
       onClick={() => setCurrentTab(children?.toString() as Tabs)}
     >
-      <svg width="100%" height="100%">
-        <rect width="100%" height="100%" />
-        <image
-          className="blur-[6px]"
-          href={textureByRarity("common")}
-          x="0"
-          y="0"
-          width="100%"
-          height="100%"
-          preserveAspectRatio="xMidYMid slice"
-        />{" "}
-        {currentTab === children?.toString() && (
-          <rect width="100%" height="100%" fill="black" opacity="0.1" />
-        )}
-        <text
-          x="50%"
-          y="50%"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="white"
-          className="font-bold text-lg"
-        >
+      <div className="rounded-sm overflow-hidden text-nowrap relative z-10 font-semibold  h-full">
+        <div
+          className="absolute w-full h-full blur-sm"
+          style={{
+            backgroundImage: `url(/${textureByRarity("common")})`,
+            backgroundSize: "cover",
+            backgroundPositionY: "center",
+          }}
+        />
+        <div className="text-black h-full flex justify-center items-center relative px-12 ">
           {children}
-        </text>
-      </svg>
+        </div>
+      </div>
     </div>
   );
 }
@@ -68,27 +56,17 @@ export function DeckInterface() {
           Collection
         </TabModal>
       </div>
-      {/* <div
-        className="w-full h-[55px] z-10 opacity-80"
-        style={{
-          backgroundImage: "url(/wood-horizontal.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></div> */}
-      <div className="w-full h-[55px]">
-        <svg width="100%" height="100%">
-          <rect width="100%" height="100%" />
-          <image
-            className="blur-[6px]"
-            href={textureByRarity("common")}
-            x="0"
-            y="0"
-            width="100%"
-            height="100%"
-            preserveAspectRatio="xMidYMid slice"
+      <div className="w-full h-[55px] hover:cursor-pointer">
+        <div className="overflow-hidden relative z-10 font-semibold h-full">
+          <div
+            className="absolute w-full h-full blur-sm"
+            style={{
+              backgroundImage: `url(/${textureByRarity("common")})`,
+              backgroundSize: "cover",
+              backgroundPositionY: "center",
+            }}
           />
-        </svg>
+        </div>
       </div>
       <div className="w-full flex justify-center overflow-hidden">
         <TabElement />

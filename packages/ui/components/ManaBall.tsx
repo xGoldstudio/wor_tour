@@ -1,5 +1,5 @@
 interface ManaBallProps {
-  mana: number;
+  mana?: number;
 }
 
 export default function ManaBall({ mana }: ManaBallProps) {
