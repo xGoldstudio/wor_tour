@@ -50,8 +50,18 @@ function GameCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const [isShown, setIsShown] = useState(false);
   const { triggerAnimation: triggerAttackAnimation } = useSyncGameAnimation();
-  const { triggerAnimation: triggerBloodAnimation } = useSyncGameAnimation();
-  const { triggerAnimation: triggerHealAnimation } = useSyncGameAnimation();
+  const {
+    triggerAnimation: triggerBloodAnimation,
+    removeAnimation: removeBloodAnimation,
+  } = useSyncGameAnimation();
+  const {
+    triggerAnimation: triggerHealAnimation,
+    removeAnimation: removeHealAnimation,
+  } = useSyncGameAnimation();
+  function clearAllAnimations() {
+    removeBloodAnimation();
+    removeHealAnimation();
+  }
   useGameEventListener({
     type: "cardStartAttacking",
     action: (_, state) => {
@@ -108,6 +118,7 @@ function GameCard({
       ];
       if (card) {
         setCard(card);
+        clearAllAnimations();
       }
     },
     filter: (e) => {
@@ -140,7 +151,6 @@ function GameCard({
           ).progress,
         onEnd: () => {
           if (cardRef.current) {
-            cardRef.current.style.display = "none";
             setIsShown(false);
           }
         },
@@ -381,8 +391,10 @@ function GameCardHpBar({
       triggerAnimation({
         replace: true,
         duration: 50,
-        computeStyle: animationTimeline(50)
-          .add(hpBarRef.current, { scaleX: 1 }, [
+        computeStyle: animationTimeline(50).add(
+          hpBarRef.current,
+          { scaleX: 1 },
+          [
             {
               values: { scaleX: 1.2 },
               ease: [0, 1, 1, 1],
@@ -397,7 +409,8 @@ function GameCardHpBar({
               from: -15,
               ease: [0, 0.42, 1, 1],
             },
-          ]).progress,
+          ]
+        ).progress,
       });
     }
   }

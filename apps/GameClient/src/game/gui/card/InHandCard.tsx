@@ -41,6 +41,7 @@ function InHandCard({ position }: { position: number }) {
       const originTransformY =
         staticCardTarget.getBoundingClientRect().top -
         ref.current.getBoundingClientRect().top;
+      ref.current.style.opacity = "0"; // to avoid the old card to flash before first tick of the animation
       triggerDrawAnimation({
         duration: 10,
         computeStyle: animationTimeline(10).add(
