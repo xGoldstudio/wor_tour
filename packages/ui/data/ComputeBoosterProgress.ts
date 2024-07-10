@@ -35,6 +35,19 @@ export function getDistribution(luckImprove: number) {
 }
 
 export const boosters: BoosterTypeDeclartion[] = [
+	{
+		name: "Classic refill",
+		cost: baseCost,
+		description: `Contain 1 unit from any worlds among unlocked cards.`,
+		contain: {
+			worlds: allWorlds,
+			rarities: classicRarityDistribution,
+			unitAmount: 1,
+		},
+		unlockCondition: {
+			world: 1,
+		},
+	},
 	...(allWorlds.map(worldBooster)),
 	...(allWorlds.map(rarityBooster)),
 ];

@@ -37,23 +37,27 @@ const packableCardsObservable = combineLatest(
 	})
 );
 export const packableCardsByRarityObservable = packableCardsObservable.pipe(
-	map((cards) => {
-		const cardsByRarity = cards.reduce(
-			(acc, card) => {
-				const cardLevel = usePlayerStore.getState().collection.get(card.id)?.level || 1;
-				acc[card.rarity].push(findCard(card.id, cardLevel));
-				return acc;
-			},
-			{
-				common: [],
-				rare: [],
-				epic: [],
-				legendary: [],
-			} as Record<CardRarity, CardType[]>
-		);
-		return cardsByRarity;
-	})
+	map(cards => arrayOfCardsToRarityMap(arrayOfCardStatInfoToCardType(cards)))
 );
+function arrayOfCardStatInfoToCardType(cards: CardStatsInfo[]) {
+	return cards.map((card) => findCard(card.id, 1));
+}
+export function arrayOfCardsToRarityMap(cards: CardType[]) {
+	const cardsByRarity = cards.reduce(
+		(acc, card) => {
+			const cardLevel = usePlayerStore.getState().collection.get(card.id)?.level || 1;
+			acc[card.rarity].push(findCard(card.id, cardLevel));
+			return acc;
+		},
+		{
+			common: [],
+			rare: [],
+			epic: [],
+			legendary: [],
+		} as Record<CardRarity, CardType[]>
+	);
+	return cardsByRarity;
+}
 function isCardPackableForBooster(booster: BoosterTypeDeclartion) {
 	return (card: CardStatsInfo) => {
 		if (!booster.contain.worlds.includes(card.world)) return false;
