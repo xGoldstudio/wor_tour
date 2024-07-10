@@ -21,7 +21,7 @@ function TabModal({ children, currentTab, setCurrentTab }: TabModalProps) {
     <div
       className={cn(
         currentTab !== children?.toString() ? "opacity-70" : null,
-        "w-[200px] h-[45px] hover:cursor-pointer"
+        "w-[200px] h-[45px] hover:cursor-pointer bg-black shadow-md rounded-t-md "
       )}
       onClick={() => setCurrentTab(children?.toString() as Tabs)}
     >
@@ -56,7 +56,7 @@ export function DeckInterface() {
           Collection
         </TabModal>
       </div>
-      <div className="w-full h-[55px] hover:cursor-pointer">
+      <div className="w-full h-[55px] hover:cursor-pointer bg-black">
         <div className="overflow-hidden relative z-10 font-semibold h-full">
           <div
             className="absolute w-full h-full blur-sm"
