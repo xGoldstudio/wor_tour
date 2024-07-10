@@ -1,4 +1,10 @@
-import { allRarites, formatTime, inPx, levels, textureByRarity, unlockedIndex, worlds } from "@repo/ui";
+import {
+  BoosterRarityDrop,
+  formatTime,
+  inPx,
+  levels, unlockedIndex,
+  worlds
+} from "@repo/ui";
 import React, { useMemo, useState } from "react";
 import * as _ from "lodash";
 import { numberOfLevels } from "./consts";
@@ -89,7 +95,10 @@ export default function Progression() {
               <p>World {levels[currentLevelHover].world}</p>
               <p>Level {levels[currentLevelHover].level}</p>
               <p>Strength {levels[currentLevelHover].strength}</p>
-              <p>Trophies Range {levels[currentLevelHover].trophyStart} - {levels[currentLevelHover].trophyEnd}</p>
+              <p>
+                Trophies Range {levels[currentLevelHover].trophyStart} -{" "}
+                {levels[currentLevelHover].trophyEnd}
+              </p>
               <div className="w-full h-[1px] bg-black my-1" />
               <p>Gold: {levels[currentLevelHover].reward.gold}</p>
               <p>Xp: {levels[currentLevelHover].reward.xp}</p>∏
@@ -125,32 +134,10 @@ export default function Progression() {
               )}
               <div className="flex items-center w-full gap-2">
                 <p>Rarities Drop:</p>
-                <div className="w-[200px] h-[16px] flex gap-1 bg-slate-500 p-[2px] px-1 rounded-sm">
-                  {allRarites.map((rarity) => (
-                    <React.Fragment key={rarity}>
-                      {currentUnlockBoosterHover.booster.contain.rarities[
-                        rarity
-                      ] ? (
-                        <div
-                          className="h-full rounded-sm relative overflow-hidden bg-white"
-                          style={{
-                            width: `${currentUnlockBoosterHover.booster.contain.rarities[rarity]}%`,
-                          }}
-                        >
-                          <div
-                            className="absolute w-full h-full top-0 left-0 blur-[1px]"
-                            style={{
-                              backgroundImage: `url(/${textureByRarity(rarity)})`,
-                              backgroundSize: "cover",
-                              backgroundPosition: "center",
-                            }}
-                          />
-                        </div>
-                      ) : (
-                        <></>
-                      )}
-                    </React.Fragment>
-                  ))}
+                <div className="w-[200px] h-[16px] bg-slate-500 p-[2px] px-1 rounded-sm">
+                  <BoosterRarityDrop
+                    booster={currentUnlockBoosterHover.booster}
+                  />
                 </div>
               </div>
             </div>

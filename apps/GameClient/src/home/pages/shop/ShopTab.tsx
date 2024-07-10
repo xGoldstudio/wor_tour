@@ -1,16 +1,16 @@
 import ScrollContainer from "react-indiana-drag-scroll";
-import usePlayerStore from "@/home/store/playerStore";
 import BuyCard from "./BuyCard";
-import useShopeStore from "@/home/store/shopStore";
+import useShopStore from "@/home/store/shopStore";
 import Ribbon from "@/home/ui/Ribbon";
-import { Booster } from "./Booster";
 import { useEffect, useState } from "react";
 import { formatTime } from "@repo/ui";
+import { Booster } from "./Booster";
+import { useBoosterStore } from "@/home/store/boosterStore";
 
 export default function ShopTab() {
-  const boosters = usePlayerStore((state) => state.getAvailableBoosters());
-  const buyableCards = useShopeStore((state) => state.cards);
-  const targetTimestamp = useShopeStore((state) => state.nextTimestamp);
+  const boosters = useBoosterStore((state) => state.boosters);
+  const buyableCards = useShopStore((state) => state.cards);
+  const targetTimestamp = useShopStore((state) => state.nextTimestamp);
 
   return (
     <div className="w-full grid grid-rows-[auto_1fr] absolute top-0 h-full">
@@ -26,8 +26,8 @@ export default function ShopTab() {
           Next in <Timer targetTimestamp={targetTimestamp} />
         </p>
         <div className="grid grid-cols-3 gap-4">
-          {buyableCards.map((card) => (
-            <BuyCard card={card} key={card.id} />
+          {buyableCards.map((card, i) => (
+            <BuyCard card={card} key={`${i}_${card.id}`} />
           ))}
         </div>
         <div className="h-[80px] w-4  pt-32"></div>
