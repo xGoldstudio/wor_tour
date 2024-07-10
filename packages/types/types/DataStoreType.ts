@@ -67,20 +67,19 @@ export interface CardEffects {
   fightBack?: FightBackEffect;
 }
 
+export type CardEffect = MultiAttackEffect | PlacementHeal | FightBackEffect;
+
 interface MultiAttackEffect {
   type: "multiAttack";
-  status: "neutral";
   amount: null;
 }
 
 interface PlacementHeal {
   type: "placementHeal";
   amount: number;
-  status: "buff";
 }
 
 interface FightBackEffect {
   type: "fightBack";
-  status: "neutral";
   amount: null;
 }

@@ -21,9 +21,11 @@ const deck: CardType[] = _.times(8, (i) => ({
 	...baseCard, id: i, rarity: "common", effects: {
 		multiAttack: {
 			type: "multiAttack",
+			amount: null,
 		},
 		fightBack: {
 			type: "fightBack",
+			amount: null,
 		},
 	},
 }));

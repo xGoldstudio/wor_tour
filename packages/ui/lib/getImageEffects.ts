@@ -38,11 +38,11 @@ export function getImageEffects(effects: CardEffects) {
   for (const effect in effects) {
     const existingImage = effectsImages[effect as keyof CardEffects];
     const desc = effectsDescription[effect as keyof CardEffects]!;
-    existingImage &&
-      effects[effect as keyof CardEffects] &&
+    const effectValue = effects[effect as keyof CardEffects];
+    existingImage && effectValue &&
       effectToShow.push({
         src: existingImage,
-        amount: effects[effect as keyof CardEffects]!.amount ?? null,
+        amount: effectValue.amount,
         status: desc.status,
         title: desc.title,
         description: desc.descrption,
