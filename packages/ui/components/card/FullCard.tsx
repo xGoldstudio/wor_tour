@@ -1,15 +1,16 @@
-import { getImageEffects } from "../../lib/getImageEffects";
 import { cn, inPx } from "../../lib/utils";
 import ManaBall from "../ManaBall";
 import { CardType } from "./Card";
 import CardBorder, { CardContentIllustartion, InnerBord } from "./CardBorder";
 import * as _ from "lodash";
+import Effects from "./Effects";
 
 export default function FullCard({
   card,
   className,
   size = 1,
   cardShards,
+  showEffectDesc,
 }: {
   card: CardType;
   className?: string;
@@ -17,13 +18,12 @@ export default function FullCard({
   cardShards?: {
     shards: number;
     maxShards: number;
-  }
+  };
+  showEffectDesc?: boolean;
 }) {
-  const effectToShow = getImageEffects(card.effects);
-
   return (
     <div
-      className={cn("box-content", className)}
+      className={cn("box-content relative", className)}
       style={{
         width: inPx(320 * size),
         height: inPx(445 * size),
@@ -35,12 +35,12 @@ export default function FullCard({
           transform: `scale(${size * 100}%)`,
         }}
       >
-        <CardBorder rarity={card.rarity} size={5}>
+        <CardBorder rarity={card.rarity} size={size * 5}>
           <div className="w-full h-full flex flex-col">
             <div className="absolute top-0 w-full h-full flex flex-col justify-between">
               <div>
                 <div className="flex">
-                  <InnerBord size={3}>
+                  <InnerBord size={size * 3}>
                     <div className="grow bg-slate-50 px-2 font-stylised text-xl h-min">
                       {card.name}
                     </div>
@@ -59,16 +59,10 @@ export default function FullCard({
                 </div>
               </div>
               <div className="w-full h-full grow overflow-hidden relative pt-2 ">
-                <div className="flex flex-col items-end gap-2 absolute top-5 z-10 right-2">
-                  {effectToShow.map((effectSrc) => (
-                    <div
-                      key={effectSrc}
-                    >
-                      <img src={`/${effectSrc}`} width={48} height={48} />
-                    </div>
-                  ))}
+                <div className="flex flex-col items-end absolute bottom-[5px] z-10 right-[4px]">
+                  <Effects effects={card.effects} size={size * 1.1} showDesc={showEffectDesc} />
                 </div>
-                <CardContentIllustartion card={card} size={3} />
+                <CardContentIllustartion card={card} size={size * 3} />
               </div>
               {cardShards && (
                 <div className="pt-2 relative">
@@ -83,7 +77,7 @@ export default function FullCard({
                           i % 2 ? "-translate-y-[3px]" : "",
                           i > cardShards.shards - 1
                             ? "brightness-0"
-                            : "drop-shadow-[1px_1px_1px_black]",
+                            : "drop-shadow-[1px_1px_1px_black]"
                         )}
                       />
                     ))}

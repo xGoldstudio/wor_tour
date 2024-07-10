@@ -1,5 +1,4 @@
-import Cover from "@/home/ui/Cover";
-import { cn } from "@repo/ui";
+import { cn, Cover } from "@repo/ui";
 
 interface RewardBoxProps {
   children: React.ReactNode;

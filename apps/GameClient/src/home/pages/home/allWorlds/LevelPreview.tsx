@@ -5,8 +5,7 @@ import {
   AllWorldsAnimationContextType,
 } from "./trophyBar/TrophyBarContext";
 import { useGSAP } from "@gsap/react";
-import { Button, cn } from "@repo/ui";
-import Cover from "@/home/ui/Cover";
+import { Button, cn, Cover } from "@repo/ui";
 import gsap from "gsap";
 import { Tier } from "@/home/store/tiers";
 import useCollectTierReward from "./useCollectTierReward";

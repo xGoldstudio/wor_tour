@@ -59,6 +59,8 @@ export interface CardStatLevel {
 
 export type CardRarity = "common" | "rare" | "epic" | "legendary";
 
+export type StatusEffectType = "buff" | "debuff" | "neutral";
+
 export interface CardEffects {
   multiAttack?: MultiAttackEffect;
   placementHeal?: PlacementHeal;
@@ -67,13 +69,18 @@ export interface CardEffects {
 
 interface MultiAttackEffect {
   type: "multiAttack";
+  status: "neutral";
+  amount: null;
 }
 
 interface PlacementHeal {
   type: "placementHeal";
   amount: number;
+  status: "buff";
 }
 
 interface FightBackEffect {
   type: "fightBack";
+  status: "neutral";
+  amount: null;
 }

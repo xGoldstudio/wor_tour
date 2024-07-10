@@ -54,7 +54,7 @@ export default function CardDisplay({
           : {}
       }
     >
-      <FullCard card={card} size={1} cardShards={cardShards} />
+      <FullCard card={card} size={1} cardShards={cardShards} showEffectDesc={position === 0} />
     </div>
   );
 }

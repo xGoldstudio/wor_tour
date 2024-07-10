@@ -4,7 +4,7 @@ import CardBorder, {
 } from "../../../../../../packages/ui/components/card/CardBorder";
 import { InGameCardType } from "@/game/stores/gameStateStore";
 import { CardEffects } from "@repo/types";
-import { cn, getImageEffects, numberWithCommas } from "@repo/ui";
+import { cn, Effects, numberWithCommas } from "@repo/ui";
 import { useSyncGameAnimation } from "@/game/gameBehavior/animation/useGameSyncAnimation";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
 import {
@@ -272,15 +272,9 @@ export function CardEffectsElements({
       (event as RemoveEffectEvent).cardPosition === position,
   });
 
-  const effectToShow = getImageEffects(effects);
-
   return (
-    <div className="absolute right-1 top-2 flex flex-col gap-2">
-      {effectToShow.map((effectSrc) => (
-        <div key={effectSrc}>
-          <img src={`/${effectSrc}`} width={32} height={32} />
-        </div>
-      ))}
+    <div className="absolute right-[4px] top-[5px] flex flex-col gap-2">
+      <Effects effects={effects} size={0.8} />
     </div>
   );
 }

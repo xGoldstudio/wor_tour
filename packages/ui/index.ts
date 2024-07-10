@@ -6,9 +6,11 @@ export {default as XpAmount} from './components/XpAmount.tsx';
 export {default as Badge} from './components/Badge.tsx';
 export {default as NumberSpan} from './components/NumberSpan.tsx';
 export {default as CardBorder} from './components/card/CardBorder.tsx';
+export {default as Effects} from './components/card/Effects.tsx';
 export {default as ManaBall} from './components/ManaBall.tsx';
 export {default as FullCard} from './components/card/FullCard.tsx';
 export {default as BoosterRarityDrop} from './components/booster/BoosterRarityDrop.tsx';
+export {default as Cover} from './components/Cover.tsx';
 
 // types
 export * from './components/card/Card.ts';

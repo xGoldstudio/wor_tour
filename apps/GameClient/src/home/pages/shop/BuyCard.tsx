@@ -40,6 +40,7 @@ export default function BuyCard({ card }: BuyCardProps) {
             shards: collectionCard?.shard ?? 0,
             maxShards: getShardsFromLevel(collectionCard?.level ?? 1),
           }}
+          showEffectDesc
         />
         <Box cover="rare" rarity="legendary" height={150}>
           <p className="text-left p-4">

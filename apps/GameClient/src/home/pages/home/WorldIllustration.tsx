@@ -1,6 +1,5 @@
 import usePlayerStore from "@/home/store/playerStore";
-import Cover from "@/home/ui/Cover";
-import { getImageUrl, textureByRarity } from "@repo/ui";
+import { Cover, getImageUrl, textureByRarity } from "@repo/ui";
 import {
 	Borders,
 	CardIllustartion,
@@ -79,7 +78,6 @@ function CurrentWorldProgress() {
         <div className="absolute right-0 top-0 z-10 -translate-y-1/2 translate-x-1/2">
           <div className="w-[20px] h-[20px] bg-slate-200 rounded-sm overflow-hidden flex items-center justify-center">
             <div className="w-[calc(100%_+_3px)] h-[calc(100%_+_3px)] absolute top-[-1.5px] left-[-1.5px] blur-[2px] rounded-sm  bg-amber-100 animate-[shiny_2s_ease-in-out_infinite]"></div>
-
             <Cover cardRarity="epic" />
             <p className="text-sm z-10 text-slate-100">{rewardToCollect}</p>
           </div>

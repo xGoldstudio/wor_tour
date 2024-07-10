@@ -1,6 +1,5 @@
 import { HomeBg } from "@/home/Home";
-import Cover from "@/home/ui/Cover";
-import { Button, cn } from "@repo/ui";
+import { Button, cn, Cover } from "@repo/ui";
 import TrophyBar from "./trophyBar/TrophyBar";
 import AllWorldsAnimationProvider, {
   AllWorldsAnimationContext,

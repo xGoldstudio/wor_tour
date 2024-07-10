@@ -6,14 +6,10 @@ import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore";
 import Badge from "../../../../packages/ui/components/Badge";
-import { NumberSpan, numberWithCommas } from "@repo/ui";
+import { Cover, NumberSpan, numberWithCommas } from "@repo/ui";
 import { cn } from "@repo/ui";
-import {
-  Borders,
-  CardIllustartion,
-  InnerBord,
-} from "../../../../packages/ui/components/card/CardBorder";
-import Cover from "./ui/Cover";
+import { Borders, CardIllustartion, InnerBord } from "../../../../packages/ui/components/card/CardBorder";
+
 
 type Tabs = "home" | "deck" | "shop";
 

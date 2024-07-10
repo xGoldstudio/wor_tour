@@ -1,8 +1,7 @@
 import { useStartGame } from "@/game/stores/gameMetadataStore";
 import { useState } from "react";
-import { numberWithCommas, textureByRarity } from "@repo/ui";
+import { Cover, numberWithCommas, textureByRarity } from "@repo/ui";
 import usePlayerStore from "@/home/store/playerStore";
-import Cover from "@/home/ui/Cover";
 import {
   InnerBord
 } from "../../../../../../packages/ui/components/card/CardBorder";

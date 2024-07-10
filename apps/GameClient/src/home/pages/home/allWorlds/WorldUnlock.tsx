@@ -1,6 +1,5 @@
 import { HomeBg } from "@/home/Home";
-import Cover from "@/home/ui/Cover";
-import { Button, cn, getImageUrl, inPx } from "@repo/ui";
+import { Button, cn, Cover, getImageUrl, inPx } from "@repo/ui";
 import { useContext, useRef } from "react";
 import {
   AllWorldsAnimationContext,

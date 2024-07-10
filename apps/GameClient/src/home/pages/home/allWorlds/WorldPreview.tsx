@@ -3,8 +3,7 @@ import useDataStore from "@/cards/DataStore";
 import usePlayerStore from "@/home/store/playerStore";
 import { useState } from "react";
 import WorldModal from "../modals/WorldModal";
-import { Badge, Button, cn, getImageUrl } from "@repo/ui";
-import Cover from "@/home/ui/Cover";
+import { Badge, Button, cn, Cover, getImageUrl } from "@repo/ui";
 import StaticCard from "@/game/gui/card/StaticCard";
 import { Tier } from "@/home/store/tiers";
 
