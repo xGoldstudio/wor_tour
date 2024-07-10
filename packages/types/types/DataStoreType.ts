@@ -18,7 +18,6 @@ export interface BoosterTypeDeclartion {
 	purchaseDelayInMs?: number;
 	unlockCondition: {
 		world: number;
-		level?: number;
 	};
 	contain: {
 		worlds: number[];

@@ -3,10 +3,10 @@ import { useState } from "react";
 import BoosterIllustration from "./BoosterIllustration";
 import Modal, { BackgroundModal } from "@/home/ui/modal";
 import usePlayerStore from "@/home/store/playerStore";
-import ConfirmationModal from "@/home/ui/ConfirmationModal";
 import CardDisplay from "@/game/gui/card/FullCard";
 import useScrollCardList from "../deck/useScrollCardList";
 import { Box, Button, GoldAmount, preventDefault } from "@repo/ui";
+import ConfirmationModal from "@/home/ui/ConfirmationModal";
 
 interface BoosterProps {
   booster: BoosterType;
@@ -23,7 +23,6 @@ export function Booster({ booster }: BoosterProps) {
       <BoosterIllustration
         size={1}
         title={booster.name}
-        illustration={booster.illustration}
       />
       <Button action={() => setIsModalOpen(true)} full small>
         <GoldAmount amount={booster.cost} />
@@ -80,7 +79,6 @@ export function BoosterModal({ closeModal, booster }: BoosterModalProps) {
               <BoosterIllustration
                 size={2.5}
                 title={booster.name}
-                illustration={booster.illustration}
               />
 
               <div className="absolute -bottom-4 -right-4">

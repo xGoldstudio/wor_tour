@@ -96,7 +96,6 @@ export default function CardReward({
         duration: 1.5,
         ease: "bounce",
       });
-      console.log(shardTarget?.getBoundingClientRect().top);
     }
     if (animationType === "evolution") {
       tl.to(

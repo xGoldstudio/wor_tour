@@ -35,14 +35,13 @@ export function getDistribution(luckImprove: number) {
 }
 
 export const boosters: BoosterTypeDeclartion[] = [
-	// ...(allWorlds.map(amountBooster)),
 	...(allWorlds.map(worldBooster)),
 	...(allWorlds.map(rarityBooster)),
 ];
 
 export const unlockedIndex: Record<number, BoosterTypeDeclartion[]> = {};
 boosters.forEach((booster) => {
-	const target = (booster.unlockCondition.world - 1) * numberOfLevels + (booster.unlockCondition.level ?? 0);
+	const target = (booster.unlockCondition.world - 1) * numberOfLevels;
 	const unlocked = unlockedIndex[target] ?? [];
 	unlocked.push(booster);
 	unlockedIndex[target] = unlocked;

@@ -24,6 +24,7 @@ export * from './lib/transformLevelStatInlevels.ts';
 export * from './lib/time.ts';
 export {default as textureByRarity} from './lib/textureByRarity.ts';
 export * from './lib/cubicBezier.ts';
+export * from './lib/rxjsToZustand.ts';
 
 // data
 export * from './data/ComputeBoosterProgress';

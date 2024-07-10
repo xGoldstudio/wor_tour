@@ -8,7 +8,6 @@ export default function BoosterIllustration({
 }: {
   size: number;
   title: string;
-  illustration: string;
 }) {
   return (
     <div

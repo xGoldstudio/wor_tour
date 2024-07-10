@@ -1,6 +1,6 @@
 import useRewardStore from "./rewardStore";
 import usePlayerStore from "./playerStore";
-import { CardRarity } from "@repo/types";
+import { BoosterTypeDeclartion } from "@repo/types";
 import { CardType } from "@repo/ui";
 
 export type BoosterName =
@@ -9,58 +9,8 @@ export type BoosterName =
   | "Common refill"
   | "Legendary refill";
 
-export type BoosterType = Omit<BoosterTypeDeclartion, "cards"> & {
+export type BoosterType = BoosterTypeDeclartion & {
   cards: CardType[];
-};
-
-export interface BoosterTypeDeclartion {
-  name: BoosterName;
-  cost: number;
-  description: string;
-  illustration: string;
-  requirements: {
-    world?: number;
-    rarity?: CardRarity[];
-    cardAvailable?: (cards: CardType[]) => boolean;
-  };
-}
-
-export const boosters: Record<BoosterName, BoosterTypeDeclartion> = {
-  "Classic refill": {
-    name: "Classic refill",
-    cost: 1000,
-    description: "Contain 1 unit from any worlds among unlocked cards.",
-    illustration: "/cards/7/level3.png",
-    requirements: {},
-  },
-  "World 1 refill": {
-    name: "World 1 refill",
-    cost: 1200,
-    description: "Contain 1 unit from any worlds among unlocked cards.",
-    illustration: "/cards/8/level3.png",
-    requirements: {
-      world: 1,
-    },
-  },
-  "Common refill": {
-    name: "Common refill",
-    cost: 800,
-    description: "Contain 1 common unit from any worlds among unlocked cards.",
-    illustration: "/cards/8/level1.png",
-    requirements: {
-      rarity: ["common"],
-    },
-  },
-  "Legendary refill": {
-    name: "Legendary refill",
-    cost: 10000,
-    description:
-      "Contain 1 legendary unit from any worlds among unlocked cards.",
-    illustration: "/cards/4/level3.png",
-    requirements: {
-      rarity: ["legendary"],
-    },
-  },
 };
 
 export default function useBooster(booster: BoosterType) {
