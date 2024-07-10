@@ -121,3 +121,7 @@ export function getCardStrength(card: {
     cardWorldMultiplier ** (card.world - 1)
   );
 }
+
+export function getShardsFromLevel(level: number) {
+  return level === 1 ? 3 : 7;
+}

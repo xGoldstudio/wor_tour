@@ -8,6 +8,7 @@ export {default as NumberSpan} from './components/NumberSpan.tsx';
 export {default as CardBorder} from './components/card/CardBorder.tsx';
 export {default as ManaBall} from './components/ManaBall.tsx';
 export {default as FullCard} from './components/card/FullCard.tsx';
+export {default as BoosterRarityDrop} from './components/booster/BoosterRarityDrop.tsx';
 
 // types
 export * from './components/card/Card.ts';

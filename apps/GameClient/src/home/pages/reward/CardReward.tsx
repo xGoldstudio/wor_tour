@@ -4,6 +4,7 @@ import { CardRewardType } from "@/home/store/rewardStore";
 import { useEffect, useRef } from "react";
 import _ from "lodash";
 import gsap from "gsap";
+import { getShardsFromLevel } from "@repo/ui";
 
 interface RewardProps {
   reward: CardRewardType;
@@ -32,7 +33,7 @@ export default function CardReward({
     if (target === null) {
       return "newCard";
     }
-    const requiredShard = reward.level === 1 ? 3 : 7;
+    const requiredShard = getShardsFromLevel(reward.level);
     return target + 1 === requiredShard ? "evolution" : "shard";
   }
 

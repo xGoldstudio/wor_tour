@@ -26,7 +26,7 @@ export default function Box({
       <Borders width={width} height={height} borderUnit={size} rarity={rarity}>
         <CardIllustartion width={width} height={height} borderUnit={size}>
           <InnerBord size={size}>
-            <div className="w-full h-full relative bg-slate-100 text-center">
+            <div className="w-full h-full relative bg-slate-800 text-center">
               {cover && (
                 <div
                   className="absolute w-full h-full top-0 left-0 blur-sm"
