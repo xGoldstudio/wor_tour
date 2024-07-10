@@ -1,8 +1,9 @@
-import useRewardStore from "./rewardStore";
-import usePlayerStore from "./playerStore";
-import { BoosterTypeDeclartion, CardRarity } from "@repo/types";
+import useRewardStore from "../rewardStore";
+import usePlayerStore from "../playerStore";
+import { BoosterTypeDeclartion } from "@repo/types";
 import { CardType } from "@repo/ui";
-import { arrayOfCardsToRarityMap, useBoosterStore } from "./boosterStore";
+import { useBoosterStore } from "../boosterStore";
+import { getRandomCardFromRarity } from "./getRandomCardFromRarity";
 
 export type BoosterName =
   | "Classic refill"
@@ -64,31 +65,4 @@ export function useAddCardOrShardOrEvolve() {
     }
     addCardOrShardOrEvolve(cardId);
   };
-}
-
-export function getRandomCardFromRarity(cards: CardType[], rarities: Record<CardRarity, number>) {
-  const cardsByRarity = arrayOfCardsToRarityMap(cards);
-  const rarityRand = Math.random() * 100;
-  let usingRarity: CardRarity | null = null;
-  let totalPercent = 0;
-  for (const rarity in rarities) {
-    const value = rarities[rarity as CardRarity];
-    totalPercent = totalPercent + value;
-    if (usingRarity === null && cardsByRarity[rarity as CardRarity].length > 0) {
-      console.log("dafult")
-      usingRarity = rarity as CardRarity; // the total rarities may be slightly less than 100, if its out of bound, we secure the first valid rarity
-    }
-    // should have cards inside
-    if (cardsByRarity[rarity as CardRarity].length > 0 && rarityRand <= totalPercent) {
-      usingRarity = rarity as CardRarity;
-      console.log(usingRarity);
-      break;
-    }
-  }
-  if (!usingRarity) return;
-  const cardsFilterdByRarity = cardsByRarity[usingRarity];
-  if (cardsFilterdByRarity.length === 0) return;
-  const randomCard =
-    cardsFilterdByRarity[Math.floor(Math.random() * cardsFilterdByRarity.length)];
-  return randomCard;
 }

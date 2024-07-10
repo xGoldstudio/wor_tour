@@ -27,7 +27,6 @@ test("attacking pipeline", () => {
 	clock.nextTick();
 	expect(state.opponentHp).toBe(100); // damage applied
 
-	console.log("sould draw")
 	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: false, targetPosition: 0, cardInHandPosition: 0 });
 	clock.nextTick();

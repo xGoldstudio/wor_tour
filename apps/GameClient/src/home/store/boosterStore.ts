@@ -3,11 +3,12 @@ import usePlayerStore, { CollectionCard } from "./playerStore";
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CardRarityOrder, CardStatsInfo, CardType, boosters, toState } from "@repo/ui";
-import { BoosterType } from "./useBooster";
+import { BoosterType } from "./useBooster/useBooster";
 import useDataStore from "@/cards/DataStore";
-import { BoosterTypeDeclartion, CardRarity } from "@repo/types";
+import { BoosterTypeDeclartion } from "@repo/types";
 import { findCard } from "@/cards";
 import { create } from 'zustand';
+import { arrayOfCardsToRarityMap } from './useBooster/getRandomCardFromRarity';
 
 const playerCollectionObservable = toStream(usePlayerStore, (state) => state.collection, {
 	fireImmediately: true,
@@ -42,22 +43,7 @@ export const packableCardsByRarityObservable = packableCardsObservable.pipe(
 function arrayOfCardStatInfoToCardType(cards: CardStatsInfo[]) {
 	return cards.map((card) => findCard(card.id, 1));
 }
-export function arrayOfCardsToRarityMap(cards: CardType[]) {
-	const cardsByRarity = cards.reduce(
-		(acc, card) => {
-			const cardLevel = usePlayerStore.getState().collection.get(card.id)?.level || 1;
-			acc[card.rarity].push(findCard(card.id, cardLevel));
-			return acc;
-		},
-		{
-			common: [],
-			rare: [],
-			epic: [],
-			legendary: [],
-		} as Record<CardRarity, CardType[]>
-	);
-	return cardsByRarity;
-}
+
 function isCardPackableForBooster(booster: BoosterTypeDeclartion) {
 	return (card: CardStatsInfo) => {
 		if (!booster.contain.worlds.includes(card.world)) return false;

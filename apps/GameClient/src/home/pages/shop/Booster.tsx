@@ -1,4 +1,4 @@
-import useBooster, { BoosterType } from "@/home/store/useBooster";
+import useBooster, { BoosterType } from "@/home/store/useBooster/useBooster";
 import { useState } from "react";
 import BoosterIllustration from "./BoosterIllustration";
 import Modal, { BackgroundModal } from "@/home/ui/modal";

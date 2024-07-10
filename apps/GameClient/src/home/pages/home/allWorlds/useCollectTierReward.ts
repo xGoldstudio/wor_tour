@@ -1,6 +1,6 @@
 import usePlayerStore from "@/home/store/playerStore";
 import useRewardStore from "@/home/store/rewardStore";
-import useBooster from "@/home/store/useBooster";
+import useBooster from "@/home/store/useBooster/useBooster";
 
 export default function useCollectTierReward(tierNumber: number) {
 	const collectTierReward = usePlayerStore((state) => state.collectTierReward);
