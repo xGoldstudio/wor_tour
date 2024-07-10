@@ -13,7 +13,7 @@ interface DeckStatsProps {
 
 function DeckStats({ averageCostDeck }: DeckStatsProps) {
   return (
-    <div className="flex w-full justify-between m-2 pt-4 h-[75px]">
+    <div className="flex w-full justify-between m-2 pt-4 h-[75px] mx-auto px-2">
       <svg width="30%" height="100%">
         <rect width="100%" height="100%" />
         <image
