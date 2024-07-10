@@ -78,7 +78,12 @@ export default function HomeTab() {
             <InnerBord size={1.5}>
               <div className="w-full h-full relative bg-slate-600 flex items-center justify-end pr-2">
                 <Cover cardRarity="rare" />
-                <p className="relative font-semibold"  x-id="trophyCountInputTrophies">{numberWithCommas(trophies)}</p>
+                <p
+                  className="relative font-semibold"
+                  x-id="trophyCountInputTrophies"
+                >
+                  {numberWithCommas(trophies)}
+                </p>
               </div>
             </InnerBord>
           </div>
