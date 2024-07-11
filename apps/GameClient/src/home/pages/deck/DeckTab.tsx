@@ -16,7 +16,7 @@ interface DeckStatsProps {
 function DeckStats({ averageCostDeck, powerTotal }: DeckStatsProps) {
   console.log(powerTotal.toFixed(0));
   return (
-    <div className="flex w-full justify-between items-center m-2 pt-4 h-[75px] mx-auto px-4">
+    <div className="flex w-full justify-between items-center m-2 pt-4 h-[75px] mx-auto px-4 ">
       <div className="flex items-center text-white gap-2 text-2xl bold ">
         {averageCostDeck.toFixed(1)}
         <ManaBall />
@@ -28,8 +28,8 @@ function DeckStats({ averageCostDeck, powerTotal }: DeckStatsProps) {
         <img
           src="/icons/epees-bouclier.png"
           alt="swords and a shield"
-          width={55}
-          height={55}
+          width={58}
+          height={58}
           className="opacity-60"
         />
       </div>

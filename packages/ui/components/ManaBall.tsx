@@ -8,7 +8,7 @@ export default function ManaBall({ mana }: ManaBallProps) {
 
 export function ManaBallWrapper({ children }: { children: React.ReactNode }) {
   return (
-    <div className="h-[40px] w-[40px] flex justify-center items-center z-10">
+    <div className="h-[40px] w-[40px] flex justify-center items-center z-10 relative">
       <div className="absolute top-[2px] left-[1px] h-[39px] w-[39px] bg-[linear-gradient(60deg,#d193cc_0%,_rgba(212,100,203,1)_100%)] rounded-full flex justify-center items-center blur-[2px]"></div>
       <div className="z-10 absolute h-[38px] w-[38px] bg-[linear-gradient(60deg,_rgba(136,21,127,1)_0%,_rgba(212,100,203,1)_100%)] rounded-full flex justify-center items-center"></div>
       <div
