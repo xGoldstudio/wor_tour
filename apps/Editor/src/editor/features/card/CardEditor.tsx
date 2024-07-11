@@ -164,7 +164,7 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
             setCardLevel({
               effects: {
                 ...card.effects,
-                fightBack: v.target.checked ? { type: "fightBack" } : undefined,
+                fightBack: v.target.checked ? { type: "fightBack", amount: null } : undefined,
               },
             });
           }}
@@ -178,7 +178,7 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
               effects: {
                 ...card.effects,
                 multiAttack: v.target.checked
-                  ? { type: "multiAttack" }
+                  ? { type: "multiAttack", amount: null }
                   : undefined,
               },
             });
