@@ -18,13 +18,7 @@ export function OrderBox({ isAscending, setIsAscending }: OrderBoxProps) {
         })}
       >
         <div className="h-6 w-6 flex justify-center items-center ">
-          <img
-            src="/icons/triangle.png"
-            alt="arrow"
-            width={40}
-            height={40}
-            className=""
-          />
+          <img src="/icons/triangle.png" alt="arrow" width={40} height={40} />
         </div>
       </div>
     </Button>

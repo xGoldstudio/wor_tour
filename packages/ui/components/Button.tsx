@@ -30,8 +30,7 @@ export default function Button({
       onClick={action}
       className={cn(
         "rounded-sm overflow-hidden text-nowrap relative z-10 font-semibold shadow-md",
-        full ? "w-full" : "w-min",
-        width ? width : "",
+        width !== undefined ? width : full ? "w-full" : "w-min",
         disabled ? "brightness-50" : "brightness-100",
         rarity === "epic" ? "bg-slate-100" : "bg-black"
       )}

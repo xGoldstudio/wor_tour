@@ -88,7 +88,7 @@ export function SortBox({
   }
   return (
     <Button action={() => getNextSort()} width="w-32">
-      <div className="">{children}</div>
+      <div>{children}</div>
     </Button>
   );
 }
