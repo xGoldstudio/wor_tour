@@ -1,7 +1,8 @@
-import { cn, textureByRarity } from "@repo/ui";
+import { cn } from "@repo/ui";
 import { useState } from "react";
 import CollectionTab from "./CollectionTab";
 import DeckTab from "./DeckTab";
+import Cover from "@/home/ui/Cover";
 
 type Tabs = "Deck" | "Collection";
 
@@ -25,15 +26,8 @@ function TabModal({ children, currentTab, setCurrentTab }: TabModalProps) {
       )}
       onClick={() => setCurrentTab(children?.toString() as Tabs)}
     >
-      <div className="rounded-sm overflow-hidden text-nowrap relative z-10 font-semibold  h-full">
-        <div
-          className="absolute w-full h-full blur-sm"
-          style={{
-            backgroundImage: `url(/${textureByRarity("common")})`,
-            backgroundSize: "cover",
-            backgroundPositionY: "center",
-          }}
-        />
+      <div className="rounded-t-md overflow-hidden text-nowrap relative z-10 font-semibold  h-full">
+        <Cover cardRarity="common" />
         <div className="text-black h-full flex justify-center items-center relative px-12 ">
           {children}
         </div>
@@ -58,14 +52,7 @@ export function DeckInterface() {
       </div>
       <div className="w-full h-[55px] hover:cursor-pointer bg-black">
         <div className="overflow-hidden relative z-10 font-semibold h-full">
-          <div
-            className="absolute w-full h-full blur-sm"
-            style={{
-              backgroundImage: `url(/${textureByRarity("common")})`,
-              backgroundSize: "cover",
-              backgroundPositionY: "center",
-            }}
-          />
+          <Cover cardRarity="common" />
         </div>
       </div>
       <div className="w-full flex justify-center overflow-hidden">

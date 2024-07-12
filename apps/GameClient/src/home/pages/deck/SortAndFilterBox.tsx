@@ -1,3 +1,4 @@
+import useDataStore from "@/cards/DataStore";
 import { findValueInRecordByKey } from "../../ui/utils/findValueInRecordByKey";
 import { ActiveFilters } from "./cardFilters";
 import { CardSorts, sorts } from "./cardSorts";
@@ -24,10 +25,15 @@ export function SortAndFilterBox({
   currentFilter,
   setCurrentFilter,
 }: SortAndFilterProps) {
+  const { totalCards } = useDataStore((state) => ({
+    totalCards: state.cards.length,
+  }));
   return (
     <div className="px-4">
       <div className="h-16 bg-black bg-opacity-30 mt-4 rounded-lg flex items-center px-4 justify-between">
-        <div className="">Cards found : {collectionLength} / 75</div>
+        <div className="">
+          Cards found : {collectionLength} / {totalCards}
+        </div>
         <div className="flex flex-row space-x-4 relative">
           <FilterBox
             currentFilter={currentFilter}
