@@ -1,4 +1,3 @@
-import Cover from "@/home/ui/Cover";
 import { cn } from "@repo/ui";
 import { useState } from "react";
 import CollectionTab from "./CollectionTab";
