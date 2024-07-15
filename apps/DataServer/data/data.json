@@ -437,33 +437,21 @@
       "rarity": "legendary",
       "id": 15,
       "world": 1,
-      "attackDefenseRatio": 0.01,
+      "attackDefenseRatio": 0.11,
       "speedDamageRatio": 0.01,
       "stats": [
         {
-          "effects": {
-            "multiAttack": {
-              "type": "multiAttack"
-            }
-          },
+          "effects": {},
           "cost": 3,
           "illustration": "card_15_level_1_1720100170687.png"
         },
         {
-          "effects": {
-            "multiAttack": {
-              "type": "multiAttack"
-            }
-          },
+          "effects": {},
           "cost": 3,
           "illustration": "card_15_level_2_1720100176579.png"
         },
         {
-          "effects": {
-            "multiAttack": {
-              "type": "multiAttack"
-            }
-          },
+          "effects": {},
           "cost": 3,
           "illustration": "card_15_level_3_1720100190398.png"
         }
@@ -471,107 +459,122 @@
     },
     {
       "id": 16,
-      "name": "common card 1",
+      "name": "Ragh Hunter",
       "rarity": "common",
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.27,
+      "speedDamageRatio": 0.27,
       "stats": [
         {
-          "cost": 1,
+          "cost": 2,
           "effects": {},
-          "illustration": null
+          "illustration": "card_16_level_1_1720706342299.png"
         },
         {
-          "cost": 1,
+          "cost": 2,
           "effects": {},
-          "illustration": null
+          "illustration": "card_16_level_2_1720706346178.png"
         },
         {
-          "cost": 1,
+          "cost": 2,
           "effects": {},
-          "illustration": null
+          "illustration": "card_16_level_3_1720706351662.png"
         }
       ]
     },
     {
       "id": 17,
-      "name": "common card 2",
+      "name": "Ragh Spadassin",
       "rarity": "common",
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.45,
+      "speedDamageRatio": 0.67,
       "stats": [
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 3,
+          "effects": {
+            "fightBack": {
+              "type": "fightBack",
+              "amount": null
+            }
+          },
+          "illustration": "card_17_level_1_1720721228258.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 3,
+          "effects": {
+            "fightBack": {
+              "type": "fightBack",
+              "amount": null
+            }
+          },
+          "illustration": "card_17_level_2_1720721232627.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 3,
+          "effects": {
+            "fightBack": {
+              "type": "fightBack",
+              "amount": null
+            }
+          },
+          "illustration": "card_17_level_3_1720721238278.png"
         }
       ]
     },
     {
       "id": 18,
-      "name": "common card 3",
+      "name": "Ragh Keeper",
       "rarity": "common",
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.73,
+      "speedDamageRatio": 0.63,
       "stats": [
         {
-          "cost": 1,
+          "cost": 5,
           "effects": {},
-          "illustration": null
+          "illustration": "card_18_level_1_1720722631140.png"
         },
         {
-          "cost": 1,
+          "cost": 5,
           "effects": {},
-          "illustration": null
+          "illustration": "card_18_level_2_1720722634257.png"
         },
         {
-          "cost": 1,
+          "cost": 5,
           "effects": {},
-          "illustration": null
+          "illustration": "card_18_level_3_1720722637985.png"
         }
       ]
     },
     {
       "id": 19,
-      "name": "common card 4",
+      "name": "Raghorse",
       "rarity": "common",
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.62,
+      "speedDamageRatio": 0.61,
       "stats": [
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_19_level_1_1720977947828.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_19_level_2_1720977954509.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_19_level_3_1720977959891.png"
         }
       ]
     },
     {
       "id": 20,
-      "name": "common card 5",
+      "name": "Rax The Crusader",
       "rarity": "common",
       "world": 2,
       "attackDefenseRatio": 0.5,
@@ -580,23 +583,23 @@
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_20_level_1_1720975944876.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_20_level_2_1720975947846.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_20_level_3_1720975951186.png"
         }
       ]
     },
     {
       "id": 21,
-      "name": "common card 6",
+      "name": "Ragh Slave",
       "rarity": "common",
       "world": 2,
       "attackDefenseRatio": 0.5,
@@ -605,23 +608,23 @@
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_21_level_1_1720977466954.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_21_level_2_1720977471267.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_21_level_3_1720977474377.png"
         }
       ]
     },
     {
       "id": 22,
-      "name": "common card 7",
+      "name": "Ragh Thrower",
       "rarity": "common",
       "world": 2,
       "attackDefenseRatio": 0.5,
@@ -630,23 +633,23 @@
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_22_level_1_1721050271270.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_22_level_2_1721050621698.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_22_level_3_1721050624380.png"
         }
       ]
     },
     {
       "id": 23,
-      "name": "common card 8",
+      "name": "Ragh Fighter",
       "rarity": "common",
       "world": 2,
       "attackDefenseRatio": 0.5,
@@ -655,73 +658,73 @@
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_23_level_1_1721051354517.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_23_level_2_1721051661386.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_23_level_3_1721051665630.png"
         }
       ]
     },
     {
       "id": 24,
-      "name": "rare card 1",
+      "name": "Enraged Ragh",
       "rarity": "rare",
       "world": 2,
-      "attackDefenseRatio": 0.5,
+      "attackDefenseRatio": 0.1,
       "speedDamageRatio": 0.5,
       "stats": [
         {
-          "cost": 1,
+          "cost": 2,
           "effects": {},
-          "illustration": null
+          "illustration": "card_24_level_1_1720724823656.png"
         },
         {
-          "cost": 1,
+          "cost": 2,
           "effects": {},
-          "illustration": null
+          "illustration": "card_24_level_2_1720725223340.png"
         },
         {
-          "cost": 1,
+          "cost": 2,
           "effects": {},
-          "illustration": null
+          "illustration": "card_24_level_3_1720725227930.png"
         }
       ]
     },
     {
       "id": 25,
-      "name": "rare card 2",
+      "name": "The Clown",
       "rarity": "rare",
       "world": 2,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
-          "cost": 1,
+          "cost": 4,
           "effects": {},
-          "illustration": null
+          "illustration": "card_25_level_1_1720974780704.png"
         },
         {
-          "cost": 1,
+          "cost": 4,
           "effects": {},
-          "illustration": null
+          "illustration": "card_25_level_2_1720974783343.png"
         },
         {
-          "cost": 1,
+          "cost": 4,
           "effects": {},
-          "illustration": null
+          "illustration": "card_25_level_3_1720974612545.png"
         }
       ]
     },
     {
       "id": 26,
-      "name": "rare card 3",
+      "name": "Giant Crocodyle",
       "rarity": "rare",
       "world": 2,
       "attackDefenseRatio": 0.5,
@@ -730,23 +733,23 @@
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_26_level_1_1721055659853.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_26_level_2_1721055653476.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_26_level_3_1721055277711.png"
         }
       ]
     },
     {
       "id": 27,
-      "name": "rare card 4",
+      "name": "Gar The Crusader",
       "rarity": "rare",
       "world": 2,
       "attackDefenseRatio": 0.5,
@@ -755,48 +758,75 @@
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_27_level_1_1721057309461.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_27_level_2_1721057402888.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_27_level_3_1721057505007.png"
         }
       ]
     },
     {
       "id": 28,
-      "name": "epic card 1",
+      "name": "Flying Scorpion",
       "rarity": "epic",
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.95,
+      "speedDamageRatio": 0.25,
       "stats": [
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 7,
+          "effects": {
+            "placementHeal": {
+              "type": "placementHeal",
+              "amount": 100
+            },
+            "multiAttack": {
+              "type": "multiAttack",
+              "amount": null
+            }
+          },
+          "illustration": "card_28_level_1_1720723376133.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 7,
+          "effects": {
+            "placementHeal": {
+              "type": "placementHeal",
+              "amount": 150
+            },
+            "multiAttack": {
+              "type": "multiAttack",
+              "amount": null
+            }
+          },
+          "illustration": "card_28_level_2_1720723379187.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 7,
+          "effects": {
+            "multiAttack": {
+              "type": "multiAttack",
+              "amount": null
+            },
+            "placementHeal": {
+              "type": "placementHeal",
+              "amount": 200
+            }
+          },
+          "illustration": "card_28_level_3_1720723381906.png"
         }
       ]
     },
     {
       "id": 29,
-      "name": "epic card 2",
+      "name": "The Purificator",
       "rarity": "epic",
       "world": 2,
       "attackDefenseRatio": 0.5,
@@ -805,42 +835,42 @@
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_29_level_1_1721060115017.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_29_level_2_1721059979891.png"
         },
         {
           "cost": 1,
           "effects": {},
-          "illustration": null
+          "illustration": "card_29_level_3_1721059885396.png"
         }
       ]
     },
     {
       "id": 30,
-      "name": "legendary card 1",
+      "name": "King Of The Ragh",
       "rarity": "legendary",
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.77,
+      "speedDamageRatio": 0.44,
       "stats": [
         {
-          "cost": 1,
+          "cost": 6,
           "effects": {},
-          "illustration": null
+          "illustration": "card_30_level_1_1721062011136.png"
         },
         {
-          "cost": 1,
+          "cost": 6,
           "effects": {},
-          "illustration": null
+          "illustration": "card_30_level_2_1721062086115.png"
         },
         {
-          "cost": 1,
+          "cost": 6,
           "effects": {},
-          "illustration": null
+          "illustration": "card_30_level_3_1721061680880.png"
         }
       ]
     },
@@ -1982,8 +2012,8 @@
     {
       "id": 2,
       "name": "Krag Desert",
-      "illustration": "world_2_illustration_1719074625096.png",
-      "cardBackground": "world_2_cardBackground_1718900878033.jpeg",
+      "illustration": "world_2_illustration_1720702007262.jpeg",
+      "cardBackground": "world_2_cardBackground_1720701361373.jpeg",
       "numberOfLevels": 0,
       "baseGoldReward": 1,
       "baseXpReward": 1,

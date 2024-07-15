@@ -5,17 +5,19 @@ import {
   AllWorldsAnimationContextType,
 } from "./trophyBar/TrophyBarContext";
 import { useGSAP } from "@gsap/react";
-import { Button, cn, Cover } from "@repo/ui";
+import { Button, cn, Cover, getImageUrlCssValue } from "@repo/ui";
 import gsap from "gsap";
 import { Tier } from "@/home/store/tiers";
 import useCollectTierReward from "./useCollectTierReward";
 import { chestImageByLevel, emptyChestImageByLevel, glowChestImageByLevel } from "./chestsImages";
+import useDataStore from "@/cards/DataStore";
 
 export default function LevelPreview({ tier }: { tier: Tier }) {
   const ref = useRef<HTMLDivElement>(null);
   const { appearedTrophiesFields, state } = useContext(
     AllWorldsAnimationContext
   ) as AllWorldsAnimationContextType;
+  const usingWorld = useDataStore((state) => state.worlds[tier.world - 1]);
   const isLast = usePlayerStore((state) => state.currentTier) === tier.tier;
   const collectReward = useCollectTierReward(tier.tier);
   const isAnimationFired = useRef(false);
@@ -109,7 +111,7 @@ export default function LevelPreview({ tier }: { tier: Tier }) {
       <div
         className={cn("absolute w-full h-full rounded-md")}
         style={{
-          backgroundImage: `url(homeBg.jpeg)`,
+          backgroundImage: getImageUrlCssValue(usingWorld.cardBackground),
           backgroundSize: "100%",
           backgroundPositionY: `${100 - (tier.tier % 10) * 10}%`,
         }}
