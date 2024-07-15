@@ -223,7 +223,7 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
           </div>
         )}
       </div>
-      <FullCard card={card} className="pt-8" size={0.6} />
+      <FullCard card={card} className="pt-8" size={0.9} />
     </div>
   );
 }

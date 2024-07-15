@@ -11,7 +11,7 @@ interface GameStateObjectConstructor {
 
 export type CurrentWinner = "player" | "opponent" | null;
 
-export const defaultManaSpeed = 300;
+export const defaultManaSpeed = 200;
 
 export class GameStateObject {
 	constructor({ playerDeck, opponentDeck, playerHp, opponentHp }: GameStateObjectConstructor) {

@@ -78,7 +78,7 @@ export default function WorldPreview({
               {cards.map((card) => (
                 <StaticCard
                   card={card}
-                  size={0.65}
+                  size={0.85}
                   key={card.id}
                   isDisabled={!isUnlocked}
                 />
