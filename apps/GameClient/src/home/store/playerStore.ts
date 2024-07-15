@@ -29,6 +29,8 @@ interface PlayerStore {
   isDeckFull: () => boolean;
   isPlayed: (cardId: number) => boolean;
 
+  getAllCardsLocked: () => CardStatsInfo[];
+  getTheLockPattern: (id: number) => number;
   getAllCardsPackable: () => CardStatsInfo[];
   getAllCardsPackableByRarity: () => Record<CardRarity, CardType[]>;
   isCardPackable: (id: number) => CardType | null;
@@ -52,7 +54,7 @@ interface PlayerStore {
 
 const defaultCollection: Map<number, CollectionCard> = new Map();
 // to 75
-for (let i = 1; i <= 75; i++) {
+for (let i = 1; i <= 69; i++) {
   defaultCollection.set(i, { id: i, level: 1, shard: 0 });
 }
 
@@ -66,7 +68,7 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   getCollection: () => Array.from(get().collection.values()),
   getCollectionInfo: (id: number) => get().collection.get(id),
   getCompleteInfo: (id: number) => ({
-    ...findCard(id, get().getCollectionInfo(id)!.level),
+    ...findCard(id, get().getCollectionInfo(id).level),
     isInDeck: get().deck.includes(id),
   }),
   getCollectionCompleteInfo: (collection: CollectionCard[]) =>
@@ -90,6 +92,16 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
     const collectionCard = get().getCollectionInfo(id);
     if (!collectionCard) return findCard(id, 1);
     return collectionCard.level < 3 ? findCard(id, collectionCard.level) : null;
+  },
+  getAllCardsLocked: () => {
+    return useDataStore.getState().cards.filter((card) => {
+      return !get().collection.has(card.id);
+    });
+  },
+  getTheLockPattern: (id: number) => {
+    const card = getCardStats(id);
+    if (card.world > get().currentWorld) return card.world;
+    else return 0;
   },
   getAllCardsPackable: () => {
     //

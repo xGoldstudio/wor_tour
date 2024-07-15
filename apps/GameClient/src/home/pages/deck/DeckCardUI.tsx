@@ -1,5 +1,5 @@
 import usePlayerStore from "@/home/store/playerStore";
-import { Button, ManaBall, preventDefault } from "@repo/ui";
+import { Button, cn, ManaBall, preventDefault } from "@repo/ui";
 import { useState } from "react";
 import CardBorder, {
   CardContentIllustartion,
@@ -10,18 +10,26 @@ interface CardUIProps {
   cardId: number;
   isHand?: boolean;
   unaddble?: boolean;
+  locked?: boolean;
 }
 
-export function DeckCardUI({ cardId, isHand, unaddble: addable }: CardUIProps) {
+export function DeckCardUI({
+  cardId,
+  isHand,
+  unaddble: addable,
+  locked = false,
+}: CardUIProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
-  const { card, removeCardFromDeck, addCardToDeck, isDeckFull } =
+  const { card, removeCardFromDeck, addCardToDeck, isDeckFull, lockPattern } =
     usePlayerStore((state) => ({
       card: state.getCompleteInfo(cardId),
       removeCardFromDeck: state.removeCardFromDeck,
       addCardToDeck: state.addCardToDeck,
       isDeckFull: state.isDeckFull(),
+      lockPattern: state.getTheLockPattern(cardId),
     }));
 
+  const opacity = locked ? "opacity-50" : "opacity-100";
   return (
     <>
       {isDescriptionOpen && (
@@ -30,12 +38,22 @@ export function DeckCardUI({ cardId, isHand, unaddble: addable }: CardUIProps) {
           closeModal={() => setIsDescriptionOpen(false)}
         />
       )}
-      <div className="relative select-none h-min">
-        <div className="" onClick={() => setIsDescriptionOpen(true)}>
+      <div className={cn("relative select-none h-min ")}>
+        {locked && (
+          <div className="absolute h-full w-full px-4 flex justify-center items-center z-10">
+            {lockPattern === 0
+              ? "Not unlocked yet"
+              : "Unlockable at world " + lockPattern}
+          </div>
+        )}
+        <div
+          className={`${opacity}`}
+          onClick={() => setIsDescriptionOpen(true)}
+        >
           <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>
-            <div className="w-full h-full flex flex-col relative">
+            <div className={`w-full h-full flex flex-col relative ${opacity}`}>
               <CardContentIllustartion card={card} size={isHand ? 1.6 : 2} />
-              <div className="absolute top-0 right-0">
+              <div className={`absolute top-0 right-0 ${opacity}`}>
                 <svg
                   className="h-full absolute left-0 -translate-x-full"
                   viewBox="0 0 32 32"
