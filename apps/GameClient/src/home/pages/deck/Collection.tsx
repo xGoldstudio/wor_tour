@@ -29,7 +29,7 @@ export default function Collection() {
   });
 
   const collectionLength = detailledCollection.length;
-
+  const cardNotFoundLength = cardNotFound.length;
   for (const filter in FiltersDescription) {
     const typedFilter = FiltersDescription[filter as CardFilters];
     detailledCollection = detailledCollection.filter((card) =>
@@ -46,6 +46,7 @@ export default function Collection() {
     detailledCollection,
     isAscending
   );
+
   // cardNotFound.forEach((card) => {
   //   console.log(getTheLockPattern(card.id));
   // });
@@ -75,7 +76,7 @@ export default function Collection() {
       </div>
       <div className="grid grid-rows-[1fr_auto] top-0 ">
         <SortAndFilterBox
-          collectionLength={collectionLength}
+          collectionLength={cardNotFoundLength}
           currentSort={currentSort}
           setCurrentSort={setcurrentSort}
           isAscending={isAscending}
@@ -84,12 +85,12 @@ export default function Collection() {
           setCurrentFilter={setCurrentFilter}
           title="Cards Not Found :"
         />
-        <div className="w-[600px] mx-auto grid grid-cols-4 gap-y-6 pt-10 pb-8">
-          {/* {cardNotFound.map((card) => (
+        <div className="w-[600px] mx-auto grid grid-cols-4 gap-y-6 pt-10 pb-28">
+          {cardNotFound.map((card) => (
             <div className="w-full flex justify-center" key={card.id}>
-              <DeckCardUI cardId={card.id} locked={true} />
+              <DeckCardUI cardId={card.id} locked={true} unaddble={true} />
             </div>
-          ))} */}
+          ))}
         </div>
       </div>
     </div>

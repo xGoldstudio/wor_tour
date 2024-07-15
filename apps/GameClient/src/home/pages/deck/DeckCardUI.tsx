@@ -40,14 +40,17 @@ export function DeckCardUI({
       )}
       <div className={cn("relative select-none h-min ")}>
         {locked && (
-          <div className="absolute h-full w-full px-4 flex justify-center items-center z-10">
+          <div
+            className="absolute h-full w-full px-4 flex justify-center items-center z-10"
+            onClick={() => setIsDescriptionOpen(true)}
+          >
             {lockPattern === 0
               ? "Not unlocked yet"
               : "Unlockable at world " + lockPattern}
           </div>
         )}
         <div
-          className={`${opacity}`}
+          className={`${opacity} `}
           onClick={() => setIsDescriptionOpen(true)}
         >
           <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>

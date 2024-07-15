@@ -66,11 +66,18 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   deck: [1, 2, 3, 4, 5, 6, 7, 8],
   gold: 0,
   getCollection: () => Array.from(get().collection.values()),
-  getCollectionInfo: (id: number) => get().collection.get(id),
-  getCompleteInfo: (id: number) => ({
-    ...findCard(id, get().getCollectionInfo(id).level),
-    isInDeck: get().deck.includes(id),
-  }),
+  getCollectionInfo: (id: number) =>
+    get().collection.has(id) ? get().collection.get(id) : undefined,
+  // getInfoOnCard: (id: number) => {return useDataStore.getState().cards.find((card) => card.id === id)},
+  getCompleteInfo: (id: number) => {
+    const cardLevel = get().getCollectionInfo(id)
+      ? get().getCollectionInfo(id)!.level
+      : 1;
+    return {
+      ...findCard(id, cardLevel),
+      isInDeck: get().deck.includes(id),
+    };
+  },
   getCollectionCompleteInfo: (collection: CollectionCard[]) =>
     collection.map((card) => get().getCompleteInfo(card.id)),
   lastCompletedLevel: -1,
