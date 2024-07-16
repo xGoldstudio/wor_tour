@@ -5,6 +5,7 @@ import CardBorder, {
   CardContentIllustartion,
 } from "../../../../../../packages/ui/components/card/CardBorder";
 import CardModal from "./CardModal";
+import { spawn } from "child_process";
 
 interface CardUIProps {
   cardId: number;
@@ -29,7 +30,7 @@ export function DeckCardUI({
       lockPattern: state.getTheLockPattern(cardId),
     }));
 
-  const opacity = locked ? "opacity-50" : "opacity-100";
+  const opacity = locked ? "brightness-50" : "opacity-100";
   return (
     <>
       {isDescriptionOpen && (
@@ -38,15 +39,20 @@ export function DeckCardUI({
           closeModal={() => setIsDescriptionOpen(false)}
         />
       )}
-      <div className={cn("relative select-none h-min ")}>
+      <div className={cn("relative select-none h-min  ")}>
         {locked && (
           <div
-            className="absolute h-full w-full px-4 flex justify-center items-center z-10"
+            className="absolute h-full w-full px-10 flex justify-center items-center z-10"
             onClick={() => setIsDescriptionOpen(true)}
           >
-            {lockPattern === 0
-              ? "Not unlocked yet"
-              : "Unlockable at world " + lockPattern}
+            {lockPattern === 0 ? (
+              "Not unlocked yet"
+            ) : (
+              <span className="text-white opacity-60">
+                {" "}
+                Unlockable at world {lockPattern}
+              </span>
+            )}
           </div>
         )}
         <div

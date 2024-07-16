@@ -1,12 +1,6 @@
-import { create } from "zustand";
 import { EditorData } from "@repo/types";
-import {
-  CardStatsInfo,
-  CardStatsInfoLevel,
-  CardType,
-  getStats,
-} from "@repo/ui";
-import { getCardFromLevel } from ".";
+import { CardStatsInfo, CardStatsInfoLevel, getStats } from "@repo/ui";
+import { create } from "zustand";
 
 interface DataStore {
   cards: CardStatsInfo[]; // mapper en cardtype!
@@ -41,7 +35,6 @@ const useDataStore = create<DataStore>()((set, get) => ({
           return s;
         }) as [CardStatsInfoLevel, CardStatsInfoLevel, CardStatsInfoLevel],
       })),
-      // .map((card) => getCardFromLevel(card, 1)),
     });
   },
 }));

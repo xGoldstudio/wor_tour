@@ -29,7 +29,7 @@ interface PlayerStore {
   isDeckFull: () => boolean;
   isPlayed: (cardId: number) => boolean;
 
-  getAllCardsLocked: () => CardStatsInfo[];
+  getAllCardsLocked: () => (CardType & { isInDeck: boolean })[];
   getTheLockPattern: (id: number) => number;
   getAllCardsPackable: () => CardStatsInfo[];
   getAllCardsPackableByRarity: () => Record<CardRarity, CardType[]>;
@@ -101,9 +101,12 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
     return collectionCard.level < 3 ? findCard(id, collectionCard.level) : null;
   },
   getAllCardsLocked: () => {
-    return useDataStore.getState().cards.filter((card) => {
-      return !get().collection.has(card.id);
-    });
+    return useDataStore
+      .getState()
+      .cards.filter((card) => {
+        return !get().collection.has(card.id);
+      })
+      .map((card) => ({ ...getCardFromLevel(card, 1), isInDeck: false }));
   }, // mapper en cardType!
   getTheLockPattern: (id: number) => {
     const card = getCardStats(id);

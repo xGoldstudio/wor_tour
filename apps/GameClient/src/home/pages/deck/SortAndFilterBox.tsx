@@ -14,7 +14,6 @@ interface SortAndFilterProps {
   setIsAscending: (isAscending: boolean) => void;
   currentFilter: ActiveFilters;
   setCurrentFilter: (filter: ActiveFilters) => void;
-  title: string;
 }
 
 export function SortAndFilterBox({
@@ -25,7 +24,6 @@ export function SortAndFilterBox({
   setIsAscending,
   currentFilter,
   setCurrentFilter,
-  title,
 }: SortAndFilterProps) {
   const { totalCards } = useDataStore((state) => ({
     totalCards: state.cards.length,
@@ -34,7 +32,7 @@ export function SortAndFilterBox({
     <div className="px-4">
       <div className="h-16 bg-black bg-opacity-30 mt-4 rounded-lg flex items-center px-4 justify-between">
         <div className="">
-          {title} {collectionLength} / {totalCards}
+          Cards Found : {collectionLength} / {totalCards}
         </div>
         <div className="flex flex-row space-x-4 relative">
           <FilterBox
