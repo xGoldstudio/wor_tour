@@ -96,7 +96,6 @@ export default function Collection() {
     currentFilter,
   });
   cardNotFound = sorts[currentSort].sortFunction(cardNotFound, isAscending);
-  detailledCollection.push(...cardNotFound);
   return (
     <div className="flex flex-col h-[674px] w-[650px]">
       <div className="grid grid-rows-[1fr_auto] top-0 ">

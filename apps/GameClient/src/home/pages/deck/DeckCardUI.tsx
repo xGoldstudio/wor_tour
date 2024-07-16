@@ -46,7 +46,7 @@ export function DeckCardUI({
             onClick={() => setIsDescriptionOpen(true)}
           >
             {lockPattern === 0 ? (
-              "Not unlocked yet"
+              <span className="text-white opacity-60">Not unlocked yet</span>
             ) : (
               <span className="text-white opacity-60">
                 {" "}
