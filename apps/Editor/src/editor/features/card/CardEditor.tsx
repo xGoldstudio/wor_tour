@@ -22,6 +22,7 @@ import {
   getTargetStrength,
   getValueInRange,
   testIsStrengthValid,
+  CardStatesData,
 } from "@repo/ui";
 import { DeleteIcon, PlusCircle } from "lucide-react";
 
@@ -116,6 +117,7 @@ function cardStatsToCard(cardStats: CardStat, level: number): CardType {
     effects: levelStat.effects,
     level,
     world: cardStats.world,
+    states: levelStat.states,
   };
 }
 
@@ -199,6 +201,7 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
                 states: [...cardStat.states.filter((_, j) => i !== j)],
               });
             }}
+            card={card}
             state={state}
             changeState={(newState) => {
               setCardStats({
@@ -206,7 +209,7 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
                   ...cardStat.states.map((s, j) => {
                     if (i === j) {
                       const type = newState.type || s.type;
-                      const typeRestrictions = restrictions[type];
+                      const typeRestrictions = CardStatesData[type];
 
                       const computeValue = () => {
                         if (typeRestrictions.noValue) return null;
@@ -253,13 +256,24 @@ function EffectFields({
   deleteState,
   changeState,
   state,
+  card,
 }: {
   deleteState: () => void;
   changeState: (newState: Partial<CardState>) => void;
   state: CardState;
+  card: CardType;
 }) {
+  const stateRestriction = CardStatesData[state.type];
   return (
     <div className="w-full col-span-2 flex gap-2">
+      <div className="h-full flex items-center">({stateRestriction.computeCost({
+        dmg: card.dmg,
+        dps: card.dmg * card.attackSpeed,
+        hp: card.hp,
+        trigger: state.trigger,
+        target: state.target,
+        value: state.value
+      }).toFixed(2)})</div>
       <div className="w-full col-span-2 grid grid-cols-4 gap-2">
         <select
           value={state.type}
@@ -283,7 +297,7 @@ function EffectFields({
         >
           {targets
             .filter((target) =>
-              restrictions[state.type].targets.find((t) => t === target)
+              stateRestriction.targets.find((t) => t === target)
             )
             .map((target) => (
               <option key={target} value={target}>
@@ -300,7 +314,7 @@ function EffectFields({
         >
           {triggers
             .filter((trigger) =>
-              restrictions[state.type].triggers.find((t) => t === trigger)
+              stateRestriction.triggers.find((t) => t === trigger)
             )
             .map((trigger) => (
               <option key={trigger} value={trigger}>
@@ -313,9 +327,9 @@ function EffectFields({
           value={state.value?.toString()}
           onChange={(v) => changeState({ value: parseInt(v.target.value) })}
           className="border-2 border-black p-2 rounded-md"
-          disabled={restrictions[state.type].noValue}
-          min={restrictions[state.type].min}
-          max={restrictions[state.type].max}
+          disabled={stateRestriction.noValue}
+          min={stateRestriction.min}
+          max={stateRestriction.max}
         />
       </div>
       <Button small action={deleteState}>
@@ -325,38 +339,7 @@ function EffectFields({
   );
 }
 
-const restrictions: Record<
-  string,
-  {
-    min: number | undefined;
-    max: number | undefined;
-    noValue: boolean;
-    triggers: TriggerCardState[];
-    targets: TargetCardState[];
-  }
-> = {
-  heal: {
-    min: 0,
-    max: undefined,
-    noValue: false,
-    triggers: ["onPlacement"],
-    targets: ["allyCards"],
-  },
-  riposte: {
-    min: 1,
-    max: undefined,
-    noValue: false,
-    triggers: ["onDamage"],
-    targets: ["notSpecified"],
-  },
-  multiAttack: {
-    min: undefined,
-    max: undefined,
-    noValue: true,
-    triggers: ["onAttack"],
-    targets: ["notSpecified"],
-  },
-};
+
 const states = ["heal", "riposte", "multiAttack"];
 const targets = [
   "selfCard",

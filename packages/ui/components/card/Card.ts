@@ -1,4 +1,5 @@
-import { CardEffects, CardRarity } from "@repo/types";
+import { CardEffects, CardRarity, CardState } from "@repo/types";
+import { CardStatesData } from "../../data/CardStatesData";
 
 export type CardType = {
   name: string;
@@ -13,6 +14,7 @@ export type CardType = {
   effects: CardEffects;
   level: number;
   world: number;
+  states: CardState[];
 };
 
 export const CardRarityOrder: CardRarity[] = [
@@ -36,7 +38,7 @@ export interface CardStatsInfoLevel {
   hp: number;
   attackSpeed: number;
   illustration: string | null;
-  effects: CardEffects;
+  states: CardState[];
 }
 
 export function testIsStrengthValid(
@@ -57,13 +59,13 @@ export function getTargetStrength(card: {
 
 const baseStats = 1;
 export const maxDelta = 0.0001;
-const survavibilityRatio = 3;
+const survavibilityRatio = 4;
 export const baseHp = 100; // card of level 1, rarity common, world 1
 export const baseDps = baseHp / survavibilityRatio;
 export const cardLevelMultiplier = 1.5;
 export const cardWorldMultiplier = 1.2;
 export const cardCostMultiplier = 1.35;
-export const speedMaxLevel1 = 2;
+export const speedMaxLevel1 = 1.65;
 export const cardRarityMultiplier = {
   common: 1,
   rare: 1.1,
@@ -79,34 +81,35 @@ export function getRealStrength(card: {
   dmg: number;
   attackSpeed: number;
   cost: number;
-  effects: CardEffects;
+  states: CardState[];
 }): number {
-  function fightBack(score: number) {
-    return score + (card.effects.fightBack ? dmg * 0.5 : 0);
-  }
-
-  function multiAttack(score: number) {
-    return score + (card.effects.multiAttack ? dps * 2.5 : 0);
-  }
-
-  function healPlacement(score: number) {
-    return (
-      score +
-      (card.effects.placementHeal
-        ? card.effects.placementHeal.amount / baseHp
-        : 0)
-    );
-  }
-
   const dmg = card.dmg / Math.sqrt(baseDps) / Math.sqrt(baseDps);
   const speed = card.attackSpeed;
   const dps = dmg * speed;
 
+  const stateCosts = computeCosts(card.states, card);
   const costDivisor = cardCostMultiplier ** (card.cost - 1); // to normalize the strength no matter the cost
-
   return (
-    healPlacement(multiAttack(fightBack(card.hp / baseHp + dps))) / costDivisor
+    ((card.hp / baseHp + dps) + stateCosts) / costDivisor
   );
+}
+
+function computeCosts(states: CardState[], stats: { hp: number; dmg: number; attackSpeed: number }) {
+  let total = 0;
+  
+  states.forEach((state) => {
+    const cost = CardStatesData[state.type].computeCost({
+      dmg: stats.dmg,
+      dps: stats.dmg * stats.attackSpeed,
+      hp: stats.hp,
+      trigger: state.trigger,
+      target: state.target,
+      value: state.value,
+    });
+    total += cost;
+  });
+
+  return total;
 }
 
 export function getCardStrength(card: {

@@ -32,3 +32,4 @@ export * from './lib/rxjsToZustand.ts';
 // data
 export * from './data/ComputeBoosterProgress';
 export * from './data/ComputeProgressionLevels';
+export * from './data/CardStatesData';

@@ -19,7 +19,7 @@ export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
   const score = getRealStrength({
     ...values,
     cost: card.stats[level - 1].cost,
-    effects: {},
+    states: [],
   });
 
   function getCurrentStats(divisor: number) {
@@ -40,7 +40,7 @@ export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
       attackSpeed: speed,
       dmg: Math.floor(dps / speed),
       cost: card.stats[level - 1].cost,
-      effects: card.stats[level - 1].effects,
+      states: card.stats[level - 1].states,
       illustration: card.stats[level - 1].illustration,
     };
   }
@@ -52,7 +52,7 @@ export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
   }
 
   let higherDivisor = 1;
-  let lowerDivisor = Object.keys(card.stats[level - 1].effects).length ? 0 : 1; // if we have an effect
+  let lowerDivisor = Object.keys(card.stats[level - 1].states).length ? 0 : 1; // if we have an effect
   let iteration = 0;
   let currentStrength = realStrength();
   while (iteration < 100 && !testIsStrengthValid(currentStrength, score)) {
