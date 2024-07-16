@@ -5,7 +5,6 @@ import CardBorder, {
   CardContentIllustartion,
 } from "../../../../../../packages/ui/components/card/CardBorder";
 import CardModal from "./CardModal";
-import { spawn } from "child_process";
 
 interface CardUIProps {
   cardId: number;

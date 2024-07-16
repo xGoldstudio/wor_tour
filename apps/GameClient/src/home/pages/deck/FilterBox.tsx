@@ -105,6 +105,22 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
       : FiltersDescription[filterCriteria].rangeMax;
   }
 
+  function deleteAllFilters() {
+    setCurrentFilter({
+      Common: false,
+      Rare: false,
+      Epic: false,
+      Legendary: false,
+      Level: {
+        min: FiltersDescription.Level.rangeMin!,
+        max: FiltersDescription.Level.rangeMax!,
+      },
+      Cost: {
+        min: FiltersDescription.Cost.rangeMin!,
+        max: FiltersDescription.Cost.rangeMax!,
+      },
+    });
+  }
   return (
     <>
       <Button
@@ -184,7 +200,12 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
                 )
               )}
               <div className="w-full h-full flex justify-center items-center border-t-neutral-300 border-t-[1px] border-opacity-30 bg-[#1E3E5B] rounded-b-md">
-                <button className="" onClick={() => setFilterIsOpen(false)}>
+                <button
+                  className=""
+                  onClick={() => {
+                    setFilterIsOpen(false), deleteAllFilters();
+                  }}
+                >
                   <span>Clear</span>
                 </button>
               </div>

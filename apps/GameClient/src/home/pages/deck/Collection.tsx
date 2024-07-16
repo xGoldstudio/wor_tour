@@ -4,62 +4,7 @@ import { ActiveFilters, FiltersDescription } from "./cardFilters";
 import { CardSorts, defaultSort, sorts } from "./cardSorts";
 import { DeckCardUI } from "./DeckCardUI";
 import { SortAndFilterBox } from "./SortAndFilterBox";
-import { CardType } from "@repo/ui";
-
-interface filterByRarityProps {
-  detailledCollection: (CardType & {
-    isInDeck: boolean;
-  })[];
-  currentFilter: ActiveFilters;
-}
-
-function filterByRarity({
-  detailledCollection,
-  currentFilter,
-}: filterByRarityProps) {
-  const commonFilter = currentFilter.Common
-    ? FiltersDescription["Common"].filterFunction(
-        detailledCollection,
-        currentFilter.Common
-      )
-    : null;
-  const rareFilter = currentFilter.Rare
-    ? FiltersDescription["Rare"].filterFunction(
-        detailledCollection,
-        currentFilter.Rare
-      )
-    : null;
-  const epicFilter = currentFilter.Epic
-    ? FiltersDescription["Epic"].filterFunction(
-        detailledCollection,
-        currentFilter.Epic
-      )
-    : null;
-  const legendaryFilter = currentFilter.Legendary
-    ? FiltersDescription["Legendary"].filterFunction(
-        detailledCollection,
-        currentFilter.Legendary
-      )
-    : null;
-  const tmpFilter = [commonFilter, rareFilter, epicFilter, legendaryFilter]
-    .filter((filter) => filter !== null)
-    .flatMap((filter) => filter);
-  if (tmpFilter.length !== 0) {
-    detailledCollection = detailledCollection.filter((card) =>
-      tmpFilter.includes(card)
-    );
-  }
-  detailledCollection = FiltersDescription.Level.filterFunction(
-    detailledCollection,
-    currentFilter.Level
-  );
-  detailledCollection = FiltersDescription.Cost.filterFunction(
-    detailledCollection,
-    currentFilter.Cost
-  );
-
-  return detailledCollection;
-}
+import { getCardsFiltered } from "./getCardsFiltered";
 
 export default function Collection() {
   let { detailledCollection, cardNotFound } = usePlayerStore((state) => ({
@@ -86,12 +31,15 @@ export default function Collection() {
 
   const collectionLength = detailledCollection.length;
 
-  detailledCollection = filterByRarity({ detailledCollection, currentFilter });
+  detailledCollection = getCardsFiltered({
+    detailledCollection,
+    currentFilter,
+  });
   detailledCollection = sorts[currentSort].sortFunction(
     detailledCollection,
     isAscending
   );
-  cardNotFound = filterByRarity({
+  cardNotFound = getCardsFiltered({
     detailledCollection: cardNotFound,
     currentFilter,
   });

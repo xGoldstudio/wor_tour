@@ -1,6 +1,5 @@
 import { findCard } from "@/cards";
 import { CardCollection } from "./cardFilters";
-import { CardStatsInfo } from "@repo/ui";
 
 export type Sorts = Record<CardSorts, CardSort>;
 export type CardSorts = "cost" | "rarity" | "world" | "level";

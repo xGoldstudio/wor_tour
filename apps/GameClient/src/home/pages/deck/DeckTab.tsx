@@ -51,7 +51,9 @@ export default function DeckTab() {
     deck,
     _.fill(Array(NUMBER_OF_CARD_IN_DECK - deck.length), null)
   );
+  console.log(deckArray);
   const detailledDeck: CardCollection[] = [];
+  console.log(detailledDeck);
   for (let i = 0; i < NUMBER_OF_CARD_IN_DECK; i++)
     detailledDeck.push(getCompleteInfo(deckArray[i]!));
   return (
@@ -67,7 +69,6 @@ export default function DeckTab() {
           </div>
         </div>
         <DeckStats detailledDeck={detailledDeck} />
-        Collection :
         <Collection />
       </ScrollContainer>
     </div>

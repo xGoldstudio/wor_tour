@@ -20,7 +20,7 @@ export interface CardFilter {
   filterFunction: (
     cards: CardCollection[],
     state: CardFilterState
-  ) => CardCollection[];
+  ) => CardCollection[] | null;
 }
 export type ActiveFilters = Record<CardFilters, CardFilterState>;
 export interface FilterSliderProperties {
@@ -45,28 +45,26 @@ export const FiltersDescription: Filters = {
     label: "Common",
     isButton: true,
     filterFunction: (cards: CardCollection[], state: CardFilterState) =>
-      state === false
-        ? cards
-        : cards.filter((card) => card.rarity === "common"),
+      state === false ? null : cards.filter((card) => card.rarity === "common"),
   },
   Rare: {
     label: "Rare",
     isButton: true,
     filterFunction: (cards: CardCollection[], state: CardFilterState) =>
-      state === false ? cards : cards.filter((card) => card.rarity === "rare"),
+      state === false ? null : cards.filter((card) => card.rarity === "rare"),
   },
   Epic: {
     label: "Epic",
     isButton: true,
     filterFunction: (cards: CardCollection[], state: CardFilterState) =>
-      state === false ? cards : cards.filter((card) => card.rarity === "epic"),
+      state === false ? null : cards.filter((card) => card.rarity === "epic"),
   },
   Legendary: {
     label: "Legendary",
     isButton: true,
     filterFunction: (cards: CardCollection[], state: CardFilterState) =>
       state === false
-        ? cards
+        ? null
         : cards.filter((card) => card.rarity === "legendary"),
   },
   Cost: {
