@@ -9,16 +9,22 @@
       "speedDamageRatio": 0.85,
       "stats": [
         {
+          "states": [],
+
           "effects": {},
           "cost": 3,
           "illustration": "card_1_level_1_1717529721890.png"
         },
         {
+          "states": [],
+
           "effects": {},
           "cost": 3,
           "illustration": "card_1_level_2_1717530044081.png"
         },
         {
+          "states": [],
+
           "effects": {},
           "cost": 3,
           "illustration": "card_1_level_3_1717530116564.png"
@@ -34,6 +40,8 @@
       "speedDamageRatio": 0.74,
       "stats": [
         {
+          "states": [],
+
           "effects": {
             "multiAttack": {
               "type": "multiAttack"
@@ -43,6 +51,8 @@
           "illustration": "card_2_level_1_1717531255144.png"
         },
         {
+          "states": [],
+
           "effects": {
             "multiAttack": {
               "type": "multiAttack"
@@ -52,6 +62,8 @@
           "illustration": "card_2_level_2_1717531258110.png"
         },
         {
+          "states": [],
+
           "effects": {
             "multiAttack": {
               "type": "multiAttack"
@@ -71,11 +83,15 @@
       "speedDamageRatio": 0.68,
       "stats": [
         {
+          "states": [],
+
           "effects": {},
           "cost": 3,
           "illustration": "card_3_level_1_1717283332492.png"
         },
         {
+          "states": [],
+
           "effects": {
             "fightBack": {
               "type": "fightBack"
@@ -85,6 +101,8 @@
           "illustration": "card_3_level_2_1717283337041.png"
         },
         {
+          "states": [],
+
           "effects": {
             "multiAttack": {
               "type": "multiAttack"
@@ -107,16 +125,22 @@
       "speedDamageRatio": 0.67,
       "stats": [
         {
+          "states": [],
+
           "effects": {},
           "cost": 2,
           "illustration": "card_4_level_1_1717531357516.png"
         },
         {
+          "states": [],
+
           "effects": {},
           "cost": 2,
           "illustration": "card_4_level_2_1717531361979.png"
         },
         {
+          "states": [],
+
           "effects": {
             "fightBack": {
               "type": "fightBack"
@@ -137,16 +161,22 @@
       "speedDamageRatio": 0.4,
       "stats": [
         {
+          "states": [],
+
           "cost": 3,
           "effects": {},
           "illustration": "card_5_level_1_1717532787493.png"
         },
         {
+          "states": [],
+
           "cost": 3,
           "effects": {},
           "illustration": "card_5_level_2_1717532831361.png"
         },
         {
+          "states": [],
+
           "cost": 3,
           "effects": {
             "placementHeal": {
@@ -168,16 +198,22 @@
       "speedDamageRatio": 0.42,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_6_level_1_1717534152341.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_6_level_2_1717534163302.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_6_level_3_1717534167407.png"
@@ -194,11 +230,15 @@
       "speedDamageRatio": 0.85,
       "stats": [
         {
+          "states": [],
+
           "cost": 5,
           "effects": {},
           "illustration": "card_7_level_1_1717535727870.png"
         },
         {
+          "states": [],
+
           "cost": 5,
           "effects": {
             "placementHeal": {
@@ -209,6 +249,8 @@
           "illustration": "card_7_level_2_1717535731862.png"
         },
         {
+          "states": [],
+
           "cost": 5,
           "effects": {
             "placementHeal": {
@@ -230,16 +272,22 @@
       "speedDamageRatio": 0.8,
       "stats": [
         {
+          "states": [],
+
           "cost": 4,
           "effects": {},
           "illustration": "card_8_level_1_1717546932368.png"
         },
         {
+          "states": [],
+
           "cost": 4,
           "effects": {},
           "illustration": "card_8_level_2_1717546935760.png"
         },
         {
+          "states": [],
+
           "cost": 4,
           "effects": {},
           "illustration": "card_8_level_3_1717546938522.png"
@@ -255,11 +303,15 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "effects": {},
           "cost": 3,
           "illustration": "card_9_level_1_1719012812863.png"
         },
         {
+          "states": [],
+
           "effects": {
             "placementHeal": {
               "type": "placementHeal",
@@ -270,6 +322,8 @@
           "illustration": "card_9_level_2_1719012817640.png"
         },
         {
+          "states": [],
+
           "effects": {
             "placementHeal": {
               "type": "placementHeal",
@@ -290,16 +344,22 @@
       "speedDamageRatio": 0.9,
       "stats": [
         {
+          "states": [],
+
           "effects": {},
           "cost": 4,
           "illustration": "card_10_level_1_1720023182860.png"
         },
         {
+          "states": [],
+
           "effects": {},
           "cost": 4,
           "illustration": "card_10_level_2_1720024251885.png"
         },
         {
+          "states": [],
+
           "effects": {},
           "cost": 4,
           "illustration": "card_10_level_3_1720024380213.png"
@@ -315,16 +375,22 @@
       "speedDamageRatio": 0.41,
       "stats": [
         {
+          "states": [],
+
           "effects": {},
           "cost": 4,
           "illustration": "card_11_level_1_1717534294464.png"
         },
         {
+          "states": [],
+
           "effects": {},
           "cost": 4,
           "illustration": "card_11_level_2_1717534301963.png"
         },
         {
+          "states": [],
+
           "effects": {},
           "cost": 4,
           "illustration": "card_11_level_3_1717534307249.png"
@@ -341,6 +407,8 @@
       "speedDamageRatio": 0.75,
       "stats": [
         {
+          "states": [],
+
           "cost": 6,
           "effects": {
             "fightBack": {
@@ -350,6 +418,8 @@
           "illustration": "card_12_level_1_1720034721455.png"
         },
         {
+          "states": [],
+
           "cost": 6,
           "effects": {
             "fightBack": {
@@ -359,6 +429,8 @@
           "illustration": "card_12_level_2_1720034153300.png"
         },
         {
+          "states": [],
+
           "cost": 6,
           "effects": {
             "fightBack": {
@@ -378,11 +450,15 @@
       "speedDamageRatio": 0.8,
       "stats": [
         {
+          "states": [],
+
           "effects": {},
           "cost": 4,
           "illustration": "card_13_level_1_1719956460438.png"
         },
         {
+          "states": [],
+
           "effects": {
             "fightBack": {
               "type": "fightBack"
@@ -392,6 +468,8 @@
           "illustration": "card_13_level_2_1719956464360.png"
         },
         {
+          "states": [],
+
           "effects": {
             "fightBack": {
               "type": "fightBack"
@@ -412,16 +490,22 @@
       "speedDamageRatio": 0.21,
       "stats": [
         {
+          "states": [],
+
           "cost": 2,
           "effects": {},
           "illustration": "card_14_level_1_1720028759577.png"
         },
         {
+          "states": [],
+
           "cost": 2,
           "effects": {},
           "illustration": "card_14_level_2_1720027978144.png"
         },
         {
+          "states": [],
+
           "cost": 2,
           "effects": {
             "fightBack": {
@@ -441,16 +525,22 @@
       "speedDamageRatio": 0.01,
       "stats": [
         {
+          "states": [],
+
           "effects": {},
           "cost": 3,
           "illustration": "card_15_level_1_1720100170687.png"
         },
         {
+          "states": [],
+
           "effects": {},
           "cost": 3,
           "illustration": "card_15_level_2_1720100176579.png"
         },
         {
+          "states": [],
+
           "effects": {},
           "cost": 3,
           "illustration": "card_15_level_3_1720100190398.png"
@@ -466,16 +556,22 @@
       "speedDamageRatio": 0.27,
       "stats": [
         {
+          "states": [],
+
           "cost": 2,
           "effects": {},
           "illustration": "card_16_level_1_1720706342299.png"
         },
         {
+          "states": [],
+
           "cost": 2,
           "effects": {},
           "illustration": "card_16_level_2_1720706346178.png"
         },
         {
+          "states": [],
+
           "cost": 2,
           "effects": {},
           "illustration": "card_16_level_3_1720706351662.png"
@@ -491,6 +587,8 @@
       "speedDamageRatio": 0.67,
       "stats": [
         {
+          "states": [],
+
           "cost": 3,
           "effects": {
             "fightBack": {
@@ -501,6 +599,8 @@
           "illustration": "card_17_level_1_1720721228258.png"
         },
         {
+          "states": [],
+
           "cost": 3,
           "effects": {
             "fightBack": {
@@ -511,6 +611,8 @@
           "illustration": "card_17_level_2_1720721232627.png"
         },
         {
+          "states": [],
+
           "cost": 3,
           "effects": {
             "fightBack": {
@@ -531,16 +633,22 @@
       "speedDamageRatio": 0.63,
       "stats": [
         {
+          "states": [],
+
           "cost": 5,
           "effects": {},
           "illustration": "card_18_level_1_1720722631140.png"
         },
         {
+          "states": [],
+
           "cost": 5,
           "effects": {},
           "illustration": "card_18_level_2_1720722634257.png"
         },
         {
+          "states": [],
+
           "cost": 5,
           "effects": {},
           "illustration": "card_18_level_3_1720722637985.png"
@@ -556,16 +664,22 @@
       "speedDamageRatio": 0.61,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_19_level_1_1720977947828.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_19_level_2_1720977954509.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_19_level_3_1720977959891.png"
@@ -581,16 +695,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_20_level_1_1720975944876.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_20_level_2_1720975947846.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_20_level_3_1720975951186.png"
@@ -606,16 +726,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_21_level_1_1720977466954.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_21_level_2_1720977471267.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_21_level_3_1720977474377.png"
@@ -628,19 +754,32 @@
       "rarity": "common",
       "world": 2,
       "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "speedDamageRatio": 0.59,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_22_level_1_1721050271270.png"
         },
         {
+          "states": [
+            {
+              "type": "heal",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": 1
+            }
+          ],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_22_level_2_1721050621698.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_22_level_3_1721050624380.png"
@@ -656,16 +795,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_23_level_1_1721051354517.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_23_level_2_1721051661386.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_23_level_3_1721051665630.png"
@@ -681,16 +826,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 2,
           "effects": {},
           "illustration": "card_24_level_1_1720724823656.png"
         },
         {
+          "states": [],
+
           "cost": 2,
           "effects": {},
           "illustration": "card_24_level_2_1720725223340.png"
         },
         {
+          "states": [],
+
           "cost": 2,
           "effects": {},
           "illustration": "card_24_level_3_1720725227930.png"
@@ -706,16 +857,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 4,
           "effects": {},
           "illustration": "card_25_level_1_1720974780704.png"
         },
         {
+          "states": [],
+
           "cost": 4,
           "effects": {},
           "illustration": "card_25_level_2_1720974783343.png"
         },
         {
+          "states": [],
+
           "cost": 4,
           "effects": {},
           "illustration": "card_25_level_3_1720974612545.png"
@@ -731,16 +888,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_26_level_1_1721055659853.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_26_level_2_1721055653476.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_26_level_3_1721055277711.png"
@@ -756,16 +919,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_27_level_1_1721057309461.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_27_level_2_1721057402888.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_27_level_3_1721057505007.png"
@@ -781,6 +950,8 @@
       "speedDamageRatio": 0.25,
       "stats": [
         {
+          "states": [],
+
           "cost": 7,
           "effects": {
             "placementHeal": {
@@ -795,6 +966,8 @@
           "illustration": "card_28_level_1_1720723376133.png"
         },
         {
+          "states": [],
+
           "cost": 7,
           "effects": {
             "placementHeal": {
@@ -809,6 +982,8 @@
           "illustration": "card_28_level_2_1720723379187.png"
         },
         {
+          "states": [],
+
           "cost": 7,
           "effects": {
             "multiAttack": {
@@ -833,16 +1008,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_29_level_1_1721060115017.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_29_level_2_1721059979891.png"
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": "card_29_level_3_1721059885396.png"
@@ -858,16 +1039,22 @@
       "speedDamageRatio": 0.44,
       "stats": [
         {
+          "states": [],
+
           "cost": 6,
           "effects": {},
           "illustration": "card_30_level_1_1721062011136.png"
         },
         {
+          "states": [],
+
           "cost": 6,
           "effects": {},
           "illustration": "card_30_level_2_1721062086115.png"
         },
         {
+          "states": [],
+
           "cost": 6,
           "effects": {},
           "illustration": "card_30_level_3_1721061680880.png"
@@ -883,16 +1070,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -908,16 +1101,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -933,16 +1132,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -958,16 +1163,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -983,16 +1194,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1008,16 +1225,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1033,16 +1256,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1058,16 +1287,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1083,16 +1318,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1108,16 +1349,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1133,16 +1380,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1158,16 +1411,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1183,16 +1442,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1208,16 +1473,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1233,16 +1504,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1258,16 +1535,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1283,16 +1566,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1308,16 +1597,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1333,16 +1628,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1358,16 +1659,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1383,16 +1690,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1408,16 +1721,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1433,16 +1752,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1458,16 +1783,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1483,16 +1814,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1508,16 +1845,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1533,16 +1876,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1558,16 +1907,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1583,16 +1938,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1608,16 +1969,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1633,16 +2000,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1658,16 +2031,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1683,16 +2062,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1708,16 +2093,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1733,16 +2124,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1758,16 +2155,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1783,16 +2186,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1808,16 +2217,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1833,16 +2248,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1858,16 +2279,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1883,16 +2310,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1908,16 +2341,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1933,16 +2372,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1958,16 +2403,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
@@ -1983,16 +2434,22 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null
         },
         {
+          "states": [],
+
           "cost": 1,
           "effects": {},
           "illustration": null

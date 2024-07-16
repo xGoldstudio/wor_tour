@@ -12,18 +12,18 @@ export interface WorldStats {
 }
 
 export interface BoosterTypeDeclartion {
-	name: string;
-	cost: number;
-	description: string;
-	purchaseDelayInMs?: number;
-	unlockCondition: {
-		world: number;
-	};
-	contain: {
-		worlds: number[];
-		rarities: Record<CardRarity, number>;
-		unitAmount: number;
-	};
+  name: string;
+  cost: number;
+  description: string;
+  purchaseDelayInMs?: number;
+  unlockCondition: {
+    world: number;
+  };
+  contain: {
+    worlds: number[];
+    rarities: Record<CardRarity, number>;
+    unitAmount: number;
+  };
 }
 
 export interface Level {
@@ -31,7 +31,7 @@ export interface Level {
   world: number,
   level: number,
   id: number,
-	chest: "common" | "rare" | "epic",
+  chest: "common" | "rare" | "epic",
   trophyStart: number,
   trophyEnd: number,
   reward: {
@@ -54,8 +54,20 @@ export interface CardStat {
 export interface CardStatLevel {
   cost: number;
   effects: CardEffects;
+  states: CardState[];
   illustration: string | null;
 }
+
+export type CardState = {
+  type: StateCardState;
+  trigger: TriggerCardState;
+  target: TargetCardState;
+  value: number | null;
+};
+
+export type TriggerCardState = "idle" | "onAttack" | "onDamage" | "onPlacement" | "onDeath" | "onHeal" | "onKill";
+export type TargetCardState = "selfCard" | "directEnnemyCard" | "enemyCards" | "allyCards" | "allCards" | "player" | "opponent" | "notSpecified";
+export type StateCardState = "heal" | "riposte" | "multiAttack";
 
 export type CardRarity = "common" | "rare" | "epic" | "legendary";
 

@@ -24,7 +24,7 @@ export function ceilToValue(ceil: number) {
 export function getCenterOfBoundingElement(queryOrElement: string | HTMLElement) {
   const element = getElement(queryOrElement);
   if (!element) {
-    return { x: 0, y: 0};
+    return { x: 0, y: 0 };
   }
   return {
     x: getXCenterBoudingOfElement(element),
@@ -64,4 +64,26 @@ export function getYCenterPositionOfElement(element: HTMLElement | string) {
     return 0;
   }
   return el.offsetTop + el.offsetHeight / 2;
+}
+
+export function getValueInRange(min: number | undefined, max: number | undefined) {
+  return (value: number | null) => {
+    if (value === null || isNaN(value)) {
+      return min !== undefined ? min : max !== undefined ? max : null;
+    }
+    if (min !== undefined && value < min) {
+      return min;
+    }
+    if (max !== undefined && value > max) {
+      return max;
+    }
+    return value;
+  }
+}
+
+export function arrayfindElementOrFirst<T extends string>(usingValue: T, array: T[]): T {
+  if (array.find(t => t === usingValue)) {
+    return usingValue;
+  }
+  return array[0];
 }
