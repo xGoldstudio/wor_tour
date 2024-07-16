@@ -1,9 +1,15 @@
 import { create } from "zustand";
 import { EditorData } from "@repo/types";
-import { CardStatsInfo, CardStatsInfoLevel, getStats } from "@repo/ui";
+import {
+  CardStatsInfo,
+  CardStatsInfoLevel,
+  CardType,
+  getStats,
+} from "@repo/ui";
+import { getCardFromLevel } from ".";
 
 interface DataStore {
-  cards: CardStatsInfo[];
+  cards: CardStatsInfo[]; // mapper en cardtype!
   worlds: World[];
   getWorld: (id: number) => World | undefined;
   init: (data: EditorData) => void;
@@ -17,7 +23,6 @@ export interface World {
   description: string;
 }
 
-
 const useDataStore = create<DataStore>()((set, get) => ({
   cards: [],
   worlds: [],
@@ -26,7 +31,7 @@ const useDataStore = create<DataStore>()((set, get) => ({
   },
   init: (data: EditorData) => {
     set({
-      worlds: data.worlds.map(world => ({
+      worlds: data.worlds.map((world) => ({
         ...world,
       })),
       cards: data.cards.map((card) => ({
@@ -36,6 +41,7 @@ const useDataStore = create<DataStore>()((set, get) => ({
           return s;
         }) as [CardStatsInfoLevel, CardStatsInfoLevel, CardStatsInfoLevel],
       })),
+      // .map((card) => getCardFromLevel(card, 1)),
     });
   },
 }));

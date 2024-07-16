@@ -1,6 +1,6 @@
 import { CardType } from "@repo/ui";
 
-export type Card = CardType & { isInDeck: boolean };
+export type CardCollection = CardType & { isInDeck: boolean };
 export type Filters = Record<CardFilters, CardFilter>;
 export type CardFiltersByRarity = "Common" | "Rare" | "Epic" | "Legendary";
 export type CardFilters =
@@ -17,7 +17,10 @@ export interface CardFilter {
   rangeMin?: number;
   rangeMax?: number;
   isButton: boolean;
-  filterFunction: (cards: Card[], state: CardFilterState) => Card[];
+  filterFunction: (
+    cards: CardCollection[],
+    state: CardFilterState
+  ) => CardCollection[];
 }
 export type ActiveFilters = Record<CardFilters, CardFilterState>;
 export interface FilterSliderProperties {
@@ -41,7 +44,7 @@ export const FiltersDescription: Filters = {
   Common: {
     label: "Common",
     isButton: true,
-    filterFunction: (cards: Card[], state: CardFilterState) =>
+    filterFunction: (cards: CardCollection[], state: CardFilterState) =>
       state === false
         ? cards
         : cards.filter((card) => card.rarity === "common"),
@@ -49,19 +52,19 @@ export const FiltersDescription: Filters = {
   Rare: {
     label: "Rare",
     isButton: true,
-    filterFunction: (cards: Card[], state: CardFilterState) =>
+    filterFunction: (cards: CardCollection[], state: CardFilterState) =>
       state === false ? cards : cards.filter((card) => card.rarity === "rare"),
   },
   Epic: {
     label: "Epic",
     isButton: true,
-    filterFunction: (cards: Card[], state: CardFilterState) =>
+    filterFunction: (cards: CardCollection[], state: CardFilterState) =>
       state === false ? cards : cards.filter((card) => card.rarity === "epic"),
   },
   Legendary: {
     label: "Legendary",
     isButton: true,
-    filterFunction: (cards: Card[], state: CardFilterState) =>
+    filterFunction: (cards: CardCollection[], state: CardFilterState) =>
       state === false
         ? cards
         : cards.filter((card) => card.rarity === "legendary"),
@@ -71,7 +74,7 @@ export const FiltersDescription: Filters = {
     rangeMin: 1,
     rangeMax: 9,
     isButton: false,
-    filterFunction: (cards: Card[], state: CardFilterState) =>
+    filterFunction: (cards: CardCollection[], state: CardFilterState) =>
       typeof state === "object" && typeof state.min === "number"
         ? cards.filter(
             (card) => card.cost >= state.min && card.cost <= state.max
@@ -83,7 +86,7 @@ export const FiltersDescription: Filters = {
     rangeMin: 1,
     rangeMax: 3,
     isButton: false,
-    filterFunction: (cards: Card[], state: CardFilterState) =>
+    filterFunction: (cards: CardCollection[], state: CardFilterState) =>
       typeof state === "object" && typeof state.min === "number"
         ? cards.filter(
             (card) => card.level >= state.min && card.level <= state.max

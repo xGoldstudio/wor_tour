@@ -2,14 +2,14 @@ import usePlayerStore from "@/home/store/playerStore";
 import { getTargetStrength, ManaBall } from "@repo/ui";
 import * as _ from "lodash";
 import ScrollContainer from "react-indiana-drag-scroll";
-import { Card } from "./cardFilters";
+import { CardCollection } from "./cardFilters";
 import Collection from "./Collection";
 import { DeckCardUI } from "./DeckCardUI";
 
 export const NUMBER_OF_CARD_IN_DECK: number = 8;
 
 interface DeckStatsProps {
-  detailledDeck: Card[];
+  detailledDeck: CardCollection[];
 }
 
 function DeckStats({ detailledDeck }: DeckStatsProps) {
@@ -51,7 +51,7 @@ export default function DeckTab() {
     deck,
     _.fill(Array(NUMBER_OF_CARD_IN_DECK - deck.length), null)
   );
-  const detailledDeck: Card[] = [];
+  const detailledDeck: CardCollection[] = [];
   for (let i = 0; i < NUMBER_OF_CARD_IN_DECK; i++)
     detailledDeck.push(getCompleteInfo(deckArray[i]!));
   return (

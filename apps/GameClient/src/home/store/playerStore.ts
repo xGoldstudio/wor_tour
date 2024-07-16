@@ -104,7 +104,7 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
     return useDataStore.getState().cards.filter((card) => {
       return !get().collection.has(card.id);
     });
-  },
+  }, // mapper en cardType!
   getTheLockPattern: (id: number) => {
     const card = getCardStats(id);
     if (card.world > get().currentWorld) return card.world;
