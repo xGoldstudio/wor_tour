@@ -105,6 +105,7 @@ function computeCosts(states: CardState[], stats: { hp: number; dmg: number; att
       trigger: state.trigger,
       target: state.target,
       value: state.value,
+      attackSpeed: stats.attackSpeed,
     });
     total += cost;
   });

@@ -62,7 +62,7 @@ export default function CardEditor() {
         <select
           value={card.id}
           onChange={(v) => {
-            navigate(`../worlds/${card.world}/${v.target.value}`);
+            navigate(`../${card.world}/${v.target.value}`);
           }}
           className="border-2 border-black p-2 rounded-md"
         >
@@ -247,7 +247,7 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
           />
         ))}
       </div>
-      <FullCard card={card} className="pt-8" size={0.9} />
+      <FullCard card={card} className="pt-8" size={0.9} showEffectDesc />
     </div>
   );
 }
@@ -272,7 +272,8 @@ function EffectFields({
         hp: card.hp,
         trigger: state.trigger,
         target: state.target,
-        value: state.value
+        value: state.value,
+        attackSpeed: card.attackSpeed,
       }).toFixed(2)})</div>
       <div className="w-full col-span-2 grid grid-cols-4 gap-2">
         <select
@@ -340,7 +341,7 @@ function EffectFields({
 }
 
 
-const states = ["heal", "riposte", "multiAttack"];
+const states = ["heal", "riposte", "multiAttack", "massacre", "bleeding"];
 const targets = [
   "selfCard",
   "directEnnemyCard",
@@ -350,6 +351,7 @@ const targets = [
   "player",
   "opponent",
   "notSpecified",
+  "otherEnnemyCards",
 ]; // not specified mean the effect select his target himself
 const triggers = [
   "idle",
@@ -359,4 +361,5 @@ const triggers = [
   "onDeath",
   "onHeal",
   "onKill",
+  "onDirectlyAttacked",
 ];

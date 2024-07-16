@@ -795,7 +795,7 @@
       "name": "Ragh Thrower",
       "rarity": "common",
       "world": 2,
-      "attackDefenseRatio": 0.5,
+      "attackDefenseRatio": 0.45,
       "speedDamageRatio": 0.59,
       "stats": [
         {
@@ -808,10 +808,10 @@
         {
           "states": [
             {
-              "type": "riposte",
-              "trigger": "onDamage",
-              "target": "notSpecified",
-              "value": 1
+              "type": "massacre",
+              "trigger": "onAttack",
+              "target": "directEnnemyCard",
+              "value": 10
             }
           ],
 
@@ -820,7 +820,14 @@
           "illustration": "card_22_level_2_1721050621698.png"
         },
         {
-          "states": [],
+          "states": [
+            {
+              "type": "massacre",
+              "trigger": "onAttack",
+              "target": "directEnnemyCard",
+              "value": 20
+            }
+          ],
 
           "cost": 1,
           "effects": {},

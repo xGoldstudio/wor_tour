@@ -15,6 +15,7 @@ export const CardStatesData: Record<
       trigger,
       target,
       value,
+      attackSpeed,
     }: {
       dmg: number;
       dps: number;
@@ -22,6 +23,7 @@ export const CardStatesData: Record<
       trigger: TriggerCardState;
       target: TargetCardState;
       value: number | null;
+      attackSpeed: number;
     }) => number;
   }
 > = {
@@ -43,8 +45,8 @@ export const CardStatesData: Record<
     min: 1,
     max: undefined,
     noValue: false,
-    triggers: ["onDamage"],
-    targets: ["notSpecified"],
+    triggers: ["onDirectlyAttacked"],
+    targets: ["directEnnemyCard"],
     computeCost: ({ dmg, value }) => {
       return (dmg / baseDps * 0.15) * ((value || 1) + 0.35); // +0.5 because the first one is more expansive
     },
@@ -54,9 +56,29 @@ export const CardStatesData: Record<
     max: undefined,
     noValue: true,
     triggers: ["onAttack"],
-    targets: ["notSpecified"],
+    targets: ["otherEnnemyCards"],
     computeCost: ({ dps }) => {
       return (dps * 1.5) / baseDps;
     },
   },
+  massacre: {
+    min: 0,
+    max: undefined,
+    noValue: false,
+    triggers: ["onAttack"],
+    targets: ["directEnnemyCard"],
+    computeCost: ({ value, attackSpeed }) => {
+      return ((value || 0) * (attackSpeed * 1.5)) / 20;
+    },
+  },
+  bleeding: {
+    min: 0,
+    max: undefined,
+    noValue: false,
+    triggers: ["onAttack"],
+    targets: ["selfCard"],
+    computeCost: () => {
+      return 0;
+    },
+  }
 };

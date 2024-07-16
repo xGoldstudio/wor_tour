@@ -3,7 +3,7 @@ import ManaBall from "../ManaBall";
 import { CardType } from "./Card";
 import CardBorder, { CardContentIllustartion, InnerBord } from "./CardBorder";
 import * as _ from "lodash";
-import Effects from "./Effects";
+import States from "./Effects";
 
 export default function FullCard({
   card,
@@ -60,7 +60,7 @@ export default function FullCard({
               </div>
               <div className="w-full h-full grow overflow-hidden relative pt-2 ">
                 <div className="flex flex-col items-end absolute bottom-[5px] z-10 right-[4px]">
-                  <Effects effects={card.effects} size={size * 1.1} showDesc={showEffectDesc} />
+                  <States states={card.states} size={size * 1.1} showDesc={showEffectDesc} />
                 </div>
                 <CardContentIllustartion card={card} size={size * 3} />
               </div>

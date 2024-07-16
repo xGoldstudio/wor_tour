@@ -65,9 +65,9 @@ export type CardState = {
   value: number | null;
 };
 
-export type TriggerCardState = "idle" | "onAttack" | "onDamage" | "onPlacement" | "onDeath" | "onHeal" | "onKill";
-export type TargetCardState = "selfCard" | "directEnnemyCard" | "enemyCards" | "allyCards" | "allCards" | "player" | "opponent" | "notSpecified";
-export type StateCardState = "heal" | "riposte" | "multiAttack";
+export type TriggerCardState = "idle" | "onAttack" | "onDamage" | "onPlacement" | "onDeath" | "onHeal" | "onKill" | "onDirectlyAttacked";
+export type TargetCardState = "selfCard" | "directEnnemyCard" | "enemyCards" | "allyCards" | "allCards" | "player" | "opponent" | "notSpecified" | "otherEnnemyCards";
+export type StateCardState = "heal" | "riposte" | "multiAttack" | "massacre" | "bleeding";
 
 export type CardRarity = "common" | "rare" | "epic" | "legendary";
 
