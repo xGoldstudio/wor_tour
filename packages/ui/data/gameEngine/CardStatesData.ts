@@ -1,4 +1,4 @@
-import { EventType } from '../../../../apps/GameClient/src/game/gameBehavior/useGameEvents';
+import { EventType, TriggerStateEvent } from '../../../../apps/GameClient/src/game/gameBehavior/useGameEvents';
 import { ClockReturn } from '../../../../apps/GameClient/src/game/gameBehavior/clock/clock';
 import { baseDps } from '@repo/ui';
 import { GameStateObject } from '../../../../apps/GameClient/src/game/gameBehavior/gameEngine/gameState';
@@ -9,8 +9,9 @@ import MultiAttackStateAction from './stateActions/multiAttack';
 import MassacreStateAction from './stateActions/massacre';
 import BleedingStateAction from './stateActions/bleeding';
 import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types/DataStoreType';
+import { InGameCardType } from '../../../../apps/GameClient/src/game/stores/gameStateStore';
 
-export type StateAction = ({ trigger, target, value, clock, state, event }: { trigger: TriggerCardState, target: TargetCardState, value: number | null, clock: ClockReturn<EventType>, state: GameStateObject, event: EventType }) => void;
+export type StateAction = ({ card, trigger, target, value, clock, gameState, event }: { card: InGameCardType, trigger: TriggerCardState, target: TargetCardState, value: number | null, clock: ClockReturn<EventType>, gameState: GameStateObject, event: TriggerStateEvent }) => void;
 
 interface CardStateDataInterface {
   min: number | undefined;
@@ -39,6 +40,9 @@ interface CardStateDataInterface {
   status: StatusEffectType;
   src: string;
   action: StateAction;
+  options: {
+    consume?: number;
+  }
 }
 
 export const CardStatesData = {
@@ -46,7 +50,7 @@ export const CardStatesData = {
     min: 0,
     max: undefined,
     noValue: false,
-    triggers: ["onDeath", "onPlacement", "onAttack", "onDirectAttack", "onDirectlyAttacked"],
+    triggers: ["idle", "onPlacement", "onAttack", "onDirectAttackHit", "onDirectlyAttacked"],
     targets: ["selfCard"],
     computeCost: () => {
       return 0;
@@ -56,6 +60,7 @@ export const CardStatesData = {
     status: "neutral",
     src: "",
     action: DummyStateAction,
+    options: {},
   },
   heal: {
     min: 0,
@@ -75,6 +80,7 @@ export const CardStatesData = {
     status: "buff",
     src: "states/heal.png",
     action: HealStateAction,
+    options: {},
   },
   riposte: {
     min: 1,
@@ -89,7 +95,10 @@ export const CardStatesData = {
     title: "Riposte",
     status: "neutral",
     src: "states/riposte.png",
-    action: RiposteStateAction
+    action: RiposteStateAction,
+    options: {
+      consume: 1
+    },
   },
   multiAttack: {
     min: undefined,
@@ -105,12 +114,13 @@ export const CardStatesData = {
     status: "neutral",
     src: "states/multiAttack.png",
     action: MultiAttackStateAction,
+    options: {},
   },
   massacre: {
     min: 0,
     max: undefined,
     noValue: false,
-    triggers: ["onDirectAttack"],
+    triggers: ["onDirectAttackHit"],
     targets: ["directEnnemyCard"],
     computeCost: ({ value, attackSpeed }) => {
       return ((value || 0) * (attackSpeed * 1.5)) / 20;
@@ -120,6 +130,7 @@ export const CardStatesData = {
     status: "buff",
     src: "states/massacre.png",
     action: MassacreStateAction,
+    options: {},
   },
   bleeding: {
     min: 0,
@@ -135,6 +146,7 @@ export const CardStatesData = {
     status: "debuff",
     src: "states/bleeding.png",
     action: BleedingStateAction,
+    options: {},
   }
 } satisfies Record<string, CardStateDataInterface>;
 

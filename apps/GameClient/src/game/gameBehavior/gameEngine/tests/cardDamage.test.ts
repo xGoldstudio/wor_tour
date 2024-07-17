@@ -1,5 +1,6 @@
 import { DAMAGE_SPEED } from "../events/cardDamage";
 import { initTest } from "./common";
+import { expect, test } from 'vitest';
 
 test("start damage to card (animation placeholder)", () => {
 	const { clock, state } = initTest();

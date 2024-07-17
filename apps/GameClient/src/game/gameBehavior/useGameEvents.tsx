@@ -176,6 +176,7 @@ export interface TriggerStateEvent {
   state: CardState;
   isPlayerCard: boolean;
   cardPosition: number;
+  initiator: EventType;
 }
 
 export interface AddStateEvent {

@@ -4,6 +4,7 @@ import { GameStateObject } from "../gameState";
 import { EventType } from "../../useGameEvents";
 import Clock from "../../clock/clock";
 import { computeNextFrameState } from "../gameEngine";
+import { expect, test } from 'vitest';
 
 const baseCard = {
   name: "string",

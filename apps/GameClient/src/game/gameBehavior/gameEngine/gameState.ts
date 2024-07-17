@@ -182,8 +182,7 @@ export class GameStateObject {
     damage: number,
     cardPosition: number
   ) {
-		const deck = isPlayerCard ? this.playerBoard : this.opponentBoard;
-		const card = deck[cardPosition];
+		const card = this.getCard(isPlayerCard, cardPosition);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return false;
 		}

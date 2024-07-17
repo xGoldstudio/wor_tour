@@ -2,6 +2,7 @@ import Clock from "../../clock/clock";
 import { EventType } from "../../useGameEvents";
 import { computeNextFrameState } from "../gameEngine";
 import { GameStateObject, defaultManaSpeed } from "../gameState";
+import { expect, test } from 'vitest';
 
 test("base state", () => {
 	const state = new GameStateObject({ playerDeck: [], opponentDeck: [], playerHp: 0, opponentHp: 0});

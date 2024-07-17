@@ -2,6 +2,7 @@ import { InGameCardType } from "@/game/stores/gameStateStore";
 import { PlaceCardEvent } from "../../useGameEvents";
 import { ComputeEventProps } from "../gameEngine";
 import _ from "lodash";
+import { triggerStates } from "./cardAttacking";
 
 export default function placeCardEvent({ event, gameState, clock }: ComputeEventProps<PlaceCardEvent>) {
 	const card = event.isPlayer
@@ -29,6 +30,14 @@ export default function placeCardEvent({ event, gameState, clock }: ComputeEvent
 		delta: card.cost,
 	});
 	gameState.placeCardBoard(event.isPlayer, event.targetPosition, cardInGame);
+	triggerStates({
+		trigger: "onPlacement",
+		clock,
+		gameState,
+		isPlayerCard: event.isPlayer,
+		cardPosition: event.targetPosition,
+		initiator: event,
+	});
 	// if (cardInGame.effects.placementHeal) {
 	// 	const board = event.isPlayer
 	// 		? [...gameState.playerBoard]

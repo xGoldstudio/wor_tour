@@ -5,7 +5,7 @@ import { EventType } from "../../useGameEvents";
 import Clock from "../../clock/clock";
 import { computeNextFrameState } from "../gameEngine";
 
-export const baseCard = {
+export const baseCard: CardType = {
 	name: "string",
 	cost: 1,
 	illustration: "string",
@@ -16,6 +16,8 @@ export const baseCard = {
 	states: [],
 	level: 1,
 	world: 1,
+	rarity: "common",
+	id: 0,
 }
 
 export const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common" }));

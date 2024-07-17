@@ -1,6 +1,7 @@
 import { CardType } from "@repo/ui";
 import { baseCard, initTest } from "./common";
 import * as _ from "lodash";
+import { test } from 'vitest';
 
 const usingDeck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common" }));
 

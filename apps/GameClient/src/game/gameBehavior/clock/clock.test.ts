@@ -1,6 +1,7 @@
 import Clock from "./clock";
+import { expect, test, vi, beforeEach } from 'vitest';
 
-const mockTriggerEvent = jest.fn(() => null);
+const mockTriggerEvent = vi.fn(() => null);
 
 beforeEach(() => {
   mockTriggerEvent.mockReset();

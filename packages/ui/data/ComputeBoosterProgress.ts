@@ -1,8 +1,9 @@
-import { ceilToValue } from "@repo/ui";
 import * as _ from "lodash";
 import { numberOfLevels } from "../../../apps/Editor/src/editor/features/progression/consts";
 import { BoosterTypeDeclartion, CardRarity } from "../types/DataStoreType";
-
+function ceilToValue(ceil: number) {
+	return (v: number) => Math.ceil(v / ceil) * ceil;
+}
 const baseCost = 1000;
 const ordinals = ["first", "second", "third", "fourth", "fifth"];
 const upgradedBoosters = [

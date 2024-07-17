@@ -59,7 +59,7 @@ export interface CardStatLevel {
   illustration: string | null;
 }
 
-export type TriggerCardState = "idle" | "onAttack" | "onDirectAttack" | "onDamage" | "onPlacement" | "onDeath" | "onHeal" | "onKill" | "onDirectlyAttacked";
+export type TriggerCardState = "idle" | "onAttack" | "onDamage" | "onPlacement" | "onDeath" | "onHeal" | "onKill" | "onDirectlyAttacked" | "onDirectAttackHit";
 export type TargetCardState = "selfCard" | "directEnnemyCard" | "enemyCards" | "allyCards" | "allCards" | "player" | "opponent" | "notSpecified" | "otherEnnemyCards";
 export type StatusEffectType = "buff" | "debuff" | "neutral";
 

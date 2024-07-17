@@ -5,6 +5,7 @@ import { computeNextFrameState } from "../gameEngine";
 import { GameStateObject } from "../gameState";
 import { CardType } from "@repo/ui";
 import { DAMAGE_SPEED } from "../events/cardDamage";
+import { expect, test } from 'vitest';
 
 const baseCard = {
 	name: "string",

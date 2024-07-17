@@ -1,5 +1,33 @@
-import { CardAttackingEvent } from "../../useGameEvents";
+import { CardAttackingEvent, EventType } from "../../useGameEvents";
 import { ComputeEventProps } from "../gameEngine";
+import { CardState } from "@repo/ui";
+import { ClockReturn } from "../../clock/clock";
+import { GameStateObject } from "../gameState";
+
+export function triggerStates({ gameState, trigger, clock, isPlayerCard, cardPosition, initiator }: {
+	gameState: GameStateObject,
+	trigger: CardState["trigger"],
+	clock: ClockReturn<EventType>,
+	isPlayerCard: boolean,
+	cardPosition: number,
+	initiator: EventType,
+}) {
+	const card = gameState.getCard(isPlayerCard, cardPosition);
+	if (card === null) {
+		return;
+	}
+	card.states.forEach((state) => {
+		if (state.trigger === trigger) {
+			clock.triggerEvent({
+				type: "triggerState",
+				isPlayerCard,
+				cardPosition,
+				state,
+				initiator: initiator,
+			});
+		}
+	});
+}
 
 export default function cardAttackingEvent({ event, gameState, clock }: ComputeEventProps<CardAttackingEvent>) {
 	const attakerCard = event.isPlayer
@@ -11,6 +39,14 @@ export default function cardAttackingEvent({ event, gameState, clock }: ComputeE
 		// if card destroyed or replaced during attack
 		return;
 	}
+	triggerStates({
+		trigger: "onAttack",
+		clock,
+		gameState,
+		isPlayerCard: event.isPlayer,
+		cardPosition: event.cardPosition,
+		initiator: event,
+	});
 	// if (attakerCard.effects.multiAttack) {
 	// 	// multi attack will attack all cards on board + player if no direct defenser
 	// 	defenseBoard.forEach((cardId, position) => {

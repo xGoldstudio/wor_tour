@@ -1,6 +1,7 @@
 import { DAMAGE_SPEED } from "../events/cardDamage";
 import { getFrameFromAttackSpeed } from "../events/utils";
 import { initTest } from "./common";
+import { expect, test } from 'vitest';
 
 test("attacking pipeline", () => {
 	const { state, clock } = initTest();
