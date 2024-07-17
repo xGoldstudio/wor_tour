@@ -1,4 +1,4 @@
-import { CardEffects, CardRarity, CardState } from "@repo/types";
+import { CardRarity, CardState } from "@repo/types";
 import { CardStatesData } from "../../data/CardStatesData";
 
 export type CardType = {
@@ -11,7 +11,6 @@ export type CardType = {
   attackSpeed: number;
   rarity: CardRarity;
   id: number;
-  effects: CardEffects;
   level: number;
   world: number;
   states: CardState[];

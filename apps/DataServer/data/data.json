@@ -44,7 +44,7 @@
             {
               "type": "multiAttack",
               "trigger": "onAttack",
-              "target": "notSpecified",
+              "target": "otherEnnemyCards",
               "value": null
             }
           ],
@@ -62,7 +62,7 @@
             {
               "type": "multiAttack",
               "trigger": "onAttack",
-              "target": "notSpecified",
+              "target": "otherEnnemyCards",
               "value": null
             }
           ],
@@ -80,7 +80,7 @@
             {
               "type": "multiAttack",
               "trigger": "onAttack",
-              "target": "notSpecified",
+              "target": "otherEnnemyCards",
               "value": null
             }
           ],

@@ -11,53 +11,53 @@ export default function cardAttackingEvent({ event, gameState, clock }: ComputeE
 		// if card destroyed or replaced during attack
 		return;
 	}
-	if (attakerCard.effects.multiAttack) {
-		// multi attack will attack all cards on board + player if no direct defenser
-		defenseBoard.forEach((cardId, position) => {
-			if (cardId !== null) {
-				clock.triggerEvent({
-					type: "cardDamage",
-					amount: attakerCard.dmg,
-					cardPosition: position,
-					isPlayerCard: !event.isPlayer,
-					directAttack: position === event.cardPosition,
-					initiator: {
-						cardPosition: event.cardPosition,
-						isPlayerCard: event.isPlayer,
-					},
-				});
-			}
-		});
-		if (!defenseCard) {
-			clock.triggerEvent({
-				type: "playerDamage",
-				damage: attakerCard.dmg,
-				isPlayer: !event.isPlayer,
-				initiator: event,
-			});
-		}
-	} else {
-		if (defenseCard) {
-			clock.triggerEvent({
-				type: "cardDamage",
-				amount: attakerCard.dmg,
+	// if (attakerCard.effects.multiAttack) {
+	// 	// multi attack will attack all cards on board + player if no direct defenser
+	// 	defenseBoard.forEach((cardId, position) => {
+	// 		if (cardId !== null) {
+	// 			clock.triggerEvent({
+	// 				type: "cardDamage",
+	// 				amount: attakerCard.dmg,
+	// 				cardPosition: position,
+	// 				isPlayerCard: !event.isPlayer,
+	// 				directAttack: position === event.cardPosition,
+	// 				initiator: {
+	// 					cardPosition: event.cardPosition,
+	// 					isPlayerCard: event.isPlayer,
+	// 				},
+	// 			});
+	// 		}
+	// 	});
+	// 	if (!defenseCard) {
+	// 		clock.triggerEvent({
+	// 			type: "playerDamage",
+	// 			damage: attakerCard.dmg,
+	// 			isPlayer: !event.isPlayer,
+	// 			initiator: event,
+	// 		});
+	// 	}
+	// } else {
+	if (defenseCard) {
+		clock.triggerEvent({
+			type: "cardDamage",
+			amount: attakerCard.dmg,
+			cardPosition: event.cardPosition,
+			isPlayerCard: !event.isPlayer,
+			directAttack: true,
+			initiator: {
 				cardPosition: event.cardPosition,
-				isPlayerCard: !event.isPlayer,
-				directAttack: true,
-				initiator: {
-					cardPosition: event.cardPosition,
-					isPlayerCard: event.isPlayer,
-				},
-			});
-		} else {
-			clock.triggerEvent({
-				type: "playerDamage",
-				damage: attakerCard.dmg,
-				isPlayer: !event.isPlayer,
-				initiator: event,
-			});
-		}
+				isPlayerCard: event.isPlayer,
+			},
+		});
+	} else {
+		clock.triggerEvent({
+			type: "playerDamage",
+			damage: attakerCard.dmg,
+			isPlayer: !event.isPlayer,
+			initiator: event,
+		});
 	}
+	// }
 	clock.triggerEvent({
 		type: "cardStartAttacking",
 		isPlayer: event.isPlayer,

@@ -19,7 +19,7 @@ export default function placeCardEvent({ event, gameState, clock }: ComputeEvent
 		startAttackingTick: null,
 		instanceId: gameState.getNextInstanceId(),
 		rarity: card.rarity,
-		effects: _.cloneDeep(card.effects) || {},
+		states: _.cloneDeep(card.states) || [],
 		illustration: card.illustration,
 		worldIllustration: card.worldIllustration,
 	};
@@ -29,32 +29,32 @@ export default function placeCardEvent({ event, gameState, clock }: ComputeEvent
 		delta: card.cost,
 	});
 	gameState.placeCardBoard(event.isPlayer, event.targetPosition, cardInGame);
-	if (cardInGame.effects.placementHeal) {
-		const board = event.isPlayer
-			? [...gameState.playerBoard]
-			: [...gameState.opponentBoard];
-		board.forEach((card, position) => {
-			if (card === null || position === event.targetPosition) {
-				return;
-			}
-			clock.triggerEvent({
-				type: "healCard",
-				cardPosition: position,
-				isPlayerCard: event.isPlayer,
-				cardInitiator: {
-					isPlayerCard: event.isPlayer,
-					cardPosition: event.targetPosition,
-				},
-				amount: cardInGame.effects.placementHeal!.amount,
-			});
-		});
-		clock.triggerEvent({
-			type: "removeEffect",
-			isPlayerCard: event.isPlayer,
-			cardPosition: event.targetPosition,
-			effectToRemove: "placementHeal",
-		});
-	}
+	// if (cardInGame.effects.placementHeal) {
+	// 	const board = event.isPlayer
+	// 		? [...gameState.playerBoard]
+	// 		: [...gameState.opponentBoard];
+	// 	board.forEach((card, position) => {
+	// 		if (card === null || position === event.targetPosition) {
+	// 			return;
+	// 		}
+	// 		clock.triggerEvent({
+	// 			type: "healCard",
+	// 			cardPosition: position,
+	// 			isPlayerCard: event.isPlayer,
+	// 			cardInitiator: {
+	// 				isPlayerCard: event.isPlayer,
+	// 				cardPosition: event.targetPosition,
+	// 			},
+	// 			amount: cardInGame.effects.placementHeal!.amount,
+	// 		});
+	// 	});
+	// 	clock.triggerEvent({
+	// 		type: "removeEffect",
+	// 		isPlayerCard: event.isPlayer,
+	// 		cardPosition: event.targetPosition,
+	// 		effectToRemove: "placementHeal",
+	// 	});
+	// }
 	clock.triggerEvent({
 		type: "cardStartAttacking",
 		isPlayer: event.isPlayer,

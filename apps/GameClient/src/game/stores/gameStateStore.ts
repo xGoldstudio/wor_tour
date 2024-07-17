@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import useGameMetadataStore from "./gameMetadataStore";
-import { CardEffects, CardRarity } from "@repo/types";
+import { CardRarity, CardState } from "@repo/types";
 import { GameStateObject } from "../gameBehavior/gameEngine/gameState";
 
 export interface GameStore {
@@ -29,7 +29,7 @@ export type InGameCardType = {
   attackSpeed: number;
   startAttackingTick: number | null;
   rarity: CardRarity;
-  effects: CardEffects;
+  states: CardState[];
   illustration: string;
   worldIllustration: string;
 };
