@@ -51,7 +51,7 @@ describe("trigger", () => {
 	test("Effectively trigger states", () => {
 		clock.triggerEvent({ type: "addState", isPlayerCard: true, cardPosition: 0, state: { type: "dummy", value: 2, trigger: "idle", target: "selfCard" } });
 		clock.nextTick();
-		clock.triggerEvent({ type: "triggerState", isPlayerCard: true, cardPosition: 0, state: state.playerBoard[0]!.states[0] });
+		clock.triggerEvent({ type: "triggerState", isPlayerCard: true, cardPosition: 0, state: state.playerBoard[0]!.states[0], initiator: { type: "dummyEvent" } });
 		vi.spyOn(CardStatesData["dummy"], "action").mockImplementation((props) => {
 			expect(props.trigger).toBe("idle");
 			expect(props.target).toBe("selfCard");

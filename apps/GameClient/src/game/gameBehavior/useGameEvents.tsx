@@ -27,6 +27,7 @@ interface GameEventsActions {
 }
 
 export type EventType =
+  | DummyEvent
   | StartGameSequence
   | StartGame
   | ManaIncreaseEvent
@@ -48,6 +49,10 @@ export type EventType =
   | RemoveStateEvent
   | TriggerStateEvent
   | AddStateEvent;
+
+export interface DummyEvent { // this event should be ignored
+  type: "dummyEvent";
+}
 
 export interface StartGameSequence {
   type: "startGameSequence";
