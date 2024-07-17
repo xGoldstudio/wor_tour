@@ -3,8 +3,7 @@ import CardBorder, {
   InnerBord,
 } from "../../../../../../packages/ui/components/card/CardBorder";
 import { InGameCardType } from "@/game/stores/gameStateStore";
-import { CardEffects } from "@repo/types";
-import { cn, Effects, numberWithCommas } from "@repo/ui";
+import { CardState, cn, Effects, numberWithCommas } from "@repo/ui";
 import { useSyncGameAnimation } from "@/game/gameBehavior/animation/useGameSyncAnimation";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
 import {
@@ -14,7 +13,7 @@ import {
   FRAME_TIME,
   HealCardEvent,
   PlaceCardEvent,
-  RemoveEffectEvent,
+  RemoveStateEvent,
 } from "@/game/gameBehavior/useGameEvents";
 import { useRef, useState } from "react";
 import useGameEventListener from "@/game/gameBehavior/useGameEventListener";
@@ -43,7 +42,7 @@ function GameCard({
     attackSpeed: 1,
     startAttackingTick: null,
     rarity: "common",
-    effects: {},
+    states: [],
     illustration: "",
     worldIllustration: "",
   });
@@ -248,7 +247,7 @@ export function CardEffectsElements({
   position: number;
   isPlayerCard: boolean;
 }) {
-  const [effects, setEffects] = useState<CardEffects>({});
+  const [states, setStates] = useState<CardState[]>([]);
 
   useGameEventListener({
     type: "placeCard",
@@ -259,7 +258,7 @@ export function CardEffectsElements({
       if (card === null) {
         return;
       }
-      setEffects({ ...card.effects });
+      setStates([ ...card.states ]);
     },
     filter: (event) =>
       (event as PlaceCardEvent).isPlayer === isPlayerCard &&
@@ -267,7 +266,7 @@ export function CardEffectsElements({
   });
 
   useGameEventListener({
-    type: "removeEffect",
+    type: "removeState",
     action: (_, state) => {
       const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
         position
@@ -275,16 +274,16 @@ export function CardEffectsElements({
       if (card === null) {
         return;
       }
-      setEffects({ ...card.effects });
+      setStates([ ...card.states ]);
     },
     filter: (event) =>
-      (event as RemoveEffectEvent).isPlayerCard === isPlayerCard &&
-      (event as RemoveEffectEvent).cardPosition === position,
+      (event as RemoveStateEvent).isPlayerCard === isPlayerCard &&
+      (event as RemoveStateEvent).cardPosition === position,
   });
 
   return (
     <div className="absolute right-[4px] top-[5px] flex flex-col gap-2">
-      <Effects effects={effects} size={0.8} />
+      <Effects states={states} size={0.8} />
     </div>
   );
 }

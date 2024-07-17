@@ -1,4 +1,4 @@
-import { Level } from '@repo/types';
+import { Level } from "@repo/ui";
 
 export interface Tier {
   tier: number;

@@ -1,5 +1,5 @@
-import { CardRarity } from "@repo/types";
 import { getCardStrength } from "../components/card/Card";
+import { CardRarity } from "../types/DataStoreType";
 
 export function getStrengthMin(world: number) {
 	const rarities: CardRarity[] = [

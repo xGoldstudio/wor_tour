@@ -60,10 +60,10 @@
         {
           "states": [
             {
-              "type": "multiAttack",
-              "trigger": "onAttack",
-              "target": "otherEnnemyCards",
-              "value": null
+              "type": "heal",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": 0
             }
           ],
 

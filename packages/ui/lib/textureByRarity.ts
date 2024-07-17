@@ -1,4 +1,4 @@
-import { CardRarity } from "@repo/types";
+import { CardRarity } from "../types/DataStoreType";
 
 export default function textureByRarity(rarity: CardRarity) {
   const borderTextureRarity = {

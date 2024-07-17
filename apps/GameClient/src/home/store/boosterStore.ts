@@ -2,13 +2,12 @@ import { toStream } from 'zustand-rx';
 import usePlayerStore, { CollectionCard } from "./playerStore";
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CardRarityOrder, CardStatsInfo, CardType, boosters, toState } from "@repo/ui";
+import { BoosterTypeDeclartion, CardRarityOrder, CardStatsInfo, CardType, boosters, toState } from "@repo/ui";
 import { BoosterType } from "./useBooster/useBooster";
 import useDataStore from "@/cards/DataStore";
-import { BoosterTypeDeclartion } from "@repo/types";
-import { findCard } from "@/cards";
 import { create } from 'zustand';
 import { arrayOfCardsToRarityMap } from './useBooster/getRandomCardFromRarity';
+import { findCard } from '@/cards';
 
 const playerCollectionObservable = toStream(usePlayerStore, (state) => state.collection, {
 	fireImmediately: true,

@@ -1,3 +1,5 @@
+import { CardState } from "@repo/ui";
+
 export interface EditorData {
   cards: CardStat[];
   worlds: WorldStats[];
@@ -53,25 +55,15 @@ export interface CardStat {
 
 export interface CardStatLevel {
   cost: number;
-  effects: CardEffects;
   states: CardState[];
   illustration: string | null;
 }
 
-export type CardState = {
-  type: StateCardState;
-  trigger: TriggerCardState;
-  target: TargetCardState;
-  value: number | null;
-};
-
-export type TriggerCardState = "idle" | "onAttack" | "onDamage" | "onPlacement" | "onDeath" | "onHeal" | "onKill" | "onDirectlyAttacked";
+export type TriggerCardState = "idle" | "onAttack" | "onDirectAttack" | "onDamage" | "onPlacement" | "onDeath" | "onHeal" | "onKill" | "onDirectlyAttacked";
 export type TargetCardState = "selfCard" | "directEnnemyCard" | "enemyCards" | "allyCards" | "allCards" | "player" | "opponent" | "notSpecified" | "otherEnnemyCards";
-export type StateCardState = "heal" | "riposte" | "multiAttack" | "massacre" | "bleeding";
+export type StatusEffectType = "buff" | "debuff" | "neutral";
 
 export type CardRarity = "common" | "rare" | "epic" | "legendary";
-
-export type StatusEffectType = "buff" | "debuff" | "neutral";
 
 export interface CardEffects {
   multiAttack?: MultiAttackEffect;

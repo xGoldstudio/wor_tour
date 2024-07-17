@@ -14,7 +14,7 @@ const baseCard = {
 	dmg: 100,
 	hp: 200,
 	attackSpeed: 1,
-	effects: {},
+	states: [],
 	level: 1,
 	world: 1,
 }

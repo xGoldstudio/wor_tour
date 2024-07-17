@@ -2,7 +2,7 @@ import { ceilToValue, cubicBezier, getStrengthMax, getStrengthMin } from "@repo/
 import * as _ from "lodash";
 import { boosters, getWorldBoosterName } from "./ComputeBoosterProgress";
 import { numberOfLevels } from "../../../apps/Editor/src/editor/features/progression/consts";
-import { Level } from "@repo/types";
+import { Level } from "../types/DataStoreType";
 
 interface World {
 	id: number;

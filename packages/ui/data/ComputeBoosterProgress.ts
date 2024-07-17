@@ -1,7 +1,7 @@
-import { BoosterTypeDeclartion, CardRarity } from "@repo/types";
 import { ceilToValue } from "@repo/ui";
 import * as _ from "lodash";
 import { numberOfLevels } from "../../../apps/Editor/src/editor/features/progression/consts";
+import { BoosterTypeDeclartion, CardRarity } from "../types/DataStoreType";
 
 const baseCost = 1000;
 const ordinals = ["first", "second", "third", "fourth", "fifth"];

@@ -1,41 +1,5 @@
-import { CardState, StatusEffectType, TargetCardState, TriggerCardState } from "@repo/types";
-
-export const effectsDescription:
-  Record<
-    string,
-    { descrption: ({ trigger, target }: { trigger: string, target: string, value: string }) => string, title: string, status: StatusEffectType, src: string }
-  > = {
-  riposte: {
-    descrption: ({ trigger, target }) => `${trigger}, instantly attack the ${target}.`,
-    title: "Riposte",
-    status: "neutral",
-    src: "states/riposte.png",
-  },
-  multiAttack: {
-    descrption: ({ trigger, target }) => `${trigger}, also attack ${target} with the normal damage.`,
-    title: "Multi Attack",
-    status: "neutral",
-    src: "states/multiAttack.png",
-  },
-  heal: {
-    descrption: ({ trigger, target, value }) => `${trigger}, heal ${target} for ${value} health points.`,
-    title: "Heal",
-    status: "buff",
-    src: "states/heal.png",
-  },
-  massacre: {
-    descrption: ({ trigger, target, value }) => `${trigger}, give bleeding ${value} to ${target}.`,
-    title: "Massacre",
-    status: "buff",
-    src: "states/massacre.png",
-  },
-  bleeding: {
-    descrption: ({ trigger, target, value }) => `${trigger}, inflict ${value} damage to ${target}.`,
-    title: "Bleeding",
-    status: "debuff",
-    src: "states/bleeding.png",
-  },
-};
+import { CardState, CardStatesData } from "../data/gameEngine/CardStatesData";
+import { StatusEffectType, TargetCardState, TriggerCardState } from "../types/DataStoreType";
 
 export interface CardStateLayoutData {
   src: string;
@@ -47,7 +11,7 @@ export interface CardStateLayoutData {
 
 export function getImageEffects(states: CardState[]): CardStateLayoutData[] {
   return states.map((state) => {
-    const desc = effectsDescription[state.type]!;
+    const desc = CardStatesData[state.type];
     return {
       src: desc.src,
       amount: state.value,
@@ -76,6 +40,7 @@ export const targetLabels: Record<TargetCardState, string> = {
 
 export const triggerLabels: Record<TriggerCardState, string> = {
   idle: "never",
+  onDirectAttack: "When this card directly attacks",
   onDirectlyAttacked: "When this card is directly attacked",
   onAttack: "When this card attacks",
   onDamage: "When this card takes damage",

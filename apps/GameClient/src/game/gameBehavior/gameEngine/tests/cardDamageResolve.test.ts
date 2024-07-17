@@ -18,7 +18,7 @@ const baseCard = {
 }
 
 const deck: CardType[] = _.times(8, (i) => ({
-	...baseCard, id: i, rarity: "common", effects: {},
+	...baseCard, id: i, rarity: "common", states: [],
 }));
 
 test("damage and kill player card", () => {

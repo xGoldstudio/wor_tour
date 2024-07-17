@@ -1,6 +1,5 @@
-import { CardType } from "@repo/ui";
+import { CardRarity, CardType } from "@repo/ui";
 import _ from "lodash";
-import { CardRarity } from "@repo/types";
 import { getRandomCardFromRarity } from "./getRandomCardFromRarity";
 
 const baseCard = {
@@ -16,19 +15,19 @@ const baseCard = {
 }
 
 const commons: CardType[] = _.times(1, (i) => ({
-	...baseCard, id: i, rarity: "common", effects: {},
+	...baseCard, id: i, rarity: "common", states: [],
 }));
 
 const rares: CardType[] = _.times(1, (i) => ({
-	...baseCard, id: i + 1, rarity: "rare", effects: {},
+	...baseCard, id: i + 1, rarity: "rare", states: [],
 }));
 
 const epics: CardType[] = _.times(1, (i) => ({
-	...baseCard, id: i + 2, rarity: "epic", effects: {},
+	...baseCard, id: i + 2, rarity: "epic", states: [],
 }));
 
 const legendaries: CardType[] = _.times(1, (i) => ({
-	...baseCard, id: i + 3, rarity: "legendary", effects: {},
+	...baseCard, id: i + 3, rarity: "legendary", states: [],
 }));
 
 const cards = [...commons, ...rares, ...epics, ...legendaries];

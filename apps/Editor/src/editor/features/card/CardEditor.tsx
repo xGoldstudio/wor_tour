@@ -2,14 +2,6 @@ import { range } from "lodash";
 import Ratios from "../../ui/Ratios";
 import useEditorStore from "../../store/EditorStore";
 import { useNavigate, useParams } from "react-router";
-import {
-  CardStat,
-  CardState,
-  CardStatLevel,
-  StateCardState as TypeCardState,
-  TargetCardState,
-  TriggerCardState,
-} from "@repo/types";
 import ImageManager from "@/editor/utils/ImageManager";
 import {
   arrayfindElementOrFirst,
@@ -23,6 +15,13 @@ import {
   getValueInRange,
   testIsStrengthValid,
   CardStatesData,
+  CardState,
+  CardStatsInfoLevel,
+  CardStatLevel,
+  CardStat,
+  TriggersOf,
+  TargetsOf,
+  ValueOf,
 } from "@repo/ui";
 import { DeleteIcon, PlusCircle } from "lucide-react";
 
@@ -45,7 +44,7 @@ export default function CardEditor() {
   const setCard = updateCard(cardId);
 
   function setCardLevel(level: number) {
-    return (cardLevel: Partial<CardStatLevel>) => {
+    return (cardLevel: Partial<CardStatsInfoLevel>) => {
       if (!card) return;
       setCard({
         ...card,
@@ -114,7 +113,6 @@ function cardStatsToCard(cardStats: CardStat, level: number): CardType {
     attackSpeed: stats.attackSpeed,
     rarity: cardStats.rarity,
     id: cardStats.id,
-    effects: levelStat.effects,
     level,
     world: cardStats.world,
     states: levelStat.states,
@@ -206,9 +204,9 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
             changeState={(newState) => {
               setCardStats({
                 states: [
-                  ...cardStat.states.map((s, j) => {
+                  ...cardStat.states.map((s, j): CardState => {
                     if (i === j) {
-                      const type = newState.type || s.type;
+                      const type = (newState.type || s.type) as "heal"; // just the same value to make typescript happy (can be something else)
                       const typeRestrictions = CardStatesData[type];
 
                       const computeValue = () => {
@@ -224,17 +222,16 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
                       };
 
                       const next = {
-                        ...s,
-                        ...newState,
-                        trigger: arrayfindElementOrFirst<TriggerCardState>(
-                          newState.trigger || s.trigger,
-                          typeRestrictions.triggers
+                        type,
+                        trigger: arrayfindElementOrFirst<TriggersOf<"heal">>(
+                          (newState.trigger || s.trigger) as TriggersOf<"heal">,
+                          (typeRestrictions.triggers) as TriggersOf<"heal">[]
                         ),
-                        target: arrayfindElementOrFirst(
-                          newState.target || s.target,
-                          typeRestrictions.targets
+                        target: arrayfindElementOrFirst<TargetsOf<"heal">>(
+                          (newState.target || s.target) as TargetsOf<"heal">,
+                          typeRestrictions.targets as TargetsOf<"heal">[]
                         ),
-                        value: computeValue(),
+                        value: computeValue() as ValueOf<"heal">,
                       };
                       console.log("next", next);
                       return next;
@@ -279,7 +276,7 @@ function EffectFields({
         <select
           value={state.type}
           onChange={(v) => {
-            changeState({ type: v.target.value as TypeCardState });
+            changeState({ type: v.target.value as CardState["type"] });
           }}
           className="border-2 border-black p-2 rounded-md"
         >
@@ -292,7 +289,7 @@ function EffectFields({
         <select
           value={state.target}
           onChange={(v) => {
-            changeState({ target: v.target.value as TargetCardState });
+            changeState({ target: v.target.value as CardState["target"] });
           }}
           className="border-2 border-black p-2 rounded-md"
         >
@@ -309,7 +306,7 @@ function EffectFields({
         <select
           value={state.trigger}
           onChange={(v) => {
-            changeState({ trigger: v.target.value as TriggerCardState });
+            changeState({ trigger: v.target.value as CardState["trigger"] });
           }}
           className="border-2 border-black p-2 rounded-md"
         >

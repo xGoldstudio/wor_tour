@@ -154,7 +154,7 @@ function InHandCard({ position }: { position: number }) {
             <CardBorder rarity={card.rarity} size={1.8}>
               <InHandCardIllustration card={card} position={position} />
               <div className="absolute right-[3px] top-[4px] flex flex-col gap-2">
-                <Effects effects={card.effects} size={0.7} />
+                <Effects states={card.states} size={0.7} />
               </div>
             </CardBorder>
             <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 scale-75">

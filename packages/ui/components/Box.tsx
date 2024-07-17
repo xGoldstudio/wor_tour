@@ -1,6 +1,6 @@
-import { CardRarity } from "@repo/types";
 import { Borders, CardIllustartion, InnerBord } from "./card/CardBorder";
 import textureByRarity from "../lib/textureByRarity";
+import { CardRarity } from "../types/DataStoreType";
 
 interface BoxProps {
   children: React.ReactNode;

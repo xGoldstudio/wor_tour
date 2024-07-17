@@ -3,9 +3,9 @@ import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import useEditorStore from "./editor/store/EditorStore";
 import WorldEditor from "./editor/features/worlds/World";
 import CardEditor from "./editor/features/card/CardEditor";
-import { EditorData } from "@repo/types";
 import EditorLayout from "./editor/Layout";
 import Progression from "./editor/features/progression/Progression";
+import { EditorData } from "@repo/ui";
 
 const queryClient = new QueryClient();
 

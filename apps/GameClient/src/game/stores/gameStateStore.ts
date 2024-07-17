@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import useGameMetadataStore from "./gameMetadataStore";
-import { CardRarity, CardState } from "@repo/types";
 import { GameStateObject } from "../gameBehavior/gameEngine/gameState";
+import { CardRarity, CardState } from "@repo/ui";
 
 export interface GameStore {
   init: () => GameStateObject;

@@ -10,7 +10,7 @@ export const dummyCard: CardType = {
   attackSpeed: 0,
   rarity: "common",
   id: 0,
-  effects: {},
+  states: [],
   level: 1,
   world: 1,
 };

@@ -1,4 +1,4 @@
-import { CardRarity, CardStat, EditorData, WorldStats } from "@repo/types";
+import { CardRarity, CardStat, EditorData, WorldStats } from "@repo/ui";
 import { create } from "zustand";
 
 interface EditorStore {
@@ -138,9 +138,9 @@ function createCard(
     attackDefenseRatio: 0.5,
     speedDamageRatio: 0.5,
     stats: [
-      { cost: 1, effects: {}, illustration: null },
-      { cost: 1, effects: {}, illustration: null },
-      { cost: 1, effects: {}, illustration: null },
+      { cost: 1, states: [], illustration: null },
+      { cost: 1, states: [], illustration: null },
+      { cost: 1, states: [], illustration: null },
     ],
   };
 }

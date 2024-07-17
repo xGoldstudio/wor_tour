@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { EditorData } from "@repo/types";
 import { CardStatsInfo, CardStatsInfoLevel, getStats } from "@repo/ui";
+import { EditorData } from "../../../../packages/ui/types/DataStoreType";
 
 interface DataStore {
   cards: CardStatsInfo[];

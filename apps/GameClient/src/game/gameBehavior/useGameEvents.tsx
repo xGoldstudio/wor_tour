@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import useGameInterface from "@/game/stores/gameInterfaceStore";
-import useGameStore from "@/game/stores/gameStateStore";
 import iaAgent from "./aiAgent";
 import Clock, { ClockReturn } from "./clock/clock";
 import GameCanvas, { GameCanvasReturn } from "./animation/gameCanvas";
@@ -8,14 +6,15 @@ import {
   resetAllGameEventListeners,
   runGameEventListeners,
 } from "./gameEventListener";
-import { CardEffects } from "@repo/types";
-import { useOnMount, useOnUnMount } from "@repo/ui";
+import { CardState, useOnMount, useOnUnMount } from "@repo/ui";
 import { computeNextFrameState } from "./gameEngine/gameEngine";
 import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
 import { useShallow } from "zustand/react/shallow";
 import useGameEventListener from "./useGameEventListener";
-import { IS_DEBUG } from "@/isDebug";
 import _ from "lodash";
+import { IS_DEBUG } from "@/isDebug";
+import useGameStore from "../stores/gameStateStore";
+import useGameInterface from "../stores/gameInterfaceStore";
 
 export const FRAME_TIME = 10;
 
@@ -43,9 +42,12 @@ export type EventType =
   | GameOverEvent
   | DrawCardEvent
   | HealCardEvent
-  | RemoveEffectEvent
   | CardDamagResolveEvent
-  | PlayerDamageResolveEvent;
+  | PlayerDamageResolveEvent
+  | ModifyStateValueEvent
+  | RemoveStateEvent
+  | TriggerStateEvent
+  | AddStateEvent;
 
 export interface StartGameSequence {
   type: "startGameSequence";
@@ -154,11 +156,33 @@ export interface HealCardEvent {
   };
 }
 
-export interface RemoveEffectEvent {
-  type: "removeEffect";
+export interface ModifyStateValueEvent {
+  type: "modifyStateValue";
+  state: CardState;
   isPlayerCard: boolean;
   cardPosition: number;
-  effectToRemove: keyof CardEffects;
+  value: number;
+}
+
+export interface RemoveStateEvent {
+  type: "removeState";
+  state: CardState;
+  isPlayerCard: boolean;
+  cardPosition: number;
+}
+
+export interface TriggerStateEvent {
+  type: "triggerState";
+  state: CardState;
+  isPlayerCard: boolean;
+  cardPosition: number;
+}
+
+export interface AddStateEvent {
+  type: "addState";
+  state: CardState;
+  isPlayerCard: boolean;
+  cardPosition: number;
 }
 
 export function getDeathAnimationKey(isPlayerCard: boolean, position: number) {

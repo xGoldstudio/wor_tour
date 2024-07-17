@@ -1,5 +1,5 @@
-import { CardRarity, CardState } from "@repo/types";
-import { CardStatesData } from "../../data/CardStatesData";
+import { CardState, CardStatesData } from "../../data/gameEngine/CardStatesData";
+import { CardRarity } from "../../types/DataStoreType";
 
 export type CardType = {
   name: string;

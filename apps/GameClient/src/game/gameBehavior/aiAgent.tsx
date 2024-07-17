@@ -3,11 +3,11 @@ import {
   EventType,
   ManaIncreaseEvent,
 } from "./useGameEvents";
-import { findCard } from "@/cards";
 import * as _ from "lodash";
 import { addGameEventListener } from "./gameEventListener";
 import { CardType, getRandomElement } from "@repo/ui";
 import { GameStateObject } from "./gameEngine/gameState";
+import { findCard } from "../../cards/index";
 
 export const botOptions = {
   disabled: false,

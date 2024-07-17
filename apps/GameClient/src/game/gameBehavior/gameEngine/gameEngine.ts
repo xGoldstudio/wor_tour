@@ -1,4 +1,4 @@
-import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, RemoveEffectEvent, StartEarningMana, SetManaIncreaseSpeed, StartGameSequence, StartGame } from './../useGameEvents';
+import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, StartEarningMana, SetManaIncreaseSpeed, StartGameSequence, StartGame, ModifyStateValueEvent, RemoveStateEvent, TriggerStateEvent, AddStateEvent } from './../useGameEvents';
 import startEarningManaEvent from "./events/startEarningMana";
 import manaIncreaseEvent from './events/manaIncrease';
 import { GameStateObject } from './gameState';
@@ -15,7 +15,10 @@ import cardDamageResolveEvent from './events/cardDamageResolve';
 import cardDestroyedEvent from './events/cardDestroyed';
 import gameOverEvent from './events/gameOverEvent';
 import healCardEvent from './events/healCard';
-import removeEffectEvent from './events/removeEffect';
+import removeStateEvent from './events/removeState';
+import addStateEvent from './events/addState';
+import modifyStateValueEvent from './events/modifyStateValue';
+import triggerStateEvent from './events/triggerState';
 import setManaIncreaseSpeed from './events/setManaIncreaseSpeed';
 import startGameSequence from './events/startGameSequence';
 import startGame from './events/startGame';
@@ -44,9 +47,12 @@ type EventTypeMap = {
 	gameOver: GameOverEvent;
 	drawCard: DrawCardEvent;
 	healCard: HealCardEvent;
-	removeEffect: RemoveEffectEvent;
 	cardDamageResolve: CardDamagResolveEvent;
 	playerDamageResolve: PlayerDamageResolveEvent;
+	modifyStateValue: ModifyStateValueEvent;
+	removeState: RemoveStateEvent;
+	triggerState: TriggerStateEvent;
+	addState: AddStateEvent;
 };
 
 type EventHandlers = {
@@ -70,8 +76,11 @@ const EventsCompute: EventHandlers = {
 	cardDamageResolve: cardDamageResolveEvent,
 	cardDestroyed: cardDestroyedEvent,
 	healCard: healCardEvent,
-	removeEffect: removeEffectEvent,
 	gameOver: gameOverEvent,
+	removeState: removeStateEvent,
+	addState: addStateEvent,
+	modifyStateValue: modifyStateValueEvent,
+	triggerState: triggerStateEvent,
 }
 
 // used in front and back and can be debugged easily (not pure mutate the state)

@@ -1,9 +1,19 @@
-import { initTest } from "./common";
+import { CardType } from "@repo/ui";
+import { baseCard, initTest } from "./common";
+import * as _ from "lodash";
+
+const usingDeck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common" }));
+
+usingDeck[0].states.push({
+	type: "multiAttack",
+	value: null,
+	trigger: "onAttack",
+	target: "otherEnnemyCards",
+});
+
 
 test("multi attack", () => {
-	const { state, clock } = initTest();
-	void state;
-	void clock;
+	const { clock } = initTest();
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
 

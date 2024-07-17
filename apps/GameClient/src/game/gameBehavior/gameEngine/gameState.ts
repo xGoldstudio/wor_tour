@@ -1,6 +1,5 @@
 import { InGameCardType } from "@/game/stores/gameStateStore";
-import { CardEffects } from "@repo/types";
-import { CardType } from "@repo/ui";
+import { CardState, CardType } from "@repo/ui";
 
 interface GameStateObjectConstructor {
 	playerDeck: CardType[];
@@ -203,20 +202,53 @@ export class GameStateObject {
 		}
 		card.hp = Math.min(card.maxHp, card.hp + amount);
   }
-	removeEffect(
-    isPlayerCard: boolean,
-    cardPosition: number,
-    effectToRemove: keyof CardEffects
-  ) {
-		const deck = isPlayerCard ? this.playerBoard : this.opponentBoard;
-		const card = deck[cardPosition];
-		if (!card) { // this is a common case, the card can be already destroyed
-			return;
-		}
-		card.effects[effectToRemove] = undefined;
-  }
 
 	setGameOver(winnerIsPlayer: boolean) {
 		this.currentWinner = winnerIsPlayer ? "player" : "opponent";
+	}
+
+	// events
+	removeState(
+    isPlayerCard: boolean,
+    cardPosition: number,
+    state: CardState,
+  ) {
+		const card = this.getCard(isPlayerCard, cardPosition);
+		if (!card) { // this is a common case, the card can be already destroyed
+			return;
+		}
+		card.states = card.states.filter((s) => s !== state);
+  }
+	addState(
+		isPlayerCard: boolean,
+		cardPosition: number,
+		state: CardState,
+	) {
+		const card = this.getCard(isPlayerCard, cardPosition);
+		if (!card) { // this is a common case, the card can be already destroyed
+			return;
+		}
+		card.states.push(state);
+	}
+	modifyStateValue(
+		isPlayerCard: boolean,
+		cardPosition: number,
+		state: CardState,
+		value: number,
+	) {
+		const card = this.getCard(isPlayerCard, cardPosition);
+		if (!card) { // this is a common case, the card can be already destroyed
+			return;
+		}
+		const stateIndex = card.states.findIndex((s) => s === state);
+		if (stateIndex === -1) {
+			return;
+		}
+		card.states[stateIndex].value = value;
+	}
+
+	// utils
+	getCard(isPlayerCard: boolean, cardPosition: number) {
+		return (isPlayerCard ? this.playerBoard : this.opponentBoard)[cardPosition];
 	}
 }

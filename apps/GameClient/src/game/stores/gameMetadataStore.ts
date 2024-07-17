@@ -3,7 +3,7 @@ import usePlayerStore, { CollectionCard } from "@/home/store/playerStore";
 import { CardType } from "@repo/ui";
 import { create } from "zustand";
 import useGameStore from "./gameStateStore";
-import useAnimationStore from "@/home/store/animationStore";
+import useAnimationStore from "../../home/store/animationStore";
 
 export interface InGameInitData {
   playerDeck: CardType[];

@@ -10,7 +10,6 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
-    "@repo/types": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/lodash": "^4.17.1",
     "@types/react": "^18.2.61",

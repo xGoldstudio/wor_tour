@@ -1,9 +1,9 @@
-import { CardState } from "@repo/types";
 import { CardStateLayoutData, getImageEffects } from "../../lib/getImageEffects";
 import Cover from "../Cover";
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { inPx } from "../../lib/utils";
+import { CardState } from "../../data/gameEngine/CardStatesData";
 
 export default function States({
   states,

@@ -1,5 +1,5 @@
-import { CardStat } from "@repo/types";
 import { CardStatsInfoLevel, baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, cardWorldMultiplier, getRealStrength, speedMaxLevel1, testIsStrengthValid } from "@repo/ui";
+import { CardStat } from "../types/DataStoreType";
 
 function cardStrengthMultiplier(card: CardStat, cost: number) {
   return (value: number) =>
