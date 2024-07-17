@@ -17,6 +17,7 @@ interface PlayerStore {
   deck: number[];
   currentWorld: number;
   gold: number;
+  numberOfCardsInDeck: number;
 
   getCollection: () => CollectionCard[];
   getCollectionInfo: (id: number) => CollectionCard | undefined;
@@ -61,6 +62,7 @@ for (let i = 1; i <= 69; i++) {
 const shardsByLevels = [3, 7];
 
 const usePlayerStore = create<PlayerStore>()((set, get) => ({
+  numberOfCardsInDeck: 8,
   collection: defaultCollection,
   currentWorld: 1,
   deck: [1, 2, 3, 4, 5, 6, 7, 8],
@@ -86,9 +88,15 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   toCollectTrophiesRewards: new Set(),
 
   removeCardFromDeck: (id: number) =>
-    set((state) => ({ deck: state.deck.filter((cardId) => cardId !== id) })),
+    set((state) => ({
+      deck: state.deck.filter((cardId) => cardId !== id),
+      numberOfCardsInDeck: state.numberOfCardsInDeck - 1,
+    })),
   addCardToDeck: (id: number) =>
-    set((state) => ({ deck: [...state.deck, id] })),
+    set((state) => ({
+      deck: [...state.deck, id],
+      numberOfCardsInDeck: state.numberOfCardsInDeck + 1,
+    })),
   isDeckFull: () => get().deck.length >= 8,
   isPlayed: (cardId: number) => get().deck.includes(cardId),
 

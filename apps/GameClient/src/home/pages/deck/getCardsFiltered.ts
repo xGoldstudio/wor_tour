@@ -1,5 +1,5 @@
 import { CardType } from "@repo/ui";
-import { ActiveFilters, CardFilters, FiltersDescription } from "./cardFilters";
+import { ActiveFilters, FiltersDescription } from "./cardFilters";
 
 interface getCardsFilteredProps {
   detailledCollection: (CardType & {

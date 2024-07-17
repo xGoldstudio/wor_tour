@@ -6,8 +6,6 @@ import { CardCollection } from "./cardFilters";
 import Collection from "./Collection";
 import { DeckCardUI } from "./DeckCardUI";
 
-export const NUMBER_OF_CARD_IN_DECK: number = 8;
-
 interface DeckStatsProps {
   detailledDeck: CardCollection[];
 }
@@ -42,19 +40,20 @@ function DeckStats({ detailledDeck }: DeckStatsProps) {
 }
 
 export default function DeckTab() {
-  const { deck, getCompleteInfo } = usePlayerStore((state) => ({
-    deck: state.deck,
-    getCompleteInfo: state.getCompleteInfo,
-  }));
+  const { deck, getCompleteInfo, numberOfCardsInDeck } = usePlayerStore(
+    (state) => ({
+      deck: state.deck,
+      getCompleteInfo: state.getCompleteInfo,
+      numberOfCardsInDeck: state.numberOfCardsInDeck,
+    })
+  );
 
   const deckArray = _.concat(
     deck,
-    _.fill(Array(NUMBER_OF_CARD_IN_DECK - deck.length), null)
+    _.fill(Array(numberOfCardsInDeck - deck.length), null)
   );
-  console.log(deckArray);
   const detailledDeck: CardCollection[] = [];
-  console.log(detailledDeck);
-  for (let i = 0; i < NUMBER_OF_CARD_IN_DECK; i++)
+  for (let i = 0; i < numberOfCardsInDeck; i++)
     detailledDeck.push(getCompleteInfo(deckArray[i]!));
   return (
     <div>
