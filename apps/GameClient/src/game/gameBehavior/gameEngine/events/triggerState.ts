@@ -24,12 +24,22 @@ export default function triggerStateEvent({ gameState, event, clock }: ComputeEv
 			state: event.state,
 		})
 	} else if (options.consume !== undefined && event.state.value !== null) {
-		clock.triggerEvent({
-			type: "modifyStateValue",
-			isPlayerCard: event.isPlayerCard,
-			cardPosition: event.cardPosition,
-			state: event.state,
-			value: event.state.value - options.consume,
-		})
+		const nextValue = event.state.value - options.consume;
+		if (nextValue <= 0) {
+			clock.triggerEvent({
+				type: "removeState",
+				isPlayerCard: event.isPlayerCard,
+				cardPosition: event.cardPosition,
+				state: event.state,
+			})
+		} else {
+			clock.triggerEvent({
+				type: "modifyStateValue",
+				isPlayerCard: event.isPlayerCard,
+				cardPosition: event.cardPosition,
+				state: event.state,
+				value: nextValue,
+			})
+		}
 	}
 }

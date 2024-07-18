@@ -22,24 +22,27 @@ test("start damage to card (animation placeholder)", () => {
 	clock.nextTick();
 	expect(state.getCard(true, 0)?.states[0].type).toBe("riposte");
 	// player card attack opponent card
-	clock.triggerEvent({
-		type: "cardDamageResolve",
-		initiator: {
-			type: "cardDamage",
-			isPlayerCard: true,
-			cardPosition: 0,
-			directAttack: true,
-			amount: 100,
+	function attack() {
+		clock.triggerEvent({
+			type: "cardDamageResolve",
 			initiator: {
-				isPlayerCard: false,
+				type: "cardDamage",
+				isPlayerCard: true,
 				cardPosition: 0,
+				directAttack: true,
+				amount: 50,
+				initiator: {
+					isPlayerCard: false,
+					cardPosition: 0,
+				},
 			},
-		},
-	});
+		});
+	}
+	attack();
 	expect(state.playerBoard[0]?.hp).toBe(200);
-	expect(state.opponentBoard[0]?.hp).toBe(200); 
+	expect(state.opponentBoard[0]?.hp).toBe(200);
 	clock.nextTick();
-	expect(state.playerBoard[0]?.hp).toBe(100);
+	expect(state.playerBoard[0]?.hp).toBe(150);
 	expect(state.getCard(true, 0)?.states[0].value).toBe(1); // riposte should have decreased
 	for (let i = 0; i < DAMAGE_SPEED - 1; i++) {
 		clock.nextTick();
@@ -47,4 +50,8 @@ test("start damage to card (animation placeholder)", () => {
 	expect(state.opponentBoard[0]?.hp).toBe(200);
 	clock.nextTick();
 	expect(state.opponentBoard[0]?.hp).toBe(100); // riposte attack ended
+	attack();
+	clock.nextTick();
+	expect(state.playerBoard[0]?.hp).toBe(100);
+	expect(state.getCard(true, 0)?.states.length).toBe(0); // riposte should have decreased
 });
