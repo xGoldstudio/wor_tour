@@ -87,3 +87,31 @@ export function arrayfindElementOrFirst<T extends string>(usingValue: T, array: 
   }
   return array[0];
 }
+
+export function defaultValue<T>(def: T): (value: T | undefined | null) => T {
+  return (value: T | undefined | null) => value ?? def;
+}
+
+export const safeArray = <T>(value: T[] | undefined | null): T[] => defaultValue<T[]>([])(value);
+
+export const safeMap = <T, U>(array: T[] | undefined | null) => (
+  fn: (item: T, index: number) => U
+) => safeArray(array).map(fn);
+
+export function inRangeValue(min: number, max: number) {
+	return (value: number | undefined | null) => typeof value === "number"
+		? Math.max(min, Math.min(max, value))
+		: min;
+}
+
+export function filterNulls<T>(array: (T | null)[]): T[] {
+	return array.filter((item): item is T => item !== null);
+}
+
+export function isTrueOr<T, U>(value: T, defaultValue: U) {
+  return (bool: boolean) => bool === true ? value : defaultValue;
+}
+
+export function findInOrFirst<T>(array: T[]) {
+  return (value: T | null | undefined) => defaultValue(array[0])(array.find(t => t === value));
+}

@@ -17,6 +17,7 @@ export * from './components/card/Card.ts';
 
 // utils
 export * from './lib/utils.ts';
+export * from './lib/tsUtils.ts';
 export * from './lib/eventUtils.ts';
 export * from './lib/list.ts';
 export * from './lib/lifecycle.ts';

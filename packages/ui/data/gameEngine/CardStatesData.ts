@@ -159,6 +159,12 @@ export type CardState = {
     target: CardStateTypeof[K]['targets'][number];
   }
 }[keyof CardStateTypeof];
+export type CardStateShape = {
+  type: keyof CardStateTypeof;
+  value: number | null;
+  trigger: TriggerCardState;
+  target: TargetCardState;
+};
 
 export type TriggersOf<K extends keyof CardStateTypeof> = CardStateTypeof[K]['triggers'][number];
 export type TargetsOf<K extends keyof CardStateTypeof> = CardStateTypeof[K]['targets'][number];
