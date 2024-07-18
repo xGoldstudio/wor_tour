@@ -284,7 +284,7 @@ function EffectFields({
           }}
           className="border-2 border-black p-2 rounded-md"
         >
-          {states.map((state) => (
+          {Object.keys(CardStatesData).map((state) => (
             <option key={state} value={state}>
               {state}
             </option>
@@ -297,10 +297,7 @@ function EffectFields({
           }}
           className="border-2 border-black p-2 rounded-md"
         >
-          {targets
-            .filter((target) =>
-              stateRestriction.targets.find((t) => t === target)
-            )
+          {stateRestriction.targets
             .map((target) => (
               <option key={target} value={target}>
                 {target}
@@ -314,10 +311,7 @@ function EffectFields({
           }}
           className="border-2 border-black p-2 rounded-md"
         >
-          {triggers
-            .filter((trigger) =>
-              stateRestriction.triggers.find((t) => t === trigger)
-            )
+          {stateRestriction.triggers
             .map((trigger) => (
               <option key={trigger} value={trigger}>
                 {trigger}
@@ -340,26 +334,3 @@ function EffectFields({
     </div>
   );
 }
-
-const states = ["heal", "riposte", "multiAttack", "massacre", "bleeding"];
-const targets = [
-  "selfCard",
-  "directEnnemyCard",
-  "enemyCards",
-  "allyCards",
-  "allCards",
-  "player",
-  "opponent",
-  "notSpecified",
-  "otherEnnemyCards",
-]; // not specified mean the effect select his target himself
-const triggers = [
-  "idle",
-  "onAttack",
-  "onDamage",
-  "onPlacement",
-  "onDeath",
-  "onHeal",
-  "onKill",
-  "onDirectlyAttacked",
-];
