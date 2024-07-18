@@ -1,7 +1,5 @@
-import { EventType, TriggerStateEvent } from '../../../../apps/GameClient/src/game/gameBehavior/useGameEvents';
-import { ClockReturn } from '../../../../apps/GameClient/src/game/gameBehavior/clock/clock';
-import { baseDps } from '@repo/ui';
-import { GameStateObject } from '../../../../apps/GameClient/src/game/gameBehavior/gameEngine/gameState';
+import { EventType, TriggerStateEvent } from './../../../../../apps/GameClient/src/game/gameBehavior/useGameEvents';
+import { ClockReturn } from './../../../../../apps/GameClient/src/game/gameBehavior/clock/clock';
 import DummyStateAction from './stateActions/dummy';
 import HealStateAction from './stateActions/heal';
 import RiposteStateAction from './stateActions/riposte';
@@ -9,9 +7,13 @@ import MultiAttackStateAction from './stateActions/multiAttack';
 import MassacreStateAction from './stateActions/massacre';
 import BleedingStateAction from './stateActions/bleeding';
 import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types/DataStoreType';
-import { InGameCardType } from '../../../../apps/GameClient/src/game/stores/gameStateStore';
+import { baseDps } from '../../types/Card';
+import { InGameCardType } from '../../../../../apps/GameClient/src/game/stores/gameStateStore';
+import { GameStateObject } from '../../../../../apps/GameClient/src/game/gameBehavior/gameEngine/gameState';
 
-export type StateAction = ({ card, trigger, target, value, clock, gameState, event }: { card: InGameCardType, trigger: TriggerCardState, target: TargetCardState, value: number | null, clock: ClockReturn<EventType>, gameState: GameStateObject, event: TriggerStateEvent }) => void;
+export type StateAction = ({ card, trigger, target, value, clock, gameState, event }: {
+  card: InGameCardType, trigger: TriggerCardState, target: TargetCardState, value: number | null, clock: ClockReturn<EventType>, gameState: GameStateObject, event: TriggerStateEvent
+}) => void;
 
 interface CardStateDataInterface {
   min: number | undefined;

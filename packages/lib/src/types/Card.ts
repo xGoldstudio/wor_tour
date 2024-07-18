@@ -1,5 +1,5 @@
-import { CardState, CardStatesData } from "../../data/gameEngine/CardStatesData";
-import { CardRarity } from "../../types/DataStoreType";
+import { CardState, CardStatesData } from "../data/gameEngine/CardStatesData";
+import { CardRarity } from "./DataStoreType";
 
 export type CardType = {
   name: string;

@@ -1,9 +1,9 @@
-import { cn, inPx } from "../../lib/utils";
 import ManaBall from "../ManaBall";
-import { CardType } from "./Card";
-import CardBorder, { CardContentIllustartion, InnerBord } from "./CardBorder";
+import { CardContentIllustartion, InnerBord, CardBorder } from "./CardBorder";
 import * as _ from "lodash";
 import States from "./Effects";
+import { inPx, CardType } from "@repo/lib";
+import { cn } from "@repo/ui";
 
 export default function FullCard({
   card,

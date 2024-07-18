@@ -1,6 +1,6 @@
 import * as _ from "lodash";
-import { numberOfLevels } from "../../../apps/Editor/src/editor/features/progression/consts";
 import { BoosterTypeDeclartion, CardRarity } from "../types/DataStoreType";
+import { numberOfLevels } from "../../../../apps/Editor/src/editor/features/progression/consts";
 function ceilToValue(ceil: number) {
 	return (v: number) => Math.ceil(v / ceil) * ceil;
 }

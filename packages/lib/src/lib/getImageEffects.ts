@@ -40,7 +40,7 @@ export const targetLabels: Record<TargetCardState, string> = {
 
 export const triggerLabels: Record<TriggerCardState, string> = {
   idle: "never",
-  onDirectAttack: "When this card directly attacks",
+  onDirectAttackHit: "When this card directly attacks",
   onDirectlyAttacked: "When this card is directly attacked",
   onAttack: "When this card attacks",
   onDamage: "When this card takes damage",

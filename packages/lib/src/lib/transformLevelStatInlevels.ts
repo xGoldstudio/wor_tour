@@ -1,4 +1,4 @@
-import { getCardStrength } from "../components/card/Card";
+import { getCardStrength } from "../types/Card";
 import { CardRarity } from "../types/DataStoreType";
 
 export function getStrengthMin(world: number) {

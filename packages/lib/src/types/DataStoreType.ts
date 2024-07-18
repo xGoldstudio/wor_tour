@@ -1,4 +1,4 @@
-import { CardState } from "@repo/ui";
+import { CardState } from "@repo/lib";
 
 export interface EditorData {
   cards: CardStat[];

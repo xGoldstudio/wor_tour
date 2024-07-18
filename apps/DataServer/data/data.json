@@ -572,7 +572,7 @@
       "rarity": "common",
       "id": 22,
       "world": 2,
-      "attackDefenseRatio": 0.45,
+      "attackDefenseRatio": 0.7,
       "speedDamageRatio": 0.59,
       "stats": [
         {

@@ -1,8 +1,10 @@
-import { ceilToValue, cubicBezier, getStrengthMax, getStrengthMin } from "@repo/ui";
+import { numberOfLevels } from './../../../../apps/Editor/src/editor/features/progression/consts';
 import * as _ from "lodash";
 import { boosters, getWorldBoosterName } from "./ComputeBoosterProgress";
-import { numberOfLevels } from "../../../apps/Editor/src/editor/features/progression/consts";
 import { Level } from "../types/DataStoreType";
+import { getStrengthMax, getStrengthMin } from "../lib/transformLevelStatInlevels";
+import { cubicBezier } from "../lib/cubicBezier";
+import { ceilToValue } from '../lib/utils';
 
 interface World {
 	id: number;

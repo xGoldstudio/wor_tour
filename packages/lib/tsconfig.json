@@ -1,5 +1,5 @@
 {
   "extends": "@repo/typescript-config/vite.json",
-  "include": [".", "lib/.ts", "../lib/src/types/Card.ts"],
+  "include": ["."],
   "exclude": ["node_modules"]
 }
