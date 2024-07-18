@@ -5,7 +5,7 @@ import WorldEditor from "./editor/features/worlds/World";
 import CardEditor from "./editor/features/card/CardEditor";
 import EditorLayout from "./editor/Layout";
 import Progression from "./editor/features/progression/Progression";
-import { EditorData } from "@repo/ui";
+import { EditorData } from "@repo/lib";
 
 const queryClient = new QueryClient();
 

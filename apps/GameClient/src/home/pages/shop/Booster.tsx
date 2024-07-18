@@ -10,9 +10,9 @@ import {
   Box,
   Button,
   GoldAmount,
-  preventDefault,
 } from "@repo/ui";
 import ConfirmationModal from "@/home/ui/ConfirmationModal";
+import { preventDefault } from "@repo/lib";
 
 interface BoosterProps {
   booster: BoosterType;

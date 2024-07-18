@@ -1,4 +1,4 @@
-import { CardType } from "@repo/ui";
+import { CardType } from "@repo/lib";
 
 export const dummyCard: CardType = {
   name: "string",

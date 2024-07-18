@@ -3,12 +3,10 @@ import Ratios from "../../ui/Ratios";
 import useEditorStore from "../../store/EditorStore";
 import { useNavigate, useParams } from "react-router";
 import ImageManager from "@/editor/utils/ImageManager";
+import { Button, FullCard, cn } from "@repo/ui";
 import {
   arrayfindElementOrFirst,
-  Button,
   CardType,
-  FullCard,
-  cn,
   getRealStrength,
   getStats,
   getTargetStrength,
@@ -22,7 +20,7 @@ import {
   TriggersOf,
   TargetsOf,
   ValueOf,
-} from "@repo/ui";
+} from "@repo/lib";
 import { DeleteIcon, PlusCircle } from "lucide-react";
 
 export default function CardEditor() {
@@ -225,7 +223,7 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
                         type,
                         trigger: arrayfindElementOrFirst<TriggersOf<"heal">>(
                           (newState.trigger || s.trigger) as TriggersOf<"heal">,
-                          (typeRestrictions.triggers) as TriggersOf<"heal">[]
+                          typeRestrictions.triggers as TriggersOf<"heal">[]
                         ),
                         target: arrayfindElementOrFirst<TargetsOf<"heal">>(
                           (newState.target || s.target) as TargetsOf<"heal">,
@@ -263,15 +261,21 @@ function EffectFields({
   const stateRestriction = CardStatesData[state.type];
   return (
     <div className="w-full col-span-2 flex gap-2">
-      <div className="h-full flex items-center">({stateRestriction.computeCost({
-        dmg: card.dmg,
-        dps: card.dmg * card.attackSpeed,
-        hp: card.hp,
-        trigger: state.trigger,
-        target: state.target,
-        value: state.value,
-        attackSpeed: card.attackSpeed,
-      }).toFixed(2)})</div>
+      <div className="h-full flex items-center">
+        (
+        {stateRestriction
+          .computeCost({
+            dmg: card.dmg,
+            dps: card.dmg * card.attackSpeed,
+            hp: card.hp,
+            trigger: state.trigger,
+            target: state.target,
+            value: state.value,
+            attackSpeed: card.attackSpeed,
+          })
+          .toFixed(2)}
+        )
+      </div>
       <div className="w-full col-span-2 grid grid-cols-4 gap-2">
         <select
           value={state.type}
@@ -336,7 +340,6 @@ function EffectFields({
     </div>
   );
 }
-
 
 const states = ["heal", "riposte", "multiAttack", "massacre", "bleeding"];
 const targets = [

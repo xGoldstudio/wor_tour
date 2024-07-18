@@ -3,9 +3,10 @@ import useDataStore from "@/cards/DataStore";
 import usePlayerStore from "@/home/store/playerStore";
 import { useState } from "react";
 import WorldModal from "../modals/WorldModal";
-import { Badge, Button, cn, Cover, getImageUrl } from "@repo/ui";
+import { Badge, Button, cn, Cover } from "@repo/ui";
 import StaticCard from "@/game/gui/card/StaticCard";
 import { Tier } from "@/home/store/tiers";
+import { getImageUrl } from "@repo/lib";
 
 export default function WorldPreview({
   tier,

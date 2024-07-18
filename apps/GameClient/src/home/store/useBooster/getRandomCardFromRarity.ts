@@ -1,4 +1,4 @@
-import { CardRarity, CardType } from "@repo/ui";
+import { CardRarity, CardType } from "@repo/lib";
 
 export function getRandomCardFromRarity(cards: CardType[], rarities: Record<CardRarity, number>) {
 	const cardsByRarity = arrayOfCardsToRarityMap(cards);

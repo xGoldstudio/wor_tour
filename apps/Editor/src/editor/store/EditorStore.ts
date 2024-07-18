@@ -1,4 +1,4 @@
-import { CardRarity, CardStat, EditorData, WorldStats } from "@repo/ui";
+import { CardRarity, CardStat, EditorData, WorldStats } from "@repo/lib";
 import { create } from "zustand";
 
 interface EditorStore {

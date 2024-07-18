@@ -7,12 +7,8 @@ import {
 	CardDamagResolveEvent,
 	HealCardEvent, PlayerDamageResolveEvent
 } from "./gameBehavior/useGameEvents";
-import {
-	getXCenterBoudingOfElement,
-	getYCenterBoudingOfElement,
-	inPx,
-} from "@repo/ui";
 import animationTimeline from "./gameBehavior/animation/timeline";
+import { getXCenterBoudingOfElement, getYCenterBoudingOfElement, inPx } from "../../../../packages/lib/src/lib/utils";
 
 export default function AmountEffectOrDamage() {
   const wrapperRef = useRef<null | HTMLDivElement>(null);

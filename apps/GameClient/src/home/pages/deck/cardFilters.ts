@@ -1,4 +1,4 @@
-import { CardType } from "@repo/ui";
+import { CardType } from "@repo/lib";
 
 export type Card = CardType & { isInDeck: boolean };
 export type Filters = Record<CardFilters, CardFilter>;

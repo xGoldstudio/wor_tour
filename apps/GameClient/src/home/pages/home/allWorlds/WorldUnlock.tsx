@@ -1,5 +1,5 @@
 import { HomeBg } from "@/home/Home";
-import { Button, cn, Cover, getImageUrl, inPx } from "@repo/ui";
+import { Button, cn, Cover } from "@repo/ui";
 import { useContext, useRef } from "react";
 import {
   AllWorldsAnimationContext,
@@ -11,6 +11,7 @@ import usePlayerStore from "@/home/store/playerStore";
 import useDataStore from "@/cards/DataStore";
 import StaticCard from "@/game/gui/card/StaticCard";
 import { getCardFromLevel } from "@/cards";
+import { getImageUrl, inPx } from "@repo/lib";
 
 export default function WorldUnlock({
   closeModal,

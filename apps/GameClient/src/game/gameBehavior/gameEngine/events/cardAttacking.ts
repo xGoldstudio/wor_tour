@@ -1,8 +1,8 @@
 import { CardAttackingEvent, EventType } from "../../useGameEvents";
 import { ComputeEventProps } from "../gameEngine";
-import { CardState } from "@repo/ui";
 import { ClockReturn } from "../../clock/clock";
 import { GameStateObject } from "../gameState";
+import { CardState } from "../../../../../../../packages/lib/src/data/gameEngine/CardStatesData";
 
 export function triggerStates({ gameState, trigger, clock, isPlayerCard, cardPosition, initiator }: {
 	gameState: GameStateObject,

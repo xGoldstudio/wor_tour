@@ -1,5 +1,5 @@
 import { InGameCardType } from "@/game/stores/gameStateStore";
-import { CardState, CardType } from "@repo/ui";
+import { CardState, CardType } from "@repo/lib";
 
 interface GameStateObjectConstructor {
 	playerDeck: CardType[];

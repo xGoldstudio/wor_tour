@@ -1,6 +1,7 @@
 import { useStartGame } from "@/game/stores/gameMetadataStore";
 import { useState } from "react";
-import { Cover, numberWithCommas, textureByRarity } from "@repo/ui";
+import { Cover } from "@repo/ui";
+import { numberWithCommas, textureByRarity } from "@repo/lib";
 import usePlayerStore from "@/home/store/playerStore";
 import {
   InnerBord

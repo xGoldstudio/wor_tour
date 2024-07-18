@@ -1,10 +1,10 @@
-import { CardType } from "@repo/ui";
 import _ from "lodash";
 import { GameStateObject } from "../gameState";
 import { EventType } from "../../useGameEvents";
 import Clock from "../../clock/clock";
 import { computeNextFrameState } from "../gameEngine";
 import { expect, test } from 'vitest';
+import { CardType } from "../../../../../../../packages/lib/src/types/Card";
 
 const baseCard = {
 	name: "string",

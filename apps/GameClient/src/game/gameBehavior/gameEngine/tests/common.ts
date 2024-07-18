@@ -1,9 +1,9 @@
-import { CardType } from "@repo/ui";
 import { GameStateObject } from "../gameState";
 import _ from "lodash";
 import { EventType } from "../../useGameEvents";
 import Clock from "../../clock/clock";
 import { computeNextFrameState } from "../gameEngine";
+import { CardType } from "../../../../../../../packages/lib/src/types/Card";
 
 export const baseCard: CardType = {
 	name: "string",

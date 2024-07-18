@@ -3,7 +3,7 @@ import BuyCard from "./BuyCard";
 import useShopStore from "@/home/store/shopStore";
 import Ribbon from "@/home/ui/Ribbon";
 import { useEffect, useState } from "react";
-import { formatTime } from "@repo/ui";
+import { formatTime } from "@repo/lib";
 import { Booster } from "./Booster";
 import { useBoosterStore } from "@/home/store/boosterStore";
 

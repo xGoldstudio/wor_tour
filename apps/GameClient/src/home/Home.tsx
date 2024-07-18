@@ -6,9 +6,10 @@ import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore";
 import Badge from "../../../../packages/ui/components/Badge";
-import { Cover, NumberSpan, numberWithCommas } from "@repo/ui";
+import { Cover, NumberSpan } from "@repo/ui";
 import { cn } from "@repo/ui";
 import { Borders, CardIllustartion, InnerBord } from "../../../../packages/ui/components/card/CardBorder";
+import { numberWithCommas } from "@repo/lib";
 
 
 type Tabs = "home" | "deck" | "shop";

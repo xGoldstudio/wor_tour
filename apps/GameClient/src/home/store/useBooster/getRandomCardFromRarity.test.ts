@@ -1,4 +1,4 @@
-import { CardRarity, CardType } from "@repo/ui";
+import { CardRarity, CardType } from "@repo/lib";
 import _ from "lodash";
 import { getRandomCardFromRarity } from "./getRandomCardFromRarity";
 import { expect, test, vi } from 'vitest';

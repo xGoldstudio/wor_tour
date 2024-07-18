@@ -1,9 +1,5 @@
-import CardBorder, {
-  CardContentIllustartion,
-  InnerBord,
-} from "../../../../../../packages/ui/components/card/CardBorder";
 import { InGameCardType } from "@/game/stores/gameStateStore";
-import { CardState, cn, Effects, numberWithCommas } from "@repo/ui";
+import { CardBorder, CardContentIllustartion, cn, Effects, InnerBord } from "@repo/ui";
 import { useSyncGameAnimation } from "@/game/gameBehavior/animation/useGameSyncAnimation";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
 import {
@@ -19,6 +15,7 @@ import { useRef, useState } from "react";
 import useGameEventListener from "@/game/gameBehavior/useGameEventListener";
 import { EmptyBar } from "../ManaBar";
 import { GameStateObject } from "@/game/gameBehavior/gameEngine/gameState";
+import { CardState, numberWithCommas } from "@repo/lib";
 
 function getTranslateY(element: HTMLElement) {
   const style = window.getComputedStyle(element);

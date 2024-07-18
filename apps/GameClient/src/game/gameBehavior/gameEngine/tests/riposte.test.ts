@@ -1,4 +1,4 @@
-import { CardType } from "@repo/ui";
+import { CardType } from '@repo/lib';
 import { baseCard, initTest } from "./common";
 import * as _ from "lodash";
 import { expect, test } from 'vitest';

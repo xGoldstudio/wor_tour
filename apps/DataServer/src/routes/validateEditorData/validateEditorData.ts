@@ -1,4 +1,4 @@
-import { CardStat, CardState, CardStatesData, CardStatLevel, DeepPartial, defaultValue, EditorData, filterNulls, findInOrFirst, inRangeValue, isTrueOr, safeMap, WorldStats, CardStateShape } from "@repo/ui";
+import { CardStat, CardState, CardStatesData, CardStateShape, CardStatLevel, DeepPartial, defaultValue, EditorData, filterNulls, findInOrFirst, inRangeValue, isTrueOr, safeMap, WorldStats } from '@repo/lib';
 
 export function purifyAppState(data: Partial<EditorData>): EditorData {
 	const safeCards: CardStat[] = safeMap<Partial<CardStat>, CardStat>(data.cards)(validateCard);
@@ -14,7 +14,7 @@ function validateCard(card: Partial<CardStat>, index: number): CardStat {
 	return {
 		name: card.name || `${card.rarity} card ${index}`,
 		rarity: card.rarity || "common",
-		id: index,
+		id: index + 1,
 		world: card.world ?? 1,
 		attackDefenseRatio: inRatioRange(card.attackDefenseRatio),
 		speedDamageRatio: inRatioRange(card.speedDamageRatio),

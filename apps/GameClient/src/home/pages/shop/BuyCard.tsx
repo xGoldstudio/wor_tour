@@ -3,7 +3,8 @@ import ConfirmationModal from "@/home/ui/ConfirmationModal";
 import { useState } from "react";
 import { priceByRarity, useBuyCard } from "@/home/store/shopStore";
 import usePlayerStore from "@/home/store/playerStore";
-import { Box, Button, CardType, FullCard, GoldAmount, cn, getShardsFromLevel } from "@repo/ui";
+import { Box, Button, FullCard, GoldAmount, cn } from "@repo/ui";
+import { CardType, getShardsFromLevel } from "@repo/lib";
 
 interface BuyCardProps {
   card: CardType;

@@ -8,14 +8,12 @@ import {
   useGameAnimation,
   useSyncGameAnimation,
 } from "../../gameBehavior/animation/useGameSyncAnimation";
-import CardBorder, {
-  CardContentIllustartion,
-} from "../../../../../../packages/ui/components/card/CardBorder";
-import { CardType, Effects, ManaBall, getCenterOfBoundingElement } from "@repo/ui";
+import { CardBorder, CardContentIllustartion, Effects, ManaBall } from "@repo/ui";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
 import { useRef, useState } from "react";
 import useGameEventListener from "@/game/gameBehavior/useGameEventListener";
 import { dummyCard } from "./const";
+import { CardType, getCenterOfBoundingElement } from "@repo/lib";
 
 function InHandCard({ position }: { position: number }) {
   const setSelectedCard = useGameInterface((state) => state.setSelectedCard);

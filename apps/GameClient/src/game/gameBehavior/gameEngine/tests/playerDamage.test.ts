@@ -3,9 +3,9 @@ import Clock from "../../clock/clock";
 import { EventType } from "../../useGameEvents";
 import { computeNextFrameState } from "../gameEngine";
 import { GameStateObject } from "../gameState";
-import { CardType } from "@repo/ui";
 import { DAMAGE_SPEED } from "../events/cardDamage";
 import { expect, test } from 'vitest';
+import { CardType } from "../../../../../../../packages/lib/src/types/Card";
 
 const baseCard = {
 	name: "string",

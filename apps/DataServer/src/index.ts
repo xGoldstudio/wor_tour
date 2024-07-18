@@ -9,4 +9,6 @@ import routes from "./routes";
 	const { server, startServer } = await initServer();
 	routes(server, state);
 	startServer();
+	console.log("hey")
+	
 })()

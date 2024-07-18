@@ -5,9 +5,10 @@ import {
 } from "./useGameEvents";
 import * as _ from "lodash";
 import { addGameEventListener } from "./gameEventListener";
-import { CardType, getRandomElement } from "@repo/ui";
 import { GameStateObject } from "./gameEngine/gameState";
 import { findCard } from "../../cards/index";
+import { CardType } from "../../../../../packages/lib/src/types/Card";
+import { getRandomElement } from "../../../../../packages/lib/src/lib/list";
 
 export const botOptions = {
   disabled: false,

@@ -6,7 +6,7 @@ import {
   resetAllGameEventListeners,
   runGameEventListeners,
 } from "./gameEventListener";
-import { CardState, useOnMount, useOnUnMount } from "@repo/ui";
+import { useOnMount, useOnUnMount } from "@repo/ui";
 import { computeNextFrameState } from "./gameEngine/gameEngine";
 import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
 import { useShallow } from "zustand/react/shallow";
@@ -15,6 +15,7 @@ import _ from "lodash";
 import { IS_DEBUG } from "@/isDebug";
 import useGameStore from "../stores/gameStateStore";
 import useGameInterface from "../stores/gameInterfaceStore";
+import { CardState } from "@repo/lib";
 
 export const FRAME_TIME = 10;
 

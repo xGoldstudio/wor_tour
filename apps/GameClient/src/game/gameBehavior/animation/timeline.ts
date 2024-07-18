@@ -1,4 +1,4 @@
-import { cubicBezier } from "@repo/ui";
+import { cubicBezier } from "@repo/lib";
 
 type AnimatedProperties = "x" | "y" | "scale" | "opacity" | "scaleX" | "scaleY";
 

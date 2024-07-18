@@ -1,4 +1,4 @@
-import { Badge, Button, cn, textureByRarity } from "@repo/ui";
+import { Badge, Button, cn } from "@repo/ui";
 import useGameMetadataStore from "../stores/gameMetadataStore";
 import Ribbon from "@/home/ui/Ribbon";
 import { EmptyBar } from "../gui/ManaBar";
@@ -9,6 +9,7 @@ import endGameScreenAnimation from "./animation";
 import { CurrentWinner } from "../gameBehavior/gameEngine/gameState";
 import useGameEventListener from "../gameBehavior/useGameEventListener";
 import { useGSAP } from "@gsap/react";
+import { textureByRarity } from "@repo/lib";
 
 export default function EndGameScreen() {
   const [currentWinner, setCurrentWinner] = useState<CurrentWinner>(null);

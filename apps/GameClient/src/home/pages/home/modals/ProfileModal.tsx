@@ -5,12 +5,13 @@ import {
   CardIllustartion,
   InnerBord,
 } from "../../../../../../../packages/ui/components/card/CardBorder";
-import { Badge, Box, getImageUrl } from "@repo/ui";
+import { Badge, Box } from "@repo/ui";
 import Ribbon from "@/home/ui/Ribbon";
 import usePlayerStore from "@/home/store/playerStore";
 import useDataStore from "@/cards/DataStore";
 import _ from "lodash";
 import { DeckCardUI } from "../../deck/DeckCardUI";
+import { getImageUrl } from "@repo/lib";
 
 interface ProfileModalProps {
   closeModal: () => void;

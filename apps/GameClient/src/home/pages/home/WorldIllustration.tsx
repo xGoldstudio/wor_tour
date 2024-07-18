@@ -1,5 +1,6 @@
 import usePlayerStore from "@/home/store/playerStore";
-import { Cover, getImageUrl, textureByRarity } from "@repo/ui";
+import { Cover } from "@repo/ui";
+import { getImageUrl, textureByRarity } from "@repo/lib";
 import {
 	Borders,
 	CardIllustartion,

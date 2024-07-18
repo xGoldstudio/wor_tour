@@ -1,4 +1,4 @@
-import { inPx, textureByRarity } from "@repo/ui";
+import { inPx, textureByRarity } from "@repo/lib";
 import * as _ from "lodash";
 import { InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
 

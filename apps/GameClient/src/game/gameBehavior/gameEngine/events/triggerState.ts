@@ -1,4 +1,4 @@
-import { CardStatesData } from "@repo/ui";
+import { CardStatesData } from "@repo/lib";
 import { TriggerStateEvent } from "../../useGameEvents";
 import { ComputeEventProps } from "../gameEngine";
 

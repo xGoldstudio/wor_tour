@@ -1,6 +1,6 @@
 import useRewardStore from "../rewardStore";
 import usePlayerStore from "../playerStore";
-import { BoosterTypeDeclartion, CardType } from "@repo/ui";
+import { BoosterTypeDeclartion, CardType } from "@repo/lib";
 import { useBoosterStore } from "../boosterStore";
 import { getRandomCardFromRarity } from "./getRandomCardFromRarity";
 

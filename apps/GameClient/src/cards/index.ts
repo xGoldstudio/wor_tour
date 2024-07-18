@@ -1,10 +1,5 @@
-import {
-  CardStatsInfo,
-  CardType,
-  getRealStrength,
-  getTargetStrength,
-  testIsStrengthValid,
-} from "@repo/ui";
+
+import { CardStatsInfo, CardType, getRealStrength, getTargetStrength, testIsStrengthValid } from "../../../../packages/lib/src/types/Card";
 import useDataStore from "./DataStore";
 
 export function findCard(id: number, level: number): CardType {

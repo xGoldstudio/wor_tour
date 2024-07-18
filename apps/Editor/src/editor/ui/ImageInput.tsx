@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import ImageManager from "../utils/ImageManager";
-import { getImageUrl } from "@repo/ui";
+import { getImageUrl } from "@repo/lib";
 
 interface ImageInputProps {
   setImage: (imageUrl: string | null) => void;
