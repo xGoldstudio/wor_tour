@@ -30,14 +30,9 @@ test("CRUDS operations on states", () => {
 	clock.triggerEvent({ type: "addState", isPlayerCard: true, cardPosition: 0, state: { type: "dummy", value: 2, trigger: "onAttack", target: "selfCard" } });
 	clock.triggerEvent({ type: "addState", isPlayerCard: true, cardPosition: 0, state: { type: "dummy", value: 2, trigger: "onAttack", target: "selfCard" } });
 	clock.nextTick();
-	expect(state.playerBoard[0]?.states.length).toBe(3);
+	expect(state.playerBoard[0]?.states.length).toBe(1);
 
 	clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, state: state.playerBoard[0]!.states[0] });
-	clock.nextTick();
-	expect(state.playerBoard[0]?.states.length).toBe(2);
-
-	clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, state: state.playerBoard[0]!.states[0] });
-	clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, state: state.playerBoard[0]!.states[1] });
 	clock.nextTick();
 	expect(state.playerBoard[0]?.states.length).toBe(0);
 });
@@ -60,6 +55,8 @@ describe("trigger", () => {
 		expect(CardStatesData["dummy"].action).not.toHaveBeenCalled();
 		clock.nextTick();
 		expect(CardStatesData["dummy"].action).toHaveBeenCalled();
+		clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, state: state.playerBoard[0]!.states[0] });
+		clock.nextTick();
 	});
 
 	test("Trigger: OnAttack", () => {
@@ -73,6 +70,8 @@ describe("trigger", () => {
 		expect(CardStatesData["dummy"].action).not.toHaveBeenCalled();
 		clock.nextTick();
 		expect(CardStatesData["dummy"].action).toHaveBeenCalled();
+		clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, state: state.playerBoard[0]!.states[0] });
+		clock.nextTick();
 	});
 
 	function cardPlayerAttackOpponentCard() {

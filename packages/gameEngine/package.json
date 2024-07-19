@@ -1,6 +1,7 @@
 {
   "name": "game_engine",
   "version": "0.0.0",
+  "type": "module",
   "exports": {
     ".": "./index.ts"
   },

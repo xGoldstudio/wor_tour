@@ -254,4 +254,11 @@ export class GameStateObject {
 	getBoard(isPlayer: boolean) {
 		return isPlayer ? this.playerBoard : this.opponentBoard;
 	}
+	getStateOfCard(isPlayerCard: boolean, cardPosition: number, type: CardState["type"]) {
+		const card = this.getCard(isPlayerCard, cardPosition);
+		if (!card) {
+			return null;
+		}
+		return card.states.find((s) => s.type === type);
+	}
 }

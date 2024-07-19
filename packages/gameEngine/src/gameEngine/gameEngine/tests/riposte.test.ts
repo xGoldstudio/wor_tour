@@ -1,7 +1,6 @@
-import { baseCard, initTest } from "./common";
+import { attackAnimation, baseCard, defaultTestDamage, defaultTestHp, drawPlaceCard, initTest, triggerDirectAttackResolved } from "./common";
 import * as _ from "lodash";
 import { expect, test } from 'vitest';
-import { DAMAGE_SPEED } from "../events/cardDamage";
 import { CardType } from "../../../types/Card";
 
 const usingDeck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common" }));
@@ -15,45 +14,34 @@ usingDeck[0].states.push({
 
 test("start damage to card (animation placeholder)", () => {
 	const { clock, state } = initTest(usingDeck);
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: false, targetPosition: 0, cardInHandPosition: 0 });
+	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, false, 0);
 	clock.nextTick();
-	expect(state.getCard(true, 0)?.states[0].type).toBe("riposte");
-	// player card attack opponent card
-	function attack() {
-		clock.triggerEvent({
-			type: "cardDamageResolve",
-			initiator: {
-				type: "cardDamage",
-				isPlayerCard: true,
-				cardPosition: 0,
-				directAttack: true,
-				amount: 50,
-				initiator: {
-					type: "cardAttacking",
-					isPlayer: false,
-					cardPosition: 0,
-					instanceId: state.opponentBoard[0]!.instanceId,
-				},
-			},
-		});
-	}
-	attack();
-	expect(state.playerBoard[0]?.hp).toBe(200);
-	expect(state.opponentBoard[0]?.hp).toBe(200);
+	expect(state.getStateOfCard(true, 0, "riposte")).toBeDefined();
+
+	const damage = 50;
+
+	triggerDirectAttackResolved(clock, state, false, 0, damage, true); // not direct attack
 	clock.nextTick();
-	expect(state.playerBoard[0]?.hp).toBe(150);
-	expect(state.getCard(true, 0)?.states[0].value).toBe(1); // riposte should have decreased
-	for (let i = 0; i < DAMAGE_SPEED - 1; i++) {
-		clock.nextTick();
-	}
-	expect(state.opponentBoard[0]?.hp).toBe(200);
+
+	// should not trigger direct attack
+	expect(state.getStateOfCard(true, 0, "riposte")?.value).toBe(2);
+
+	triggerDirectAttackResolved(clock, state, false, 0, damage);
 	clock.nextTick();
-	expect(state.opponentBoard[0]?.hp).toBe(100); // riposte attack ended
-	attack();
+
+	expect(state.getStateOfCard(true, 0, "riposte")?.value).toBe(1);
+
+	attackAnimation(clock);
+
+	expect(state.getCard(false, 0)?.hp).toBe(defaultTestHp - defaultTestDamage); // riposte attack ended
+
+	triggerDirectAttackResolved(clock, state, false, 0, damage);
 	clock.nextTick();
-	expect(state.playerBoard[0]?.hp).toBe(100);
-	expect(state.getCard(true, 0)?.states.length).toBe(0); // riposte should have decreased
+
+	expect(state.getStateOfCard(true, 0, "riposte")).toBeUndefined();
+
+	attackAnimation(clock);
+
+	expect(state.getCard(false, 0)).toBeNull();
 });

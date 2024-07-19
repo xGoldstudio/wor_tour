@@ -11,8 +11,19 @@ import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types
 import { baseDps } from '../../types/Card';
 
 export type StateAction = ({ card, trigger, target, value, clock, gameState, event }: {
-  card: InGameCardType, trigger: TriggerCardState, target: TargetCardState, value: number | null, clock: ClockReturn<EventType>, gameState: GameStateObject, event: TriggerStateEvent
+  card: InGameCardType,
+  trigger: TriggerCardState,
+  target: TargetCardState,
+  value: number | null,
+  clock: ClockReturn<EventType>,
+  gameState: GameStateObject,
+  event: TriggerStateEvent,
 }) => void;
+
+interface CardStateDataOptions {
+  consume?: number;
+  stackable?: boolean;
+}
 
 interface CardStateDataInterface {
   min: number | undefined;
@@ -41,9 +52,7 @@ interface CardStateDataInterface {
   status: StatusEffectType;
   src: string;
   action: StateAction;
-  options: {
-    consume?: number;
-  }
+  options: CardStateDataOptions;
 }
 
 export const CardStatesData = {
@@ -147,7 +156,9 @@ export const CardStatesData = {
     status: "debuff",
     src: "states/bleeding.png",
     action: BleedingStateAction,
-    options: {},
+    options: {
+      stackable: true,
+    },
   }
 } satisfies Record<string, CardStateDataInterface>;
 
@@ -170,3 +181,9 @@ export type CardStateShape = {
 export type TriggersOf<K extends keyof CardStateTypeof> = CardStateTypeof[K]['triggers'][number];
 export type TargetsOf<K extends keyof CardStateTypeof> = CardStateTypeof[K]['targets'][number];
 export type ValueOf<K extends keyof CardStateTypeof> = CardStateTypeof[K]['noValue'] extends true ? null : number;
+
+export function getOptionsFromType (
+  type: keyof CardStateTypeof,
+): CardStateDataOptions {
+  return CardStatesData[type].options;
+}

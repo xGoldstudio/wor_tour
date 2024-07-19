@@ -8,22 +8,24 @@ export default function cardDamageResolveEvent({ gameState, clock, event }: Comp
 		event.initiator.amount,
 		event.initiator.cardPosition
 	);
-	triggerStates({
-		trigger: "onDirectAttackHit",
-		clock,
-		gameState,
-		isPlayerCard: event.initiator.initiator.isPlayer,
-		cardPosition: event.initiator.initiator.cardPosition,
-		initiator: event,
-	});
-	triggerStates({
-		trigger: "onDirectlyAttacked",
-		clock,
-		gameState,
-		isPlayerCard: event.initiator.isPlayerCard,
-		cardPosition: event.initiator.cardPosition,
-		initiator: event,
-	});
+	if (event.initiator.directAttack) {
+		triggerStates({
+			trigger: "onDirectAttackHit",
+			clock,
+			gameState,
+			isPlayerCard: event.initiator.initiator.isPlayer,
+			cardPosition: event.initiator.initiator.cardPosition,
+			initiator: event,
+		});
+		triggerStates({
+			trigger: "onDirectlyAttacked",
+			clock,
+			gameState,
+			isPlayerCard: event.initiator.isPlayerCard,
+			cardPosition: event.initiator.cardPosition,
+			initiator: event,
+		});
+	}
 	if (isDead) {
 		clock.triggerEvent({
 			type: "cardDestroyed",

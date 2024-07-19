@@ -16,7 +16,6 @@ describe("bleeding state", () => {
 	});
 
 	test("damage come from itself and not direct attack", () => {
-		console.log(clock.getLastTickEvents());
 		expect(clock.getLastTickEvents().find(
 			e => e.type === "cardDamageResolve"
 				&& e.initiator.amount === bleedingStateTest.value

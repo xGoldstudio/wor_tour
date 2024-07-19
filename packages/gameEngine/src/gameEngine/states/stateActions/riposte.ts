@@ -2,7 +2,9 @@ import { StateAction } from "../CardStatesData";
 
 const RiposteStateAction: StateAction = ({ clock, event, card }) => {
 	const cardDamageResolveEvent = event.initiator;
-	if (cardDamageResolveEvent.type !== "cardDamageResolve") {
+	if (cardDamageResolveEvent.type !== "cardDamageResolve"
+		|| cardDamageResolveEvent.initiator.directAttack === false
+	) {
 		return;
 	}
 	clock.triggerEvent({

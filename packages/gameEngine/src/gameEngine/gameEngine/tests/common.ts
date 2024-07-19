@@ -64,6 +64,13 @@ export const bleedingStateTest: CardState = {
 	target: "selfCard",
 };
 
+export const massacreStateTest: CardState = {
+	type: "massacre",
+	value: 10,
+	trigger: "onDirectAttackHit",
+	target: "directEnnemyCard",
+};
+
 export function triggerDirectAttack(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,
@@ -78,8 +85,43 @@ export function triggerDirectAttack(
 	});
 }
 
+export function triggerDirectAttackResolved(
+	clock: ClockReturn<EventType>,
+	state: GameStateObject,
+	isPlayer: boolean,
+	cardPosition: number,
+	damage: number,
+	notDirect?: true,
+) {
+	clock.triggerEvent({
+		type: "cardDamageResolve",
+		initiator: {
+			type: "cardDamage",
+			isPlayerCard: !isPlayer,
+			cardPosition,
+			directAttack: !notDirect,
+			amount: damage,
+			initiator: {
+				type: "cardAttacking",
+				isPlayer,
+				cardPosition,
+				instanceId: state.getCard(isPlayer, cardPosition)!.instanceId
+			}
+		}
+	});
+}
+
 export function attackAnimation(clock: ClockReturn<EventType>) {
 	for (let i = 0; i < DAMAGE_SPEED; i++) {
 		clock.nextTick();
 	}
+}
+
+export function findStateByType(
+	state: GameStateObject,
+	isPlayerCard: boolean,
+	cardPosition: number,
+	type: CardState["type"],
+) {
+	return state.getCard(isPlayerCard, cardPosition)!.states.find(s => s.type === type)
 }
