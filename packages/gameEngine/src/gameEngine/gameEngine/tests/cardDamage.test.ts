@@ -16,8 +16,10 @@ test("start damage to card (animation placeholder)", () => {
 			directAttack: false,
 			amount: amount,
 			initiator: {
-				isPlayerCard: false,
+				type: "cardAttacking",
+				isPlayer: false,
 				cardPosition: 0,
+				instanceId: 0,
 			},
 		});
 	}
@@ -46,8 +48,10 @@ test("start damage to card (animation placeholder)", () => {
 			directAttack: false,
 			amount: amount,
 			initiator: {
-				isPlayerCard: true,
+				type: "cardAttacking",
+				isPlayer: true,
 				cardPosition: 0,
+				instanceId: 0,
 			},
 		});
 	}

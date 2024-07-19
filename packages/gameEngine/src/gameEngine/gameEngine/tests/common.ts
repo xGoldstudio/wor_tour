@@ -57,6 +57,13 @@ export const healStateDefaultTest: CardState = {
 	target: "allyCards",
 };
 
+export const bleedingStateTest: CardState = {
+	type: "bleeding",
+	value: 10,
+	trigger: "onAttack",
+	target: "selfCard",
+};
+
 export function triggerDirectAttack(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,
