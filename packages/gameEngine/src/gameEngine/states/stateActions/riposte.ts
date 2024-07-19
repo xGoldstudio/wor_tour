@@ -9,8 +9,8 @@ const RiposteStateAction: StateAction = ({ clock, event, card }) => {
 		type: "cardDamage",
 		amount: card.dmg,
 		cardPosition: cardDamageResolveEvent.initiator.initiator.cardPosition,
-		isPlayerCard: cardDamageResolveEvent.initiator.initiator.isPlayerCard,
-		initiator: cardDamageResolveEvent.initiator,
+		isPlayerCard: cardDamageResolveEvent.initiator.initiator.isPlayer,
+		initiator: cardDamageResolveEvent.initiator.initiator,
 		directAttack: false,
 	});
 }

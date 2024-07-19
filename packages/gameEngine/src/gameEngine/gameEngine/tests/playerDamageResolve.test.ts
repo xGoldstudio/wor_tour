@@ -4,7 +4,7 @@ import { EventType } from "../../../types/eventType";
 import { computeNextFrameState } from "../gameEngine";
 import { GameStateObject } from "../gameState";
 import { expect, test } from 'vitest';
-import { CardType } from "@repo/lib";
+import { CardType } from "../../../types/Card";
 
 const baseCard = {
   name: "string",

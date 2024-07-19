@@ -332,6 +332,9 @@ importers:
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../config-eslint
+      '@repo/lib':
+        specifier: workspace:*
+        version: link:../lib
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../config-typescript

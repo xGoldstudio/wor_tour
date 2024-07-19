@@ -98,10 +98,7 @@ export interface CardDamageEvent {
   cardPosition: number;
   isPlayerCard: boolean;
   directAttack: boolean;
-  initiator: {
-    isPlayerCard: boolean;
-    cardPosition: number;
-  };
+  initiator: CardAttackingEvent;
 }
 
 export interface CardDamagResolveEvent {

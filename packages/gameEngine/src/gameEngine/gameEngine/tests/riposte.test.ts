@@ -1,8 +1,8 @@
-import { CardType } from '@repo/lib';
 import { baseCard, initTest } from "./common";
 import * as _ from "lodash";
 import { expect, test } from 'vitest';
 import { DAMAGE_SPEED } from "../events/cardDamage";
+import { CardType } from "../../../types/Card";
 
 const usingDeck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common" }));
 
@@ -32,8 +32,10 @@ test("start damage to card (animation placeholder)", () => {
 				directAttack: true,
 				amount: 50,
 				initiator: {
-					isPlayerCard: false,
+					type: "cardAttacking",
+					isPlayer: false,
 					cardPosition: 0,
+					instanceId: state.opponentBoard[0]!.instanceId,
 				},
 			},
 		});

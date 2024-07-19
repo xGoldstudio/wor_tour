@@ -196,7 +196,7 @@ function useGameEvents(): GameEventsActions {
   function animationReactionToEvent(event: EventType) {
     if (event.type === "cardDamage") {
       gameCanvas?.newAnimation(
-        `card_${event.initiator.isPlayerCard}_${event.initiator.cardPosition}`,
+        `card_${event.initiator.isPlayer}_${event.initiator.cardPosition}`,
         `card_${event.isPlayerCard}_${event.cardPosition}`,
         "attack",
         clock.getImmutableInternalState().currentFrame

@@ -10,6 +10,7 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@repo/lib": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/lodash": "^4.17.1",

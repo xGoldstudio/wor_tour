@@ -12,7 +12,7 @@ export default function cardDamageResolveEvent({ gameState, clock, event }: Comp
 		trigger: "onDirectAttackHit",
 		clock,
 		gameState,
-		isPlayerCard: event.initiator.initiator.isPlayerCard,
+		isPlayerCard: event.initiator.initiator.isPlayer,
 		cardPosition: event.initiator.initiator.cardPosition,
 		initiator: event,
 	});

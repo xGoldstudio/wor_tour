@@ -14,8 +14,10 @@ export interface ClockReturn<EventType> {
   getImmutableInternalState: () => {
     currentFrame: number;
     isRunningEvent: boolean;
-    timeoutQueue: FrameObject<EventType>[];
+    timeoutQueue: readonly FrameObject<EventType>[];
+    history: readonly FrameObject<EventType>[];
   };
+  getLastTickEvents: () => EventType[];
 }
 
 export default function Clock<EventType>(
@@ -23,6 +25,7 @@ export default function Clock<EventType>(
 ): ClockReturn<EventType> {
 
   let timeoutQueue: FrameObject<EventType>[] = [];
+  const history: FrameObject<EventType>[] = [];
   let isRunningEvent = false;
   let currentFrame = 0;
 
@@ -33,6 +36,7 @@ export default function Clock<EventType>(
     addEventToNextFrame,
     nextTick,
     getImmutableInternalState,
+    getLastTickEvents,
   };
 
   function getCurrentFrameObject(): FrameObject<EventType> | null {
@@ -94,6 +98,7 @@ export default function Clock<EventType>(
     while (nextEventQueue.length > 0) {
       const event = nextEventQueue[0];
       nextEventQueue = nextEventQueue.slice(1);
+      addEventToHistory(event);
       onTriggerEvent(event, state);
     }
   }
@@ -119,7 +124,21 @@ export default function Clock<EventType>(
       currentFrame,
       isRunningEvent,
       timeoutQueue: _.cloneDeep(timeoutQueue),
+      history: Object.freeze([...history]),
     };
+  }
+
+  function addEventToHistory(event: EventType) {
+    const current = history.length > 0 ? history[history.length - 1] : null;
+    if (current && current.frame === currentFrame) {
+      current.events.push(event);
+      return;
+    }
+    history.push({ frame: currentFrame, events: [event] });
+  }
+
+  function getLastTickEvents() {
+    return (history[history.length - 1])?.events ?? [];
   }
 
   return state;

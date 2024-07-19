@@ -37,32 +37,6 @@ export default function placeCardEvent({ event, gameState, clock }: ComputeEvent
 		cardPosition: event.targetPosition,
 		initiator: event,
 	});
-	// if (cardInGame.effects.placementHeal) {
-	// 	const board = event.isPlayer
-	// 		? [...gameState.playerBoard]
-	// 		: [...gameState.opponentBoard];
-	// 	board.forEach((card, position) => {
-	// 		if (card === null || position === event.targetPosition) {
-	// 			return;
-	// 		}
-	// 		clock.triggerEvent({
-	// 			type: "healCard",
-	// 			cardPosition: position,
-	// 			isPlayerCard: event.isPlayer,
-	// 			cardInitiator: {
-	// 				isPlayerCard: event.isPlayer,
-	// 				cardPosition: event.targetPosition,
-	// 			},
-	// 			amount: cardInGame.effects.placementHeal!.amount,
-	// 		});
-	// 	});
-	// 	clock.triggerEvent({
-	// 		type: "removeEffect",
-	// 		isPlayerCard: event.isPlayer,
-	// 		cardPosition: event.targetPosition,
-	// 		effectToRemove: "placementHeal",
-	// 	});
-	// }
 	clock.triggerEvent({
 		type: "cardStartAttacking",
 		isPlayer: event.isPlayer,

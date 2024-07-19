@@ -4,7 +4,7 @@ import { EventType } from "../../../types/eventType";
 import Clock from "../../clock/clock";
 import { computeNextFrameState } from "../gameEngine";
 import { expect, test } from 'vitest';
-import { CardType } from "@repo/lib";
+import { CardType } from "../../../types/Card";
 
 const baseCard = {
 	name: "string",
@@ -38,8 +38,10 @@ test("removing effect player card", () => {
 		directAttack: false,
 		amount: 100,
 		initiator: {
-			isPlayerCard: false,
+			type: "cardAttacking",
+			isPlayer: false,
 			cardPosition: 0,
+			instanceId: 0,
 		},
 	} });
 	clock.nextTick();

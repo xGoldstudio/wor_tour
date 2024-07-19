@@ -179,21 +179,21 @@ export class GameStateObject {
 	}
 	// cards dmg
 	dealDamageToCard(
-    isPlayerCard: boolean,
-    damage: number,
-    cardPosition: number
-  ) {
+		isPlayerCard: boolean,
+		damage: number,
+		cardPosition: number
+	) {
 		const card = this.getCard(isPlayerCard, cardPosition);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return false;
 		}
 		card.hp = Math.max(0, card.hp - damage);
 		return card.hp === 0;
-  }
+	}
 	destroyCard(isPlayerCard: boolean, cardPosition: number) {
 		const board = isPlayerCard ? this.playerBoard : this.opponentBoard;
 		board[cardPosition] = null;
-  }
+	}
 	healCard(isPlayerCard: boolean, cardPosition: number, amount: number) {
 		const deck = isPlayerCard ? this.playerBoard : this.opponentBoard;
 		const card = deck[cardPosition];
@@ -201,7 +201,7 @@ export class GameStateObject {
 			return;
 		}
 		card.hp = Math.min(card.maxHp, card.hp + amount);
-  }
+	}
 
 	setGameOver(winnerIsPlayer: boolean) {
 		this.currentWinner = winnerIsPlayer ? "player" : "opponent";
@@ -209,16 +209,16 @@ export class GameStateObject {
 
 	// events
 	removeState(
-    isPlayerCard: boolean,
-    cardPosition: number,
-    state: CardState,
-  ) {
+		isPlayerCard: boolean,
+		cardPosition: number,
+		state: CardState,
+	) {
 		const card = this.getCard(isPlayerCard, cardPosition);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return;
 		}
 		card.states = card.states.filter((s) => s !== state);
-  }
+	}
 	addState(
 		isPlayerCard: boolean,
 		cardPosition: number,
@@ -250,5 +250,8 @@ export class GameStateObject {
 	// utils
 	getCard(isPlayerCard: boolean, cardPosition: number) {
 		return (isPlayerCard ? this.playerBoard : this.opponentBoard)[cardPosition];
+	}
+	getBoard(isPlayer: boolean) {
+		return isPlayer ? this.playerBoard : this.opponentBoard;
 	}
 }

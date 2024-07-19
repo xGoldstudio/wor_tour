@@ -4,7 +4,7 @@ import { computeNextFrameState } from "../gameEngine";
 import { GameStateObject } from "../gameState";
 import _ from "lodash";
 import { expect, test } from 'vitest';
-import { CardType } from "@repo/lib";
+import { CardType } from "../../../types/Card";
 
 const baseCard = {
   name: "string",

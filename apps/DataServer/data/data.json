@@ -91,7 +91,14 @@
         },
         {
           "cost": 3,
-          "states": [],
+          "states": [
+            {
+              "type": "riposte",
+              "trigger": "onDirectlyAttacked",
+              "target": "directEnnemyCard",
+              "value": 1
+            }
+          ],
           "illustration": "card_3_level_3_1717283341661.png"
         }
       ]

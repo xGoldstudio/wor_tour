@@ -84,8 +84,10 @@ describe("trigger", () => {
 				isPlayerCard: false,
 				directAttack: true,
 				initiator: {
-					isPlayerCard: true, // the card with effect
+					type: "cardAttacking",
+					isPlayer: true, // the card with effect
 					cardPosition: 0,
+					instanceId: state.playerBoard[0]!.instanceId,
 				},
 			}
 		});
