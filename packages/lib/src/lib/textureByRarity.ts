@@ -1,4 +1,4 @@
-import { CardRarity } from "../types/DataStoreType";
+import { CardRarity } from "../../../gameEngine/src/types/DataStoreType";
 
 export default function textureByRarity(rarity: CardRarity) {
   const borderTextureRarity = {

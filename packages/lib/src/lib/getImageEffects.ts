@@ -1,5 +1,5 @@
-import { CardState, CardStatesData } from "../data/gameEngine/CardStatesData";
-import { StatusEffectType, TargetCardState, TriggerCardState } from "../types/DataStoreType";
+import { CardState, CardStatesData } from "../../../gameEngine/src/gameEngine/states/CardStatesData";
+import { StatusEffectType, TargetCardState, TriggerCardState } from "../../../gameEngine/src/types/DataStoreType";
 
 export interface CardStateLayoutData {
   src: string;

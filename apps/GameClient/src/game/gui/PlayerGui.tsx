@@ -8,7 +8,7 @@ import _ from "lodash";
 import { useState } from "react";
 import useGameEventListener from "../gameBehavior/useGameEventListener";
 import { dummyCard } from "./card/const";
-import { CardType } from "../../../../../packages/lib/src/types/Card";
+import { CardType } from "../../../../../packages/gameEngine/src/types/Card";
 
 interface PlayerGUIProps {
   isPlayer: boolean;

@@ -1,7 +1,6 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore from "@/game/stores/gameStateStore";
 import {
-  DrawCardEvent,
   useTriggerEvent,
 } from "../../gameBehavior/useGameEvents";
 import {
@@ -14,6 +13,7 @@ import { useRef, useState } from "react";
 import useGameEventListener from "@/game/gameBehavior/useGameEventListener";
 import { dummyCard } from "./const";
 import { CardType, getCenterOfBoundingElement } from "@repo/lib";
+import { DrawCardEvent } from "game_engine";
 
 function InHandCard({ position }: { position: number }) {
   const setSelectedCard = useGameInterface((state) => state.setSelectedCard);

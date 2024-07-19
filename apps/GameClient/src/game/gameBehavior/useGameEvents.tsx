@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import iaAgent from "./aiAgent";
-import Clock, { ClockReturn } from "./clock/clock";
 import GameCanvas, { GameCanvasReturn } from "./animation/gameCanvas";
 import {
   resetAllGameEventListeners,
   runGameEventListeners,
 } from "./gameEventListener";
 import { useOnMount, useOnUnMount } from "@repo/ui";
-import { computeNextFrameState } from "./gameEngine/gameEngine";
 import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
 import { useShallow } from "zustand/react/shallow";
 import useGameEventListener from "./useGameEventListener";
@@ -15,7 +13,7 @@ import _ from "lodash";
 import { IS_DEBUG } from "@/isDebug";
 import useGameStore from "../stores/gameStateStore";
 import useGameInterface from "../stores/gameInterfaceStore";
-import { CardState } from "@repo/lib";
+import { ClockReturn, EventType, Clock, computeNextFrameState } from "game_engine";
 
 export const FRAME_TIME = 10;
 
@@ -25,171 +23,6 @@ interface GameEventsActions {
   fastForward: (amount: number) => void;
   gameRef: React.MutableRefObject<HTMLDivElement | null>;
   isInit: boolean;
-}
-
-export type EventType =
-  | DummyEvent
-  | StartGameSequence
-  | StartGame
-  | ManaIncreaseEvent
-  | SetManaIncreaseSpeed
-  | ManaConsumeEvent
-  | PlaceCardEvent
-  | StartEarningMana
-  | CardStartAttackingEvent
-  | CardAttackingEvent
-  | PlayerDamageEvent
-  | CardDamageEvent
-  | CardDestroyedEvent
-  | GameOverEvent
-  | DrawCardEvent
-  | HealCardEvent
-  | CardDamagResolveEvent
-  | PlayerDamageResolveEvent
-  | ModifyStateValueEvent
-  | RemoveStateEvent
-  | TriggerStateEvent
-  | AddStateEvent;
-
-export interface DummyEvent { // this event should be ignored
-  type: "dummyEvent";
-}
-
-export interface StartGameSequence {
-  type: "startGameSequence";
-}
-
-export interface StartGame {
-  type: "startGame";
-}
-
-export interface ManaConsumeEvent {
-  type: "manaConsume";
-  isPlayer: boolean;
-  delta: number;
-}
-
-export interface StartEarningMana {
-  type: "startEarningMana";
-  isPlayer: boolean;
-}
-
-export interface SetManaIncreaseSpeed {
-  type: "setManaIncreaseSpeed";
-  isPlayer: boolean;
-  speed: number;
-}
-
-export interface ManaIncreaseEvent {
-  type: "manaIncrease";
-  isPlayer: boolean;
-}
-
-export interface PlaceCardEvent {
-  type: "placeCard";
-  isPlayer: boolean;
-  targetPosition: number;
-  cardInHandPosition: number;
-}
-
-export interface CardStartAttackingEvent {
-  type: "cardStartAttacking";
-  isPlayer: boolean;
-  cardPosition: number;
-  instanceId: number;
-}
-
-export interface CardAttackingEvent {
-  type: "cardAttacking";
-  isPlayer: boolean;
-  cardPosition: number;
-  instanceId: number;
-}
-
-export interface PlayerDamageEvent {
-  type: "playerDamage";
-  isPlayer: boolean;
-  damage: number;
-  initiator: CardAttackingEvent;
-}
-
-export interface PlayerDamageResolveEvent {
-  type: "playerDamageResolve";
-  initiator: PlayerDamageEvent;
-}
-
-export interface CardDamageEvent {
-  type: "cardDamage";
-  amount: number;
-  cardPosition: number;
-  isPlayerCard: boolean;
-  directAttack: boolean;
-  initiator: {
-    isPlayerCard: boolean;
-    cardPosition: number;
-  };
-}
-
-export interface CardDamagResolveEvent {
-  type: "cardDamageResolve";
-  initiator: CardDamageEvent;
-}
-
-export interface CardDestroyedEvent {
-  type: "cardDestroyed";
-  initiator: CardDamageEvent;
-}
-
-export interface GameOverEvent {
-  type: "gameOver";
-  winnerIsPlayer: boolean;
-}
-
-export interface DrawCardEvent {
-  type: "drawCard";
-  isPlayer: boolean;
-  handPosition: number;
-}
-
-export interface HealCardEvent {
-  type: "healCard";
-  isPlayerCard: boolean;
-  cardPosition: number;
-  amount: number;
-  cardInitiator: {
-    isPlayerCard: boolean;
-    cardPosition: number;
-  };
-}
-
-export interface ModifyStateValueEvent {
-  type: "modifyStateValue";
-  state: CardState;
-  isPlayerCard: boolean;
-  cardPosition: number;
-  value: number;
-}
-
-export interface RemoveStateEvent {
-  type: "removeState";
-  state: CardState;
-  isPlayerCard: boolean;
-  cardPosition: number;
-}
-
-export interface TriggerStateEvent {
-  type: "triggerState";
-  state: CardState;
-  isPlayerCard: boolean;
-  cardPosition: number;
-  initiator: EventType;
-}
-
-export interface AddStateEvent {
-  type: "addState";
-  state: CardState;
-  isPlayerCard: boolean;
-  cardPosition: number;
 }
 
 export function getDeathAnimationKey(isPlayerCard: boolean, position: number) {

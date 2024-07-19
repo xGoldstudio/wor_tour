@@ -1,21 +1,14 @@
-import { InGameCardType } from "@/game/stores/gameStateStore";
 import { CardBorder, CardContentIllustartion, cn, Effects, InnerBord } from "@repo/ui";
 import { useSyncGameAnimation } from "@/game/gameBehavior/animation/useGameSyncAnimation";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
 import {
-  CardDamagResolveEvent,
-  CardDestroyedEvent,
-  CardStartAttackingEvent,
   FRAME_TIME,
-  HealCardEvent,
-  PlaceCardEvent,
-  RemoveStateEvent,
 } from "@/game/gameBehavior/useGameEvents";
 import { useRef, useState } from "react";
 import useGameEventListener from "@/game/gameBehavior/useGameEventListener";
 import { EmptyBar } from "../ManaBar";
-import { GameStateObject } from "@/game/gameBehavior/gameEngine/gameState";
 import { CardState, numberWithCommas } from "@repo/lib";
+import { CardDamagResolveEvent, CardDestroyedEvent, CardStartAttackingEvent, GameStateObject, HealCardEvent, InGameCardType, PlaceCardEvent, RemoveStateEvent } from "game_engine";
 
 function getTranslateY(element: HTMLElement) {
   const style = window.getComputedStyle(element);

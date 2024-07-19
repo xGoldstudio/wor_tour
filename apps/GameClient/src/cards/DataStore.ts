@@ -1,6 +1,6 @@
 import { create } from "zustand";
-import { CardStatsInfo, CardStatsInfoLevel } from "../../../../packages/lib/src/types/Card";
-import { EditorData } from "../../../../packages/lib/src/types/DataStoreType";
+import { CardStatsInfo, CardStatsInfoLevel } from "../../../../packages/gameEngine/src/types/Card";
+import { EditorData } from "../../../../packages/gameEngine/src/types/DataStoreType";
 import { getStats } from "../../../../packages/lib/src/lib/getStats";
 
 interface DataStore {

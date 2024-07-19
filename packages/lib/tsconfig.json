@@ -1,5 +1,5 @@
 {
   "extends": "@repo/typescript-config/vite.json",
-  "include": ["."],
+  "include": [".", "../gameEngine/src/gameEngine/states", "../gameEngine/src/types/Card.ts", "../gameEngine/src/types/DataStoreType.ts"],
   "exclude": ["node_modules"]
 }

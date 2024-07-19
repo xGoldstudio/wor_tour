@@ -1,5 +1,5 @@
 
-import { CardStatsInfo, CardType, getRealStrength, getTargetStrength, testIsStrengthValid } from "../../../../packages/lib/src/types/Card";
+import { CardStatsInfo, CardType, getRealStrength, getTargetStrength, testIsStrengthValid } from "../../../../packages/gameEngine/src/types/Card";
 import useDataStore from "./DataStore";
 
 export function findCard(id: number, level: number): CardType {

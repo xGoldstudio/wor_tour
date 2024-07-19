@@ -1,5 +1,5 @@
-import { baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, CardStatsInfoLevel, cardWorldMultiplier, getRealStrength, speedMaxLevel1, testIsStrengthValid } from "../types/Card";
-import { CardStat } from "../types/DataStoreType";
+import { baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, CardStatsInfoLevel, cardWorldMultiplier, getRealStrength, speedMaxLevel1, testIsStrengthValid } from "../../../gameEngine/src/types/Card";
+import { CardStat } from "../../../gameEngine/src/types/DataStoreType";
 
 function cardStrengthMultiplier(card: CardStat, cost: number) {
   return (value: number) =>

@@ -49,10 +49,10 @@
           "cost": 3,
           "states": [
             {
-              "type": "heal",
-              "trigger": "onPlacement",
-              "target": "allyCards",
-              "value": 0
+              "type": "multiAttack",
+              "trigger": "onAttack",
+              "target": "otherEnnemyCards",
+              "value": null
             }
           ],
           "illustration": "card_2_level_2_1717531258110.png"
@@ -577,7 +577,14 @@
       "stats": [
         {
           "cost": 1,
-          "states": [],
+          "states": [
+            {
+              "type": "bleeding",
+              "trigger": "onAttack",
+              "target": "selfCard",
+              "value": 0
+            }
+          ],
           "illustration": "card_22_level_1_1721050271270.png"
         },
         {

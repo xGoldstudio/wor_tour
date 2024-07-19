@@ -1,0 +1,23 @@
+{
+  "name": "game_engine",
+  "version": "0.0.0",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint \"**/*.ts\"",
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/lodash": "^4.17.1",
+    "eslint": "^8.57.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "vitest": "^2.0.3"
+  }
+}

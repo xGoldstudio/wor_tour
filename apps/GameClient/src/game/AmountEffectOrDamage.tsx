@@ -6,7 +6,7 @@ import useGameEventListener from "./gameBehavior/useGameEventListener";
 import {
 	CardDamagResolveEvent,
 	HealCardEvent, PlayerDamageResolveEvent
-} from "./gameBehavior/useGameEvents";
+} from "game_engine";
 import animationTimeline from "./gameBehavior/animation/timeline";
 import { getXCenterBoudingOfElement, getYCenterBoudingOfElement, inPx } from "../../../../packages/lib/src/lib/utils";
 

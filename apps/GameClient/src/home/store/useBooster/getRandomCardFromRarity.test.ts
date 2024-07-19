@@ -40,7 +40,7 @@ const rarities:Record<CardRarity, number> = {
 	legendary: 5,
 };
 
-test("trigger event futur tick", () => {
+test("get random card from rarity", () => {
 	vi.spyOn(global.Math, 'random').mockReturnValue(0.99999);
 	expect(getRandomCardFromRarity(cards, rarities)).toBe(legendaries[0]);
 	vi.spyOn(global.Math, 'random').mockReturnValue(0.9);

@@ -1,6 +1,6 @@
 // // types
-export * from './src/types/Card.ts';
-export * from './src/types/DataStoreType.ts';
+export * from '../gameEngine/src/types/Card.ts';
+export * from '../gameEngine/src/types/DataStoreType.ts';
 
 // utils
 export * from './src/lib/utils.ts';
@@ -18,4 +18,4 @@ export * from './src/lib/cubicBezier.ts';
 // data
 export * from './src/data/ComputeBoosterProgress';
 export * from './src/data/ComputeProgressionLevels';
-export * from './src/data/gameEngine/CardStatesData.ts';
+export * from '../gameEngine/src/gameEngine/states/CardStatesData.ts';
