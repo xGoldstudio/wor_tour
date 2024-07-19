@@ -1,4 +1,4 @@
-import { CardState, CardStatesData } from "@repo/lib";
+import { CardState, CardStatesData } from "../../states/CardStatesData";
 import { baseCard, initTest } from "./common";
 import { expect, test, vi, describe } from 'vitest';
 
