@@ -1,10 +1,8 @@
-import useDataStore from "@/cards/DataStore";
-import { findCard, getCardFromLevel, getCardStats } from "@/cards";
 import { create } from "zustand";
-import { BoosterType, boosters } from "./useBooster";
-import { CardRarity } from "@repo/types";
-import { CardRarityOrder, CardStatsInfo, CardType } from "@repo/ui";
-import useAnimationStore from "./animationStore";
+import { Tier, getTierFromLevel } from "./tiers";
+import { findCard } from "../../cards/index";
+import { CardType } from "@repo/lib";
+import { levels } from "@repo/ui";
 
 export interface CollectionCard {
   id: number;
@@ -38,19 +36,16 @@ interface PlayerStore {
 
   addCardOrShardOrEvolve: (cardId: number) => void;
 
-  getAvailableBoosters: () => BoosterType[];
-
   addGold: (amount: number) => void;
   spendGold: (amount: number) => void;
 
   trophies: number;
   maxTrophies: number;
-  addTrophies: (amount: number) => void;
-  removeTrophies: (amount: number) => void;
+  setTrophies: (amount: number) => false | "tier" | "world";
 
-  toCollectTrophiesRewards: Set<number>;
-  collectedTrophiesReward: (reward: number) => void;
-  getIsToCollectTrophiesReward: (reward: number) => boolean;
+  tiers: Map<number, Tier>;
+  currentTier: number;
+  collectTierReward: (tierNumber: number) => Tier | null;
 }
 
 const defaultCollection: Map<number, CollectionCard> = new Map();
@@ -85,7 +80,14 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   lastCompletedLevel: -1,
   trophies: 0,
   maxTrophies: 0,
-  toCollectTrophiesRewards: new Set(),
+  tiers: (() => {
+    const tierState = new Map<number, Tier>();
+    levels.forEach((level) => {
+      tierState.set(level.id, getTierFromLevel(level));
+    });
+    return tierState;
+  })(),
+  currentTier: 0,
 
   removeCardFromDeck: (id: number) =>
     set((state) => ({
@@ -169,93 +171,51 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
     set((state) => ({ collection: new Map(state.collection) }));
   },
 
-  getAvailableBoosters: () => {
-    return Object.values(boosters).map((booster) => {
-      // if (booster.requirements.world && booster.requirements.world > get().currentWorld) return null;
-      let boosterCardsPackable = get()
-        .getAllCardsPackable()
-        .map((card) => {
-          const cardLevel = get().collection.get(card.id)?.level || 1;
-          return getCardFromLevel(card, cardLevel);
-        });
-      boosterCardsPackable = boosterCardsPackable.filter((card) => {
-        if (
-          booster.requirements.world &&
-          card.world > booster.requirements.world
-        )
-          return false;
-        if (
-          booster.requirements.rarity &&
-          !booster.requirements.rarity.includes(card.rarity)
-        )
-          return false;
-        return true;
-      });
-      // sort by rarity
-      boosterCardsPackable.sort(
-        (a, b) =>
-          CardRarityOrder.indexOf(a.rarity) - CardRarityOrder.indexOf(b.rarity)
-      );
-      return { ...booster, cards: boosterCardsPackable };
-    });
-  },
 
   addGold: (amount: number) => {
-    useAnimationStore.getState().addAnimation({
-      type: "money",
-      previousValue: get().gold,
-      amount,
-    });
     set((state) => ({ gold: state.gold + amount }));
   },
   spendGold: (amount: number) =>
     set((state) => ({ gold: state.gold - amount })),
 
-  addTrophies: (amount: number) => {
-    useAnimationStore.getState().addAnimation({
-      type: "trophy",
-      previousValue: get().trophies,
-      amount,
-    });
-    set((state) => updateTrophies(state, amount));
-  },
-  removeTrophies: (amount: number) =>
-    set((state) => updateTrophies(state, -amount)),
+  setTrophies: (amount: number) => updateTrophies(set, amount),
 
-  collectedTrophiesReward: (reward: number) => {
+  collectTierReward: (tierNumber: number) => {
+    let result: Tier | null = null;
     set((state) => {
-      const toCollectTrophiesRewards = new Set(state.toCollectTrophiesRewards);
-      toCollectTrophiesRewards.delete(reward);
-      return { toCollectTrophiesRewards };
+      let tier = state.tiers.get(tierNumber);
+      if (!tier || !tier.isUnlocked || tier.isOpen) return {};
+      result = tier;
+      tier.isOpen = true;
+      tier = { ...tier };
+      return { tiers: new Map(state.tiers) };
     });
-  },
-  getIsToCollectTrophiesReward: (reward: number) =>
-    get().toCollectTrophiesRewards.has(reward),
+    return result;
+  }
 }));
 
-function updateTrophies(state: PlayerStore, difference: number) {
-  const nextTrophies = Math.max(0, state.trophies + difference);
-  const resObject = {
-    trophies: nextTrophies,
-    currentWorld: Math.min(4, Math.floor(nextTrophies / 1000)) + 1,
-    maxTrophies: Math.max(nextTrophies, state.maxTrophies),
-  };
-  const nextStage = Math.floor(nextTrophies / 100);
-  const maxStage = Math.floor(state.maxTrophies / 100);
-  if (nextTrophies > state.maxTrophies && nextStage > maxStage) {
-    const stageDiff = nextStage - maxStage;
-    return {
-      ...resObject,
-      toCollectTrophiesRewards: new Set([
-        ...state.toCollectTrophiesRewards,
-        ...Array.from(
-          { length: stageDiff },
-          (_, i) => (maxStage + i + 1) * 100
-        ),
-      ]),
-    };
-  }
-  return resObject;
+function updateTrophies(set: (state: (s: PlayerStore) => Partial<PlayerStore>) => void, difference: number): false | "tier" | "world" {
+  let result: false | "tier" | "world" = false;
+  set((state) => {
+    const nextTrophies = Math.max(0, state.trophies + difference);
+    const currentTierValue = state.tiers.get(state.currentTier);
+    const nextTierValue = state.tiers.get(state.currentTier + 1);
+    const previousTierValue = state.tiers.get(state.currentTier - 1);
+    let nextTier = state.currentTier;
+    let tierState = state.tiers;
+    if (currentTierValue && nextTierValue && nextTierValue.level.trophyStart <= nextTrophies) {
+      nextTier = nextTierValue.tier;
+      nextTierValue.isUnlocked = true;
+      tierState = new Map(tierState);
+      if (state.maxTrophies < nextTierValue.level.trophyStart) {
+        result = nextTierValue.isWorld ? "world" : "tier";
+      }
+    } else if (currentTierValue && previousTierValue && currentTierValue.level.trophyStart > nextTrophies) {
+      nextTier = previousTierValue.tier;
+    }
+    return ({ trophies: nextTrophies, maxTrophies: Math.max(nextTrophies, state.maxTrophies), currentTier: nextTier, tiers: tierState, currentWorld: tierState.get(nextTier)!.world });
+  });
+  return result;
 }
 
 export default usePlayerStore;

@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { create } from "zustand";
 import { useOnMount, useOnUnMount } from "@repo/ui";
 import { AnimationTimeline } from "./timeline";
-import { GameStateObject } from "../gameEngine/gameState";
+import { GameStateObject } from "game_engine";
 
 type ComputeAnimation = (
   state: GameStateObject,
@@ -121,6 +121,7 @@ export function useSyncGameAnimation() {
       store.animations.delete(key);
       removeListener.current = null;
       onEnd?.();
+      computeStyle(duration);
     };
     store.animations.set(key, {
       progress: (frame) => {
@@ -139,8 +140,13 @@ export function useSyncGameAnimation() {
     removeListener.current?.();
   });
 
+  function removeAnimation() {
+    removeListener.current?.();
+  }
+
   return {
     triggerAnimation,
+    removeAnimation,
   };
 }
 

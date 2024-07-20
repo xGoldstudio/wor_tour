@@ -4,7 +4,7 @@ import Home from "./home/Home";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import useDataStore from "./cards/DataStore";
-import { EditorData } from "@repo/types";
+import { EditorData } from "../../../packages/gameEngine/src/types/DataStoreType";
 
 const queryClient = new QueryClient();
 
@@ -41,5 +41,5 @@ function AppRouter() {
     return <div>Loading...</div>;
   }
 
-  return isInGame ? <Game /> : <Home />;
+  return <div id="app">{isInGame ? <Game /> : <Home />}</div>;
 }

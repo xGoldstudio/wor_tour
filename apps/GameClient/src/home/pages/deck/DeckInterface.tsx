@@ -1,8 +1,7 @@
-import { cn } from "@repo/ui";
-import React, { useState } from "react";
+import { cn, Cover } from "@repo/ui";
+import { useState } from "react";
 import CollectionTab from "./CollectionTab";
 import DeckTab from "./DeckTab";
-import Cover from "@/home/ui/Cover";
 
 export type Tabs = "Deck" | "Collection";
 

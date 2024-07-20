@@ -1,4 +1,4 @@
-import { Box, Button } from "@repo/ui";
+import { Button } from "@repo/ui";
 import Modal, { BackgroundModal } from "./modal";
 
 interface ConfirmationModalProps {
@@ -20,7 +20,7 @@ export default function ConfirmationModal({
     <Modal closeModal={closeModal} title={"confirmation"}>
       <BackgroundModal closeModal={closeModal}>
         <div className="w-full h-full flex flex-col justify-center items-center gap-8">
-          <Box>{children}</Box>
+          {children}
           <div className="flex gap-16">
             <Button
               action={() => {

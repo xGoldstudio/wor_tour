@@ -7,9 +7,14 @@ import { imagesDir } from './initFs';
 export default async function initServer() {
 	const fastify = Fastify({
 		logger: true,
+		bodyLimit: 1048576 * 100, // 100MB
 	});
 
-	fastify.register(multipart);
+	fastify.register(multipart, {
+		limits: {
+			fileSize: 1048576 * 100, // 100MB
+		}
+	});
 	fastify.register(cors, {
 		// Set your CORS options here
 		origin: "*", // Change this to your desired origin or set it dynamically based on request headers

@@ -1,25 +1,14 @@
-import CardBorder, {
-  CardContentIllustartion,
-  InnerBord,
-} from "../../../../../../packages/ui/components/card/CardBorder";
-import { InGameCardType } from "@/game/stores/gameStateStore";
-import { CardEffects } from "@repo/types";
-import { cn, getImageEffects, numberWithCommas } from "@repo/ui";
+import { CardBorder, CardContentIllustartion, cn, Effects, InnerBord } from "@repo/ui";
 import { useSyncGameAnimation } from "@/game/gameBehavior/animation/useGameSyncAnimation";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
 import {
-  CardDamagResolveEvent,
-  CardDestroyedEvent,
-  CardStartAttackingEvent,
   FRAME_TIME,
-  HealCardEvent,
-  PlaceCardEvent,
-  RemoveEffectEvent,
 } from "@/game/gameBehavior/useGameEvents";
 import { useRef, useState } from "react";
 import useGameEventListener from "@/game/gameBehavior/useGameEventListener";
 import { EmptyBar } from "../ManaBar";
-import { GameStateObject } from "@/game/gameBehavior/gameEngine/gameState";
+import { CardState, numberWithCommas } from "@repo/lib";
+import { CardDamagResolveEvent, CardDestroyedEvent, CardStartAttackingEvent, GameStateObject, HealCardEvent, InGameCardType, PlaceCardEvent, RemoveStateEvent } from "game_engine";
 
 function getTranslateY(element: HTMLElement) {
   const style = window.getComputedStyle(element);
@@ -43,15 +32,25 @@ function GameCard({
     attackSpeed: 1,
     startAttackingTick: null,
     rarity: "common",
-    effects: {},
+    states: [],
     illustration: "",
     worldIllustration: "",
   });
   const cardRef = useRef<HTMLDivElement>(null);
   const [isShown, setIsShown] = useState(false);
   const { triggerAnimation: triggerAttackAnimation } = useSyncGameAnimation();
-  const { triggerAnimation: triggerBloodAnimation } = useSyncGameAnimation();
-  const { triggerAnimation: triggerHealAnimation } = useSyncGameAnimation();
+  const {
+    triggerAnimation: triggerBloodAnimation,
+    removeAnimation: removeBloodAnimation,
+  } = useSyncGameAnimation();
+  const {
+    triggerAnimation: triggerHealAnimation,
+    removeAnimation: removeHealAnimation,
+  } = useSyncGameAnimation();
+  function clearAllAnimations() {
+    removeBloodAnimation();
+    removeHealAnimation();
+  }
   useGameEventListener({
     type: "cardStartAttacking",
     action: (_, state) => {
@@ -108,6 +107,7 @@ function GameCard({
       ];
       if (card) {
         setCard(card);
+        clearAllAnimations();
       }
     },
     filter: (e) => {
@@ -140,7 +140,6 @@ function GameCard({
           ).progress,
         onEnd: () => {
           if (cardRef.current) {
-            cardRef.current.style.display = "none";
             setIsShown(false);
           }
         },
@@ -238,7 +237,7 @@ export function CardEffectsElements({
   position: number;
   isPlayerCard: boolean;
 }) {
-  const [effects, setEffects] = useState<CardEffects>({});
+  const [states, setStates] = useState<CardState[]>([]);
 
   useGameEventListener({
     type: "placeCard",
@@ -249,7 +248,7 @@ export function CardEffectsElements({
       if (card === null) {
         return;
       }
-      setEffects({ ...card.effects });
+      setStates([ ...card.states ]);
     },
     filter: (event) =>
       (event as PlaceCardEvent).isPlayer === isPlayerCard &&
@@ -257,7 +256,7 @@ export function CardEffectsElements({
   });
 
   useGameEventListener({
-    type: "removeEffect",
+    type: "removeState",
     action: (_, state) => {
       const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
         position
@@ -265,22 +264,16 @@ export function CardEffectsElements({
       if (card === null) {
         return;
       }
-      setEffects({ ...card.effects });
+      setStates([ ...card.states ]);
     },
     filter: (event) =>
-      (event as RemoveEffectEvent).isPlayerCard === isPlayerCard &&
-      (event as RemoveEffectEvent).cardPosition === position,
+      (event as RemoveStateEvent).isPlayerCard === isPlayerCard &&
+      (event as RemoveStateEvent).cardPosition === position,
   });
 
-  const effectToShow = getImageEffects(effects);
-
   return (
-    <div className="absolute right-1 top-2 flex flex-col gap-2">
-      {effectToShow.map((effectSrc) => (
-        <div key={effectSrc}>
-          <img src={`/${effectSrc}`} width={32} height={32} />
-        </div>
-      ))}
+    <div className="absolute right-[4px] top-[5px] flex flex-col gap-2">
+      <Effects states={states} size={0.8} />
     </div>
   );
 }
@@ -387,8 +380,10 @@ function GameCardHpBar({
       triggerAnimation({
         replace: true,
         duration: 50,
-        computeStyle: animationTimeline(50)
-          .add(hpBarRef.current, { scaleX: 1 }, [
+        computeStyle: animationTimeline(50).add(
+          hpBarRef.current,
+          { scaleX: 1 },
+          [
             {
               values: { scaleX: 1.2 },
               ease: [0, 1, 1, 1],
@@ -403,7 +398,8 @@ function GameCardHpBar({
               from: -15,
               ease: [0, 0.42, 1, 1],
             },
-          ]).progress,
+          ]
+        ).progress,
       });
     }
   }

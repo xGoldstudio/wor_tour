@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import useGameMetadataStore from "./gameMetadataStore";
-import { CardEffects, CardRarity } from "@repo/types";
-import { GameStateObject } from "../gameBehavior/gameEngine/gameState";
+import { GameStateObject, InGameCardType } from "game_engine";
 
 export interface GameStore {
   init: () => GameStateObject;
@@ -19,21 +18,6 @@ interface DeathAnimation {
 }
 
 export type Animation3dType = "attack" | "heal";
-
-export type InGameCardType = {
-  id: number;
-  instanceId: number;
-  maxHp: number;
-  hp: number;
-  dmg: number;
-  attackSpeed: number;
-  startAttackingTick: number | null;
-  rarity: CardRarity;
-  effects: CardEffects;
-  illustration: string;
-  worldIllustration: string;
-};
-
 
 const useGameStore = create<GameStore>()((set) => ({
   init: () => {

@@ -5,11 +5,11 @@ import {
   useRef,
   useState,
 } from "react";
-import { getCenterOfBoundingElement, inPx, textureByRarity } from "@repo/ui";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { ContextSafeFunc, useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { AllWorldsAnimationContext, AllWorldsAnimationContextType } from "./TrophyBarContext";
+import { getCenterOfBoundingElement, inPx, textureByRarity } from "@repo/lib";
 
 export default function TrophyBar({
   numberOfTrophies,

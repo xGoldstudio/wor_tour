@@ -1,4 +1,4 @@
-import { stopPropagation } from "@repo/ui";
+import { stopPropagation } from "@repo/lib";
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { Header } from "../Home";

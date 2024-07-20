@@ -1,9 +1,7 @@
-import { CardType } from "@repo/ui";
-import CardBorder, {
-  CardContentIllustartion,
-} from "../../../../../../packages/ui/components/card/CardBorder";
+import { CardType } from "@repo/lib";
 import CardModal from "@/home/pages/deck/CardModal";
 import { useState } from "react";
+import { CardBorder, CardContentIllustartion } from "@repo/ui";
 
 function StaticCard({
   card,

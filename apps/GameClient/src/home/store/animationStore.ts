@@ -7,6 +7,8 @@ export interface GlobalAnimation {
 	type: GolbalAnimationType;
 	previousValue: number;
 	amount: number;
+	originRef?: HTMLElement | null;
+	onEnd?: () => void;
 }
 
 interface AnimationStore {

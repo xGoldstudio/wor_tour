@@ -1,6 +1,7 @@
-import { EditorData } from "@repo/types";
-import { CardStatsInfo, CardStatsInfoLevel, getStats } from "@repo/ui";
 import { create } from "zustand";
+import { CardStatsInfo, CardStatsInfoLevel } from "../../../../packages/gameEngine/src/types/Card";
+import { EditorData } from "../../../../packages/gameEngine/src/types/DataStoreType";
+import { getStats } from "../../../../packages/lib/src/lib/getStats";
 
 interface DataStore {
   cards: CardStatsInfo[]; // mapper en cardtype!

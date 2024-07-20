@@ -1,5 +1,6 @@
 import { CollectionCard } from "@/home/store/playerStore";
-import { CardType, FullCard } from "@repo/ui";
+import { CardType } from "@repo/lib";
+import { FullCard } from "@repo/ui";
 
 export default function CardDisplay({
   card,
@@ -54,7 +55,7 @@ export default function CardDisplay({
           : {}
       }
     >
-      <FullCard card={card} size={1} cardShards={cardShards} />
+      <FullCard card={card} size={1} cardShards={cardShards} showEffectDesc={position === 0} />
     </div>
   );
 }

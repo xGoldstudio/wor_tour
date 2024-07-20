@@ -3,12 +3,12 @@ import ManaBar from "./ManaBar";
 import useGameStore from "@/game/stores/gameStateStore";
 import InHandCard from "./card/InHandCard";
 import StaticCard from "./card/StaticCard";
-import { CardType } from "@repo/ui";
 import { useShallow } from "zustand/react/shallow";
 import _ from "lodash";
 import { useState } from "react";
 import useGameEventListener from "../gameBehavior/useGameEventListener";
 import { dummyCard } from "./card/const";
+import { CardType } from "../../../../../packages/gameEngine/src/types/Card";
 
 interface PlayerGUIProps {
   isPlayer: boolean;

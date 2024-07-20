@@ -54,8 +54,7 @@ export default function EditorLayout({
         </div>
       </div>
       {isEditorStale && (
-        <div className="fixed bg-slate-200 left-1/2 -translate-x-1/2 bottom-8 py-4 w-[800px] flex items-center gap-4 justify-center rounded-md">
-          <p>Modifications has not been saved</p>
+        <div className="fixed bg-slate-400 top-2 right-2 py-4 px-4 flex items-center gap-4 justify-center rounded-md z-10">
           <Button
             action={() => mutation.mutate()}
             disabled={mutation.isLoading}

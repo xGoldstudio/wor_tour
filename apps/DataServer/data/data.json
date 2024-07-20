@@ -9,18 +9,18 @@
       "speedDamageRatio": 0.85,
       "stats": [
         {
-          "effects": {},
           "cost": 3,
+          "states": [],
           "illustration": "card_1_level_1_1717529721890.png"
         },
         {
-          "effects": {},
           "cost": 3,
+          "states": [],
           "illustration": "card_1_level_2_1717530044081.png"
         },
         {
-          "effects": {},
           "cost": 3,
+          "states": [],
           "illustration": "card_1_level_3_1717530116564.png"
         }
       ]
@@ -34,30 +34,39 @@
       "speedDamageRatio": 0.74,
       "stats": [
         {
-          "effects": {
-            "multiAttack": {
-              "type": "multiAttack"
-            }
-          },
           "cost": 3,
+          "states": [
+            {
+              "type": "multiAttack",
+              "trigger": "onAttack",
+              "target": "otherEnnemyCards",
+              "value": null
+            }
+          ],
           "illustration": "card_2_level_1_1717531255144.png"
         },
         {
-          "effects": {
-            "multiAttack": {
-              "type": "multiAttack"
-            }
-          },
           "cost": 3,
+          "states": [
+            {
+              "type": "multiAttack",
+              "trigger": "onAttack",
+              "target": "otherEnnemyCards",
+              "value": null
+            }
+          ],
           "illustration": "card_2_level_2_1717531258110.png"
         },
         {
-          "effects": {
-            "multiAttack": {
-              "type": "multiAttack"
-            }
-          },
           "cost": 3,
+          "states": [
+            {
+              "type": "multiAttack",
+              "trigger": "onAttack",
+              "target": "otherEnnemyCards",
+              "value": null
+            }
+          ],
           "illustration": "card_2_level_3_1717531263090.png"
         }
       ]
@@ -71,29 +80,25 @@
       "speedDamageRatio": 0.68,
       "stats": [
         {
-          "effects": {},
           "cost": 3,
+          "states": [],
           "illustration": "card_3_level_1_1717283332492.png"
         },
         {
-          "effects": {
-            "fightBack": {
-              "type": "fightBack"
-            }
-          },
           "cost": 3,
+          "states": [],
           "illustration": "card_3_level_2_1717283337041.png"
         },
         {
-          "effects": {
-            "multiAttack": {
-              "type": "multiAttack"
-            },
-            "fightBack": {
-              "type": "fightBack"
-            }
-          },
           "cost": 3,
+          "states": [
+            {
+              "type": "riposte",
+              "trigger": "onDirectlyAttacked",
+              "target": "directEnnemyCard",
+              "value": 1
+            }
+          ],
           "illustration": "card_3_level_3_1717283341661.png"
         }
       ]
@@ -107,141 +112,118 @@
       "speedDamageRatio": 0.67,
       "stats": [
         {
-          "effects": {},
           "cost": 2,
+          "states": [],
           "illustration": "card_4_level_1_1717531357516.png"
         },
         {
-          "effects": {},
           "cost": 2,
+          "states": [],
           "illustration": "card_4_level_2_1717531361979.png"
         },
         {
-          "effects": {
-            "fightBack": {
-              "type": "fightBack"
-            }
-          },
           "cost": 2,
+          "states": [],
           "illustration": "card_4_level_3_1717531367194.png"
         }
       ]
     },
     {
-      "id": 5,
       "name": "Crabvor Recruit",
       "rarity": "common",
+      "id": 5,
       "world": 1,
-      "worldIllustration": "/cards/worlds/1.png",
       "attackDefenseRatio": 0.2,
       "speedDamageRatio": 0.4,
       "stats": [
         {
           "cost": 3,
-          "effects": {},
+          "states": [],
           "illustration": "card_5_level_1_1717532787493.png"
         },
         {
           "cost": 3,
-          "effects": {},
+          "states": [],
           "illustration": "card_5_level_2_1717532831361.png"
         },
         {
           "cost": 3,
-          "effects": {
-            "placementHeal": {
-              "type": "placementHeal",
-              "amount": 35
-            }
-          },
+          "states": [],
           "illustration": "card_5_level_3_1717532794506.png"
         }
       ]
     },
     {
-      "id": 6,
       "name": "Psychalgua Exo Mana",
       "rarity": "common",
+      "id": 6,
       "world": 1,
-      "worldIllustration": "/cards/worlds/1.png",
       "attackDefenseRatio": 0.41,
       "speedDamageRatio": 0.42,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": "card_6_level_1_1717534152341.png"
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": "card_6_level_2_1717534163302.png"
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": "card_6_level_3_1717534167407.png"
         }
       ]
     },
     {
-      "id": 7,
       "name": "Crabvor Preceptor",
       "rarity": "common",
+      "id": 7,
       "world": 1,
-      "worldIllustration": "/cards/worlds/1.png",
       "attackDefenseRatio": 0.4,
       "speedDamageRatio": 0.85,
       "stats": [
         {
           "cost": 5,
-          "effects": {},
+          "states": [],
           "illustration": "card_7_level_1_1717535727870.png"
         },
         {
           "cost": 5,
-          "effects": {
-            "placementHeal": {
-              "type": "placementHeal",
-              "amount": 60
-            }
-          },
+          "states": [],
           "illustration": "card_7_level_2_1717535731862.png"
         },
         {
           "cost": 5,
-          "effects": {
-            "placementHeal": {
-              "type": "placementHeal",
-              "amount": 100
-            }
-          },
+          "states": [],
           "illustration": "card_7_level_3_1717535735398.png"
         }
       ]
     },
     {
-      "id": 8,
       "name": "Crabvor Elite",
       "rarity": "common",
+      "id": 8,
       "world": 1,
-      "worldIllustration": "/cards/worlds/1.png",
       "attackDefenseRatio": 0.74,
       "speedDamageRatio": 0.8,
       "stats": [
         {
           "cost": 4,
-          "effects": {},
+          "states": [],
           "illustration": "card_8_level_1_1717546932368.png"
         },
         {
           "cost": 4,
-          "effects": {},
+          "states": [],
           "illustration": "card_8_level_2_1717546935760.png"
         },
         {
           "cost": 4,
-          "effects": {},
+          "states": [],
           "illustration": "card_8_level_3_1717546938522.png"
         }
       ]
@@ -255,28 +237,39 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
-          "effects": {},
           "cost": 3,
+          "states": [
+            {
+              "type": "heal",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": 25
+            }
+          ],
           "illustration": "card_9_level_1_1719012812863.png"
         },
         {
-          "effects": {
-            "placementHeal": {
-              "type": "placementHeal",
-              "amount": 75
-            }
-          },
           "cost": 3,
+          "states": [
+            {
+              "type": "heal",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": 75
+            }
+          ],
           "illustration": "card_9_level_2_1719012817640.png"
         },
         {
-          "effects": {
-            "placementHeal": {
-              "type": "placementHeal",
-              "amount": 100
-            }
-          },
           "cost": 3,
+          "states": [
+            {
+              "type": "heal",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": 150
+            }
+          ],
           "illustration": "card_9_level_3_1719012820414.png"
         }
       ]
@@ -290,18 +283,18 @@
       "speedDamageRatio": 0.9,
       "stats": [
         {
-          "effects": {},
           "cost": 4,
+          "states": [],
           "illustration": "card_10_level_1_1720023182860.png"
         },
         {
-          "effects": {},
           "cost": 4,
+          "states": [],
           "illustration": "card_10_level_2_1720024251885.png"
         },
         {
-          "effects": {},
           "cost": 4,
+          "states": [],
           "illustration": "card_10_level_3_1720024380213.png"
         }
       ]
@@ -315,56 +308,43 @@
       "speedDamageRatio": 0.41,
       "stats": [
         {
-          "effects": {},
           "cost": 4,
+          "states": [],
           "illustration": "card_11_level_1_1717534294464.png"
         },
         {
-          "effects": {},
           "cost": 4,
+          "states": [],
           "illustration": "card_11_level_2_1717534301963.png"
         },
         {
-          "effects": {},
           "cost": 4,
+          "states": [],
           "illustration": "card_11_level_3_1717534307249.png"
         }
       ]
     },
     {
-      "id": 12,
       "name": "Primal Crabvor",
       "rarity": "rare",
+      "id": 12,
       "world": 1,
-      "worldIllustration": "/cards/worlds/1.png",
       "attackDefenseRatio": 0.9,
       "speedDamageRatio": 0.75,
       "stats": [
         {
           "cost": 6,
-          "effects": {
-            "fightBack": {
-              "type": "fightBack"
-            }
-          },
+          "states": [],
           "illustration": "card_12_level_1_1720034721455.png"
         },
         {
           "cost": 6,
-          "effects": {
-            "fightBack": {
-              "type": "fightBack"
-            }
-          },
+          "states": [],
           "illustration": "card_12_level_2_1720034153300.png"
         },
         {
           "cost": 6,
-          "effects": {
-            "fightBack": {
-              "type": "fightBack"
-            }
-          },
+          "states": [],
           "illustration": "card_12_level_3_1720034142219.png"
         }
       ]
@@ -378,56 +358,43 @@
       "speedDamageRatio": 0.8,
       "stats": [
         {
-          "effects": {},
           "cost": 4,
+          "states": [],
           "illustration": "card_13_level_1_1719956460438.png"
         },
         {
-          "effects": {
-            "fightBack": {
-              "type": "fightBack"
-            }
-          },
           "cost": 4,
+          "states": [],
           "illustration": "card_13_level_2_1719956464360.png"
         },
         {
-          "effects": {
-            "fightBack": {
-              "type": "fightBack"
-            }
-          },
           "cost": 4,
+          "states": [],
           "illustration": "card_13_level_3_1719956467507.png"
         }
       ]
     },
     {
-      "id": 14,
       "name": "Hero Crabvor",
       "rarity": "epic",
+      "id": 14,
       "world": 1,
-      "worldIllustration": "/cards/worlds/1.png",
       "attackDefenseRatio": 0.2,
       "speedDamageRatio": 0.21,
       "stats": [
         {
           "cost": 2,
-          "effects": {},
+          "states": [],
           "illustration": "card_14_level_1_1720028759577.png"
         },
         {
           "cost": 2,
-          "effects": {},
+          "states": [],
           "illustration": "card_14_level_2_1720027978144.png"
         },
         {
           "cost": 2,
-          "effects": {
-            "fightBack": {
-              "type": "fightBack"
-            }
-          },
+          "states": [],
           "illustration": "card_14_level_3_1720028021115.png"
         }
       ]
@@ -437,1582 +404,1589 @@
       "rarity": "legendary",
       "id": 15,
       "world": 1,
-      "attackDefenseRatio": 0.36,
-      "speedDamageRatio": 0.23,
+      "attackDefenseRatio": 0.11,
+      "speedDamageRatio": 0.01,
       "stats": [
         {
-          "effects": {},
           "cost": 3,
+          "states": [],
           "illustration": "card_15_level_1_1720100170687.png"
         },
         {
-          "effects": {},
           "cost": 3,
+          "states": [],
           "illustration": "card_15_level_2_1720100176579.png"
         },
         {
-          "effects": {},
           "cost": 3,
+          "states": [],
           "illustration": "card_15_level_3_1720100190398.png"
         }
       ]
     },
     {
+      "name": "Ragh Hunter",
+      "rarity": "common",
       "id": 16,
-      "name": "common card 1",
-      "rarity": "common",
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.27,
+      "speedDamageRatio": 0.27,
       "stats": [
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 2,
+          "states": [],
+          "illustration": "card_16_level_1_1720706342299.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 2,
+          "states": [],
+          "illustration": "card_16_level_2_1720706346178.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 2,
+          "states": [],
+          "illustration": "card_16_level_3_1720706351662.png"
         }
       ]
     },
     {
+      "name": "Ragh Spadassin",
+      "rarity": "common",
       "id": 17,
-      "name": "common card 2",
-      "rarity": "common",
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.45,
+      "speedDamageRatio": 0.67,
       "stats": [
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 3,
+          "states": [],
+          "illustration": "card_17_level_1_1720721228258.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 3,
+          "states": [],
+          "illustration": "card_17_level_2_1720721232627.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 3,
+          "states": [],
+          "illustration": "card_17_level_3_1720721238278.png"
         }
       ]
     },
     {
+      "name": "Ragh Keeper",
+      "rarity": "common",
       "id": 18,
-      "name": "common card 3",
-      "rarity": "common",
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.73,
+      "speedDamageRatio": 0.63,
       "stats": [
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 5,
+          "states": [],
+          "illustration": "card_18_level_1_1720722631140.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 5,
+          "states": [],
+          "illustration": "card_18_level_2_1720722634257.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 5,
+          "states": [],
+          "illustration": "card_18_level_3_1720722637985.png"
         }
       ]
     },
     {
+      "name": "Raghorse",
+      "rarity": "common",
       "id": 19,
-      "name": "common card 4",
-      "rarity": "common",
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.62,
+      "speedDamageRatio": 0.61,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_19_level_1_1720977947828.png"
         },
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_19_level_2_1720977954509.png"
         },
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_19_level_3_1720977959891.png"
         }
       ]
     },
     {
+      "name": "Rax The Crusader",
+      "rarity": "common",
       "id": 20,
-      "name": "common card 5",
-      "rarity": "common",
       "world": 2,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_20_level_1_1720975944876.png"
         },
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_20_level_2_1720975947846.png"
         },
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_20_level_3_1720975951186.png"
         }
       ]
     },
     {
+      "name": "Ragh Slave",
+      "rarity": "common",
       "id": 21,
-      "name": "common card 6",
-      "rarity": "common",
       "world": 2,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_21_level_1_1720977466954.png"
         },
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_21_level_2_1720977471267.png"
         },
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_21_level_3_1720977474377.png"
         }
       ]
     },
     {
+      "name": "Ragh Thrower",
+      "rarity": "common",
       "id": 22,
-      "name": "common card 7",
-      "rarity": "common",
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.7,
+      "speedDamageRatio": 0.39,
       "stats": [
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 3,
+          "states": [
+            {
+              "type": "massacre",
+              "trigger": "onDirectAttackHit",
+              "target": "directEnnemyCard",
+              "value": 10
+            }
+          ],
+          "illustration": "card_22_level_1_1721050271270.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 3,
+          "states": [
+            {
+              "type": "massacre",
+              "trigger": "onDirectAttackHit",
+              "target": "directEnnemyCard",
+              "value": 20
+            }
+          ],
+          "illustration": "card_22_level_2_1721050621698.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 3,
+          "states": [
+            {
+              "type": "massacre",
+              "trigger": "onDirectAttackHit",
+              "target": "directEnnemyCard",
+              "value": 30
+            }
+          ],
+          "illustration": "card_22_level_3_1721050624380.png"
         }
       ]
     },
     {
+      "name": "Ragh Fighter",
+      "rarity": "common",
       "id": 23,
-      "name": "common card 8",
-      "rarity": "common",
       "world": 2,
-      "attackDefenseRatio": 0.5,
+      "attackDefenseRatio": 0.48,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_23_level_1_1721051354517.png"
         },
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [
+            {
+              "type": "heal",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": 50
+            }
+          ],
+          "illustration": "card_23_level_2_1721051661386.png"
         },
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_23_level_3_1721051665630.png"
         }
       ]
     },
     {
+      "name": "Enraged Ragh",
+      "rarity": "rare",
       "id": 24,
-      "name": "rare card 1",
-      "rarity": "rare",
       "world": 2,
-      "attackDefenseRatio": 0.5,
+      "attackDefenseRatio": 0.1,
       "speedDamageRatio": 0.5,
       "stats": [
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 2,
+          "states": [],
+          "illustration": "card_24_level_1_1720724823656.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 2,
+          "states": [],
+          "illustration": "card_24_level_2_1720725223340.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 2,
+          "states": [],
+          "illustration": "card_24_level_3_1720725227930.png"
         }
       ]
     },
     {
+      "name": "The Clown",
+      "rarity": "rare",
       "id": 25,
-      "name": "rare card 2",
-      "rarity": "rare",
       "world": 2,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 4,
+          "states": [],
+          "illustration": "card_25_level_1_1720974780704.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 4,
+          "states": [],
+          "illustration": "card_25_level_2_1720974783343.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 4,
+          "states": [],
+          "illustration": "card_25_level_3_1720974612545.png"
         }
       ]
     },
     {
+      "name": "Giant Crocodyle",
+      "rarity": "rare",
       "id": 26,
-      "name": "rare card 3",
-      "rarity": "rare",
       "world": 2,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_26_level_1_1721055659853.png"
         },
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_26_level_2_1721055653476.png"
         },
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_26_level_3_1721055277711.png"
         }
       ]
     },
     {
+      "name": "Gar The Crusader",
+      "rarity": "rare",
       "id": 27,
-      "name": "rare card 4",
-      "rarity": "rare",
       "world": 2,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_27_level_1_1721057309461.png"
         },
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_27_level_2_1721057402888.png"
         },
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_27_level_3_1721057505007.png"
         }
       ]
     },
     {
+      "name": "Flying Scorpion",
+      "rarity": "epic",
       "id": 28,
-      "name": "epic card 1",
-      "rarity": "epic",
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.95,
+      "speedDamageRatio": 0.25,
       "stats": [
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 7,
+          "states": [],
+          "illustration": "card_28_level_1_1720723376133.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 7,
+          "states": [],
+          "illustration": "card_28_level_2_1720723379187.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 7,
+          "states": [],
+          "illustration": "card_28_level_3_1720723381906.png"
         }
       ]
     },
     {
+      "name": "The Purificator",
+      "rarity": "epic",
       "id": 29,
-      "name": "epic card 2",
-      "rarity": "epic",
       "world": 2,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_29_level_1_1721060115017.png"
         },
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_29_level_2_1721059979891.png"
         },
         {
           "cost": 1,
-          "effects": {},
-          "illustration": null
+          "states": [],
+          "illustration": "card_29_level_3_1721059885396.png"
         }
       ]
     },
     {
+      "name": "King Of The Ragh",
+      "rarity": "legendary",
       "id": 30,
-      "name": "legendary card 1",
-      "rarity": "legendary",
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.77,
+      "speedDamageRatio": 0.44,
       "stats": [
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 6,
+          "states": [],
+          "illustration": "card_30_level_1_1721062011136.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 6,
+          "states": [],
+          "illustration": "card_30_level_2_1721062086115.png"
         },
         {
-          "cost": 1,
-          "effects": {},
-          "illustration": null
+          "cost": 6,
+          "states": [],
+          "illustration": "card_30_level_3_1721061680880.png"
         }
       ]
     },
     {
+      "name": "common card 1",
+      "rarity": "common",
       "id": 31,
-      "name": "common card 1",
-      "rarity": "common",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "common card 2",
+      "rarity": "common",
       "id": 32,
-      "name": "common card 2",
-      "rarity": "common",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "common card 3",
+      "rarity": "common",
       "id": 33,
-      "name": "common card 3",
-      "rarity": "common",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "common card 4",
+      "rarity": "common",
       "id": 34,
-      "name": "common card 4",
-      "rarity": "common",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "common card 5",
+      "rarity": "common",
       "id": 35,
-      "name": "common card 5",
-      "rarity": "common",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "common card 6",
+      "rarity": "common",
       "id": 36,
-      "name": "common card 6",
-      "rarity": "common",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "common card 7",
+      "rarity": "common",
       "id": 37,
-      "name": "common card 7",
-      "rarity": "common",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "common card 8",
+      "rarity": "common",
       "id": 38,
-      "name": "common card 8",
-      "rarity": "common",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "rare card 1",
+      "rarity": "rare",
       "id": 39,
-      "name": "rare card 1",
-      "rarity": "rare",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "rare card 2",
+      "rarity": "rare",
       "id": 40,
-      "name": "rare card 2",
-      "rarity": "rare",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "rare card 3",
+      "rarity": "rare",
       "id": 41,
-      "name": "rare card 3",
-      "rarity": "rare",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "rare card 4",
+      "rarity": "rare",
       "id": 42,
-      "name": "rare card 4",
-      "rarity": "rare",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "epic card 1",
+      "rarity": "epic",
       "id": 43,
-      "name": "epic card 1",
-      "rarity": "epic",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "epic card 2",
+      "rarity": "epic",
       "id": 44,
-      "name": "epic card 2",
-      "rarity": "epic",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "legendary card 1",
+      "rarity": "legendary",
       "id": 45,
-      "name": "legendary card 1",
-      "rarity": "legendary",
       "world": 3,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "common card 1",
+      "rarity": "common",
       "id": 46,
-      "name": "common card 1",
-      "rarity": "common",
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
+      "name": "common card 2",
+      "rarity": "common",
       "id": 47,
-      "name": "common card 2",
-      "rarity": "common",
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 48,
       "name": "common card 3",
       "rarity": "common",
+      "id": 48,
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 49,
       "name": "common card 4",
       "rarity": "common",
+      "id": 49,
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 50,
       "name": "common card 5",
       "rarity": "common",
+      "id": 50,
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 51,
       "name": "common card 6",
       "rarity": "common",
+      "id": 51,
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 52,
       "name": "common card 7",
       "rarity": "common",
+      "id": 52,
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 53,
       "name": "common card 8",
       "rarity": "common",
+      "id": 53,
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 54,
       "name": "rare card 1",
       "rarity": "rare",
+      "id": 54,
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 55,
       "name": "rare card 2",
       "rarity": "rare",
+      "id": 55,
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 56,
       "name": "rare card 3",
       "rarity": "rare",
+      "id": 56,
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 57,
       "name": "rare card 4",
       "rarity": "rare",
+      "id": 57,
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 58,
       "name": "epic card 1",
       "rarity": "epic",
+      "id": 58,
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 59,
       "name": "epic card 2",
       "rarity": "epic",
+      "id": 59,
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 60,
       "name": "legendary card 1",
       "rarity": "legendary",
+      "id": 60,
       "world": 4,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 61,
       "name": "common card 1",
       "rarity": "common",
+      "id": 61,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 62,
       "name": "common card 2",
       "rarity": "common",
+      "id": 62,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 63,
       "name": "common card 3",
       "rarity": "common",
+      "id": 63,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 64,
       "name": "common card 4",
       "rarity": "common",
+      "id": 64,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 65,
       "name": "common card 5",
       "rarity": "common",
+      "id": 65,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 66,
       "name": "common card 6",
       "rarity": "common",
+      "id": 66,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 67,
       "name": "common card 7",
       "rarity": "common",
+      "id": 67,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 68,
       "name": "common card 8",
       "rarity": "common",
+      "id": 68,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 69,
       "name": "rare card 1",
       "rarity": "rare",
+      "id": 69,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 70,
       "name": "rare card 2",
       "rarity": "rare",
+      "id": 70,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 71,
       "name": "rare card 3",
       "rarity": "rare",
+      "id": 71,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 72,
       "name": "rare card 4",
       "rarity": "rare",
+      "id": 72,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 73,
       "name": "epic card 1",
       "rarity": "epic",
+      "id": 73,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 74,
       "name": "epic card 2",
       "rarity": "epic",
+      "id": 74,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     },
     {
-      "id": 75,
       "name": "legendary card 1",
       "rarity": "legendary",
+      "id": 75,
       "world": 5,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         },
         {
           "cost": 1,
-          "effects": {},
+          "states": [],
           "illustration": null
         }
       ]
     }
   ],
-
   "worlds": [
     {
       "id": 1,
-      "name": "Crabvor Island",
       "illustration": "world_1_illustration_1718482725169.png",
       "cardBackground": "world_1_cardBackground_1718815100412.jpeg",
+      "name": "Crabvor Island",
       "description": "A dangerous island where a creature from the sea can surprise you at anytime anywhere..."
     },
     {
       "id": 2,
+      "illustration": "world_2_illustration_1720702007262.jpeg",
+      "cardBackground": "world_2_cardBackground_1720701361373.jpeg",
       "name": "Krag Desert",
-      "illustration": "world_2_illustration_1719074625096.png",
-      "cardBackground": "world_2_cardBackground_1718900878033.jpeg",
-      "numberOfLevels": 0,
-      "baseGoldReward": 1,
-      "baseXpReward": 1,
-      "levels": [],
-
       "description": "New world description"
     },
     {
       "id": 3,
-      "name": "Human Kingdom",
       "illustration": null,
       "cardBackground": null,
-      "numberOfLevels": 0,
-      "baseGoldReward": 1,
-      "baseXpReward": 1,
-      "levels": [],
-
+      "name": "Human Kingdom",
       "description": "New world description"
     },
     {
       "id": 4,
-      "name": "Mutant Underworld",
       "illustration": null,
       "cardBackground": null,
-      "numberOfLevels": 0,
-      "baseGoldReward": 1,
-      "baseXpReward": 1,
-      "levels": [],
-
+      "name": "Mutant Underworld",
       "description": "New world description"
     },
     {
       "id": 5,
-      "name": "Dark Magic Cult Castle",
       "illustration": null,
       "cardBackground": null,
-      "numberOfLevels": 0,
-      "baseGoldReward": 1,
-      "baseXpReward": 1,
-      "levels": [],
-
+      "name": "Dark Magic Cult Castle",
       "description": "New world description"
     }
   ]
