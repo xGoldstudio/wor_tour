@@ -10,7 +10,6 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
-    "@repo/types": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/lodash": "^4.17.1",
     "@types/react": "^18.2.61",
@@ -21,6 +20,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@repo/lib": "workspace:*",
     "lodash": "^4.17.21",
     "rxjs": "^7.8.1",
     "zustand": "^4.5.2"

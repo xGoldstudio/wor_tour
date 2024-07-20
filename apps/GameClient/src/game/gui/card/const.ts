@@ -1,4 +1,4 @@
-import { CardType } from "@repo/ui";
+import { CardType } from "@repo/lib";
 
 export const dummyCard: CardType = {
   name: "string",
@@ -10,7 +10,7 @@ export const dummyCard: CardType = {
   attackSpeed: 0,
   rarity: "common",
   id: 0,
-  effects: {},
+  states: [],
   level: 1,
   world: 1,
 };

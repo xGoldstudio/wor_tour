@@ -1,5 +1,5 @@
-import { CardRarity } from "@repo/types";
-import { cn, textureByRarity } from "@repo/ui";
+import { CardRarity, textureByRarity } from "@repo/lib";
+import { cn } from "../lib/utils";
 
 interface CoverProps {
   cardRarity: CardRarity;

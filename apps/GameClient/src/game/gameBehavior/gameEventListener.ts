@@ -1,6 +1,4 @@
-import { ClockReturn } from "./clock/clock";
-import { GameStateObject } from "./gameEngine/gameState";
-import { EventType } from "./useGameEvents";
+import { ClockReturn, EventType, GameStateObject } from "game_engine";
 
 let gameEventListeners = initGameEventListeners();
 

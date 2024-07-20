@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import useAnimationStore, { GlobalAnimation } from "../store/animationStore";
 import gsap from "gsap";
 import _ from "lodash";
-import { inPx, numberWithCommas } from "@repo/ui";
+import { inPx, numberWithCommas } from "@repo/lib";
 import usePlayerStore from "../store/playerStore";
 import { createPortal } from "react-dom";
 

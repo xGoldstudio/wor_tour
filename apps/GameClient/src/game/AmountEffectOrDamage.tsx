@@ -6,13 +6,9 @@ import useGameEventListener from "./gameBehavior/useGameEventListener";
 import {
 	CardDamagResolveEvent,
 	HealCardEvent, PlayerDamageResolveEvent
-} from "./gameBehavior/useGameEvents";
-import {
-	getXCenterBoudingOfElement,
-	getYCenterBoudingOfElement,
-	inPx,
-} from "@repo/ui";
+} from "game_engine";
 import animationTimeline from "./gameBehavior/animation/timeline";
+import { getXCenterBoudingOfElement, getYCenterBoudingOfElement, inPx } from "../../../../packages/lib/src/lib/utils";
 
 export default function AmountEffectOrDamage() {
   const wrapperRef = useRef<null | HTMLDivElement>(null);

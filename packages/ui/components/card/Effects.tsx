@@ -1,20 +1,18 @@
-import { CardEffects } from "@repo/types";
-import { EffectLayoutData, getImageEffects } from "../../lib/getImageEffects";
+import { CardState, CardStateLayoutData, getImageEffects, inPx } from "@repo/lib";
 import Cover from "../Cover";
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { inPx } from "../../lib/utils";
 
-export default function Effects({
-  effects,
+export default function States({
+  states,
   size,
   showDesc,
 }: {
-  effects: CardEffects;
+  states: CardState[];
   size: number;
   showDesc?: boolean;
 }) {
-  const effectToShow = getImageEffects(effects);
+  const effectToShow = getImageEffects(states);
 
   return (
     <div
@@ -33,14 +31,14 @@ function EffectLayout({
   size,
   showDesc,
 }: {
-  effect: EffectLayoutData;
+  effect: CardStateLayoutData;
   size: number;
   showDesc?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const illustrationSize = 36 * size;
+  const illustrationSize = 32 * size;
   const wrapperSize = 42 * size;
-  const fontSize = `${0.875 * size}rem`;
+  const fontSize = `${1 * size}rem`;
   const [show, setShow] = useState(false);
   return (
     <div
@@ -60,7 +58,7 @@ function EffectLayout({
       />
       {effect.amount !== null && (
         <p
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 font-semibold drop-shadow-[1px_1px_1px_black]"
+          className="absolute -bottom-1 left-1/2 -translate-x-1/2 font-semibold drop-shadow-[1px_1px_1px_black]"
           style={{
             fontSize,
             color: {
@@ -86,7 +84,7 @@ function EffectDesc({
   show,
 }: {
   effectRef: HTMLDivElement;
-  effect: EffectLayoutData;
+  effect: CardStateLayoutData;
   show: boolean;
 }) {
   const home = document.body;

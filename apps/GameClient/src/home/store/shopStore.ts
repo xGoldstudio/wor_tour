@@ -1,8 +1,7 @@
 import { create } from "zustand";
 import usePlayerStore from "./playerStore";
 import { useAddCardOrShardOrEvolve } from "./useBooster/useBooster";
-import { CardRarity } from "@repo/types";
-import { CardRarityOrder, CardType } from "@repo/ui";
+import { CardRarity, CardRarityOrder, CardType } from "@repo/lib";
 import { combineLatest } from 'rxjs';
 import { packableCardsByRarityObservable } from "./boosterStore";
 import { map, filter } from 'rxjs/operators';

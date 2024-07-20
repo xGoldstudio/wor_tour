@@ -1,21 +1,19 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore from "@/game/stores/gameStateStore";
 import {
-  DrawCardEvent,
   useTriggerEvent,
 } from "../../gameBehavior/useGameEvents";
 import {
   useGameAnimation,
   useSyncGameAnimation,
 } from "../../gameBehavior/animation/useGameSyncAnimation";
-import CardBorder, {
-  CardContentIllustartion,
-} from "../../../../../../packages/ui/components/card/CardBorder";
-import { CardType, Effects, ManaBall, getCenterOfBoundingElement } from "@repo/ui";
+import { CardBorder, CardContentIllustartion, Effects, ManaBall } from "@repo/ui";
 import animationTimeline from "@/game/gameBehavior/animation/timeline";
 import { useRef, useState } from "react";
 import useGameEventListener from "@/game/gameBehavior/useGameEventListener";
 import { dummyCard } from "./const";
+import { CardType, getCenterOfBoundingElement } from "@repo/lib";
+import { DrawCardEvent } from "game_engine";
 
 function InHandCard({ position }: { position: number }) {
   const setSelectedCard = useGameInterface((state) => state.setSelectedCard);
@@ -154,7 +152,7 @@ function InHandCard({ position }: { position: number }) {
             <CardBorder rarity={card.rarity} size={1.8}>
               <InHandCardIllustration card={card} position={position} />
               <div className="absolute right-[3px] top-[4px] flex flex-col gap-2">
-                <Effects effects={card.effects} size={0.7} />
+                <Effects states={card.states} size={0.7} />
               </div>
             </CardBorder>
             <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 scale-75">

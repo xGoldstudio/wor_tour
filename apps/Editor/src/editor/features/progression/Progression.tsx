@@ -1,15 +1,13 @@
 import {
-  BoosterRarityDrop,
+  BoosterTypeDeclartion,
   formatTime,
   inPx,
-  levels, unlockedIndex,
-  worlds
-} from "@repo/ui";
+} from "@repo/lib";
 import React, { useMemo, useState } from "react";
 import * as _ from "lodash";
 import { numberOfLevels } from "./consts";
 import { Link } from "react-router-dom";
-import { BoosterTypeDeclartion } from "@repo/types";
+import { BoosterRarityDrop, levels, unlockedIndex, worlds } from "@repo/ui";
 
 export default function Progression() {
   const [currentLevelHover, setCurrentLevelHover] = useState<null | number>(

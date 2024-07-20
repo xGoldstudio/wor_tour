@@ -1,5 +1,5 @@
+import { EventType } from "game_engine";
 import { create } from "zustand";
-import { EventType } from "../gameBehavior/useGameEvents";
 
 interface GameInterfaceStore {
   cardSelected: null | number;

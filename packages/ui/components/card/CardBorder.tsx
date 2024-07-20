@@ -1,7 +1,5 @@
-import { CardRarity } from "@repo/types";
-import { cn, inPx } from "../../lib/utils";
-import textureByRarity from "../../lib/textureByRarity";
-import { getImageUrlCssValue } from "../../lib/getImageUrl";
+import { CardRarity, getImageUrlCssValue, inPx, textureByRarity } from "@repo/lib";
+import { cn } from "../../lib/utils";
 
 interface CardBoardProps {
   rarity: CardRarity;
@@ -9,7 +7,7 @@ interface CardBoardProps {
   size: number;
 }
 
-export default function CardBorder({ rarity, children, size }: CardBoardProps) {
+export function CardBorder({ rarity, children, size }: CardBoardProps) {
   const width = 64 * size;
   const height = 89 * size;
   const borderUnit = Math.min(0.5 * size, 2);

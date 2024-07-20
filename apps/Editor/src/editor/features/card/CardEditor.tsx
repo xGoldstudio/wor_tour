@@ -2,17 +2,26 @@ import { range } from "lodash";
 import Ratios from "../../ui/Ratios";
 import useEditorStore from "../../store/EditorStore";
 import { useNavigate, useParams } from "react-router";
-import { CardStat, CardStatLevel } from "@repo/types";
 import ImageManager from "@/editor/utils/ImageManager";
+import { Button, FullCard, cn } from "@repo/ui";
 import {
+  arrayfindElementOrFirst,
   CardType,
-  FullCard,
-  cn,
   getRealStrength,
   getStats,
   getTargetStrength,
+  getValueInRange,
   testIsStrengthValid,
-} from "@repo/ui";
+  CardStatesData,
+  CardState,
+  CardStatsInfoLevel,
+  CardStatLevel,
+  CardStat,
+  TriggersOf,
+  TargetsOf,
+  ValueOf,
+} from "@repo/lib";
+import { DeleteIcon, PlusCircle } from "lucide-react";
 
 export default function CardEditor() {
   const { cardId: cardIdParam } = useParams();
@@ -33,7 +42,7 @@ export default function CardEditor() {
   const setCard = updateCard(cardId);
 
   function setCardLevel(level: number) {
-    return (cardLevel: Partial<CardStatLevel>) => {
+    return (cardLevel: Partial<CardStatsInfoLevel>) => {
       if (!card) return;
       setCard({
         ...card,
@@ -50,7 +59,7 @@ export default function CardEditor() {
         <select
           value={card.id}
           onChange={(v) => {
-            navigate(`../worlds/${card.world}/${v.target.value}`);
+            navigate(`../${card.world}/${v.target.value}`);
           }}
           className="border-2 border-black p-2 rounded-md"
         >
@@ -73,9 +82,9 @@ export default function CardEditor() {
       </div>
 
       <div className="flex gap-8">
-        <CardLevel cardStats={card} setCardLevel={setCardLevel(1)} level={1} />
-        <CardLevel cardStats={card} setCardLevel={setCardLevel(2)} level={2} />
-        <CardLevel cardStats={card} setCardLevel={setCardLevel(3)} level={3} />
+        <CardLevel cardStats={card} setCardStats={setCardLevel(1)} level={1} />
+        <CardLevel cardStats={card} setCardStats={setCardLevel(2)} level={2} />
+        <CardLevel cardStats={card} setCardStats={setCardLevel(3)} level={3} />
       </div>
     </div>
   );
@@ -83,7 +92,7 @@ export default function CardEditor() {
 
 interface CardLevelProps {
   cardStats: CardStat;
-  setCardLevel: (card: Partial<CardStatLevel>) => void;
+  setCardStats: (card: Partial<CardStatLevel>) => void;
   level: number;
 }
 
@@ -102,14 +111,15 @@ function cardStatsToCard(cardStats: CardStat, level: number): CardType {
     attackSpeed: stats.attackSpeed,
     rarity: cardStats.rarity,
     id: cardStats.id,
-    effects: levelStat.effects,
     level,
     world: cardStats.world,
+    states: levelStat.states,
   };
 }
 
-function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
+function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
   const card = cardStatsToCard(cardStats, level);
+  const cardStat = cardStats.stats[level - 1];
 
   const realStrength = getRealStrength(card);
   const targetStrength = getTargetStrength(card);
@@ -117,7 +127,7 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
 
   return (
     <div className="flex flex-col items-center">
-      <div className="w-[500px] h-[350px] bg-slate-200 p-2 rounded-md grid grid-cols-[1fr_2fr] grid-rows-[repeat(15,_1fr)] gap-y-2">
+      <div className="w-[500px]  bg-slate-200 p-2 rounded-md grid grid-cols-[1fr_2fr] gap-y-2">
         <h2 className="col-span-2 text-center pt-1 text-xl font-bold">
           Level {level}
         </h2>
@@ -134,7 +144,7 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
           type="file"
           accept="image/png, image/jpeg"
           onChange={async (v) => {
-            setCardLevel({
+            setCardStats({
               illustration: await ImageManager().addImage(
                 v.target.files![0],
                 `card_${card.id}_level_${level}`
@@ -146,7 +156,7 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
         <select
           value={card.cost}
           onChange={(v) => {
-            setCardLevel({ cost: parseInt(v.target.value) });
+            setCardStats({ cost: parseInt(v.target.value) });
           }}
           className="border-2 border-black p-2 rounded-md"
         >
@@ -156,74 +166,171 @@ function CardLevel({ cardStats, setCardLevel, level }: CardLevelProps) {
             </option>
           ))}
         </select>
-        <label>Fight Back: </label>
-        <input
-          type="checkbox"
-          checked={!!card.effects.fightBack}
-          onChange={(v) => {
-            setCardLevel({
-              effects: {
-                ...card.effects,
-                fightBack: v.target.checked ? { type: "fightBack", amount: null } : undefined,
-              },
-            });
-          }}
-        />
-        <label>Multi Attack: </label>
-        <input
-          type="checkbox"
-          checked={!!card.effects.multiAttack}
-          onChange={(v) => {
-            setCardLevel({
-              effects: {
-                ...card.effects,
-                multiAttack: v.target.checked
-                  ? { type: "multiAttack", amount: null }
-                  : undefined,
-              },
-            });
-          }}
-        />
-        <label>Placement heal: </label>
-        <input
-          type="checkbox"
-          checked={!!card.effects.placementHeal}
-          onChange={(v) => {
-            setCardLevel({
-              effects: {
-                ...card.effects,
-                placementHeal: v.target.checked
-                  ? { type: "placementHeal", amount: 50 }
-                  : undefined,
-              },
-            });
-          }}
-        />
-        {card.effects.placementHeal && (
-          <div className="border-[1px] border-black col-span-2 p-1 grid grid-cols-[1fr_2fr]">
-            <label>Amount: </label>
-            <input
-              value={card.effects.placementHeal.amount}
-              min={0}
-              step={50}
-              type="number"
-              className="border-2 border-black p-2 rounded-md"
-              onChange={(v) => {
-                setCardLevel({
-                  effects: {
-                    ...card.effects,
-                    placementHeal: {
-                      ...card.effects.placementHeal!,
-                      amount: parseInt(v.target.value),
-                    },
+        <p className="w-full text-center col-span-2 text-xl font-semibold pt-2">
+          Effects
+        </p>
+        <div className="w-full col-span-2 flex justify-center">
+          <Button
+            action={() => {
+              setCardStats({
+                states: [
+                  ...cardStat.states,
+                  {
+                    type: "heal",
+                    trigger: "onPlacement",
+                    target: "allyCards",
+                    value: 0,
                   },
-                });
-              }}
-            />
-          </div>
-        )}
+                ],
+              });
+            }}
+            small
+          >
+            <PlusCircle size={20} className="mr-2" /> Add effect
+          </Button>
+        </div>
+        {cardStat.states.map((state, i) => (
+          <EffectFields
+            key={`${i}_${state.type}`}
+            deleteState={() => {
+              setCardStats({
+                states: [...cardStat.states.filter((_, j) => i !== j)],
+              });
+            }}
+            card={card}
+            state={state}
+            changeState={(newState) => {
+              setCardStats({
+                states: [
+                  ...cardStat.states.map((s, j): CardState => {
+                    if (i === j) {
+                      const type = (newState.type || s.type) as "heal"; // just the same value to make typescript happy (can be something else)
+                      const typeRestrictions = CardStatesData[type];
+
+                      const computeValue = () => {
+                        if (typeRestrictions.noValue) return null;
+                        return getValueInRange(
+                          typeRestrictions.min,
+                          typeRestrictions.max
+                        )(
+                          newState.value !== undefined
+                            ? newState.value
+                            : s.value
+                        );
+                      };
+
+                      const next = {
+                        type,
+                        trigger: arrayfindElementOrFirst<TriggersOf<"heal">>(
+                          (newState.trigger || s.trigger) as TriggersOf<"heal">,
+                          typeRestrictions.triggers as TriggersOf<"heal">[]
+                        ),
+                        target: arrayfindElementOrFirst<TargetsOf<"heal">>(
+                          (newState.target || s.target) as TargetsOf<"heal">,
+                          typeRestrictions.targets as TargetsOf<"heal">[]
+                        ),
+                        value: computeValue() as ValueOf<"heal">,
+                      };
+                      console.log("next", next);
+                      return next;
+                    }
+                    return s;
+                  }),
+                ],
+              });
+            }}
+          />
+        ))}
       </div>
-      <FullCard card={card} className="pt-8" size={0.9} />
+      <FullCard card={card} className="pt-8" size={0.9} showEffectDesc />
+    </div>
+  );
+}
+
+function EffectFields({
+  deleteState,
+  changeState,
+  state,
+  card,
+}: {
+  deleteState: () => void;
+  changeState: (newState: Partial<CardState>) => void;
+  state: CardState;
+  card: CardType;
+}) {
+  const stateRestriction = CardStatesData[state.type];
+  return (
+    <div className="w-full col-span-2 flex gap-2">
+      <div className="h-full flex items-center">
+        (
+        {stateRestriction
+          .computeCost({
+            dmg: card.dmg,
+            dps: card.dmg * card.attackSpeed,
+            hp: card.hp,
+            trigger: state.trigger,
+            target: state.target,
+            value: state.value,
+            attackSpeed: card.attackSpeed,
+          })
+          .toFixed(2)}
+        )
+      </div>
+      <div className="w-full col-span-2 grid grid-cols-4 gap-2">
+        <select
+          value={state.type}
+          onChange={(v) => {
+            changeState({ type: v.target.value as CardState["type"] });
+          }}
+          className="border-2 border-black p-2 rounded-md"
+        >
+          {Object.keys(CardStatesData).map((state) => (
+            <option key={state} value={state}>
+              {state}
+            </option>
+          ))}
+        </select>
+        <select
+          value={state.target}
+          onChange={(v) => {
+            changeState({ target: v.target.value as CardState["target"] });
+          }}
+          className="border-2 border-black p-2 rounded-md"
+        >
+          {stateRestriction.targets
+            .map((target) => (
+              <option key={target} value={target}>
+                {target}
+              </option>
+            ))}
+        </select>
+        <select
+          value={state.trigger}
+          onChange={(v) => {
+            changeState({ trigger: v.target.value as CardState["trigger"] });
+          }}
+          className="border-2 border-black p-2 rounded-md"
+        >
+          {stateRestriction.triggers
+            .map((trigger) => (
+              <option key={trigger} value={trigger}>
+                {trigger}
+              </option>
+            ))}
+        </select>
+        <input
+          type="number"
+          value={state.value?.toString()}
+          onChange={(v) => changeState({ value: parseInt(v.target.value) })}
+          className="border-2 border-black p-2 rounded-md"
+          disabled={stateRestriction.noValue}
+          min={stateRestriction.min}
+          max={stateRestriction.max}
+        />
+      </div>
+      <Button small action={deleteState}>
+        <DeleteIcon />
+      </Button>
     </div>
   );
 }

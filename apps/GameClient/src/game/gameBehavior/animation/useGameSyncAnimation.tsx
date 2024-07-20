@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { create } from "zustand";
 import { useOnMount, useOnUnMount } from "@repo/ui";
 import { AnimationTimeline } from "./timeline";
-import { GameStateObject } from "../gameEngine/gameState";
+import { GameStateObject } from "game_engine";
 
 type ComputeAnimation = (
   state: GameStateObject,

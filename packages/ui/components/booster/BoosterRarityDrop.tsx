@@ -1,7 +1,6 @@
-import { BoosterTypeDeclartion } from "@repo/types";
-import { allRarites } from "../../data/ComputeBoosterProgress";
 import React from "react";
-import textureByRarity from "../../lib/textureByRarity";
+import { BoosterTypeDeclartion, textureByRarity } from "@repo/lib";
+import { allRarites } from "../../data/ComputeBoosterProgress";
 
 export default function BoosterRarityDrop({
   booster,

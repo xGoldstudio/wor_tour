@@ -3,7 +3,8 @@ import CardDisplay from "@/game/gui/card/FullCard";
 import usePlayerStore from "@/home/store/playerStore";
 import Modal, { CoverModal } from "@/home/ui/modal";
 import useScrollCardList from "./useScrollCardList";
-import { Button, cn, preventDefault } from "@repo/ui";
+import { Button, cn } from "@repo/ui";
+import { preventDefault } from "@repo/lib";
 
 interface CardModalProps {
   cardId: number;
