@@ -3,7 +3,7 @@ import { attackAnimation, defaultTestDamage, defaultTestHp, drawPlaceCard, initT
 import { expect, test } from 'vitest';
 
 test("multi attack", () => {
-	const { clock, state } = initTest();
+	const { clock, state } = initTest({});
 	drawPlaceCard(clock, true, 1);
 	drawPlaceCard(clock, false, 0);
 	drawPlaceCard(clock, false, 2);

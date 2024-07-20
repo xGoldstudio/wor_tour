@@ -1,14 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import iaAgent from "./aiAgent";
 import GameCanvas, { GameCanvasReturn } from "./animation/gameCanvas";
-import {
-  resetAllGameEventListeners,
-  runGameEventListeners,
-} from "./gameEventListener";
-import { useOnMount, useOnUnMount } from "@repo/ui";
-import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
+
+import { resetAllGameEventListeners, runGameEventListeners, useGameEventListener, useGameSyncAnimationStore, useOnMount, useOnUnMount } from "@repo/ui";
 import { useShallow } from "zustand/react/shallow";
-import useGameEventListener from "./useGameEventListener";
 import _ from "lodash";
 import { IS_DEBUG } from "@/isDebug";
 import useGameStore from "../stores/gameStateStore";

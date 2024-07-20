@@ -4,7 +4,7 @@ import { initTest } from "./common";
 import { expect, test } from 'vitest';
 
 test("attacking pipeline", () => {
-	const { state, clock } = initTest();
+	const { state, clock } = initTest({});
 	void state;
 	void clock;
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });

@@ -5,10 +5,10 @@ import {
   GameStateObject,
 } from "game_engine";
 import * as _ from "lodash";
-import { addGameEventListener } from "./gameEventListener";
 import { findCard } from "../../cards/index";
 import { CardType } from "../../../../../packages/gameEngine/src/types/Card";
 import { getRandomElement } from "../../../../../packages/lib/src/lib/list";
+import { addGameEventListener } from "@repo/ui";
 
 export const botOptions = {
   disabled: false,

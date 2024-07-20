@@ -2,7 +2,7 @@ import { defaultTestHp, drawPlaceCard, findStateByType, initTest, massacreStateT
 import { describe, expect, test } from 'vitest';
 
 describe("bleeding state", () => {
-	const { clock, state } = initTest();
+	const { clock, state } = initTest({});
 	drawPlaceCard(clock, true, 0);
 	drawPlaceCard(clock, false, 0);
 	clock.triggerEvent({ type: "addState", isPlayerCard: true, cardPosition: 0, state: massacreStateTest });

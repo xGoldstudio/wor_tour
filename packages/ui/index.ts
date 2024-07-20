@@ -23,3 +23,4 @@ export * from './data/ComputeBoosterProgress.ts';
 export { default as GameCard } from './components/card/GameCard.tsx';
 export * from './components/card/gameEventListener.ts';
 export * from './components/card/useGameSyncAnimation.tsx';
+export {default as useGameEventListener} from './components/card/useGameEventListener.ts';

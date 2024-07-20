@@ -1,9 +1,8 @@
-import { useGameAnimation } from "../gameBehavior/animation/useGameSyncAnimation";
-import animationTimeline from "../gameBehavior/animation/timeline";
 import _ from "lodash";
 import { ManaBallWrapper } from "../../../../../packages/ui/components/ManaBall";
 import { useState } from "react";
-import { EmptyBar } from "@repo/ui";
+import { EmptyBar, useGameAnimation } from "@repo/ui";
+import { animationTimeline } from "@repo/lib";
 
 function ManaBar() {
   const [mana, setMana] = useState(0);

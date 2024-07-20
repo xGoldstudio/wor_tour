@@ -3,7 +3,7 @@ import { initTest } from "./common";
 import { expect, test } from 'vitest';
 
 test("start damage to card (animation placeholder)", () => {
-	const { clock, state } = initTest();
+	const { clock, state } = initTest({});
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
 	clock.nextTick();
@@ -35,7 +35,7 @@ test("start damage to card (animation placeholder)", () => {
 });
 
 test("start damage to card (animation placeholder)", () => {
-	const { clock, state } = initTest();
+	const { clock, state } = initTest({});
 	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: false, targetPosition: 0, cardInHandPosition: 0 });
 	clock.nextTick();

@@ -3,16 +3,11 @@ import useGameStore from "@/game/stores/gameStateStore";
 import {
   useTriggerEvent,
 } from "../../gameBehavior/useGameEvents";
-import {
-  useGameAnimation,
-  useSyncGameAnimation,
-} from "../../gameBehavior/animation/useGameSyncAnimation";
-import { CardBorder, CardContentIllustartion, Effects, ManaBall } from "@repo/ui";
-import animationTimeline from "@/game/gameBehavior/animation/timeline";
+
+import { CardBorder, CardContentIllustartion, Effects, ManaBall, useGameAnimation, useGameEventListener, useSyncGameAnimation } from "@repo/ui";
 import { useRef, useState } from "react";
-import useGameEventListener from "@/game/gameBehavior/useGameEventListener";
 import { dummyCard } from "./const";
-import { CardType, getCenterOfBoundingElement } from "@repo/lib";
+import { animationTimeline, CardType, getCenterOfBoundingElement } from "@repo/lib";
 import { DrawCardEvent } from "game_engine";
 
 function InHandCard({ position }: { position: number }) {

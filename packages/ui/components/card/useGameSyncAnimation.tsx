@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { create } from "zustand";
 import { useOnMount, useOnUnMount } from "@repo/ui";
 import { GameStateObject } from "game_engine";
 import { AnimationTimeline } from "@repo/lib";
+import { uniqueId } from "lodash";
 
 type ComputeAnimation = (
   state: GameStateObject,
@@ -62,7 +62,7 @@ export function useRegisterAnimation() {
     computeStyle: (progress: number) => void;
     onEnd?: () => void;
   }) {
-    const key = uuidv4();
+    const key = uniqueId();
     let firstFrame: null | number = null;
     removeListeners.current.set(key, () => {
       store.animations.delete(key);
@@ -115,7 +115,7 @@ export function useSyncGameAnimation() {
         return;
       }
     }
-    const key = uuidv4();
+    const key = uniqueId();
     let firstFrame: null | number = null;
     removeListener.current = () => {
       store.animations.delete(key);
@@ -193,7 +193,7 @@ function useGameAnimation({
 
   function registerAnimation(element: HTMLElement) {
     removeAnimation();
-    const key = uuidv4();
+    const key = uniqueId();
     store.animations.set(key, {
       progress: (frame, state) =>
         tl(element, state).progress(getProgress(state, frame, element)),
