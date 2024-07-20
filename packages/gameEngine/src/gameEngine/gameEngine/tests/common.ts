@@ -28,11 +28,18 @@ export const baseCard: CardType = {
 
 export const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common" }));
 
-export function initTest(playerDeck?: CardType[]) {
+export function initTest({ playerDeck, sideEffectOnFrame }: {
+	playerDeck?: CardType[], sideEffectOnFrame?: ({ state, clock, event }: {
+		state: GameStateObject;
+		clock: ClockReturn<EventType>;
+		event: EventType;
+	}) => void
+}) {
 	const state = new GameStateObject({ playerDeck: playerDeck ?? deck, opponentDeck: deck, playerHp: 200, opponentHp: 200 });
 	const clock = Clock<EventType>(
 		(event, clock) => {
 			computeNextFrameState(state, event, clock);
+			sideEffectOnFrame?.({ state, clock, event });
 		}
 	);
 	return { state, clock };

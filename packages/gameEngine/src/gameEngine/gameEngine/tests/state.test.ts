@@ -3,7 +3,7 @@ import { baseCard, initTest } from "./common";
 import { expect, test, vi, describe } from 'vitest';
 
 test("CRUDS operations on states", () => {
-	const { clock, state } = initTest();
+	const { clock, state } = initTest({});
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
 	clock.nextTick();
@@ -38,7 +38,7 @@ test("CRUDS operations on states", () => {
 });
 
 describe("trigger", () => {
-	const { clock, state } = initTest();
+	const { clock, state } = initTest({});
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
 	clock.nextTick();
@@ -130,7 +130,7 @@ describe("trigger", () => {
 test("Trigger: OnPlacement", () => {
 	const card = baseCard;
 	card.states = [{ type: "dummy", value: 2, trigger: "onPlacement", target: "selfCard" }];
-	const { clock, state } = initTest([card]);
+	const { clock, state } = initTest({ playerDeck: [card] });
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
 	vi.spyOn(CardStatesData["dummy"], "action").mockImplementation((props) => {

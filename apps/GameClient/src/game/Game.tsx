@@ -1,12 +1,12 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameEvents from "./gameBehavior/useGameEvents";
 import GameDebugPanel from "./GameDebugPanel";
-import GameCard from "./gui/card/GameCard";
 import PlayerGUI from "./gui/PlayerGui";
 import FlashDamage from "./FlashDamage";
 import AmountEffectOrDamage from "./AmountEffectOrDamage";
 import EndGameScreen from "./endGameScreen/EndGameScreen";
 import StartSequence from "./StartSequence";
+import { GameCard } from "@repo/ui";
 
 export default function Game() {
   const {

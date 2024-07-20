@@ -1,14 +1,8 @@
-import { CardBorder, CardContentIllustartion, cn, Effects, InnerBord } from "@repo/ui";
-import { useSyncGameAnimation } from "@/game/gameBehavior/animation/useGameSyncAnimation";
-import animationTimeline from "@/game/gameBehavior/animation/timeline";
-import {
-  FRAME_TIME,
-} from "@/game/gameBehavior/useGameEvents";
+import { CardBorder, CardContentIllustartion, cn, Effects, EmptyBar, InnerBord, useSyncGameAnimation } from "@repo/ui";
 import { useRef, useState } from "react";
-import useGameEventListener from "@/game/gameBehavior/useGameEventListener";
-import { EmptyBar } from "../ManaBar";
-import { CardState, numberWithCommas } from "@repo/lib";
-import { CardDamagResolveEvent, CardDestroyedEvent, CardStartAttackingEvent, GameStateObject, HealCardEvent, InGameCardType, PlaceCardEvent, RemoveStateEvent } from "game_engine";
+import { CardState, numberWithCommas, animationTimeline } from "@repo/lib";
+import { CardDamagResolveEvent, CardDestroyedEvent, CardStartAttackingEvent, FRAME_TIME, GameStateObject, HealCardEvent, InGameCardType, PlaceCardEvent, RemoveStateEvent } from "game_engine";
+import useGameEventListener from "./useGameEventListener";
 
 function getTranslateY(element: HTMLElement) {
   const style = window.getComputedStyle(element);

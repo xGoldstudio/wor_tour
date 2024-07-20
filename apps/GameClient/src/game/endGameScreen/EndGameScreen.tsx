@@ -1,7 +1,6 @@
-import { Badge, Button, cn } from "@repo/ui";
+import { Badge, Button, cn, EmptyBar } from "@repo/ui";
 import useGameMetadataStore from "../stores/gameMetadataStore";
 import Ribbon from "@/home/ui/Ribbon";
-import { EmptyBar } from "../gui/ManaBar";
 import * as _ from "lodash";
 import RewardBox from "./RewardBox";
 import { useRef, useState } from "react";
