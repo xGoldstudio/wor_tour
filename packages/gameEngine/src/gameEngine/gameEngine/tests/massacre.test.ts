@@ -7,7 +7,7 @@ describe("bleeding state", () => {
 	drawPlaceCard(clock, false, 0);
 	clock.triggerEvent({ type: "addState", isPlayerCard: true, cardPosition: 0, state: massacreStateTest });
 	clock.nextTick();
-	expect(state.playerBoard[0]!.states).toContain(massacreStateTest);
+	expect(state.getStateOfCard(true, 0, "massacre")).toBeDefined();
 
 	const damage = 10;
 	triggerDirectAttackResolved(clock, state, true, 0, damage);

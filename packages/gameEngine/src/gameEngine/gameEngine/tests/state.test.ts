@@ -22,7 +22,7 @@ test("CRUDS operations on states", () => {
 	expect(state.playerBoard[0]?.states.length).toBe(1);
 	expect(state.playerBoard[0]?.states[0].value).toBe(1);
 
-	clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, state: state.playerBoard[0]!.states[0] });
+	clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, stateType: "dummy" });
 	clock.nextTick();
 	expect(state.playerBoard[0]?.states.length).toBe(0);
 
@@ -32,7 +32,7 @@ test("CRUDS operations on states", () => {
 	clock.nextTick();
 	expect(state.playerBoard[0]?.states.length).toBe(1);
 
-	clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, state: state.playerBoard[0]!.states[0] });
+	clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, stateType: "dummy" });
 	clock.nextTick();
 	expect(state.playerBoard[0]?.states.length).toBe(0);
 });
@@ -55,7 +55,7 @@ describe("trigger", () => {
 		expect(CardStatesData["dummy"].action).not.toHaveBeenCalled();
 		clock.nextTick();
 		expect(CardStatesData["dummy"].action).toHaveBeenCalled();
-		clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, state: state.playerBoard[0]!.states[0] });
+		clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, stateType: "dummy" });
 		clock.nextTick();
 	});
 
@@ -70,7 +70,7 @@ describe("trigger", () => {
 		expect(CardStatesData["dummy"].action).not.toHaveBeenCalled();
 		clock.nextTick();
 		expect(CardStatesData["dummy"].action).toHaveBeenCalled();
-		clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, state: state.playerBoard[0]!.states[0] });
+		clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, stateType: "dummy" });
 		clock.nextTick();
 	});
 
@@ -107,7 +107,7 @@ describe("trigger", () => {
 		expect(CardStatesData["dummy"].action).not.toHaveBeenCalled();
 		clock.nextTick();
 		expect(CardStatesData["dummy"].action).toHaveBeenCalled();
-		clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, state: state });
+		clock.triggerEvent({ type: "removeState", isPlayerCard: true, cardPosition: 0, stateType: "dummy" });
 		clock.nextTick();
 	});
 
@@ -122,7 +122,7 @@ describe("trigger", () => {
 		expect(CardStatesData["dummy"].action).not.toHaveBeenCalled();
 		clock.nextTick();
 		expect(CardStatesData["dummy"].action).toHaveBeenCalled();
-		clock.triggerEvent({ type: "removeState", isPlayerCard: false, cardPosition: 0, state });
+		clock.triggerEvent({ type: "removeState", isPlayerCard: false, cardPosition: 0, stateType: "dummy" });
 		clock.nextTick();
 	});
 });

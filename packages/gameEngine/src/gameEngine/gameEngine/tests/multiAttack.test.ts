@@ -9,7 +9,7 @@ test("multi attack", () => {
 	drawPlaceCard(clock, false, 2);
 	clock.triggerEvent({ type: "addState", isPlayerCard: true, cardPosition: 1, state: multiAttackState });
 	clock.nextTick();
-	expect(state.playerBoard[1]?.states).toContain(multiAttackState);
+	expect(state.getStateOfCard(true, 1, "multiAttack")).toBeDefined();
 	/**
 	 * Board:
 	 * [x] [ ] [x]

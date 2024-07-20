@@ -21,7 +21,7 @@ export default function triggerStateEvent({ gameState, event, clock }: ComputeEv
 			type: "removeState",
 			isPlayerCard: event.isPlayerCard,
 			cardPosition: event.cardPosition,
-			state: event.state,
+			stateType: event.state.type,
 		})
 	} else if (options.consume !== undefined && event.state.value !== null) {
 		const nextValue = event.state.value - options.consume;
@@ -30,7 +30,7 @@ export default function triggerStateEvent({ gameState, event, clock }: ComputeEv
 				type: "removeState",
 				isPlayerCard: event.isPlayerCard,
 				cardPosition: event.cardPosition,
-				state: event.state,
+				stateType: event.state.type,
 			})
 		} else {
 			clock.triggerEvent({
