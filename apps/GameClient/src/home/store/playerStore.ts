@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { Tier, getTierFromLevel } from "./tiers";
 import { findCard } from "../../cards/index";
-import { CardType, levels } from "@repo/lib";
+import { CardType } from "@repo/lib";
+import { levels } from "@repo/ui";
 
 export interface CollectionCard {
   id: number;

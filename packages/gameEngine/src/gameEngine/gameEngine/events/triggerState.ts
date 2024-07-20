@@ -1,4 +1,4 @@
-import { CardStatesData } from "../../states/CardStatesData";
+import { CardStatesData, getOptionsFromType } from "../../states/CardStatesData";
 import { TriggerStateEvent } from "../../../types/eventType";
 import { ComputeEventProps } from "../gameEngine";
 
@@ -6,7 +6,7 @@ export default function triggerStateEvent({ gameState, event, clock }: ComputeEv
 	const card = gameState.getCard(event.isPlayerCard, event.cardPosition);
 	if (card === null) return;
 	const stateData = CardStatesData[event.state.type];
-	const options = { ...stateData.options };
+	const options = getOptionsFromType(event.state.type);
 	stateData.action({
 		trigger: event.state.trigger,
 		target: event.state.target,

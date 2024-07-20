@@ -1,10 +1,8 @@
-import { numberOfLevels } from './../../../../apps/Editor/src/editor/features/progression/consts';
 import * as _ from "lodash";
 import { boosters, getWorldBoosterName } from "./ComputeBoosterProgress";
-import { Level } from "../../../gameEngine/src/types/DataStoreType";
 import { getStrengthMax, getStrengthMin } from "../lib/transformLevelStatInlevels";
-import { cubicBezier } from "../lib/cubicBezier";
-import { ceilToValue } from '../lib/utils';
+import { ceilToValue, cubicBezier, Level } from "@repo/lib";
+import { numberOfLevels } from "../lib/utils";
 
 interface World {
 	id: number;

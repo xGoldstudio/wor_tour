@@ -580,22 +580,10 @@
       "id": 22,
       "world": 2,
       "attackDefenseRatio": 0.7,
-      "speedDamageRatio": 0.59,
+      "speedDamageRatio": 0.39,
       "stats": [
         {
-          "cost": 1,
-          "states": [
-            {
-              "type": "bleeding",
-              "trigger": "onAttack",
-              "target": "selfCard",
-              "value": 0
-            }
-          ],
-          "illustration": "card_22_level_1_1721050271270.png"
-        },
-        {
-          "cost": 1,
+          "cost": 3,
           "states": [
             {
               "type": "massacre",
@@ -604,16 +592,28 @@
               "value": 10
             }
           ],
-          "illustration": "card_22_level_2_1721050621698.png"
+          "illustration": "card_22_level_1_1721050271270.png"
         },
         {
-          "cost": 1,
+          "cost": 3,
           "states": [
             {
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
               "value": 20
+            }
+          ],
+          "illustration": "card_22_level_2_1721050621698.png"
+        },
+        {
+          "cost": 3,
+          "states": [
+            {
+              "type": "massacre",
+              "trigger": "onDirectAttackHit",
+              "target": "directEnnemyCard",
+              "value": 30
             }
           ],
           "illustration": "card_22_level_3_1721050624380.png"

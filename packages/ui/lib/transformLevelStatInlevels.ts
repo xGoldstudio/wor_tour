@@ -1,5 +1,4 @@
-import { getCardStrength } from "../../../gameEngine/src/types/Card";
-import { CardRarity } from "../../../gameEngine/src/types/DataStoreType";
+import { CardRarity, getCardStrength } from "@repo/lib";
 
 export function getStrengthMin(world: number) {
 	const rarities: CardRarity[] = [

@@ -15,3 +15,7 @@ export {default as Cover} from './components/Cover.tsx';
 export * from './lib/rxjsToZustand.ts';
 export * from './lib/lifecycle.ts';
 export * from "./lib/utils.ts";
+export * from './lib/transformLevelStatInlevels.ts';
+
+export * from './data/ComputeProgressionLevels.ts';
+export * from './data/ComputeBoosterProgress.ts';

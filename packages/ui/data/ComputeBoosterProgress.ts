@@ -1,6 +1,6 @@
+import { BoosterTypeDeclartion, CardRarity } from "@repo/lib";
 import * as _ from "lodash";
-import { BoosterTypeDeclartion, CardRarity } from "../../../gameEngine/src/types/DataStoreType";
-import { numberOfLevels } from "../../../../apps/Editor/src/editor/features/progression/consts";
+import { numberOfLevels } from "../lib/utils";
 function ceilToValue(ceil: number) {
 	return (v: number) => Math.ceil(v / ceil) * ceil;
 }
