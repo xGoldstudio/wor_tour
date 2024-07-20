@@ -1,10 +1,11 @@
 import usePlayerStore from "@/home/store/playerStore";
-import { getTargetStrength, ManaBall } from "@repo/ui";
+import { ManaBall } from "@repo/ui";
 import * as _ from "lodash";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { Card } from "./cardFilters";
 import Collection from "./Collection";
 import { DeckCardUI } from "./DeckCardUI";
+import { getTargetStrength } from "@repo/lib";
 
 export const NUMBER_OF_CARD_IN_DECK: number = 8;
 
