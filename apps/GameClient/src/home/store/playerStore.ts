@@ -1,8 +1,9 @@
 import { create } from "zustand";
 import { Tier, getTierFromLevel } from "./tiers";
-import { findCard } from "../../cards/index";
-import { CardType } from "@repo/lib";
+import { findCard, getCardFromLevel, getCardStats } from "../../cards/index";
+import { CardRarity, CardStatsInfo, CardType } from "@repo/lib";
 import { levels } from "@repo/ui";
+import useDataStore from "@/cards/DataStore";
 
 export interface CollectionCard {
   id: number;
@@ -171,7 +172,6 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
     set((state) => ({ collection: new Map(state.collection) }));
   },
 
-
   addGold: (amount: number) => {
     set((state) => ({ gold: state.gold + amount }));
   },
@@ -191,10 +191,13 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
       return { tiers: new Map(state.tiers) };
     });
     return result;
-  }
+  },
 }));
 
-function updateTrophies(set: (state: (s: PlayerStore) => Partial<PlayerStore>) => void, difference: number): false | "tier" | "world" {
+function updateTrophies(
+  set: (state: (s: PlayerStore) => Partial<PlayerStore>) => void,
+  difference: number
+): false | "tier" | "world" {
   let result: false | "tier" | "world" = false;
   set((state) => {
     const nextTrophies = Math.max(0, state.trophies + difference);
@@ -203,17 +206,31 @@ function updateTrophies(set: (state: (s: PlayerStore) => Partial<PlayerStore>) =
     const previousTierValue = state.tiers.get(state.currentTier - 1);
     let nextTier = state.currentTier;
     let tierState = state.tiers;
-    if (currentTierValue && nextTierValue && nextTierValue.level.trophyStart <= nextTrophies) {
+    if (
+      currentTierValue &&
+      nextTierValue &&
+      nextTierValue.level.trophyStart <= nextTrophies
+    ) {
       nextTier = nextTierValue.tier;
       nextTierValue.isUnlocked = true;
       tierState = new Map(tierState);
       if (state.maxTrophies < nextTierValue.level.trophyStart) {
         result = nextTierValue.isWorld ? "world" : "tier";
       }
-    } else if (currentTierValue && previousTierValue && currentTierValue.level.trophyStart > nextTrophies) {
+    } else if (
+      currentTierValue &&
+      previousTierValue &&
+      currentTierValue.level.trophyStart > nextTrophies
+    ) {
       nextTier = previousTierValue.tier;
     }
-    return ({ trophies: nextTrophies, maxTrophies: Math.max(nextTrophies, state.maxTrophies), currentTier: nextTier, tiers: tierState, currentWorld: tierState.get(nextTier)!.world });
+    return {
+      trophies: nextTrophies,
+      maxTrophies: Math.max(nextTrophies, state.maxTrophies),
+      currentTier: nextTier,
+      tiers: tierState,
+      currentWorld: tierState.get(nextTier)!.world,
+    };
   });
   return result;
 }

@@ -1,4 +1,4 @@
-import { CardType } from "@repo/ui";
+import { CardType } from "@repo/lib";
 import { ActiveFilters, FiltersDescription } from "./cardFilters";
 
 interface getCardsFilteredProps {

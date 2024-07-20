@@ -1,8 +1,15 @@
 import usePlayerStore from "@/home/store/playerStore";
-import { Button, CardBorder, CardContentIllustartion, ManaBall } from "@repo/ui";
+import {
+  Button,
+  CardBorder,
+  CardContentIllustartion,
+  ManaBall,
+} from "@repo/ui";
 import { useState } from "react";
 import CardModal from "./CardModal";
 import { preventDefault } from "@repo/lib";
+import { cn } from "@repo/ui";
+import { Tabs } from "./DeckInterface";
 
 interface CardUIProps {
   cardId: number;

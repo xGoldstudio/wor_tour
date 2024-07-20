@@ -60,7 +60,7 @@ export default function DeckTab() {
     detailledDeck.push(getCompleteInfo(deckArray[i]!));
   return (
     <div>
-      <ScrollContainer className="grow overflow-y-scroll scrollbar-hiden flex flex-col h-[674px] w-full">
+      <ScrollContainer className="grow overflow-y-scroll scrollbar-hiden flex flex-col h-[674px] w-[650px]">
         <div className="grid grid-rows-[1fr_auto] top-0 ">
           <div className="grid grid-cols-4 gap-y-8 pt-8 ">
             {detailledDeck.map((card) => (
@@ -71,7 +71,7 @@ export default function DeckTab() {
           </div>
         </div>
         <DeckStats detailledDeck={detailledDeck} />
-        <Collection />
+        {/* <Collection /> */}
       </ScrollContainer>
     </div>
   );
