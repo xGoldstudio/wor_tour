@@ -265,6 +265,38 @@ export function CardEffectsElements({
       (event as RemoveStateEvent).cardPosition === position,
   });
 
+  useGameEventListener({
+    type: "addState",
+    action: (_, state) => {
+      const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
+        position
+      ];
+      if (card === null) {
+        return;
+      }
+      setStates([ ...card.states ]);
+    },
+    filter: (event) =>
+      (event as RemoveStateEvent).isPlayerCard === isPlayerCard &&
+      (event as RemoveStateEvent).cardPosition === position,
+  });
+
+  useGameEventListener({
+    type: "modifyStateValue",
+    action: (_, state) => {
+      const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
+        position
+      ];
+      if (card === null) {
+        return;
+      }
+      setStates([ ...card.states ]);
+    },
+    filter: (event) =>
+      (event as RemoveStateEvent).isPlayerCard === isPlayerCard &&
+      (event as RemoveStateEvent).cardPosition === position,
+  });
+
   return (
     <div className="absolute right-[4px] top-[5px] flex flex-col gap-2">
       <Effects states={states} size={0.8} />

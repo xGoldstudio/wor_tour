@@ -211,13 +211,13 @@ export class GameStateObject {
 	removeState(
 		isPlayerCard: boolean,
 		cardPosition: number,
-		state: CardState,
+		type: CardState["type"],
 	) {
 		const card = this.getCard(isPlayerCard, cardPosition);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return;
 		}
-		card.states = card.states.filter((s) => s !== state);
+		card.states = card.states.filter((s) => s.type !== type);
 	}
 	addState(
 		isPlayerCard: boolean,
@@ -228,7 +228,7 @@ export class GameStateObject {
 		if (!card) { // this is a common case, the card can be already destroyed
 			return;
 		}
-		card.states.push(state);
+		card.states.push({ ...state });
 	}
 	modifyStateValue(
 		isPlayerCard: boolean,

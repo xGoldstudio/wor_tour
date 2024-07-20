@@ -143,7 +143,7 @@ export interface ModifyStateValueEvent {
 
 export interface RemoveStateEvent {
   type: "removeState";
-  state: CardState;
+  stateType: CardState["type"];
   isPlayerCard: boolean;
   cardPosition: number;
 }

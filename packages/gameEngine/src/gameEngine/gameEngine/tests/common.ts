@@ -57,6 +57,13 @@ export const multiAttackState: CardState = {
 	target: "otherEnnemyCards",
 };
 
+export const riposteStateTest: CardState = {
+	type: "riposte",
+	value: 1,
+	trigger: "onDirectlyAttacked",
+	target: "directEnnemyCard",
+};
+
 export const healStateDefaultTest: CardState = {
 	type: "heal",
 	value: 100,
@@ -92,6 +99,24 @@ export function triggerDirectAttack(
 	});
 }
 
+export function triggerHealCard(
+	clock: ClockReturn<EventType>,
+	isPlayerCard: boolean,
+	cardPosition: number,
+	amount: number,
+) {
+	clock.triggerEvent({
+		type: "healCard",
+		isPlayerCard,
+		cardPosition,
+		amount,
+		cardInitiator: {
+			isPlayerCard,
+			cardPosition,
+		}
+	})
+}
+
 export function triggerDirectAttackResolved(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,
@@ -112,7 +137,7 @@ export function triggerDirectAttackResolved(
 				type: "cardAttacking",
 				isPlayer,
 				cardPosition,
-				instanceId: state.getCard(isPlayer, cardPosition)!.instanceId
+				instanceId: state.getCard(isPlayer, cardPosition)?.instanceId ?? 0,
 			}
 		}
 	});

@@ -107,7 +107,8 @@ export const CardStatesData = {
     src: "states/riposte.png",
     action: RiposteStateAction,
     options: {
-      consume: 1
+      consume: 1,
+      stackable: true,
     },
   },
   multiAttack: {
