@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { GameEventListenerFunction, addGameEventListener } from "./gameEventListener";
-import { EventType } from "./useGameEvents";
+import { EventType } from "game_engine";
 
 interface UseGameEventListenerProps {
 	type: EventType["type"],

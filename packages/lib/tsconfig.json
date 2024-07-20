@@ -1,0 +1,5 @@
+{
+  "extends": "@repo/typescript-config/vite.json",
+  "include": [".", "../gameEngine/src/gameEngine/states", "../gameEngine/src/types/Card.ts", "../gameEngine/src/types/DataStoreType.ts", "../ui/lib/transformLevelStatInlevels.ts"],
+  "exclude": ["node_modules"]
+}

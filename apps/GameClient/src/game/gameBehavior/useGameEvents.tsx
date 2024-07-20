@@ -1,21 +1,19 @@
 import { useEffect, useRef, useState } from "react";
-import useGameInterface from "@/game/stores/gameInterfaceStore";
-import useGameStore from "@/game/stores/gameStateStore";
 import iaAgent from "./aiAgent";
-import Clock, { ClockReturn } from "./clock/clock";
 import GameCanvas, { GameCanvasReturn } from "./animation/gameCanvas";
 import {
   resetAllGameEventListeners,
   runGameEventListeners,
 } from "./gameEventListener";
-import { CardEffects } from "@repo/types";
 import { useOnMount, useOnUnMount } from "@repo/ui";
-import { computeNextFrameState } from "./gameEngine/gameEngine";
 import { useGameSyncAnimationStore } from "./animation/useGameSyncAnimation";
 import { useShallow } from "zustand/react/shallow";
 import useGameEventListener from "./useGameEventListener";
-import { IS_DEBUG } from "@/isDebug";
 import _ from "lodash";
+import { IS_DEBUG } from "@/isDebug";
+import useGameStore from "../stores/gameStateStore";
+import useGameInterface from "../stores/gameInterfaceStore";
+import { ClockReturn, EventType, Clock, computeNextFrameState } from "game_engine";
 
 export const FRAME_TIME = 10;
 
@@ -25,140 +23,6 @@ interface GameEventsActions {
   fastForward: (amount: number) => void;
   gameRef: React.MutableRefObject<HTMLDivElement | null>;
   isInit: boolean;
-}
-
-export type EventType =
-  | StartGameSequence
-  | StartGame
-  | ManaIncreaseEvent
-  | SetManaIncreaseSpeed
-  | ManaConsumeEvent
-  | PlaceCardEvent
-  | StartEarningMana
-  | CardStartAttackingEvent
-  | CardAttackingEvent
-  | PlayerDamageEvent
-  | CardDamageEvent
-  | CardDestroyedEvent
-  | GameOverEvent
-  | DrawCardEvent
-  | HealCardEvent
-  | RemoveEffectEvent
-  | CardDamagResolveEvent
-  | PlayerDamageResolveEvent;
-
-export interface StartGameSequence {
-  type: "startGameSequence";
-}
-
-export interface StartGame {
-  type: "startGame";
-}
-
-export interface ManaConsumeEvent {
-  type: "manaConsume";
-  isPlayer: boolean;
-  delta: number;
-}
-
-export interface StartEarningMana {
-  type: "startEarningMana";
-  isPlayer: boolean;
-}
-
-export interface SetManaIncreaseSpeed {
-  type: "setManaIncreaseSpeed";
-  isPlayer: boolean;
-  speed: number;
-}
-
-export interface ManaIncreaseEvent {
-  type: "manaIncrease";
-  isPlayer: boolean;
-}
-
-export interface PlaceCardEvent {
-  type: "placeCard";
-  isPlayer: boolean;
-  targetPosition: number;
-  cardInHandPosition: number;
-}
-
-export interface CardStartAttackingEvent {
-  type: "cardStartAttacking";
-  isPlayer: boolean;
-  cardPosition: number;
-  instanceId: number;
-}
-
-export interface CardAttackingEvent {
-  type: "cardAttacking";
-  isPlayer: boolean;
-  cardPosition: number;
-  instanceId: number;
-}
-
-export interface PlayerDamageEvent {
-  type: "playerDamage";
-  isPlayer: boolean;
-  damage: number;
-  initiator: CardAttackingEvent;
-}
-
-export interface PlayerDamageResolveEvent {
-  type: "playerDamageResolve";
-  initiator: PlayerDamageEvent;
-}
-
-export interface CardDamageEvent {
-  type: "cardDamage";
-  amount: number;
-  cardPosition: number;
-  isPlayerCard: boolean;
-  directAttack: boolean;
-  initiator: {
-    isPlayerCard: boolean;
-    cardPosition: number;
-  };
-}
-
-export interface CardDamagResolveEvent {
-  type: "cardDamageResolve";
-  initiator: CardDamageEvent;
-}
-
-export interface CardDestroyedEvent {
-  type: "cardDestroyed";
-  initiator: CardDamageEvent;
-}
-
-export interface GameOverEvent {
-  type: "gameOver";
-  winnerIsPlayer: boolean;
-}
-
-export interface DrawCardEvent {
-  type: "drawCard";
-  isPlayer: boolean;
-  handPosition: number;
-}
-
-export interface HealCardEvent {
-  type: "healCard";
-  isPlayerCard: boolean;
-  cardPosition: number;
-  amount: number;
-  cardInitiator: {
-    isPlayerCard: boolean;
-    cardPosition: number;
-  };
-}
-
-export interface RemoveEffectEvent {
-  type: "removeEffect";
-  isPlayerCard: boolean;
-  cardPosition: number;
-  effectToRemove: keyof CardEffects;
 }
 
 export function getDeathAnimationKey(isPlayerCard: boolean, position: number) {
@@ -332,7 +196,7 @@ function useGameEvents(): GameEventsActions {
   function animationReactionToEvent(event: EventType) {
     if (event.type === "cardDamage") {
       gameCanvas?.newAnimation(
-        `card_${event.initiator.isPlayerCard}_${event.initiator.cardPosition}`,
+        `card_${event.initiator.isPlayer}_${event.initiator.cardPosition}`,
         `card_${event.isPlayerCard}_${event.cardPosition}`,
         "attack",
         clock.getImmutableInternalState().currentFrame

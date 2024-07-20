@@ -1,20 +1,20 @@
 import { getCardFromLevel } from "@/cards";
-import useDataStore, { World } from "@/cards/DataStore";
+import useDataStore from "@/cards/DataStore";
 import usePlayerStore from "@/home/store/playerStore";
 import { useState } from "react";
-import LevelPreview from "./LevelPreview";
 import WorldModal from "../modals/WorldModal";
-import { Badge, Button, cn, getImageUrl } from "@repo/ui";
-import Cover from "@/home/ui/Cover";
+import { Badge, Button, cn, Cover } from "@repo/ui";
 import StaticCard from "@/game/gui/card/StaticCard";
-import _ from "lodash";
+import { Tier } from "@/home/store/tiers";
+import { getImageUrl } from "@repo/lib";
 
 export default function WorldPreview({
-  world,
+  tier,
 }: {
-  world: World;
-  scroller: HTMLDivElement | null;
+  tier: Tier;
 }) {
+  const [isWorldModalOpen, setIsWorldModalOpen] = useState(false);
+  const world = useDataStore((state) => state.worlds[tier.world - 1]!);
   const cards = useDataStore((state) => state.cards)
     .filter((card) => card.world === world.id)
     .map((card) => getCardFromLevel(card, 3));
@@ -25,13 +25,9 @@ export default function WorldPreview({
   const worldTrophies = (world.id - 1) * 1000;
 
   const isUnlocked = worldTrophies <= playerTrophies;
-  const [isWorldModalOpen, setIsWorldModalOpen] = useState(false);
 
   return (
     <>
-      {_.range(1, 10).map((i) => (
-        <LevelPreview i={10 - i} worldTrophies={worldTrophies} key={i} />
-      ))}
       <div
         className={`trophiesField worldField${world.id} flex flex-col relative items-center w-full justify-center`}
       >
@@ -83,7 +79,7 @@ export default function WorldPreview({
               {cards.map((card) => (
                 <StaticCard
                   card={card}
-                  size={0.65}
+                  size={0.85}
                   key={card.id}
                   isDisabled={!isUnlocked}
                 />

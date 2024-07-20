@@ -6,15 +6,11 @@ import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore";
 import Badge from "../../../../packages/ui/components/Badge";
-import { NumberSpan, numberWithCommas } from "@repo/ui";
+import { Cover, NumberSpan } from "@repo/ui";
 import { cn } from "@repo/ui";
-import {
-  Borders,
-  CardIllustartion,
-  InnerBord,
-} from "../../../../packages/ui/components/card/CardBorder";
-import Cover from "./ui/Cover";
-import AnimationContainer from "./animations/AnimationContainer";
+import { Borders, CardIllustartion, InnerBord } from "../../../../packages/ui/components/card/CardBorder";
+import { numberWithCommas } from "@repo/lib";
+
 
 type Tabs = "home" | "deck" | "shop";
 
@@ -36,7 +32,6 @@ export default function Home() {
         className="w-[700px] h-full relative overflow-hidden bg-slate-900"
         id="home"
       >
-        <AnimationContainer />
         <RewardBlockWithContext />
         <HomeBg />
         <div className="w-full h-full relative flex flex-col items-center justify-between">
@@ -145,15 +140,18 @@ function FooterButton({
 
 export function HomeBg() {
   return (
-    <div
-      className="w-full h-full absolute blur-sm"
-      style={{
-        backgroundImage: "url('/homeBg.jpeg')",
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-      }}
-    >
-      <div className="w-full h-full absolute bg-[radial-gradient(circle,_rgba(226,232,240,0.1)_40%,_rgba(0,0,0,0.4)_100%)]" />
+    <div className="w-full h-full absolute ">
+      <div className="w-full h-full absolute bg-black" />
+      <div
+        className="w-full h-full absolute blur-sm"
+        style={{
+          backgroundImage: "url('/homeBg.jpeg')",
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+        }}
+      >
+        <div className="w-full h-full absolute bg-[radial-gradient(circle,_rgba(226,232,240,0.1)_40%,_rgba(0,0,0,0.4)_100%)]" />
+      </div>
     </div>
   );
 }

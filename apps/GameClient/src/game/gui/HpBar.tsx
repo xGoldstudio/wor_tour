@@ -1,10 +1,11 @@
 import { useRef, useState } from "react";
 import { EmptyBar } from "./ManaBar";
-import { cn, numberWithCommas } from "@repo/ui";
+import { cn } from "@repo/ui";
 import useGameEventListener from "../gameBehavior/useGameEventListener";
-import { PlayerDamageResolveEvent } from "../gameBehavior/useGameEvents";
 import { useSyncGameAnimation } from "../gameBehavior/animation/useGameSyncAnimation";
 import animationTimeline from "../gameBehavior/animation/timeline";
+import { numberWithCommas } from "../../../../../packages/lib/src/lib/utils";
+import { PlayerDamageResolveEvent } from "game_engine";
 
 interface HpBarProps {
   maxHp: number;

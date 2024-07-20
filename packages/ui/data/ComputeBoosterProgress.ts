@@ -1,8 +1,9 @@
-import { BoosterTypeDeclartion, CardRarity } from "@repo/types";
-import { ceilToValue } from "@repo/ui";
+import { BoosterTypeDeclartion, CardRarity } from "@repo/lib";
 import * as _ from "lodash";
-import { numberOfLevels } from "../../../apps/Editor/src/editor/features/progression/consts";
-
+import { numberOfLevels } from "../lib/utils";
+function ceilToValue(ceil: number) {
+	return (v: number) => Math.ceil(v / ceil) * ceil;
+}
 const baseCost = 1000;
 const ordinals = ["first", "second", "third", "fourth", "fifth"];
 const upgradedBoosters = [
@@ -35,14 +36,26 @@ export function getDistribution(luckImprove: number) {
 }
 
 export const boosters: BoosterTypeDeclartion[] = [
-	...(allWorlds.map(amountBooster)),
+	{
+		name: "Classic refill",
+		cost: baseCost,
+		description: `Contain 1 unit from any worlds among unlocked cards.`,
+		contain: {
+			worlds: allWorlds,
+			rarities: classicRarityDistribution,
+			unitAmount: 1,
+		},
+		unlockCondition: {
+			world: 1,
+		},
+	},
 	...(allWorlds.map(worldBooster)),
 	...(allWorlds.map(rarityBooster)),
 ];
 
 export const unlockedIndex: Record<number, BoosterTypeDeclartion[]> = {};
 boosters.forEach((booster) => {
-	const target = (booster.unlockCondition.world - 1) * numberOfLevels + (booster.unlockCondition.level ?? 0);
+	const target = (booster.unlockCondition.world - 1) * numberOfLevels;
 	const unlocked = unlockedIndex[target] ?? [];
 	unlocked.push(booster);
 	unlockedIndex[target] = unlocked;
@@ -50,23 +63,6 @@ boosters.forEach((booster) => {
 
 export function getAmountBoosterName(world: number) {
 	return `${amountNames[world - 1]} refill`;
-}
-
-function amountBooster(world: number): BoosterTypeDeclartion {
-	const amount = world;
-	return {
-		name: getAmountBoosterName(world),
-		cost: amount === 1 ? baseCost : ceilToValue(100)(baseCost * (1.65 ** amount)),
-		description: `Contain ${amount} time the same unit from any worlds among unlocked cards.`,
-		contain: {
-			worlds: allWorlds,
-			rarities: classicRarityDistribution,
-			unitAmount: amount,
-		},
-		unlockCondition: {
-			world: amount,
-		},
-	}
 }
 
 export function getWorldBoosterName(world: number) {
@@ -102,7 +98,6 @@ function rarityBooster(world: number): BoosterTypeDeclartion {
 		purchaseDelayInMs: purchaseDelayInMs,
 		unlockCondition: {
 			world: world,
-			level: numberOfLevels / 2,
 		},
 		contain: {
 			worlds: allWorlds,

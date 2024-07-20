@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@repo/ui": "workspace:*",
+    "@repo/lib": "workspace:*",
     "lodash": "^4.17.21",
     "lucide-react": "^0.376.0",
     "react": "^18.2.0",
@@ -21,7 +22,6 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@repo/types": "workspace:*",
     "@jest/globals": "^29.7.0",
     "@repo/eslint-config": "workspace:*",
     "@repo/tailwind-config": "workspace:*",

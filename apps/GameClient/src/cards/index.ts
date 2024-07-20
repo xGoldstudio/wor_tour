@@ -1,10 +1,5 @@
-import {
-  CardStatsInfo,
-  CardType,
-  getRealStrength,
-  getTargetStrength,
-  testIsStrengthValid,
-} from "@repo/ui";
+
+import { CardStatsInfo, CardType, getRealStrength, getTargetStrength, testIsStrengthValid } from "../../../../packages/gameEngine/src/types/Card";
 import useDataStore from "./DataStore";
 
 export function findCard(id: number, level: number): CardType {
@@ -32,7 +27,7 @@ export function getCardFromLevel(card: CardStatsInfo, level: number): CardType {
     attackSpeed: card.stats[levelIndex].attackSpeed,
     rarity: card.rarity,
     id: card.id,
-    effects: card.stats[levelIndex].effects,
+    states: card.stats[levelIndex].states,
     level: level,
     world: card.world,
   };
