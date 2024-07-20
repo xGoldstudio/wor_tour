@@ -3,8 +3,8 @@ import { getTargetStrength, ManaBall } from "@repo/ui";
 import * as _ from "lodash";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { CardCollection } from "./cardFilters";
-import Collection from "./Collection";
 import { DeckCardUI } from "./DeckCardUI";
+import Collection from "./Collection";
 
 interface DeckStatsProps {
   detailledDeck: CardCollection[];
@@ -59,7 +59,7 @@ export default function DeckTab() {
     <div>
       <ScrollContainer className="grow overflow-y-scroll scrollbar-hiden flex flex-col h-[674px] w-full">
         <div className="grid grid-rows-[1fr_auto] top-0 ">
-          <div className="grid grid-cols-4 gap-y-8 pt-8">
+          <div className="grid grid-cols-4 gap-y-8 pt-8 ">
             {detailledDeck.map((card) => (
               <div className="w-full flex justify-center" key={card.id}>
                 <DeckCardUI cardId={card.id} />

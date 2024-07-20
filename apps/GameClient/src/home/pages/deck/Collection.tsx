@@ -5,8 +5,13 @@ import { CardSorts, defaultSort, sorts } from "./cardSorts";
 import { DeckCardUI } from "./DeckCardUI";
 import { SortAndFilterBox } from "./SortAndFilterBox";
 import { getCardsFiltered } from "./getCardsFiltered";
+import { Tabs } from "./DeckInterface";
 
-export default function Collection() {
+interface CollectionProps {
+  setCurrentTab?: (tab: Tabs) => void;
+}
+
+export default function Collection({ setCurrentTab }: CollectionProps) {
   let { detailledCollection, cardNotFound } = usePlayerStore((state) => ({
     detailledCollection: state.getCollectionCompleteInfo(state.getCollection()),
     cardNotFound: state.getAllCardsLocked(),
@@ -45,8 +50,8 @@ export default function Collection() {
   });
   cardNotFound = sorts[currentSort].sortFunction(cardNotFound, isAscending);
   return (
-    <div className="flex flex-col h-[674px] w-[650px]">
-      <div className="grid grid-rows-[1fr_auto] top-0 ">
+    <div className="flex flex-col h-[674px] w-[650px] ">
+      <div className="grid grid-rows-[1fr_auto] top-0 pb-20">
         <SortAndFilterBox
           collectionLength={collectionLength}
           currentSort={currentSort}
@@ -59,7 +64,7 @@ export default function Collection() {
         <div className="w-[600px] mx-auto grid grid-cols-4 gap-y-6 pt-10 pb-8">
           {detailledCollection.map((card) => (
             <div className="w-full flex justify-center" key={card.id}>
-              <DeckCardUI cardId={card.id} />
+              <DeckCardUI cardId={card.id} setCurrentTab={setCurrentTab} />
             </div>
           ))}
           {cardNotFound.map((card) => (

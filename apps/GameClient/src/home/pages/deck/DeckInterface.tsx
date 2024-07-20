@@ -1,12 +1,16 @@
 import { cn } from "@repo/ui";
-import { useState } from "react";
+import React, { useState } from "react";
 import CollectionTab from "./CollectionTab";
 import DeckTab from "./DeckTab";
 import Cover from "@/home/ui/Cover";
 
-type Tabs = "Deck" | "Collection";
+export type Tabs = "Deck" | "Collection";
 
-const tabs: Record<Tabs, () => JSX.Element> = {
+interface TabProps {
+  setCurrentTab: (tab: Tabs) => void;
+}
+
+const tabs: Record<Tabs, React.FC<TabProps>> = {
   Deck: DeckTab,
   Collection: CollectionTab,
 };
@@ -56,7 +60,7 @@ export function DeckInterface() {
         </div>
       </div>
       <div className="w-full flex justify-center overflow-hidden">
-        <TabElement />
+        <TabElement setCurrentTab={setCurrentTab} />
       </div>
     </div>
   );
