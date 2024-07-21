@@ -11,6 +11,7 @@ import CardModal from "./CardModal";
 import { preventDefault } from "@repo/lib";
 import { cn } from "@repo/ui";
 import { Tabs } from "./DeckInterface";
+import TiltContainer from "./TiltContainer";
 
 interface CardUIProps {
   cardId: number;
@@ -51,6 +52,7 @@ export function DeckCardUI({
           closeModal={() => setIsDescriptionOpen(false)}
         />
       )}
+      <TiltContainer>
         <div className="relative p-2">
           {isSelected && (
             <Cover cardRarity={"common"} className="rounded-lg blur-sm" />
@@ -159,6 +161,7 @@ export function DeckCardUI({
             )}
           </div>
         </div>
+      </TiltContainer>
     </>
   );
 }
