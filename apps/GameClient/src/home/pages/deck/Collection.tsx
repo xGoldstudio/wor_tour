@@ -9,9 +9,15 @@ import { Tabs } from "./DeckInterface";
 
 interface CollectionProps {
   setCurrentTab?: (tab: Tabs) => void;
+  setSelectedCard?: (cardId: number) => void;
+  selectedCard?: number;
 }
 
-export default function Collection({ setCurrentTab }: CollectionProps) {
+export default function Collection({
+  setCurrentTab,
+  setSelectedCard,
+  selectedCard,
+}: CollectionProps) {
   let { detailledCollection, cardNotFound } = usePlayerStore((state) => ({
     detailledCollection: state.getCollectionCompleteInfo(state.getCollection()),
     cardNotFound: state.getAllCardsLocked(),
@@ -64,12 +70,23 @@ export default function Collection({ setCurrentTab }: CollectionProps) {
         <div className="w-[600px] mx-auto grid grid-cols-4 gap-y-6 pt-10 pb-8">
           {detailledCollection.map((card) => (
             <div className="w-full flex justify-center" key={card.id}>
-              <DeckCardUI cardId={card.id} setCurrentTab={setCurrentTab} />
+              <DeckCardUI
+                cardId={card.id}
+                setCurrentTab={setCurrentTab}
+                selectedCard={selectedCard}
+                setSelectedCard={() => setSelectedCard!(card.id)}
+              />
             </div>
           ))}
           {cardNotFound.map((card) => (
             <div className="w-full flex justify-center" key={card.id}>
-              <DeckCardUI cardId={card.id} locked={true} unaddble={true} />
+              <DeckCardUI
+                cardId={card.id}
+                locked={true}
+                unaddble={true}
+                selectedCard={selectedCard}
+                setSelectedCard={() => setSelectedCard!(card.id)}
+              />
             </div>
           ))}
         </div>

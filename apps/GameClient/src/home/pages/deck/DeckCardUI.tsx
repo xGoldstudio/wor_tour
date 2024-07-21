@@ -3,6 +3,7 @@ import {
   Button,
   CardBorder,
   CardContentIllustartion,
+  Cover,
   ManaBall,
 } from "@repo/ui";
 import { useState } from "react";
@@ -17,6 +18,8 @@ interface CardUIProps {
   unaddble?: boolean;
   locked?: boolean;
   setCurrentTab?: (tab: Tabs) => void;
+  setSelectedCard?: (cardId: number) => void;
+  selectedCard?: number;
 }
 
 export function DeckCardUI({
@@ -25,6 +28,8 @@ export function DeckCardUI({
   unaddble: addable,
   locked = false,
   setCurrentTab,
+  setSelectedCard,
+  selectedCard,
 }: CardUIProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
 
@@ -37,6 +42,8 @@ export function DeckCardUI({
       lockPattern: state.getTheLockPattern(cardId),
     }));
 
+  const isSelected = selectedCard === card.id;
+
   const opacity = locked ? "brightness-50" : "opacity-100";
   return (
     <>
@@ -46,7 +53,10 @@ export function DeckCardUI({
           closeModal={() => setIsDescriptionOpen(false)}
         />
       )}
-      <div className=" relative">
+      <div className="relative p-2">
+        {isSelected && (
+          <Cover cardRarity={"common"} className="rounded-lg blur-sm" />
+        )}
         <div className={cn("relative select-none h-min  ")}>
           {locked && (
             <div
@@ -65,7 +75,10 @@ export function DeckCardUI({
           )}
           <div
             className={`${opacity} `}
-            onClick={() => setIsDescriptionOpen(true)}
+            onClick={() => {
+              // setIsDescriptionOpen(true);
+              setSelectedCard?.(card.id);
+            }}
           >
             <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>
               <div
@@ -91,7 +104,7 @@ export function DeckCardUI({
           </div>
           {!addable && (
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/4">
-              {card.isInDeck ? (
+              {/* {card.isInDeck ? (
                 <Button
                   action={() => removeCardFromDeck(card.id)}
                   small
@@ -119,10 +132,104 @@ export function DeckCardUI({
                     className="w-4 h-4 m-1 my-2"
                   />
                 </Button>
-              )}
+              )} */}
+            </div>
+          )}
+          {/* <div className="relative w-full  "> */}
+          {/*  */}
+          {/* {isSelected && (
+            <div className="absolute z-20 w-full flex justify-center items-center flex-col pt-1 bottom-2">
+              <div className=" shadow-2xl">
+                <Button
+                  small={true}
+                  width="w-28 "
+                  rarity={card.rarity}
+                  action={() => setIsDescriptionOpen(true)}
+                >
+                  Infos
+                </Button>
+              </div>
+              <div className="relative    shadow-2xl">
+                <Button
+                  small={true}
+                  width="w-28"
+                  action={() => removeCardFromDeck(card.id)}
+                >
+                  Remove
+                </Button>
+              </div>
+            </div>
+          )} */}
+          {isSelected && (
+            <div className="absolute z-20 w-full flex justify-center items-center  pt-1 bottom-2  ">
+              <div className=" shadow-2xl group">
+                <Button
+                  small={true}
+                  width="w-[3.4rem] "
+                  rarity={card.rarity}
+                  action={() => setIsDescriptionOpen(true)}
+                >
+                  <img
+                    className="p-[0.25rem] group-hover:p-[0.15rem]"
+                    src="/information-circle-no-bg.png"
+                    width={30}
+                    height={30}
+                    alt=""
+                  />
+                </Button>
+              </div>
+              <div className="group shadow-2xl">
+                {card.isInDeck ? (
+                  <Button
+                    small={true}
+                    width="w-[3.4rem]"
+                    action={() => removeCardFromDeck(card.id)}
+                  >
+                    <img
+                      className="p-[0.25rem] group-hover:p-[0.15rem]"
+                      src="/trash-no-bg.png"
+                      width={27}
+                      height={27}
+                      alt=""
+                    />
+                  </Button>
+                ) : (
+                  <Button
+                    small={true}
+                    width="w-[3.4rem]"
+                    disabled={isDeckFull}
+                    action={preventDefault(() => {
+                      addCardToDeck(card.id);
+                      setCurrentTab?.("Deck");
+                    })}
+                  >
+                    <img
+                      className="p-[0.25rem] group-hover:p-[0.15rem]"
+                      src="/icons/plus.svg"
+                      width={27}
+                      height={27}
+                      alt=""
+                    />
+                  </Button>
+                )}
+                {/* <Button
+                  small={true}
+                  width="w-[3.4rem]"
+                  action={() => removeCardFromDeck(card.id)}
+                >
+                  <img
+                    className="p-[0.25rem] group-hover:p-[0.15rem]"
+                    src="/trash-no-bg.png"
+                    width={27}
+                    height={27}
+                    alt=""
+                  />
+                </Button> */}
+              </div>
             </div>
           )}
         </div>
+        {/* </div> */}
       </div>
     </>
   );

@@ -6,6 +6,7 @@ import { CardCollection } from "./cardFilters";
 import { DeckCardUI } from "./DeckCardUI";
 import Collection from "./Collection";
 import { getTargetStrength } from "@repo/lib";
+import { useState } from "react";
 
 export const NUMBER_OF_CARD_IN_DECK: number = 8;
 
@@ -18,6 +19,7 @@ function DeckStats({ detailledDeck }: DeckStatsProps) {
     (total, card) => total + getTargetStrength(card),
     0
   );
+
   const averageCostDeck =
     detailledDeck.reduce((total, card) => total + card.cost, 0) /
     detailledDeck.length;
@@ -50,7 +52,7 @@ export default function DeckTab() {
       numberOfCardsInDeck: state.numberOfCardsInDeck,
     })
   );
-
+  const [selectedCard, setSelectedCard] = useState<number>(0);
   const deckArray = _.concat(
     deck,
     _.fill(Array(numberOfCardsInDeck - deck.length), null)
@@ -65,13 +67,22 @@ export default function DeckTab() {
           <div className="grid grid-cols-4 gap-y-8 pt-8 ">
             {detailledDeck.map((card) => (
               <div className="w-full flex justify-center" key={card.id}>
-                <DeckCardUI cardId={card.id} />
+                <DeckCardUI
+                  cardId={card.id}
+                  setSelectedCard={() => setSelectedCard(card.id)}
+                  selectedCard={selectedCard}
+                />
               </div>
             ))}
           </div>
         </div>
         <DeckStats detailledDeck={detailledDeck} />
-        {/* <Collection /> */}
+        {selectedCard !== 0 && (
+          <Collection
+            setSelectedCard={setSelectedCard}
+            selectedCard={selectedCard}
+          />
+        )}
       </ScrollContainer>
     </div>
   );
