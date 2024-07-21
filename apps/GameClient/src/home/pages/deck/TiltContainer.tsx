@@ -13,7 +13,7 @@ interface TiltState {
 
 const TiltContainer: React.FC<TiltContainerProps> = ({
   children,
-  maxTilt = 40,
+  maxTilt = 30,
 }) => {
   const [tilt, setTilt] = useState<TiltState>({ x: 0, y: 0 });
   const ref = useRef<HTMLDivElement | null>(null);

@@ -12,6 +12,7 @@ import { preventDefault } from "@repo/lib";
 import { cn } from "@repo/ui";
 import { Tabs } from "./DeckInterface";
 import TiltContainer from "./TiltContainer";
+import LightContainer from "./LightContainer";
 
 interface CardUIProps {
   cardId: number;
@@ -41,8 +42,6 @@ export function DeckCardUI({
       lockPattern: state.getTheLockPattern(cardId),
     }));
 
-  const isSelected = selectedCard === card.id;
-
   const opacity = locked ? "brightness-50" : "opacity-100";
   return (
     <>
@@ -53,114 +52,218 @@ export function DeckCardUI({
         />
       )}
       <TiltContainer>
-        <div className="relative p-2">
-          {isSelected && (
-            <Cover cardRarity={"common"} className="rounded-lg blur-sm" />
-          )}
-          <div className={cn("relative select-none h-min  ")}>
-            {locked && (
-              <div
-                className="absolute h-full w-full px-10 flex justify-center items-center z-10"
-                onClick={() => setIsDescriptionOpen(true)}
-              >
-                {lockPattern === 0 ? (
-                  <span className="text-white opacity-60">
-                    Not unlocked yet
-                  </span>
-                ) : (
-                  <span className="text-white opacity-60">
-                    {" "}
-                    Unlockable at world {lockPattern}
-                  </span>
-                )}
-              </div>
-            )}
-            <div
-              className={`${opacity} `}
-              onClick={() => setSelectedCard?.(card.id)}
-            >
-              <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>
+        <div className="absolute top-0 left-0 z-50 -translate-x-1/3 -translate-y-1/3 scale-[65%]">
+          <ManaBall mana={card.cost} />
+        </div>
+        {card.rarity !== "legendary" ? (
+          <div className="relative">
+            <div className={cn("relative select-none h-min  ")}>
+              {locked && (
                 <div
-                  className={`w-full h-full flex flex-col relative ${opacity}`}
+                  className="absolute h-full w-full px-10 flex justify-center items-center z-10"
+                  onClick={() => setIsDescriptionOpen(true)}
                 >
-                  <CardContentIllustartion
-                    card={card}
-                    size={isHand ? 1.6 : 2}
-                  />
-                  <div className={`absolute top-0 right-0 ${opacity}`}>
-                    <svg
-                      className="h-full absolute left-0 -translate-x-full"
-                      viewBox="0 0 32 32"
-                    >
-                      <polygon points="0,0 32,32 32,0" fill="black" />
-                    </svg>
-                    <div className=" bg-black text-white text-sm font-[stylised] leading-3 px-2 pl-1 py-[2px]">
-                      {card.level}
-                    </div>
-                  </div>
-                </div>
-              </CardBorder>
-              <div className="absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3 scale-[65%]">
-                <ManaBall mana={card.cost} />
-              </div>
-            </div>
-            {isSelected && (
-              <div className="absolute z-20 w-full flex justify-center items-center  pt-1 bottom-2  ">
-                <div className=" shadow-2xl group">
-                  <Button
-                    small={true}
-                    width="w-[3.4rem] "
-                    rarity={card.rarity}
-                    action={() => setIsDescriptionOpen(true)}
-                  >
-                    <img
-                      className="p-[0.25rem] group-hover:p-[0.15rem]"
-                      src="/information-circle-no-bg.png"
-                      width={30}
-                      height={30}
-                      alt=""
-                    />
-                  </Button>
-                </div>
-                <div className="group shadow-2xl">
-                  {card.isInDeck ? (
-                    <Button
-                      small={true}
-                      width="w-[3.4rem]"
-                      action={() => removeCardFromDeck(card.id)}
-                    >
-                      <img
-                        className="p-[0.25rem] group-hover:p-[0.15rem]"
-                        src="/trash-no-bg.png"
-                        width={27}
-                        height={27}
-                        alt=""
-                      />
-                    </Button>
+                  {lockPattern === 0 ? (
+                    <span className="text-white opacity-60">
+                      Not unlocked yet
+                    </span>
                   ) : (
-                    <Button
-                      small={true}
-                      width="w-[3.4rem]"
-                      disabled={isDeckFull}
-                      action={preventDefault(() => {
-                        addCardToDeck(card.id);
-                        setCurrentTab?.("Deck");
-                      })}
-                    >
-                      <img
-                        className="p-[0.25rem] group-hover:p-[0.15rem]"
-                        src="/icons/plus.svg"
-                        width={27}
-                        height={27}
-                        alt=""
-                      />
-                    </Button>
+                    <span className="text-white opacity-60">
+                      {" "}
+                      Unlockable at world {lockPattern}
+                    </span>
                   )}
                 </div>
+              )}
+              <div
+                className={`${opacity} `}
+                onClick={() => setSelectedCard?.(card.id)}
+              >
+                <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>
+                  <div
+                    className={`w-full h-full flex flex-col relative ${opacity}`}
+                  >
+                    <CardContentIllustartion
+                      card={card}
+                      size={isHand ? 1.6 : 2}
+                    />
+                    <div className={`absolute top-0 right-0 ${opacity}`}>
+                      <svg
+                        className="h-full absolute left-0 -translate-x-full"
+                        viewBox="0 0 32 32"
+                      >
+                        <polygon points="0,0 32,32 32,0" fill="black" />
+                      </svg>
+                      <div className=" bg-black text-white text-sm font-[stylised] leading-3 px-2 pl-1 py-[2px]">
+                        {card.level}
+                      </div>
+                    </div>
+                  </div>
+                </CardBorder>
               </div>
-            )}
+              {selectedCard === card.id && (
+                <div className="absolute z-20 w-full flex justify-center items-center  pt-1 bottom-2  ">
+                  <div className=" shadow-2xl group">
+                    <Button
+                      small={true}
+                      width="w-[3.4rem] "
+                      rarity={card.rarity}
+                      action={() => setIsDescriptionOpen(true)}
+                    >
+                      <img
+                        className="p-[0.25rem] group-hover:p-[0.15rem]"
+                        src="/information-circle-no-bg.png"
+                        width={30}
+                        height={30}
+                        alt=""
+                      />
+                    </Button>
+                  </div>
+                  <div className="group shadow-2xl">
+                    {card.isInDeck ? (
+                      <Button
+                        small={true}
+                        width="w-[3.4rem]"
+                        action={() => removeCardFromDeck(card.id)}
+                      >
+                        <img
+                          className="p-[0.25rem] group-hover:p-[0.15rem]"
+                          src="/trash-no-bg.png"
+                          width={27}
+                          height={27}
+                          alt=""
+                        />
+                      </Button>
+                    ) : (
+                      <Button
+                        small={true}
+                        width="w-[3.4rem]"
+                        disabled={isDeckFull}
+                        action={preventDefault(() => {
+                          addCardToDeck(card.id);
+                          setCurrentTab?.("Deck");
+                        })}
+                      >
+                        <img
+                          className="p-[0.25rem] group-hover:p-[0.15rem]"
+                          src="/icons/plus.svg"
+                          width={27}
+                          height={27}
+                          alt=""
+                        />
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        ) : (
+          <LightContainer className="w-full">
+            <div className="relative">
+              <div className={cn("relative select-none h-min  ")}>
+                {locked && (
+                  <div
+                    className="absolute h-full w-full px-10 flex justify-center items-center z-10"
+                    onClick={() => setIsDescriptionOpen(true)}
+                  >
+                    {lockPattern === 0 ? (
+                      <span className="text-white opacity-60">
+                        Not unlocked yet
+                      </span>
+                    ) : (
+                      <span className="text-white opacity-60">
+                        {" "}
+                        Unlockable at world {lockPattern}
+                      </span>
+                    )}
+                  </div>
+                )}
+                <div
+                  className={`${opacity} `}
+                  onClick={() => setSelectedCard?.(card.id)}
+                >
+                  <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>
+                    <div
+                      className={`w-full h-full flex flex-col relative ${opacity}`}
+                    >
+                      <CardContentIllustartion
+                        card={card}
+                        size={isHand ? 1.6 : 2}
+                      />
+                      <div className={`absolute top-0 right-0 ${opacity}`}>
+                        <svg
+                          className="h-full absolute left-0 -translate-x-full"
+                          viewBox="0 0 32 32"
+                        >
+                          <polygon points="0,0 32,32 32,0" fill="black" />
+                        </svg>
+                        <div className=" bg-black text-white text-sm font-[stylised] leading-3 px-2 pl-1 py-[2px]">
+                          {card.level}
+                        </div>
+                      </div>
+                    </div>
+                  </CardBorder>
+                </div>
+                {selectedCard === card.id && (
+                  <div className="absolute z-20 w-full flex justify-center items-center  pt-1 bottom-2  ">
+                    <div className=" shadow-2xl group">
+                      <Button
+                        small={true}
+                        width="w-[3.4rem] "
+                        rarity={card.rarity}
+                        action={() => setIsDescriptionOpen(true)}
+                      >
+                        <img
+                          className="p-[0.25rem] group-hover:p-[0.15rem]"
+                          src="/information-circle-no-bg.png"
+                          width={30}
+                          height={30}
+                          alt=""
+                        />
+                      </Button>
+                    </div>
+                    <div className="group shadow-2xl">
+                      {card.isInDeck ? (
+                        <Button
+                          small={true}
+                          width="w-[3.4rem]"
+                          action={() => removeCardFromDeck(card.id)}
+                        >
+                          <img
+                            className="p-[0.25rem] group-hover:p-[0.15rem]"
+                            src="/trash-no-bg.png"
+                            width={27}
+                            height={27}
+                            alt=""
+                          />
+                        </Button>
+                      ) : (
+                        <Button
+                          small={true}
+                          width="w-[3.4rem]"
+                          disabled={isDeckFull}
+                          action={preventDefault(() => {
+                            addCardToDeck(card.id);
+                            setCurrentTab?.("Deck");
+                          })}
+                        >
+                          <img
+                            className="p-[0.25rem] group-hover:p-[0.15rem]"
+                            src="/icons/plus.svg"
+                            width={27}
+                            height={27}
+                            alt=""
+                          />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </LightContainer>
+        )}
       </TiltContainer>
     </>
   );
