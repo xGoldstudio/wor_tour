@@ -83,7 +83,6 @@ export default function Collection({
               <DeckCardUI
                 cardId={card.id}
                 locked={true}
-                unaddble={true}
                 selectedCard={selectedCard}
                 setSelectedCard={() => setSelectedCard!(card.id)}
               />
