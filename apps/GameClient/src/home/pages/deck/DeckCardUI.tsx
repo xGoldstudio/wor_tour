@@ -1,18 +1,17 @@
 import usePlayerStore from "@/home/store/playerStore";
+import { preventDefault } from "@repo/lib";
 import {
   Button,
   CardBorder,
   CardContentIllustartion,
-  Cover,
+  cn,
   ManaBall,
 } from "@repo/ui";
 import { useState } from "react";
 import CardModal from "./CardModal";
-import { preventDefault } from "@repo/lib";
-import { cn } from "@repo/ui";
 import { Tabs } from "./DeckInterface";
-import TiltContainer from "./TiltContainer";
 import LightContainer from "./LightContainer";
+import TiltContainer from "./TiltContainer";
 
 interface CardUIProps {
   cardId: number;
