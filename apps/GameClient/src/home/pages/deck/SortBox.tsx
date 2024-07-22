@@ -1,5 +1,4 @@
-import { BoxModal } from "@/home/ui/modal";
-import { cn } from "@repo/ui";
+import { Button, cn } from "@repo/ui";
 import { CardSorts, sorts } from "./cardSorts";
 
 interface SortModalProps {
@@ -88,10 +87,8 @@ export function SortBox({
     }
   }
   return (
-    <BoxModal width="w-20">
-      <div className="">
-        <button onClick={() => getNextSort()}>{children}</button>
-      </div>
-    </BoxModal>
+    <Button action={() => getNextSort()} width="w-32">
+      <div>{children}</div>
+    </Button>
   );
 }

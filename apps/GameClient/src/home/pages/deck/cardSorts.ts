@@ -7,6 +7,7 @@ export interface CardSort {
   label: string;
   sortFunction: (detailledCollection: Card[], isAcending: boolean) => Card[];
 }
+export const defaultSort: CardSorts = "world";
 
 const rarityOrder = { common: 1, rare: 2, epic: 3, legendary: 4 };
 

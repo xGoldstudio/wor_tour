@@ -1,4 +1,4 @@
-import { cn } from "@repo/ui";
+import { cn, Cover } from "@repo/ui";
 import { useState } from "react";
 import CollectionTab from "./CollectionTab";
 import DeckTab from "./DeckTab";
@@ -20,20 +20,17 @@ function TabModal({ children, currentTab, setCurrentTab }: TabModalProps) {
   return (
     <div
       className={cn(
-        "h-[35px] w-[200px] bg-blue-300 flex justify-center items-center rounded-t-lg text-xl hover:cursor-pointer",
-        currentTab !== children?.toString() ? "opacity-50" : null
+        currentTab !== children?.toString() ? "opacity-70" : null,
+        "w-[200px] h-[45px] hover:cursor-pointer bg-black shadow-md rounded-t-md "
       )}
-      style={{
-        backgroundImage: "url(/wood-vertical.jpg)",
-        backgroundSize: "cover",
-        backgroundPosition: cn(
-          "bottom 50px right 100px",
-          children?.toString() === "Deck" ? "bottom 0px" : null
-        ),
-      }}
       onClick={() => setCurrentTab(children?.toString() as Tabs)}
     >
-      {children}
+      <div className="rounded-t-md overflow-hidden text-nowrap relative z-10 font-semibold  h-full">
+        <Cover cardRarity="common" />
+        <div className="text-black h-full flex justify-center items-center relative px-12 ">
+          {children}
+        </div>
+      </div>
     </div>
   );
 }
@@ -52,14 +49,11 @@ export function DeckInterface() {
           Collection
         </TabModal>
       </div>
-      <div
-        className="w-full h-[55px] z-10 opacity-80"
-        style={{
-          backgroundImage: "url(/wood-horizontal.jpg)",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      ></div>
+      <div className="w-full h-[55px] hover:cursor-pointer bg-black">
+        <div className="overflow-hidden relative z-10 font-semibold h-full">
+          <Cover cardRarity="common" />
+        </div>
+      </div>
       <div className="w-full flex justify-center overflow-hidden">
         <TabElement />
       </div>

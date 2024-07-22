@@ -1,4 +1,4 @@
-import { BoxModal } from "@/home/ui/modal";
+import { Button } from "@repo/ui";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { useEffect, useRef, useState } from "react";
@@ -106,20 +106,29 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
   }
 
   return (
-    <BoxModal>
-      <button
-        onClick={() => {
+    <>
+      <Button
+        small={true}
+        full={false}
+        action={() => {
           setFilterIsOpen(!filterIsOpen);
         }}
       >
-        Test
-      </button>
+        <div className="h-6 w-6 flex justify-center items-center ">
+          <img
+            src="/icons/filter.png"
+            alt="gear-wheel"
+            width={40}
+            height={40}
+          />
+        </div>
+      </Button>
       {filterIsOpen && (
         <OutsideClickHandler onOutsideClick={() => setFilterIsOpen(false)}>
-          <div className="absolute top-10 z-10 flex flex-col items-center justify-center -mt-8 ">
+          <div className="absolute -left-[82px] top-14 z-10 flex flex-col items-center justify-center -mt-8 ">
             <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-b-[16px] border-transparent border-b-white " />
             <div className="h-[371px] w-[170px] bg-[#406799] border-white border-2 rounded-md flex flex-col gap-2 items-center text-white">
-              <span className="pr-11 pt-2">Filter</span>
+              <span className="pt-2">Filter</span>
               {Object.values(FiltersDescription).map((filterCriteria, index) =>
                 filterCriteria.isButton ? (
                   <div className="flex justify-start items-center gap-2 border-t-[1px] border-opacity-30 border-t-neutral-300 w-full pl-2 pt-2">
@@ -183,6 +192,6 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
           </div>
         </OutsideClickHandler>
       )}
-    </BoxModal>
+    </>
   );
 }
