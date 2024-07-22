@@ -1,4 +1,3 @@
-import { filterNulls } from '@repo/lib';
 import { StateAction } from "../CardStatesData";
 
 const HealStateAction: StateAction = ({ value, event, gameState, clock }) => {
@@ -6,15 +5,15 @@ const HealStateAction: StateAction = ({ value, event, gameState, clock }) => {
 	if (initiator.type !== "placeCard" || value === null) {
 		return;
 	}
-	filterNulls(gameState.getBoard(initiator.isPlayer)).forEach((card, position) => {
-		if (card.hp === card.maxHp) return;
+	gameState.getBoard(initiator.isPlayer).forEach((card, position) => {
+		if (!card || card.hp === card.maxHp || position === initiator.position) return;
 		clock.triggerEvent({
 			type: "healCard",
 			cardPosition: position,
 			isPlayerCard: initiator.isPlayer,
 			cardInitiator: {
 				isPlayerCard: initiator.isPlayer,
-				cardPosition: initiator.cardInHandPosition,
+				cardPosition: initiator.position,
 			},
 			amount: value,
 		});

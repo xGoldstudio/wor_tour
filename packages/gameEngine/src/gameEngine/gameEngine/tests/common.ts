@@ -47,7 +47,7 @@ export function initTest({ playerDeck, sideEffectOnFrame }: {
 
 export function drawPlaceCard(clock: ClockReturn<EventType>, isPlayer: boolean, position: number) {
 	clock.triggerEvent({ type: "drawCard", isPlayer: isPlayer, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: isPlayer, targetPosition: position, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: isPlayer, position: position, cardInHandPosition: 0 });
 }
 
 export const multiAttackState: CardState = {

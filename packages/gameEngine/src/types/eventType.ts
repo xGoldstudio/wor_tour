@@ -63,7 +63,7 @@ export interface ManaIncreaseEvent {
 export interface PlaceCardEvent {
   type: "placeCard";
   isPlayer: boolean;
-  targetPosition: number;
+  position: number;
   cardInHandPosition: number;
 }
 

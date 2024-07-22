@@ -29,7 +29,7 @@ test("damage and kill player card", () => {
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// deal damage to card
 	function dealDamage(amount: number) {
@@ -66,7 +66,7 @@ test("damage and kill opponent card", () => {
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
 	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: false, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// deal damage to card
 	function dealDamage(amount: number) {

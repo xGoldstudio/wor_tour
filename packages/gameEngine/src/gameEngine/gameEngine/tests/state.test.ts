@@ -5,7 +5,7 @@ import { expect, test, vi, describe } from 'vitest';
 test("CRUDS operations on states", () => {
 	const { clock, state } = initTest({});
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	expect(state.playerBoard[0]?.states.length).toBe(0);
 
@@ -40,7 +40,7 @@ test("CRUDS operations on states", () => {
 describe("trigger", () => {
 	const { clock, state } = initTest({});
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 
 	test("Effectively trigger states", () => {
@@ -96,7 +96,7 @@ describe("trigger", () => {
 	test("Trigger: OnDirectAttackHit", () => {
 		// on direct attack hit
 		clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-		clock.triggerEvent({ type: "placeCard", isPlayer: false, targetPosition: 0, cardInHandPosition: 0 });
+		clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 		const dummyState: CardState = { type: "dummy", value: 4, trigger: "onDirectAttackHit", target: "selfCard" };
 		clock.triggerEvent({ type: "addState", instanceId: getInstanceId(state, true, 0), isPlayerCard: true, position: 0, state: dummyState });
 		clock.nextTick();
@@ -133,7 +133,7 @@ test("Trigger: OnPlacement", () => {
 	card.states = [{ type: "dummy", value: 2, trigger: "onPlacement", target: "selfCard" }];
 	const { clock, state } = initTest({ playerDeck: [card] });
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	vi.spyOn(CardStatesData["dummy"], "action").mockImplementation((props) => {
 		expect(props.trigger).toBe("onPlacement");
 		expect(props.value).toBe(2);

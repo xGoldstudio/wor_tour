@@ -29,7 +29,7 @@ test("destroying player card", () => {
 	);
 	expect(state.playerBoard[0]).toBe(null);
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	expect(state.playerBoard[0]?.id).toBe(0);
 	clock.triggerEvent({ type: "cardDestroyed", initiator: {
@@ -57,7 +57,7 @@ test("destroying opponent card", () => {
 	);
 	expect(state.opponentBoard[0]).toBe(null);
 	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: false, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	expect(state.opponentBoard[0]?.id).toBe(0);
 	clock.triggerEvent({ type: "cardDestroyed", initiator: {

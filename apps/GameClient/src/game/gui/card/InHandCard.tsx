@@ -84,7 +84,7 @@ function InHandCard({ position }: { position: number }) {
     triggerEvent({
       type: "placeCard",
       isPlayer: true,
-      targetPosition,
+      position: targetPosition,
       cardInHandPosition,
     });
     removeCardTarget();

@@ -130,7 +130,7 @@ function GameCard({
     filter: (e) => {
       const event = e as PlaceCardEvent;
       return (
-        event.targetPosition === position && event.isPlayer === isPlayerCard
+        event.position === position && event.isPlayer === isPlayerCard
       );
     },
   });
@@ -269,7 +269,7 @@ export function CardEffectsElements({
     },
     filter: (event) =>
       (event as PlaceCardEvent).isPlayer === isPlayerCard &&
-      (event as PlaceCardEvent).targetPosition === position,
+      (event as PlaceCardEvent).position === position,
   });
 
   useGameEventListener({
@@ -377,7 +377,7 @@ function GameCardHpBar({
     },
     filter: (event) =>
       (event as PlaceCardEvent).isPlayer === isPlayerCard &&
-      (event as PlaceCardEvent).targetPosition === position,
+      (event as PlaceCardEvent).position === position,
   });
 
   useGameEventListener({

@@ -44,7 +44,7 @@ interface PlayerStore {
 const defaultCollection: Map<number, CollectionCard> = new Map();
 // to 75
 for (let i = 1; i <= 75; i++) {
-  defaultCollection.set(i, { id: i, level: 2, shard: 0 });
+  defaultCollection.set(i, { id: i, level: 3, shard: 0 });
 }
 
 const shardsByLevels = [3, 7];

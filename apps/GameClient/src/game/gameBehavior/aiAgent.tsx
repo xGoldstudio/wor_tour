@@ -57,7 +57,7 @@ export default function iaAgent() {
       triggerEvent({
         type: "placeCard",
         isPlayer: false,
-        targetPosition: target,
+        position: target,
         cardInHandPosition: nextCardToUse.position,
       });
       setNextCardToUse(data);

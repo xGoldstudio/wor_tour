@@ -5,7 +5,7 @@ import { expect, test } from 'vitest';
 test("start damage to card (animation placeholder)", () => {
 	const { clock, state } = initTest({});
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// deal damage to player
 	function dealDamageToCard(amount: number) {
@@ -38,7 +38,7 @@ test("start damage to card (animation placeholder)", () => {
 test("start damage to card (animation placeholder)", () => {
 	const { clock, state } = initTest({});
 	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: false, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// deal damage to player
 	function dealDamageToCard(amount: number) {
