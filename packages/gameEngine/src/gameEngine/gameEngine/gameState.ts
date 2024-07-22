@@ -209,47 +209,51 @@ export class GameStateObject {
 
 	// events
 	removeState(
-		isPlayerCard: boolean,
-		cardPosition: number,
+		instanceId: number,
 		type: CardState["type"],
 	) {
-		const card = this.getCard(isPlayerCard, cardPosition);
+		const card = this.getCardInstance(instanceId);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return;
 		}
 		card.states = card.states.filter((s) => s.type !== type);
 	}
 	addState(
-		isPlayerCard: boolean,
-		cardPosition: number,
+		instanceId: number,
 		state: CardState,
 	) {
-		const card = this.getCard(isPlayerCard, cardPosition);
+		const card = this.getCardInstance(instanceId);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return;
 		}
 		card.states.push({ ...state });
 	}
 	modifyStateValue(
-		isPlayerCard: boolean,
-		cardPosition: number,
-		state: CardState,
-		value: number,
+		instanceId: number,
+		stateType: CardState["type"],
+		delta: number,
 	) {
-		const card = this.getCard(isPlayerCard, cardPosition);
+		const card = this.getCardInstance(instanceId);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return;
 		}
-		const stateIndex = card.states.findIndex((s) => s === state);
+		const stateIndex = card.states.findIndex((s) => s.type === stateType);
 		if (stateIndex === -1) {
 			return;
 		}
-		card.states[stateIndex].value = value;
+		const value = card.states[stateIndex].value;
+		if (value === null) {
+			return;
+		}
+		card.states[stateIndex].value = value + delta;
 	}
 
 	// utils
 	getCard(isPlayerCard: boolean, cardPosition: number) {
 		return (isPlayerCard ? this.playerBoard : this.opponentBoard)[cardPosition];
+	}
+	getCardInstance(instanceId: number) {
+		return [...this.playerBoard, ...this.opponentBoard].find((c) => c?.instanceId === instanceId) || null;
 	}
 	getBoard(isPlayer: boolean) {
 		return isPlayer ? this.playerBoard : this.opponentBoard;
@@ -260,5 +264,12 @@ export class GameStateObject {
 			return null;
 		}
 		return card.states.find((s) => s.type === type);
+	}
+	getStateOfCardByInstanceId(instanceId: number, type: CardState["type"]) {
+		const card = this.getCardInstance(instanceId);
+		if (!card) {
+			return null;
+		}
+		return card.states.find((s) => s.type === type) ?? null;
 	}
 }

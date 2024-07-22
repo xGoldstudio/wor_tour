@@ -1,4 +1,4 @@
-import { CardState } from "@repo/lib";
+import { CardState, getOptionsFromType } from "@repo/lib";
 import { Button, GameCard } from "@repo/ui";
 import {
   bleedingStateTest,
@@ -15,21 +15,40 @@ export default function InGameCardDebug() {
   const { clock, state, pause, setSpeed, speed, isPlaying, runTicks } =
     instance ?? {};
 
-  function addState(state: CardState) {
+  function addState(stateArg: CardState) {
+    const instanceId = state?.getCard(true, 0)?.instanceId;
+    if (instanceId === undefined) return;
     clock?.triggerEvent({
       type: "addState",
+      instanceId,
       isPlayerCard: true,
-      cardPosition: 0,
-      state,
+      position: 0,
+      state: stateArg,
     });
   }
 
   function removeState(stateType: CardState["type"]) {
+    const instanceId = state?.getCard(true, 0)?.instanceId;
+    if (instanceId === undefined) return;
     clock?.triggerEvent({
       type: "removeState",
+      instanceId,
       isPlayerCard: true,
-      cardPosition: 0,
+      position: 0,
       stateType,
+    });
+  }
+
+  function consumeState(stateType: CardState["type"], consumeState: number) {
+    const instanceId = state?.getCard(true, 0)?.instanceId;
+    if (instanceId === undefined) return;
+    clock?.triggerEvent({
+      type: "decreaseStateValue",
+      instanceId,
+      isPlayerCard: true,
+      position: 0,
+      stateType,
+      decreaseBy: consumeState,
     });
   }
 
@@ -44,6 +63,7 @@ export default function InGameCardDebug() {
   }
 
   function addRemoveState(state: CardState) {
+    const options = getOptionsFromType(state.type);
     return (
       <>
         <Button action={() => addState(state)} full>
@@ -51,6 +71,14 @@ export default function InGameCardDebug() {
         </Button>
         <Button action={() => removeState(state.type)} full rarity="common">
           Remove {state.type}
+        </Button>
+        <Button
+          action={() => consumeState(state.type, options.consume!)}
+          full
+          rarity="epic"
+          disabled={options.consume === undefined}
+        >
+          Consume {state.type}
         </Button>
       </>
     );
@@ -60,7 +88,7 @@ export default function InGameCardDebug() {
     return (
       <Button
         action={() => setSpeed?.(speedArg)}
-        rarity={speed === (1/speedArg) && isPlaying ? "epic" : "rare"}
+        rarity={speed === 1 / speedArg && isPlaying ? "epic" : "rare"}
         full
       >
         x{speedArg}
@@ -70,7 +98,9 @@ export default function InGameCardDebug() {
 
   function addTicksButton(ticks: number) {
     return (
-      <Button action={() => runTicks?.(ticks)} full>+{ticks} ticks</Button>
+      <Button action={() => runTicks?.(ticks)} full>
+        +{ticks} ticks
+      </Button>
     );
   }
 
@@ -107,7 +137,7 @@ export default function InGameCardDebug() {
             <Button action={() => healCard(10)}>Heal card</Button>
           </div>
           <p className="text-2xl font-semibold">States</p>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             {addRemoveState(bleedingStateTest)}
             {addRemoveState(multiAttackState)}
             {addRemoveState(riposteStateTest)}

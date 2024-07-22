@@ -1,5 +1,5 @@
 import { DAMAGE_SPEED } from "../events/cardDamage";
-import { initTest } from "./common";
+import { getInstanceId, initTest } from "./common";
 import { expect, test } from 'vitest';
 
 test("start damage to card (animation placeholder)", () => {
@@ -12,6 +12,7 @@ test("start damage to card (animation placeholder)", () => {
 		clock.triggerEvent({
 			type: "cardDamage",
 			isPlayerCard: true,
+			instanceId: getInstanceId(state, true, 0),
 			cardPosition: 0,
 			directAttack: false,
 			amount: amount,
@@ -44,6 +45,7 @@ test("start damage to card (animation placeholder)", () => {
 		clock.triggerEvent({
 			type: "cardDamage",
 			isPlayerCard: false,
+			instanceId: getInstanceId(state, false, 0),
 			cardPosition: 0,
 			directAttack: false,
 			amount: amount,

@@ -10,6 +10,7 @@ const RiposteStateAction: StateAction = ({ clock, event, card }) => {
 	clock.triggerEvent({
 		type: "cardDamage",
 		amount: card.dmg,
+		instanceId: cardDamageResolveEvent.initiator.initiator.instanceId,
 		cardPosition: cardDamageResolveEvent.initiator.initiator.cardPosition,
 		isPlayerCard: cardDamageResolveEvent.initiator.initiator.isPlayer,
 		initiator: cardDamageResolveEvent.initiator.initiator,

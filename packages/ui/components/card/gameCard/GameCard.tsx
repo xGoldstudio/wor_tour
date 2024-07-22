@@ -1,8 +1,31 @@
-import { CardBorder, CardContentIllustartion, cn, Effects, EmptyBar, InnerBord, useSyncGameAnimation } from "@repo/ui";
+import {
+  CardBorder,
+  CardContentIllustartion,
+  cn,
+  EmptyBar,
+  InnerBord,
+  useSyncGameAnimation,
+} from "@repo/ui";
 import { useRef, useState } from "react";
-import { CardState, numberWithCommas, animationTimeline } from "@repo/lib";
-import { CardDamagResolveEvent, CardDestroyedEvent, CardStartAttackingEvent, FRAME_TIME, GameStateObject, HealCardEvent, InGameCardType, PlaceCardEvent, RemoveStateEvent } from "game_engine";
-import useGameEventListener from "./useGameEventListener";
+import {
+  CardState,
+  numberWithCommas,
+  animationTimeline,
+  inPx,
+} from "@repo/lib";
+import {
+  AddStateEvent,
+  CardDamagResolveEvent,
+  CardDestroyedEvent,
+  CardStartAttackingEvent,
+  FRAME_TIME,
+  GameStateObject,
+  HealCardEvent,
+  InGameCardType,
+  PlaceCardEvent,
+} from "game_engine";
+import useGameEventListener from "../useGameEventListener";
+import { GameCardEffect } from "./GameCardEffect";
 
 function getTranslateY(element: HTMLElement) {
   const style = window.getComputedStyle(element);
@@ -142,8 +165,8 @@ function GameCard({
     filter: (e) => {
       const event = e as CardDestroyedEvent;
       return (
-        event.initiator.cardPosition === position &&
-        event.initiator.isPlayerCard === isPlayerCard
+        event.initiator.isPlayerCard === isPlayerCard &&
+        event.initiator.cardPosition === position
       );
     },
   });
@@ -225,11 +248,11 @@ function GameCard({
 }
 
 export function CardEffectsElements({
-  position,
   isPlayerCard,
+  position,
 }: {
-  position: number;
   isPlayerCard: boolean;
+  position: number;
 }) {
   const [states, setStates] = useState<CardState[]>([]);
 
@@ -242,7 +265,7 @@ export function CardEffectsElements({
       if (card === null) {
         return;
       }
-      setStates([ ...card.states ]);
+      setStates([...card.states]);
     },
     filter: (event) =>
       (event as PlaceCardEvent).isPlayer === isPlayerCard &&
@@ -250,56 +273,42 @@ export function CardEffectsElements({
   });
 
   useGameEventListener({
-    type: "removeState",
-    action: (_, state) => {
-      const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
-        position
-      ];
-      if (card === null) {
-        return;
-      }
-      setStates([ ...card.states ]);
-    },
-    filter: (event) =>
-      (event as RemoveStateEvent).isPlayerCard === isPlayerCard &&
-      (event as RemoveStateEvent).cardPosition === position,
-  });
-
-  useGameEventListener({
     type: "addState",
-    action: (_, state) => {
-      const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
-        position
-      ];
-      if (card === null) {
-        return;
-      }
-      setStates([ ...card.states ]);
+    action: (event) => {
+      setStates((states) => {
+        const existingState = states.find(
+          (s) => s.type === (event as AddStateEvent).state.type
+        );
+        if (existingState) {
+          return states;
+        }
+        return [...states, (event as AddStateEvent).state];
+      });
     },
     filter: (event) =>
-      (event as RemoveStateEvent).isPlayerCard === isPlayerCard &&
-      (event as RemoveStateEvent).cardPosition === position,
-  });
-
-  useGameEventListener({
-    type: "modifyStateValue",
-    action: (_, state) => {
-      const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
-        position
-      ];
-      if (card === null) {
-        return;
-      }
-      setStates([ ...card.states ]);
-    },
-    filter: (event) =>
-      (event as RemoveStateEvent).isPlayerCard === isPlayerCard &&
-      (event as RemoveStateEvent).cardPosition === position,
+      (event as AddStateEvent).isPlayerCard === isPlayerCard &&
+      (event as AddStateEvent).position === position,
   });
 
   return (
     <div className="absolute right-[4px] top-[5px] flex flex-col gap-2">
-      <Effects states={states} size={0.8} />
+      <div
+        className="flex flex-col absolute"
+        style={{ top: 0, right: inPx(6 * 0.8) }}
+      >
+        {states.map((state, index) => (
+          <GameCardEffect
+            state={state}
+            isPlayerCard={isPlayerCard}
+            position={position}
+            removeState={(stateType) => {
+              setStates((states) => states.filter((s) => s.type !== stateType));
+            }}
+            key={state.type}
+            statePosition={index}
+          />
+        ))}
+      </div>
     </div>
   );
 }
@@ -333,7 +342,7 @@ export function GameCardDesign({
             <GameCardHpBar position={position} isPlayerCard={isPlayerCard} />
           </InnerBord>
         </div>
-        <CardEffectsElements position={position} isPlayerCard={isPlayerCard} />
+        <CardEffectsElements isPlayerCard={isPlayerCard} position={position} />
       </div>
     </CardBorder>
   );
@@ -375,9 +384,8 @@ function GameCardHpBar({
     type: "cardDamageResolve",
     action: (_, state) => onHpChange(state),
     filter: (event) =>
-      (event as CardDamagResolveEvent).initiator.isPlayerCard ===
-        isPlayerCard &&
-      (event as CardDamagResolveEvent).initiator.cardPosition === position,
+      (event as CardDamagResolveEvent).initiator.cardPosition === position &&
+      (event as CardDamagResolveEvent).initiator.isPlayerCard === isPlayerCard,
   });
 
   useGameEventListener({

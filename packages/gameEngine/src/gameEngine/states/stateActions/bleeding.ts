@@ -11,6 +11,7 @@ const BleedingStateAction: StateAction = ({ event, clock, value }) => {
 		initiator: {
 			type: "cardDamage",
 			amount: value,
+			instanceId: initiator.instanceId,
 			cardPosition: initiator.cardPosition,
 			isPlayerCard: initiator.isPlayer,
 			directAttack: false,

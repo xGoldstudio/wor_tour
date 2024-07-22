@@ -101,11 +101,13 @@ export function useSyncGameAnimation() {
     computeStyle,
     replace,
     onEnd,
+    onComplete,
   }: {
     duration: number;
     computeStyle: (progress: number) => void;
     replace?: boolean;
     onEnd?: () => void;
+    onComplete?: () => void; // same as on end, but require the animation to fully run to call it
   }) {
     if (removeListener.current) {
       if (replace) {
@@ -130,6 +132,7 @@ export function useSyncGameAnimation() {
         }
         computeStyle(frame - firstFrame);
         if (frame - firstFrame > duration) {
+          onComplete?.();
           removeListener.current?.();
         }
       },

@@ -129,15 +129,16 @@ export function triggerDirectAttackResolved(
 		type: "cardDamageResolve",
 		initiator: {
 			type: "cardDamage",
+			instanceId: getInstanceId(state, !isPlayer, cardPosition),
+			directAttack: !notDirect,
 			isPlayerCard: !isPlayer,
 			cardPosition,
-			directAttack: !notDirect,
 			amount: damage,
 			initiator: {
 				type: "cardAttacking",
 				isPlayer,
 				cardPosition,
-				instanceId: state.getCard(isPlayer, cardPosition)?.instanceId ?? 0,
+				instanceId: -1,
 			}
 		}
 	});
@@ -156,4 +157,8 @@ export function findStateByType(
 	type: CardState["type"],
 ) {
 	return state.getCard(isPlayerCard, cardPosition)!.states.find(s => s.type === type)
+}
+
+export function getInstanceId(state: GameStateObject, isPlayer: boolean, cardPosition: number) {
+	return state.getCard(isPlayer, cardPosition)!.instanceId;
 }

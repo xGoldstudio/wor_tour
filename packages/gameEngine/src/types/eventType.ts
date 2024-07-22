@@ -20,7 +20,8 @@ export type EventType =
   | HealCardEvent
   | CardDamagResolveEvent
   | PlayerDamageResolveEvent
-  | ModifyStateValueEvent
+  | IncreaseStateValueEvent
+  | DecreaseStateValueEvent
   | RemoveStateEvent
   | TriggerStateEvent
   | AddStateEvent;
@@ -95,10 +96,11 @@ export interface PlayerDamageResolveEvent {
 export interface CardDamageEvent {
   type: "cardDamage";
   amount: number;
-  cardPosition: number;
-  isPlayerCard: boolean;
+  instanceId: number;
   directAttack: boolean;
   initiator: CardAttackingEvent;
+  isPlayerCard: boolean;
+  cardPosition: number;
 }
 
 export interface CardDamagResolveEvent {
@@ -133,34 +135,47 @@ export interface HealCardEvent {
   };
 }
 
-export interface ModifyStateValueEvent {
-  type: "modifyStateValue";
-  state: CardState;
+export interface IncreaseStateValueEvent {
+  type: "increaseStateValue";
+  stateType: CardState["type"];
+  increaseBy: number;
+  instanceId: number;
   isPlayerCard: boolean;
-  cardPosition: number;
-  value: number;
+  position: number;
+}
+
+export interface DecreaseStateValueEvent {
+  type: "decreaseStateValue";
+  stateType: CardState["type"];
+  instanceId: number;
+  decreaseBy: number;
+  isPlayerCard: boolean;
+  position: number;
 }
 
 export interface RemoveStateEvent {
   type: "removeState";
   stateType: CardState["type"];
+  instanceId: number;
   isPlayerCard: boolean;
-  cardPosition: number;
+  position: number;
 }
 
 export interface TriggerStateEvent {
   type: "triggerState";
   state: CardState;
-  isPlayerCard: boolean;
-  cardPosition: number;
   initiator: EventType;
+  instanceId: number;
+  isPlayerCard: boolean;
+  position: number;
 }
 
 export interface AddStateEvent {
   type: "addState";
   state: CardState;
+  instanceId: number;
   isPlayerCard: boolean;
-  cardPosition: number;
+  position: number;
 }
 
 export type InGameCardType = {

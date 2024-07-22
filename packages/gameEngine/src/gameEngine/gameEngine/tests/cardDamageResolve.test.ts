@@ -5,6 +5,7 @@ import Clock from "../../clock/clock";
 import { computeNextFrameState } from "../gameEngine";
 import { expect, test } from 'vitest';
 import { CardType } from "../../../types/Card";
+import { getInstanceId } from "./common";
 
 const baseCard = {
 	name: "string",
@@ -35,12 +36,15 @@ test("damage and kill player card", () => {
 		clock.triggerEvent({
 			type: "cardDamageResolve", initiator: {
 				type: "cardDamage",
+				instanceId: getInstanceId(state, true, 0),
 				isPlayerCard: true,
 				cardPosition: 0,
 				directAttack: false,
 				amount: amount,
 				initiator: {
-					isPlayerCard: false,
+					type: "cardAttacking",
+					instanceId: -1,
+					isPlayer: false,
 					cardPosition: 0,
 				},
 			}
@@ -69,12 +73,15 @@ test("damage and kill opponent card", () => {
 		clock.triggerEvent({
 			type: "cardDamageResolve", initiator: {
 				type: "cardDamage",
+				instanceId: getInstanceId(state, false, 0),
 				isPlayerCard: false,
 				cardPosition: 0,
 				directAttack: false,
 				amount: amount,
 				initiator: {
-					isPlayerCard: true,
+					type: "cardAttacking",
+					instanceId: -1,
+					isPlayer: true,
 					cardPosition: 0,
 				},
 			}
