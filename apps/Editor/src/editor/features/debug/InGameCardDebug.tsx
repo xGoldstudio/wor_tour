@@ -11,7 +11,7 @@ import {
 import { defaultActions, useRunInstance } from "./useRunGameInstance";
 
 export default function InGameCardDebug() {
-  const instance = useRunInstance();
+  const instance = useRunInstance(false);
   const { clock, state, pause, setSpeed, speed, isPlaying, runTicks } =
     instance ?? {};
 

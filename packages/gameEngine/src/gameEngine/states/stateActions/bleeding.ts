@@ -5,7 +5,6 @@ const BleedingStateAction: StateAction = ({ event, clock, value }) => {
 	if (initiator.type !== "cardAttacking" || value === null) {
 		return;
 	}
-	console.log('BleedingStateAction');
 	clock.triggerEvent({
 		type: "cardDamageResolve", // The damage is instantly resolved
 		initiator: {

@@ -1,7 +1,7 @@
 import useEditorStore from "@/editor/store/EditorStore";
 import { CardType } from "@repo/lib";
 import { runGameEventListeners, useGameSyncAnimationStore } from "@repo/ui";
-import { ClockReturn, drawPlaceCard, EventType, FRAME_TIME, GameStateObject, initTest } from "game_engine";
+import { ClockReturn, drawPlaceCard, EventType, FRAME_TIME, GameStateObject, healStateDefaultTest, initTest } from "game_engine";
 import { useEffect, useState } from "react";
 
 const dummyCard: CardType = {
@@ -12,7 +12,7 @@ const dummyCard: CardType = {
 	dmg: 0,
 	hp: 200,
 	attackSpeed: 0.5,
-	states: [],
+	states: [healStateDefaultTest],
 	level: 1,
 	world: 1,
 	rarity: "common",
@@ -31,7 +31,7 @@ function useDummyCard() {
 	return dummyCard;
 }
 
-export function useRunInstance() {
+export function useRunInstance(log: boolean) {
 	const card = useDummyCard();
 	const { triggerGameSyncAnimation } = useGameSyncAnimationStore();
 	const [instance, setInstance] = useState<{
@@ -47,6 +47,7 @@ export function useRunInstance() {
 	useEffect(() => {
 		const { clock, state } = initTest({
 			sideEffectOnFrame: ({ event, state, clock }) => {
+				log && console.log(event);
 				runGameEventListeners(
 					event.type,
 					event,

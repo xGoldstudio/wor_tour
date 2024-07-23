@@ -92,30 +92,41 @@ export function useRegisterAnimation() {
   };
 }
 
+interface TriggerAnimationProps {
+  duration: number;
+  computeStyle: (progress: number) => void;
+  replace?: boolean;
+  queueAnimation?: boolean;
+  onEnd?: () => void;
+  onComplete?: () => void; // same as on end, but require the animation to fully run to call it
+}
+
 export function useSyncGameAnimation() {
   const store = useAnimationStore();
   const removeListener = useRef<null | (() => void)>(null);
+  const queue = useRef<TriggerAnimationProps[]>([]);
 
   function triggerAnimation({
     duration,
     computeStyle,
     replace,
+    queueAnimation,
     onEnd,
     onComplete,
-  }: {
-    duration: number;
-    computeStyle: (progress: number) => void;
-    replace?: boolean;
-    onEnd?: () => void;
-    onComplete?: () => void; // same as on end, but require the animation to fully run to call it
-  }) {
+  }: TriggerAnimationProps) {
     if (removeListener.current) {
       if (replace) {
         removeListener.current?.();
-      } else {
-        console.log("already have an animation running");
+        queue.current = [];
+      } else if (queueAnimation) {
+        queue.current.push({
+          duration,
+          computeStyle,
+          onEnd,
+          onComplete,
+        });
         return;
-      }
+      } 
     }
     const key = uniqueId();
     let firstFrame: null | number = null;
@@ -134,9 +145,19 @@ export function useSyncGameAnimation() {
         if (frame - firstFrame > duration) {
           onComplete?.();
           removeListener.current?.();
+          consumeQueue();
         }
       },
     });
+  }
+
+  function consumeQueue() {
+    if (queue.current.length > 0) {
+      const next = queue.current.shift();
+      if (next) {
+        triggerAnimation(next);
+      }
+    }
   }
 
   useOnUnMount(() => {

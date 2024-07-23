@@ -14,10 +14,10 @@ import {
   inPx,
 } from "@repo/lib";
 import {
-  AddStateEvent,
   CardDamagResolveEvent,
   CardDestroyedEvent,
   CardStartAttackingEvent,
+  EventType,
   FRAME_TIME,
   GameStateObject,
   HealCardEvent,
@@ -26,6 +26,7 @@ import {
 } from "game_engine";
 import useGameEventListener from "../useGameEventListener";
 import { GameCardEffect } from "./GameCardEffect";
+import useCatpureEvents from "./useCaptureEvents";
 
 function getTranslateY(element: HTMLElement) {
   const style = window.getComputedStyle(element);
@@ -129,9 +130,7 @@ function GameCard({
     },
     filter: (e) => {
       const event = e as PlaceCardEvent;
-      return (
-        event.position === position && event.isPlayer === isPlayerCard
-      );
+      return event.position === position && event.isPlayer === isPlayerCard;
     },
   });
   useGameEventListener({
@@ -256,39 +255,43 @@ export function CardEffectsElements({
 }) {
   const [states, setStates] = useState<CardState[]>([]);
 
+  function setStatesFromGameState(state: GameStateObject) {
+    const card = state.getCard(isPlayerCard, position);
+    if (card) {
+      setStates([...card.states]);
+    }
+  }
+  function removeState(stateType: CardState["type"]) {
+    setStates((states) => states.filter((s) => s.type !== stateType));
+  }
+  
   useGameEventListener({
     type: "placeCard",
     action: (_, state) => {
-      const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
-        position
-      ];
-      if (card === null) {
-        return;
-      }
-      setStates([...card.states]);
+      setStatesFromGameState(state);
     },
     filter: (event) =>
-      (event as PlaceCardEvent).isPlayer === isPlayerCard &&
-      (event as PlaceCardEvent).position === position,
+      (event as PlaceCardEvent).position === position &&
+      (event as PlaceCardEvent).isPlayer === isPlayerCard,
   });
 
-  useGameEventListener({
-    type: "addState",
-    action: (event) => {
-      setStates((states) => {
-        const existingState = states.find(
-          (s) => s.type === (event as AddStateEvent).state.type
-        );
-        if (existingState) {
-          return states;
-        }
-        return [...states, (event as AddStateEvent).state];
-      });
-    },
-    filter: (event) =>
-      (event as AddStateEvent).isPlayerCard === isPlayerCard &&
-      (event as AddStateEvent).position === position,
-  });
+  const watcher = (event: EventType, state: GameStateObject) => {
+    if (
+      (event.type === "addState" ||
+        event.type === "triggerState" ||
+        event.type === "removeState" ||
+        event.type === "increaseStateValue" ||
+        event.type === "decreaseStateValue") &&
+      event.isPlayerCard === isPlayerCard &&
+      event.position === position
+    ) {
+      if (event.type === "addState") setStatesFromGameState(state); // side effect
+      return true;
+    }
+    return null;
+  };
+
+  const { consumeEvents } = useCatpureEvents({ watcher });
 
   return (
     <div className="absolute right-[4px] top-[5px] flex flex-col gap-2">
@@ -299,13 +302,10 @@ export function CardEffectsElements({
         {states.map((state, index) => (
           <GameCardEffect
             state={state}
-            isPlayerCard={isPlayerCard}
-            position={position}
-            removeState={(stateType) => {
-              setStates((states) => states.filter((s) => s.type !== stateType));
-            }}
+            removeState={removeState}
             key={state.type}
             statePosition={index}
+            consumeEvents={consumeEvents}
           />
         ))}
       </div>
