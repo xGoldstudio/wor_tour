@@ -1,20 +1,25 @@
-import { CardState, EventType, GameStateObject } from "game_engine";
+import { CardState, EventType, GameStateObject, PlaceCardEvent } from "game_engine";
 import { useSyncGameAnimation } from "../useGameSyncAnimation";
 import { useRef, useState } from "react";
 import { animationTimeline, getStateData, inPx } from "@repo/lib";
 import { EffectLayout } from "../Effects";
 import useConsumeEvents from "../caputeEvents/useConsumeEvents";
+import useGameEventListener from "../useGameEventListener";
 
 interface GameCardEffectProps {
   state: CardState;
   removeState: (type: CardState["type"]) => void;
   statePosition: number;
+  position: number;
+  isPlayerCard: boolean;
 }
 
 export function GameCardEffect({
   state,
   removeState,
   statePosition,
+  position,
+  isPlayerCard,
 }: GameCardEffectProps) {
   const size = 0.8;
   const { triggerAnimation } = useSyncGameAnimation();
@@ -27,55 +32,52 @@ export function GameCardEffect({
   function getPaddingOffset(usingStatePosition: number) {
     return usingStatePosition * size * (42 + 8) + 8 * size;
   }
-  useConsumeEvents(
-    (event: EventType, gameState: GameStateObject) => {
-      if (event.type === "addState" && event.state.type === currentState.type) {
-        appearAnimation();
-        return true;
-      }
-      if (
-        event.type === "removeState" &&
-        event.stateType === currentState.type
-      ) {
-        removeAnimation();
-        return true;
-      }
-      if (
-        event.type === "increaseStateValue" &&
-        event.stateType === currentState.type
-      ) {
-        scaleAnimation(
-          true,
-          gameState.getStateOfCardByInstanceId(
-            event.instanceId,
-            event.stateType
-          )
-        );
-        return true;
-      }
-      if (
-        event.type === "decreaseStateValue" &&
-        event.stateType === currentState.type
-      ) {
-        scaleAnimation(
-          false,
-          gameState.getStateOfCardByInstanceId(
-            event.instanceId,
-            event.stateType
-          )
-        );
-        return true;
-      }
-      if (
-        event.type === "triggerState" &&
-        event.state.type === currentState.type
-      ) {
-        triggerStateAnimation();
-        return true;
-      }
-      return null;
+  useGameEventListener({
+    type: "placeCard",
+    action: (event, gameState) => {
+      const cardState = gameState.getStateOfCard((event as PlaceCardEvent).isPlayer, (event as PlaceCardEvent).position, state.type);
+      if (cardState) setCurrentState({ ...cardState });
+    },
+    filter: (event) => (event as PlaceCardEvent).position === position && (event as PlaceCardEvent).isPlayer === isPlayerCard,
+  });
+  useConsumeEvents((event: EventType, gameState: GameStateObject) => {
+    if (event.type === "addState" && event.state.type === currentState.type) {
+      appearAnimation();
+      return true;
     }
-  );
+    if (event.type === "removeState" && event.stateType === currentState.type) {
+      removeAnimation();
+      return true;
+    }
+    if (
+      event.type === "increaseStateValue" &&
+      event.stateType === currentState.type
+    ) {
+      scaleAnimation(
+        true,
+        gameState.getStateOfCardByInstanceId(event.instanceId, event.stateType)
+      );
+      return true;
+    }
+    if (
+      event.type === "decreaseStateValue" &&
+      event.stateType === currentState.type
+    ) {
+      scaleAnimation(
+        false,
+        gameState.getStateOfCardByInstanceId(event.instanceId, event.stateType)
+      );
+      return true;
+    }
+    if (
+      event.type === "triggerState" &&
+      event.state.type === currentState.type
+    ) {
+      triggerStateAnimation();
+      return true;
+    }
+    return null;
+  });
   if (prevStatePosition.current !== statePosition) {
     // since its an array, we are forced to relay on react props (which can lead to small desyncronisation from the game loop)
     triggerPositionAnimation({

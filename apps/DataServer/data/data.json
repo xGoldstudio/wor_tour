@@ -760,14 +760,7 @@
         },
         {
           "cost": 1,
-          "states": [
-            {
-              "type": "heal",
-              "trigger": "onPlacement",
-              "target": "allyCards",
-              "value": 50
-            }
-          ],
+          "states": [],
           "illustration": "card_23_level_2_1721051661386.png"
         },
         {
@@ -782,7 +775,7 @@
       "rarity": "rare",
       "id": 24,
       "world": 2,
-      "attackDefenseRatio": 0.1,
+      "attackDefenseRatio": 0.3,
       "speedDamageRatio": 0.5,
       "stats": [
         {
