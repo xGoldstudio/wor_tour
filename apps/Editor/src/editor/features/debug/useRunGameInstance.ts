@@ -1,7 +1,7 @@
 import useEditorStore from "@/editor/store/EditorStore";
-import { CardType } from "@repo/lib";
+import { CardState, CardType } from "@repo/lib";
 import { runGameEventListeners, useGameSyncAnimationStore } from "@repo/ui";
-import { ClockReturn, drawPlaceCard, EventType, FRAME_TIME, GameStateObject, healStateDefaultTest, initTest } from "game_engine";
+import { ClockReturn, drawPlaceCard, EventType, FRAME_TIME, GameStateObject, healStateDefaultTest, initTest, massacreStateTest } from "game_engine";
 import { useEffect, useState } from "react";
 
 const dummyCard: CardType = {
@@ -12,7 +12,7 @@ const dummyCard: CardType = {
 	dmg: 0,
 	hp: 200,
 	attackSpeed: 0.5,
-	states: [healStateDefaultTest],
+	states: [healStateDefaultTest, { ...massacreStateTest, value: 100 } as CardState],
 	level: 1,
 	world: 1,
 	rarity: "common",

@@ -134,7 +134,7 @@ export const CardStatesData = {
     triggers: ["onDirectAttackHit"],
     targets: ["directEnnemyCard"],
     computeCost: ({ value, attackSpeed }) => {
-      return ((value || 0) * (attackSpeed * 1.5)) / 20;
+      return ((value || 0) * (attackSpeed * 1.5)) / 7;
     },
     descrption: ({ trigger, target, value }) => `${trigger}, give bleeding ${value} to ${target}.`,
     title: "Massacre",
@@ -149,8 +149,8 @@ export const CardStatesData = {
     noValue: false,
     triggers: ["onAttack"],
     targets: ["selfCard"],
-    computeCost: () => {
-      return 0;
+    computeCost: ({ value }) => {
+      return -((value || 0) * 0.035);
     },
     descrption: ({ trigger, target, value }) => `${trigger}, inflict ${value} damage to ${target}.`,
     title: "Bleeding",

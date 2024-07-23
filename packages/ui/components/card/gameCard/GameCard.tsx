@@ -304,6 +304,8 @@ export function CardEffectsElements({
               removeState={removeState}
               key={state.type}
               statePosition={index}
+              position={position}
+              isPlayerCard={isPlayerCard}
             />
           ))}
         </CaptureEvents>
