@@ -1,13 +1,14 @@
-import { defaultTestHp, drawPlaceCard, findStateByType, initTest, massacreStateTest, triggerDirectAttackResolved } from "./common";
+import { defaultTestHp, drawPlaceCard, findStateByType, getInstanceId, initTest, massacreStateTest, triggerDirectAttackResolved } from "./common";
 import { describe, expect, test } from 'vitest';
 
 describe("bleeding state", () => {
-	const { clock, state } = initTest();
+	const { clock, state } = initTest({});
 	drawPlaceCard(clock, true, 0);
 	drawPlaceCard(clock, false, 0);
-	clock.triggerEvent({ type: "addState", isPlayerCard: true, cardPosition: 0, state: massacreStateTest });
 	clock.nextTick();
-	expect(state.playerBoard[0]!.states).toContain(massacreStateTest);
+	clock.triggerEvent({ type: "addState", instanceId: getInstanceId(state, true, 0), isPlayerCard: true, position: 0, state: massacreStateTest });
+	clock.nextTick();
+	expect(state.getStateOfCard(true, 0, "massacre")).toBeDefined();
 
 	const damage = 10;
 	triggerDirectAttackResolved(clock, state, true, 0, damage);

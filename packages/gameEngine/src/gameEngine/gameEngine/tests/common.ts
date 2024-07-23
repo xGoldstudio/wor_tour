@@ -28,11 +28,18 @@ export const baseCard: CardType = {
 
 export const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common" }));
 
-export function initTest(playerDeck?: CardType[]) {
+export function initTest({ playerDeck, sideEffectOnFrame }: {
+	playerDeck?: CardType[], sideEffectOnFrame?: ({ state, clock, event }: {
+		state: GameStateObject;
+		clock: ClockReturn<EventType>;
+		event: EventType;
+	}) => void
+}) {
 	const state = new GameStateObject({ playerDeck: playerDeck ?? deck, opponentDeck: deck, playerHp: 200, opponentHp: 200 });
 	const clock = Clock<EventType>(
 		(event, clock) => {
 			computeNextFrameState(state, event, clock);
+			sideEffectOnFrame?.({ state, clock, event });
 		}
 	);
 	return { state, clock };
@@ -40,7 +47,7 @@ export function initTest(playerDeck?: CardType[]) {
 
 export function drawPlaceCard(clock: ClockReturn<EventType>, isPlayer: boolean, position: number) {
 	clock.triggerEvent({ type: "drawCard", isPlayer: isPlayer, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: isPlayer, targetPosition: position, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: isPlayer, position: position, cardInHandPosition: 0 });
 }
 
 export const multiAttackState: CardState = {
@@ -48,6 +55,13 @@ export const multiAttackState: CardState = {
 	value: null,
 	trigger: "onAttack",
 	target: "otherEnnemyCards",
+};
+
+export const riposteStateTest: CardState = {
+	type: "riposte",
+	value: 1,
+	trigger: "onDirectlyAttacked",
+	target: "directEnnemyCard",
 };
 
 export const healStateDefaultTest: CardState = {
@@ -85,6 +99,24 @@ export function triggerDirectAttack(
 	});
 }
 
+export function triggerHealCard(
+	clock: ClockReturn<EventType>,
+	isPlayerCard: boolean,
+	cardPosition: number,
+	amount: number,
+) {
+	clock.triggerEvent({
+		type: "healCard",
+		isPlayerCard,
+		cardPosition,
+		amount,
+		cardInitiator: {
+			isPlayerCard,
+			cardPosition,
+		}
+	})
+}
+
 export function triggerDirectAttackResolved(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,
@@ -97,15 +129,16 @@ export function triggerDirectAttackResolved(
 		type: "cardDamageResolve",
 		initiator: {
 			type: "cardDamage",
+			instanceId: getInstanceId(state, !isPlayer, cardPosition),
+			directAttack: !notDirect,
 			isPlayerCard: !isPlayer,
 			cardPosition,
-			directAttack: !notDirect,
 			amount: damage,
 			initiator: {
 				type: "cardAttacking",
 				isPlayer,
 				cardPosition,
-				instanceId: state.getCard(isPlayer, cardPosition)!.instanceId
+				instanceId: -1,
 			}
 		}
 	});
@@ -124,4 +157,8 @@ export function findStateByType(
 	type: CardState["type"],
 ) {
 	return state.getCard(isPlayerCard, cardPosition)!.states.find(s => s.type === type)
+}
+
+export function getInstanceId(state: GameStateObject, isPlayer: boolean, cardPosition: number) {
+	return state.getCard(isPlayer, cardPosition)!.instanceId;
 }

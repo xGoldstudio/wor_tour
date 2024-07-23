@@ -6,9 +6,9 @@ import StaticCard from "./card/StaticCard";
 import { useShallow } from "zustand/react/shallow";
 import _ from "lodash";
 import { useState } from "react";
-import useGameEventListener from "../gameBehavior/useGameEventListener";
 import { dummyCard } from "./card/const";
 import { CardType } from "../../../../../packages/gameEngine/src/types/Card";
+import { useGameEventListener } from "@repo/ui";
 
 interface PlayerGUIProps {
   isPlayer: boolean;

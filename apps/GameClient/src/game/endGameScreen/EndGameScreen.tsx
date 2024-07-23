@@ -1,13 +1,11 @@
-import { Badge, Button, cn } from "@repo/ui";
+import { Badge, Button, cn, EmptyBar, useGameEventListener } from "@repo/ui";
 import useGameMetadataStore from "../stores/gameMetadataStore";
 import Ribbon from "@/home/ui/Ribbon";
-import { EmptyBar } from "../gui/ManaBar";
 import * as _ from "lodash";
 import RewardBox from "./RewardBox";
 import { useRef, useState } from "react";
 import endGameScreenAnimation from "./animation";
 import { CurrentWinner } from "game_engine";
-import useGameEventListener from "../gameBehavior/useGameEventListener";
 import { useGSAP } from "@gsap/react";
 import { textureByRarity } from "@repo/lib";
 

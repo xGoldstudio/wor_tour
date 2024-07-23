@@ -12,11 +12,11 @@ export type GameEventListenerFunction = (
 ) => void;
 
 function initGameEventListeners() {
-  return new Map<EventType["type"], GameEventListenerFunction[]>();
+  return new Map<EventType["type"] | null, GameEventListenerFunction[]>();
 }
 
 export function addGameEventListener(
-  type: EventType["type"], // null is a wildcard
+  type: EventType["type"] | null, // null is a wildcard
   action: GameEventListenerFunction,
   filter?: (event: EventType) => boolean // filter allow to listen only to specific event
 ) {
@@ -33,7 +33,7 @@ export function addGameEventListener(
 }
 
 export function removeGameEventListener(
-  type: EventType["type"],
+  type: EventType["type"] | null,
   action: GameEventListenerFunction,
 ) {
   const existingEvents = gameEventListeners.get(type);
@@ -55,6 +55,10 @@ export function runGameEventListeners(
   clock: ClockReturn<EventType>,
 ) {
   gameEventListeners.get(type)?.forEach((action: GameEventListenerFunction) => {
+    action(e, data, triggerEvent, clock);
+  });
+  // (null is a wildcard, so run on every event)
+  gameEventListeners.get(null)?.forEach((action: GameEventListenerFunction) => {
     action(e, data, triggerEvent, clock);
   });
 }

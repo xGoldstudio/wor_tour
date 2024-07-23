@@ -7,12 +7,20 @@ const RiposteStateAction: StateAction = ({ clock, event, card }) => {
 	) {
 		return;
 	}
+	const attacker = cardDamageResolveEvent.initiator.initiator; // the one who attacked whill take damage
+	const defender = cardDamageResolveEvent.initiator; // the one who was attacked will deal damage
 	clock.triggerEvent({
 		type: "cardDamage",
 		amount: card.dmg,
-		cardPosition: cardDamageResolveEvent.initiator.initiator.cardPosition,
-		isPlayerCard: cardDamageResolveEvent.initiator.initiator.isPlayer,
-		initiator: cardDamageResolveEvent.initiator.initiator,
+		instanceId: attacker.instanceId,
+		cardPosition: attacker.cardPosition,
+		isPlayerCard: attacker.isPlayer,
+		initiator: {
+			type: "cardAttacking",
+			isPlayer: defender.isPlayerCard,
+			cardPosition: defender.cardPosition,
+			instanceId: card.instanceId,
+		},
 		directAttack: false,
 	});
 }

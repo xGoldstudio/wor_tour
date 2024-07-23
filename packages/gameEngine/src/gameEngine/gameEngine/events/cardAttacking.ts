@@ -20,8 +20,9 @@ export function triggerStates({ gameState, trigger, clock, isPlayerCard, cardPos
 		if (state.trigger === trigger) {
 			clock.triggerEvent({
 				type: "triggerState",
-				isPlayerCard,
-				cardPosition,
+				instanceId: card.instanceId,
+				position: cardPosition,
+				isPlayerCard: isPlayerCard,
 				state,
 				initiator: initiator,
 			});
@@ -52,6 +53,7 @@ export default function cardAttackingEvent({ event, gameState, clock }: ComputeE
 			type: "cardDamage",
 			amount: attakerCard.dmg,
 			cardPosition: event.cardPosition,
+			instanceId: defenseCard.instanceId,
 			isPlayerCard: !event.isPlayer,
 			directAttack: true,
 			initiator: event,

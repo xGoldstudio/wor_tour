@@ -1,4 +1,9 @@
-import { CardState, CardStateLayoutData, getImageEffects, inPx } from "@repo/lib";
+import {
+  CardState,
+  CardStateLayoutData,
+  getImageEffects,
+  inPx
+} from "@repo/lib";
 import Cover from "../Cover";
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -20,13 +25,18 @@ export default function States({
       style={{ padding: inPx(8 * size), gap: inPx(8 * size) }}
     >
       {effectToShow.map((effect) => (
-        <EffectLayout key={effect.title} effect={effect} size={size} showDesc={showDesc} />
+        <EffectLayout
+          key={effect.title}
+          effect={effect}
+          size={size}
+          showDesc={showDesc}
+        />
       ))}
     </div>
   );
 }
 
-function EffectLayout({
+export function EffectLayout({
   effect,
   size,
   showDesc,
@@ -40,6 +50,7 @@ function EffectLayout({
   const wrapperSize = 42 * size;
   const fontSize = `${1 * size}rem`;
   const [show, setShow] = useState(false);
+
   return (
     <div
       ref={ref}

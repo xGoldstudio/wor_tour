@@ -7,14 +7,15 @@ const MultiAttackStateAction: StateAction = ({
 	if (initiator.type !== "cardAttacking") {
 		return;
 	}
-	gameState.getBoard(!initiator.isPlayer).forEach((cardId, position) => {
-		if (cardId !== null) {
+	gameState.getBoard(!initiator.isPlayer).forEach((boardCard, position) => {
+		if (boardCard !== null && position !== initiator.cardPosition) {
 			clock.triggerEvent({
 				type: "cardDamage",
 				amount: card.dmg,
+				instanceId: boardCard.instanceId,
 				cardPosition: position,
 				isPlayerCard: !initiator.isPlayer,
-				directAttack: position === event.cardPosition,
+				directAttack: false,
 				initiator: initiator,
 			});
 		}

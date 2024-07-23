@@ -3,7 +3,7 @@ import { GameEventListenerFunction, addGameEventListener } from "./gameEventList
 import { EventType } from "game_engine";
 
 interface UseGameEventListenerProps {
-	type: EventType["type"],
+	type: EventType["type"] | null,
 	action: GameEventListenerFunction,
 	filter?: (event: EventType) => boolean,
 	deps?: React.DependencyList;

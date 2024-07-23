@@ -28,19 +28,19 @@ export default function placeCardEvent({ event, gameState, clock }: ComputeEvent
 		isPlayer: event.isPlayer,
 		delta: card.cost,
 	});
-	gameState.placeCardBoard(event.isPlayer, event.targetPosition, cardInGame);
+	gameState.placeCardBoard(event.isPlayer, event.position, cardInGame);
 	triggerStates({
 		trigger: "onPlacement",
 		clock,
 		gameState,
 		isPlayerCard: event.isPlayer,
-		cardPosition: event.targetPosition,
+		cardPosition: event.position,
 		initiator: event,
 	});
 	clock.triggerEvent({
 		type: "cardStartAttacking",
 		isPlayer: event.isPlayer,
-		cardPosition: event.targetPosition,
+		cardPosition: event.position,
 		instanceId: cardInGame.instanceId,
 	});
 	clock.triggerEvent({

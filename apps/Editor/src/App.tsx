@@ -6,6 +6,7 @@ import CardEditor from "./editor/features/card/CardEditor";
 import EditorLayout from "./editor/Layout";
 import Progression from "./editor/features/progression/Progression";
 import { EditorData } from "@repo/lib";
+import InGameCardDebug from "./editor/features/debug/InGameCardDebug";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ function AppRouter() {
         <Route path="/" element={<Progression />} index />
         <Route path="/:worldId/:cardId" element={<CardEditor />} />
         <Route path="/:worldId" element={<WorldEditor />} />
+        <Route path="/debug" element={<InGameCardDebug />} />
       </Route>
     </Routes>
   );

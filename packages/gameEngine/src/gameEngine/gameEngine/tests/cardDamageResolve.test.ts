@@ -5,6 +5,7 @@ import Clock from "../../clock/clock";
 import { computeNextFrameState } from "../gameEngine";
 import { expect, test } from 'vitest';
 import { CardType } from "../../../types/Card";
+import { getInstanceId } from "./common";
 
 const baseCard = {
 	name: "string",
@@ -28,19 +29,22 @@ test("damage and kill player card", () => {
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// deal damage to card
 	function dealDamage(amount: number) {
 		clock.triggerEvent({
 			type: "cardDamageResolve", initiator: {
 				type: "cardDamage",
+				instanceId: getInstanceId(state, true, 0),
 				isPlayerCard: true,
 				cardPosition: 0,
 				directAttack: false,
 				amount: amount,
 				initiator: {
-					isPlayerCard: false,
+					type: "cardAttacking",
+					instanceId: -1,
+					isPlayer: false,
 					cardPosition: 0,
 				},
 			}
@@ -62,19 +66,22 @@ test("damage and kill opponent card", () => {
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
 	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: false, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// deal damage to card
 	function dealDamage(amount: number) {
 		clock.triggerEvent({
 			type: "cardDamageResolve", initiator: {
 				type: "cardDamage",
+				instanceId: getInstanceId(state, false, 0),
 				isPlayerCard: false,
 				cardPosition: 0,
 				directAttack: false,
 				amount: amount,
 				initiator: {
-					isPlayerCard: true,
+					type: "cardAttacking",
+					instanceId: -1,
+					isPlayer: true,
 					cardPosition: 0,
 				},
 			}

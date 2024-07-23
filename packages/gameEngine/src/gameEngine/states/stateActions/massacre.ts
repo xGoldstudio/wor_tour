@@ -2,7 +2,7 @@ import { StateAction } from "../CardStatesData";
 
 const MassacreStateAction: StateAction = ({ event, clock, value }) => {
 	const initiator = event.initiator;
-	if (initiator.type !== "cardDamageResolve" 
+	if (initiator.type !== "cardDamageResolve"
 		|| initiator.initiator.directAttack === false
 		|| value === null
 	) {
@@ -10,8 +10,9 @@ const MassacreStateAction: StateAction = ({ event, clock, value }) => {
 	}
 	clock.triggerEvent({
 		type: "addState",
+		instanceId: initiator.initiator.instanceId,
+		position: initiator.initiator.cardPosition,
 		isPlayerCard: initiator.initiator.isPlayerCard,
-		cardPosition: initiator.initiator.cardPosition,
 		state: {
 			type: "bleeding",
 			trigger: "onAttack",

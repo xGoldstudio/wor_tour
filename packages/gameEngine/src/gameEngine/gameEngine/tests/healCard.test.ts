@@ -5,6 +5,7 @@ import Clock from "../../clock/clock";
 import { computeNextFrameState } from "../gameEngine";
 import { expect, test } from 'vitest';
 import { CardType } from "../../../types/Card";
+import { getInstanceId } from "./common";
 
 const baseCard = {
 	name: "string",
@@ -28,7 +29,7 @@ test("removing effect player card", () => {
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// deal damage to card
 	clock.triggerEvent({ type: "cardDamageResolve", initiator: {
@@ -37,6 +38,7 @@ test("removing effect player card", () => {
 		cardPosition: 0,
 		directAttack: false,
 		amount: 100,
+		instanceId: getInstanceId(state, true, 0),
 		initiator: {
 			type: "cardAttacking",
 			isPlayer: false,
