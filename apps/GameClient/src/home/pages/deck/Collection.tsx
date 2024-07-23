@@ -57,7 +57,7 @@ export default function Collection({
   cardNotFound = sorts[currentSort].sortFunction(cardNotFound, isAscending);
   return (
     <div className="flex flex-col h-[674px] w-[650px] ">
-      <div className="grid grid-rows-[1fr_auto] top-0 pb-20">
+      <div className="grid grid-rows-[1fr_auto] top-0 pb-6">
         <SortAndFilterBox
           collectionLength={collectionLength}
           currentSort={currentSort}
