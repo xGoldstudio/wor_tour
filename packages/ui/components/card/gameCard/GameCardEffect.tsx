@@ -3,22 +3,18 @@ import { useSyncGameAnimation } from "../useGameSyncAnimation";
 import { useRef, useState } from "react";
 import { animationTimeline, getStateData, inPx } from "@repo/lib";
 import { EffectLayout } from "../Effects";
-import { useConsumeEvents } from "./useCaptureEvents";
+import useConsumeEvents from "../caputeEvents/useConsumeEvents";
 
 interface GameCardEffectProps {
   state: CardState;
   removeState: (type: CardState["type"]) => void;
   statePosition: number;
-  consumeEvents: (
-    consumer: (event: EventType, state: GameStateObject) => true | null
-  ) => () => void;
 }
 
 export function GameCardEffect({
   state,
   removeState,
   statePosition,
-  consumeEvents,
 }: GameCardEffectProps) {
   const size = 0.8;
   const { triggerAnimation } = useSyncGameAnimation();
@@ -32,7 +28,6 @@ export function GameCardEffect({
     return usingStatePosition * size * (42 + 8) + 8 * size;
   }
   useConsumeEvents(
-    consumeEvents,
     (event: EventType, gameState: GameStateObject) => {
       if (event.type === "addState" && event.state.type === currentState.type) {
         appearAnimation();

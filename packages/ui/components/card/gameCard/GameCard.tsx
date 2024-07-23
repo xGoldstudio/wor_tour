@@ -26,7 +26,7 @@ import {
 } from "game_engine";
 import useGameEventListener from "../useGameEventListener";
 import { GameCardEffect } from "./GameCardEffect";
-import useCatpureEvents from "./useCaptureEvents";
+import { CaptureEvents } from "../caputeEvents/CaptureEvents";
 
 function getTranslateY(element: HTMLElement) {
   const style = window.getComputedStyle(element);
@@ -264,7 +264,7 @@ export function CardEffectsElements({
   function removeState(stateType: CardState["type"]) {
     setStates((states) => states.filter((s) => s.type !== stateType));
   }
-  
+
   useGameEventListener({
     type: "placeCard",
     action: (_, state) => {
@@ -291,23 +291,22 @@ export function CardEffectsElements({
     return null;
   };
 
-  const { consumeEvents } = useCatpureEvents({ watcher });
-
   return (
     <div className="absolute right-[4px] top-[5px] flex flex-col gap-2">
       <div
         className="flex flex-col absolute"
         style={{ top: 0, right: inPx(6 * 0.8) }}
       >
-        {states.map((state, index) => (
-          <GameCardEffect
-            state={state}
-            removeState={removeState}
-            key={state.type}
-            statePosition={index}
-            consumeEvents={consumeEvents}
-          />
-        ))}
+        <CaptureEvents watcher={watcher}>
+          {states.map((state, index) => (
+            <GameCardEffect
+              state={state}
+              removeState={removeState}
+              key={state.type}
+              statePosition={index}
+            />
+          ))}
+        </CaptureEvents>
       </div>
     </div>
   );
