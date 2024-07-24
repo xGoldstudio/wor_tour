@@ -1,7 +1,7 @@
 import useEditorStore from "@/editor/store/EditorStore";
 import { CardState, CardType } from "@repo/lib";
 import { runGameEventListeners, useGameSyncAnimationStore, useOnMount, useOnUnMount } from "@repo/ui";
-import { ClockReturn, drawPlaceCard, EventType, FRAME_TIME, GameStateObject, healStateDefaultTest, initTest, massacreStateTest } from "game_engine";
+import { ClockReturn, EventType, FRAME_TIME, GameStateObject, healStateDefaultTest, initTest, massacreStateTest } from "game_engine";
 import { useState } from "react";
 
 const dummyCard: CardType = {
@@ -61,7 +61,6 @@ export function useRunInstance(log: boolean): UseRunInstance {
 			},
 			playerDeck: [card],
 		});
-		defaultActions(clock);
 		function playTick(shouldAnimate: boolean) {
 			if (shouldAnimate) {
 				triggerGameSyncAnimation(
@@ -108,12 +107,6 @@ export function useRunInstance(log: boolean): UseRunInstance {
 	});
 
 	return instance;
-}
-
-
-export function defaultActions(clock?: ClockReturn<EventType>) {
-	if (!clock) return;
-	drawPlaceCard(clock, true, 0);
 }
 
 function tickLoop(triggerTickEffects: (shouldAnimate: boolean) => void) {

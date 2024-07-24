@@ -1,5 +1,4 @@
 import HpBar from "./HpBar";
-import ManaBar from "./ManaBar";
 import useGameStore from "@/game/stores/gameStateStore";
 import InHandCard from "./card/InHandCard";
 import StaticCard from "./card/StaticCard";
@@ -7,8 +6,8 @@ import { useShallow } from "zustand/react/shallow";
 import _ from "lodash";
 import { useState } from "react";
 import { dummyCard } from "./card/const";
-import { CardType } from "../../../../../packages/gameEngine/src/types/Card";
-import { useGameEventListener } from "@repo/ui";
+import { ManaBar, useGameEventListener } from "@repo/ui";
+import { CardType } from "@repo/lib";
 
 interface PlayerGUIProps {
   isPlayer: boolean;

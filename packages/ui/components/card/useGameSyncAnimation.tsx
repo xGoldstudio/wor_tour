@@ -126,10 +126,13 @@ export function useSyncGameAnimation() {
           onComplete,
         });
         return;
-      } 
+      } else {
+        return;
+      }
     }
     const key = uniqueId();
     let firstFrame: null | number = null;
+    let offset = 0;
     removeListener.current = () => {
       store.animations.delete(key);
       removeListener.current = null;
@@ -141,14 +144,20 @@ export function useSyncGameAnimation() {
         if (firstFrame === null) {
           firstFrame = frame;
         }
-        computeStyle(frame - firstFrame);
-        if (frame - firstFrame > duration) {
+        const referenceFrame = firstFrame - offset;
+        computeStyle(frame - referenceFrame);
+        if (frame - referenceFrame > duration) {
           onComplete?.();
           removeListener.current?.();
           consumeQueue();
         }
       },
     });
+    return {
+      fastForward: (value: number) => {
+        offset = Math.max(value, 0);
+      }
+    }
   }
 
   function consumeQueue() {

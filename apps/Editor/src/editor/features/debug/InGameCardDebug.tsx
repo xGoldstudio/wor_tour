@@ -1,19 +1,31 @@
 import { CardState, getOptionsFromType } from "@repo/lib";
-import { Button, GameCard } from "@repo/ui";
+import { Button, GameCard, useOnMount } from "@repo/ui";
 import {
   bleedingStateTest,
+  ClockReturn,
+  drawPlaceCard,
+  EventType,
   massacreStateTest,
   multiAttackState,
   riposteStateTest,
   triggerDirectAttackResolved,
   triggerHealCard,
 } from "game_engine";
-import { defaultActions, useRunInstance } from "./useRunGameInstance";
+import { useRunInstance } from "./useRunGameInstance";
 import DebugPanelLayout from "./DebugPanelLayout";
+
+function defaultActions(clock?: ClockReturn<EventType>) {
+	if (!clock) return;
+	drawPlaceCard(clock, true, 0);
+}
 
 export default function InGameCardDebug() {
   const instance = useRunInstance(false);
   const { clock, state } = instance;
+
+  useOnMount(() => {
+    defaultActions(clock);
+  })
 
   function addState(stateArg: CardState) {
     const instanceId = state?.getCard(true, 0)?.instanceId;

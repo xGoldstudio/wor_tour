@@ -12,6 +12,7 @@ export { default as FullCard } from './components/card/FullCard.tsx';
 export { default as BoosterRarityDrop } from './components/booster/BoosterRarityDrop.tsx';
 export { default as Cover } from './components/Cover.tsx';
 export { default as EmptyBar } from './components/EmptyBar.tsx';
+export { default as ManaBar } from './components/game/ManaBar.tsx';
 export * from './components/card/useGameSyncAnimation.tsx';
 export * from './lib/rxjsToZustand.ts';
 export * from './lib/lifecycle.ts';
