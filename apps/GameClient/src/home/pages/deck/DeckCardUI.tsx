@@ -11,14 +11,16 @@ import {
 import { useState } from "react";
 import CardModal from "./CardModal";
 import { Tabs } from "./DeckInterface";
+import { selectedCardType } from "./DeckTab";
 
 interface CardUIProps {
   cardId: number;
   isHand?: boolean;
   locked?: boolean;
   setCurrentTab?: (tab: Tabs) => void;
-  setSelectedCard?: (cardId: number) => void;
-  selectedCard?: number;
+  setSelectedCard: (obj: selectedCardType) => void;
+  selectedCard: selectedCardType;
+  tab: Tabs;
 }
 
 export function DeckCardUI({
@@ -28,6 +30,7 @@ export function DeckCardUI({
   setCurrentTab,
   setSelectedCard,
   selectedCard,
+  tab,
 }: CardUIProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
 
@@ -40,7 +43,7 @@ export function DeckCardUI({
       lockPattern: state.getTheLockPattern(cardId),
     }));
 
-  const isSelected = selectedCard === card.id;
+  const isSelected = selectedCard?.id === card.id && selectedCard?.tab === tab;
 
   const opacity = locked ? "brightness-50" : "opacity-100";
   return (
@@ -76,7 +79,7 @@ export function DeckCardUI({
           )}
           <div
             className={`${opacity} hover:cursor-pointer`}
-            onClick={() => setSelectedCard?.(card.id)}
+            onClick={() => setSelectedCard({ id: card.id, tab: "Deck" })}
           >
             {/* <SelectedBordersCard> */}
             <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>

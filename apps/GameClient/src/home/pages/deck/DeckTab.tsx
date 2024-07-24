@@ -1,12 +1,13 @@
 import usePlayerStore from "@/home/store/playerStore";
 import { ManaBall } from "@repo/ui";
 import * as _ from "lodash";
-import ScrollContainer from "react-indiana-drag-scroll";
 import { CardCollection } from "./cardFilters";
 import { DeckCardUI } from "./DeckCardUI";
 import Collection from "./Collection";
 import { getTargetStrength } from "@repo/lib";
 import { useState } from "react";
+import ScrollContainer from "react-indiana-drag-scroll";
+import { Tabs } from "./DeckInterface";
 
 export const NUMBER_OF_CARD_IN_DECK: number = 8;
 
@@ -44,6 +45,8 @@ function DeckStats({ detailledDeck }: DeckStatsProps) {
   );
 }
 
+export type selectedCardType = { id: number; tab: Tabs | null };
+
 export default function DeckTab() {
   const { deck, getCompleteInfo, numberOfCardsInDeck } = usePlayerStore(
     (state) => ({
@@ -52,7 +55,10 @@ export default function DeckTab() {
       numberOfCardsInDeck: state.numberOfCardsInDeck,
     })
   );
-  const [selectedCard, setSelectedCard] = useState<number>(0);
+  const [selectedCard, setSelectedCard] = useState<selectedCardType>({
+    id: 0,
+    tab: null,
+  });
   const deckArray = _.concat(
     deck,
     _.fill(Array(numberOfCardsInDeck - deck.length), null)
@@ -62,22 +68,25 @@ export default function DeckTab() {
     detailledDeck.push(getCompleteInfo(deckArray[i]!));
   return (
     <div>
-      <ScrollContainer className="grow overflow-y-scroll scrollbar-hiden flex flex-col h-[674px] w-[650px]">
-        <div className="grid grid-rows-[1fr_auto] top-0 ">
+      <ScrollContainer className="grow scrollbar-hiden flex flex-col h-[674px] w-[650px]">
+        <div className="grid grid-rows-[1fr_auto]  ">
           <div className="grid grid-cols-4 gap-y-8 pt-8 ">
             {detailledDeck.map((card) => (
               <div className="w-full flex justify-center" key={card.id}>
                 <DeckCardUI
                   cardId={card.id}
-                  setSelectedCard={() => setSelectedCard(card.id)}
+                  setSelectedCard={() =>
+                    setSelectedCard({ id: card.id, tab: "Deck" })
+                  }
                   selectedCard={selectedCard}
+                  tab="Deck"
                 />
               </div>
             ))}
           </div>
         </div>
         <DeckStats detailledDeck={detailledDeck} />
-        {selectedCard !== 0 && (
+        {selectedCard.id !== 0 && (
           <Collection
             setSelectedCard={setSelectedCard}
             selectedCard={selectedCard}

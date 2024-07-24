@@ -1,6 +1,8 @@
 import { findCard } from "@/cards";
 import { CardCollection } from "./cardFilters";
 
+export const NUMBER_OF_CARD_IN_DECK: number = 8;
+
 export type Sorts = Record<CardSorts, CardSort>;
 export type CardSorts = "cost" | "rarity" | "world" | "level";
 export interface CardSort {
