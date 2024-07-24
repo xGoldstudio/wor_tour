@@ -1,7 +1,12 @@
-import { CardState, EventType, GameStateObject, PlaceCardEvent } from "game_engine";
+import {
+  CardState,
+  EventType,
+  GameStateObject,
+  PlaceCardEvent,
+} from "game_engine";
 import { useSyncGameAnimation } from "../useGameSyncAnimation";
 import { useRef, useState } from "react";
-import { animationTimeline, getStateData, inPx } from "@repo/lib";
+import { animationTimeline, getStateData, translateYpx } from "@repo/lib";
 import { EffectLayout } from "../Effects";
 import useConsumeEvents from "../caputeEvents/useConsumeEvents";
 import useGameEventListener from "../useGameEventListener";
@@ -35,11 +40,28 @@ export function GameCardEffect({
   useGameEventListener({
     type: "placeCard",
     action: (event, gameState) => {
-      const cardState = gameState.getStateOfCard((event as PlaceCardEvent).isPlayer, (event as PlaceCardEvent).position, state.type);
-      if (cardState) setCurrentState({ ...cardState });
+      const cardStateWithIndex = gameState.getStateOfCardWithIndex(
+        (event as PlaceCardEvent).isPlayer,
+        (event as PlaceCardEvent).position,
+        state.type
+      );
+      if (cardStateWithIndex) {
+        setCurrentState({ ...cardStateWithIndex[1] });
+        prevStatePosition.current = cardStateWithIndex[0]; // in case a new card is placed with an effect present in the current card,
+        // we must jump to the next position directly, without triggering any animation related to swap position
+        if (positionRef.current)
+          positionRef.current.style.transform = translateYpx(
+            getPaddingOffset(cardStateWithIndex[0])
+          );
+      }
     },
-    filter: (event) => (event as PlaceCardEvent).position === position && (event as PlaceCardEvent).isPlayer === isPlayerCard,
+    filter: (event) =>
+      (event as PlaceCardEvent).position === position &&
+      (event as PlaceCardEvent).isPlayer === isPlayerCard,
   });
+  if (prevStatePosition.current !== statePosition) { // checking between value updated by events, and props related to cardStates react useState list
+    changePostitionAnimation();
+  }
   useConsumeEvents((event: EventType, gameState: GameStateObject) => {
     if (event.type === "addState" && event.state.type === currentState.type) {
       appearAnimation();
@@ -78,26 +100,6 @@ export function GameCardEffect({
     }
     return null;
   });
-  if (prevStatePosition.current !== statePosition) {
-    // since its an array, we are forced to relay on react props (which can lead to small desyncronisation from the game loop)
-    triggerPositionAnimation({
-      replace: true,
-      duration: 10,
-      computeStyle: animationTimeline(10).add(
-        positionRef.current,
-        { y: getPaddingOffset(prevStatePosition.current) },
-        [
-          {
-            values: { y: getPaddingOffset(statePosition) },
-            ease: [0, 1, 1, 1],
-            onStart: () => {
-              prevStatePosition.current = statePosition;
-            },
-          },
-        ]
-      ).progress,
-    });
-  }
 
   function appearAnimation() {
     triggerAnimation({
@@ -186,13 +188,33 @@ export function GameCardEffect({
         ]).progress,
     });
   }
+  function changePostitionAnimation() {
+    // since its an array, we are forced to relay on react props (which can lead to small desyncronisation from the game loop)
+    triggerPositionAnimation({
+      replace: true,
+      duration: 10,
+      computeStyle: animationTimeline(10).add(
+        positionRef.current,
+        { y: getPaddingOffset(prevStatePosition.current) },
+        [
+          {
+            values: { y: getPaddingOffset(statePosition) },
+            ease: [0, 1, 1, 1],
+            onStart: () => {
+              prevStatePosition.current = statePosition;
+            },
+          },
+        ]
+      ).progress,
+    });
+  }
 
   return (
     <div
       ref={positionRef}
       className="absolute right-0"
       style={{
-        transform: `translateY(${inPx(getPaddingOffset(prevStatePosition.current))})`, // we are using prevStatePosition to avoid jumping due to desyncro of gameLoop and react render
+        transform: translateYpx(getPaddingOffset(prevStatePosition.current)), // we are using prevStatePosition to avoid jumping due to desyncro of gameLoop and react render
       }}
     >
       <div ref={ref}>

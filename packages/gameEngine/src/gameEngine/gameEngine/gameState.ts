@@ -265,6 +265,14 @@ export class GameStateObject {
 		}
 		return card.states.find((s) => s.type === type);
 	}
+	getStateOfCardWithIndex(isPlayerCard: boolean, cardPosition: number, type: CardState["type"]): null | [number, CardState] {
+		const card = this.getCard(isPlayerCard, cardPosition);
+		if (!card) {
+			return null;
+		}
+		const index = card.states.findIndex((s) => s.type === type);
+		return index === -1 ? null : [index, card.states[index]];
+	}
 	getStateOfCardByInstanceId(instanceId: number, type: CardState["type"]) {
 		const card = this.getCardInstance(instanceId);
 		if (!card) {
