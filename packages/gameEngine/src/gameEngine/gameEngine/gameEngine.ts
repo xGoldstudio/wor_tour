@@ -1,4 +1,4 @@
-import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, StartEarningMana, SetManaIncreaseSpeed, StartGameSequence, StartGame, RemoveStateEvent, TriggerStateEvent, AddStateEvent, IncreaseStateValueEvent, DecreaseStateValueEvent } from '../../types/eventType';
+import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, StartEarningManaEvent, SetManaIncreaseSpeed, StartGameSequence, StartGameEvent, RemoveStateEvent, TriggerStateEvent, AddStateEvent, IncreaseStateValueEvent, DecreaseStateValueEvent, EndEarningManaEvent } from '../../types/eventType';
 import startEarningManaEvent from "./events/startEarningMana";
 import manaIncreaseEvent from './events/manaIncrease';
 import { GameStateObject } from './gameState';
@@ -23,6 +23,7 @@ import startGameSequence from './events/startGameSequence';
 import startGame from './events/startGame';
 import increaseStateValueEvent from './events/increaseStateValue';
 import decreaseStateValueEvent from './events/decreaseStateValue';
+import endEarningManaEvent from './events/endEarningMana';
 
 export const FRAME_TIME = 10;
 
@@ -34,12 +35,13 @@ export interface ComputeEventProps<E extends EventType> {
 
 type EventTypeMap = {
 	startGameSequence: StartGameSequence;
-	startGame: StartGame;
+	startGame: StartGameEvent;
 	manaIncrease: ManaIncreaseEvent;
 	manaConsume: ManaConsumeEvent;
 	setManaIncreaseSpeed: SetManaIncreaseSpeed;
 	placeCard: PlaceCardEvent;
-	startEarningMana: StartEarningMana;
+	startEarningMana: StartEarningManaEvent;
+	endEarningMana: EndEarningManaEvent;
 	cardStartAttacking: CardStartAttackingEvent;
 	cardAttacking: CardAttackingEvent;
 	playerDamage: PlayerDamageEvent;
@@ -66,6 +68,7 @@ const EventsCompute: EventHandlers = {
 	startGame: startGame,
 	manaIncrease: manaIncreaseEvent,
 	startEarningMana: startEarningManaEvent,
+	endEarningMana: endEarningManaEvent,
 	setManaIncreaseSpeed: setManaIncreaseSpeed,
 	manaConsume: manaConsumeEvent,
 	drawCard: drawCardEvent,

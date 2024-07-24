@@ -175,7 +175,6 @@ export function triggerIncreaseMana(
 		type: "manaIncrease",
 		isPlayer,
 		value: amount,
-		isNaturalEarn: false,
 	});
 }
 

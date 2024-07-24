@@ -1,19 +1,19 @@
-import { StartEarningMana } from "../../../types/eventType";
+import { StartEarningManaEvent } from "../../../types/eventType";
 import { ComputeEventProps } from "../gameEngine";
 import { MAX_MANA } from "../gameState";
 
-export default function startEarningManaEvent({ event, gameState, clock }: ComputeEventProps<StartEarningMana>) {
+export default function startEarningManaEvent({ event, gameState, clock }: ComputeEventProps<StartEarningManaEvent>) {
 	if (
 		gameState.getMana(event.isPlayer) < MAX_MANA
 		&& gameState.getStartEarningMana(event.isPlayer) === null
 	) {
-		gameState.startEarningMana(event.isPlayer, clock.getImmutableInternalState().currentFrame);
+		const currentFrame = clock.getImmutableInternalState().currentFrame;
+		gameState.startEarningMana(event.isPlayer, currentFrame);
 		clock.setGameEventTimeout(
 			{
-				type: "manaIncrease",
+				type: "endEarningMana",
 				isPlayer: event.isPlayer,
-				value: 1,
-				isNaturalEarn: true,
+				startEarningManaFrame: currentFrame,
 			},
 			gameState.getManaSpeed(event.isPlayer),
 		);
