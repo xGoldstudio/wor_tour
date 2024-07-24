@@ -13,6 +13,8 @@ export type CurrentWinner = "player" | "opponent" | null;
 
 export const defaultManaSpeed = 300;
 
+export const MAX_MANA = 9;
+
 export class GameStateObject {
 	constructor({ playerDeck, opponentDeck, playerHp, opponentHp }: GameStateObjectConstructor) {
 		this.playerMana = 0;
@@ -71,6 +73,13 @@ export class GameStateObject {
 			this.opponentTickStartEarningMana = tick;
 		}
 	}
+	resetEarningMana(isPlayer: boolean) {
+		if (isPlayer) {
+			this.playerTickStartEarningMana = null;
+		} else {
+			this.opponentTickStartEarningMana = null;
+		}
+	}
 	setIncreaseManaSpeed(isPlayer: boolean, speed: number) {
 		if (isPlayer) {
 			this.playerManaSpeed = speed;
@@ -78,20 +87,18 @@ export class GameStateObject {
 			this.opponentManaSpeed = speed;
 		}
 	}
-	increaseMana(isPlayer: boolean) {
+	increaseMana(isPlayer: boolean, value: number) {
 		if (isPlayer) {
-			this.playerMana = this.playerMana + 1;
-			this.playerTickStartEarningMana = null;
+			this.playerMana = Math.min(this.playerMana + value, MAX_MANA);
 		} else {
-			this.opponentMana = this.opponentMana + 1;
-			this.opponentTickStartEarningMana = null;
+			this.opponentMana = Math.min(this.opponentMana + value, MAX_MANA);
 		}
 	}
 	consumeMana(isPlayer: boolean, amount: number) {
 		if (isPlayer) {
-			this.playerMana = this.playerMana - amount;
+			this.playerMana = Math.max(this.playerMana - amount, 0);
 		} else {
-			this.opponentMana = this.opponentMana - amount;
+			this.opponentMana = Math.max(this.opponentMana - amount, 0);
 		}
 	}
 	getHandFromState(isPlayer: boolean) {
@@ -265,11 +272,28 @@ export class GameStateObject {
 		}
 		return card.states.find((s) => s.type === type);
 	}
+	getStateOfCardWithIndex(isPlayerCard: boolean, cardPosition: number, type: CardState["type"]): null | [number, CardState] {
+		const card = this.getCard(isPlayerCard, cardPosition);
+		if (!card) {
+			return null;
+		}
+		const index = card.states.findIndex((s) => s.type === type);
+		return index === -1 ? null : [index, card.states[index]];
+	}
 	getStateOfCardByInstanceId(instanceId: number, type: CardState["type"]) {
 		const card = this.getCardInstance(instanceId);
 		if (!card) {
 			return null;
 		}
 		return card.states.find((s) => s.type === type) ?? null;
+	}
+	getMana(isPlayer: boolean) {
+		return isPlayer ? this.playerMana : this.opponentMana;
+	}
+	getStartEarningMana(isPlayer: boolean) {
+		return isPlayer ? this.playerTickStartEarningMana : this.opponentTickStartEarningMana;
+	}
+	getManaSpeed(isPlayer: boolean) {
+		return isPlayer ? this.playerManaSpeed : this.opponentManaSpeed;
 	}
 }

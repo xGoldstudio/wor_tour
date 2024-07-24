@@ -144,6 +144,40 @@ export function triggerDirectAttackResolved(
 	});
 }
 
+export function triggerStartEarningMana(
+	clock: ClockReturn<EventType>,
+	isPlayer: boolean,
+) {
+	clock.triggerEvent({
+		type: "startEarningMana",
+		isPlayer,
+	});
+}
+
+export function triggerConsumeMana(
+	clock: ClockReturn<EventType>,
+	isPlayer: boolean,
+	amount: number,
+) {
+	clock.triggerEvent({
+		type: "manaConsume",
+		isPlayer,
+		delta: amount,
+	});
+}
+
+export function triggerIncreaseMana(
+	clock: ClockReturn<EventType>,
+	isPlayer: boolean,
+	amount: number
+) {
+	clock.triggerEvent({
+		type: "manaIncrease",
+		isPlayer,
+		value: amount,
+	});
+}
+
 export function attackAnimation(clock: ClockReturn<EventType>) {
 	for (let i = 0; i < DAMAGE_SPEED; i++) {
 		clock.nextTick();

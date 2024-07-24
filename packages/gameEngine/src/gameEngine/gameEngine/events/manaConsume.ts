@@ -3,5 +3,7 @@ import { ManaConsumeEvent } from "../../../types/eventType";
 
 export default function manaConsumeEvent({ event, gameState, clock }: ComputeEventProps<ManaConsumeEvent>) {
 	gameState.consumeMana(event.isPlayer, event.delta);
-	clock.triggerEvent({ type: "startEarningMana", isPlayer: event.isPlayer });
+	if (gameState.getStartEarningMana(event.isPlayer) === null) {
+		clock.triggerEvent({ type: "startEarningMana", isPlayer: event.isPlayer });
+	}
 }

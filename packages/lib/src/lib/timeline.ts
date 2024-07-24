@@ -153,7 +153,7 @@ function computeValues(
     const toValue = to[typedKey];
     const fromValue = from[typedKey];
     if (toValue !== undefined && fromValue !== undefined) {
-      res[typedKey] = fromValue + normalizedProgress * (toValue - fromValue);
+      res[typedKey] = (fromValue + normalizedProgress * (toValue - fromValue));
     }
   }
   return res;

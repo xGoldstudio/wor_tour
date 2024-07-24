@@ -161,7 +161,7 @@ export default function Progression() {
                     fill={`rgba(${142}, ${175}, ${214}, ${(world.maxLevel - min) / range})`}
                   />
                   <Link
-                    to={`/${world.id}`}
+                    to={`${world.id}`}
                     className="hover:underline decoration-solid py-1"
                   >
                     <text

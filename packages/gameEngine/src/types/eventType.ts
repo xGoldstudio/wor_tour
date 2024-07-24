@@ -4,12 +4,13 @@ import { CardRarity } from "./DataStoreType";
 export type EventType =
   | DummyEvent
   | StartGameSequence
-  | StartGame
+  | StartGameEvent
   | ManaIncreaseEvent
   | SetManaIncreaseSpeed
   | ManaConsumeEvent
   | PlaceCardEvent
-  | StartEarningMana
+  | StartEarningManaEvent
+  | EndEarningManaEvent
   | CardStartAttackingEvent
   | CardAttackingEvent
   | PlayerDamageEvent
@@ -34,7 +35,7 @@ export interface StartGameSequence {
   type: "startGameSequence";
 }
 
-export interface StartGame {
+export interface StartGameEvent {
   type: "startGame";
 }
 
@@ -44,9 +45,15 @@ export interface ManaConsumeEvent {
   delta: number;
 }
 
-export interface StartEarningMana {
+export interface StartEarningManaEvent {
   type: "startEarningMana";
   isPlayer: boolean;
+}
+
+export interface EndEarningManaEvent {
+  type: "endEarningMana";
+  isPlayer: boolean;
+  startEarningManaFrame: number;
 }
 
 export interface SetManaIncreaseSpeed {
@@ -58,6 +65,7 @@ export interface SetManaIncreaseSpeed {
 export interface ManaIncreaseEvent {
   type: "manaIncrease";
   isPlayer: boolean;
+  value: number;
 }
 
 export interface PlaceCardEvent {

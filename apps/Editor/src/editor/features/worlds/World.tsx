@@ -20,7 +20,7 @@ export default function WorldEditor() {
   );
 
   if (!editorStore || !editorStore.world) {
-    navigate("/worlds");
+    navigate("");
     return;
   }
 
@@ -58,7 +58,7 @@ export default function WorldEditor() {
       <div className="flex flex-col bg-slate-200 rounded-md p-4 w-[400px] items-center">
         <h3 className="text-2xl font-bold">Cards:</h3>
         {cards.map((card) => (
-          <div className="py-1 flex gap-4 items-start w-full">
+          <div className="py-1 flex gap-4 items-start w-full" key={card.id}>
             <Link
               to={`${card.id}`}
               className="hover:underline decoration-solid "

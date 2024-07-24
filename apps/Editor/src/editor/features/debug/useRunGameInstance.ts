@@ -1,8 +1,8 @@
 import useEditorStore from "@/editor/store/EditorStore";
 import { CardState, CardType } from "@repo/lib";
-import { runGameEventListeners, useGameSyncAnimationStore } from "@repo/ui";
-import { ClockReturn, drawPlaceCard, EventType, FRAME_TIME, GameStateObject, healStateDefaultTest, initTest, massacreStateTest } from "game_engine";
-import { useEffect, useState } from "react";
+import { runGameEventListeners, useGameSyncAnimationStore, useOnMount, useOnUnMount } from "@repo/ui";
+import { ClockReturn, EventType, FRAME_TIME, GameStateObject, healStateDefaultTest, initTest, massacreStateTest } from "game_engine";
+import { useState } from "react";
 
 const dummyCard: CardType = {
 	name: "Dummy",
@@ -31,20 +31,23 @@ function useDummyCard() {
 	return dummyCard;
 }
 
-export function useRunInstance(log: boolean) {
+export type UseRunInstance = {
+	state: GameStateObject;
+	clock: ClockReturn<EventType>;
+	play: () => void;
+	pause: () => void;
+	setSpeed: (speed: number) => void;
+	speed: number;
+	isPlaying: boolean;
+	runTicks: (tickToDo: number) => void;
+};
+
+export function useRunInstance(log: boolean): UseRunInstance {
 	const card = useDummyCard();
 	const { triggerGameSyncAnimation } = useGameSyncAnimationStore();
-	const [instance, setInstance] = useState<{
-		state: GameStateObject;
-		clock: ClockReturn<EventType>;
-		play: () => void;
-		pause: () => void;
-		setSpeed: (speed: number) => void;
-		speed: number;
-		isPlaying: boolean;
-		runTicks: (tickToDo: number) => void;
-	} | null>(null);
-	useEffect(() => {
+	const [instance, setInstance] = useState<UseRunInstance>(runInstance());
+
+	function runInstance() {
 		const { clock, state } = initTest({
 			sideEffectOnFrame: ({ event, state, clock }) => {
 				log && console.log(event);
@@ -58,7 +61,6 @@ export function useRunInstance(log: boolean) {
 			},
 			playerDeck: [card],
 		});
-		defaultActions(clock);
 		function playTick(shouldAnimate: boolean) {
 			if (shouldAnimate) {
 				triggerGameSyncAnimation(
@@ -81,22 +83,30 @@ export function useRunInstance(log: boolean) {
 		const setSpeed = (speed: number) => operation(() => loopState.setSpeed(speed));
 		const operation = (fn: () => void) => {
 			fn();
-			updateInstance();
+			setInstance(getInstance);
 		}
-		const updateInstance = () => setInstance({
-			clock, state,  ...loopState, play, pause, setSpeed, runTicks,
+		const getInstance = () => ({
+			clock,
+			state,
+			isPlaying: loopState.isPlaying,
+			speed: loopState.speed,
+			play,
+			pause,
+			setSpeed,
+			runTicks
 		});
-		updateInstance();
-		play();
-		return (() => pause());
-	}, []);
+		return getInstance();
+	}
+
+	useOnMount(() => {
+		instance.play();
+	})
+
+	useOnUnMount(() => {
+		instance.pause();
+	});
 
 	return instance;
-}
-
-export function defaultActions(clock?: ClockReturn<EventType>) {
-	if (!clock) return;
-	drawPlaceCard(clock, true, 0);
 }
 
 function tickLoop(triggerTickEffects: (shouldAnimate: boolean) => void) {
@@ -140,7 +150,7 @@ function tickLoop(triggerTickEffects: (shouldAnimate: boolean) => void) {
 	}
 
 	function setSpeed(newSpeed: number) {
-		state.speed = 1/newSpeed;
+		state.speed = 1 / newSpeed;
 		play();
 	}
 

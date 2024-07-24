@@ -1,20 +1,23 @@
-import { StartEarningMana } from "../../../types/eventType";
+import { StartEarningManaEvent } from "../../../types/eventType";
 import { ComputeEventProps } from "../gameEngine";
+import { MAX_MANA } from "../gameState";
 
-export default function startEarningManaEvent({ event, gameState, clock }: ComputeEventProps<StartEarningMana>) {
+export default function startEarningManaEvent({ event, gameState, clock }: ComputeEventProps<StartEarningManaEvent>) {
 	if (
-		(event.isPlayer ? gameState.playerMana : gameState.opponentMana) < 9 &&
-		(event.isPlayer
-			? gameState.playerTickStartEarningMana
-			: gameState.opponentTickStartEarningMana) === null
+		gameState.getMana(event.isPlayer) < MAX_MANA
+		&& gameState.getStartEarningMana(event.isPlayer) === null
 	) {
-    gameState.startEarningMana(event.isPlayer, clock.getImmutableInternalState().currentFrame);
-    clock.setGameEventTimeout(
+		const currentFrame = clock.getImmutableInternalState().currentFrame;
+		gameState.startEarningMana(event.isPlayer, currentFrame);
+		clock.setGameEventTimeout(
 			{
-				type: "manaIncrease",
-        isPlayer: event.isPlayer,
-      },
-      gameState[event.isPlayer ? "playerManaSpeed" : "opponentManaSpeed"]
-    );
+				type: "endEarningMana",
+				isPlayer: event.isPlayer,
+				startEarningManaFrame: currentFrame,
+			},
+			gameState.getManaSpeed(event.isPlayer),
+		);
+	} else {
+		gameState.resetEarningMana(event.isPlayer);
 	}
 }

@@ -1,6 +1,6 @@
-import { StartGame } from "../../../types/eventType";
+import { StartGameEvent } from "../../../types/eventType";
 import { ComputeEventProps } from "../gameEngine";
 
-export default function startGame({ gameState }: ComputeEventProps<StartGame>) {
+export default function startGame({ gameState }: ComputeEventProps<StartGameEvent>) {
 	gameState.startGame();
 }
