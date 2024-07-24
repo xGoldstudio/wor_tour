@@ -9,11 +9,11 @@ import {
   triggerHealCard,
 } from "game_engine";
 import { defaultActions, useRunInstance } from "./useRunGameInstance";
+import DebugPanelLayout from "./DebugPanelLayout";
 
 export default function InGameCardDebug() {
   const instance = useRunInstance(false);
-  const { clock, state, pause, setSpeed, speed, isPlaying, runTicks } =
-    instance ?? {};
+  const { clock, state } = instance;
 
   function addState(stateArg: CardState) {
     const instanceId = state?.getCard(true, 0)?.instanceId;
@@ -84,26 +84,6 @@ export default function InGameCardDebug() {
     );
   }
 
-  function setSpeedButton(speedArg: number) {
-    return (
-      <Button
-        action={() => setSpeed?.(speedArg)}
-        rarity={speed === 1 / speedArg && isPlaying ? "epic" : "rare"}
-        full
-      >
-        x{speedArg}
-      </Button>
-    );
-  }
-
-  function addTicksButton(ticks: number) {
-    return (
-      <Button action={() => runTicks?.(ticks)} full>
-        +{ticks} ticks
-      </Button>
-    );
-  }
-
   return (
     <div>
       <div className="w-full flex justify-center items-center pt-16 gap-32">
@@ -112,23 +92,7 @@ export default function InGameCardDebug() {
             <GameCard isPlayerCard={true} position={0} />
           </div>
         </div>
-        <div className="flex gap-4 h-full flex-col justify-center">
-          <p className="text-2xl font-semibold">Game management</p>
-          <div className="grid grid-cols-5 gap-4">
-            <Button
-              action={() => pause?.()}
-              rarity={isPlaying ? "rare" : "epic"}
-              full
-            >
-              Pause
-            </Button>
-            {setSpeedButton(0.25)}
-            {setSpeedButton(0.5)}
-            {setSpeedButton(1)}
-            {setSpeedButton(2)}
-            {addTicksButton(1)}
-            {addTicksButton(10)}
-          </div>
+        <DebugPanelLayout instance={instance}>
           <p className="text-2xl font-semibold">Basic operations</p>
           <div className="flex gap-4">
             <Button action={() => defaultActions(clock)}>PlaceCard</Button>
@@ -143,7 +107,7 @@ export default function InGameCardDebug() {
             {addRemoveState(riposteStateTest)}
             {addRemoveState(massacreStateTest)}
           </div>
-        </div>
+        </DebugPanelLayout>
       </div>
     </div>
   );
