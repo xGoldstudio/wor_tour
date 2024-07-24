@@ -58,6 +58,8 @@ export interface SetManaIncreaseSpeed {
 export interface ManaIncreaseEvent {
   type: "manaIncrease";
   isPlayer: boolean;
+  value: number;
+  isNaturalEarn: boolean; // from startIncreaseManaEvent pipeline
 }
 
 export interface PlaceCardEvent {

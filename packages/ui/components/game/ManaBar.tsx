@@ -2,11 +2,12 @@ import _ from "lodash";
 import { ManaBallWrapper } from "../ManaBall";
 import { useRef, useState } from "react";
 import {
-  EmptyBar, useGameEventListener,
-  useSyncGameAnimation
+  EmptyBar, useGameEventListener, useSyncGameAnimation
 } from "@repo/ui";
 import { animationTimeline } from "@repo/lib";
 import {
+  ClockReturn,
+  EventType,
   GameStateObject,
   ManaConsumeEvent,
   ManaIncreaseEvent,
@@ -36,26 +37,22 @@ function ManaBar() {
       ref.current.innerHTML = String(state.playerMana); // the inner html ensure that the content is frame perfect, react will then do its job normally
       triggerAnimation({
         duration: 50,
-        computeStyle: animationTimeline(50).add(
-          ref.current,
-          { scaleX: 1 },
-          [
-            {
-              values: { scaleX: 1.2 },
-              ease: [0, 1, 1, 1],
-            },
-            {
-              values: { scaleX: 0.85 },
-              from: -30,
-              ease: [0, 1, 1, 1],
-            },
-            {
-              values: { scaleX: 1 },
-              from: -15,
-              ease: [0, 0.42, 1, 1],
-            },
-          ]
-        ).progress,
+        computeStyle: animationTimeline(50).add(ref.current, { scaleX: 1 }, [
+          {
+            values: { scaleX: 1.2 },
+            ease: [0, 1, 1, 1],
+          },
+          {
+            values: { scaleX: 0.85 },
+            from: -30,
+            ease: [0, 1, 1, 1],
+          },
+          {
+            values: { scaleX: 1 },
+            from: -15,
+            ease: [0, 0.42, 1, 1],
+          },
+        ]).progress,
       });
     }
     setMana(state.playerMana);
@@ -83,44 +80,66 @@ function ManaSubBarProgress({ manaIndex }: { manaIndex: number }) {
     triggerAnimation: changeManaTriggerAnimation,
     removeAnimation: changeManaRemoveAnimation,
   } = useSyncGameAnimation();
+
+  const filter = (event: EventType) =>
+    (event as { isPlayer: boolean }).isPlayer;
   useGameEventListener({
     type: "startEarningMana",
     action: (_, state, __, clock) => {
-      if (state.playerMana === manaIndex && animationRef.current) {
-        triggerAnimation({
-          duration: state.playerManaSpeed,
-          computeStyle: animationTimeline(state.playerManaSpeed).add(
-            animationRef.current,
-            { scaleX: 0 },
-            { values: { scaleX: 1 } }
-          ).progress,
-        })?.fastForward(
-          clock.getImmutableInternalState().currentFrame -
-            state.playerTickStartEarningMana!
-        );
-      } else {
-        removeAnimation();
-      }
-      if (state.playerMana < manaIndex && animationRef.current) {
-        animationRef.current.style.transform = "scaleX(0)";
-      } else if (state.playerMana > manaIndex && animationRef.current) {
-        animationRef.current.style.transform = "scaleX(1)";
-      }
+      earnManaAnimation(state, clock);
+      changeManaEvent(state, true);
     },
-    filter: (event) => (event as ManaIncreaseEvent).isPlayer,
+    filter,
   });
   useGameEventListener({
     type: "manaIncrease",
-    action: (_, state) => changeManaEvent(state, true),
-    filter: (event) => (event as ManaIncreaseEvent).isPlayer,
+    action: (_, state, __, clock) => {
+      earnManaAnimation(state, clock);
+      changeManaEvent(state, true);
+    },
+    filter,
   });
   useGameEventListener({
     type: "manaConsume",
-    action: (_, state) => changeManaEvent(state, false),
-    filter: (event) => (event as ManaConsumeEvent).isPlayer,
+    action: (_, state, __, clock) => {
+      earnManaAnimation(state, clock);
+      changeManaEvent(state, false);
+    },
+    filter,
   });
+
   const changeManaAnimationDuration = 40;
+  function earnManaAnimation(
+    state: GameStateObject,
+    clock: ClockReturn<EventType>
+  ) {
+    if (
+      state.playerMana === manaIndex &&
+      state.playerTickStartEarningMana !== null &&
+      animationRef.current
+    ) {
+      triggerAnimation({
+        duration: state.playerManaSpeed - 1,
+        computeStyle: animationTimeline(state.playerManaSpeed - 1).add(
+          animationRef.current,
+          { scaleX: 0 },
+          { values: { scaleX: 1 } }
+        ).progress,
+      })?.fastForward(
+        clock.getImmutableInternalState().currentFrame -
+          state.playerTickStartEarningMana
+      );
+      return;
+    }
+    removeAnimation();
+    if (state.playerMana < manaIndex && animationRef.current) {
+      animationRef.current.style.transform = "scaleX(0)";
+    } else if (state.playerMana > manaIndex && animationRef.current) {
+      animationRef.current.style.transform = "scaleX(1)";
+    }
+  }
   function changeManaEvent(state: GameStateObject, direction: boolean) {
+    // purlple animation
     if (state.playerMana - 1 === manaIndex && changeManaAnimationRef.current) {
       changeManaTriggerAnimation({
         duration: changeManaAnimationDuration,
@@ -128,12 +147,14 @@ function ManaSubBarProgress({ manaIndex }: { manaIndex: number }) {
           changeManaAnimationRef.current
         ).progress,
       });
-    } else if (
-      manaIndex > state.playerMana - 1 &&
-      changeManaAnimationRef.current
-    ) {
-      changeManaRemoveAnimation();
+      return;
+    }
+    if (!changeManaAnimationRef.current) return;
+    changeManaRemoveAnimation();
+    if (manaIndex > state.playerMana - 1) {
       changeManaAnimationRef.current.style.transform = "scaleX(0)";
+    } else if (manaIndex < state.playerMana) {
+      changeManaAnimationRef.current.style.transform = "scaleX(1)";
     }
   }
   const increaseManaTimeline = (ref: HTMLElement) =>

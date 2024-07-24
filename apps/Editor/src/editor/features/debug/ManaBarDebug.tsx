@@ -1,7 +1,7 @@
-import { Button, ManaBar, useGameEventListener, useOnMount } from "@repo/ui";
+import { Button, ManaBar, useOnMount } from "@repo/ui";
 import DebugPanelLayout from "./DebugPanelLayout";
 import { useRunInstance } from "./useRunGameInstance";
-import { StartEarningMana, triggerConsumeMana, triggerIncreaseMana } from "game_engine";
+import { MAX_MANA, triggerConsumeMana, triggerIncreaseMana, triggerStartEarningMana } from "game_engine";
 
 export default function ManaBarDebug() {
   const instance = useRunInstance(false);
@@ -9,7 +9,7 @@ export default function ManaBarDebug() {
 
   useOnMount(() => {
     if (!clock || !state) return;
-    triggerIncreaseMana(clock, true);
+    triggerStartEarningMana(clock, true);
   })
 
   function consumeMana(amount: number) {
@@ -17,9 +17,9 @@ export default function ManaBarDebug() {
     triggerConsumeMana(clock, true, amount);
   }
 
-  function increaseMana() {
+  function increaseMana(amount: number) {
     if (!clock || !state) return;
-    triggerIncreaseMana(clock, true);
+    triggerIncreaseMana(clock, true, amount);
   }
 
   function consumeMaxMana() {
@@ -27,20 +27,10 @@ export default function ManaBarDebug() {
     triggerConsumeMana(clock, true, state.playerMana);
   }
 
-  useGameEventListener({
-    type: null,
-    action: (event, state) => {
-      console.log(event, state);
-    },
-  })
-
-  useGameEventListener({
-    type: "startEarningMana",
-    action: (event, state) => {
-      console.log(event, state.playerManaSpeed, state.playerMana);
-    },
-    filter: (event) => (event as StartEarningMana).isPlayer,
-  })
+  function increaseMaxMana() {
+    if (!state) return;
+    increaseMana(MAX_MANA - state.getMana(true));
+  }
 
   return (
     <div>
@@ -51,7 +41,9 @@ export default function ManaBarDebug() {
             <Button action={() => consumeMaxMana()}>Consume max</Button>
             <Button action={() => consumeMana(1)}>Consume 1</Button>
             <Button action={() => consumeMana(2)}>Consume 2</Button>
-            <Button action={() => increaseMana()}>Increase</Button>
+            <Button action={() => increaseMaxMana()}>Increase max</Button>
+            <Button action={() => increaseMana(1)}>Increase 1</Button>
+            <Button action={() => increaseMana(2)}>Increase 2</Button>
           </div>
           <div className="flex gap-4">
           </div>

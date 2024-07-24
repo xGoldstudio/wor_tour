@@ -144,6 +144,16 @@ export function triggerDirectAttackResolved(
 	});
 }
 
+export function triggerStartEarningMana(
+	clock: ClockReturn<EventType>,
+	isPlayer: boolean,
+) {
+	clock.triggerEvent({
+		type: "startEarningMana",
+		isPlayer,
+	});
+}
+
 export function triggerConsumeMana(
 	clock: ClockReturn<EventType>,
 	isPlayer: boolean,
@@ -159,10 +169,13 @@ export function triggerConsumeMana(
 export function triggerIncreaseMana(
 	clock: ClockReturn<EventType>,
 	isPlayer: boolean,
+	amount: number
 ) {
 	clock.triggerEvent({
 		type: "manaIncrease",
 		isPlayer,
+		value: amount,
+		isNaturalEarn: false,
 	});
 }
 
