@@ -13,12 +13,14 @@ interface CollectionProps {
   setCurrentTab?: (tab: Tabs) => void;
   setSelectedCard: (obj: selectedCardType) => void;
   selectedCard: selectedCardType;
+  classname?: string;
 }
 
 export default function Collection({
   setCurrentTab,
   setSelectedCard,
   selectedCard,
+  classname = "pb-24",
 }: CollectionProps) {
   let { detailledCollection, cardNotFound } = usePlayerStore((state) => ({
     detailledCollection: state.getCollectionCompleteInfo(state.getCollection()),
@@ -58,19 +60,23 @@ export default function Collection({
   });
   cardNotFound = sorts[currentSort].sortFunction(cardNotFound, isAscending);
   return (
-    <div className="flex flex-col h-[674px] w-[650px] ">
-      <div className="grid grid-rows-[1fr_auto] top-0 pb-6">
-        <SortAndFilterBox
-          collectionLength={collectionLength}
-          currentSort={currentSort}
-          setCurrentSort={setcurrentSort}
-          isAscending={isAscending}
-          setIsAscending={setIsAscending}
-          currentFilter={currentFilter}
-          setCurrentFilter={setCurrentFilter}
-        />
-        <ScrollContainer className="grow overflow-y-scroll scrollbar-hiden flex flex-col h-[674px] w-[650px]">
-          <div className="w-[600px] mx-auto grid grid-cols-4 gap-y-6 pt-10 pb-28">
+    <div className="flex flex-col w-[650px] ">
+      <div className="grid grid-rows-[1fr_auto] top-0  ">
+        <div className="sticky top-0 z-10 ">
+          <SortAndFilterBox
+            collectionLength={collectionLength}
+            currentSort={currentSort}
+            setCurrentSort={setcurrentSort}
+            isAscending={isAscending}
+            setIsAscending={setIsAscending}
+            currentFilter={currentFilter}
+            setCurrentFilter={setCurrentFilter}
+          />
+        </div>
+        <ScrollContainer
+          className={`grow overflow-y-scroll scrollbar-hiden flex flex-col h-[674px] w-[650px], ${classname}`}
+        >
+          <div className="w-[600px] mx-auto grid grid-cols-4 gap-y-6 pt-10 ">
             {detailledCollection.map((card) => (
               <div className="w-full flex justify-center" key={card.id}>
                 <DeckCardUI
