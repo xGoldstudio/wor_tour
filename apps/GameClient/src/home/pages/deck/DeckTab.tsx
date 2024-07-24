@@ -31,7 +31,7 @@ function DeckStats({ detailledDeck }: DeckStatsProps) {
       </div>
       <div className="flex items-center">
         <span className=" text-white text-2xl bold ">
-          {powerTotal.toFixed(0)}
+          {powerTotal.toFixed(1)}
         </span>
         <img
           src="/icons/epees-bouclier.png"

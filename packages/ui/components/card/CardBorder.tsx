@@ -1,4 +1,9 @@
-import { CardRarity, getImageUrlCssValue, inPx, textureByRarity } from "@repo/lib";
+import {
+  CardRarity,
+  getImageUrlCssValue,
+  inPx,
+  textureByRarity,
+} from "@repo/lib";
 import { cn } from "../../lib/utils";
 
 interface CardBoardProps {
@@ -135,7 +140,10 @@ export function CardContentIllustartion({
     <>
       <InnerBord size={size}>
         <div
-          className={cn("w-full h-full grow absolute box-border", isDisabled && "grayscale")}
+          className={cn(
+            "w-full h-full grow absolute box-border",
+            isDisabled && "grayscale"
+          )}
           style={{
             backgroundImage: getImageUrlCssValue(card.worldIllustration),
             backgroundSize: "cover",
@@ -144,7 +152,10 @@ export function CardContentIllustartion({
           }}
         ></div>
         <div
-          className={cn("w-full h-full grow absolute box-border", isDisabled && "grayscale")}
+          className={cn(
+            "w-full h-full grow absolute box-border",
+            isDisabled && "grayscale"
+          )}
           style={{
             backgroundImage: getImageUrlCssValue(card.illustration),
             backgroundSize: "cover",
