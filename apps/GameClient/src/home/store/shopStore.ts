@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import usePlayerStore from "./playerStore";
+import usePlayerStore from "./playerStore/playerStore";
 import { useAddCardOrShardOrEvolve } from "./useBooster/useBooster";
 import { CardRarity, CardRarityOrder, CardType } from "@repo/lib";
 import { combineLatest } from 'rxjs';

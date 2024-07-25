@@ -1,6 +1,6 @@
 import { DebugButton } from "./game/GameDebugPanel";
 import useAnimationStore from "./home/store/animationStore";
-import usePlayerStore from "./home/store/playerStore";
+import usePlayerStore from "./home/store/playerStore/playerStore";
 
 export default function DebugPanel() {
   const { addGold, setTrophies } = usePlayerStore((state) => ({

@@ -2,7 +2,7 @@ import { useStartGame } from "@/game/stores/gameMetadataStore";
 import { useState } from "react";
 import { Cover, InnerBord } from "@repo/ui";
 import { numberWithCommas, textureByRarity } from "@repo/lib";
-import usePlayerStore from "@/home/store/playerStore";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 import AllWorlds from "./allWorlds/AllWorlds";
 import ProfileModal from "./modals/ProfileModal";
 import AnimationContainer from "@/home/animations/AnimationContainer";

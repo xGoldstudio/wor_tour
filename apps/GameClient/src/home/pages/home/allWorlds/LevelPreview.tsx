@@ -1,4 +1,4 @@
-import usePlayerStore from "@/home/store/playerStore";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { useContext, useRef } from "react";
 import {
   AllWorldsAnimationContext,

@@ -1,4 +1,4 @@
-import { CollectionCard } from "@/home/store/playerStore";
+import { CollectionCard } from "@/home/store/playerStore/playerStore";
 import { CardType } from "@repo/lib";
 import { FullCard } from "@repo/ui";
 

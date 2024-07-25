@@ -1,4 +1,4 @@
-import usePlayerStore from "@/home/store/playerStore";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { ManaBall } from "@repo/ui";
 import * as _ from "lodash";
 import ScrollContainer from "react-indiana-drag-scroll";

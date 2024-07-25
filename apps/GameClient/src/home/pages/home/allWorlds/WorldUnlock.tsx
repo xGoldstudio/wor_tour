@@ -7,7 +7,7 @@ import {
 } from "./trophyBar/TrophyBarContext";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import usePlayerStore from "@/home/store/playerStore";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 import useDataStore from "@/cards/DataStore";
 import StaticCard from "@/game/gui/card/StaticCard";
 import { getCardFromLevel } from "@/cards";

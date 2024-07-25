@@ -1,5 +1,5 @@
 import { toStream } from 'zustand-rx';
-import usePlayerStore, { CollectionCard } from "./playerStore";
+import usePlayerStore, { CollectionCard } from "./playerStore/playerStore";
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { boosters, toState } from "@repo/ui";
