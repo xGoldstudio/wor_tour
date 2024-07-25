@@ -13,12 +13,14 @@ import WorldPreview from "./WorldPreview";
 import LevelPreview from "./LevelPreview";
 import WorldUnlock from "./WorldUnlock";
 
+export type AllWorldsStateType = "normal" | "tier" | "world";
+
 export default function AllWorlds({
   closeModal,
   state,
 }: {
   closeModal: () => void;
-  state: "normal" | "tier" | "world";
+  state: AllWorldsStateType;
 }) {
   const home = document.getElementById("home");
 

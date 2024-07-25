@@ -5,7 +5,7 @@ import usePlayerStore from "./home/store/playerStore";
 export default function DebugPanel() {
   const { addGold, setTrophies } = usePlayerStore((state) => ({
     addGold: state.addGold,
-    setTrophies: state.setTrophies,
+    setTrophies: state.addOrRemoveTrophies,
   }));
 
   const addTrophies = (amount: number) => useAnimationStore.getState().addAnimation({

@@ -13,7 +13,7 @@ import { useState } from "react";
 export default function WorldIllustration({
   setWorldsModalOpen,
 }: {
-  setWorldsModalOpen: (value: "tier" | "world" | "normal" | false) => void;
+  setWorldsModalOpen: () => void;
 }) {
   const { currentWorld } = usePlayerStore((state) => ({
     trophies: state.trophies,
@@ -27,10 +27,7 @@ export default function WorldIllustration({
   }
 
   return (
-    <div
-      className="relative w-1/2"
-      onClick={() => setWorldsModalOpen("normal")}
-    >
+    <div className="relative w-1/2" onClick={setWorldsModalOpen}>
       <img
         id="worldIllustration"
         className="w-full aspect-square relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)]"

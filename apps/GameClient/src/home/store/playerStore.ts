@@ -34,7 +34,7 @@ interface PlayerStore {
 
   trophies: number;
   maxTrophies: number;
-  setTrophies: (amount: number) => false | "tier" | "world";
+  addOrRemoveTrophies: (amount: number) => false | "tier" | "world";
 
   tiers: Map<number, Tier>;
   currentTier: number;
@@ -110,7 +110,7 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   spendGold: (amount: number) =>
     set((state) => ({ gold: state.gold - amount })),
 
-  setTrophies: (amount: number) => updateTrophies(set, amount),
+  addOrRemoveTrophies: (amount: number) => updateTrophies(set, amount),
 
   collectTierReward: (tierNumber: number) => {
     let result: Tier | null = null;

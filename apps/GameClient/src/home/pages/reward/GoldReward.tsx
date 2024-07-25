@@ -75,6 +75,7 @@ export default function GoldReward({
             originRef: scope.current?.querySelector("img") as HTMLImageElement,
             onEnd: removeCurrentReward,
           });
+          usePlayerStore.getState().addGold(reward.amount);
         }
       }}
     >
