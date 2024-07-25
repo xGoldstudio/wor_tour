@@ -48,31 +48,31 @@ function DeckStats({ detailledDeck }: DeckStatsProps) {
 export type selectedCardType = { id: number; tab: Tabs | null };
 
 export default function DeckTab() {
-  const { deck, getCompleteInfo, numberOfCardsInDeck } = usePlayerStore(
-    (state) => ({
+  const { deck, getCompleteInfo, numberOfCardsInDeck, currentMissingCards } =
+    usePlayerStore((state) => ({
       deck: state.deck,
       getCompleteInfo: state.getCompleteInfo,
       numberOfCardsInDeck: state.numberOfCardsInDeck,
-    })
-  );
+      currentMissingCards: state.currentMissingCards,
+    }));
   const [selectedCard, setSelectedCard] = useState<selectedCardType>({
     id: 0,
     tab: null,
   });
   const deckArray = _.concat(
     deck,
-    _.fill(Array(numberOfCardsInDeck - deck.length), null)
+    _.fill(Array(NUMBER_OF_CARD_IN_DECK - deck.length), null)
   );
   const detailledDeck: CardCollection[] = [];
-  for (let i = 0; i < numberOfCardsInDeck; i++)
+  for (let i = 0; i < NUMBER_OF_CARD_IN_DECK; i++)
     detailledDeck.push(getCompleteInfo(deckArray[i]!));
   return (
     <div>
       <ScrollContainer className="grow scrollbar-hiden flex flex-col h-[674px] w-[650px] overflow-y-scroll">
         <div className="grid grid-rows-[1fr_auto]  ">
           <div className="grid grid-cols-4 gap-y-8 pt-8 ">
-            {detailledDeck.map((card) => (
-              <div className="w-full flex justify-center" key={card.id}>
+            {detailledDeck.map((card, index) => (
+              <div className="w-full flex justify-center" key={index}>
                 <DeckCardUI
                   cardId={card.id}
                   setSelectedCard={() =>

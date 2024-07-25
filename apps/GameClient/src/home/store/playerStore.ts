@@ -14,6 +14,7 @@ export interface CollectionCard {
 interface PlayerStore {
   collection: Map<number, CollectionCard>;
   deck: number[];
+  currentMissingCards: number[];
   currentWorld: number;
   gold: number;
   numberOfCardsInDeck: number;
@@ -62,6 +63,7 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   collection: defaultCollection,
   currentWorld: 1,
   deck: [1, 2, 3, 4, 5, 6, 7, 8],
+  currentMissingCards: [],
   gold: 0,
   getCollection: () => Array.from(get().collection.values()),
   getCollectionInfo: (id: number) =>
@@ -91,16 +93,28 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   currentTier: 0,
 
   removeCardFromDeck: (id: number) =>
-    set((state) => ({
-      deck: state.deck.filter((cardId) => cardId !== id),
-      numberOfCardsInDeck: state.numberOfCardsInDeck - 1,
-    })),
+    set((state) => {
+      const index = state.deck.findIndex((cardId) => cardId === id);
+      state.deck.splice(index, 1, 0);
+
+      return {
+        deck: [...state.deck],
+        numberOfCardsInDeck: state.numberOfCardsInDeck - 1,
+      };
+    }),
   addCardToDeck: (id: number) =>
-    set((state) => ({
-      deck: [...state.deck, id],
-      numberOfCardsInDeck: state.numberOfCardsInDeck + 1,
-    })),
-  isDeckFull: () => get().deck.length >= 8,
+    set((state) => {
+      state.deck.splice(
+        state.deck.findIndex((id) => id === 0),
+        1,
+        id
+      );
+      return {
+        deck: [...state.deck],
+        numberOfCardsInDeck: state.numberOfCardsInDeck + 1,
+      };
+    }),
+  isDeckFull: () => get().numberOfCardsInDeck >= 8,
   isPlayed: (cardId: number) => get().deck.includes(cardId),
 
   isCardPackable: (id: number) => {
@@ -118,7 +132,7 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
         return !get().collection.has(card.id);
       })
       .map((card) => ({ ...getCardFromLevel(card, 1), isInDeck: false }));
-  }, // mapper en cardType!
+  },
   getTheLockPattern: (id: number) => {
     const card = getCardStats(id);
     if (card.world > get().currentWorld) return card.world;
