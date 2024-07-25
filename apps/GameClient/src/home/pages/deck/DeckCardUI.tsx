@@ -12,6 +12,7 @@ import { useState } from "react";
 import CardModal from "./CardModal";
 import { Tabs } from "./DeckInterface";
 import { selectedCardType } from "./DeckTab";
+import { useEditionMode } from "./context/EditionModeContext";
 
 interface CardUIProps {
   cardId: number;
@@ -33,6 +34,7 @@ export function DeckCardUI({
   tab,
 }: CardUIProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
+  const { editionMode, setEditionMode } = useEditionMode();
 
   const { card, removeCardFromDeck, addCardToDeck, isDeckFull, lockPattern } =
     usePlayerStore((state) => ({
@@ -43,7 +45,6 @@ export function DeckCardUI({
       lockPattern: state.getTheLockPattern(cardId),
     }));
   const isSelected = selectedCard?.id === card.id && selectedCard?.tab === tab;
-
   const opacity = locked ? "brightness-50" : "opacity-100";
   return (
     <div>
@@ -85,7 +86,6 @@ export function DeckCardUI({
               className={`${opacity} hover:cursor-pointer`}
               onClick={() => setSelectedCard({ id: card.id, tab: "Deck" })}
             >
-              {/* <SelectedBordersCard> */}
               <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>
                 <div
                   className={`w-full h-full flex flex-col relative ${opacity}`}
@@ -107,7 +107,6 @@ export function DeckCardUI({
                   </div>
                 </div>
               </CardBorder>
-              {/* </SelectedBordersCard> */}
               <div className="absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3 scale-[65%]">
                 <ManaBall mana={card.cost} />
               </div>
@@ -138,6 +137,7 @@ export function DeckCardUI({
                       width="w-[3.6rem]"
                       className="h-10"
                       action={() => {
+                        setEditionMode(true);
                         removeCardFromDeck(card.id);
                         setCurrentTab?.("Deck");
                       }}
@@ -176,7 +176,7 @@ export function DeckCardUI({
           </div>
         </div>
       ) : (
-        <div className="h-[178px] w-[128px] bg-black bg-opacity-20 border border-gray-300 border-opacity-25 backdrop-filter backdrop-blur-sm rounded-sm " />
+        <div className="mb-2 h-[178px] w-[128px] bg-black bg-opacity-20 border border-gray-300 border-opacity-25 backdrop-filter backdrop-blur-sm rounded-sm " />
       )}
     </div>
   );

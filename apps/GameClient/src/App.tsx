@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import useDataStore from "./cards/DataStore";
 import { EditorData } from "../../../packages/gameEngine/src/types/DataStoreType";
+import { EditionModeProvider } from "./home/pages/deck/context/EditionModeContext";
 
 const queryClient = new QueryClient();
 
@@ -12,7 +13,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <AppRouter />
+        <EditionModeProvider>
+          <AppRouter />
+        </EditionModeProvider>
       </QueryClientProvider>
     </BrowserRouter>
   );

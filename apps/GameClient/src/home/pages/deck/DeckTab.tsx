@@ -8,8 +8,8 @@ import { getTargetStrength } from "@repo/lib";
 import { useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { Tabs } from "./DeckInterface";
-
-export const NUMBER_OF_CARD_IN_DECK: number = 8;
+import { NUMBER_OF_CARD_IN_DECK } from "./cardSorts";
+import { EditionModeProvider } from "./context/EditionModeContext";
 
 interface DeckStatsProps {
   detailledDeck: CardCollection[];
@@ -48,13 +48,12 @@ function DeckStats({ detailledDeck }: DeckStatsProps) {
 export type selectedCardType = { id: number; tab: Tabs | null };
 
 export default function DeckTab() {
-  const { deck, getCompleteInfo, numberOfCardsInDeck, currentMissingCards } =
-    usePlayerStore((state) => ({
-      deck: state.deck,
-      getCompleteInfo: state.getCompleteInfo,
-      numberOfCardsInDeck: state.numberOfCardsInDeck,
-      currentMissingCards: state.currentMissingCards,
-    }));
+  const { deck, getCompleteInfo } = usePlayerStore((state) => ({
+    deck: state.deck,
+    getCompleteInfo: state.getCompleteInfo,
+    numberOfCardsInDeck: state.numberOfCardsInDeck,
+    currentMissingCards: state.currentMissingCards,
+  }));
   const [selectedCard, setSelectedCard] = useState<selectedCardType>({
     id: 0,
     tab: null,
@@ -73,14 +72,16 @@ export default function DeckTab() {
           <div className="grid grid-cols-4 gap-y-8 pt-8 ">
             {detailledDeck.map((card, index) => (
               <div className="w-full flex justify-center" key={index}>
-                <DeckCardUI
-                  cardId={card.id}
-                  setSelectedCard={() =>
-                    setSelectedCard({ id: card.id, tab: "Deck" })
-                  }
-                  selectedCard={selectedCard}
-                  tab="Deck"
-                />
+                <EditionModeProvider>
+                  <DeckCardUI
+                    cardId={card.id}
+                    setSelectedCard={() =>
+                      setSelectedCard({ id: card.id, tab: "Deck" })
+                    }
+                    selectedCard={selectedCard}
+                    tab="Deck"
+                  />
+                </EditionModeProvider>
               </div>
             ))}
           </div>

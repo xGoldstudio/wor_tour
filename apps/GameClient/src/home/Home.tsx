@@ -1,16 +1,20 @@
 import DebugPanel from "@/DebugPanel";
 import HomeTab from "./pages/home/HomeTab";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { DeckInterface as DeckTab } from "./pages/deck/DeckInterface";
 import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore";
 import Badge from "../../../../packages/ui/components/Badge";
-import { Cover, NumberSpan } from "@repo/ui";
+import { Button, Cover, NumberSpan } from "@repo/ui";
 import { cn } from "@repo/ui";
-import { Borders, CardIllustartion, InnerBord } from "../../../../packages/ui/components/card/CardBorder";
+import {
+  Borders,
+  CardIllustartion,
+  InnerBord,
+} from "../../../../packages/ui/components/card/CardBorder";
 import { numberWithCommas } from "@repo/lib";
-
+import { useEditionMode } from "./pages/deck/context/EditionModeContext";
 
 type Tabs = "home" | "deck" | "shop";
 
@@ -21,10 +25,12 @@ const tabsPosition: Record<Tabs, number> = {
   home: 1,
   deck: 2,
 };
-
 export default function Home() {
   const [currentTab, setCurrentTab] = useState<Tabs>("home");
-
+  const { editionMode, setEditionMode } = useEditionMode();
+  const { isDeckFull } = usePlayerStore((state) => ({
+    isDeckFull: state.isDeckFull(),
+  }));
   return (
     <div className="w-screen h-screen justify-center bg-black relative flex">
       <DebugPanel />
@@ -52,46 +58,66 @@ export default function Home() {
               </div>
             ))}
           </div>
-
-          <div className="flex w-full bg-black relative z-10">
-            <div className="w-full h-full absolute flex overflow-hidden">
-              <div className="grow h-full bg-slate-600 relative">
+          {editionMode ? (
+            <div className="h-[70px] w-full bg-white relative z-10 ">
+              <div className="grow h-full bg-slate-600 relative flex items-center justify-center">
                 <Cover cardRarity="rare" />
-              </div>
-              <div className="grow h-full bg-slate-600 relative">
-                <Cover cardRarity="rare" />
-              </div>
-              <div className="grow h-full bg-slate-600 relative">
-                <Cover cardRarity="rare" />
+                {isDeckFull ? (
+                  <Button rarity="epic" action={() => setEditionMode(false)}>
+                    Done
+                  </Button>
+                ) : (
+                  <Button
+                    rarity="epic"
+                    disabled={true}
+                    action={() => setEditionMode(false)}
+                  >
+                    Done
+                  </Button>
+                )}
               </div>
             </div>
-            <div
-              className="w-1/3 h-full absolute transition-transform overflow-hidden"
-              style={{
-                transform: `translateX(${100 * tabsPosition[currentTab]}%)`,
-              }}
-            >
-              <Cover cardRarity="epic" />
+          ) : (
+            <div className="flex w-full bg-black relative z-10">
+              <div className="w-full h-full absolute flex overflow-hidden">
+                <div className="grow h-full bg-slate-600 relative">
+                  <Cover cardRarity="rare" />
+                </div>
+                <div className="grow h-full bg-slate-600 relative">
+                  <Cover cardRarity="rare" />
+                </div>
+                <div className="grow h-full bg-slate-600 relative">
+                  <Cover cardRarity="rare" />
+                </div>
+              </div>
+              <div
+                className="w-1/3 h-full absolute transition-transform overflow-hidden"
+                style={{
+                  transform: `translateX(${100 * tabsPosition[currentTab]}%)`,
+                }}
+              >
+                <Cover cardRarity="epic" />
+              </div>
+              <FooterButton
+                onClick={() => setCurrentTab("shop")}
+                label="Shop"
+                selected={currentTab === "shop"}
+                imageUrl="footer/backpack.png"
+              />
+              <FooterButton
+                onClick={() => setCurrentTab("home")}
+                label="Battle"
+                selected={currentTab === "home"}
+                imageUrl="fightback.png"
+              />
+              <FooterButton
+                onClick={() => setCurrentTab("deck")}
+                label="Collection"
+                selected={currentTab === "deck"}
+                imageUrl="footer/collection.png"
+              />
             </div>
-            <FooterButton
-              onClick={() => setCurrentTab("shop")}
-              label="Shop"
-              selected={currentTab === "shop"}
-              imageUrl="footer/backpack.png"
-            />
-            <FooterButton
-              onClick={() => setCurrentTab("home")}
-              label="Battle"
-              selected={currentTab === "home"}
-              imageUrl="fightback.png"
-            />
-            <FooterButton
-              onClick={() => setCurrentTab("deck")}
-              label="Collection"
-              selected={currentTab === "deck"}
-              imageUrl="footer/collection.png"
-            />
-          </div>
+          )}
         </div>
       </div>
     </div>
