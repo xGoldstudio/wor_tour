@@ -51,12 +51,10 @@ function isCardPackableForBooster(booster: BoosterTypeDeclartion) {
 		return true;
 	}
 }
+export const FIRST_CARD_LEVEL = 1;
 function findCardFromCollection(card: { id: number }) {
 	const collectionCard = usePlayerStore.getState().collection.get(card.id);
-	if (collectionCard) {
-		return findCard(card.id, collectionCard.level);
-	}
-	return null;
+	return findCard(card.id, collectionCard ? collectionCard.level : FIRST_CARD_LEVEL);
 }
 function sortCardsByRarity(a: CardType, b: CardType) {
 	return CardRarityOrder.indexOf(a.rarity) - CardRarityOrder.indexOf(b.rarity)

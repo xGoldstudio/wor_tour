@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { DebugButton } from "./game/GameDebugPanel";
 import useAnimationStore from "./home/store/animationStore";
+import { WarningResetPlayStore } from "./home/store/playerStore/defaultData";
 import usePlayerStore from "./home/store/playerStore/playerStore";
 
 export default function DebugPanel() {
@@ -8,11 +10,14 @@ export default function DebugPanel() {
     setTrophies: state.addOrRemoveTrophies,
   }));
 
-  const addTrophies = (amount: number) => useAnimationStore.getState().addAnimation({
-    type: "trophy",
-    previousValue: usePlayerStore.getState().trophies,
-    amount,
-  });
+  const addTrophies = (amount: number) =>
+    useAnimationStore.getState().addAnimation({
+      type: "trophy",
+      previousValue: usePlayerStore.getState().trophies,
+      amount,
+    });
+
+  const [confirmationResetPlayer, setConfirmationResetPlayer] = useState(false);
 
   return (
     <div className="fixed right-2 top-2 border-2 border-white text-white px-4 py-2 flex flex-col gap-4">
@@ -33,6 +38,29 @@ export default function DebugPanel() {
         <DebugButton onClick={() => setTrophies(-10)}>-10</DebugButton>
         <DebugButton onClick={() => setTrophies(-1)}>-1</DebugButton>
         <DebugButton onClick={() => setTrophies(100)}>+100</DebugButton>
+      </div>
+      <p className="text-red-600">Danger zone:</p>
+      <div className="grid grid-cols-2 gap-4 border-4 border-red-600 text-red-600 p-2">
+        {confirmationResetPlayer ? (
+          <>
+            <p className="col-span-2">Are you sure to reset player?</p>
+            <DebugButton onClick={() => setConfirmationResetPlayer(false)}>
+              No
+            </DebugButton>
+            <DebugButton
+              onClick={() => {
+                WarningResetPlayStore();
+                setConfirmationResetPlayer(false);
+              }}
+            >
+              Yes
+            </DebugButton>
+          </>
+        ) : (
+          <DebugButton onClick={() => setConfirmationResetPlayer(true)}>
+            Reset Player
+          </DebugButton>
+        )}
       </div>
     </div>
   );

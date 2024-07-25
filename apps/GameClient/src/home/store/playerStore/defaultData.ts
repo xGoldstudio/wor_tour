@@ -1,10 +1,23 @@
-import { CollectionCard } from "./playerStore";
+import { levels } from "@repo/ui";
+import { getTierFromLevel, Tier } from "../tiers";
+import usePlayerStore, { CollectionCard } from "./playerStore";
 
-const defaultCollection: Map<number, CollectionCard> = new Map();
-// to 75
-for (let i = 1; i <= 8; i++) {
-  defaultCollection.set(i, { id: i, level: 1, shard: 0 });
-}
+const defaultCollection = (() => {
+	const collection: Map<number, CollectionCard> = new Map();
+	// to 75
+	for (let i = 1; i <= 8; i++) {
+		collection.set(i, { id: i, level: 1, shard: 0 });
+	}
+	return collection;
+})();
+
+const tiers = (() => {
+	const tierState = new Map<number, Tier>();
+	levels.forEach((level) => {
+		tierState.set(level.id, getTierFromLevel(level));
+	});
+	return tierState;
+})();
 
 export const defaultPlayerStoreData = {
 	collection: defaultCollection,
@@ -14,4 +27,9 @@ export const defaultPlayerStoreData = {
 	trophies: 0,
 	maxTrophies: 0,
 	currentTier: 0,
+	tiers: tiers,
+}
+
+export function WarningResetPlayStore() {
+	usePlayerStore.setState(defaultPlayerStoreData);
 }

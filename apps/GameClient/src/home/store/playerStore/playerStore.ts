@@ -1,10 +1,9 @@
 import { create } from "zustand";
-import { Tier, getTierFromLevel } from "../tiers";
-import { findCard } from "../../../cards/index";
+import { Tier } from "../tiers";
 import { CardType } from "@repo/lib";
-import { levels } from "@repo/ui";
 import { persist } from "zustand/middleware";
 import { defaultPlayerStoreData } from "./defaultData";
+import { findCard } from "@/cards";
 
 export interface CollectionCard {
   id: number;
@@ -58,13 +57,6 @@ const usePlayerStore = create(
       }),
       getCollectionCompleteInfo: (collection: CollectionCard[]) =>
         collection.map((card) => get().getCompleteInfo(card.id)),
-      tiers: (() => {
-        const tierState = new Map<number, Tier>();
-        levels.forEach((level) => {
-          tierState.set(level.id, getTierFromLevel(level));
-        });
-        return tierState;
-      })(),
 
       removeCardFromDeck: (id: number) =>
         set((state) => ({ deck: state.deck.filter((cardId) => cardId !== id) })),
