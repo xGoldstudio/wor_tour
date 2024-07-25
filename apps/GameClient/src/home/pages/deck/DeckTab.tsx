@@ -1,15 +1,14 @@
 import usePlayerStore from "@/home/store/playerStore";
+import { getTargetStrength } from "@repo/lib";
 import { ManaBall } from "@repo/ui";
 import * as _ from "lodash";
-import { CardCollection } from "./cardFilters";
-import { DeckCardUI } from "./DeckCardUI";
-import Collection from "./Collection";
-import { getTargetStrength } from "@repo/lib";
 import { useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
-import { Tabs } from "./DeckInterface";
+import { CardCollection } from "./cardFilters";
 import { NUMBER_OF_CARD_IN_DECK } from "./cardSorts";
-import { EditionModeProvider } from "./context/EditionModeContext";
+import Collection from "./Collection";
+import { DeckCardUI } from "./DeckCardUI";
+import { Tabs } from "./DeckInterface";
 
 interface DeckStatsProps {
   detailledDeck: CardCollection[];
@@ -72,16 +71,14 @@ export default function DeckTab() {
           <div className="grid grid-cols-4 gap-y-8 pt-8 ">
             {detailledDeck.map((card, index) => (
               <div className="w-full flex justify-center" key={index}>
-                <EditionModeProvider>
-                  <DeckCardUI
-                    cardId={card.id}
-                    setSelectedCard={() =>
-                      setSelectedCard({ id: card.id, tab: "Deck" })
-                    }
-                    selectedCard={selectedCard}
-                    tab="Deck"
-                  />
-                </EditionModeProvider>
+                <DeckCardUI
+                  cardId={card.id}
+                  setSelectedCard={() =>
+                    setSelectedCard({ id: card.id, tab: "Deck" })
+                  }
+                  selectedCard={selectedCard}
+                  tab="Deck"
+                />
               </div>
             ))}
           </div>

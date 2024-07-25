@@ -1,20 +1,19 @@
 import DebugPanel from "@/DebugPanel";
-import HomeTab from "./pages/home/HomeTab";
-import { useContext, useState } from "react";
-import { DeckInterface as DeckTab } from "./pages/deck/DeckInterface";
-import ShopTab from "./pages/shop/ShopTab";
-import { RewardBlockWithContext } from "./pages/reward/Reward";
-import usePlayerStore from "./store/playerStore";
+import { numberWithCommas } from "@repo/lib";
+import { Button, cn, Cover, NumberSpan } from "@repo/ui";
+import { useState } from "react";
 import Badge from "../../../../packages/ui/components/Badge";
-import { Button, Cover, NumberSpan } from "@repo/ui";
-import { cn } from "@repo/ui";
 import {
   Borders,
   CardIllustartion,
   InnerBord,
 } from "../../../../packages/ui/components/card/CardBorder";
-import { numberWithCommas } from "@repo/lib";
 import { useEditionMode } from "./pages/deck/context/EditionModeContext";
+import { DeckInterface as DeckTab } from "./pages/deck/DeckInterface";
+import HomeTab from "./pages/home/HomeTab";
+import { RewardBlockWithContext } from "./pages/reward/Reward";
+import ShopTab from "./pages/shop/ShopTab";
+import usePlayerStore from "./store/playerStore";
 
 type Tabs = "home" | "deck" | "shop";
 
@@ -28,9 +27,6 @@ const tabsPosition: Record<Tabs, number> = {
 export default function Home() {
   const [currentTab, setCurrentTab] = useState<Tabs>("home");
   const { editionMode, setEditionMode } = useEditionMode();
-  const { isDeckFull } = usePlayerStore((state) => ({
-    isDeckFull: state.isDeckFull(),
-  }));
   return (
     <div className="w-screen h-screen justify-center bg-black relative flex">
       <DebugPanel />
@@ -62,19 +58,9 @@ export default function Home() {
             <div className="h-[70px] w-full bg-white relative z-10 ">
               <div className="grow h-full bg-slate-600 relative flex items-center justify-center">
                 <Cover cardRarity="rare" />
-                {isDeckFull ? (
-                  <Button rarity="epic" action={() => setEditionMode(false)}>
-                    Done
-                  </Button>
-                ) : (
-                  <Button
-                    rarity="epic"
-                    disabled={true}
-                    action={() => setEditionMode(false)}
-                  >
-                    Done
-                  </Button>
-                )}
+                <Button rarity="epic" action={() => setEditionMode(false)}>
+                  Done
+                </Button>
               </div>
             </div>
           ) : (

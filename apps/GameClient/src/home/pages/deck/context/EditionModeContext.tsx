@@ -1,4 +1,4 @@
-import React, { createContext, useState, ReactNode, useContext } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 interface EditionModeContextProps {
   editionMode: boolean;
@@ -13,16 +13,7 @@ export function EditionModeProvider({ children }: { children: ReactNode }) {
   const [editionMode, setEditionMode] = useState(false);
   console.log(editionMode);
   return (
-    <EditionModeContext.Provider
-      value={{
-        editionMode,
-        setEditionMode: (value: boolean) => {
-          console.log("1 === ", value);
-          setEditionMode(value);
-          console.log("2 === ", editionMode);
-        },
-      }}
-    >
+    <EditionModeContext.Provider value={{ editionMode, setEditionMode }}>
       {children}
     </EditionModeContext.Provider>
   );

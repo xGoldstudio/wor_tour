@@ -13,9 +13,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <EditionModeProvider>
-          <AppRouter />
-        </EditionModeProvider>
+        <AppRouter />
       </QueryClientProvider>
     </BrowserRouter>
   );
@@ -44,5 +42,15 @@ function AppRouter() {
     return <div>Loading...</div>;
   }
 
-  return <div id="app">{isInGame ? <Game /> : <Home />}</div>;
+  return (
+    <div id="app">
+      {isInGame ? (
+        <Game />
+      ) : (
+        <EditionModeProvider>
+          <Home />
+        </EditionModeProvider>
+      )}
+    </div>
+  );
 }

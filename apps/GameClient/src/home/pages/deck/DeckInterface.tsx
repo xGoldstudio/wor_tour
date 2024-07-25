@@ -2,10 +2,6 @@ import { cn, Cover } from "@repo/ui";
 import { useState } from "react";
 import CollectionTab from "./CollectionTab";
 import DeckTab from "./DeckTab";
-import {
-  EditionModeProvider,
-  useEditionMode,
-} from "./context/EditionModeContext";
 
 export type Tabs = "Deck" | "Collection";
 
@@ -46,8 +42,6 @@ function TabModal({ children, currentTab, setCurrentTab }: TabModalProps) {
 export function DeckInterface() {
   const [currentTab, setCurrentTab] = useState<Tabs>("Deck");
   const TabElement = tabs[currentTab];
-  // const { editionMode, setEditionMode } = useEditionMode();
-
   return (
     <div>
       <div className="m-2 relative flex justify-center gap-2 -mb-[0px]">
@@ -64,9 +58,7 @@ export function DeckInterface() {
         </div>
       </div>
       <div className="w-full flex justify-center overflow-hidden">
-        <EditionModeProvider>
-          <TabElement setCurrentTab={setCurrentTab} />
-        </EditionModeProvider>
+        <TabElement setCurrentTab={setCurrentTab} />
       </div>
     </div>
   );
