@@ -1,31 +1,31 @@
 import { useStartGame } from "@/game/stores/gameMetadataStore";
 import { useState } from "react";
-import { Cover } from "@repo/ui";
+import { Cover, InnerBord } from "@repo/ui";
 import { numberWithCommas, textureByRarity } from "@repo/lib";
 import usePlayerStore from "@/home/store/playerStore";
-import {
-  InnerBord
-} from "../../../../../../packages/ui/components/card/CardBorder";
 import AllWorlds from "./allWorlds/AllWorlds";
 import ProfileModal from "./modals/ProfileModal";
 import AnimationContainer from "@/home/animations/AnimationContainer";
 import WorldIllustration from "./WorldIllustration";
+import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 
 export default function HomeTab() {
   const startGame = useStartGame();
-
   const { trophies } = usePlayerStore((state) => ({
     trophies: state.trophies,
     currentWorld: state.currentWorld,
   }));
   const [profileOpen, setProfileOpen] = useState(false);
-  const [worldsModalOpen, setWorldsModalOpen] = useState<
-    false | "normal" | "tier" | "world"
-  >(false);
+  const { worldsModalOpen, setWorldsModalOpen } = useClientInterfaceStore(
+    (state) => ({
+      worldsModalOpen: state.worldsModalOpen,
+      setWorldsModalOpen: state.setWorldsModalOpen,
+    })
+  );
 
   return (
     <div className="w-full h-full flex flex-col items-center">
-      <AnimationContainer setWorldsModalOpen={setWorldsModalOpen} />
+      <AnimationContainer />
       {worldsModalOpen && (
         <AllWorlds
           closeModal={() => setWorldsModalOpen(false)}
@@ -90,7 +90,7 @@ export default function HomeTab() {
         </div>
       </div>
       <div className="flex flex-col gap-16 items-center grow pt-20">
-        <WorldIllustration setWorldsModalOpen={setWorldsModalOpen} />
+        <WorldIllustration setWorldsModalOpen={() => setWorldsModalOpen("normal")} />
         <div
           id="battleButton"
           className="relative rounded-sm flex p-1 flex-col items-center font-slate-600 cursor-pointer"

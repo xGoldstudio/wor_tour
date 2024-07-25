@@ -4,6 +4,7 @@ import { create } from "zustand";
 import useGameStore from "./gameStateStore";
 import useAnimationStore from "../../home/store/animationStore";
 import { CardType } from "@repo/lib";
+import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 
 export interface InGameInitData {
   playerDeck: CardType[];
@@ -92,10 +93,11 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
         type: "trophy",
         previousValue: usePlayerStore.getState().trophies,
         amount: rewards.trophies,
+        onEnd: () => useClientInterfaceStore.getState().setWorldsModalOpen(hasChangeWorldOrTier),
       });
-    } else {
-      usePlayerStore.getState().setTrophies(rewards.trophies);
     }
+    const hasChangeWorldOrTier = usePlayerStore.getState().addOrRemoveTrophies(rewards.trophies);
+    usePlayerStore.getState().addGold(rewards.money);
   },
   reset: () => set({ isInGame: false }),
 }));
@@ -116,7 +118,6 @@ export function useStartGame() {
     });
     const opponentDeck = new Map<number, CollectionCard>(playerDeck);
     // const cardsPool = cards.filter(card => card.world === level.world);
-
     setInGameData(playerDeck, opponentDeck, 2000, 2000);
   }
 
