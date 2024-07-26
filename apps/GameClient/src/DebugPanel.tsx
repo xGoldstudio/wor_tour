@@ -3,6 +3,7 @@ import { DebugButton } from "./game/GameDebugPanel";
 import useAnimationStore from "./home/store/animationStore";
 import usePlayerStore from "./home/store/playerStore/playerStore";
 import { WarningResetPlayStore } from "./home/store/initAllClientData";
+import clientLoop from "./home/services/LoopService/clientLoop";
 
 export default function DebugPanel() {
   const { addGold, setTrophies } = usePlayerStore((state) => ({
@@ -38,6 +39,21 @@ export default function DebugPanel() {
         <DebugButton onClick={() => setTrophies(-10)}>-10</DebugButton>
         <DebugButton onClick={() => setTrophies(-1)}>-1</DebugButton>
         <DebugButton onClick={() => setTrophies(100)}>+100</DebugButton>
+      </div>
+      <p>Event Clock: </p>
+      <div className="grid grid-cols-2 gap-4">
+        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(10*60)}>
+          Fast Forward 10 minutes
+        </DebugButton>
+        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(60*60)}>
+        Fast Forward 1 hours
+        </DebugButton>
+        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(60*60*24)}>
+        Fast Forward 1 day
+        </DebugButton>
+        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(7*60*60*24)}>
+        Fast Forward 1 week
+        </DebugButton>
       </div>
       <p className="text-red-600">Danger zone:</p>
       <div className="grid grid-cols-2 gap-4 border-4 border-red-600 text-red-600 p-2">

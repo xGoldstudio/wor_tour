@@ -1,3 +1,4 @@
+import { IS_DEBUG } from "@/isDebug";
 import { callbackService } from "../CallbackService/callbackService";
 
 const clientLoopDataFromLocalStorage = JSON.parse(localStorage.getItem('clientLoop') || '{}') as Partial<ClientLoopData>;
@@ -9,6 +10,14 @@ type ClientLoopData = {
 
 const FRAME_DURATION = 1000;
 
+function getFirstTimeOfDay() {
+	return new Date().setHours(0, 0, 0, 0);
+}
+
+function getRemainFramesFromCurrentCycle(elapsedFramesFromLastCycle: number, timeout: number) {
+	return timeout - elapsedFramesFromLastCycle % timeout;
+}
+
 function ClientLoop() {
 	const timersMap: Record<string, { remainingFrames: number, callbackName: string, cycleDuration: number | null }>
 		= clientLoopDataFromLocalStorage.timersMap || {};
@@ -17,11 +26,16 @@ function ClientLoop() {
 	let lastTimestamp = clientLoopDataFromLocalStorage.lastTimestamp || Date.now();
 
 	function cycle(name: string, callbackName: string, timeout: number) { // cycle should be called once in a account lifetime
+		const firstTimeOfDay = getFirstTimeOfDay();
+		const remainFramesFromCurrentCycle = getRemainFramesFromCurrentCycle(
+			Math.floor((Date.now() - firstTimeOfDay) / FRAME_DURATION),
+			timeout,
+		);
 		callbackService.call(callbackName); // initial call
 		pushTimer(
 			name,
 			callbackName,
-			timeout,
+			remainFramesFromCurrentCycle,
 			timeout,
 		);
 	}
@@ -46,13 +60,17 @@ function ClientLoop() {
 			timer.remainingFrames -= framesToAdd;
 			if (timer.remainingFrames <= 0) {
 				if (timer.cycleDuration !== null) {
-					timer.remainingFrames = timer.cycleDuration;
+					timer.remainingFrames = getRemainFramesFromCurrentCycle(
+						-timer.remainingFrames,
+						timer.cycleDuration,
+					);
 				} else {
 					delete timersMap[timerName];
 				}
 				callbackService.call(timer.callbackName);
 			}
 		});
+
 		notifiyAllListeners();
 		saveState();
 	}
@@ -71,14 +89,14 @@ function ClientLoop() {
 		}
 		listenersMap[name].listeners.push(listener);
 		return {
-			unsubscribe: () => { // unsubscribe
+			unsubscribe: () => {
 				listenersMap[name].listeners = listenersMap[name].listeners.filter((l) => l !== listener);
 			},
 			remainingFrames: timersMap[name]?.remainingFrames ?? null,
 		}
 	}
 
-	function start() {
+	function startInterval() {
 		setInterval(() => {
 			loop();
 		}, FRAME_DURATION);
@@ -100,13 +118,19 @@ function ClientLoop() {
 		});
 	}
 
+	function _unsafeManipulateClock(framesToAdd: number) {
+		if (!IS_DEBUG) return;
+		lastTimestamp = lastTimestamp - framesToAdd * FRAME_DURATION;
+	}
+
 	return {
 		cycle,
 		pushTimer,
-		start,
+		start: startInterval,
 		addListener,
 		reset,
-	}
+		_unsafeManipulateClock,
+	};
 }
 
 const clientLoop = ClientLoop();
