@@ -62,7 +62,7 @@ export default function Collection({
   return (
     <div className="flex flex-col w-[650px] ">
       <div className="grid grid-rows-[1fr_auto] top-0  ">
-        <div className="sticky top-0 z-10 ">
+        <div className=" ">
           <SortAndFilterBox
             collectionLength={collectionLength}
             currentSort={currentSort}

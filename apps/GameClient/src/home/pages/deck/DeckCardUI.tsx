@@ -84,7 +84,10 @@ export function DeckCardUI({
             )}
             <div
               className={`${opacity} hover:cursor-pointer`}
-              onClick={() => setSelectedCard({ id: card.id, tab: "Deck" })}
+              onClick={() => {
+                setSelectedCard({ id: card.id, tab: "Deck" }),
+                  !isDeckFull && setEditionMode(true);
+              }}
             >
               <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>
                 <div
