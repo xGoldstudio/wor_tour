@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { DebugButton } from "./game/GameDebugPanel";
 import useAnimationStore from "./home/store/animationStore";
-import usePlayerStore from "./home/store/playerStore/playerStore";
+import usePlayerStore, { CollectionCard } from "./home/store/playerStore/playerStore";
 import { _warningResetPlayStore } from "./home/store/initAllClientData";
 import clientLoop from "./home/services/LoopService/clientLoop";
+import useDataStore from "./cards/DataStore";
 
 export default function DebugPanel() {
   const { addGold, setTrophies } = usePlayerStore((state) => ({
@@ -19,6 +20,16 @@ export default function DebugPanel() {
     });
 
   const [confirmationResetPlayer, setConfirmationResetPlayer] = useState(false);
+
+  function giveAllCards() {
+    const maxedCollection: Map<number, CollectionCard> = new Map();
+    for (let i = 1; i <= useDataStore.getState().cards.length; i++) {
+      maxedCollection.set(i, { id: i, level: 3, shard: 0 });
+    }
+    usePlayerStore.setState({
+      collection: maxedCollection,
+    })
+  }
 
   return (
     <div className="fixed right-2 top-2 border-2 border-white text-white px-4 py-2 flex flex-col gap-4">
@@ -53,6 +64,12 @@ export default function DebugPanel() {
         </DebugButton>
         <DebugButton onClick={() => clientLoop._unsafeManipulateClock(7*60*60*24)}>
         Fast Forward 1 week
+        </DebugButton>
+      </div>
+      <p>Collection: </p>
+      <div className="grid grid-cols-2 gap-4">
+        <DebugButton onClick={() => giveAllCards()}>
+          Give all cards
         </DebugButton>
       </div>
       <p className="text-red-600">Danger zone:</p>

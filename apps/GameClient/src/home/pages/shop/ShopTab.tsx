@@ -15,7 +15,7 @@ export default function ShopTab() {
       <ScrollContainer className="flex flex-col items-center">
         <Ribbon>Boosters</Ribbon>
         <div className="grid grid-cols-3 gap-1 w-[416px]">
-          {Object.values(boosters).map((booster) => (
+          {Object.values(boosters).filter(b => b.cards.length > 0).map((booster) => (
             <Booster booster={booster} key={booster.name} />
           ))}
         </div>

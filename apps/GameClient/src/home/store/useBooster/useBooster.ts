@@ -23,6 +23,7 @@ export default function useBooster() {
   }));
   const addOrEvolve = useAddCardOrShardOrEvolve();
   const boosters = useBoosterStore((state) => state.boosters);
+  const addReward = useRewardStore((state) => state.addReward)
 
   return function openBooster(boosterName: string, isBuying: boolean) {
     const booster = boosters.find((b) => b.name === boosterName);
@@ -31,12 +32,12 @@ export default function useBooster() {
       return;
     }
     const card = getRandomCardFromRarity(booster.cards, booster.contain.rarities);
-    if (!card) {
-      console.warn("Unexpected warning: No card found in booster", boosterName);
-      return;
-    }
     if (isBuying) {
       spendGold(booster.cost);
+    }
+    if (!card) {
+      addReward({ type: "gold", amount: booster.cost });
+      return;
     }
     addOrEvolve(card.id);
   };

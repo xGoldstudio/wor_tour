@@ -66,9 +66,6 @@ export const boostersObservable = combineLatest([packableCardsObservable, player
 				.map(findCardFromCollection)
 				.filter((card) => card) as CardType[])
 				.sort(sortCardsByRarity);
-			if (packableCards.length === 0) {
-				return null;
-			}
 			return { ...booster, cards: packableCards };
 		}).filter((booster) => booster !== null) as BoosterType[];
 	})

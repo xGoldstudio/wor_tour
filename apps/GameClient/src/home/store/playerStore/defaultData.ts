@@ -4,7 +4,6 @@ import usePlayerStore, { CollectionCard } from "./playerStore";
 
 const defaultCollection = (() => {
 	const collection: Map<number, CollectionCard> = new Map();
-	// to 75
 	for (let i = 1; i <= 8; i++) {
 		collection.set(i, { id: i, level: 1, shard: 0 });
 	}
