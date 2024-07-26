@@ -133,11 +133,13 @@ export default function HomeTab({ setCurrentTab }: HomeTabProps) {
                 !isDeckFull && "bg-gray-800"
               )}
             ></div>
-            <img
-              src="/padlock-nobg.png"
-              className="h-[22px] absolute top-1/2 -translate-y-1/2 left-[4.65rem] brightness-75"
-              alt="padlock"
-            />
+            {!isDeckFull && (
+              <img
+                src="/padlock-nobg.png"
+                className="h-[22px] absolute top-1/2 -translate-y-1/2 left-[4.65rem] brightness-75"
+                alt="padlock"
+              />
+            )}
             <p className="text-2xl relative font-bold">Battle</p>
           </div>
           <div className="relative flex items-center gap-3 justify-center px-16">

@@ -9,6 +9,7 @@ import { NUMBER_OF_CARD_IN_DECK } from "./cardSorts";
 import Collection from "./Collection";
 import { DeckCardUI } from "./DeckCardUI";
 import { Tabs } from "./DeckInterface";
+import { useEditionMode } from "./context/UseEditionMode";
 
 interface DeckStatsProps {
   detailledDeck: CardCollection[];
@@ -53,6 +54,7 @@ export default function DeckTab() {
     numberOfCardsInDeck: state.numberOfCardsInDeck,
     currentMissingCards: state.currentMissingCards,
   }));
+  const { editionMode } = useEditionMode();
   const [selectedCard, setSelectedCard] = useState<selectedCardType>({
     id: 0,
     tab: null,
@@ -84,7 +86,7 @@ export default function DeckTab() {
           </div>
         </div>
         <DeckStats detailledDeck={detailledDeck} />
-        {selectedCard.id !== 0 && (
+        {editionMode && (
           <Collection
             setSelectedCard={setSelectedCard}
             selectedCard={selectedCard}
