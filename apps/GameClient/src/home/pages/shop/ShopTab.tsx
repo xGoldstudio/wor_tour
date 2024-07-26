@@ -1,16 +1,14 @@
 import ScrollContainer from "react-indiana-drag-scroll";
 import BuyCard from "./BuyCard";
-import useShopStore from "@/home/store/shopStore";
+import useShopStore from "@/home/store/shopStore/shopStore";
 import Ribbon from "@/home/ui/Ribbon";
-import { useEffect, useState } from "react";
-import { formatTime } from "@repo/lib";
 import { Booster } from "./Booster";
 import { useBoosterStore } from "@/home/store/boosterStore";
+import Timer from "@/home/services/LoopService/Timer";
 
 export default function ShopTab() {
   const boosters = useBoosterStore((state) => state.boosters);
   const buyableCards = useShopStore((state) => state.cards);
-  const targetTimestamp = useShopStore((state) => state.nextTimestamp);
 
   return (
     <div className="w-full grid grid-rows-[auto_1fr] absolute top-0 h-full">
@@ -23,7 +21,7 @@ export default function ShopTab() {
         </div>
         <Ribbon>Cards by unit</Ribbon>
         <p className="text-center pb-3">
-          Next in <Timer targetTimestamp={targetTimestamp} />
+          Next in <Timer name="cardShop" />
         </p>
         <div className="grid grid-cols-3 gap-4">
           {buyableCards.map((card, i) => (
@@ -34,24 +32,4 @@ export default function ShopTab() {
       </ScrollContainer>
     </div>
   );
-}
-
-interface TimerProps {
-  targetTimestamp: number;
-}
-
-function Timer({ targetTimestamp }: TimerProps) {
-  const [timeRemaining, setTimeRemaining] = useState(
-    targetTimestamp - Date.now()
-  );
-
-  useEffect(() => {
-    setTimeRemaining(targetTimestamp - Date.now());
-    const interval = setInterval(() => {
-      setTimeRemaining(targetTimestamp - Date.now());
-    }, 100);
-    return () => clearInterval(interval);
-  }, [targetTimestamp]);
-
-  return <span>{formatTime(timeRemaining)}</span>;
 }

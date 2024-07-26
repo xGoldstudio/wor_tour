@@ -28,8 +28,9 @@ export const defaultPlayerStoreData = {
 	maxTrophies: 0,
 	currentTier: 0,
 	tiers: tiers,
+	isInit: false,
 }
 
-export function WarningResetPlayStore() {
-	usePlayerStore.setState(defaultPlayerStoreData);
+export function initPlayerStore() {
+	usePlayerStore.setState({ ...defaultPlayerStoreData, isInit: true });
 }

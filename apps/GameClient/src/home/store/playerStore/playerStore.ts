@@ -20,6 +20,7 @@ interface PlayerStore {
   maxTrophies: number;
   currentTier: number;
   tiers: Map<number, Tier>;
+  isInit: boolean;
 
   getCollection: () => CollectionCard[];
   getCollectionInfo: (id: number) => CollectionCard | undefined;
@@ -119,6 +120,7 @@ const usePlayerStore = create(
       maxTrophies: state.maxTrophies,
       currentTier: state.currentTier,
       tiers: Array.from(state.tiers.entries()),
+      isInit: state.isInit,
     }),
     merge: (persisted, current) => {
       const persistedData = persisted as PersistedDataPlayerStore;
@@ -140,6 +142,7 @@ interface PersistedDataPlayerStore {
   maxTrophies: number;
   currentTier: number;
   tiers: [number, Tier][];
+  isInit: boolean;
 }
 
 function updateTrophies(set: (state: (s: PlayerStore) => Partial<PlayerStore>) => void, difference: number): false | "tier" | "world" {

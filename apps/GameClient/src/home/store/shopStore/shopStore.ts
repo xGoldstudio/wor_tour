@@ -1,50 +1,63 @@
 import { create } from "zustand";
-import usePlayerStore from "./playerStore/playerStore";
-import { useAddCardOrShardOrEvolve } from "./useBooster/useBooster";
-import { CardRarity, CardRarityOrder, CardType } from "@repo/lib";
-import { combineLatest } from 'rxjs';
-import { packableCardsByRarityObservable } from "./boosterStore";
-import { map, filter } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import usePlayerStore from "../playerStore/playerStore";
+import { useAddCardOrShardOrEvolve } from "../useBooster/useBooster";
+import { CardRarity, CardRarityOrder, CardStatsInfo, CardType } from "@repo/lib";
+import { persist } from "zustand/middleware";
+import useDataStore from "@/cards/DataStore";
+import { isCardPackable } from "../boosterStore";
+import { arrayOfCardsToRarityMap } from "../useBooster/getRandomCardFromRarity";
+import { findCard } from "@/cards";
+import clientLoop from "../../services/LoopService/clientLoop";
 
-const useShopStore = create<ShopStore>()(() => ({
+// const CARDS_ROTATION_TIME = 1000 * 60 * 60 * 3;
+const CARDS_ROTATION_TIME = 50; // in seconds
+
+export function initShopStore() {
+  useShopStore.setState({ ...ShopeStoreDefaultState });
+  clientLoop.cycle("cardShop", "setCardsToBuy", CARDS_ROTATION_TIME);
+}
+
+const ShopeStoreDefaultState = {
   cards: [],
   hasBeenBought: [],
-  nextTimestamp: 0,
-}));
+}
+
+const useShopStore = create(persist<ShopStore>(
+  () => ({
+    ...ShopeStoreDefaultState,
+  }),
+  { name: "shopStore" },
+));
 
 export default useShopStore;
 
 interface ShopStore {
   cards: CardType[];
   hasBeenBought: number[];
-  nextTimestamp: number;
 }
 
-const eventLoopObservable = new Observable<number>(subscriber => {
-  subscriber.next(Date.now());
-  setInterval(() => {
-    subscriber.next(Date.now());
-  }, 1000);
-});
-
-const listOfCardsToBuy = combineLatest(
-  [packableCardsByRarityObservable, eventLoopObservable]
-).pipe(
-  filter((_, timestamp) => timestamp >= useShopStore.getState().nextTimestamp),
-  map(([cardsByRarity]) => computeListOfCardsToBuy(cardsByRarity)));
-
-listOfCardsToBuy.subscribe(({ cardsToBuy, timeStamp }) => {
-  if (cardsToBuy.length === 0) return;
+export function setCardsToBuy() {
+  const cardsToBuy = computeListOfCardsToBuy(getAllPackableCardsByRarity());
   useShopStore.setState({
     cards: cardsToBuy,
     hasBeenBought: [],
-    nextTimestamp: timeStamp,
   });
-})
+}
+
+function getAllPackableCardsByRarity() {
+  const cards = useDataStore.getState().cards;
+  const collectionMap = usePlayerStore.getState().collection;
+  const currentWorld = usePlayerStore.getState().currentWorld;
+  return arrayOfCardsToRarityMap(arrayOfCardStatInfoToCardType(cards.filter(
+    (card) => isCardPackable(card, collectionMap, currentWorld)
+  )));
+}
+
+function arrayOfCardStatInfoToCardType(cards: CardStatsInfo[]) {
+  return cards.map((card) => findCard(card.id, 1));
+}
 
 function computeListOfCardsToBuy(cardsByRarity: Record<CardRarity, CardType[]>) {
-  const currentTimeStamp = Date.now();
   const cardsToBuy = [];
   const cardsRaritiesToGet: CardRarity[] = [
     "common",
@@ -63,7 +76,7 @@ function computeListOfCardsToBuy(cardsByRarity: Record<CardRarity, CardType[]>) 
       cardsToBuy.push(randomCard);
     }
   }
-  return { cardsToBuy, timeStamp: currentTimeStamp + (1000 * 60 * 60 * 3) };// 3 hours
+  return cardsToBuy;
 }
 
 function getCardsByRarityOrHigher(

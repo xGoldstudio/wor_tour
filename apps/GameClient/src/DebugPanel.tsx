@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { DebugButton } from "./game/GameDebugPanel";
 import useAnimationStore from "./home/store/animationStore";
-import { WarningResetPlayStore } from "./home/store/playerStore/defaultData";
 import usePlayerStore from "./home/store/playerStore/playerStore";
+import { WarningResetPlayStore } from "./home/store/initAllClientData";
 
 export default function DebugPanel() {
   const { addGold, setTrophies } = usePlayerStore((state) => ({

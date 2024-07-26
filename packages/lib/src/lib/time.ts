@@ -1,10 +1,9 @@
-export const formatTime = (time: number) => {
-	if (time <= 0) {
+export const formatTime = (seconds: number) => {
+	if (seconds <= 0) {
 		return "00:00:00";
 	}
-	const hours = Math.floor(time / 3600000);
-	const minutes = Math.floor((time % 3600000) / 60000);
-	const seconds = Math.floor((time % 60000) / 1000);
+	const hours = Math.floor(seconds / 3600);
+	const minutes = Math.floor((seconds % 3600) / 60);
 	return `${hours.toString().padStart(2, "0")}:${minutes
 		.toString()
 		.padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;

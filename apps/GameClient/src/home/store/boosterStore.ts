@@ -6,7 +6,6 @@ import { boosters, toState } from "@repo/ui";
 import { BoosterType } from "./useBooster/useBooster";
 import useDataStore from "@/cards/DataStore";
 import { create } from 'zustand';
-import { arrayOfCardsToRarityMap } from './useBooster/getRandomCardFromRarity';
 import { findCard } from '@/cards';
 import { BoosterTypeDeclartion, CardRarityOrder, CardStatsInfo, CardType } from '@repo/lib';
 
@@ -20,7 +19,7 @@ const playerCurrentWorldObservable = toStream(usePlayerStore, (state) => state.c
 const cardsObservable = toStream(useDataStore, (state) => state.cards, {
 	fireImmediately: true,
 });
-function isCardPackable(card: CardStatsInfo, collection: Map<number, CollectionCard>, currentWorld: number): boolean {
+export function isCardPackable(card: CardStatsInfo, collection: Map<number, CollectionCard>, currentWorld: number): boolean {
 	const collectionCard = collection.get(card.id);
 	if (!card) return false;
 	if (card.world > currentWorld) return false;
@@ -37,12 +36,6 @@ const packableCardsObservable = combineLatest(
 		);
 	})
 );
-export const packableCardsByRarityObservable = packableCardsObservable.pipe(
-	map(cards => arrayOfCardsToRarityMap(arrayOfCardStatInfoToCardType(cards)))
-);
-function arrayOfCardStatInfoToCardType(cards: CardStatsInfo[]) {
-	return cards.map((card) => findCard(card.id, 1));
-}
 
 function isCardPackableForBooster(booster: BoosterTypeDeclartion) {
 	return (card: CardStatsInfo) => {

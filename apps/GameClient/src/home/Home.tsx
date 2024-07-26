@@ -6,9 +6,8 @@ import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore/playerStore";
 import Badge from "../../../../packages/ui/components/Badge";
-import { Cover, NumberSpan } from "@repo/ui";
+import { Borders, CardIllustartion, Cover, InnerBord, NumberSpan } from "@repo/ui";
 import { cn } from "@repo/ui";
-import { Borders, CardIllustartion, InnerBord } from "../../../../packages/ui/components/card/CardBorder";
 import { numberWithCommas } from "@repo/lib";
 
 
@@ -23,7 +22,7 @@ const tabsPosition: Record<Tabs, number> = {
 };
 
 export default function Home() {
-  const [currentTab, setCurrentTab] = useState<Tabs>("home");
+  const [currentTab, setCurrentTab] = useState<Tabs>("shop");
 
   return (
     <div className="w-screen h-screen justify-center bg-black relative flex">
