@@ -8,12 +8,12 @@ import {
   CardIllustartion,
   InnerBord,
 } from "../../../../packages/ui/components/card/CardBorder";
-import { useEditionMode } from "./pages/deck/context/EditionModeContext";
 import { DeckInterface as DeckTab } from "./pages/deck/DeckInterface";
 import HomeTab from "./pages/home/HomeTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import ShopTab from "./pages/shop/ShopTab";
 import usePlayerStore from "./store/playerStore";
+import { useEditionMode } from "./pages/deck/context/UseEditionMode";
 
 interface TabProps {
   setCurrentTab?: (tab: Tabs) => void;

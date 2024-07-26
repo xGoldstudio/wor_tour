@@ -12,16 +12,16 @@ import { useState } from "react";
 import CardModal from "./CardModal";
 import { Tabs } from "./DeckInterface";
 import { selectedCardType } from "./DeckTab";
-import { useEditionMode } from "./context/EditionModeContext";
+import { useEditionMode } from "./context/UseEditionMode";
 
 interface CardUIProps {
   cardId: number;
   isHand?: boolean;
   locked?: boolean;
   setCurrentTab?: (tab: Tabs) => void;
-  setSelectedCard: (obj: selectedCardType) => void;
-  selectedCard: selectedCardType;
-  tab: Tabs;
+  setSelectedCard?: (obj: selectedCardType) => void;
+  selectedCard?: selectedCardType;
+  tab?: Tabs;
 }
 
 export function DeckCardUI({
@@ -34,7 +34,7 @@ export function DeckCardUI({
   tab,
 }: CardUIProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
-  const { editionMode, setEditionMode } = useEditionMode();
+  const { setEditionMode } = useEditionMode();
 
   const { card, removeCardFromDeck, addCardToDeck, isDeckFull, lockPattern } =
     usePlayerStore((state) => ({
@@ -85,7 +85,8 @@ export function DeckCardUI({
             <div
               className={`${opacity} hover:cursor-pointer`}
               onClick={() => {
-                setSelectedCard({ id: card.id, tab: "Deck" }),
+                setSelectedCard &&
+                  setSelectedCard({ id: card.id, tab: "Deck" }),
                   !isDeckFull && setEditionMode(true);
               }}
             >

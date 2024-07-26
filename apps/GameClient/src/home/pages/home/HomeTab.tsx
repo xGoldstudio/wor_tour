@@ -9,7 +9,7 @@ import ProfileModal from "./modals/ProfileModal";
 import AnimationContainer from "@/home/animations/AnimationContainer";
 import WorldIllustration from "./WorldIllustration";
 import { Tabs } from "@/home/Home";
-import { useEditionMode } from "../deck/context/EditionModeContext";
+import { useEditionMode } from "../deck/context/UseEditionMode";
 
 interface HomeTabProps {
   setCurrentTab?: (tab: Tabs) => void;

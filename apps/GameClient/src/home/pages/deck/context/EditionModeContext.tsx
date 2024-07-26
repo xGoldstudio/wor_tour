@@ -1,13 +1,5 @@
-import { createContext, ReactNode, useContext, useState } from "react";
-
-interface EditionModeContextProps {
-  editionMode: boolean;
-  setEditionMode: (value: boolean) => void;
-}
-
-export const EditionModeContext = createContext<
-  EditionModeContextProps | undefined
->(undefined);
+import { ReactNode, useState } from "react";
+import { EditionModeContext } from "./UseEditionMode";
 
 export function EditionModeProvider({ children }: { children: ReactNode }) {
   const [editionMode, setEditionMode] = useState(false);
@@ -17,11 +9,3 @@ export function EditionModeProvider({ children }: { children: ReactNode }) {
     </EditionModeContext.Provider>
   );
 }
-
-export const useEditionMode = () => {
-  const context = useContext(EditionModeContext);
-  if (context === undefined) {
-    throw new Error("useEditionMode must be used within a EditionModeProvider");
-  }
-  return context;
-};
