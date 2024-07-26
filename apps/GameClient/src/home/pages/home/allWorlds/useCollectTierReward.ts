@@ -9,7 +9,6 @@ export default function useCollectTierReward(tierNumber: number) {
 
 	return () => {
 		const tier = collectTierReward(tierNumber);
-		console.log(tier)
 		if (!tier) {
 			return;
 		}

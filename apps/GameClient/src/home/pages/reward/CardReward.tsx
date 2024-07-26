@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import _ from "lodash";
 import gsap from "gsap";
 import { getShardsFromLevel } from "@repo/lib";
+import { cn } from "@repo/ui";
 
 interface RewardProps {
   reward: CardRewardType;
@@ -155,6 +156,7 @@ export default function CardReward({
             <ShowTitle
               title={getAnimationLabel()}
               delay={getAnimationDuration()}
+              className="z-10"
             />
             <div className="relative">
               <div
@@ -240,7 +242,7 @@ export default function CardReward({
   );
 }
 
-function ShowTitle({ title, delay }: { title: string; delay?: number }) {
+function ShowTitle({ title, delay, className }: { title: string; delay?: number, className?: string }) {
   const ref = useRef<null | HTMLDivElement>(null);
 
   useEffect(() => {
@@ -255,7 +257,7 @@ function ShowTitle({ title, delay }: { title: string; delay?: number }) {
   }, [delay, ref]);
 
   return (
-    <h1 className="text-5xl text-nowrap font-stylised flex" ref={ref}>
+    <h1 className={cn("text-5xl text-nowrap flex font-semibold", className)} ref={ref}>
       {title.split("").map((letter, index) =>
         letter === " " ? (
           <div className="w-4" key={index}></div>

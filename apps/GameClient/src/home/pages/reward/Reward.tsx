@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import gsap from "gsap";
-import useRewardStore, { RewardType } from "@/home/store/rewardStore";
+import useRewardStore from "@/home/store/rewardStore";
 import CardReward from "./CardReward";
 import GoldReward from "./GoldReward";
 import { Header } from "@/home/Home";
@@ -65,18 +65,13 @@ function RewardSection({ children }: { children: React.ReactNode }) {
 }
 
 export function RewardBlockWithContext() {
-  const { rewards, collectReward } = useRewardStore((state) => ({
-    rewards: state.rewards,
+  const { currentReward, collectReward } = useRewardStore((state) => ({
     collectReward: state.collectReward,
+    currentReward: state.rewards[0] ?? null,
   }));
-  const [currentReward, setCurentReward] = useState<RewardType | null>(null);
-
-  if (rewards.length && currentReward === null) {
-    setCurentReward(collectReward()); // pop the first reward
-  }
 
   if (!currentReward) {
-    return null;
+    return <></>;
   }
 
   return (
@@ -85,19 +80,19 @@ export function RewardBlockWithContext() {
         {currentReward.type === "card" && (
           <CardReward
             reward={currentReward}
-            removeCurrentReward={() => setCurentReward(null)}
+            removeCurrentReward={() => collectReward()}
           />
         )}
         {currentReward.type === "gold" && (
           <GoldReward
             reward={currentReward}
-            removeCurrentReward={() => setCurentReward(null)}
+            removeCurrentReward={() => collectReward()}
           />
         )}
         {currentReward.type === "chest" && (
           <ChestReward
             reward={currentReward}
-            removeCurrentReward={() => setCurentReward(null)}
+            removeCurrentReward={() => collectReward()}
           />
         )}
       </div>

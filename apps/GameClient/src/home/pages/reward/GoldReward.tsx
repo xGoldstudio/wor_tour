@@ -16,13 +16,13 @@ export default function GoldReward({
 }: GoldRewardProps) {
   const scope = useRef<HTMLDivElement>(null);
   const animationOver = useRef<false | "appear" | "disapear">(false);
-	const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
 
   useGSAP(
     () => {
       if (!scope.current) return;
       const tl = gsap.timeline({});
-			tlRef.current = tl;
+      tlRef.current = tl;
       tl.fromTo(
         scope.current.querySelector("img"),
         { scale: 0 },
@@ -53,7 +53,7 @@ export default function GoldReward({
       ref={scope}
       onClick={() => {
         if (animationOver.current === "appear") {
-					tlRef.current?.kill();
+          tlRef.current?.kill();
           if (scope.current) {
             gsap.to(scope.current.querySelector("img"), {
               scale: 0,
@@ -73,9 +73,11 @@ export default function GoldReward({
             previousValue: usePlayerStore.getState().gold,
             amount: reward.amount,
             originRef: scope.current?.querySelector("img") as HTMLImageElement,
-            onEnd: removeCurrentReward,
+            onEnd: () => {
+              removeCurrentReward();
+              usePlayerStore.getState().addGold(reward.amount);
+            },
           });
-          usePlayerStore.getState().addGold(reward.amount);
         }
       }}
     >

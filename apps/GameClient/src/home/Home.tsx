@@ -22,7 +22,7 @@ const tabsPosition: Record<Tabs, number> = {
 };
 
 export default function Home() {
-  const [currentTab, setCurrentTab] = useState<Tabs>("shop");
+  const [currentTab, setCurrentTab] = useState<Tabs>("home");
 
   return (
     <div className="w-screen h-screen justify-center bg-black relative flex">

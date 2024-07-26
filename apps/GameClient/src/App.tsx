@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import useDataStore from "./cards/DataStore";
 import { EditorData } from "../../../packages/gameEngine/src/types/DataStoreType";
 import usePlayerStore from "./home/store/playerStore/playerStore";
-import { WarningResetPlayStore } from "./home/store/initAllClientData";
+import { _warningResetPlayStore } from "./home/store/initAllClientData";
 
 const queryClient = new QueryClient();
 
@@ -35,7 +35,7 @@ function AppRouter() {
         const objectData = JSON.parse(stringData) as EditorData;
         init(objectData);
         if (!usePlayerStore.getState().isInit) {
-          WarningResetPlayStore();
+          _warningResetPlayStore();
         }
       },
       staleTime: 2200000,

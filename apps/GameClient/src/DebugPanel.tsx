@@ -2,7 +2,7 @@ import { useState } from "react";
 import { DebugButton } from "./game/GameDebugPanel";
 import useAnimationStore from "./home/store/animationStore";
 import usePlayerStore from "./home/store/playerStore/playerStore";
-import { WarningResetPlayStore } from "./home/store/initAllClientData";
+import { _warningResetPlayStore } from "./home/store/initAllClientData";
 import clientLoop from "./home/services/LoopService/clientLoop";
 
 export default function DebugPanel() {
@@ -65,7 +65,7 @@ export default function DebugPanel() {
             </DebugButton>
             <DebugButton
               onClick={() => {
-                WarningResetPlayStore();
+                _warningResetPlayStore();
                 setConfirmationResetPlayer(false);
               }}
             >
