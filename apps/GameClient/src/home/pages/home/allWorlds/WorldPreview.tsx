@@ -32,7 +32,7 @@ export default function WorldPreview({
         className={`trophiesField worldField${world.id} flex flex-col relative items-center w-full justify-center`}
       >
         {isWorldModalOpen && (
-          <WorldModal closeModal={() => setIsWorldModalOpen(false)} />
+          <WorldModal closeModal={() => setIsWorldModalOpen(false)} world={world} />
         )}
 
         <div className="flex flex-col relative items-center gap-2 w-full py-4 justify-center">
