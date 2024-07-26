@@ -1,6 +1,6 @@
 import { getCardFromLevel } from "@/cards";
 import useDataStore from "@/cards/DataStore";
-import usePlayerStore from "@/home/store/playerStore";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { useState } from "react";
 import WorldModal from "../modals/WorldModal";
 import { Badge, Button, cn, Cover } from "@repo/ui";

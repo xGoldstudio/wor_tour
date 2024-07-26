@@ -1,12 +1,11 @@
 import { toStream } from 'zustand-rx';
-import usePlayerStore, { CollectionCard } from "./playerStore";
+import usePlayerStore, { CollectionCard } from "./playerStore/playerStore";
 import { combineLatest } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { boosters, toState } from "@repo/ui";
 import { BoosterType } from "./useBooster/useBooster";
 import useDataStore from "@/cards/DataStore";
 import { create } from 'zustand';
-import { arrayOfCardsToRarityMap } from './useBooster/getRandomCardFromRarity';
 import { findCard } from '@/cards';
 import { BoosterTypeDeclartion, CardRarityOrder, CardStatsInfo, CardType } from '@repo/lib';
 
@@ -20,7 +19,7 @@ const playerCurrentWorldObservable = toStream(usePlayerStore, (state) => state.c
 const cardsObservable = toStream(useDataStore, (state) => state.cards, {
 	fireImmediately: true,
 });
-function isCardPackable(card: CardStatsInfo, collection: Map<number, CollectionCard>, currentWorld: number): boolean {
+export function isCardPackable(card: CardStatsInfo, collection: Map<number, CollectionCard>, currentWorld: number): boolean {
 	const collectionCard = collection.get(card.id);
 	if (!card) return false;
 	if (card.world > currentWorld) return false;
@@ -37,12 +36,6 @@ const packableCardsObservable = combineLatest(
 		);
 	})
 );
-export const packableCardsByRarityObservable = packableCardsObservable.pipe(
-	map(cards => arrayOfCardsToRarityMap(arrayOfCardStatInfoToCardType(cards)))
-);
-function arrayOfCardStatInfoToCardType(cards: CardStatsInfo[]) {
-	return cards.map((card) => findCard(card.id, 1));
-}
 
 function isCardPackableForBooster(booster: BoosterTypeDeclartion) {
 	return (card: CardStatsInfo) => {
@@ -51,12 +44,10 @@ function isCardPackableForBooster(booster: BoosterTypeDeclartion) {
 		return true;
 	}
 }
+export const FIRST_CARD_LEVEL = 1;
 function findCardFromCollection(card: { id: number }) {
 	const collectionCard = usePlayerStore.getState().collection.get(card.id);
-	if (collectionCard) {
-		return findCard(card.id, collectionCard.level);
-	}
-	return null;
+	return findCard(card.id, collectionCard ? collectionCard.level : FIRST_CARD_LEVEL);
 }
 function sortCardsByRarity(a: CardType, b: CardType) {
 	return CardRarityOrder.indexOf(a.rarity) - CardRarityOrder.indexOf(b.rarity)
@@ -75,9 +66,6 @@ export const boostersObservable = combineLatest([packableCardsObservable, player
 				.map(findCardFromCollection)
 				.filter((card) => card) as CardType[])
 				.sort(sortCardsByRarity);
-			if (packableCards.length === 0) {
-				return null;
-			}
 			return { ...booster, cards: packableCards };
 		}).filter((booster) => booster !== null) as BoosterType[];
 	})

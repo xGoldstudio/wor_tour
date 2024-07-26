@@ -7,7 +7,7 @@ import AllWorldsAnimationProvider, {
 } from "./trophyBar/TrophyBarContext";
 import { useContext, useRef } from "react";
 import { createPortal } from "react-dom";
-import usePlayerStore from "@/home/store/playerStore";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 import ScrollContainer from "react-indiana-drag-scroll";
 import WorldPreview from "./WorldPreview";
 import LevelPreview from "./LevelPreview";

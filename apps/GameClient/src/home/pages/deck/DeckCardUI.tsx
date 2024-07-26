@@ -1,4 +1,4 @@
-import usePlayerStore from "@/home/store/playerStore";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { Button, CardBorder, CardContentIllustartion, ManaBall } from "@repo/ui";
 import { useState } from "react";
 import CardModal from "./CardModal";

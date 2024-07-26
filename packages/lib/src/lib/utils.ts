@@ -112,3 +112,7 @@ export function findInOrFirst<T>(array: T[]) {
 export function translateYpx(value: number) {
   return `translateY(${inPx(value)})`;
 }
+
+export function getSecondsFromHours(hours: number) {
+  return hours * 3600;
+}

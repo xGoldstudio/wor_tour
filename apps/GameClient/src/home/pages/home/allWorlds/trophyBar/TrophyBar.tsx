@@ -185,6 +185,7 @@ export default function TrophyBar({
         },
         "begin"
       );
+      tl.progress(1).progress(0);
     },
     {
       scope: state.wrapperContainer || undefined,
