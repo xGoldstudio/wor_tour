@@ -15,9 +15,17 @@ import { RewardBlockWithContext } from "./pages/reward/Reward";
 import ShopTab from "./pages/shop/ShopTab";
 import usePlayerStore from "./store/playerStore";
 
-type Tabs = "home" | "deck" | "shop";
+interface TabProps {
+  setCurrentTab?: (tab: Tabs) => void;
+}
 
-const tabs: (() => JSX.Element)[] = [ShopTab, HomeTab, DeckTab];
+export type Tabs = "home" | "deck" | "shop";
+
+const tabs: (({ setCurrentTab }: TabProps) => JSX.Element)[] = [
+  ShopTab,
+  HomeTab,
+  DeckTab,
+];
 
 const tabsPosition: Record<Tabs, number> = {
   shop: 0,
@@ -50,7 +58,7 @@ export default function Home() {
           >
             {tabs.map((Tab) => (
               <div className="w-full h-full relative" key={Tab.name}>
-                <Tab />
+                <Tab setCurrentTab={setCurrentTab} />
               </div>
             ))}
           </div>

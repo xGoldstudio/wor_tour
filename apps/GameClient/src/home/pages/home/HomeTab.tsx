@@ -1,23 +1,30 @@
 import { useStartGame } from "@/game/stores/gameMetadataStore";
 import { useState } from "react";
-import { Cover } from "@repo/ui";
+import { cn, Cover } from "@repo/ui";
 import { numberWithCommas, textureByRarity } from "@repo/lib";
 import usePlayerStore from "@/home/store/playerStore";
-import {
-  InnerBord
-} from "../../../../../../packages/ui/components/card/CardBorder";
+import { InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
 import AllWorlds from "./allWorlds/AllWorlds";
 import ProfileModal from "./modals/ProfileModal";
 import AnimationContainer from "@/home/animations/AnimationContainer";
 import WorldIllustration from "./WorldIllustration";
+import { Tabs } from "@/home/Home";
+import { useEditionMode } from "../deck/context/EditionModeContext";
 
-export default function HomeTab() {
+interface HomeTabProps {
+  setCurrentTab?: (tab: Tabs) => void;
+}
+
+export default function HomeTab({ setCurrentTab }: HomeTabProps) {
   const startGame = useStartGame();
+  const { setEditionMode } = useEditionMode();
 
-  const { trophies } = usePlayerStore((state) => ({
+  const { trophies, isDeckFull } = usePlayerStore((state) => ({
     trophies: state.trophies,
     currentWorld: state.currentWorld,
+    isDeckFull: state.isDeckFull(),
   }));
+
   const [profileOpen, setProfileOpen] = useState(false);
   const [worldsModalOpen, setWorldsModalOpen] = useState<
     false | "normal" | "tier" | "world"
@@ -93,13 +100,44 @@ export default function HomeTab() {
         <WorldIllustration setWorldsModalOpen={setWorldsModalOpen} />
         <div
           id="battleButton"
-          className="relative rounded-sm flex p-1 flex-col items-center font-slate-600 cursor-pointer"
-          onClick={() => startGame()}
+          className={cn(
+            "relative rounded-sm flex p-1 flex-col items-center font-slate-600 cursor-pointer",
+            !isDeckFull && "brightness-75"
+          )}
+          onClick={() => {
+            isDeckFull ? startGame() : setCurrentTab!("deck"),
+              setEditionMode(true);
+          }}
         >
-          <div className="w-[calc(100%_+_6px)] h-[calc(100%_+_6px)] absolute top-[-3px] left-[-3px] blur-sm rounded-sm  bg-amber-100 animate-[shiny_2s_ease-in-out_infinite]"></div>
-          <Cover cardRarity="epic" className="rounded-sm" />
+          <div
+            className={cn(
+              "w-[calc(100%_+_6px)] h-[calc(100%_+_6px)] absolute top-[-3px] left-[-3px] blur-sm rounded-sm bg-amber-100  animate-[shiny_2s_ease-in-out_infinite]",
+              !isDeckFull && "bg-gray-950"
+            )}
+          ></div>
+
+          {isDeckFull ? (
+            <Cover cardRarity="epic" className="rounded-sm" />
+          ) : (
+            <>
+              <div className="h-7 w-3/5 flex items-center justify-center absolute -top-7 bg-gray-800  backdrop-blur-sm opacity-80 rounded-t-sm font-bold text-white">
+                Deck Incomplete
+              </div>
+              <Cover cardRarity="rare" className="rounded-sm" />
+            </>
+          )}
           <div className="relative rounded-sm w-full flex justify-center py-2 mx-4">
-            <div className="bg-white w-full h-full absolute top-0 backdrop-blur-sm opacity-50 rounded-sm"></div>
+            <div
+              className={cn(
+                "bg-white w-full h-full absolute top-0 backdrop-blur-sm opacity-50 rounded-sm",
+                !isDeckFull && "bg-gray-800"
+              )}
+            ></div>
+            <img
+              src="/padlock-nobg.png"
+              className="h-[22px] absolute top-1/2 -translate-y-1/2 left-[4.65rem] brightness-75"
+              alt="padlock"
+            />
             <p className="text-2xl relative font-bold">Battle</p>
           </div>
           <div className="relative flex items-center gap-3 justify-center px-16">

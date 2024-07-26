@@ -5,7 +5,7 @@ import DeckTab from "./DeckTab";
 
 export type Tabs = "Deck" | "Collection";
 
-interface TabProps {
+export interface TabProps {
   setCurrentTab: (tab: Tabs) => void;
 }
 

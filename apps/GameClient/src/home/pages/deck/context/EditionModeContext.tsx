@@ -11,7 +11,6 @@ export const EditionModeContext = createContext<
 
 export function EditionModeProvider({ children }: { children: ReactNode }) {
   const [editionMode, setEditionMode] = useState(false);
-  console.log(editionMode);
   return (
     <EditionModeContext.Provider value={{ editionMode, setEditionMode }}>
       {children}
