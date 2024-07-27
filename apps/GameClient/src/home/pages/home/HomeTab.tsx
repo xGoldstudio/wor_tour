@@ -8,6 +8,8 @@ import ProfileModal from "./modals/ProfileModal";
 import AnimationContainer from "@/home/animations/AnimationContainer";
 import WorldIllustration from "./WorldIllustration";
 import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
+import Timer from "@/home/services/LoopService/Timer";
+import { dailyGoldService } from "@/home/services/DailyGoldService/dailyGoldService";
 
 export default function HomeTab() {
   const startGame = useStartGame();
@@ -22,6 +24,10 @@ export default function HomeTab() {
       setWorldsModalOpen: state.setWorldsModalOpen,
     })
   );
+  const { dailyGoldConsumed, dailyGoldLimit } = dailyGoldService.store((state) => ({
+    dailyGoldConsumed: state.dailyGoldConsumed,
+    dailyGoldLimit: state.dailyGoldLimit,
+  }));
 
   return (
     <div className="w-full h-full flex flex-col items-center">
@@ -93,7 +99,7 @@ export default function HomeTab() {
         <WorldIllustration setWorldsModalOpen={() => setWorldsModalOpen("normal")} />
         <div
           id="battleButton"
-          className="relative rounded-sm flex p-1 flex-col items-center font-slate-600 cursor-pointer"
+          className="relative rounded-sm flex p-1 flex-col items-center font-slate-600 cursor-pointer w-[310px]"
           onClick={() => startGame()}
         >
           <div className="w-[calc(100%_+_6px)] h-[calc(100%_+_6px)] absolute top-[-3px] left-[-3px] blur-sm rounded-sm  bg-amber-100 animate-[shiny_2s_ease-in-out_infinite]"></div>
@@ -102,14 +108,14 @@ export default function HomeTab() {
             <div className="bg-white w-full h-full absolute top-0 backdrop-blur-sm opacity-50 rounded-sm"></div>
             <p className="text-2xl relative font-bold">Battle</p>
           </div>
-          <div className="relative flex items-center gap-3 justify-center px-16">
+          <div className="relative flex items-center gap-3 justify-start w-full pl-16">
             <img
               src="/money.png"
               className="h-[48px] drop-shadow-[2px_1px_1px_black]"
             />
             <div className="relative">
-              <p className="text-sm font-semibold leading-4">900/5000</p>
-              <p className="text-sm leading-4">reset in: 2h50</p>
+              <p className="text-sm font-semibold leading-4">{dailyGoldConsumed}/{dailyGoldLimit}</p>
+              <p className="text-sm leading-4">reset in: <Timer name="dailyGold" /></p>
             </div>
           </div>
         </div>

@@ -3,19 +3,6 @@ import { boosters, getWorldBoosterName } from "./ComputeBoosterProgress";
 import { getStrengthMax, getStrengthMin } from "../lib/transformLevelStatInlevels";
 import { ceilToValue, cubicBezier, Level } from "@repo/lib";
 import { numberOfLevels } from "../lib/utils";
-import { WORLD_GOLD_RATIO } from "./const";
-
-export const GoldPerVictory = 250;
-export const MaxGoldPerDay = 5000;
-
-const ceilToFive = ceilToValue(5);
-
-function computeGoldWorldValue(value: number) {
-	return (currentWorld: number) => ceilToFive(value * (WORLD_GOLD_RATIO ** (currentWorld - 1)));
-}
-
-export const getGoldPerVictory = computeGoldWorldValue(GoldPerVictory);
-export const getMaxGoldPerDay = computeGoldWorldValue(MaxGoldPerDay);
 
 interface World {
 	id: number;

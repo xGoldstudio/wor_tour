@@ -21,7 +21,7 @@ export default function ShopTab() {
         </div>
         <Ribbon>Cards by unit</Ribbon>
         <p className="text-center pb-3">
-          Next in <Timer name="cardShop" />
+          Next in <Timer name="cardRotationShop" />
         </p>
         <div className="grid grid-cols-3 gap-4">
           {buyableCards.map((card, i) => (

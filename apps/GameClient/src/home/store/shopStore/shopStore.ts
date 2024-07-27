@@ -7,13 +7,11 @@ import useDataStore from "@/cards/DataStore";
 import { isCardPackable } from "../boosterStore";
 import { arrayOfCardsToRarityMap } from "../useBooster/getRandomCardFromRarity";
 import { findCard } from "@/cards";
-import clientLoop from "../../services/LoopService/clientLoop";
 
-const CARDS_ROTATION_TIME = getSecondsFromHours(3);
+export const CARDS_ROTATION_TIME = getSecondsFromHours(3);
 
 export function initShopStore() {
   useShopStore.setState({ ...ShopeStoreDefaultState });
-  clientLoop.cycle("cardShop", "setCardsToBuy", CARDS_ROTATION_TIME);
 }
 
 const ShopeStoreDefaultState = {
