@@ -1,7 +1,5 @@
 import { create } from "zustand";
-import { CardStatsInfo, CardStatsInfoLevel } from "../../../../packages/gameEngine/src/types/Card";
-import { EditorData } from "../../../../packages/gameEngine/src/types/DataStoreType";
-import { getStats } from "../../../../packages/lib/src/lib/getStats";
+import { CardStatsInfo, CardStatsInfoLevel, EditorData, getStats } from "@repo/lib";
 
 interface DataStore {
   cards: CardStatsInfo[];
@@ -17,7 +15,6 @@ export interface World {
   name: string;
   description: string;
 }
-
 
 const useDataStore = create<DataStore>()((set, get) => ({
   cards: [],

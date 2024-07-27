@@ -1,6 +1,7 @@
 import { BoosterTypeDeclartion, CardRarity } from "@repo/lib";
 import * as _ from "lodash";
 import { numberOfLevels } from "../lib/utils";
+import { WORLD_GOLD_RATIO } from "./const";
 function ceilToValue(ceil: number) {
 	return (v: number) => Math.ceil(v / ceil) * ceil;
 }
@@ -72,7 +73,7 @@ export function getWorldBoosterName(world: number) {
 function worldBooster(world: number): BoosterTypeDeclartion {
 	return {
 		name: getWorldBoosterName(world),
-		cost: ceilToValue(100)(baseCost * (1.2 ** world)),
+		cost: ceilToValue(100)(baseCost * (WORLD_GOLD_RATIO ** world)),
 		description: `Contain 1 unit from ${ordinals[world - 1]} world.`,
 		unlockCondition: {
 			world: world,

@@ -116,3 +116,7 @@ export function translateYpx(value: number) {
 export function getSecondsFromHours(hours: number) {
   return hours * 3600;
 }
+
+export function getSecondsFromDays(days: 1) {
+  return days * 86400;
+}

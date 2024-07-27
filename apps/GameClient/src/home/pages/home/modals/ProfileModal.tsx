@@ -1,17 +1,13 @@
 import Modal from "@/home/ui/modal";
 import ScrollContainer from "react-indiana-drag-scroll";
-import {
-  Borders,
-  CardIllustartion,
-  InnerBord,
-} from "../../../../../../../packages/ui/components/card/CardBorder";
 import { Badge, Box } from "@repo/ui";
 import Ribbon from "@/home/ui/Ribbon";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import useDataStore from "@/cards/DataStore";
 import _ from "lodash";
 import { DeckCardUI } from "../../deck/DeckCardUI";
-import { getImageUrl } from "@repo/lib";
+import WorldField from "./WorldField";
+import Field from "./Field";
 
 interface ProfileModalProps {
   closeModal: () => void;
@@ -46,60 +42,25 @@ export default function ProfileModal({ closeModal }: ProfileModalProps) {
               backgroundSize: "cover",
             }}
           />
-          <ScrollContainer className="w-full h-full flex">
+          <ScrollContainer className="w-full h-full flex overflow-y-scroll" stopPropagation={false}>
             <div className="w-full h-max flex flex-col items-center relative pb-8">
               <p className="text-4xl font-semibold text-white py-16 relative drop-shadow-[2px_2px_1px_black]">
                 Goldaxe
               </p>
               <div className="grid grid-cols-2 gap-4">
-                <Borders width={191} height={55} borderUnit={1} rarity={"epic"}>
-                  <CardIllustartion width={191} height={55} borderUnit={0.6}>
-                    <InnerBord size={1}>
-                      <div className="flex w-full items-center justify-start pl-2 gap-2 relative bg-slate-600 h-full">
-                        <div
-                          className="absolute top-0 left-0 w-full h-full blur-sm"
-                          style={{ backgroundImage: "url(/silver.jpeg)" }}
-                        />
-                        <Badge value="45" />
-                        <p className="relative font-semibold">Level</p>
-                      </div>
-                    </InnerBord>
-                  </CardIllustartion>
-                </Borders>
-                <Borders width={191} height={55} borderUnit={1} rarity={"epic"}>
-                  <CardIllustartion width={191} height={55} borderUnit={0.6}>
-                    <InnerBord size={1}>
-                      <div className="flex w-full items-center justify-start pl-2 gap-2 relative bg-slate-600 h-full">
-                        <div
-                          className="absolute top-0 left-0 w-full h-full blur-sm"
-                          style={{ backgroundImage: "url(/silver.jpeg)" }}
-                        />
-                        <img
-                          className="w-[32px] aspect-square relative"
-                          src={getImageUrl(world.illustration)}
-                        />
-                        <p className="relative font-semibold">World 1</p>
-                      </div>
-                    </InnerBord>
-                  </CardIllustartion>
-                </Borders>
-                <Borders width={191} height={55} borderUnit={1} rarity={"epic"}>
-                  <CardIllustartion width={191} height={55} borderUnit={0.6}>
-                    <InnerBord size={1}>
-                      <div className="flex w-full items-center justify-start pl-2 gap-2 relative bg-slate-600 h-full">
-                        <div
-                          className="absolute top-0 left-0 w-full h-full blur-sm"
-                          style={{ backgroundImage: "url(/silver.jpeg)" }}
-                        />
-                        <img
-                          src="/trophy.png"
-                          className="w-[32px] drop-shadow-[2px_1px_1px_black]"
-                        />
-                        <p className="relative font-semibold">450</p>
-                      </div>
-                    </InnerBord>
-                  </CardIllustartion>
-                </Borders>
+                <Field>
+                  <Badge value="45" />
+                  <p className="relative font-semibold">Level</p>
+                </Field>
+                <WorldField world={world} />
+                <Field>
+                  <img
+                    src="/trophy.png"
+                    className="w-[32px] drop-shadow-[2px_1px_1px_black]"
+                  />
+                  <p className="relative font-semibold">450</p>
+                </Field>
+
                 <Stat label="Victory" value="45" />
               </div>
               <Ribbon className="mt-16 px-16">Deck</Ribbon>
@@ -129,19 +90,11 @@ export default function ProfileModal({ closeModal }: ProfileModalProps) {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <Borders width={191} height={55} borderUnit={1} rarity={"epic"}>
-      <CardIllustartion width={191} height={55} borderUnit={0.6}>
-        <InnerBord size={1}>
-          <div className="flex w-full items-center justify-center pl-2 relative bg-slate-600 h-full flex-col">
-            <div
-              className="absolute top-0 left-0 w-full h-full blur-sm"
-              style={{ backgroundImage: "url(/silver.jpeg)" }}
-            />
-            <p className="relative font-semibold leading-5">{label}</p>
-            <p className="relative text-sm leading-4">{value}</p>
-          </div>
-        </InnerBord>
-      </CardIllustartion>
-    </Borders>
+    <Field>
+      <div className="flex w-full items-center justify-center h-full flex-col">
+        <p className="relative font-semibold leading-5">{label}</p>
+        <p className="relative text-sm leading-4">{value}</p>
+      </div>
+    </Field>
   );
 }

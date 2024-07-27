@@ -3,7 +3,7 @@ import { DebugButton } from "./game/GameDebugPanel";
 import useAnimationStore from "./home/store/animationStore";
 import usePlayerStore, { CollectionCard } from "./home/store/playerStore/playerStore";
 import { _warningResetPlayStore } from "./home/store/initAllClientData";
-import clientLoop from "./home/services/LoopService/clientLoop";
+import clientLoop from "./home/services/LoopService/clientLoopService";
 import useDataStore from "./cards/DataStore";
 
 export default function DebugPanel() {

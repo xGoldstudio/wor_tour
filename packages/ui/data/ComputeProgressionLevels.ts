@@ -18,18 +18,18 @@ function buildLevel(word: number) {
 	};
 }
 
-const worlds: World[] = _.range(1, 6).map(buildLevel);
+const worldsHardcodedData: World[] = _.range(1, 6).map(buildLevel);
 
 const endPercentage = 0.65;
 const beginPercentage = 0.30;
-const gapPercentage = (1 - endPercentage) / (worlds.length - 1);
+const gapPercentage = (1 - endPercentage) / (worldsHardcodedData.length - 1);
 
 const baseGoldReward = 1500;
 const baseXpReward = 0;
 
 const levels: Level[] = [];
 
-worlds.forEach((world) => {
+worldsHardcodedData.forEach((world) => {
 	// world 1 have a different begin percentage and a different easing
 	const computedBeginPercentage =
 		(world.id > 1 ? beginPercentage : 0) + gapPercentage * (world.id - 1);
@@ -71,4 +71,4 @@ worlds.forEach((world) => {
 	}
 });
 
-export { worlds, levels };
+export { worldsHardcodedData, levels };

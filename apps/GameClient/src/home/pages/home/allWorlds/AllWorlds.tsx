@@ -64,7 +64,7 @@ function AllWorldsInner({ closeModal }: { closeModal: () => void }) {
           <ScrollContainer
             className={cn(
               "allWorldsScrollerContainer",
-              "max-h-[100%] overflow-hidden w-full flex flex-col relative"
+              "max-h-[100%] overflow-hidden w-full flex flex-col relative overflow-y-scroll"
             )}
             innerRef={scrollerRef}
           >

@@ -1,10 +1,11 @@
 import { IS_DEBUG } from "@/isDebug";
-import { callbackService } from "../CallbackService/callbackService";
+import { callbackService, CallbackServiceName } from "../CallbackService/callbackService";
+import { getSecondsFromDays } from "@repo/lib";
+import { CARDS_ROTATION_TIME } from "@/home/store/shopStore/shopStore";
 
-const clientLoopDataFromLocalStorage = JSON.parse(localStorage.getItem('clientLoop') || '{}') as Partial<ClientLoopData>;
 
 type ClientLoopData = {
-	timersMap: Record<string, { remainingFrames: number, callbackName: string, cycleDuration: number | null }>,
+	timersMap: Record<string, { remainingFrames: number, callbackName: CallbackServiceName, cycleDuration: number | null }>,
 	lastTimestamp: number,
 };
 
@@ -18,29 +19,45 @@ function getRemainFramesFromCurrentCycle(elapsedFramesFromLastCycle: number, tim
 	return timeout - elapsedFramesFromLastCycle % timeout;
 }
 
-function ClientLoop() {
-	const timersMap: Record<string, { remainingFrames: number, callbackName: string, cycleDuration: number | null }>
-		= clientLoopDataFromLocalStorage.timersMap || {};
+interface CycleProps {
+	name: string;
+	callbackName: CallbackServiceName;
+	duration: number;
+}
+
+interface Timer { remainingFrames: number, callbackName: CallbackServiceName, cycleDuration: number | null }
+
+function ClientLoop(cycles: CycleProps[]) {
+	const clientLoopDataFromLocalStorage = JSON.parse(localStorage.getItem('clientLoop') || '{}') as Partial<ClientLoopData>;
+	const timersMap: Record<string, Timer> = clientLoopDataFromLocalStorage.timersMap || {};
 	const listenersMap: Record<string, { listeners: ((remainingFrames: number | null) => void)[] }>
 		= {};
 	let lastTimestamp = clientLoopDataFromLocalStorage.lastTimestamp || Date.now();
+	init();
 
-	function cycle(name: string, callbackName: string, timeout: number) { // cycle should be called once in a account lifetime
+	function init() {
+		cycles.forEach(cycle);
+	}
+
+	function cycle({ name, callbackName, duration }: CycleProps) {
+		if (timersMap[name]) {
+			return;
+		}
+		callbackService.call(callbackName);
 		const firstTimeOfDay = getFirstTimeOfDay();
 		const remainFramesFromCurrentCycle = getRemainFramesFromCurrentCycle(
 			Math.floor((Date.now() - firstTimeOfDay) / FRAME_DURATION),
-			timeout,
+			duration,
 		);
-		callbackService.call(callbackName); // initial call
 		pushTimer(
 			name,
 			callbackName,
 			remainFramesFromCurrentCycle,
-			timeout,
+			duration,
 		);
 	}
 
-	function pushTimer(name: string, callbackName: string, timeout: number, cycleDuration: number | null = null) {
+	function pushTimer(name: string, callbackName: CallbackServiceName, timeout: number, cycleDuration: number | null = null) {
 		timersMap[name] = {
 			remainingFrames: timeout,
 			callbackName,
@@ -116,6 +133,7 @@ function ClientLoop() {
 		Object.keys(timersMap).forEach((timerName) => {
 			delete timersMap[timerName];
 		});
+		init();
 	}
 
 	function _unsafeManipulateClock(framesToAdd: number) {
@@ -124,7 +142,6 @@ function ClientLoop() {
 	}
 
 	return {
-		cycle,
 		pushTimer,
 		start: startInterval,
 		addListener,
@@ -133,7 +150,10 @@ function ClientLoop() {
 	};
 }
 
-const clientLoop = ClientLoop();
+const clientLoop = ClientLoop([
+	{ name: "cardRotationShop", callbackName: "setCardsToBuy", duration: CARDS_ROTATION_TIME },
+	{ name: "dailyGold", callbackName: "resetDailyGold", duration: getSecondsFromDays(1) }
+]);
 clientLoop.start();
 
 export default clientLoop;
