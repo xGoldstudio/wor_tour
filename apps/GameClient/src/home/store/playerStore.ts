@@ -25,6 +25,9 @@ interface PlayerStore {
   getCollectionCompleteInfo: (
     collection: CollectionCard[]
   ) => (CardType & { isInDeck: boolean })[];
+  getCollectionNotInDeck: (
+    collection: CollectionCard[]
+  ) => (CardType & { isInDeck: boolean })[];
   removeCardFromDeck: (id: number) => void;
   addCardToDeck: (id: number) => void;
   isDeckFull: () => boolean;
@@ -80,6 +83,11 @@ const usePlayerStore = create<PlayerStore>()((set, get) => ({
   },
   getCollectionCompleteInfo: (collection: CollectionCard[]) =>
     collection.map((card) => get().getCompleteInfo(card.id)),
+  getCollectionNotInDeck: (collection: CollectionCard[]) =>
+    collection
+      .map((card) => get().getCompleteInfo(card.id))
+      .filter((card) => !get().deck.includes(card.id)),
+
   lastCompletedLevel: -1,
   trophies: 0,
   maxTrophies: 0,

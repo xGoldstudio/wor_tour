@@ -48,12 +48,15 @@ function DeckStats({ detailledDeck }: DeckStatsProps) {
 export type selectedCardType = { id: number; tab: Tabs | null };
 
 export default function DeckTab() {
-  const { deck, getCompleteInfo } = usePlayerStore((state) => ({
-    deck: state.deck,
-    getCompleteInfo: state.getCompleteInfo,
-    numberOfCardsInDeck: state.numberOfCardsInDeck,
-    currentMissingCards: state.currentMissingCards,
-  }));
+  const { deck, getCompleteInfo, collectionInDeck } = usePlayerStore(
+    (state) => ({
+      deck: state.deck,
+      getCompleteInfo: state.getCompleteInfo,
+      numberOfCardsInDeck: state.numberOfCardsInDeck,
+      currentMissingCards: state.currentMissingCards,
+      collectionInDeck: state.getCollectionNotInDeck(state.getCollection()),
+    })
+  );
   const { editionMode } = useEditionMode();
   const [selectedCard, setSelectedCard] = useState<selectedCardType>({
     id: 0,
@@ -88,6 +91,7 @@ export default function DeckTab() {
         <DeckStats detailledDeck={detailledDeck} />
         {editionMode && (
           <Collection
+            collection={collectionInDeck}
             setSelectedCard={setSelectedCard}
             selectedCard={selectedCard}
             classname={"h-full pb-4"}

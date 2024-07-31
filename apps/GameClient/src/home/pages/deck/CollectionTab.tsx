@@ -3,6 +3,7 @@ import Collection from "./Collection";
 import { Tabs } from "./DeckInterface";
 import { useState } from "react";
 import { selectedCardType } from "./DeckTab";
+import usePlayerStore from "@/home/store/playerStore";
 
 interface CollectionTabProps {
   setCurrentTab: (tab: Tabs) => void;
@@ -13,10 +14,16 @@ export default function CollectionTab({ setCurrentTab }: CollectionTabProps) {
     id: 0,
     tab: null,
   });
+  const { collectionInCollection } = usePlayerStore((state) => ({
+    collectionInCollection: state.getCollectionCompleteInfo(
+      state.getCollection()
+    ),
+  }));
   return (
     <>
       <ScrollContainer className="grow overflow-y-scroll scrollbar-hide flex justify-center">
         <Collection
+          collection={collectionInCollection}
           setCurrentTab={setCurrentTab}
           selectedCard={selectedCard}
           setSelectedCard={setSelectedCard}

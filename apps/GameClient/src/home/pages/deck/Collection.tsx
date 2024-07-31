@@ -8,8 +8,10 @@ import { getCardsFiltered } from "./getCardsFiltered";
 import { Tabs } from "./DeckInterface";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { selectedCardType } from "./DeckTab";
+import { CardType } from "@repo/lib";
 
 interface CollectionProps {
+  collection: (CardType & { isInDeck: boolean })[];
   setCurrentTab?: (tab: Tabs) => void;
   setSelectedCard: (obj: selectedCardType) => void;
   selectedCard: selectedCardType;
@@ -17,12 +19,13 @@ interface CollectionProps {
 }
 
 export default function Collection({
+  collection,
   setCurrentTab,
   setSelectedCard,
   selectedCard,
   classname = "pb-24",
 }: CollectionProps) {
-  let { detailledCollection, cardNotFound } = usePlayerStore((state) => ({
+  let { cardNotFound } = usePlayerStore((state) => ({
     detailledCollection: state.getCollectionCompleteInfo(state.getCollection()),
     cardNotFound: state.getAllCardsLocked(),
   }));
@@ -43,7 +46,7 @@ export default function Collection({
       max: FiltersDescription.Cost.rangeMax!,
     },
   });
-
+  let detailledCollection = [...collection];
   const collectionLength = detailledCollection.length;
 
   detailledCollection = getCardsFiltered({
