@@ -12,7 +12,6 @@ import { useState } from "react";
 import CardModal from "./CardModal";
 import { Tabs } from "./DeckInterface";
 import { useEditionMode } from "./context/UseEditionMode";
-import { set } from "lodash";
 
 interface CardUIProps {
   cardId: number;
