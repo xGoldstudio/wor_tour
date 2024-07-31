@@ -122,7 +122,7 @@ export function DeckCardUI({
                     small={true}
                     width="w-[3.6rem] "
                     className="h-10"
-                    rarity={card.rarity}
+                    rarity={"rare"}
                     action={() => setIsDescriptionOpen(true)}
                   >
                     <img
