@@ -126,7 +126,7 @@ export function DeckCardUI({
                     action={() => setIsDescriptionOpen(true)}
                   >
                     <img
-                      className="p-[0.25rem] group-hover:p-[0.15rem]"
+                      className="p-[0.25rem] group-hover:p-[0.15rem] "
                       src="/information-circle-no-bg.png"
                       width={30}
                       height={30}

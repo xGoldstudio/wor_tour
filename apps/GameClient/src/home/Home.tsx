@@ -62,7 +62,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-          {editionMode ? (
+          {editionMode && (
             <div className="h-[70px] w-full bg-white relative z-10 ">
               <div className="grow h-full bg-slate-600 relative flex items-center justify-center">
                 <Cover cardRarity="rare" />
@@ -71,47 +71,52 @@ export default function Home() {
                 </Button>
               </div>
             </div>
-          ) : (
-            <div className="flex w-full bg-black relative z-10">
-              <div className="w-full h-full absolute flex overflow-hidden">
-                <div className="grow h-full bg-slate-600 relative">
-                  <Cover cardRarity="rare" />
-                </div>
-                <div className="grow h-full bg-slate-600 relative">
-                  <Cover cardRarity="rare" />
-                </div>
-                <div className="grow h-full bg-slate-600 relative">
-                  <Cover cardRarity="rare" />
-                </div>
-              </div>
-              <div
-                className="w-1/3 h-full absolute transition-transform overflow-hidden"
-                style={{
-                  transform: `translateX(${100 * tabsPosition[currentTab]}%)`,
-                }}
-              >
-                <Cover cardRarity="epic" />
-              </div>
-              <FooterButton
-                onClick={() => setCurrentTab("shop")}
-                label="Shop"
-                selected={currentTab === "shop"}
-                imageUrl="footer/backpack.png"
-              />
-              <FooterButton
-                onClick={() => setCurrentTab("home")}
-                label="Battle"
-                selected={currentTab === "home"}
-                imageUrl="fightback.png"
-              />
-              <FooterButton
-                onClick={() => setCurrentTab("deck")}
-                label="Collection"
-                selected={currentTab === "deck"}
-                imageUrl="footer/collection.png"
-              />
-            </div>
           )}
+
+          <div
+            className={cn(
+              "flex w-full bg-black relative z-10",
+              editionMode && "hidden"
+            )}
+          >
+            <div className="w-full h-full absolute flex overflow-hidden">
+              <div className="grow h-full bg-slate-600 relative">
+                <Cover cardRarity="rare" />
+              </div>
+              <div className="grow h-full bg-slate-600 relative">
+                <Cover cardRarity="rare" />
+              </div>
+              <div className="grow h-full bg-slate-600 relative">
+                <Cover cardRarity="rare" />
+              </div>
+            </div>
+            <div
+              className="w-1/3 h-full absolute transition-transform overflow-hidden"
+              style={{
+                transform: `translateX(${100 * tabsPosition[currentTab]}%)`,
+              }}
+            >
+              <Cover cardRarity="epic" />
+            </div>
+            <FooterButton
+              onClick={() => setCurrentTab("shop")}
+              label="Shop"
+              selected={currentTab === "shop"}
+              imageUrl="footer/backpack.png"
+            />
+            <FooterButton
+              onClick={() => setCurrentTab("home")}
+              label="Battle"
+              selected={currentTab === "home"}
+              imageUrl="fightback.png"
+            />
+            <FooterButton
+              onClick={() => setCurrentTab("deck")}
+              label="Collection"
+              selected={currentTab === "deck"}
+              imageUrl="footer/collection.png"
+            />
+          </div>
         </div>
       </div>
     </div>
