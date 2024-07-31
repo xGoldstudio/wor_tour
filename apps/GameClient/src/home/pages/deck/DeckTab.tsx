@@ -7,9 +7,8 @@ import ScrollContainer from "react-indiana-drag-scroll";
 import { CardCollection } from "./cardFilters";
 import { NUMBER_OF_CARD_IN_DECK } from "./cardSorts";
 import Collection from "./Collection";
-import { DeckCardUI } from "./DeckCardUI";
-import { Tabs } from "./DeckInterface";
 import { useEditionMode } from "./context/UseEditionMode";
+import { DeckCardUI } from "./DeckCardUI";
 
 interface DeckStatsProps {
   detailledDeck: CardCollection[];

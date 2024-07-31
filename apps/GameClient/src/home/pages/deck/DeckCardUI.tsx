@@ -11,16 +11,16 @@ import {
 import { useState } from "react";
 import CardModal from "./CardModal";
 import { Tabs } from "./DeckInterface";
-import { selectedCardType } from "./DeckTab";
 import { useEditionMode } from "./context/UseEditionMode";
+import { set } from "lodash";
 
 interface CardUIProps {
   cardId: number;
   isHand?: boolean;
   locked?: boolean;
   setCurrentTab?: (tab: Tabs) => void;
-  setSelectedCard: (id: number) => void;
-  selectedCard: number;
+  setSelectedCard?: (id: number) => void;
+  selectedCard?: number;
 }
 
 export function DeckCardUI({
@@ -83,7 +83,7 @@ export function DeckCardUI({
             <div
               className={`${opacity} hover:cursor-pointer`}
               onClick={() => {
-                isSelected ? setSelectedCard(0) : setSelectedCard(card.id),
+                isSelected ? setSelectedCard!(0) : setSelectedCard!(card.id),
                   !isDeckFull && setEditionMode(true);
               }}
             >
@@ -123,7 +123,7 @@ export function DeckCardUI({
                     action={() => setIsDescriptionOpen(true)}
                   >
                     <img
-                      className="p-[0.25rem] group-hover:p-[0.15rem] transition-all duration-100 ease-in-out"
+                      className="p-[0.25rem] group-hover:p-[0.15rem] transition-all duration-100 ease-in-out invert"
                       src="/information-circle-no-bg.png"
                       width={30}
                       height={30}
