@@ -10,11 +10,13 @@ import { GameCard } from "@repo/ui";
 
 export default function Game() {
   const {
-    togglePlay,
-    isClockRunning,
-    fastForward,
     gameRef,
     isInit,
+    play,
+    pause,
+    isPlaying,
+    runTicks,
+    clock,
   } = useGameEvents();
   console.log("game render");
 
@@ -24,9 +26,11 @@ export default function Game() {
       ref={gameRef}
     >
       <GameDebugPanel
-        togglePlay={togglePlay}
-        isClockRunning={isClockRunning}
-        fastForward={fastForward}
+        play={play}
+        pause={pause}
+        isPlaying={isPlaying}
+        runTicks={runTicks}
+        clock={clock}
       />
       {isInit && (
         <>
@@ -43,7 +47,7 @@ export default function Game() {
                 backgroundSize: "cover",
               }}
             ></div>
-            <PlayerGUI isPlayer={false} />
+            <PlayerGUI isPlayer={false} clock={clock} />
             <div className="w-full flex justify-center relative">
               <div className="grid grid-cols-3 gap-4 px-8">
                 <CardPlaceholder position={0} isPlayer={false} />
@@ -54,7 +58,7 @@ export default function Game() {
                 <CardPlaceholder position={2} isPlayer />
               </div>
             </div>
-            <PlayerGUI isPlayer />
+            <PlayerGUI isPlayer clock={clock} />
           </div>
           <div className="bg-black h-full w-full"></div>
         </>

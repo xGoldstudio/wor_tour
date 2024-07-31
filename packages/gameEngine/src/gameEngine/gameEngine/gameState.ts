@@ -2,7 +2,7 @@ import { CardType } from "../../types/Card";
 import { InGameCardType } from "../../types/eventType";
 import { CardState } from "../states/CardStatesData";
 
-interface GameStateObjectConstructor {
+export interface GameStateObjectConstructor {
 	playerDeck: CardType[];
 	opponentDeck: CardType[];
 	playerHp: number;

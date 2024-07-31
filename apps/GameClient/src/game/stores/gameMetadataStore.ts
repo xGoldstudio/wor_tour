@@ -5,13 +5,7 @@ import useAnimationStore from "../../home/store/animationStore";
 import { CardType } from "@repo/lib";
 import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 import usePlayerStore, { CollectionCard } from "@/home/store/playerStore/playerStore";
-
-export interface InGameInitData {
-  playerDeck: CardType[];
-  opponentDeck: CardType[];
-  playerHp: number;
-  opponentHp: number;
-}
+import { GameStateObjectConstructor } from "game_engine";
 
 interface GameInterfaceStore {
   isInGame: boolean;
@@ -29,7 +23,7 @@ interface GameInterfaceStore {
       trophies: number;
     }
   },
-  getInGameInitData: () => InGameInitData;
+  getInGameInitData: () => GameStateObjectConstructor;
   findCard: (id: number, isPlayer: boolean) => CardType;
   setIsInGame: (isInGame: boolean) => void;
   setInGameData: (

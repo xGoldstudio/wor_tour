@@ -8,12 +8,14 @@ import { useState } from "react";
 import { dummyCard } from "./card/const";
 import { ManaBar, useGameEventListener } from "@repo/ui";
 import { CardType } from "@repo/lib";
+import { ClockReturn, EventType } from "game_engine";
 
 interface PlayerGUIProps {
   isPlayer: boolean;
+  clock: ClockReturn<EventType>;
 }
 
-function PlayerGUI({ isPlayer }: PlayerGUIProps) {
+function PlayerGUI({ isPlayer, clock }: PlayerGUIProps) {
   const { deck, maxHp } = useGameStore(
     useShallow((s) => ({
       deck: s.state.playerDeck,
@@ -50,7 +52,7 @@ function PlayerGUI({ isPlayer }: PlayerGUIProps) {
                 ))}
               </div>
               {_.times(4).map((index) => (
-                <InHandCard position={index} key={index} />
+                <InHandCard position={index} clock={clock} key={index} />
               ))}
             </div>
           )}
