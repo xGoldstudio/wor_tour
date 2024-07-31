@@ -126,7 +126,7 @@ export function DeckCardUI({
                     action={() => setIsDescriptionOpen(true)}
                   >
                     <img
-                      className="p-[0.25rem] group-hover:p-[0.15rem] "
+                      className="p-[0.25rem] group-hover:p-[0.15rem] transition-all duration-100 ease-in-out"
                       src="/information-circle-no-bg.png"
                       width={30}
                       height={30}
@@ -147,7 +147,7 @@ export function DeckCardUI({
                       }}
                     >
                       <img
-                        className="p-[0.25rem] group-hover:p-[0.15rem]"
+                        className="p-[0.25rem] group-hover:p-[0.15rem] transition-all duration-100 ease-in-out"
                         src="/trash-no-bg.png"
                         width={27}
                         height={27}
@@ -166,7 +166,7 @@ export function DeckCardUI({
                       })}
                     >
                       <img
-                        className="p-[0.25rem] group-hover:p-[0.15rem]"
+                        className="p-[0.25rem] group-hover:p-[0.15rem] transition-all duration-100 ease-in-out"
                         src="/icons/plus.svg"
                         width={27}
                         height={27}
