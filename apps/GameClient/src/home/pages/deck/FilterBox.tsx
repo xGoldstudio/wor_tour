@@ -141,7 +141,7 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
       </Button>
       {filterIsOpen && (
         <OutsideClickHandler onOutsideClick={() => setFilterIsOpen(false)}>
-          <div className="absolute -left-[82px] top-14 z-20 flex flex-col items-center justify-center -mt-8 ">
+          <div className="absolute -left-[82px] top-14 z-30 flex flex-col items-center justify-center -mt-8 ">
             <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-b-[16px] border-transparent border-b-white " />
             <div className="h-[371px] w-[170px] bg-[#406799] border-white border-2 rounded-md flex flex-col gap-2 items-center text-white">
               <span className="pt-2">Filter</span>
