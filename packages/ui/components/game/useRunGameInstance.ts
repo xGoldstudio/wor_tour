@@ -18,7 +18,7 @@ export function useRunInstance({
 }: {
 	animationsCompute?: (currentFrame: number) => Promise<void>,
 	fpsTracker?: FpsTrackerType,
-	gameData?: GameStateObjectConstructor,
+	gameData?: Partial<GameStateObjectConstructor>,
 }): UseRunInstance {
 	const { triggerGameSyncAnimation, reset: resetGameSyncAnimationStore } = useGameSyncAnimationStore();
 	const [instance, setInstance] = useState<UseRunInstance>(runInstance());

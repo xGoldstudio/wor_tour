@@ -1,6 +1,5 @@
 import React from "react";
-import { Button } from "@repo/ui";
-import { UseRunInstance } from "./useRunGameInstance";
+import { Button, UseRunInstance } from "@repo/ui";
 
 export default function DebugPanelLayout({
   instance,
