@@ -19,9 +19,8 @@ interface CardUIProps {
   isHand?: boolean;
   locked?: boolean;
   setCurrentTab?: (tab: Tabs) => void;
-  setSelectedCard?: (obj: selectedCardType) => void;
-  selectedCard?: selectedCardType;
-  tab?: Tabs;
+  setSelectedCard: (id: number) => void;
+  selectedCard: number;
 }
 
 export function DeckCardUI({
@@ -31,7 +30,6 @@ export function DeckCardUI({
   setCurrentTab,
   setSelectedCard,
   selectedCard,
-  tab,
 }: CardUIProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
   const { setEditionMode } = useEditionMode();
@@ -44,7 +42,7 @@ export function DeckCardUI({
       isDeckFull: state.isDeckFull(),
       lockPattern: state.getTheLockPattern(cardId),
     }));
-  const isSelected = selectedCard?.id === card.id && selectedCard?.tab === tab;
+  const isSelected = selectedCard === card.id;
   const opacity = locked ? "brightness-50" : "opacity-100";
   return (
     <div>
@@ -85,8 +83,7 @@ export function DeckCardUI({
             <div
               className={`${opacity} hover:cursor-pointer`}
               onClick={() => {
-                setSelectedCard &&
-                  setSelectedCard({ id: card.id, tab: "Deck" }),
+                isSelected ? setSelectedCard(0) : setSelectedCard(card.id),
                   !isDeckFull && setEditionMode(true);
               }}
             >
@@ -117,7 +114,7 @@ export function DeckCardUI({
             </div>
             {isSelected && (
               <div className="absolute z-20 w-full flex justify-center items-center  pt-1  -bottom-11 gap-x-3  ">
-                <div className=" shadow-2xl group  rounded-lg">
+                <div className=" shadow-2xl group  rounded-lg ">
                   <Button
                     small={true}
                     width="w-[3.6rem] "

@@ -13,8 +13,8 @@ import { CardType } from "@repo/lib";
 interface CollectionProps {
   collection: (CardType & { isInDeck: boolean })[];
   setCurrentTab?: (tab: Tabs) => void;
-  setSelectedCard: (obj: selectedCardType) => void;
-  selectedCard: selectedCardType;
+  setSelectedCard: (id: number) => void;
+  selectedCard: number;
   classname?: string;
 }
 
@@ -85,11 +85,8 @@ export default function Collection({
                 <DeckCardUI
                   cardId={card.id}
                   setCurrentTab={setCurrentTab}
-                  setSelectedCard={() =>
-                    setSelectedCard({ id: card.id, tab: "Collection" })
-                  }
+                  setSelectedCard={setSelectedCard}
                   selectedCard={selectedCard}
-                  tab="Collection"
                 />
               </div>
             ))}
@@ -98,11 +95,8 @@ export default function Collection({
                 <DeckCardUI
                   cardId={card.id}
                   locked={true}
-                  setSelectedCard={() =>
-                    setSelectedCard({ id: card.id, tab: "Collection" })
-                  }
+                  setSelectedCard={setSelectedCard}
                   selectedCard={selectedCard}
-                  tab="Collection"
                 />
               </div>
             ))}

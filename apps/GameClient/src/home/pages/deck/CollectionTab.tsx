@@ -2,7 +2,6 @@ import ScrollContainer from "react-indiana-drag-scroll";
 import Collection from "./Collection";
 import { Tabs } from "./DeckInterface";
 import { useState } from "react";
-import { selectedCardType } from "./DeckTab";
 import usePlayerStore from "@/home/store/playerStore";
 
 interface CollectionTabProps {
@@ -10,10 +9,7 @@ interface CollectionTabProps {
 }
 
 export default function CollectionTab({ setCurrentTab }: CollectionTabProps) {
-  const [selectedCard, setSelectedCard] = useState<selectedCardType>({
-    id: 0,
-    tab: null,
-  });
+  const [selectedCard, setSelectedCard] = useState<number>(0);
   const { collectionInCollection } = usePlayerStore((state) => ({
     collectionInCollection: state.getCollectionCompleteInfo(
       state.getCollection()

@@ -45,7 +45,7 @@ function DeckStats({ detailledDeck }: DeckStatsProps) {
   );
 }
 
-export type selectedCardType = { id: number; tab: Tabs | null };
+export type selectedCardType = { id: number };
 
 export default function DeckTab() {
   const { deck, getCompleteInfo, collectionInDeck } = usePlayerStore(
@@ -58,10 +58,7 @@ export default function DeckTab() {
     })
   );
   const { editionMode } = useEditionMode();
-  const [selectedCard, setSelectedCard] = useState<selectedCardType>({
-    id: 0,
-    tab: null,
-  });
+  const [selectedCard, setSelectedCard] = useState<number>(0);
   const deckArray = _.concat(
     deck,
     _.fill(Array(NUMBER_OF_CARD_IN_DECK - deck.length), null)
@@ -78,11 +75,8 @@ export default function DeckTab() {
               <div className="w-full flex justify-center" key={index}>
                 <DeckCardUI
                   cardId={card.id}
-                  setSelectedCard={() =>
-                    setSelectedCard({ id: card.id, tab: "Deck" })
-                  }
+                  setSelectedCard={setSelectedCard}
                   selectedCard={selectedCard}
-                  tab="Deck"
                 />
               </div>
             ))}
