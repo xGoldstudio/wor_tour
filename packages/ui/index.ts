@@ -13,6 +13,8 @@ export { default as BoosterRarityDrop } from './components/booster/BoosterRarity
 export { default as Cover } from './components/Cover.tsx';
 export { default as EmptyBar } from './components/EmptyBar.tsx';
 export { default as ManaBar } from './components/game/ManaBar.tsx';
+export * from './components/game/useRunGameInstance.ts';
+export * from './components/game/FpsTracker.ts';
 export * from './components/card/useGameSyncAnimation.tsx';
 export * from './lib/rxjsToZustand.ts';
 export * from './lib/lifecycle.ts';

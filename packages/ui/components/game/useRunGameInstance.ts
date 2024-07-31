@@ -1,35 +1,6 @@
-import useEditorStore from "@/editor/store/EditorStore";
-import { CardState, CardType } from "@repo/lib";
-import { runGameEventListeners, useGameSyncAnimationStore, useOnMount, useOnUnMount } from "@repo/ui";
-import { ClockReturn, EventType, FRAME_TIME, GameStateObject, healStateDefaultTest, initTest, massacreStateTest } from "game_engine";
-import { useState } from "react";
-
-const dummyCard: CardType = {
-	name: "Dummy",
-	cost: 1,
-	illustration: "string",
-	worldIllustration: "string",
-	dmg: 0,
-	hp: 200,
-	attackSpeed: 0.5,
-	states: [healStateDefaultTest, { ...massacreStateTest, value: 100 } as CardState],
-	level: 1,
-	world: 1,
-	rarity: "common",
-	id: 0,
-};
-
-function useDummyCard() {
-	const cardIllustartion = useEditorStore(
-		(state) => state.cards[21]?.stats[2].illustration
-	);
-	const worldIllustration = useEditorStore(
-		(state) => state.worlds[1].cardBackground
-	);
-	dummyCard.illustration = cardIllustartion ?? "";
-	dummyCard.worldIllustration = worldIllustration ?? "";
-	return dummyCard;
-}
+import { FpsTrackerType, resetAllGameEventListeners, runGameEventListeners, useGameSyncAnimationStore, useOnMount, useOnUnMount } from "@repo/ui";
+import { ClockReturn, EventType, FRAME_TIME, GameStateObject, GameStateObjectConstructor, initTest } from "game_engine";
+import { useRef, useState } from "react";
 
 export type UseRunInstance = {
 	state: GameStateObject;
@@ -42,15 +13,23 @@ export type UseRunInstance = {
 	runTicks: (tickToDo: number) => void;
 };
 
-export function useRunInstance(log: boolean): UseRunInstance {
-	const card = useDummyCard();
-	const { triggerGameSyncAnimation } = useGameSyncAnimationStore();
+export function useRunInstance({
+	animationsCompute, fpsTracker, gameData,
+}: {
+	animationsCompute?: (currentFrame: number) => Promise<void>,
+	fpsTracker?: FpsTrackerType,
+	gameData?: Partial<GameStateObjectConstructor>,
+}): UseRunInstance {
+	const { triggerGameSyncAnimation, reset: resetGameSyncAnimationStore } = useGameSyncAnimationStore();
 	const [instance, setInstance] = useState<UseRunInstance>(runInstance());
+	const isGameOverRef = useRef(false);
 
 	function runInstance() {
 		const { clock, state } = initTest({
-			sideEffectOnFrame: ({ event, state, clock }) => {
-				log && console.log(event);
+			sideEffectOnEvent: ({ event, state, clock }) => {
+				if (event.type === "gameOver") {
+					isGameOverRef.current = true;
+				}
 				runGameEventListeners(
 					event.type,
 					event,
@@ -59,14 +38,16 @@ export function useRunInstance(log: boolean): UseRunInstance {
 					clock
 				);
 			},
-			playerDeck: [card],
+			gameData,
 		});
-		function playTick(shouldAnimate: boolean) {
+		async function playTick(shouldAnimate: boolean) {
+			if (isGameOverRef.current) return;
 			if (shouldAnimate) {
 				triggerGameSyncAnimation(
 					state,
 					clock.getImmutableInternalState().currentFrame
 				);
+				await animationsCompute?.(clock.getImmutableInternalState().currentFrame);
 			}
 			clock.nextTick();
 		}
@@ -77,7 +58,7 @@ export function useRunInstance(log: boolean): UseRunInstance {
 			}
 			playTick(true);
 		}
-		const loopState = tickLoop(playTick)
+		const loopState = tickLoop(playTick, fpsTracker)
 		const play = () => operation(loopState.play);
 		const pause = () => operation(loopState.pause);
 		const setSpeed = (speed: number) => operation(() => loopState.setSpeed(speed));
@@ -104,12 +85,14 @@ export function useRunInstance(log: boolean): UseRunInstance {
 
 	useOnUnMount(() => {
 		instance.pause();
+		resetAllGameEventListeners();
+		resetGameSyncAnimationStore();
 	});
 
 	return instance;
 }
 
-function tickLoop(triggerTickEffects: (shouldAnimate: boolean) => void) {
+function tickLoop(triggerTickEffects: (shouldAnimate: boolean) => void, fpsTracker?: FpsTrackerType) {
 	let lastTickTiming = <number | null>(null);
 	const state = {
 		isPlaying: false,
@@ -134,6 +117,7 @@ function tickLoop(triggerTickEffects: (shouldAnimate: boolean) => void) {
 					triggerTickEffects(false);
 				}
 			}
+			fpsTracker?.register(timeSinceLastTick);
 			nextTick();
 		});
 	}

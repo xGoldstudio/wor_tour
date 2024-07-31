@@ -1,4 +1,4 @@
-import { GameStateObject } from "../gameState";
+import { GameStateObject, GameStateObjectConstructor } from "../gameState";
 import _ from "lodash";
 import { EventType } from "../../../types/eventType";
 import Clock, { ClockReturn } from "../../clock/clock";
@@ -28,18 +28,24 @@ export const baseCard: CardType = {
 
 export const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common" }));
 
-export function initTest({ playerDeck, sideEffectOnFrame }: {
-	playerDeck?: CardType[], sideEffectOnFrame?: ({ state, clock, event }: {
+export function initTest({ gameData, sideEffectOnEvent }: {
+	gameData?: Partial<GameStateObjectConstructor>,
+	sideEffectOnEvent?: ({ state, clock, event }: {
 		state: GameStateObject;
 		clock: ClockReturn<EventType>;
 		event: EventType;
 	}) => void
 }) {
-	const state = new GameStateObject({ playerDeck: playerDeck ?? deck, opponentDeck: deck, playerHp: 200, opponentHp: 200 });
+	const state = new GameStateObject({
+		playerDeck: gameData?.playerDeck ?? deck,
+		opponentDeck: gameData?.opponentDeck ?? deck,
+		playerHp: gameData?.playerHp ?? 200,
+		opponentHp: gameData?.opponentHp ?? 200,
+	});
 	const clock = Clock<EventType>(
 		(event, clock) => {
 			computeNextFrameState(state, event, clock);
-			sideEffectOnFrame?.({ state, clock, event });
+			sideEffectOnEvent?.({ state, clock, event });
 		}
 	);
 	return { state, clock };

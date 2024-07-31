@@ -1,5 +1,5 @@
 import { CardState, getOptionsFromType } from "@repo/lib";
-import { Button, GameCard, useOnMount } from "@repo/ui";
+import { Button, GameCard, useOnMount, useRunInstance } from "@repo/ui";
 import {
   bleedingStateTest,
   ClockReturn,
@@ -11,8 +11,8 @@ import {
   triggerDirectAttackResolved,
   triggerHealCard,
 } from "game_engine";
-import { useRunInstance } from "./useRunGameInstance";
 import DebugPanelLayout from "./DebugPanelLayout";
+import { useDummyCard } from "./useDummyCard";
 
 function defaultActions(clock?: ClockReturn<EventType>) {
 	if (!clock) return;
@@ -20,7 +20,12 @@ function defaultActions(clock?: ClockReturn<EventType>) {
 }
 
 export default function InGameCardDebug() {
-  const instance = useRunInstance(false);
+  const dummyCard = useDummyCard();
+  const instance = useRunInstance({
+    gameData: {
+      playerDeck: [dummyCard],
+    }
+  });
   const { clock, state } = instance;
 
   useOnMount(() => {

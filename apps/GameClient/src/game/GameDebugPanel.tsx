@@ -1,18 +1,23 @@
 import { IS_DEBUG } from "@/isDebug";
-import { GAME_OPTS, TriggerGameEvent } from "./gameBehavior/useGameEvents";
+import { GAME_OPTS } from "./gameBehavior/useGameEvents";
 import { botOptions } from "./gameBehavior/aiAgent";
 import FpsPrint from "./FpsPrint";
+import { ClockReturn, EventType } from "game_engine";
 
 interface GameDebugPanelProps {
-  togglePlay: () => void;
-  isClockRunning: boolean;
-  fastForward: (amount: number) => void;
+  play: () => void;
+  pause: () => void;
+  isPlaying: boolean;
+  runTicks: (amount: number) => void;
+  clock: ClockReturn<EventType>;
 }
 
 export default function GameDebugPanel({
-  togglePlay,
-  isClockRunning,
-  fastForward,
+  play,
+  pause,
+  isPlaying,
+  runTicks,
+  clock,
 }: GameDebugPanelProps) {
   if (!IS_DEBUG()) {
     return <></>;
@@ -20,18 +25,18 @@ export default function GameDebugPanel({
   return (
     <div className="fixed right-2 top-2 border-2 border-white text-white px-4 py-2 flex flex-col gap-4">
       <FpsPrint />
-      <DebugButton onClick={togglePlay}>
-        {isClockRunning ? "pause" : "play"}
+      <DebugButton onClick={isPlaying ? pause : play}>
+        {isPlaying ? "pause" : "play"}
       </DebugButton>
       <div className="flex gap-4">
-        <DebugButton onClick={() => fastForward(1)}>+1</DebugButton>
-        <DebugButton onClick={() => fastForward(10)}>+10</DebugButton>
-        <DebugButton onClick={() => fastForward(100)}>+100 (1s)</DebugButton>
-        <DebugButton onClick={() => fastForward(6000)}>+6000 (1m)</DebugButton>
+        <DebugButton onClick={() => runTicks(1)}>+1</DebugButton>
+        <DebugButton onClick={() => runTicks(10)}>+10</DebugButton>
+        <DebugButton onClick={() => runTicks(100)}>+100 (1s)</DebugButton>
+        <DebugButton onClick={() => runTicks(6000)}>+6000 (1m)</DebugButton>
       </div>
       <DebugButton
         onClick={() => {
-          TriggerGameEvent?.({
+          clock.triggerEvent({
             type: "playerDamageResolve",
             initiator: {
               type: "playerDamage",
@@ -51,7 +56,7 @@ export default function GameDebugPanel({
       </DebugButton>
       <DebugButton
         onClick={() => {
-          TriggerGameEvent?.({
+          clock.triggerEvent({
             type: "playerDamageResolve",
             initiator: {
               type: "playerDamage",

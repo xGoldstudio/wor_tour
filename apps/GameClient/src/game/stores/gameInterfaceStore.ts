@@ -10,12 +10,6 @@ interface GameInterfaceStore {
   setCardTarget: (target: number) => void;
   removeCardTarget: () => void;
 
-  isClockRunning: boolean;
-  setIsClockRunning: (value: boolean) => void;
-
-  getData: () => GameInterfaceStore;
-
-  triggerEvent: (event: EventType) => void;
   init: ({
     triggerEvent
   }: { triggerEvent: (event: EventType) => void }) => void;
@@ -28,9 +22,8 @@ const state = {
 };
 
 // This store is used to manage the game interface state (data exclusively and uniquely to the client side)
-const useGameInterface = create<GameInterfaceStore>()((set, get) => ({
+const useGameInterface = create<GameInterfaceStore>()((set) => ({
   ...state,
-  triggerEvent: () => {},
 
   setSelectedCard: (cardPosition: number) =>
     set({ cardSelected: cardPosition }),
@@ -39,12 +32,7 @@ const useGameInterface = create<GameInterfaceStore>()((set, get) => ({
   setCardTarget: (target: number) => set({ cardTarget: target }),
   removeCardTarget: () => set({ cardTarget: null }),
 
-  setIsClockRunning: (value: boolean) => set({ isClockRunning: value }),
-
-  getData: get,
-  init: ({
-    triggerEvent
-  }: { triggerEvent: (event: EventType) => void }) => set({ ...state, triggerEvent }),
+  init: () => set({ ...state }),
 }));
 
 export default useGameInterface;

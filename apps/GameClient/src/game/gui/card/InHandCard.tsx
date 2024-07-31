@@ -1,16 +1,13 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore from "@/game/stores/gameStateStore";
-import {
-  useTriggerEvent,
-} from "../../gameBehavior/useGameEvents";
 
 import { CardBorder, CardContentIllustartion, Effects, ManaBall, useGameAnimation, useGameEventListener, useSyncGameAnimation } from "@repo/ui";
 import { useRef, useState } from "react";
 import { dummyCard } from "./const";
 import { animationTimeline, CardType, getCenterOfBoundingElement } from "@repo/lib";
-import { DrawCardEvent } from "game_engine";
+import { ClockReturn, DrawCardEvent, EventType } from "game_engine";
 
-function InHandCard({ position }: { position: number }) {
+function InHandCard({ position, clock }: { position: number, clock: ClockReturn<EventType> }) {
   const setSelectedCard = useGameInterface((state) => state.setSelectedCard);
   const removeCardTarget = useGameInterface((state) => state.removeCardTarget);
   const unselectCard = useGameInterface((state) => state.unselectCard);
@@ -72,8 +69,6 @@ function InHandCard({ position }: { position: number }) {
     setSelectedCard(position);
   }
 
-  const triggerEvent = useTriggerEvent();
-
   function placeNewCard(
     cardInHandPosition: number,
     targetPosition: number | null
@@ -81,7 +76,7 @@ function InHandCard({ position }: { position: number }) {
     if (targetPosition === null) {
       return;
     }
-    triggerEvent({
+    clock.triggerEvent({
       type: "placeCard",
       isPlayer: true,
       position: targetPosition,

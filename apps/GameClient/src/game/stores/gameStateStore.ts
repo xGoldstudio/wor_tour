@@ -1,9 +1,8 @@
 import { create } from "zustand";
-import useGameMetadataStore from "./gameMetadataStore";
 import { GameStateObject, InGameCardType } from "game_engine";
 
 export interface GameStore {
-  init: () => GameStateObject;
+  init: (newState: GameStateObject) => GameStateObject;
   state: GameStateObject;
 }
 
@@ -20,10 +19,7 @@ interface DeathAnimation {
 export type Animation3dType = "attack" | "heal";
 
 const useGameStore = create<GameStore>()((set) => ({
-  init: () => {
-    const newState = new GameStateObject(
-      useGameMetadataStore.getState().getInGameInitData()
-    );
+  init: (newState: GameStateObject) => {
     set({
       state: newState,
     });
