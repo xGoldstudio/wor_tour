@@ -113,7 +113,7 @@ export function DeckCardUI({
               </div>
             </div>
             {isSelected && (
-              <div className="absolute z-20 w-full flex justify-center items-center  pt-1  -bottom-11 gap-x-3  ">
+              <div className="absolute z-20 w-full flex justify-center items-center   -bottom-[3.15rem] gap-x-3  ">
                 <div className=" shadow-2xl group  rounded-lg ">
                   <Button
                     small={true}
