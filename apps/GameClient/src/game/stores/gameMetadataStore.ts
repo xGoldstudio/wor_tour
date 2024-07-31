@@ -2,15 +2,15 @@ import { findCard } from "@/cards";
 import { create } from "zustand";
 import useGameStore from "./gameStateStore";
 import useAnimationStore from "../../home/store/animationStore";
-import { CardType } from "@repo/lib";
+import { CardType, getTargetStrength } from "@repo/lib";
 import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
-import usePlayerStore, { CollectionCard } from "@/home/store/playerStore/playerStore";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { GameStateObjectConstructor } from "game_engine";
 
 interface GameInterfaceStore {
   isInGame: boolean;
-  playerCards: Map<number, CollectionCard>;
-  opponentCards: Map<number, CollectionCard>;
+  playerCards: CardType[];
+  opponentCards: CardType[];
   playerHp: number;
   opponentHp: number;
   rewards: {
@@ -24,11 +24,10 @@ interface GameInterfaceStore {
     }
   },
   getInGameInitData: () => GameStateObjectConstructor;
-  findCard: (id: number, isPlayer: boolean) => CardType;
   setIsInGame: (isInGame: boolean) => void;
   setInGameData: (
-    playerCards: Map<number, CollectionCard>,
-    opponentCards: Map<number, CollectionCard>,
+    playerCards: CardType[],
+    opponentCards: CardType[],
     playerHp: number,
     opponentHp: number
   ) => void;
@@ -38,8 +37,8 @@ interface GameInterfaceStore {
 
 const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
   isInGame: false,
-  playerCards: new Map<number, CollectionCard>(),
-  opponentCards: new Map<number, CollectionCard>(),
+  playerCards: [],
+  opponentCards: [],
   playerHp: 1000,
   opponentHp: 1000,
   rewards: {
@@ -53,8 +52,8 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
     }
   },
   setInGameData: (
-    playerCards: Map<number, CollectionCard>,
-    opponentCards: Map<number, CollectionCard>,
+    playerCards: CardType[],
+    opponentCards: CardType[],
     playerHp: number,
     opponentHp: number
   ) => {
@@ -66,14 +65,6 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
     playerHp: get().playerHp,
     opponentHp: get().opponentHp,
   }),
-  findCard: (id: number, isPlayer: boolean) => {
-    const collectionCard = isPlayer
-      ? get().playerCards.get(id)
-      : get().opponentCards.get(id);
-    if (collectionCard === undefined)
-      throw new Error(`Card with id ${id} not found`);
-    return findCard(collectionCard.id, collectionCard.level);
-  },
   setIsInGame: (isInGame: boolean) => set({ isInGame }),
   collectRewards: () => {
     const rewards = get().rewards[useGameStore.getState().state.currentWinner === "player" ? "win" : "lose"];
@@ -103,19 +94,28 @@ export function useStartGame() {
   }));
 
   function startGame() {
-    const playerDeck = new Map<number, CollectionCard>();
-    deck.forEach((cardId) => {
-      playerDeck.set(
-        cardId,
-        usePlayerStore.getState().getCollectionInfo(cardId)!
-      );
-    });
-    const opponentDeck = new Map<number, CollectionCard>(playerDeck);
+    const playerDeck: CardType[] = deck.map((cardId) => findCard(cardId, usePlayerStore.getState().getCollectionInfo(cardId)!.level));
+    const opponentTargetStrength = usePlayerStore.getState().getCurrentTier().level.strength;
+    const opponentDeck = buildDeckFromStrengthTarget(opponentTargetStrength);
     // const cardsPool = cards.filter(card => card.world === level.world);
-    setInGameData(playerDeck, opponentDeck, 2000, 2000);
+    setInGameData(playerDeck, opponentDeck, getHpFromDeck(playerDeck), getHpFromDeck(opponentDeck));
   }
 
   return startGame;
 }
 
 export default useGameMetadataStore;
+
+function getHpFromDeck(deck: CardType[]) {
+  return Math.round(getDeckStrength(deck) * 100);
+}
+
+function getDeckStrength(deck: CardType[]) {
+  return deck.reduce((acc, card) => acc + getTargetStrength(card), 0);
+}
+
+function buildDeckFromStrengthTarget(strength: number) {
+  console.log(strength)
+  const cardsId = [1, 2, 3, 4, 5, 6, 7, 8];
+  return cardsId.map(cardId => findCard(cardId, 1));
+}
