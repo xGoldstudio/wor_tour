@@ -129,10 +129,12 @@ export function CardContentIllustartion({
   card,
   size,
   isDisabled = false,
+  isSelected = false,
 }: {
   card: { worldIllustration: string; illustration: string | null };
   size: number;
   isDisabled?: boolean;
+  isSelected?: boolean;
 }) {
   const borderUnit = Math.min(0.5 * size, 2);
 
@@ -141,8 +143,9 @@ export function CardContentIllustartion({
       <InnerBord size={size}>
         <div
           className={cn(
-            "w-full h-full grow absolute box-border",
-            isDisabled && "grayscale"
+            "w-full h-full grow absolute box-border transition-all duration-300 ease-in-out",
+            isDisabled && "grayscale",
+            isSelected && "scale-125"
           )}
           style={{
             backgroundImage: getImageUrlCssValue(card.worldIllustration),
@@ -153,8 +156,9 @@ export function CardContentIllustartion({
         ></div>
         <div
           className={cn(
-            "w-full h-full grow absolute box-border",
-            isDisabled && "grayscale"
+            "w-full h-full grow absolute box-border transition-all duration-200 ease-in-out",
+            isDisabled && "grayscale",
+            isSelected && "scale-125"
           )}
           style={{
             backgroundImage: getImageUrlCssValue(card.illustration),

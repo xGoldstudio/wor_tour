@@ -90,6 +90,7 @@ export function DeckCardUI({
                   className={`w-full h-full flex flex-col relative ${opacity}`}
                 >
                   <CardContentIllustartion
+                    isSelected={isSelected}
                     card={card}
                     size={isHand ? 1.6 : 2}
                   />
