@@ -52,13 +52,12 @@ export function DeckCardUI({
         />
       )}
       {card.id !== 0 ? (
-        <div
-          className={cn(isSelected ? "pt-2 px-2 relative " : "pb-2 relative ")}
-        >
+        <div className={cn(isSelected ? "px-2 relative " : "pb-2 relative ")}>
           {isSelected && (
             <Cover
               cardRarity={card.rarity}
               className="rounded-lg blur-sm absolute "
+              isSelected={isSelected}
             />
           )}
           <div className={cn("relative select-none h-min  ")}>
@@ -114,6 +113,12 @@ export function DeckCardUI({
             {isSelected && (
               <div className="absolute z-20 w-full flex justify-center items-center   -bottom-[3.15rem] gap-x-3  ">
                 <div className=" shadow-2xl group  rounded-lg ">
+                  <Cover
+                    cardRarity={card.rarity}
+                    className="rounded-lg blur-sm absolute "
+                    isSelected={isSelected}
+                    isButton={true}
+                  />
                   <Button
                     small={true}
                     width="w-[3.6rem] "
