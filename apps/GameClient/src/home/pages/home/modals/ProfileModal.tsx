@@ -2,12 +2,12 @@ import Modal from "@/home/ui/modal";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { Badge, Box } from "@repo/ui";
 import Ribbon from "@/home/ui/Ribbon";
-import usePlayerStore from "@/home/store/playerStore/playerStore";
 import useDataStore from "@/cards/DataStore";
 import _ from "lodash";
 import { DeckCardUI } from "../../deck/DeckCardUI";
 import WorldField from "./WorldField";
 import Field from "./Field";
+import usePlayerStore from "@/home/store/playerStore";
 
 interface ProfileModalProps {
   closeModal: () => void;
@@ -42,7 +42,10 @@ export default function ProfileModal({ closeModal }: ProfileModalProps) {
               backgroundSize: "cover",
             }}
           />
-          <ScrollContainer className="w-full h-full flex overflow-y-scroll" stopPropagation={false}>
+          <ScrollContainer
+            className="w-full h-full flex overflow-y-scroll"
+            stopPropagation={false}
+          >
             <div className="w-full h-max flex flex-col items-center relative pb-8">
               <p className="text-4xl font-semibold text-white py-16 relative drop-shadow-[2px_2px_1px_black]">
                 Goldaxe

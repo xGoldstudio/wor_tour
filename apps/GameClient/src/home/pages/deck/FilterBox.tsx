@@ -203,7 +203,8 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
                 <button
                   className=""
                   onClick={() => {
-                    setFilterIsOpen(false), deleteAllFilters();
+                    setFilterIsOpen(false);
+                    deleteAllFilters();
                   }}
                 >
                   <span>Clear</span>

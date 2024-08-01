@@ -1,5 +1,5 @@
 import useDataStore from "@/cards/DataStore";
-import usePlayerStore from "@/home/store/playerStore/playerStore";
+import usePlayerStore from "@/home/store/playerStore";
 import { getImageUrl, textureByRarity } from "@repo/lib";
 import {
   Borders,

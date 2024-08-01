@@ -1,5 +1,5 @@
 import useAnimationStore from "@/home/store/animationStore";
-import usePlayerStore from "@/home/store/playerStore/playerStore";
+import usePlayerStore from "@/home/store/playerStore";
 import { GoldRewardType } from "@/home/store/rewardStore";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";

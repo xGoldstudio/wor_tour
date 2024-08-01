@@ -1,14 +1,22 @@
 import DebugPanel from "@/DebugPanel";
 import { numberWithCommas } from "@repo/lib";
-import { Borders, Button, CardIllustartion, cn, Cover, InnerBord, NumberSpan } from "@repo/ui";
+import {
+  Badge,
+  Borders,
+  Button,
+  CardIllustartion,
+  cn,
+  Cover,
+  InnerBord,
+  NumberSpan,
+} from "@repo/ui";
 import { useState } from "react";
-import Badge from "../../../../packages/ui/components/Badge";
 import { useEditionMode } from "./pages/deck/context/UseEditionMode";
 import { DeckInterface as DeckTab } from "./pages/deck/DeckInterface";
 import HomeTab from "./pages/home/HomeTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import ShopTab from "./pages/shop/ShopTab";
-import usePlayerStore from "./store/playerStore/playerStore";
+import usePlayerStore from "./store/playerStore";
 
 interface TabProps {
   setCurrentTab?: (tab: Tabs) => void;

@@ -16,15 +16,13 @@ export default function CollectionTab({ setCurrentTab }: CollectionTabProps) {
     ),
   }));
   return (
-    <>
-      <ScrollContainer className="grow overflow-y-scroll scrollbar-hide flex justify-center">
-        <Collection
-          collection={collectionInCollection}
-          setCurrentTab={setCurrentTab}
-          selectedCard={selectedCard}
-          setSelectedCard={setSelectedCard}
-        />
-      </ScrollContainer>
-    </>
+    <ScrollContainer className="grow overflow-y-scroll scrollbar-hide flex justify-center">
+      <Collection
+        collection={collectionInCollection}
+        setCurrentTab={setCurrentTab}
+        selectedCard={selectedCard}
+        setSelectedCard={setSelectedCard}
+      />
+    </ScrollContainer>
   );
 }

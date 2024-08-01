@@ -6,8 +6,8 @@ import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import useDataStore from "./cards/DataStore";
 import { EditorData } from "../../../packages/gameEngine/src/types/DataStoreType";
 import { EditionModeProvider } from "./home/pages/deck/context/EditionModeContext";
-import usePlayerStore from "./home/store/playerStore/playerStore";
 import { _warningResetPlayStore } from "./home/store/initAllClientData";
+import usePlayerStore from "./home/store/playerStore";
 
 const queryClient = new QueryClient();
 

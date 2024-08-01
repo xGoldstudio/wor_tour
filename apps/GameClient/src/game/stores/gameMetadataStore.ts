@@ -4,8 +4,8 @@ import useGameStore from "./gameStateStore";
 import useAnimationStore from "../../home/store/animationStore";
 import { CardType } from "@repo/lib";
 import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
-import usePlayerStore, { CollectionCard } from "@/home/store/playerStore/playerStore";
 import { GameStateObjectConstructor } from "game_engine";
+import usePlayerStore, { CollectionCard } from "@/home/store/playerStore";
 
 interface GameInterfaceStore {
   isInGame: boolean;
@@ -17,12 +17,12 @@ interface GameInterfaceStore {
     win: {
       money: number;
       trophies: number;
-    },
+    };
     lose: {
       money: number;
       trophies: number;
-    }
-  },
+    };
+  };
   getInGameInitData: () => GameStateObjectConstructor;
   findCard: (id: number, isPlayer: boolean) => CardType;
   setIsInGame: (isInGame: boolean) => void;
@@ -45,12 +45,12 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
   rewards: {
     win: {
       money: 0,
-      trophies: 0
+      trophies: 0,
     },
     lose: {
       money: 0,
-      trophies: 0
-    }
+      trophies: 0,
+    },
   },
   setInGameData: (
     playerCards: Map<number, CollectionCard>,
@@ -58,11 +58,25 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
     playerHp: number,
     opponentHp: number
   ) => {
-    set({ playerCards, opponentCards, playerHp, opponentHp, isInGame: true, rewards: { win: { money: 250, trophies: 40 }, lose: { money: 50, trophies: -40 } } });
+    set({
+      playerCards,
+      opponentCards,
+      playerHp,
+      opponentHp,
+      isInGame: true,
+      rewards: {
+        win: { money: 250, trophies: 40 },
+        lose: { money: 50, trophies: -40 },
+      },
+    });
   },
   getInGameInitData: () => ({
-    playerDeck: [...get().playerCards.values()].map((card) => findCard(card.id, card.level)),
-    opponentDeck: [...get().opponentCards.values()].map((card) => findCard(card.id, card.level)),
+    playerDeck: [...get().playerCards.values()].map((card) =>
+      findCard(card.id, card.level)
+    ),
+    opponentDeck: [...get().opponentCards.values()].map((card) =>
+      findCard(card.id, card.level)
+    ),
     playerHp: get().playerHp,
     opponentHp: get().opponentHp,
   }),
@@ -76,7 +90,12 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
   },
   setIsInGame: (isInGame: boolean) => set({ isInGame }),
   collectRewards: () => {
-    const rewards = get().rewards[useGameStore.getState().state.currentWinner === "player" ? "win" : "lose"];
+    const rewards =
+      get().rewards[
+        useGameStore.getState().state.currentWinner === "player"
+          ? "win"
+          : "lose"
+      ];
     useAnimationStore.getState().addAnimation({
       type: "money",
       previousValue: usePlayerStore.getState().gold,
@@ -87,10 +106,15 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
         type: "trophy",
         previousValue: usePlayerStore.getState().trophies,
         amount: rewards.trophies,
-        onEnd: () => useClientInterfaceStore.getState().setWorldsModalOpen(hasChangeWorldOrTier),
+        onEnd: () =>
+          useClientInterfaceStore
+            .getState()
+            .setWorldsModalOpen(hasChangeWorldOrTier),
       });
     }
-    const hasChangeWorldOrTier = usePlayerStore.getState().addOrRemoveTrophies(rewards.trophies);
+    const hasChangeWorldOrTier = usePlayerStore
+      .getState()
+      .addOrRemoveTrophies(rewards.trophies);
     usePlayerStore.getState().addGold(rewards.money);
   },
   reset: () => set({ isInGame: false }),

@@ -2,17 +2,12 @@ import useBooster, { BoosterType } from "@/home/store/useBooster/useBooster";
 import { useState } from "react";
 import BoosterIllustration from "./BoosterIllustration";
 import Modal, { BackgroundModal } from "@/home/ui/modal";
-import usePlayerStore from "@/home/store/playerStore/playerStore";
 import CardDisplay from "@/game/gui/card/FullCard";
 import useScrollCardList from "../deck/useScrollCardList";
-import {
-  BoosterRarityDrop,
-  Box,
-  Button,
-  GoldAmount,
-} from "@repo/ui";
+import { BoosterRarityDrop, Box, Button, GoldAmount } from "@repo/ui";
 import ConfirmationModal from "@/home/ui/ConfirmationModal";
 import { preventDefault } from "@repo/lib";
+import usePlayerStore from "@/home/store/playerStore";
 
 interface BoosterProps {
   booster: BoosterType;

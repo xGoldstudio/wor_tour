@@ -1,4 +1,3 @@
-import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { useContext, useRef } from "react";
 import {
   AllWorldsAnimationContext,
@@ -9,9 +8,14 @@ import { Button, cn, Cover } from "@repo/ui";
 import gsap from "gsap";
 import { Tier } from "@/home/store/tiers";
 import useCollectTierReward from "./useCollectTierReward";
-import { chestImageByLevel, emptyChestImageByLevel, glowChestImageByLevel } from "./chestsImages";
+import {
+  chestImageByLevel,
+  emptyChestImageByLevel,
+  glowChestImageByLevel,
+} from "./chestsImages";
 import useDataStore from "@/cards/DataStore";
 import { getImageUrlCssValue } from "@repo/lib";
+import usePlayerStore from "@/home/store/playerStore";
 
 export default function LevelPreview({ tier }: { tier: Tier }) {
   const ref = useRef<HTMLDivElement>(null);

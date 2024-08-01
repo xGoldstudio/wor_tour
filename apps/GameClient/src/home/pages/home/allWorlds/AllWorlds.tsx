@@ -7,11 +7,11 @@ import AllWorldsAnimationProvider, {
 } from "./trophyBar/TrophyBarContext";
 import { useContext, useRef } from "react";
 import { createPortal } from "react-dom";
-import usePlayerStore from "@/home/store/playerStore/playerStore";
 import ScrollContainer from "react-indiana-drag-scroll";
 import WorldPreview from "./WorldPreview";
 import LevelPreview from "./LevelPreview";
 import WorldUnlock from "./WorldUnlock";
+import usePlayerStore from "@/home/store/playerStore";
 
 export type AllWorldsStateType = "normal" | "tier" | "world";
 
@@ -40,9 +40,7 @@ function AllWorldsInner({ closeModal }: { closeModal: () => void }) {
     maxTrophies: state.maxTrophies,
     currentWorld: state.currentWorld,
   }));
-  const tiers = [
-    ...usePlayerStore((state) => state.tiers).values(),
-  ].reverse();
+  const tiers = [...usePlayerStore((state) => state.tiers).values()].reverse();
   const { state } = useContext(
     AllWorldsAnimationContext
   ) as AllWorldsAnimationContextType;

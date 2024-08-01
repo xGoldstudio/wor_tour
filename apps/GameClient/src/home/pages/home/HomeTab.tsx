@@ -115,12 +115,12 @@ export default function HomeTab({ setCurrentTab }: HomeTabProps) {
         <div
           id="battleButton"
           className={cn(
-            "relative rounded-sm flex p-1 flex-col items-center font-slate-600 cursor-pointer",
+            "relative rounded-sm flex p-1 flex-col items-center font-slate-600 cursor-pointer w-[310px]",
             !isDeckFull && "brightness-75"
           )}
           onClick={() => {
-            isDeckFull ? startGame() : setCurrentTab!("deck"),
-              setEditionMode(true);
+            isDeckFull ? startGame() : setCurrentTab!("deck");
+            setEditionMode(true);
           }}
         >
           <div

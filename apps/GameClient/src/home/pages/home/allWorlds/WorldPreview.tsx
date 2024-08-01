@@ -1,18 +1,14 @@
 import { getCardFromLevel } from "@/cards";
 import useDataStore from "@/cards/DataStore";
-import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { useState } from "react";
 import WorldModal from "../modals/WorldModal";
 import { Badge, Button, cn, Cover } from "@repo/ui";
 import StaticCard from "@/game/gui/card/StaticCard";
 import { Tier } from "@/home/store/tiers";
 import { getImageUrl } from "@repo/lib";
+import usePlayerStore from "@/home/store/playerStore";
 
-export default function WorldPreview({
-  tier,
-}: {
-  tier: Tier;
-}) {
+export default function WorldPreview({ tier }: { tier: Tier }) {
   const [isWorldModalOpen, setIsWorldModalOpen] = useState(false);
   const world = useDataStore((state) => state.worlds[tier.world - 1]!);
   const cards = useDataStore((state) => state.cards)
@@ -32,7 +28,10 @@ export default function WorldPreview({
         className={`trophiesField worldField${world.id} flex flex-col relative items-center w-full justify-center`}
       >
         {isWorldModalOpen && (
-          <WorldModal closeModal={() => setIsWorldModalOpen(false)} world={world} />
+          <WorldModal
+            closeModal={() => setIsWorldModalOpen(false)}
+            world={world}
+          />
         )}
 
         <div className="flex flex-col relative items-center gap-2 w-full py-4 justify-center">

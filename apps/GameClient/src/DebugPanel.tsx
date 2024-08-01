@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { DebugButton } from "./game/GameDebugPanel";
 import useAnimationStore from "./home/store/animationStore";
-import usePlayerStore, { CollectionCard } from "./home/store/playerStore/playerStore";
 import { _warningResetPlayStore } from "./home/store/initAllClientData";
 import clientLoop from "./home/services/LoopService/clientLoopService";
 import useDataStore from "./cards/DataStore";
+import usePlayerStore, { CollectionCard } from "./home/store/playerStore";
 
 export default function DebugPanel() {
   const { addGold, setTrophies } = usePlayerStore((state) => ({
@@ -28,7 +28,7 @@ export default function DebugPanel() {
     }
     usePlayerStore.setState({
       collection: maxedCollection,
-    })
+    });
   }
 
   return (
@@ -53,24 +53,26 @@ export default function DebugPanel() {
       </div>
       <p>Event Clock: </p>
       <div className="grid grid-cols-2 gap-4">
-        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(10*60)}>
+        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(10 * 60)}>
           Fast Forward 10 minutes
         </DebugButton>
-        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(60*60)}>
-        Fast Forward 1 hours
+        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(60 * 60)}>
+          Fast Forward 1 hours
         </DebugButton>
-        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(60*60*24)}>
-        Fast Forward 1 day
+        <DebugButton
+          onClick={() => clientLoop._unsafeManipulateClock(60 * 60 * 24)}
+        >
+          Fast Forward 1 day
         </DebugButton>
-        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(7*60*60*24)}>
-        Fast Forward 1 week
+        <DebugButton
+          onClick={() => clientLoop._unsafeManipulateClock(7 * 60 * 60 * 24)}
+        >
+          Fast Forward 1 week
         </DebugButton>
       </div>
       <p>Collection: </p>
       <div className="grid grid-cols-2 gap-4">
-        <DebugButton onClick={() => giveAllCards()}>
-          Give all cards
-        </DebugButton>
+        <DebugButton onClick={() => giveAllCards()}>Give all cards</DebugButton>
       </div>
       <p className="text-red-600">Danger zone:</p>
       <div className="grid grid-cols-2 gap-4 border-4 border-red-600 text-red-600 p-2">

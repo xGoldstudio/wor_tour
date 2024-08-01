@@ -7,11 +7,11 @@ import {
 } from "./trophyBar/TrophyBarContext";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import usePlayerStore from "@/home/store/playerStore/playerStore";
 import useDataStore from "@/cards/DataStore";
 import StaticCard from "@/game/gui/card/StaticCard";
 import { getCardFromLevel } from "@/cards";
 import { getImageUrl, inPx } from "@repo/lib";
+import usePlayerStore from "@/home/store/playerStore";
 
 export default function WorldUnlock({
   closeModal,
@@ -33,7 +33,7 @@ export default function WorldUnlock({
         setState("normal");
       },
     });
-		tl.fromTo(
+    tl.fromTo(
       ref.current.querySelector(".footer"),
       {
         opacity: 0,
@@ -81,8 +81,8 @@ export default function WorldUnlock({
       },
       "start+=0.5"
     );
-		const cards = ref.current.querySelectorAll(".cards>div");
-		tl.set(cards, { opacity: 0, y: -100 }, "start");
+    const cards = ref.current.querySelectorAll(".cards>div");
+    tl.set(cards, { opacity: 0, y: -100 }, "start");
     tl.fromTo(
       cards,
       {
@@ -106,7 +106,7 @@ export default function WorldUnlock({
         opacity: 0,
         x: -20,
         duration: 0.3,
-				delay: 0.5,
+        delay: 0.5,
       }
     );
   }, [ref]);

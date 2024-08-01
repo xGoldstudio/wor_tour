@@ -17,14 +17,14 @@ export default function Cover({
   return (
     <div
       className={cn(
-        "absolute w-full h-full  top-0 left-0 overflow-hidden ",
+        "absolute w-full h-full top-0 left-0 overflow-hidden",
         className,
         isSelected && "h-[calc(100%_+_15px)]  -top-2",
         isButton && "w-[calc(100%_+_15px)] -left-2"
       )}
     >
       <div
-        className="absolute w-full h-full top-0 left-0 blur-sm "
+        className="absolute w-full h-full top-0 left-0 blur-sm"
         style={{
           backgroundImage: `url(/${textureByRarity(cardRarity)})`,
           backgroundSize: "cover",
