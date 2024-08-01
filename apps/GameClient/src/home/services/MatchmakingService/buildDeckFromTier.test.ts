@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import cardForTest from "./cardsForTest";
+import cardForTest from "../../../game/stores/cardsForTest";
 import buildDeck, { getDeckStrength } from "./buildDeck";
 import { NUMBER_OF_CARD_IN_DECK } from "@/const";
 

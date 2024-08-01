@@ -11,10 +11,9 @@ import { textureByRarity } from "@repo/lib";
 
 export default function EndGameScreen() {
   const [currentWinner, setCurrentWinner] = useState<CurrentWinner>(null);
-  const { reset: resetMetadata, rewards, collectRewards } = useGameMetadataStore((state) => ({
+  const { reset: resetMetadata, rewards } = useGameMetadataStore((state) => ({
     reset: state.reset,
     rewards: state.rewards[currentWinner === "player" ? "win" : "lose"],
-    collectRewards: state.collectRewards,
   }));
 
   useGameEventListener({
@@ -83,7 +82,6 @@ export default function EndGameScreen() {
   }
 
   function onContinue() {
-    collectRewards();
     resetMetadata();
   }
 
