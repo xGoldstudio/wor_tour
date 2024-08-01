@@ -6,6 +6,9 @@ import { CardType, getTargetStrength } from "@repo/lib";
 import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { GameStateObjectConstructor } from "game_engine";
+import { Tier } from "@/home/store/tiers";
+import useDataStore from "@/cards/DataStore";
+import buildDeck, { getDeckStrength } from "./buildDeck";
 
 interface GameInterfaceStore {
   isInGame: boolean;
@@ -95,9 +98,11 @@ export function useStartGame() {
 
   function startGame() {
     const playerDeck: CardType[] = deck.map((cardId) => findCard(cardId, usePlayerStore.getState().getCollectionInfo(cardId)!.level));
-    const opponentTargetStrength = usePlayerStore.getState().getCurrentTier().level.strength;
-    const opponentDeck = buildDeckFromStrengthTarget(opponentTargetStrength);
-    // const cardsPool = cards.filter(card => card.world === level.world);
+    const cardPool = getCardsPoolFromTier(usePlayerStore.getState().getCurrentTier());
+    const targetStrength = usePlayerStore.getState().getCurrentTier().level.strength;
+    const previousTierStrength = usePlayerStore.getState().getPreviousTier().level.strength;
+    const randomValueBetween = Math.random() * (targetStrength - previousTierStrength) + previousTierStrength;
+    const opponentDeck = buildDeck(randomValueBetween, 0.2, cardPool);
     setInGameData(playerDeck, opponentDeck, getHpFromDeck(playerDeck), getHpFromDeck(opponentDeck));
   }
 
@@ -110,12 +115,14 @@ function getHpFromDeck(deck: CardType[]) {
   return Math.round(getDeckStrength(deck) * 100);
 }
 
-function getDeckStrength(deck: CardType[]) {
-  return deck.reduce((acc, card) => acc + getTargetStrength(card), 0);
-}
-
-function buildDeckFromStrengthTarget(strength: number) {
-  console.log(strength)
-  const cardsId = [1, 2, 3, 4, 5, 6, 7, 8];
-  return cardsId.map(cardId => findCard(cardId, 1));
+function getCardsPoolFromTier(tier: Tier) {
+  const pool: [number, CardType][] = [];
+  useDataStore.getState().cards.forEach(card => {
+    if (card.world > tier.world) return;
+    for (let i = 0; i < 3; i++) {
+      const cardType = findCard(card.id, i + 1);
+      pool.push([getTargetStrength(cardType), cardType]);
+    }
+  });
+  return pool.sort((a, b) => a[0] - b[0]);
 }

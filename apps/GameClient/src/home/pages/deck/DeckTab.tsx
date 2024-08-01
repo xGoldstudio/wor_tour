@@ -6,8 +6,7 @@ import { Card } from "./cardFilters";
 import Collection from "./Collection";
 import { DeckCardUI } from "./DeckCardUI";
 import { getTargetStrength } from "@repo/lib";
-
-export const NUMBER_OF_CARD_IN_DECK: number = 8;
+import { NUMBER_OF_CARD_IN_DECK } from "@/const";
 
 interface DeckStatsProps {
   detailledDeck: Card[];

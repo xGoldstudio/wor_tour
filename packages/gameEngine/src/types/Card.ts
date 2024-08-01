@@ -1,5 +1,6 @@
 import { CardRarity } from "./DataStoreType";
 import { CardState, CardStatesData } from "../gameEngine/states/CardStatesData";
+import { roundToTwoMath } from "@repo/lib";
 
 export type CardType = {
   name: string;
@@ -53,7 +54,7 @@ export function getTargetStrength(card: {
   world: number;
 }) {
   const targetStrength = getCardStrength(card);
-  return baseStats * targetStrength;
+  return roundToTwoMath(baseStats * targetStrength);
 }
 
 const baseStats = 1;
