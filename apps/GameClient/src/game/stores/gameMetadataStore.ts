@@ -127,7 +127,7 @@ export function useStartGame() {
         },
         lose: {
           money: dailyGoldService.getGoldLoseReward(),
-          trophies: -(LOWEST_TROPHIES_WIN + trophiesGap),
+          trophies: Math.max(-(LOWEST_TROPHIES_WIN + trophiesGap), -usePlayerStore.getState().trophies),
         }
       },
     );
