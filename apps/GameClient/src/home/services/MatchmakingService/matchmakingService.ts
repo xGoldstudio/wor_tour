@@ -131,7 +131,11 @@ function MatchmakingService() {
 		usePlayerStore.getState().addGold(rewards.money);
 	}
 
-	return { startGame, endGame };
+	function reset() {
+		store.setState({ loserQueue: null });
+	}
+
+	return { startGame, endGame, reset };
 }
 
 export const matchmakingService = MatchmakingService();
