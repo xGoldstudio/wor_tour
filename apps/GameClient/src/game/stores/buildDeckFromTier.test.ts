@@ -1,7 +1,6 @@
 import { describe, expect, test } from "vitest";
 import cardForTest from "./cardsForTest";
 import buildDeck, { getDeckStrength } from "./buildDeck";
-import _ from "lodash";
 import { NUMBER_OF_CARD_IN_DECK } from "@/const";
 
 describe("base state", () => {

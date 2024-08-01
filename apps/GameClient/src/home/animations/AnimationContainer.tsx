@@ -150,8 +150,10 @@ function orchestrateTrophyAnimation({
           delay: 0.6 + i * 0.2,
           onComplete: () => {
             inputTrophies.innerHTML = numberWithCommas(
-              animationObject.previousValue +
-                (animationObject.amount / numberOfIncrements) * (i + 1)
+              Math.round(
+                animationObject.previousValue +
+                  (animationObject.amount / numberOfIncrements) * (i + 1)
+              )
             );
           },
         },

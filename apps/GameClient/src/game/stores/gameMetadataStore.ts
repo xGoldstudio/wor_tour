@@ -9,6 +9,18 @@ import { GameStateObjectConstructor } from "game_engine";
 import { Tier } from "@/home/store/tiers";
 import useDataStore from "@/cards/DataStore";
 import buildDeck, { getDeckStrength } from "./buildDeck";
+import { dailyGoldService } from "@/home/services/DailyGoldService/dailyGoldService";
+
+interface GameRewards {
+  win: {
+    money: number;
+    trophies: number;
+  },
+  lose: {
+    money: number;
+    trophies: number;
+  }
+}
 
 interface GameInterfaceStore {
   isInGame: boolean;
@@ -16,23 +28,15 @@ interface GameInterfaceStore {
   opponentCards: CardType[];
   playerHp: number;
   opponentHp: number;
-  rewards: {
-    win: {
-      money: number;
-      trophies: number;
-    },
-    lose: {
-      money: number;
-      trophies: number;
-    }
-  },
+  rewards: GameRewards,
   getInGameInitData: () => GameStateObjectConstructor;
   setIsInGame: (isInGame: boolean) => void;
   setInGameData: (
     playerCards: CardType[],
     opponentCards: CardType[],
     playerHp: number,
-    opponentHp: number
+    opponentHp: number,
+    rewards: GameRewards,
   ) => void;
   collectRewards: () => void;
   reset: () => void;
@@ -58,9 +62,10 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
     playerCards: CardType[],
     opponentCards: CardType[],
     playerHp: number,
-    opponentHp: number
+    opponentHp: number,
+    gameRewards: GameRewards,
   ) => {
-    set({ playerCards, opponentCards, playerHp, opponentHp, isInGame: true, rewards: { win: { money: 250, trophies: 40 }, lose: { money: 50, trophies: -40 } } });
+    set({ playerCards, opponentCards, playerHp, opponentHp, isInGame: true, rewards: gameRewards });
   },
   getInGameInitData: () => ({
     playerDeck: [...get().playerCards.values()].map((card) => findCard(card.id, card.level)),
@@ -70,12 +75,16 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
   }),
   setIsInGame: (isInGame: boolean) => set({ isInGame }),
   collectRewards: () => {
-    const rewards = get().rewards[useGameStore.getState().state.currentWinner === "player" ? "win" : "lose"];
-    useAnimationStore.getState().addAnimation({
-      type: "money",
-      previousValue: usePlayerStore.getState().gold,
-      amount: rewards.money,
-    });
+    const isWin = useGameStore.getState().state.currentWinner === "player";
+    const rewards = get().rewards[isWin ? "win" : "lose"];
+    dailyGoldService.earnReward(isWin);
+    if (rewards.money > 0) {
+      useAnimationStore.getState().addAnimation({
+        type: "money",
+        previousValue: usePlayerStore.getState().gold,
+        amount: rewards.money,
+      });
+    }
     if (rewards.trophies > 0) {
       useAnimationStore.getState().addAnimation({
         type: "trophy",
@@ -90,6 +99,9 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
   reset: () => set({ isInGame: false }),
 }));
 
+const MAX_TROPHIES_WIN = 35;
+const LOWEST_TROPHIES_WIN = 25;
+
 export function useStartGame() {
   const { deck } = usePlayerStore((state) => ({ deck: state.deck }));
   const { setInGameData } = useGameMetadataStore((state) => ({
@@ -103,7 +115,22 @@ export function useStartGame() {
     const previousTierStrength = usePlayerStore.getState().getPreviousTier().level.strength;
     const randomValueBetween = Math.random() * (targetStrength - previousTierStrength) + previousTierStrength;
     const opponentDeck = buildDeck(randomValueBetween, 0.2, cardPool);
-    setInGameData(playerDeck, opponentDeck, getHpFromDeck(playerDeck), getHpFromDeck(opponentDeck));
+    const maxGap = targetStrength - previousTierStrength;
+    const currentGap = targetStrength - randomValueBetween;
+    const trophiesGap = Math.round((currentGap / maxGap) * (MAX_TROPHIES_WIN - LOWEST_TROPHIES_WIN));
+    setInGameData(
+      playerDeck, opponentDeck, getHpFromDeck(playerDeck), getHpFromDeck(opponentDeck),
+      {
+        win: {
+          money: dailyGoldService.getGoldWinReward(),
+          trophies: MAX_TROPHIES_WIN - trophiesGap,
+        },
+        lose: {
+          money: dailyGoldService.getGoldLoseReward(),
+          trophies: -(LOWEST_TROPHIES_WIN + trophiesGap),
+        }
+      },
+    );
   }
 
   return startGame;
