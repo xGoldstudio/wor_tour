@@ -3,7 +3,7 @@ import { TriggerStateEvent } from "../../../types/eventType";
 import { ComputeEventProps } from "../gameEngine";
 
 export default function triggerStateEvent({ gameState, event, clock }: ComputeEventProps<TriggerStateEvent>) {
-	const card = gameState.getCard(event.isPlayerCard, event.cardPosition);
+	const card = gameState.getCardInstance(event.instanceId);
 	if (card === null) return;
 	const stateData = CardStatesData[event.state.type];
 	const options = getOptionsFromType(event.state.type);
@@ -19,26 +19,29 @@ export default function triggerStateEvent({ gameState, event, clock }: ComputeEv
 	if (event.state.trigger === "onPlacement") {
 		clock.triggerEvent({
 			type: "removeState",
+			instanceId: card.instanceId,
+			stateType: event.state.type,
+			position: event.position,
 			isPlayerCard: event.isPlayerCard,
-			cardPosition: event.cardPosition,
-			state: event.state,
 		})
 	} else if (options.consume !== undefined && event.state.value !== null) {
 		const nextValue = event.state.value - options.consume;
 		if (nextValue <= 0) {
 			clock.triggerEvent({
 				type: "removeState",
-				isPlayerCard: event.isPlayerCard,
-				cardPosition: event.cardPosition,
-				state: event.state,
+				instanceId: card.instanceId,
+				stateType: event.state.type,
+				position: event.position,
+				isPlayerCard: event.isPlayerCard
 			})
 		} else {
 			clock.triggerEvent({
-				type: "modifyStateValue",
-				isPlayerCard: event.isPlayerCard,
-				cardPosition: event.cardPosition,
-				state: event.state,
-				value: nextValue,
+				type: "decreaseStateValue",
+				instanceId: card.instanceId,
+				decreaseBy: options.consume,
+				stateType: event.state.type,
+				position: event.position,
+				isPlayerCard: event.isPlayerCard
 			})
 		}
 	}

@@ -1,5 +1,4 @@
-import usePlayerStore from "@/home/store/playerStore";
-import { Cover } from "@repo/ui";
+import { Borders, CardIllustartion, Cover, EmptyBar, InnerBord } from "@repo/ui";
 import { getImageUrl, textureByRarity } from "@repo/lib";
 import {
   Borders,
@@ -10,11 +9,12 @@ import { EmptyBar } from "@/game/gui/ManaBar";
 import _ from "lodash";
 import useDataStore from "@/cards/DataStore";
 import { useState } from "react";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 
 export default function WorldIllustration({
   setWorldsModalOpen,
 }: {
-  setWorldsModalOpen: (value: "tier" | "world" | "normal" | false) => void;
+  setWorldsModalOpen: () => void;
 }) {
   const { currentWorld } = usePlayerStore((state) => ({
     trophies: state.trophies,
@@ -28,10 +28,7 @@ export default function WorldIllustration({
   }
 
   return (
-    <div
-      className="relative w-1/2"
-      onClick={() => setWorldsModalOpen("normal")}
-    >
+    <div className="relative w-1/2" onClick={setWorldsModalOpen}>
       <img
         id="worldIllustration"
         className="w-full aspect-square relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)]"

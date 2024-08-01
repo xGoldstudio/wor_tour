@@ -1,6 +1,6 @@
 import { getCardFromLevel, getCardStats } from "@/cards";
 import CardDisplay from "@/game/gui/card/FullCard";
-import usePlayerStore from "@/home/store/playerStore";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 import Modal, { CoverModal } from "@/home/ui/modal";
 import useScrollCardList from "./useScrollCardList";
 import { Button, cn } from "@repo/ui";

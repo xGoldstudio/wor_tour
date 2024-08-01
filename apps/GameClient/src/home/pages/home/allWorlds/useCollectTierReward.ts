@@ -1,4 +1,4 @@
-import usePlayerStore from "@/home/store/playerStore";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 import useRewardStore from "@/home/store/rewardStore";
 import useBooster from "@/home/store/useBooster/useBooster";
 
@@ -9,7 +9,6 @@ export default function useCollectTierReward(tierNumber: number) {
 
 	return () => {
 		const tier = collectTierReward(tierNumber);
-		console.log(tier)
 		if (!tier) {
 			return;
 		}

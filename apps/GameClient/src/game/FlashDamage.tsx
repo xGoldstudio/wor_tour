@@ -1,8 +1,7 @@
 import { useRef } from "react";
-import useGameEventListener from "./gameBehavior/useGameEventListener";
 import { PlayerDamageResolveEvent } from "game_engine";
-import { useSyncGameAnimation } from "./gameBehavior/animation/useGameSyncAnimation";
-import animationTimeline from "./gameBehavior/animation/timeline";
+import { useGameEventListener, useSyncGameAnimation } from "@repo/ui";
+import { animationTimeline } from "@repo/lib";
 
 export default function FlashDamage() {
   const bloodRef = useRef<HTMLDivElement | null>(null);

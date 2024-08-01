@@ -6,12 +6,16 @@ import CardEditor from "./editor/features/card/CardEditor";
 import EditorLayout from "./editor/Layout";
 import Progression from "./editor/features/progression/Progression";
 import { EditorData } from "@repo/lib";
+import DebugIndex from "./editor/features/debug/DebugIndex";
+import AppEditorIndex from ".";
+import LightEditorLayout from "./editor/LightLayout";
+import { DebugComponents } from "./editor/features/debug/DebugComponents";
 
 const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/">
       <QueryClientProvider client={queryClient}>
         <AppRouter />
       </QueryClientProvider>
@@ -41,10 +45,23 @@ function AppRouter() {
 
   return (
     <Routes>
+      <Route path="/" element={<AppEditorIndex />} />
       <Route path="/" element={<EditorLayout reloadData={data.refetch} />}>
-        <Route path="/" element={<Progression />} index />
-        <Route path="/:worldId/:cardId" element={<CardEditor />} />
-        <Route path="/:worldId" element={<WorldEditor />} />
+        <Route path="/worlds">
+          <Route element={<Progression />} index />
+          <Route path=":worldId/:cardId" element={<CardEditor />} />
+          <Route path=":worldId" element={<WorldEditor />} />
+        </Route>
+      </Route>
+      <Route path="/debug" element={<LightEditorLayout />}>
+        <Route path="" element={<DebugIndex />} />
+        {DebugComponents.map(([name, Component]) => (
+          <Route
+            path={`${name.toLowerCase()}`}
+            element={<Component />}
+            key={name}
+          />
+        ))}
       </Route>
     </Routes>
   );

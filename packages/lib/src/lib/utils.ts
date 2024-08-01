@@ -108,3 +108,15 @@ export function isTrueOr<T, U>(value: T, defaultValue: U) {
 export function findInOrFirst<T>(array: T[]) {
   return (value: T | null | undefined) => defaultValue(array[0])(array.find(t => t === value));
 }
+
+export function translateYpx(value: number) {
+  return `translateY(${inPx(value)})`;
+}
+
+export function getSecondsFromHours(hours: number) {
+  return hours * 3600;
+}
+
+export function getSecondsFromDays(days: 1) {
+  return days * 86400;
+}

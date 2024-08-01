@@ -34,14 +34,14 @@ test("complete placement player", () => {
 	clock.nextTick();
 	expect(state.playerDeck.length).toEqual(4);
 
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// card should be replaced
 	expect(state.playerHand[0]).toEqual(deck[4]);
 	expect(state.playerBoard[0]?.id).toEqual(0);
 
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	expect(state.playerBoard[0]?.id).toEqual(5);
 
@@ -61,14 +61,14 @@ test("complete placement opponent", () => {
 	clock.nextTick();
 	expect(state.opponentDeck.length).toEqual(4);
 
-	clock.triggerEvent({ type: "placeCard", isPlayer: false, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// card should be replaced
 	expect(state.opponentHand[0]).toEqual(deck[4]);
 	expect(state.opponentBoard[0]?.id).toEqual(0);
 
-	clock.triggerEvent({ type: "placeCard", isPlayer: false, targetPosition: 0, cardInHandPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: false, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	expect(state.opponentBoard[0]?.id).toEqual(5);
 

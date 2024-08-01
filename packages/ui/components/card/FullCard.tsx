@@ -41,7 +41,7 @@ export default function FullCard({
               <div>
                 <div className="flex">
                   <InnerBord size={size * 3}>
-                    <div className="grow bg-slate-50 px-2 font-stylised text-xl h-min">
+                    <div className="grow bg-slate-50 px-2 font-semibold text-xl h-min">
                       {card.name}
                     </div>
                   </InnerBord>
@@ -60,7 +60,11 @@ export default function FullCard({
               </div>
               <div className="w-full h-full grow overflow-hidden relative pt-2 ">
                 <div className="flex flex-col items-end absolute bottom-[5px] z-10 right-[4px]">
-                  <States states={card.states} size={size * 1.1} showDesc={showEffectDesc} />
+                  <States
+                    states={card.states}
+                    size={size * 1.1}
+                    showDesc={showEffectDesc}
+                  />
                 </div>
                 <CardContentIllustartion card={card} size={size * 3} />
               </div>
@@ -110,11 +114,11 @@ function StatLine({ className, title, value }: StateLineProps) {
   return (
     <div className={cn("text-sm", className)}>
       <InnerBord size={3}>
-        <div className=" bg-slate-50 flex pb-[2px] justify-between items-center flex-col">
-          <p className="text-nowrap font-stylised text-base">{title}</p>
-          <p className="font-stylised text-sm">
-            {Math.round(value * 100) / 100}
+        <div className=" bg-slate-50 flex justify-between items-center flex-col py-1 relative">
+          <p className="text-nowrap font-semibold leading-5 text-base">
+            {title}
           </p>
+          <p className="text-sm leading-5">{Math.round(value * 100) / 100}</p>
         </div>
       </InnerBord>
     </div>

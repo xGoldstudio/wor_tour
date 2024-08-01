@@ -1,17 +1,18 @@
 import { DAMAGE_SPEED } from "../events/cardDamage";
-import { initTest } from "./common";
+import { getInstanceId, initTest } from "./common";
 import { expect, test } from 'vitest';
 
 test("start damage to card (animation placeholder)", () => {
-	const { clock, state } = initTest();
+	const { clock, state } = initTest({});
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// deal damage to player
 	function dealDamageToCard(amount: number) {
 		clock.triggerEvent({
 			type: "cardDamage",
 			isPlayerCard: true,
+			instanceId: getInstanceId(state, true, 0),
 			cardPosition: 0,
 			directAttack: false,
 			amount: amount,
@@ -35,15 +36,16 @@ test("start damage to card (animation placeholder)", () => {
 });
 
 test("start damage to card (animation placeholder)", () => {
-	const { clock, state } = initTest();
+	const { clock, state } = initTest({});
 	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: false, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// deal damage to player
 	function dealDamageToCard(amount: number) {
 		clock.triggerEvent({
 			type: "cardDamage",
 			isPlayerCard: false,
+			instanceId: getInstanceId(state, false, 0),
 			cardPosition: 0,
 			directAttack: false,
 			amount: amount,

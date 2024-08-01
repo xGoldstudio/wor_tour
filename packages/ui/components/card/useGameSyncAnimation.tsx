@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { create } from "zustand";
 import { useOnMount, useOnUnMount } from "@repo/ui";
-import { AnimationTimeline } from "./timeline";
 import { GameStateObject } from "game_engine";
+import { AnimationTimeline } from "@repo/lib";
+import { uniqueId } from "lodash";
 
 type ComputeAnimation = (
   state: GameStateObject,
@@ -62,7 +62,7 @@ export function useRegisterAnimation() {
     computeStyle: (progress: number) => void;
     onEnd?: () => void;
   }) {
-    const key = uuidv4();
+    const key = uniqueId();
     let firstFrame: null | number = null;
     removeListeners.current.set(key, () => {
       store.animations.delete(key);
@@ -92,31 +92,47 @@ export function useRegisterAnimation() {
   };
 }
 
+interface TriggerAnimationProps {
+  duration: number;
+  computeStyle: (progress: number) => void;
+  replace?: boolean;
+  queueAnimation?: boolean;
+  onEnd?: () => void;
+  onComplete?: () => void; // same as on end, but require the animation to fully run to call it
+}
+
 export function useSyncGameAnimation() {
   const store = useAnimationStore();
   const removeListener = useRef<null | (() => void)>(null);
+  const queue = useRef<TriggerAnimationProps[]>([]);
 
   function triggerAnimation({
     duration,
     computeStyle,
     replace,
+    queueAnimation,
     onEnd,
-  }: {
-    duration: number;
-    computeStyle: (progress: number) => void;
-    replace?: boolean;
-    onEnd?: () => void;
-  }) {
+    onComplete,
+  }: TriggerAnimationProps) {
     if (removeListener.current) {
       if (replace) {
         removeListener.current?.();
+        queue.current = [];
+      } else if (queueAnimation) {
+        queue.current.push({
+          duration,
+          computeStyle,
+          onEnd,
+          onComplete,
+        });
+        return;
       } else {
-        console.log("already have an animation running");
         return;
       }
     }
-    const key = uuidv4();
+    const key = uniqueId();
     let firstFrame: null | number = null;
+    let offset = 0;
     removeListener.current = () => {
       store.animations.delete(key);
       removeListener.current = null;
@@ -128,12 +144,29 @@ export function useSyncGameAnimation() {
         if (firstFrame === null) {
           firstFrame = frame;
         }
-        computeStyle(frame - firstFrame);
-        if (frame - firstFrame > duration) {
+        const referenceFrame = firstFrame - offset;
+        computeStyle(frame - referenceFrame);
+        if (frame - referenceFrame > duration) {
+          onComplete?.();
           removeListener.current?.();
+          consumeQueue();
         }
       },
     });
+    return {
+      fastForward: (value: number) => {
+        offset = Math.max(value, 0);
+      }
+    }
+  }
+
+  function consumeQueue() {
+    if (queue.current.length > 0) {
+      const next = queue.current.shift();
+      if (next) {
+        triggerAnimation(next);
+      }
+    }
   }
 
   useOnUnMount(() => {
@@ -193,7 +226,7 @@ function useGameAnimation({
 
   function registerAnimation(element: HTMLElement) {
     removeAnimation();
-    const key = uuidv4();
+    const key = uniqueId();
     store.animations.set(key, {
       progress: (frame, state) =>
         tl(element, state).progress(getProgress(state, frame, element)),

@@ -10,6 +10,9 @@ import AnimationContainer from "@/home/animations/AnimationContainer";
 import WorldIllustration from "./WorldIllustration";
 import { Tabs } from "@/home/Home";
 import { useEditionMode } from "../deck/context/UseEditionMode";
+import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
+import Timer from "@/home/services/LoopService/Timer";
+import { dailyGoldService } from "@/home/services/DailyGoldService/dailyGoldService";
 
 interface HomeTabProps {
   setCurrentTab?: (tab: Tabs) => void;
@@ -26,13 +29,20 @@ export default function HomeTab({ setCurrentTab }: HomeTabProps) {
   }));
 
   const [profileOpen, setProfileOpen] = useState(false);
-  const [worldsModalOpen, setWorldsModalOpen] = useState<
-    false | "normal" | "tier" | "world"
-  >(false);
+  const { worldsModalOpen, setWorldsModalOpen } = useClientInterfaceStore(
+    (state) => ({
+      worldsModalOpen: state.worldsModalOpen,
+      setWorldsModalOpen: state.setWorldsModalOpen,
+    })
+  );
+  const { dailyGoldConsumed, dailyGoldLimit } = dailyGoldService.store((state) => ({
+    dailyGoldConsumed: state.dailyGoldConsumed,
+    dailyGoldLimit: state.dailyGoldLimit,
+  }));
 
   return (
     <div className="w-full h-full flex flex-col items-center">
-      <AnimationContainer setWorldsModalOpen={setWorldsModalOpen} />
+      <AnimationContainer />
       {worldsModalOpen && (
         <AllWorlds
           closeModal={() => setWorldsModalOpen(false)}
@@ -97,7 +107,7 @@ export default function HomeTab({ setCurrentTab }: HomeTabProps) {
         </div>
       </div>
       <div className="flex flex-col gap-16 items-center grow pt-20">
-        <WorldIllustration setWorldsModalOpen={setWorldsModalOpen} />
+        <WorldIllustration setWorldsModalOpen={() => setWorldsModalOpen("normal")} />
         <div
           id="battleButton"
           className={cn(
@@ -142,14 +152,14 @@ export default function HomeTab({ setCurrentTab }: HomeTabProps) {
             )}
             <p className="text-2xl relative font-bold">Battle</p>
           </div>
-          <div className="relative flex items-center gap-3 justify-center px-16">
+          <div className="relative flex items-center gap-3 justify-start w-full pl-16">
             <img
               src="/money.png"
               className="h-[48px] drop-shadow-[2px_1px_1px_black]"
             />
             <div className="relative">
-              <p className="text-sm font-semibold leading-4">900/5000</p>
-              <p className="text-sm leading-4">reset in: 2h50</p>
+              <p className="text-sm font-semibold leading-4">{dailyGoldConsumed}/{dailyGoldLimit}</p>
+              <p className="text-sm leading-4">reset in: <Timer name="dailyGold" /></p>
             </div>
           </div>
         </div>

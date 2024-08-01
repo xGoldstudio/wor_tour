@@ -4,12 +4,13 @@ import { CardRarity } from "./DataStoreType";
 export type EventType =
   | DummyEvent
   | StartGameSequence
-  | StartGame
+  | StartGameEvent
   | ManaIncreaseEvent
   | SetManaIncreaseSpeed
   | ManaConsumeEvent
   | PlaceCardEvent
-  | StartEarningMana
+  | StartEarningManaEvent
+  | EndEarningManaEvent
   | CardStartAttackingEvent
   | CardAttackingEvent
   | PlayerDamageEvent
@@ -20,7 +21,8 @@ export type EventType =
   | HealCardEvent
   | CardDamagResolveEvent
   | PlayerDamageResolveEvent
-  | ModifyStateValueEvent
+  | IncreaseStateValueEvent
+  | DecreaseStateValueEvent
   | RemoveStateEvent
   | TriggerStateEvent
   | AddStateEvent;
@@ -33,7 +35,7 @@ export interface StartGameSequence {
   type: "startGameSequence";
 }
 
-export interface StartGame {
+export interface StartGameEvent {
   type: "startGame";
 }
 
@@ -43,9 +45,15 @@ export interface ManaConsumeEvent {
   delta: number;
 }
 
-export interface StartEarningMana {
+export interface StartEarningManaEvent {
   type: "startEarningMana";
   isPlayer: boolean;
+}
+
+export interface EndEarningManaEvent {
+  type: "endEarningMana";
+  isPlayer: boolean;
+  startEarningManaFrame: number;
 }
 
 export interface SetManaIncreaseSpeed {
@@ -57,12 +65,13 @@ export interface SetManaIncreaseSpeed {
 export interface ManaIncreaseEvent {
   type: "manaIncrease";
   isPlayer: boolean;
+  value: number;
 }
 
 export interface PlaceCardEvent {
   type: "placeCard";
   isPlayer: boolean;
-  targetPosition: number;
+  position: number;
   cardInHandPosition: number;
 }
 
@@ -95,10 +104,11 @@ export interface PlayerDamageResolveEvent {
 export interface CardDamageEvent {
   type: "cardDamage";
   amount: number;
-  cardPosition: number;
-  isPlayerCard: boolean;
+  instanceId: number;
   directAttack: boolean;
   initiator: CardAttackingEvent;
+  isPlayerCard: boolean;
+  cardPosition: number;
 }
 
 export interface CardDamagResolveEvent {
@@ -133,34 +143,47 @@ export interface HealCardEvent {
   };
 }
 
-export interface ModifyStateValueEvent {
-  type: "modifyStateValue";
-  state: CardState;
+export interface IncreaseStateValueEvent {
+  type: "increaseStateValue";
+  stateType: CardState["type"];
+  increaseBy: number;
+  instanceId: number;
   isPlayerCard: boolean;
-  cardPosition: number;
-  value: number;
+  position: number;
+}
+
+export interface DecreaseStateValueEvent {
+  type: "decreaseStateValue";
+  stateType: CardState["type"];
+  instanceId: number;
+  decreaseBy: number;
+  isPlayerCard: boolean;
+  position: number;
 }
 
 export interface RemoveStateEvent {
   type: "removeState";
-  state: CardState;
+  stateType: CardState["type"];
+  instanceId: number;
   isPlayerCard: boolean;
-  cardPosition: number;
+  position: number;
 }
 
 export interface TriggerStateEvent {
   type: "triggerState";
   state: CardState;
-  isPlayerCard: boolean;
-  cardPosition: number;
   initiator: EventType;
+  instanceId: number;
+  isPlayerCard: boolean;
+  position: number;
 }
 
 export interface AddStateEvent {
   type: "addState";
   state: CardState;
+  instanceId: number;
   isPlayerCard: boolean;
-  cardPosition: number;
+  position: number;
 }
 
 export type InGameCardType = {

@@ -32,6 +32,10 @@ export default function Collection({
   const [isAscending, setIsAscending] = useState<boolean>(true);
 
   const [currentFilter, setCurrentFilter] = useState<ActiveFilters>({
+    Cost: {
+      min: FiltersDescription.Cost.rangeMin!,
+      max: FiltersDescription.Cost.rangeMax!,
+    },
     Common: false,
     Rare: false,
     Epic: false,

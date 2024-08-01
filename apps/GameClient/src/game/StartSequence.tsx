@@ -1,8 +1,6 @@
 import { useRef, useState } from "react";
-import { useRegisterAnimation } from "./gameBehavior/animation/useGameSyncAnimation";
-import animationTimeline from "./gameBehavior/animation/timeline";
-import useGameEventListener from "./gameBehavior/useGameEventListener";
-import { cn } from "@repo/ui";
+import { cn, useGameEventListener, useRegisterAnimation } from "@repo/ui";
+import { animationTimeline } from "@repo/lib";
 
 export default function StartSequence() {
   const wrapperRef = useRef<null | HTMLDivElement>(null);

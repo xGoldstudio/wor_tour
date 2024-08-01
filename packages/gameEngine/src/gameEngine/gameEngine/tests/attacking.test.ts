@@ -4,11 +4,11 @@ import { initTest } from "./common";
 import { expect, test } from 'vitest';
 
 test("attacking pipeline", () => {
-	const { state, clock } = initTest();
+	const { state, clock } = initTest({});
 	void state;
 	void clock;
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	expect(state.playerBoard[0]?.startAttackingTick).toBe(0);
 
@@ -29,7 +29,7 @@ test("attacking pipeline", () => {
 	expect(state.opponentHp).toBe(100); // damage applied
 
 	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: false, targetPosition: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	for (let i = 0; i < attackFrames + DAMAGE_SPEED; i++) {
 		clock.nextTick();

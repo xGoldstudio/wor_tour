@@ -7,18 +7,20 @@ import AllWorldsAnimationProvider, {
 } from "./trophyBar/TrophyBarContext";
 import { useContext, useRef } from "react";
 import { createPortal } from "react-dom";
-import usePlayerStore from "@/home/store/playerStore";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 import ScrollContainer from "react-indiana-drag-scroll";
 import WorldPreview from "./WorldPreview";
 import LevelPreview from "./LevelPreview";
 import WorldUnlock from "./WorldUnlock";
+
+export type AllWorldsStateType = "normal" | "tier" | "world";
 
 export default function AllWorlds({
   closeModal,
   state,
 }: {
   closeModal: () => void;
-  state: "normal" | "tier" | "world";
+  state: AllWorldsStateType;
 }) {
   const home = document.getElementById("home");
 
@@ -62,7 +64,7 @@ function AllWorldsInner({ closeModal }: { closeModal: () => void }) {
           <ScrollContainer
             className={cn(
               "allWorldsScrollerContainer",
-              "max-h-[100%] overflow-hidden w-full flex flex-col relative"
+              "max-h-[100%] overflow-hidden w-full flex flex-col relative overflow-y-scroll"
             )}
             innerRef={scrollerRef}
           >

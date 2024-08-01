@@ -3,7 +3,6 @@ import useAnimationStore, { GlobalAnimation } from "../store/animationStore";
 import gsap from "gsap";
 import _ from "lodash";
 import { inPx, numberWithCommas } from "@repo/lib";
-import usePlayerStore from "../store/playerStore";
 import { createPortal } from "react-dom";
 
 function addTrophy(container: HTMLElement) {
@@ -89,24 +88,22 @@ function orchestrateTrophyAnimation({
   origin,
   target,
   container,
-  nextAnimation,
   animationObject,
   layoutId,
   inputQuerySelector,
   inputValueQuerySelector,
   createElement,
-  setWorldsModalOpen,
+  delay,
 }: {
   origin: HTMLElement;
   target: HTMLElement;
   container: HTMLElement;
-  nextAnimation: () => void;
   animationObject: GlobalAnimation;
   layoutId: string;
   inputQuerySelector: string;
   inputValueQuerySelector: string;
   createElement: (element: HTMLElement) => HTMLElement;
-  setWorldsModalOpen: (value: "tier" | "world" | false) => void;
+  delay: number;
 }) {
   const originRect = origin.getBoundingClientRect();
   const targetRect = target.getBoundingClientRect();
@@ -115,17 +112,7 @@ function orchestrateTrophyAnimation({
   const y = originRect.top + originRect.height / 2 - halfSize;
   const targetX = targetRect.left + targetRect.width / 2 - halfSize;
   const targetY = targetRect.top + targetRect.height / 2 - halfSize;
-  const tl = gsap.timeline({
-    onComplete: () => {
-      nextAnimation();
-      animationObject.onEnd?.();
-      if (animationObject.type === "money") {
-        usePlayerStore.getState().addGold(animationObject.amount);
-      } else if (animationObject.type === "trophy") {
-        setWorldsModalOpen(usePlayerStore.getState().setTrophies(animationObject.amount));
-      }
-    },
-  });
+  const tl = gsap.timeline({ onComplete: animationObject.onEnd }).delay(delay);
   const amountOfParticles = Math.min(10, animationObject.amount);
   _.range(amountOfParticles).forEach((i) =>
     animateTrophy(tl, createElement(container), x, y, targetX, targetY, i)
@@ -187,17 +174,16 @@ function orchestrateTrophyAnimation({
 
 function animation({
   animationObject,
-  nextAnimation,
   container,
-  setWorldsModalOpen,
+  delay,
 }: {
   animationObject: GlobalAnimation;
-  nextAnimation: () => void;
   container: HTMLElement;
-  setWorldsModalOpen: (value: "tier" | "world" | false) => void;
+  delay: number;
 }) {
   if (animationObject.type === "money") {
-    const origin = animationObject.originRef ?? document.getElementById("battleButton");
+    const origin =
+      animationObject.originRef ?? document.getElementById("battleButton");
     const target = document.getElementById("moneyCountIcon");
 
     if (origin && target) {
@@ -205,16 +191,14 @@ function animation({
         origin,
         target,
         container,
-        nextAnimation,
         animationObject,
         layoutId: "moneyCount",
         inputQuerySelector: '[x-id="moneyCountInput"]',
         inputValueQuerySelector: '[x-id="moneyCountInputValue"]',
         createElement: addMoney,
-        setWorldsModalOpen,
+        delay,
       });
     }
-    // do money animation
   }
   if (animationObject.type === "trophy") {
     const origin = document.getElementById("battleButton");
@@ -225,23 +209,18 @@ function animation({
         origin,
         target,
         container,
-        nextAnimation,
         animationObject,
         layoutId: "trophyCount",
         inputQuerySelector: '[x-id="trophyCountInput"]',
         inputValueQuerySelector: '[x-id="trophyCountInputTrophies"]',
         createElement: addTrophy,
-        setWorldsModalOpen,
+        delay,
       });
     }
   }
 }
 
-export default function AnimationContainer({
-  setWorldsModalOpen,
-}: {
-  setWorldsModalOpen: (value: "tier" | "world" | false) => void;
-}) {
+export default function AnimationContainer() {
   const { animationsQueue, clearQueue } = useAnimationStore((state) => ({
     animationsQueue: state.queue,
     clearQueue: state.clearQueue,
@@ -258,25 +237,29 @@ export default function AnimationContainer({
       !isAnimating
     ) {
       setIsAnimating(true);
-      const copyQueue = clearQueue().reverse();
-      const nextAnimation = () => {
-        if (container.current === null) {
-          return;
-        }
-        const currentAnimation = copyQueue.pop();
-        if (currentAnimation) {
-          animation({
-            animationObject: currentAnimation,
-            nextAnimation,
-            container: container.current,
-            setWorldsModalOpen: setWorldsModalOpen,
-          });
-        } else {
-          setIsAnimating(false);
-          clearContainer(container.current);
-        }
+      const copyQueue = clearQueue();
+      const stopAnimating = () => {
+        setIsAnimating(false);
+        container.current && clearContainer(container.current);
       };
-      nextAnimation();
+      const currentContainer = container.current;
+      if (currentContainer === null) {
+        stopAnimating();
+        return;
+      }
+      copyQueue.forEach((currentAnimation, index) => {
+        animation({
+          animationObject: {
+            ...currentAnimation,
+            onEnd: () => {
+              currentAnimation.onEnd?.();
+              if (index === copyQueue.length - 1) stopAnimating();
+            },
+          },
+          container: currentContainer,
+          delay: index * 2,
+        });
+      });
     }
   }, [animationsQueue, isAnimating, container, appContainer]);
 

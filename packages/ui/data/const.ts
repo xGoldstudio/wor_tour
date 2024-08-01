@@ -1,0 +1,1 @@
+export const WORLD_GOLD_RATIO = 1.2;

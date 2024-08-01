@@ -1,14 +1,15 @@
-import { bleedingStateTest, drawPlaceCard, initTest } from "./common";
+import { bleedingStateTest, drawPlaceCard, getInstanceId, initTest } from "./common";
 import { describe, expect, test } from 'vitest';
 
 describe("bleeding state", () => {
-	const { clock, state } = initTest();
+	const { clock, state } = initTest({});
 	drawPlaceCard(clock, true, 0);
-	clock.triggerEvent({ type: "addState", isPlayerCard: true, cardPosition: 0, state: bleedingStateTest });
 	clock.nextTick();
-	expect(state.playerBoard[0]!.states).toContain(bleedingStateTest);
+	clock.triggerEvent({ type: "addState", instanceId: getInstanceId(state, true, 0), position: 0, isPlayerCard: true, state: bleedingStateTest });
+	clock.nextTick();
+	expect(state.getStateOfCard(true, 0, "bleeding")).toBeDefined();
 	const hpBefore = state.playerBoard[0]!.hp;
-	clock.triggerEvent({ type: "cardAttacking", isPlayer: true, cardPosition: 0, instanceId: state.playerBoard[0]!.instanceId });
+	clock.triggerEvent({ type: "cardAttacking", isPlayer: true, cardPosition: 0, instanceId: getInstanceId(state, true, 0) });
 	clock.nextTick();
 
 	test("should take damage when attack", () => {
@@ -20,7 +21,7 @@ describe("bleeding state", () => {
 			e => e.type === "cardDamageResolve"
 				&& e.initiator.amount === bleedingStateTest.value
 				&& e.initiator.directAttack === false
-				&& e.initiator.initiator.instanceId === state.playerBoard[0]!.instanceId
+				&& e.initiator.initiator.instanceId === getInstanceId(state, true, 0)
 		)).toBeDefined();
 	});
 });

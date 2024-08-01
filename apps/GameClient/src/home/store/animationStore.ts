@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import usePlayerStore from "./playerStore";
+import usePlayerStore from "./playerStore/playerStore";
 
 type GolbalAnimationType = "money" | "trophy";
 

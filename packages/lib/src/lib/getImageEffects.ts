@@ -10,20 +10,22 @@ export interface CardStateLayoutData {
 }
 
 export function getImageEffects(states: CardState[]): CardStateLayoutData[] {
-  return states.map((state) => {
-    const desc = CardStatesData[state.type];
-    return {
-      src: desc.src,
-      amount: state.value,
-      status: desc.status,
-      title: desc.title,
-      description: desc.descrption({
-        trigger: triggerLabels[state.trigger],
-        target: targetLabels[state.target],
-        value: String(state.value),
-      }),
-    };
-  });
+  return states.map(getStateData);
+}
+
+export function getStateData(state: CardState): CardStateLayoutData {
+  const desc = CardStatesData[state.type];
+  return {
+    src: desc.src,
+    amount: state.value,
+    status: desc.status,
+    title: desc.title,
+    description: desc.descrption({
+      trigger: triggerLabels[state.trigger],
+      target: targetLabels[state.target],
+      value: String(state.value),
+    }),
+  };
 }
 
 export const targetLabels: Record<TargetCardState, string> = {

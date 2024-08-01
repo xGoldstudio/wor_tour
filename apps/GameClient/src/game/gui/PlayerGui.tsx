@@ -1,20 +1,21 @@
 import HpBar from "./HpBar";
-import ManaBar from "./ManaBar";
 import useGameStore from "@/game/stores/gameStateStore";
 import InHandCard from "./card/InHandCard";
 import StaticCard from "./card/StaticCard";
 import { useShallow } from "zustand/react/shallow";
 import _ from "lodash";
 import { useState } from "react";
-import useGameEventListener from "../gameBehavior/useGameEventListener";
 import { dummyCard } from "./card/const";
-import { CardType } from "../../../../../packages/gameEngine/src/types/Card";
+import { ManaBar, useGameEventListener } from "@repo/ui";
+import { CardType } from "@repo/lib";
+import { ClockReturn, EventType } from "game_engine";
 
 interface PlayerGUIProps {
   isPlayer: boolean;
+  clock: ClockReturn<EventType>;
 }
 
-function PlayerGUI({ isPlayer }: PlayerGUIProps) {
+function PlayerGUI({ isPlayer, clock }: PlayerGUIProps) {
   const { deck, maxHp } = useGameStore(
     useShallow((s) => ({
       deck: s.state.playerDeck,
@@ -51,7 +52,7 @@ function PlayerGUI({ isPlayer }: PlayerGUIProps) {
                 ))}
               </div>
               {_.times(4).map((index) => (
-                <InHandCard position={index} key={index} />
+                <InHandCard position={index} clock={clock} key={index} />
               ))}
             </div>
           )}

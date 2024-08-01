@@ -5,3 +5,4 @@ export * from "./src/gameEngine/gameEngine/gameEngine";
 export * from "./src/gameEngine/states/CardStatesData";
 export * from "./src/gameEngine/gameEngine/gameEngine";
 export * from "./src/gameEngine/gameEngine/gameState";
+export * from "./src/gameEngine/gameEngine/tests/common";

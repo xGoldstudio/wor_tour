@@ -1,15 +1,16 @@
 import { EventType } from "../../../types/eventType";
-import { attackAnimation, defaultTestDamage, defaultTestHp, drawPlaceCard, initTest, multiAttackState, triggerDirectAttack } from "./common";
+import { attackAnimation, defaultTestDamage, defaultTestHp, drawPlaceCard, getInstanceId, initTest, multiAttackState, triggerDirectAttack } from "./common";
 import { expect, test } from 'vitest';
 
 test("multi attack", () => {
-	const { clock, state } = initTest();
+	const { clock, state } = initTest({});
 	drawPlaceCard(clock, true, 1);
 	drawPlaceCard(clock, false, 0);
 	drawPlaceCard(clock, false, 2);
-	clock.triggerEvent({ type: "addState", isPlayerCard: true, cardPosition: 1, state: multiAttackState });
 	clock.nextTick();
-	expect(state.playerBoard[1]?.states).toContain(multiAttackState);
+	clock.triggerEvent({ type: "addState", instanceId: getInstanceId(state, true, 1), isPlayerCard: true, position: 1, state: multiAttackState });
+	clock.nextTick();
+	expect(state.getStateOfCard(true, 1, "multiAttack")).toBeDefined();
 	/**
 	 * Board:
 	 * [x] [ ] [x]
@@ -34,11 +35,11 @@ test("multi attack", () => {
 	drawPlaceCard(clock, false, 1);
 	triggerDirectAttack(clock, state, true, 1);
 	clock.nextTick();
-		/**
-	 * Board:
-	 * [x] [x] [x]
-	 * [ ] [x] [ ]	(player)
-	 */
+	/**
+ * Board:
+ * [x] [x] [x]
+ * [ ] [x] [ ]	(player)
+ */
 	attackAnimation(clock);
 	lastTickEvents = clock.getLastTickEvents();
 	expect(findEnnemyCardDamageResolve(lastTickEvents, 0, attacker, false)).toBeDefined();
@@ -47,7 +48,7 @@ test("multi attack", () => {
 });
 
 function findEnnemyCardDamageResolve(history: EventType[], cardPosition: number, instanceId: number, directAttack: boolean) {
-	return history.find(e => 
+	return history.find(e =>
 		e.type === "cardDamageResolve"
 		&& e.initiator.amount === defaultTestDamage
 		&& e.initiator.cardPosition === cardPosition
@@ -57,7 +58,7 @@ function findEnnemyCardDamageResolve(history: EventType[], cardPosition: number,
 	);
 }
 function findDirectDamage(history: EventType[], isPlayer: boolean, instanceId: number) {
-	return history.find(e => 
+	return history.find(e =>
 		e.type === "playerDamageResolve"
 		&& e.initiator.damage === defaultTestDamage
 		&& e.initiator.isPlayer === isPlayer

@@ -1,21 +1,13 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore from "@/game/stores/gameStateStore";
-import {
-  useTriggerEvent,
-} from "../../gameBehavior/useGameEvents";
-import {
-  useGameAnimation,
-  useSyncGameAnimation,
-} from "../../gameBehavior/animation/useGameSyncAnimation";
-import { CardBorder, CardContentIllustartion, Effects, ManaBall } from "@repo/ui";
-import animationTimeline from "@/game/gameBehavior/animation/timeline";
-import { useRef, useState } from "react";
-import useGameEventListener from "@/game/gameBehavior/useGameEventListener";
-import { dummyCard } from "./const";
-import { CardType, getCenterOfBoundingElement } from "@repo/lib";
-import { DrawCardEvent } from "game_engine";
 
-function InHandCard({ position }: { position: number }) {
+import { CardBorder, CardContentIllustartion, Effects, ManaBall, useGameAnimation, useGameEventListener, useSyncGameAnimation } from "@repo/ui";
+import { useRef, useState } from "react";
+import { dummyCard } from "./const";
+import { animationTimeline, CardType, getCenterOfBoundingElement } from "@repo/lib";
+import { ClockReturn, DrawCardEvent, EventType } from "game_engine";
+
+function InHandCard({ position, clock }: { position: number, clock: ClockReturn<EventType> }) {
   const setSelectedCard = useGameInterface((state) => state.setSelectedCard);
   const removeCardTarget = useGameInterface((state) => state.removeCardTarget);
   const unselectCard = useGameInterface((state) => state.unselectCard);
@@ -77,8 +69,6 @@ function InHandCard({ position }: { position: number }) {
     setSelectedCard(position);
   }
 
-  const triggerEvent = useTriggerEvent();
-
   function placeNewCard(
     cardInHandPosition: number,
     targetPosition: number | null
@@ -86,10 +76,10 @@ function InHandCard({ position }: { position: number }) {
     if (targetPosition === null) {
       return;
     }
-    triggerEvent({
+    clock.triggerEvent({
       type: "placeCard",
       isPlayer: true,
-      targetPosition,
+      position: targetPosition,
       cardInHandPosition,
     });
     removeCardTarget();

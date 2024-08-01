@@ -1,16 +1,11 @@
 import { findCard } from "@/cards";
-import usePlayerStore, { CollectionCard } from "@/home/store/playerStore";
 import { create } from "zustand";
 import useGameStore from "./gameStateStore";
 import useAnimationStore from "../../home/store/animationStore";
 import { CardType } from "@repo/lib";
-
-export interface InGameInitData {
-  playerDeck: CardType[];
-  opponentDeck: CardType[];
-  playerHp: number;
-  opponentHp: number;
-}
+import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
+import usePlayerStore, { CollectionCard } from "@/home/store/playerStore/playerStore";
+import { GameStateObjectConstructor } from "game_engine";
 
 interface GameInterfaceStore {
   isInGame: boolean;
@@ -28,7 +23,7 @@ interface GameInterfaceStore {
       trophies: number;
     }
   },
-  getInGameInitData: () => InGameInitData;
+  getInGameInitData: () => GameStateObjectConstructor;
   findCard: (id: number, isPlayer: boolean) => CardType;
   setIsInGame: (isInGame: boolean) => void;
   setInGameData: (
@@ -92,10 +87,11 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
         type: "trophy",
         previousValue: usePlayerStore.getState().trophies,
         amount: rewards.trophies,
+        onEnd: () => useClientInterfaceStore.getState().setWorldsModalOpen(hasChangeWorldOrTier),
       });
-    } else {
-      usePlayerStore.getState().setTrophies(rewards.trophies);
     }
+    const hasChangeWorldOrTier = usePlayerStore.getState().addOrRemoveTrophies(rewards.trophies);
+    usePlayerStore.getState().addGold(rewards.money);
   },
   reset: () => set({ isInGame: false }),
 }));
@@ -116,7 +112,6 @@ export function useStartGame() {
     });
     const opponentDeck = new Map<number, CollectionCard>(playerDeck);
     // const cardsPool = cards.filter(card => card.world === level.world);
-
     setInGameData(playerDeck, opponentDeck, 2000, 2000);
   }
 

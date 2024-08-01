@@ -7,7 +7,7 @@ import React, { useMemo, useState } from "react";
 import * as _ from "lodash";
 import { numberOfLevels } from "./consts";
 import { Link } from "react-router-dom";
-import { BoosterRarityDrop, levels, unlockedIndex, worlds } from "@repo/ui";
+import { BoosterRarityDrop, levels, unlockedIndex, worldsHardcodedData } from "@repo/ui";
 
 export default function Progression() {
   const [currentLevelHover, setCurrentLevelHover] = useState<null | number>(
@@ -26,9 +26,9 @@ export default function Progression() {
   const top = 20 + padding;
   const left = padding;
   const bottom = height - h - padding;
-  const worldW = (width - padding * 2) / worlds.length;
-  const min = _.minBy(worlds, "minLevel")?.minLevel || 0;
-  const max = _.maxBy(worlds, "maxLevel")?.maxLevel || 0;
+  const worldW = (width - padding * 2) / worldsHardcodedData.length;
+  const min = _.minBy(worldsHardcodedData, "minLevel")?.minLevel || 0;
+  const max = _.maxBy(worldsHardcodedData, "maxLevel")?.maxLevel || 0;
   const range = max - min;
   const scale = (bottom - top) / range;
   function computePositionFromValue(value: number) {
@@ -147,7 +147,7 @@ export default function Progression() {
             }}
             viewBox={`0 0 ${width} ${height}`}
           >
-            {worlds.map((world) => {
+            {worldsHardcodedData.map((world) => {
               const startX = getX(world.id);
               const endY = computePositionFromValue(world.minLevel);
               const startY = computePositionFromValue(world.maxLevel);
@@ -161,7 +161,7 @@ export default function Progression() {
                     fill={`rgba(${142}, ${175}, ${214}, ${(world.maxLevel - min) / range})`}
                   />
                   <Link
-                    to={`/${world.id}`}
+                    to={`${world.id}`}
                     className="hover:underline decoration-solid py-1"
                   >
                     <text

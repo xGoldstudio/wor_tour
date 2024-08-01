@@ -75,6 +75,9 @@ importers:
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      game_engine:
+        specifier: workspace:*
+        version: link:../../packages/gameEngine
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -375,6 +378,9 @@ importers:
       '@repo/lib':
         specifier: workspace:*
         version: link:../lib
+      game_engine:
+        specifier: workspace:*
+        version: link:../gameEngine
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
