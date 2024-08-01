@@ -35,10 +35,12 @@ export default function HomeTab({ setCurrentTab }: HomeTabProps) {
       setWorldsModalOpen: state.setWorldsModalOpen,
     })
   );
-  const { dailyGoldConsumed, dailyGoldLimit } = dailyGoldService.store((state) => ({
-    dailyGoldConsumed: state.dailyGoldConsumed,
-    dailyGoldLimit: state.dailyGoldLimit,
-  }));
+  const { dailyGoldConsumed, dailyGoldLimit } = dailyGoldService.store(
+    (state) => ({
+      dailyGoldConsumed: state.dailyGoldConsumed,
+      dailyGoldLimit: state.dailyGoldLimit,
+    })
+  );
 
   return (
     <div className="w-full h-full flex flex-col items-center">
@@ -107,7 +109,9 @@ export default function HomeTab({ setCurrentTab }: HomeTabProps) {
         </div>
       </div>
       <div className="flex flex-col gap-16 items-center grow pt-20">
-        <WorldIllustration setWorldsModalOpen={() => setWorldsModalOpen("normal")} />
+        <WorldIllustration
+          setWorldsModalOpen={() => setWorldsModalOpen("normal")}
+        />
         <div
           id="battleButton"
           className={cn(
@@ -146,7 +150,7 @@ export default function HomeTab({ setCurrentTab }: HomeTabProps) {
             {!isDeckFull && (
               <img
                 src="/padlock-nobg.png"
-                className="h-[22px] absolute top-1/2 -translate-y-1/2 left-[4.65rem] brightness-75"
+                className="h-[22px] absolute top-1/2 -translate-y-1/2 left-12 brightness-75"
                 alt="padlock"
               />
             )}
@@ -158,8 +162,12 @@ export default function HomeTab({ setCurrentTab }: HomeTabProps) {
               className="h-[48px] drop-shadow-[2px_1px_1px_black]"
             />
             <div className="relative">
-              <p className="text-sm font-semibold leading-4">{dailyGoldConsumed}/{dailyGoldLimit}</p>
-              <p className="text-sm leading-4">reset in: <Timer name="dailyGold" /></p>
+              <p className="text-sm font-semibold leading-4">
+                {dailyGoldConsumed}/{dailyGoldLimit}
+              </p>
+              <p className="text-sm leading-4">
+                reset in: <Timer name="dailyGold" />
+              </p>
             </div>
           </div>
         </div>

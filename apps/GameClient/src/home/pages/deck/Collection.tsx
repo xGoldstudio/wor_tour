@@ -44,10 +44,6 @@ export default function Collection({
       min: FiltersDescription.Level.rangeMin!,
       max: FiltersDescription.Level.rangeMax!,
     },
-    Cost: {
-      min: FiltersDescription.Cost.rangeMin!,
-      max: FiltersDescription.Cost.rangeMax!,
-    },
   });
   let detailledCollection = [...collection];
   const collectionLength = detailledCollection.length;
