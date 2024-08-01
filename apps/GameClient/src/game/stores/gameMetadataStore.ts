@@ -5,8 +5,9 @@ import useAnimationStore from "../../home/store/animationStore";
 import { CardType } from "@repo/lib";
 import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 import { GameStateObjectConstructor } from "game_engine";
-import usePlayerStore, { CollectionCard } from "@/home/store/playerStore";
-
+import usePlayerStore, {
+  CollectionCard,
+} from "@/home/store/playerStore/playerStore";
 interface GameInterfaceStore {
   isInGame: boolean;
   playerCards: Map<number, CollectionCard>;
