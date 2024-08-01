@@ -73,12 +73,17 @@ function MatchmakingService() {
 		return { targetStrength: randomValueBetween, winTrophies, loseTrophies };
 	}
 
+	const MINIMAL_LOSER_QUEUE_TIER = 1;
+
 	function endGame(gameState: GameStateObject) {
 		const isWin = gameState.currentWinner === "player";
 		const reward = useGameMetadataStore.getState().rewards[isWin ? "win" : "lose"];
 		collectRewards(isWin, reward);
 		const loserQueue = store.getState().loserQueue;
-		if (!isWin) {
+		if (usePlayerStore.getState().currentTier <= MINIMAL_LOSER_QUEUE_TIER) {
+			store.setState({ loserQueue: null });
+		}
+		else if (!isWin) {
 			store.setState({
 				loserQueue: {
 					strength: getStrengthForLoserQueue((useGameMetadataStore.getState().playerCards)),
@@ -97,7 +102,7 @@ function MatchmakingService() {
 	const LOSER_QUEUE_REDUCE_STRENGTH = 0.5;
 	const MAX_LOSER_QUEUE_STRENGTH_REDUCED = 1.5;
 
-	function getStrengthForLoserQueue(losingDeck: CardType[]) {
+	function getStrengthForLoserQueue(losingDeck: CardType[]): number {
 		const loserQueue = store.getState().loserQueue;
 		const referenceStrength = loserQueue
 			? loserQueue.strength - LOSER_QUEUE_REDUCE_STRENGTH
