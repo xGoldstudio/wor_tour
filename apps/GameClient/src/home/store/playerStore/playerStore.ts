@@ -41,6 +41,9 @@ interface PlayerStore {
   addOrRemoveTrophies: (amount: number) => false | "tier" | "world";
 
   collectTierReward: (tierNumber: number) => Tier | null;
+  getCurrentTier: () => Tier;
+  getPreviousTier: () => Tier;
+  getNextTier: () => Tier;
 }
 
 const shardsByLevels = [3, 7];
@@ -108,7 +111,10 @@ const usePlayerStore = create(
           return { tiers: new Map(state.tiers) };
         });
         return result;
-      }
+      },
+      getCurrentTier: () => get().tiers.get(get().currentTier) || get().tiers.get(1)!,
+      getPreviousTier: () => get().tiers.get(get().currentTier - 1) || get().tiers.get(1)!,
+      getNextTier: () => get().tiers.get(get().currentTier + 1) || get().tiers.get(1)!,
     }), {
     name: "player",
     partialize: (state) => ({

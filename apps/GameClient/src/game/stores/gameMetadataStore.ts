@@ -1,45 +1,41 @@
 import { findCard } from "@/cards";
 import { create } from "zustand";
-import useGameStore from "./gameStateStore";
-import useAnimationStore from "../../home/store/animationStore";
 import { CardType } from "@repo/lib";
-import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
-import usePlayerStore, { CollectionCard } from "@/home/store/playerStore/playerStore";
 import { GameStateObjectConstructor } from "game_engine";
+
+export interface GameRewards {
+  win: GameReward;
+  lose: GameReward;
+}
+
+export interface GameReward {
+  money: number;
+  trophies: number;
+}
 
 interface GameInterfaceStore {
   isInGame: boolean;
-  playerCards: Map<number, CollectionCard>;
-  opponentCards: Map<number, CollectionCard>;
+  playerCards: CardType[];
+  opponentCards: CardType[];
   playerHp: number;
   opponentHp: number;
-  rewards: {
-    win: {
-      money: number;
-      trophies: number;
-    },
-    lose: {
-      money: number;
-      trophies: number;
-    }
-  },
+  rewards: GameRewards,
   getInGameInitData: () => GameStateObjectConstructor;
-  findCard: (id: number, isPlayer: boolean) => CardType;
   setIsInGame: (isInGame: boolean) => void;
   setInGameData: (
-    playerCards: Map<number, CollectionCard>,
-    opponentCards: Map<number, CollectionCard>,
+    playerCards: CardType[],
+    opponentCards: CardType[],
     playerHp: number,
-    opponentHp: number
+    opponentHp: number,
+    rewards: GameRewards,
   ) => void;
-  collectRewards: () => void;
   reset: () => void;
 }
 
 const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
   isInGame: false,
-  playerCards: new Map<number, CollectionCard>(),
-  opponentCards: new Map<number, CollectionCard>(),
+  playerCards: [],
+  opponentCards: [],
   playerHp: 1000,
   opponentHp: 1000,
   rewards: {
@@ -53,12 +49,13 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
     }
   },
   setInGameData: (
-    playerCards: Map<number, CollectionCard>,
-    opponentCards: Map<number, CollectionCard>,
+    playerCards: CardType[],
+    opponentCards: CardType[],
     playerHp: number,
-    opponentHp: number
+    opponentHp: number,
+    gameRewards: GameRewards,
   ) => {
-    set({ playerCards, opponentCards, playerHp, opponentHp, isInGame: true, rewards: { win: { money: 250, trophies: 40 }, lose: { money: 50, trophies: -40 } } });
+    set({ playerCards, opponentCards, playerHp, opponentHp, isInGame: true, rewards: gameRewards });
   },
   getInGameInitData: () => ({
     playerDeck: [...get().playerCards.values()].map((card) => findCard(card.id, card.level)),
@@ -66,56 +63,9 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
     playerHp: get().playerHp,
     opponentHp: get().opponentHp,
   }),
-  findCard: (id: number, isPlayer: boolean) => {
-    const collectionCard = isPlayer
-      ? get().playerCards.get(id)
-      : get().opponentCards.get(id);
-    if (collectionCard === undefined)
-      throw new Error(`Card with id ${id} not found`);
-    return findCard(collectionCard.id, collectionCard.level);
-  },
   setIsInGame: (isInGame: boolean) => set({ isInGame }),
-  collectRewards: () => {
-    const rewards = get().rewards[useGameStore.getState().state.currentWinner === "player" ? "win" : "lose"];
-    useAnimationStore.getState().addAnimation({
-      type: "money",
-      previousValue: usePlayerStore.getState().gold,
-      amount: rewards.money,
-    });
-    if (rewards.trophies > 0) {
-      useAnimationStore.getState().addAnimation({
-        type: "trophy",
-        previousValue: usePlayerStore.getState().trophies,
-        amount: rewards.trophies,
-        onEnd: () => useClientInterfaceStore.getState().setWorldsModalOpen(hasChangeWorldOrTier),
-      });
-    }
-    const hasChangeWorldOrTier = usePlayerStore.getState().addOrRemoveTrophies(rewards.trophies);
-    usePlayerStore.getState().addGold(rewards.money);
-  },
   reset: () => set({ isInGame: false }),
 }));
 
-export function useStartGame() {
-  const { deck } = usePlayerStore((state) => ({ deck: state.deck }));
-  const { setInGameData } = useGameMetadataStore((state) => ({
-    setInGameData: state.setInGameData,
-  }));
-
-  function startGame() {
-    const playerDeck = new Map<number, CollectionCard>();
-    deck.forEach((cardId) => {
-      playerDeck.set(
-        cardId,
-        usePlayerStore.getState().getCollectionInfo(cardId)!
-      );
-    });
-    const opponentDeck = new Map<number, CollectionCard>(playerDeck);
-    // const cardsPool = cards.filter(card => card.world === level.world);
-    setInGameData(playerDeck, opponentDeck, 2000, 2000);
-  }
-
-  return startGame;
-}
 
 export default useGameMetadataStore;

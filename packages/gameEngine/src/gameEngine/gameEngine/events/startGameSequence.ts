@@ -4,6 +4,8 @@ import { defaultManaSpeed } from "../gameState";
 
 export default function startGameSequence({ clock }: ComputeEventProps<StartGameSequence>) {
 	const time = 30;
+	clock.triggerEvent({ type: "shuffleDeck", isPlayer: true });
+	clock.triggerEvent({ type: "shuffleDeck", isPlayer: false });
 	clock.triggerEvent({ type: "setManaIncreaseSpeed", isPlayer: true, speed: time });
 	clock.triggerEvent({ type: "setManaIncreaseSpeed", isPlayer: false, speed: time });
 	clock.setGameEventTimeout({ type: "startEarningMana", isPlayer: true }, time);

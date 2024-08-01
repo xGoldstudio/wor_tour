@@ -1,4 +1,3 @@
-import { useStartGame } from "@/game/stores/gameMetadataStore";
 import { useState } from "react";
 import { Cover, InnerBord } from "@repo/ui";
 import { numberWithCommas, textureByRarity } from "@repo/lib";
@@ -10,9 +9,9 @@ import WorldIllustration from "./WorldIllustration";
 import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 import Timer from "@/home/services/LoopService/Timer";
 import { dailyGoldService } from "@/home/services/DailyGoldService/dailyGoldService";
+import { matchmakingService } from "@/home/services/MatchmakingService/matchmakingService";
 
 export default function HomeTab() {
-  const startGame = useStartGame();
   const { trophies } = usePlayerStore((state) => ({
     trophies: state.trophies,
     currentWorld: state.currentWorld,
@@ -100,7 +99,7 @@ export default function HomeTab() {
         <div
           id="battleButton"
           className="relative rounded-sm flex p-1 flex-col items-center font-slate-600 cursor-pointer w-[310px]"
-          onClick={() => startGame()}
+          onClick={() => matchmakingService.startGame()}
         >
           <div className="w-[calc(100%_+_6px)] h-[calc(100%_+_6px)] absolute top-[-3px] left-[-3px] blur-sm rounded-sm  bg-amber-100 animate-[shiny_2s_ease-in-out_infinite]"></div>
           <Cover cardRarity="epic" className="rounded-sm" />

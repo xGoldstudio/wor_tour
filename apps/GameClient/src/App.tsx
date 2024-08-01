@@ -7,6 +7,8 @@ import useDataStore from "./cards/DataStore";
 import { EditorData } from "../../../packages/gameEngine/src/types/DataStoreType";
 import usePlayerStore from "./home/store/playerStore/playerStore";
 import { _warningResetPlayStore } from "./home/store/initAllClientData";
+import DebugPanel from "./DebugPanel";
+import ErrorBoundary from "./ErrorBoundary";
 
 const queryClient = new QueryClient();
 
@@ -46,5 +48,14 @@ function AppRouter() {
     return <div>Loading...</div>;
   }
 
-  return <div id="app">{isInGame ? <Game /> : <Home />}</div>;
+  return (
+    <ErrorBoundary fallback={(
+      <div className="bg-black w-screen h-screen">
+        <h1 className="text-white">Something went wrong.</h1>
+        <DebugPanel />
+      </div>
+  )}>
+      <div id="app">{isInGame ? <Game /> : <Home />}</div>
+    </ErrorBoundary>
+  );
 }
