@@ -513,38 +513,17 @@
       "stats": [
         {
           "cost": 3,
-          "states": [
-            {
-              "type": "massacre",
-              "trigger": "onDirectAttackHit",
-              "target": "directEnnemyCard",
-              "value": 5
-            }
-          ],
+          "states": [],
           "illustration": "card_15_level_1_1720100170687.png"
         },
         {
           "cost": 3,
-          "states": [
-            {
-              "type": "massacre",
-              "trigger": "onDirectAttackHit",
-              "target": "directEnnemyCard",
-              "value": 10
-            }
-          ],
+          "states": [],
           "illustration": "card_15_level_2_1720100176579.png"
         },
         {
           "cost": 3,
-          "states": [
-            {
-              "type": "massacre",
-              "trigger": "onDirectAttackHit",
-              "target": "directEnnemyCard",
-              "value": 15
-            }
-          ],
+          "states": [],
           "illustration": "card_15_level_3_1720100190398.png"
         }
       ]

@@ -83,7 +83,7 @@ export const CardStatesData = {
       let targetRatio = 0;
       if (trigger === "onPlacement") triggerRatio = 1;
       if (target === "allyCards") targetRatio = 1;
-      return ((value || 0) / (baseDps * 3)) * triggerRatio * targetRatio;
+      return ((value || 0) / (baseDps * 6)) * triggerRatio * targetRatio;
     },
     descrption: ({ trigger, target, value }) => `${trigger}, heal ${target} for ${value} health points.`,
     title: "Heal",
