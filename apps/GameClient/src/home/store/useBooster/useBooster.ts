@@ -14,6 +14,8 @@ export type BoosterType = BoosterTypeDeclartion & {
   cards: CardType[];
 };
 
+const UNLOCK_NEW_CARDS_TRESHOLD = 0.3;
+
 export default function useBooster() {
   const { spendGold, gold } = usePlayerStore((state) => ({
     addCardOrShardOrEvolve: state.addCardOrShardOrEvolve,
@@ -31,7 +33,9 @@ export default function useBooster() {
     if (isBuying && gold < booster.cost) {
       return;
     }
-    const card = getRandomCardFromRarity(booster.cards, booster.contain.rarities);
+    const allowUnlockingCard = Math.random() < UNLOCK_NEW_CARDS_TRESHOLD;
+    const filteredBoostCards = allowUnlockingCard ? booster.cards.filter((card) => usePlayerStore.getState().getCollectionInfo(card.id)) : booster.cards;
+    const card = getRandomCardFromRarity(filteredBoostCards, booster.contain.rarities);
     if (isBuying) {
       spendGold(booster.cost);
     }

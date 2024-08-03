@@ -83,7 +83,7 @@ export const CardStatesData = {
       let targetRatio = 0;
       if (trigger === "onPlacement") triggerRatio = 1;
       if (target === "allyCards") targetRatio = 1;
-      return ((value || 0) / (baseDps * 6)) * triggerRatio * targetRatio;
+      return ((value || 0) / (baseDps * 3)) * triggerRatio * targetRatio;
     },
     descrption: ({ trigger, target, value }) => `${trigger}, heal ${target} for ${value} health points.`,
     title: "Heal",
@@ -134,7 +134,7 @@ export const CardStatesData = {
     triggers: ["onDirectAttackHit"],
     targets: ["directEnnemyCard"],
     computeCost: ({ value, attackSpeed }) => {
-      return ((value || 0) * (attackSpeed * 1.5)) / 7;
+      return ((value || 0) * (attackSpeed * 4)) / 7;
     },
     descrption: ({ trigger, target, value }) => `${trigger}, give bleeding ${value} to ${target}.`,
     title: "Massacre",
