@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type RewardType = CardRewardType | GoldRewardType | ChestRewardType;
+export type RewardType = CardRewardType | GoldRewardType | ChestRewardType | KeyRewardType;
 
 export interface CardRewardType {
   type: "card";
@@ -19,6 +19,9 @@ export interface ChestRewardType {
   type: "chest";
 }
 
+export interface KeyRewardType {
+  type: "key";
+}
 
 export function initRewardStore() {
   useRewardStore.setState({ ...RewardStoreDefaultState });
