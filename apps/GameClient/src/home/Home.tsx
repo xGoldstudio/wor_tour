@@ -5,8 +5,8 @@ import { DeckInterface as DeckTab } from "./pages/deck/DeckInterface";
 import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore/playerStore";
-import Badge from "../../../../packages/ui/components/Badge";
 import {
+  Badge,
   Borders,
   CardIllustartion,
   Cover,
@@ -17,6 +17,7 @@ import { cn } from "@repo/ui";
 import { numberWithCommas } from "@repo/lib";
 import KeysOutput from "./ui/KeysOutput";
 import Timer from "./services/LoopService/Timer";
+import LevelModal from "./levelModal/LevelModal";
 
 type Tabs = "home" | "deck" | "shop";
 
@@ -40,6 +41,7 @@ export default function Home() {
       >
         <RewardBlockWithContext />
         <HomeBg />
+        <LevelModal />
         <div className="w-full h-full relative flex flex-col items-center justify-between">
           <Header />
           <div

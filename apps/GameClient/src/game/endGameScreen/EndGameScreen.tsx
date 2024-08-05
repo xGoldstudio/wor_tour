@@ -1,7 +1,6 @@
 import { Badge, Button, cn, EmptyBar, KeyAmount, useGameEventListener } from "@repo/ui";
 import useGameMetadataStore from "../stores/gameMetadataStore";
 import Ribbon from "@/home/ui/Ribbon";
-import * as _ from "lodash";
 import RewardBox from "./RewardBox";
 import { useRef, useState } from "react";
 import endGameScreenAnimation from "./animation";
@@ -9,6 +8,7 @@ import { CurrentWinner } from "game_engine";
 import { useGSAP } from "@gsap/react";
 import { textureByRarity } from "@repo/lib";
 import { keysService } from "@/home/services/inject";
+import ShinyRotator from "./ShinyRotator";
 
 export default function EndGameScreen() {
   const [currentWinner, setCurrentWinner] = useState<CurrentWinner>(null);
@@ -142,46 +142,6 @@ export default function EndGameScreen() {
           </Button>
         </div>
       </div>
-    </div>
-  );
-}
-
-function ShinyRotator({
-  forwardRef,
-}: {
-  forwardRef: React.RefObject<HTMLDivElement>;
-}) {
-  return (
-    <div
-      className="w-screen h-screen absolute top-1/2 -translate-y-[600px] scale-0"
-      ref={forwardRef}
-    >
-      <svg
-        viewBox="0 0 100 100"
-        className="absolute top-0 left-1/2 h-full -translate-x-1/2 drop-shadow-[0px_0px_15px_white] scale-150 opacity-50"
-      >
-        <defs>
-          <linearGradient id="gradient" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="40%" stopColor="white" stopOpacity={0} />
-            <stop offset="60%" stopColor="white" stopOpacity={0.5} />
-            <stop offset="100%" stopColor="white" />
-          </linearGradient>
-          <linearGradient id="legendaryGradient" x1="0" x2="1" y1="0" y2="1">
-            <stop offset="40%" stopColor="#DFFCD3" stopOpacity={0} />
-            <stop offset="60%" stopColor="#1D7BFA" stopOpacity={0.5} />
-            <stop offset="100%" stopColor="#F02BD4" />
-          </linearGradient>
-        </defs>
-
-        {_.range(8).map((index) => (
-          <polygon
-            key={index}
-            points="50,50 10,0 0,10"
-            fill={`url(${"#gradient"})`}
-            transform={`rotate(${index * (360 / 8)} 50 50)`}
-          />
-        ))}
-      </svg>
     </div>
   );
 }
