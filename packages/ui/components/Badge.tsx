@@ -5,12 +5,14 @@ interface BadgeProps {
   value: string;
   className?: string;
   rarity?: CardRarity;
+  textId?: string;
 }
 
 export default function Badge({
   className,
   value,
   rarity = "rare",
+  textId,
 }: BadgeProps) {
   return (
     <div
@@ -28,7 +30,7 @@ export default function Badge({
           backgroundPositionY: "center",
         }}
       />
-      <p className="relative">{value}</p>
+      <p className="relative" id={textId}>{value}</p>
     </div>
   );
 }

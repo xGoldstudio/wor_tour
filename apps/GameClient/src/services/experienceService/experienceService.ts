@@ -3,7 +3,9 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 const EXPERIENCE_PER_WIN = 15;
+const DEFAULT_EXPERIENCE_FOR_NEXT_LEVEL = 25;
 const GOLD_FOR_NEXT_LEVEL = 1500;
+const LINERA_EXPERIENCE_GROWTH = 7;
 
 export interface ExperienceReward {
 	previousLevel: number;
@@ -11,11 +13,26 @@ export interface ExperienceReward {
 	gold: number;
 }
 
+export interface ExperienceGain {
+	previousExperience: number;
+	nextExperience: number;
+	previousLevel: number;
+	nextLevel: number;
+	previousExperienceForNextLevel: number;
+}
+
 const defaultState = {
 	level: 1,
 	experience: 0,
-	experienceForNextLevel: 50,
+	experienceForNextLevel: DEFAULT_EXPERIENCE_FOR_NEXT_LEVEL,
 	levelReward: [] as ExperienceReward[],
+	lastExperienceGain: {
+		previousExperience: 0,
+		nextExperience: 0,
+		previousLevel: 0,
+		nextLevel: 0,
+		previousExperienceForNextLevel: 0,
+	} as ExperienceGain,
 };
 
 export default function ExperienceService() {
@@ -28,9 +45,10 @@ export default function ExperienceService() {
 	function gainExperience() {
 		const previousExperience = store.getState().experience;
 		const previousLevel = store.getState().level;
+		const previousExperienceForNextLevel = store.getState().experienceForNextLevel;
 		let nextExperience = previousExperience + EXPERIENCE_PER_WIN;
-		const nextLevel = previousLevel + Math.floor(nextExperience / store.getState().experienceForNextLevel);
-		nextExperience = nextExperience % store.getState().experienceForNextLevel;
+		const nextLevel = previousLevel + Math.floor(nextExperience / previousExperienceForNextLevel);
+		nextExperience = nextExperience % previousExperienceForNextLevel;
 		store.setState({ experience: nextExperience, level: nextLevel });
 		const diff = nextLevel - previousLevel;
 		if (diff) {
@@ -41,13 +59,9 @@ export default function ExperienceService() {
 					return { levelReward: [...levelReward] };
 				});
 			}
-			return {
-				previousExperience,
-				nextExperience,
-				previousLevel,
-				nextLevel,
-			};
+			store.setState({ experienceForNextLevel: DEFAULT_EXPERIENCE_FOR_NEXT_LEVEL + nextLevel * LINERA_EXPERIENCE_GROWTH });
 		}
+		store.setState({ lastExperienceGain: { previousExperience, previousExperienceForNextLevel, nextExperience, previousLevel, nextLevel } });
 	}
 
 	function collectReward() {
@@ -77,6 +91,23 @@ export default function ExperienceService() {
 		return store((state) => state.experienceForNextLevel);
 	}
 
+	function useWatchLastExperienceGain() {
+		const {
+			previousExperienceForNextLevel,
+			previousExperience,
+			nextExperience,
+			previousLevel,
+			nextLevel,
+		} = store((state) => state.lastExperienceGain);
+
+		return {
+			experienceProgress: previousExperience / previousExperienceForNextLevel,
+			experienceProgressTarget: nextExperience / store.getState().experienceForNextLevel,
+			previousLevel,
+			nextLevel,
+		}
+	}
+
 	return {
 		reset,
 		gainExperience,
@@ -85,5 +116,6 @@ export default function ExperienceService() {
 		useWatchLevels,
 		useWatchExperience,
 		useWatchExperienceForNextLevel,
+		useWatchLastExperienceGain,
 	};
 }
