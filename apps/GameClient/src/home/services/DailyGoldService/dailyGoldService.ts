@@ -16,7 +16,7 @@ function computeGoldWorldValue(value: number) {
 export const getGoldPerVictory = computeGoldWorldValue(GoldPerVictory);
 export const getMaxGoldPerDay = computeGoldWorldValue(MaxGoldPerDay);
 
-function DailyGoldService() {
+export function DailyGoldService() {
 	const store = create(persist(() => (
 		{
 			dailyGoldConsumed: 0,
@@ -76,5 +76,3 @@ function DailyGoldService() {
 		reset,
 	}
 }
-
-export const dailyGoldService = DailyGoldService();

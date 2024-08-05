@@ -8,8 +8,7 @@ import AnimationContainer from "@/home/animations/AnimationContainer";
 import WorldIllustration from "./WorldIllustration";
 import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 import Timer from "@/home/services/LoopService/Timer";
-import { dailyGoldService } from "@/home/services/DailyGoldService/dailyGoldService";
-import { matchmakingService } from "@/home/services/MatchmakingService/matchmakingService";
+import { dailyGoldService, matchmakingService } from "@/home/services/inject";
 
 export default function HomeTab() {
   const { trophies } = usePlayerStore((state) => ({

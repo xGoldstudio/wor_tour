@@ -1,4 +1,4 @@
-import useAnimationStore from "@/home/store/animationStore";
+import { startContainerAnimation } from "@/home/animations/Animations";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { GoldRewardType } from "@/home/store/rewardStore";
 import { useGSAP } from "@gsap/react";
@@ -68,14 +68,18 @@ export default function GoldReward({
             });
           }
           animationOver.current = "disapear";
-          useAnimationStore.getState().addAnimation({
-            type: "money",
-            previousValue: usePlayerStore.getState().gold,
-            amount: reward.amount,
-            originRef: scope.current?.querySelector("img") as HTMLImageElement,
-            onEnd: () => {
-              removeCurrentReward();
-              usePlayerStore.getState().addGold(reward.amount);
+          startContainerAnimation({
+            animationObject: {
+              type: "money",
+              previousValue: usePlayerStore.getState().gold,
+              amount: reward.amount,
+              originRef: scope.current?.querySelector(
+                "img"
+              ) as HTMLImageElement,
+              onEnd: () => {
+                removeCurrentReward();
+                usePlayerStore.getState().addGold(reward.amount);
+              },
             },
           });
         }

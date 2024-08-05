@@ -1,4 +1,4 @@
-import { Badge, Button, cn, EmptyBar, useGameEventListener } from "@repo/ui";
+import { Badge, Button, cn, EmptyBar, KeyAmount, useGameEventListener } from "@repo/ui";
 import useGameMetadataStore from "../stores/gameMetadataStore";
 import Ribbon from "@/home/ui/Ribbon";
 import * as _ from "lodash";
@@ -8,6 +8,7 @@ import endGameScreenAnimation from "./animation";
 import { CurrentWinner } from "game_engine";
 import { useGSAP } from "@gsap/react";
 import { textureByRarity } from "@repo/lib";
+import { keysService } from "@/home/services/inject";
 
 export default function EndGameScreen() {
   const [currentWinner, setCurrentWinner] = useState<CurrentWinner>(null);
@@ -137,7 +138,7 @@ export default function EndGameScreen() {
             </div>
           </div>
           <Button action={onContinue} forwardRef={buttonRef}>
-            Continue
+            Continue {isWinner && keysService.hasKeyRewardWaiting() ? <>(<KeyAmount amount={-1} className="pl-1" />)</> : <>(<KeyAmount amount={0} className="pl-1 text-red-500" />)</>}
           </Button>
         </div>
       </div>

@@ -6,10 +6,17 @@ import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore/playerStore";
 import Badge from "../../../../packages/ui/components/Badge";
-import { Borders, CardIllustartion, Cover, InnerBord, NumberSpan } from "@repo/ui";
+import {
+  Borders,
+  CardIllustartion,
+  Cover,
+  InnerBord,
+  NumberSpan,
+} from "@repo/ui";
 import { cn } from "@repo/ui";
 import { numberWithCommas } from "@repo/lib";
-
+import KeysOutput from "./ui/KeysOutput";
+import Timer from "./services/LoopService/Timer";
 
 type Tabs = "home" | "deck" | "shop";
 
@@ -161,6 +168,7 @@ interface RessourceCounterProps {
   icon: React.ReactNode;
   width?: number;
   name: string;
+  timer?: string;
 }
 
 export function RessourceCounter({
@@ -169,6 +177,7 @@ export function RessourceCounter({
   icon,
   width = 191,
   name,
+  timer,
 }: RessourceCounterProps) {
   return (
     <div className="relative" x-id={`${name}CountInput`} id={`${name}Count`}>
@@ -202,6 +211,11 @@ export function RessourceCounter({
                   </>
                 )}
               </p>
+              {timer && (
+                <div className="absolute top-1/2 -translate-y-1/2 right-1 text-sm w-[40px]">
+                  <Timer name={timer} options={{ removeHours: true }} />
+                </div>
+              )}
             </div>
           </InnerBord>
         </CardIllustartion>
@@ -228,17 +242,7 @@ export function Header() {
         }
         name="xp"
       />
-      <RessourceCounter
-        amount={4}
-        max={5}
-        icon={
-          <img
-            src="/key.png"
-            className="absolute z-10 left-[3px] top-1/2 -translate-x-1/2 -translate-y-1/2 h-[32px] drop-shadow-[2px_1px_1px_black] rotate-[25deg] contrast-150"
-          />
-        }
-        name="keys"
-      />
+      <KeysOutput />
       <RessourceCounter
         amount={gold}
         icon={

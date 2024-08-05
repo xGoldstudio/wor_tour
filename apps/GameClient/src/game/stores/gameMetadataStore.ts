@@ -2,6 +2,7 @@ import { findCard } from "@/cards";
 import { create } from "zustand";
 import { CardType } from "@repo/lib";
 import { GameStateObjectConstructor } from "game_engine";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 
 export interface GameRewards {
   win: GameReward;
@@ -20,6 +21,7 @@ interface GameInterfaceStore {
   playerHp: number;
   opponentHp: number;
   rewards: GameRewards,
+  currentGameWorld: number;
   getInGameInitData: () => GameStateObjectConstructor;
   setIsInGame: (isInGame: boolean) => void;
   setInGameData: (
@@ -48,6 +50,7 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
       trophies: 0
     }
   },
+  currentGameWorld: 1,
   setInGameData: (
     playerCards: CardType[],
     opponentCards: CardType[],
@@ -55,7 +58,15 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
     opponentHp: number,
     gameRewards: GameRewards,
   ) => {
-    set({ playerCards, opponentCards, playerHp, opponentHp, isInGame: true, rewards: gameRewards });
+    set({
+      playerCards,
+      opponentCards,
+      playerHp,
+      opponentHp,
+      isInGame: true,
+      rewards: gameRewards,
+      currentGameWorld: usePlayerStore.getState().currentWorld,
+    });
   },
   getInGameInitData: () => ({
     playerDeck: [...get().playerCards.values()].map((card) => findCard(card.id, card.level)),

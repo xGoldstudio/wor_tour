@@ -1,9 +1,7 @@
 import { initPlayerStore } from "./playerStore/defaultData";
-import clientLoop from "../services/LoopService/clientLoopService";
 import { initShopStore } from "./shopStore/shopStore";
 import { initRewardStore } from "./rewardStore";
-import { dailyGoldService } from "../services/DailyGoldService/dailyGoldService";
-import { matchmakingService } from "../services/MatchmakingService/matchmakingService";
+import { clientLoop, dailyGoldService, keysService, matchmakingService } from "../services/inject";
 
 export function _warningResetPlayStore() {
 	console.log("All data has been initialized");
@@ -12,5 +10,6 @@ export function _warningResetPlayStore() {
 	initRewardStore();
 	dailyGoldService.reset();
 	matchmakingService.reset();
+	keysService.reset();
 	clientLoop.reset(); // This is the function that resets the clientLoop and trigger cycle once
 }
