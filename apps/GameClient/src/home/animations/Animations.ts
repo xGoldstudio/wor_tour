@@ -1,6 +1,7 @@
 import { inPx, numberWithCommas } from "@repo/lib";
 import { GlobalAnimation } from "../store/animationStore";
 import _ from "lodash";
+import gsap from "gsap";
 
 function addTrophy(container: HTMLElement) {
   const size = 32;

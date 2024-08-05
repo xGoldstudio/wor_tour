@@ -100,7 +100,6 @@ export function MatchmakingService() {
 				store.setState({ loserQueue: null });
 			}
 		}
-		useGameMetadataStore.getState().reset();
 	}
 
 	const LOSER_QUEUE_REDUCE_STRENGTH = 0.5;
