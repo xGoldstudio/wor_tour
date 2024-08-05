@@ -196,6 +196,7 @@ export function RessourceCounter({
                 <div
                   className="absolute top-0 left-0 h-full bg-blue-400 overflow-hidden"
                   style={{ width: `${(amount / max) * 100}%` }}
+                  id={`${name}CountProgressBar`}
                 />
               )}
               <p

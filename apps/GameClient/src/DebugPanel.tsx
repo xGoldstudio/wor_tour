@@ -39,6 +39,10 @@ export default function DebugPanel() {
     useRewardStore.getState().addReward({ type: "key" });
   }
 
+  function addKeysReward() {
+    useRewardStore.getState().addReward({ type: "keys" });
+  }
+
   const instantWinGame = () => {
     matchmakingService.startGame();
     const gameObject = new GameStateObject({ playerDeck: [], opponentDeck: [], playerHp: 1, opponentHp: 1 });
@@ -70,6 +74,7 @@ export default function DebugPanel() {
       <div className="grid grid-cols-2 gap-4">
       <DebugButton onClick={() => useRewardStore.getState().removeAllRewards()}>Clear rewards</DebugButton>
         <DebugButton onClick={() => addKeyReward()}>Key reward</DebugButton>
+        <DebugButton onClick={() => addKeysReward()}>Keys reward</DebugButton>
         <DebugButton onClick={instantWinGame}>Instant win game</DebugButton>
       </div>
       <p>Event Clock: </p>

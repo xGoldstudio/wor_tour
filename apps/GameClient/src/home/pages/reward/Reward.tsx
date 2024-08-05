@@ -7,6 +7,7 @@ import { Header } from "@/home/Home";
 import { useGSAP } from "@gsap/react";
 import ChestReward from "./ChestReward";
 import KeyReward from "./KeyReward";
+import KeysReward from "./KeysReward";
 
 function RewardSection({ children }: { children: React.ReactNode }) {
   const scope = useRef<HTMLDivElement>(null);
@@ -94,6 +95,11 @@ export function RewardBlockWithContext() {
       />
     )} else if (currentReward.type === "key") { return (
       <KeyReward
+        reward={currentReward}
+        removeCurrentReward={() => collectReward()}
+      />
+    )} else if (currentReward.type === "keys") { return (
+      <KeysReward
         reward={currentReward}
         removeCurrentReward={() => collectReward()}
       />

@@ -19,6 +19,7 @@ export * from './components/game/FpsTracker.ts';
 export * from './components/card/useGameSyncAnimation.tsx';
 export * from './lib/rxjsToZustand.ts';
 export * from './lib/lifecycle.ts';
+export { default as useSafeTimeout } from './lib/useSafeTimeout.ts';
 export * from "./lib/utils.ts";
 export * from './lib/transformLevelStatInlevels.ts';
 
