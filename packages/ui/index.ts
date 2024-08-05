@@ -2,6 +2,7 @@
 export { default as Button } from './components/Button.tsx';
 export { default as Box } from './components/Box.tsx';
 export { default as GoldAmount } from './components/GoldAmount.tsx';
+export { default as KeyAmount } from './components/KeyAmount.tsx';
 export { default as XpAmount } from './components/XpAmount.tsx';
 export { default as Badge } from './components/Badge.tsx';
 export { default as NumberSpan } from './components/NumberSpan.tsx';

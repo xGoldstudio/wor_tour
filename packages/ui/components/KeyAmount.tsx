@@ -1,17 +1,17 @@
 import { cn } from "../lib/utils";
 import NumberSpan from "./NumberSpan";
 
-interface GoldAmountProps {
+interface KeyAmountProps {
   amount: number;
   className?: string;
 }
 
-export default function GoldAmount({ amount, className }: GoldAmountProps) {
+export default function KetAmount({ amount, className }: KeyAmountProps) {
   return (
     <span className={cn("inline-block", className)}>
       <NumberSpan>{amount}</NumberSpan>
-      <span className="inline-block ml-1 relative bottom-[2px]">
-        <img src="/money.png" className="h-[22px] min-w-[22px] inline-block" />
+      <span className="inline-block relative bottom-[2px]">
+        <img src="/key.png" className="h-[22px] min-w-[22px] inline-block" />
       </span>
     </span>
   );

@@ -1,17 +1,22 @@
 import { useState } from "react";
 import useClientLoop from "./useClientLoop";
-import { formatTime } from "@repo/lib";
+import { formatTime, FormatTimeOptions } from "@repo/lib";
 
 interface TimerProps {
   name: string;
+  options?: FormatTimeOptions;
 }
 
-export default function Timer({ name }: TimerProps) {
-  const [secondsRemaining, setSecondsRemaining] = useState<number>(0); 
+export default function Timer({ name, options }: TimerProps) {
+  const [secondsRemaining, setSecondsRemaining] = useState<number | null>(0); 
 
   useClientLoop(name, (frames) => {
-    setSecondsRemaining(frames ?? 0);
+    setSecondsRemaining(frames);
   });
 
-  return <span>{formatTime(secondsRemaining)}</span>;
+  if (secondsRemaining === null) {
+    return null;
+  }
+
+  return <span>{formatTime(secondsRemaining, options)}</span>;
 }

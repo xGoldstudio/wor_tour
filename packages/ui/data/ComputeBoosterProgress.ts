@@ -36,6 +36,8 @@ export function getDistribution(luckImprove: number) {
 	return _.mapValues(lucks, (v) => v / total * 100);
 }
 
+export const worldBoosters = allWorlds.map(worldBooster);
+
 export const boosters: BoosterTypeDeclartion[] = [
 	{
 		name: "Classic refill",
@@ -50,7 +52,7 @@ export const boosters: BoosterTypeDeclartion[] = [
 			world: 1,
 		},
 	},
-	...(allWorlds.map(worldBooster)),
+	...worldBoosters,
 	...(allWorlds.map(rarityBooster)),
 ];
 

@@ -4,13 +4,13 @@ import { findCard } from "@/cards";
 import { CardType, getTargetStrength } from "@repo/lib";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import useGameMetadataStore, { GameReward } from "@/game/stores/gameMetadataStore";
-import { dailyGoldService } from "../DailyGoldService/dailyGoldService";
 import { Tier } from "@/home/store/tiers";
 import { GameStateObject } from "game_engine";
 import useAnimationStore from "@/home/store/animationStore";
 import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 import { persist } from "zustand/middleware";
 import { create } from "zustand";
+import { dailyGoldService, keysService } from "../inject";
 
 const MAX_TROPHIES_WIN = 35;
 const LOWEST_TROPHIES_WIN = 25;
@@ -22,7 +22,7 @@ interface LoserQueue {
 }
 
 // Need to be tested efficiently
-function MatchmakingService() {
+export function MatchmakingService() {
 	const store = create(persist(() => (
 		{
 			loserQueue: null as LoserQueue | null,
@@ -79,6 +79,9 @@ function MatchmakingService() {
 		const isWin = gameState.currentWinner === "player";
 		const reward = useGameMetadataStore.getState().rewards[isWin ? "win" : "lose"];
 		collectRewards(isWin, reward);
+		if (isWin) {
+			keysService.consumeKey(usePlayerStore.getState().currentWorld);
+		}
 		const loserQueue = store.getState().loserQueue;
 		if (usePlayerStore.getState().currentTier <= MINIMAL_LOSER_QUEUE_TIER) {
 			store.setState({ loserQueue: null });
@@ -97,6 +100,7 @@ function MatchmakingService() {
 				store.setState({ loserQueue: null });
 			}
 		}
+		useGameMetadataStore.getState().reset();
 	}
 
 	const LOSER_QUEUE_REDUCE_STRENGTH = 0.5;
@@ -142,8 +146,6 @@ function MatchmakingService() {
 
 	return { startGame, endGame, reset };
 }
-
-export const matchmakingService = MatchmakingService();
 
 function getHpFromDeck(deck: CardType[]) {
 	return Math.round(getDeckStrength(deck) * 100);

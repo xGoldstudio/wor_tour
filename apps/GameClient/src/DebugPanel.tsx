@@ -5,9 +5,10 @@ import usePlayerStore, {
   CollectionCard,
 } from "./home/store/playerStore/playerStore";
 import { _warningResetPlayStore } from "./home/store/initAllClientData";
-import clientLoop from "./home/services/LoopService/clientLoopService";
 import useDataStore from "./cards/DataStore";
 import useRewardStore from "./home/store/rewardStore";
+import { clientLoop, matchmakingService } from "./home/services/inject";
+import { GameStateObject } from "game_engine";
 
 export default function DebugPanel() {
   const { addGold, setTrophies } = usePlayerStore((state) => ({
@@ -38,6 +39,13 @@ export default function DebugPanel() {
     useRewardStore.getState().addReward({ type: "key" });
   }
 
+  const instantWinGame = () => {
+    matchmakingService.startGame();
+    const gameObject = new GameStateObject({ playerDeck: [], opponentDeck: [], playerHp: 1, opponentHp: 1 });
+    gameObject.setGameOver(true);
+    matchmakingService.endGame(gameObject);
+  };
+
   return (
     <div className="fixed right-2 top-2 border-2 border-white text-white px-4 py-2 flex flex-col gap-4">
       <div className="flex gap-4">
@@ -60,10 +68,21 @@ export default function DebugPanel() {
       </div>
       <p>Rewards</p>
       <div className="grid grid-cols-2 gap-4">
+      <DebugButton onClick={() => useRewardStore.getState().removeAllRewards()}>Clear rewards</DebugButton>
         <DebugButton onClick={() => addKeyReward()}>Key reward</DebugButton>
+        <DebugButton onClick={instantWinGame}>Instant win game</DebugButton>
       </div>
       <p>Event Clock: </p>
       <div className="grid grid-cols-2 gap-4">
+        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(1)}>
+          Fast Forward 1 second
+        </DebugButton>
+        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(10)}>
+          Fast Forward 10 seconds
+        </DebugButton>
+        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(60)}>
+          Fast Forward 1 minutes
+        </DebugButton>
         <DebugButton onClick={() => clientLoop._unsafeManipulateClock(10 * 60)}>
           Fast Forward 10 minutes
         </DebugButton>

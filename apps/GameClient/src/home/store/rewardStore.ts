@@ -35,6 +35,7 @@ interface RewardStore {
   rewards: RewardType[];
   addReward: (reward: RewardType) => void;
   collectReward: () => RewardType;
+  removeAllRewards: () => void;
 }
 
 const useRewardStore = create(persist<RewardStore>((set, get) => ({
@@ -46,6 +47,7 @@ const useRewardStore = create(persist<RewardStore>((set, get) => ({
     set({ rewards });
     return reward;
   },
+  removeAllRewards: () => set({ rewards: [] }),
 }), { name: "reward-store" }));
 
 export default useRewardStore;
