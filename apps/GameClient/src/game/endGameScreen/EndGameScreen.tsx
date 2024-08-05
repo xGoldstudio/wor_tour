@@ -7,8 +7,8 @@ import endGameScreenAnimation from "./animation";
 import { CurrentWinner } from "game_engine";
 import { useGSAP } from "@gsap/react";
 import { textureByRarity } from "@repo/lib";
-import { keysService } from "@/home/services/inject";
 import ShinyRotator from "./ShinyRotator";
+import { keysService } from "@/services/inject";
 
 export default function EndGameScreen() {
   const [currentWinner, setCurrentWinner] = useState<CurrentWinner>(null);

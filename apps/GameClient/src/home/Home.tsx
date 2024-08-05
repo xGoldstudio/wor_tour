@@ -16,8 +16,8 @@ import {
 import { cn } from "@repo/ui";
 import { numberWithCommas } from "@repo/lib";
 import KeysOutput from "./ui/KeysOutput";
-import Timer from "./services/LoopService/Timer";
 import LevelModal from "./levelModal/LevelModal";
+import Timer from "@/services/LoopService/Timer";
 
 type Tabs = "home" | "deck" | "shop";
 

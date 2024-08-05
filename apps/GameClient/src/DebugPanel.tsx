@@ -7,8 +7,8 @@ import usePlayerStore, {
 import { _warningResetPlayStore } from "./home/store/initAllClientData";
 import useDataStore from "./cards/DataStore";
 import useRewardStore from "./home/store/rewardStore";
-import { clientLoop, matchmakingService } from "./home/services/inject";
 import { GameStateObject } from "game_engine";
+import { clientLoop, matchmakingService } from "./services/inject";
 
 export default function DebugPanel() {
   const { addGold, setTrophies } = usePlayerStore((state) => ({

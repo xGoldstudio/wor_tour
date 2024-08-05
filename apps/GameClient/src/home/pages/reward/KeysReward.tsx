@@ -1,7 +1,7 @@
 import { startContainerAnimation } from "@/home/animations/Animations";
-import { keysService } from "@/home/services/inject";
-import { MAX_KEYS } from "@/home/services/KeysService/KeysService";
 import { KeysRewardType } from "@/home/store/rewardStore";
+import { keysService } from "@/services/inject";
+import { MAX_KEYS } from "@/services/KeysService/KeysService";
 import { useGSAP } from "@gsap/react";
 import { useSafeTimeout } from "@repo/ui";
 import gsap from "gsap";

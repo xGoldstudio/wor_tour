@@ -1,6 +1,6 @@
+import { MAX_KEYS } from "@/services/KeysService/KeysService";
 import { RessourceCounter } from "../Home";
-import { keysService } from "../services/inject";
-import { MAX_KEYS } from "../services/KeysService/KeysService";
+import { keysService } from "@/services/inject";
 
 export default function KeysOutput() {
   const keys = keysService.watchKeys();

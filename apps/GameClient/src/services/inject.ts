@@ -1,10 +1,10 @@
 import { getSecondsFromDays } from "@repo/lib";
-import { CARDS_ROTATION_TIME, setCardsToBuy } from "../store/shopStore/shopStore";
 import { KeysService } from "./KeysService/KeysService";
 import { DailyGoldService } from "./DailyGoldService/dailyGoldService";
 import { CallbackService } from "./CallbackService/callbackService";
 import { MatchmakingService } from "./MatchmakingService/matchmakingService";
 import { ClientLoop } from "./LoopService/clientLoopService";
+import { CARDS_ROTATION_TIME, setCardsToBuy } from "@/home/store/shopStore/shopStore";
 
 export const keysService = KeysService();
 

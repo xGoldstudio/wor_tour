@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
-import cardForTest from "../../../game/stores/cardsForTest";
 import buildDeck, { getDeckStrength } from "./buildDeck";
 import { NUMBER_OF_CARD_IN_DECK } from "@/const";
+import cardForTest from "@/game/stores/cardsForTest";
 
 describe("base state", () => {
 	let lowestStrengthDeck = 0;
