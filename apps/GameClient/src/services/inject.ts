@@ -5,6 +5,7 @@ import { CallbackService } from "./CallbackService/callbackService";
 import { MatchmakingService } from "./MatchmakingService/matchmakingService";
 import { ClientLoop } from "./LoopService/clientLoopService";
 import { CARDS_ROTATION_TIME, setCardsToBuy } from "@/home/store/shopStore/shopStore";
+import ExperienceService from "./experienceService/experienceService";
 
 export const keysService = KeysService();
 
@@ -24,3 +25,5 @@ export const clientLoop = ClientLoop([
 	{ name: "dailyGold", callbackName: "resetDailyGold", duration: getSecondsFromDays(1) }
 ]);
 clientLoop.start();
+
+export const experienceService = ExperienceService();

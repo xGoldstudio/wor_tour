@@ -128,3 +128,7 @@ export function getSecondsFromDays(days: 1) {
 export function isNotEmpty<T>(array: T[]) {
   return array.length > 0;
 }
+
+export function getFirst<T>(array: T[]) {
+  return array[0];
+}

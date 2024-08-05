@@ -7,8 +7,14 @@ import RewardBox from "@/game/endGameScreen/RewardBox";
 import ShinyRotator from "@/game/endGameScreen/ShinyRotator";
 import gsap from "gsap";
 import { ArrowBigRight } from "lucide-react";
+import { ExperienceReward } from "@/services/experienceService/experienceService";
 
-export default function LevelModal() {
+interface ExperienceModalProps {
+  reward: ExperienceReward;
+  onContinue: () => void;
+}
+
+export default function ExperienceModal({ reward, onContinue }: ExperienceModalProps) {
   const boxRef = useRef<HTMLDivElement>(null);
   const shinyRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -97,8 +103,6 @@ export default function LevelModal() {
     }
   );
 
-  function onContinue() {}
-
   return (
     <div className="w-screen h-full flex justify-center fixed top-0 left-0 z-30">
       <div className="w-[700px] h-full overflow-hidden flex flex-col items-center relative">
@@ -124,7 +128,7 @@ export default function LevelModal() {
               }}
             />
             <div className="flex gap-6 items-center relative" ref={rewardsRef}>
-              <RewardBox amount={1000}>
+              <RewardBox amount={reward.gold}>
                 <img src="/money.png" className="h-[64px]" />
               </RewardBox>
               <RewardBox amount={"+max"}>
@@ -132,11 +136,11 @@ export default function LevelModal() {
               </RewardBox>
             </div>
             <div className="flex gap-1 items-center relative" ref={levelRef}>
-              <Badge value={String(1)} rarity="common" />
+              <Badge value={String(reward.previousLevel)} rarity="common" />
               <ArrowBigRight size={24} fill="black" />
               <ArrowBigRight size={24} fill="black" />
               <ArrowBigRight size={24} fill="black" />
-              <Badge value={String(2)} rarity="rare" />
+              <Badge value={String(reward.nextLevel)} rarity="rare" />
             </div>
           </div>
           <Button action={onContinue} forwardRef={buttonRef}>
