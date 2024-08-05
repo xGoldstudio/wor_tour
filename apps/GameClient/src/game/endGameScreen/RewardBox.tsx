@@ -2,7 +2,7 @@ import { cn, Cover } from "@repo/ui";
 
 interface RewardBoxProps {
   children: React.ReactNode;
-  amount: number;
+  amount: number | string;
 }
 
 export default function RewardBox({ children, amount }: RewardBoxProps) {
@@ -16,7 +16,7 @@ export default function RewardBox({ children, amount }: RewardBoxProps) {
       </div>
       <div className="absolute w-min bottom-2 z-10 px-2 rounded-md overflow-hidden bg-slate-50 left-1/2 -translate-x-1/2">
         <Cover cardRarity="rare" />
-        <p className="relative font-bold text-center">{amount > 0 ? "+" :""}{amount}</p>
+        <p className="relative font-bold text-center">{typeof amount === "number" && amount > 0 ? "+" : ""}{amount}</p>
       </div>
     </div>
   );

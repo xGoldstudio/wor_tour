@@ -8,7 +8,7 @@ import useGameInterface from "../stores/gameInterfaceStore";
 import useGameCanvas from "./animation/useGameCanvas";
 import { ClockReturn, EventType } from "game_engine";
 import useGameMetadataStore from "../stores/gameMetadataStore";
-import { matchmakingService } from "@/home/services/inject";
+import { matchmakingService } from "@/services/inject";
 
 export const FRAME_TIME = 10;
 

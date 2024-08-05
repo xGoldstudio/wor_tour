@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type RewardType = CardRewardType | GoldRewardType | ChestRewardType | KeyRewardType;
+export type RewardType = CardRewardType | GoldRewardType | ChestRewardType | KeyRewardType | KeysRewardType;
 
 export interface CardRewardType {
   type: "card";
@@ -13,6 +13,10 @@ export interface CardRewardType {
 export interface GoldRewardType {
   type: "gold";
   amount: number;
+}
+
+export interface KeysRewardType {
+  type: "keys";
 }
 
 export interface ChestRewardType {

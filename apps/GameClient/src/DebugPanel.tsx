@@ -7,8 +7,8 @@ import usePlayerStore, {
 import { _warningResetPlayStore } from "./home/store/initAllClientData";
 import useDataStore from "./cards/DataStore";
 import useRewardStore from "./home/store/rewardStore";
-import { clientLoop, matchmakingService } from "./home/services/inject";
 import { GameStateObject } from "game_engine";
+import { clientLoop, experienceService, matchmakingService } from "./services/inject";
 
 export default function DebugPanel() {
   const { addGold, setTrophies } = usePlayerStore((state) => ({
@@ -39,6 +39,10 @@ export default function DebugPanel() {
     useRewardStore.getState().addReward({ type: "key" });
   }
 
+  function addKeysReward() {
+    useRewardStore.getState().addReward({ type: "keys" });
+  }
+
   const instantWinGame = () => {
     matchmakingService.startGame();
     const gameObject = new GameStateObject({ playerDeck: [], opponentDeck: [], playerHp: 1, opponentHp: 1 });
@@ -66,10 +70,15 @@ export default function DebugPanel() {
         <DebugButton onClick={() => setTrophies(-1)}>-1</DebugButton>
         <DebugButton onClick={() => setTrophies(100)}>+100</DebugButton>
       </div>
+      <p>Experience</p>
+      <div className="grid grid-cols-2 gap-4">
+        <DebugButton onClick={() => experienceService.gainExperience()}>Gain experience</DebugButton>
+      </div>
       <p>Rewards</p>
       <div className="grid grid-cols-2 gap-4">
-      <DebugButton onClick={() => useRewardStore.getState().removeAllRewards()}>Clear rewards</DebugButton>
+        <DebugButton onClick={() => useRewardStore.getState().removeAllRewards()}>Clear rewards</DebugButton>
         <DebugButton onClick={() => addKeyReward()}>Key reward</DebugButton>
+        <DebugButton onClick={() => addKeysReward()}>Keys reward</DebugButton>
         <DebugButton onClick={instantWinGame}>Instant win game</DebugButton>
       </div>
       <p>Event Clock: </p>

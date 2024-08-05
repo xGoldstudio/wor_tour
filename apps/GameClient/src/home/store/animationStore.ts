@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import usePlayerStore from "./playerStore/playerStore";
 
-type GolbalAnimationType = "money" | "trophy";
+type GolbalAnimationType = "money" | "trophy" | "keys";
 
 export interface GlobalAnimation {
 	type: GolbalAnimationType;

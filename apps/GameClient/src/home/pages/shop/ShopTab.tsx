@@ -4,7 +4,7 @@ import useShopStore from "@/home/store/shopStore/shopStore";
 import Ribbon from "@/home/ui/Ribbon";
 import { Booster } from "./Booster";
 import { useBoosterStore } from "@/home/store/boosterStore";
-import Timer from "@/home/services/LoopService/Timer";
+import Timer from "@/services/LoopService/Timer";
 
 export default function ShopTab() {
   const boosters = useBoosterStore((state) => state.boosters);

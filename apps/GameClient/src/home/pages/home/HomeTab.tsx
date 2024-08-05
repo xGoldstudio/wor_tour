@@ -7,8 +7,8 @@ import ProfileModal from "./modals/ProfileModal";
 import AnimationContainer from "@/home/animations/AnimationContainer";
 import WorldIllustration from "./WorldIllustration";
 import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
-import Timer from "@/home/services/LoopService/Timer";
-import { dailyGoldService, matchmakingService } from "@/home/services/inject";
+import { dailyGoldService, matchmakingService } from "@/services/inject";
+import Timer from "@/services/LoopService/Timer";
 
 export default function HomeTab() {
   const { trophies } = usePlayerStore((state) => ({

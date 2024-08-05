@@ -56,7 +56,16 @@ export function KeysService() {
 		return useRewardStore.getState().rewards.some((reward) => reward.type === "key");
 	}
 
+	function setMax() {
+		store.setState({ keys: MAX_KEYS });
+		clientLoop.removeTimer("earnKey");
+	}
+
 	const watchKeys = () => store((state) => state.keys);
+
+	function getKeys() {
+		return store.getState().keys;
+	}
 
 	return {
 		addKey,
@@ -64,5 +73,7 @@ export function KeysService() {
 		consumeKey,
 		watchKeys,
 		hasKeyRewardWaiting,
+		setMax,
+		getKeys,
 	}
 }

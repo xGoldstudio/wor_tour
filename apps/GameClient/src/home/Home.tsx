@@ -5,18 +5,19 @@ import { DeckInterface as DeckTab } from "./pages/deck/DeckInterface";
 import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore/playerStore";
-import Badge from "../../../../packages/ui/components/Badge";
 import {
   Borders,
   CardIllustartion,
   Cover,
   InnerBord,
-  NumberSpan,
+  NumberSpan
 } from "@repo/ui";
 import { cn } from "@repo/ui";
 import { numberWithCommas } from "@repo/lib";
 import KeysOutput from "./ui/KeysOutput";
-import Timer from "./services/LoopService/Timer";
+import Timer from "@/services/LoopService/Timer";
+import ExperienceModalWatcher from "./experienceModal/ExperienceModalWatcher";
+import ExperienceOutput from "./ui/ExperienceOutput";
 
 type Tabs = "home" | "deck" | "shop";
 
@@ -40,6 +41,7 @@ export default function Home() {
       >
         <RewardBlockWithContext />
         <HomeBg />
+        <ExperienceModalWatcher />
         <div className="w-full h-full relative flex flex-col items-center justify-between">
           <Header />
           <div
@@ -194,6 +196,7 @@ export function RessourceCounter({
                 <div
                   className="absolute top-0 left-0 h-full bg-blue-400 overflow-hidden"
                   style={{ width: `${(amount / max) * 100}%` }}
+                  id={`${name}CountProgressBar`}
                 />
               )}
               <p
@@ -231,17 +234,7 @@ export function Header() {
 
   return (
     <div className="flex gap-4 px-8 py-4 w-full justify-center">
-      <RessourceCounter
-        amount={26}
-        max={50}
-        icon={
-          <Badge
-            className="absolute z-10 left-0 top-1/2 -translate-x-1/2 -translate-y-1/2"
-            value="1"
-          />
-        }
-        name="xp"
-      />
+      <ExperienceOutput />
       <KeysOutput />
       <RessourceCounter
         amount={gold}

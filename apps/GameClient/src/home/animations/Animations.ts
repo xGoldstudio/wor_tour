@@ -3,30 +3,23 @@ import { GlobalAnimation } from "../store/animationStore";
 import _ from "lodash";
 import gsap from "gsap";
 
-function addTrophy(container: HTMLElement) {
-  const size = 32;
-  const trophy = document.createElement("img");
-  trophy.src = "/trophy.png";
-  trophy.style.position = "absolute";
-  trophy.style.left = "0";
-  trophy.style.top = "0";
-  trophy.style.width = inPx(size);
-  trophy.style.zIndex = "100";
-  container.appendChild(trophy);
-  return trophy;
-}
+const addTrophy = createImageParticule("/trophy.png");
+const addMoney = createImageParticule("/money.png");
+const addKey = createImageParticule("/key.png");
 
-function addMoney(container: HTMLElement) {
-  const size = 32;
-  const money = document.createElement("img");
-  money.src = "/money.png";
-  money.style.position = "absolute";
-  money.style.left = "0";
-  money.style.top = "0";
-  money.style.width = inPx(size);
-  money.style.zIndex = "100";
-  container.appendChild(money);
-  return money;
+function createImageParticule(src: string) {
+  return (container: HTMLElement) => {
+    const size = 32;
+    const trophy = document.createElement("img");
+    trophy.src = src;
+    trophy.style.position = "absolute";
+    trophy.style.left = "0";
+    trophy.style.top = "0";
+    trophy.style.width = inPx(size);
+    trophy.style.zIndex = "100";
+    container.appendChild(trophy);
+    return trophy;
+  }
 }
 
 function animateTrophy(
@@ -88,6 +81,7 @@ function orchestrateTrophyAnimation({
   inputValueQuerySelector,
   createElement,
   delay,
+  progressBarQuerySelector,
 }: {
   origin: HTMLElement;
   target: HTMLElement;
@@ -98,6 +92,7 @@ function orchestrateTrophyAnimation({
   inputValueQuerySelector: string;
   createElement: (element: HTMLElement) => HTMLElement;
   delay: number;
+  progressBarQuerySelector?: string;
 }) {
   const elements: HTMLElement[] = [];
   const originRect = origin.getBoundingClientRect();
@@ -107,16 +102,19 @@ function orchestrateTrophyAnimation({
   const y = originRect.top + originRect.height / 2 - halfSize;
   const targetX = targetRect.left + targetRect.width / 2 - halfSize;
   const targetY = targetRect.top + targetRect.height / 2 - halfSize;
-  const tl = gsap.timeline({ onComplete: () => {
-    animationObject.onEnd?.();
-    elements.forEach((elt) => {
-      container.removeChild(elt);
-    });
-  } }).delay(delay);
+  const tl = gsap.timeline({
+    onComplete: () => {
+      animationObject.onEnd?.();
+      elements.forEach((elt) => {
+        container.removeChild(elt);
+      });
+    }
+  }).delay(delay);
   const amountOfParticles = Math.min(10, animationObject.amount);
+  const lowAmountOfParticles = amountOfParticles <= 5;
   _.range(amountOfParticles).forEach((i) => {
     const elt = createElement(container);
-    animateTrophy(tl, elt, x, y, targetX, targetY, i)
+    animateTrophy(tl, elt, x, y, targetX, targetY, lowAmountOfParticles ? (i*2) : i)
     elements.push(elt);
   });
   const trophyCount = document.getElementById(layoutId);
@@ -141,8 +139,9 @@ function orchestrateTrophyAnimation({
     inputTrophies.innerHTML = numberWithCommas(animationObject.previousValue);
     const numberOfIncrements = Math.min(
       5,
-      Math.max(1, Math.floor(amountOfParticles / 2))
+      amountOfParticles,
     );
+    const bar = progressBarQuerySelector ? trophyCountClone.querySelector(progressBarQuerySelector) as HTMLElement : null;
     _.range(numberOfIncrements).forEach((i) => {
       tl.to(
         input,
@@ -152,12 +151,14 @@ function orchestrateTrophyAnimation({
           ease: "power1.in",
           delay: 0.6 + i * 0.2,
           onComplete: () => {
-            inputTrophies.innerHTML = numberWithCommas(
-              Math.round(
-                animationObject.previousValue +
-                  (animationObject.amount / numberOfIncrements) * (i + 1)
-              )
+            const value = Math.round(
+              animationObject.previousValue +
+              (animationObject.amount / numberOfIncrements) * (i + 1)
             );
+            inputTrophies.innerHTML = numberWithCommas(value);
+            if (bar) {
+              bar.style.width = `${(value / (animationObject.previousValue + animationObject.amount)) * 100}%`;
+            }
           },
         },
         "second"
@@ -221,6 +222,24 @@ export function startContainerAnimation({
         inputValueQuerySelector: '[x-id="trophyCountInputTrophies"]',
         createElement: addTrophy,
         delay,
+      });
+    }
+  }
+  if (animationObject.type === "keys") {
+    const target = document.getElementById("keysCountIcon");
+
+    if (animationObject.originRef && target) {
+      orchestrateTrophyAnimation({
+        origin: animationObject.originRef,
+        target,
+        container,
+        animationObject,
+        layoutId: "keysCount",
+        inputQuerySelector: '[x-id="keysCountInput"]',
+        inputValueQuerySelector: '[x-id="keysCountInputValue"]',
+        createElement: addKey,
+        delay,
+        progressBarQuerySelector: "#keysCountProgressBar",
       });
     }
   }

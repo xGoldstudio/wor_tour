@@ -87,8 +87,13 @@ export function ClientLoop(cycles: CycleProps[]) {
 		saveState();
 	}
 
-	function removeTimer(name: string) {
+	function internalRemoveTimer(name: string) {
+		notifyDeletedTimer(name);
 		delete timersMap[name];
+	}
+
+	function removeTimer(name: string) {
+		internalRemoveTimer(name);
 		saveState();
 	}
 
@@ -122,9 +127,8 @@ export function ClientLoop(cycles: CycleProps[]) {
 					}
 					timer.remainingFrames = remainingFrames;
 				} else {
-					notifyDeletedTimer(timerName);
 					callbackService.call(timer.callbackName);
-					delete timersMap[timerName];
+					internalRemoveTimer(timerName);
 					return;
 				}
 			}
