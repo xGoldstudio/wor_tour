@@ -10,7 +10,7 @@ import useAnimationStore from "@/home/store/animationStore";
 import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 import { persist } from "zustand/middleware";
 import { create } from "zustand";
-import { dailyGoldService, keysService } from "../inject";
+import { dailyGoldService, experienceService, keysService } from "../inject";
 
 const MAX_TROPHIES_WIN = 35;
 const LOWEST_TROPHIES_WIN = 25;
@@ -81,6 +81,7 @@ export function MatchmakingService() {
 		collectRewards(isWin, reward);
 		if (isWin) {
 			keysService.consumeKey(usePlayerStore.getState().currentWorld);
+			experienceService.gainExperience();
 		}
 		const loserQueue = store.getState().loserQueue;
 		if (usePlayerStore.getState().currentTier <= MINIMAL_LOSER_QUEUE_TIER) {
