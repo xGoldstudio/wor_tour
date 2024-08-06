@@ -13,7 +13,7 @@ interface EndGameScreenProps {
   isWinner: boolean;
 }
 
-export default function EndGameScreen({ isWinner }: EndGameScreenProps) {
+export default function EndGameModal({ isWinner }: EndGameScreenProps) {
   const { reset: resetMetadata, rewards } = useGameMetadataStore((state) => ({
     reset: state.reset,
     rewards: state.rewards[isWinner ? "win" : "lose"],

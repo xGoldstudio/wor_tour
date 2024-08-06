@@ -3,7 +3,7 @@ import { baseCard, getInstanceId, initTest } from "./common";
 import { expect, test, vi, describe } from 'vitest';
 
 test("CRUDS operations on states", () => {
-	const { clock, state } = initTest({});
+	const { clock, state } = initTest({ skipStartGame: true});
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
@@ -38,7 +38,7 @@ test("CRUDS operations on states", () => {
 });
 
 describe("trigger", () => {
-	const { clock, state } = initTest({});
+	const { clock, state } = initTest({ skipStartGame: true });
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
@@ -131,7 +131,7 @@ describe("trigger", () => {
 test("Trigger: OnPlacement", () => {
 	const card = baseCard;
 	card.states = [{ type: "dummy", value: 2, trigger: "onPlacement", target: "selfCard" }];
-	const { clock, state } = initTest({ gameData: { playerDeck: [card] } });
+	const { clock, state } = initTest({ gameData: { playerDeck: [card] }, skipStartGame: true });
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	vi.spyOn(CardStatesData["dummy"], "action").mockImplementation((props) => {

@@ -2,7 +2,7 @@ import { defaultTestHp, drawPlaceCard, findStateByType, getInstanceId, initTest,
 import { describe, expect, test } from 'vitest';
 
 describe("bleeding state", () => {
-	const { clock, state } = initTest({});
+	const { clock, state } = initTest({ skipStartGame: true });
 	drawPlaceCard(clock, true, 0);
 	drawPlaceCard(clock, false, 0);
 	clock.nextTick();

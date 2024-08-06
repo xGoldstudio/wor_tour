@@ -3,7 +3,7 @@ import { getInstanceId, initTest } from "./common";
 import { expect, test } from 'vitest';
 
 test("start damage to card (animation placeholder)", () => {
-	const { clock, state } = initTest({});
+	const { clock, state } = initTest({ skipStartGame: true });
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
@@ -36,7 +36,7 @@ test("start damage to card (animation placeholder)", () => {
 });
 
 test("start damage to card (animation placeholder)", () => {
-	const { clock, state } = initTest({});
+	const { clock, state } = initTest({ skipStartGame : true });
 	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();

@@ -28,13 +28,14 @@ export const baseCard: CardType = {
 
 export const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common" }));
 
-export function initTest({ gameData, sideEffectOnEvent }: {
+export function initTest({ gameData, sideEffectOnEvent, skipStartGame }: {
 	gameData?: Partial<GameStateObjectConstructor>,
 	sideEffectOnEvent?: ({ state, clock, event }: {
 		state: GameStateObject;
 		clock: ClockReturn<EventType>;
 		event: EventType;
-	}) => void
+	}) => void,
+	skipStartGame?: boolean,
 }) {
 	const state = new GameStateObject({
 		playerDeck: gameData?.playerDeck ?? deck,
@@ -48,6 +49,9 @@ export function initTest({ gameData, sideEffectOnEvent }: {
 			sideEffectOnEvent?.({ state, clock, event });
 		}
 	);
+	if (skipStartGame) {
+		clock.triggerEvent({ type: "startGame" });
+	}
 	return { state, clock };
 }
 

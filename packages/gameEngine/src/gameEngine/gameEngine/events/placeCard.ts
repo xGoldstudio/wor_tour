@@ -4,6 +4,9 @@ import _ from "lodash";
 import { triggerStates } from "./cardAttacking";
 
 export default function placeCardEvent({ event, gameState, clock }: ComputeEventProps<PlaceCardEvent>) {
+	if (!gameState.isStarted) {
+		return;
+	}
 	const card = event.isPlayer
 	? gameState.playerHand[event.cardInHandPosition]
 	: gameState.opponentHand[event.cardInHandPosition];

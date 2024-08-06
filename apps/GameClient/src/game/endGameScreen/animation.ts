@@ -28,8 +28,8 @@ export default function endGameScreenAnimation({
   const tl = gsap.timeline();
   tl.fromTo(
     boxRef,
-    { x: -500, opacity: 0 },
-    { x: 0, opacity: 1, duration: 0.4 },
+    { scale: 0, opacity: 0 },
+    { scale: 1, opacity: 1, duration: 0.4 },
     "appear"
   );
   if (currentLevel < targetLevel) {

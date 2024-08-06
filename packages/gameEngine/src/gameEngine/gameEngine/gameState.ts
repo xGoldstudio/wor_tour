@@ -302,4 +302,7 @@ export class GameStateObject {
 	getManaSpeed(isPlayer: boolean) {
 		return isPlayer ? this.playerManaSpeed : this.opponentManaSpeed;
 	}
+	isPlayerWinner() {
+		return this.currentWinner === "player";
+	}
 }

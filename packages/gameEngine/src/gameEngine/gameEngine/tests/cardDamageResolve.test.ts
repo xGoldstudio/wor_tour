@@ -28,6 +28,7 @@ test("damage and kill player card", () => {
 	const clock = Clock<EventType>(
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
+	clock.triggerEvent({ type: "startGame" });
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
@@ -65,6 +66,7 @@ test("damage and kill opponent card", () => {
 	const clock = Clock<EventType>(
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
+	clock.triggerEvent({ type: "startGame" });
 	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();

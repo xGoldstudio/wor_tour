@@ -19,6 +19,7 @@ import {
   CardStartAttackingEvent,
   EventType,
   FRAME_TIME,
+  GameOverEvent,
   GameStateObject,
   HealCardEvent,
   InGameCardType,
@@ -133,34 +134,35 @@ function GameCard({
       return event.position === position && event.isPlayer === isPlayerCard;
     },
   });
+  function cardDestroyed() {
+    if (!cardRef.current) {
+      return;
+    }
+    triggerAttackAnimation({
+      replace: true,
+      duration: 50,
+      computeStyle: animationTimeline(50)
+        // y is the current translation y of the ref
+        .add(
+          cardRef.current,
+          { opacity: 100, x: 0, y: getTranslateY(cardRef.current) },
+          [
+            { values: { opacity: 75, x: 10, y: 0 }, to: 12 },
+            { values: { opacity: 50, x: -10, y: 0 }, to: 24 },
+            { values: { opacity: 25, x: 10, y: 0 }, to: 36 },
+            { values: { opacity: 0, x: 0, y: 0 } },
+          ]
+        ).progress,
+      onEnd: () => {
+        if (cardRef.current) {
+          setIsShown(false);
+        }
+      },
+    });
+  }
   useGameEventListener({
     type: "cardDestroyed",
-    action: () => {
-      if (!cardRef.current) {
-        return;
-      }
-      triggerAttackAnimation({
-        replace: true,
-        duration: 50,
-        computeStyle: animationTimeline(50)
-          // y is the current translation y of the ref
-          .add(
-            cardRef.current,
-            { opacity: 100, x: 0, y: getTranslateY(cardRef.current) },
-            [
-              { values: { opacity: 75, x: 10, y: 0 }, to: 12 },
-              { values: { opacity: 50, x: -10, y: 0 }, to: 24 },
-              { values: { opacity: 25, x: 10, y: 0 }, to: 36 },
-              { values: { opacity: 0, x: 0, y: 0 } },
-            ]
-          ).progress,
-        onEnd: () => {
-          if (cardRef.current) {
-            setIsShown(false);
-          }
-        },
-      });
-    },
+    action: cardDestroyed,
     filter: (e) => {
       const event = e as CardDestroyedEvent;
       return (
@@ -168,6 +170,10 @@ function GameCard({
         event.initiator.cardPosition === position
       );
     },
+  });
+  useGameEventListener({
+    type: "gameOver",
+    action: (event) => (event as GameOverEvent).winnerIsPlayer !== isPlayerCard && cardDestroyed(),
   });
   useGameEventListener({
     type: "cardDamageResolve",

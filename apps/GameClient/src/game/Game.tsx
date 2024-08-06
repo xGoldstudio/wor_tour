@@ -1,5 +1,5 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
-import useGameEvents from "./gameBehavior/useGameEvents";
+import useRunGame from "./gameBehavior/useGameEvents";
 import GameDebugPanel from "./GameDebugPanel";
 import PlayerGUI from "./gui/PlayerGui";
 import FlashDamage from "./FlashDamage";
@@ -17,7 +17,7 @@ export default function Game() {
     isPlaying,
     runTicks,
     clock,
-  } = useGameEvents();
+  } = useRunGame();
 
   return (
     <div
