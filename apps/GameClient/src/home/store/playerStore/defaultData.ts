@@ -29,6 +29,8 @@ export const defaultPlayerStoreData = {
 	currentTier: 0,
 	tiers: tiers,
 	isInit: false,
+  currentMissingCards: [],
+  numberOfCardsInDeck: 8,
 }
 
 export function initPlayerStore() {

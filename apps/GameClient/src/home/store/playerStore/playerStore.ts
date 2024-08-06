@@ -3,7 +3,8 @@ import { Tier } from "../tiers";
 import { CardType } from "@repo/lib";
 import { persist } from "zustand/middleware";
 import { defaultPlayerStoreData } from "./defaultData";
-import { findCard } from "@/cards";
+import { findCard, getCardFromLevel, getCardStats } from "@/cards";
+import useDataStore from "@/cards/DataStore";
 
 export interface CollectionCard {
   id: number;
@@ -22,16 +23,25 @@ interface PlayerStore {
   tiers: Map<number, Tier>;
   isInit: boolean;
 
+  numberOfCardsInDeck: number;
+  currentMissingCards: number[];
+
   getCollection: () => CollectionCard[];
   getCollectionInfo: (id: number) => CollectionCard | undefined;
   getCompleteInfo: (id: number) => CardType & { isInDeck: boolean };
   getCollectionCompleteInfo: (
     collection: CollectionCard[]
   ) => (CardType & { isInDeck: boolean })[];
+  getCollectionNotInDeck: (
+    collection: CollectionCard[]
+  ) => (CardType & { isInDeck: boolean })[];
   removeCardFromDeck: (id: number) => void;
   addCardToDeck: (id: number) => void;
   isDeckFull: () => boolean;
   isPlayed: (cardId: number) => boolean;
+
+  getAllCardsLocked: () => (CardType & { isInDeck: boolean })[];
+  getTheLockPattern: (id: number) => number;
 
   addCardOrShardOrEvolve: (cardId: number) => void;
 
@@ -61,13 +71,51 @@ const usePlayerStore = create(
       }),
       getCollectionCompleteInfo: (collection: CollectionCard[]) =>
         collection.map((card) => get().getCompleteInfo(card.id)),
+      getCollectionNotInDeck: (collection: CollectionCard[]) =>
+        collection
+          .map((card) => get().getCompleteInfo(card.id))
+          .filter((card) => !get().deck.includes(card.id)),
+
 
       removeCardFromDeck: (id: number) =>
-        set((state) => ({ deck: state.deck.filter((cardId) => cardId !== id) })),
+        set((state) => {
+          const index = state.deck.findIndex((cardId) => cardId === id);
+          state.deck.splice(index, 1, 0);
+
+          return {
+            deck: [...state.deck],
+            numberOfCardsInDeck: state.numberOfCardsInDeck - 1,
+          };
+        }),
       addCardToDeck: (id: number) =>
-        set((state) => ({ deck: [...state.deck, id] })),
-      isDeckFull: () => get().deck.length >= 8,
+        set((state) => {
+          state.deck.splice(
+            state.deck.findIndex((id) => id === 0),
+            1,
+            id
+          );
+          return {
+            deck: [...state.deck],
+            numberOfCardsInDeck: state.numberOfCardsInDeck + 1,
+          };
+        }),
+      isDeckFull: () => get().numberOfCardsInDeck >= 8,
       isPlayed: (cardId: number) => get().deck.includes(cardId),
+
+      getAllCardsLocked: () => {
+        return useDataStore
+          .getState()
+          .cards.filter((card) => {
+            return !get().collection.has(card.id);
+          })
+          .map((card) => ({ ...getCardFromLevel(card, 1), isInDeck: false }));
+      },
+      getTheLockPattern: (id: number) => {
+        const card = getCardStats(id);
+        if (card.world > get().currentWorld) return card.world;
+        else return 0;
+      },
+
 
       addCardOrShardOrEvolve: (cardId: number) => {
         const collectionCard = get().getCollectionInfo(cardId);
@@ -127,6 +175,8 @@ const usePlayerStore = create(
       currentTier: state.currentTier,
       tiers: Array.from(state.tiers.entries()),
       isInit: state.isInit,
+      numberOfCardsInDeck: state.numberOfCardsInDeck,
+      currentMissingCards: state.currentMissingCards,
     }),
     merge: (persisted, current) => {
       const persistedData = persisted as PersistedDataPlayerStore;
