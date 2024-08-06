@@ -2,6 +2,7 @@
 export { default as Button } from './components/Button.tsx';
 export { default as Box } from './components/Box.tsx';
 export { default as GoldAmount } from './components/GoldAmount.tsx';
+export { default as KeyAmount } from './components/KeyAmount.tsx';
 export { default as XpAmount } from './components/XpAmount.tsx';
 export { default as Badge } from './components/Badge.tsx';
 export { default as NumberSpan } from './components/NumberSpan.tsx';
@@ -18,6 +19,7 @@ export * from './components/game/FpsTracker.ts';
 export * from './components/card/useGameSyncAnimation.tsx';
 export * from './lib/rxjsToZustand.ts';
 export * from './lib/lifecycle.ts';
+export { default as useSafeTimeout } from './lib/useSafeTimeout.ts';
 export * from "./lib/utils.ts";
 export * from './lib/transformLevelStatInlevels.ts';
 

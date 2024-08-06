@@ -1,4 +1,4 @@
-import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, StartEarningManaEvent, SetManaIncreaseSpeed, StartGameSequence, StartGameEvent, RemoveStateEvent, TriggerStateEvent, AddStateEvent, IncreaseStateValueEvent, DecreaseStateValueEvent, EndEarningManaEvent } from '../../types/eventType';
+import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, StartEarningManaEvent, SetManaIncreaseSpeed, StartGameSequence, StartGameEvent, RemoveStateEvent, TriggerStateEvent, AddStateEvent, IncreaseStateValueEvent, DecreaseStateValueEvent, EndEarningManaEvent, ShuffleDeckEvent } from '../../types/eventType';
 import startEarningManaEvent from "./events/startEarningMana";
 import manaIncreaseEvent from './events/manaIncrease';
 import { GameStateObject } from './gameState';
@@ -24,6 +24,7 @@ import startGame from './events/startGame';
 import increaseStateValueEvent from './events/increaseStateValue';
 import decreaseStateValueEvent from './events/decreaseStateValue';
 import endEarningManaEvent from './events/endEarningMana';
+import shuffleDeckEvent from './events/shuffleDeck';
 
 export const FRAME_TIME = 10;
 
@@ -57,6 +58,7 @@ type EventTypeMap = {
 	removeState: RemoveStateEvent;
 	triggerState: TriggerStateEvent;
 	addState: AddStateEvent;
+	shuffleDeck: ShuffleDeckEvent;
 };
 
 type EventHandlers = {
@@ -87,6 +89,7 @@ const EventsCompute: EventHandlers = {
 	increaseStateValue: increaseStateValueEvent,
 	decreaseStateValue: decreaseStateValueEvent,
 	triggerState: triggerStateEvent,
+	shuffleDeck: shuffleDeckEvent,
 }
 
 // used in front and back and can be debugged easily (not pure mutate the state)

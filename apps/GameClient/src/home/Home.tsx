@@ -1,26 +1,33 @@
 import DebugPanel from "@/DebugPanel";
-import { numberWithCommas } from "@repo/lib";
-import { Borders, Button, CardIllustartion, cn, Cover, InnerBord, NumberSpan } from "@repo/ui";
-import { useState } from "react";
-import Badge from "../../../../packages/ui/components/Badge";
-import { useEditionMode } from "./pages/deck/context/UseEditionMode";
-import { DeckInterface as DeckTab } from "./pages/deck/DeckInterface";
 import HomeTab from "./pages/home/HomeTab";
-import { RewardBlockWithContext } from "./pages/reward/Reward";
+import { useState } from "react";
+import { DeckInterface as DeckTab } from "./pages/deck/DeckInterface";
 import ShopTab from "./pages/shop/ShopTab";
+import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore/playerStore";
-
-interface TabProps {
-  setCurrentTab?: (tab: Tabs) => void;
-}
+import {
+  Borders,
+  Button,
+  CardIllustartion,
+  Cover,
+  InnerBord,
+  NumberSpan,
+} from "@repo/ui";
+import { cn } from "@repo/ui";
+import { numberWithCommas } from "@repo/lib";
+import KeysOutput from "./ui/KeysOutput";
+import Timer from "@/services/LoopService/Timer";
+import ExperienceModalWatcher from "./experienceModal/ExperienceModalWatcher";
+import ExperienceOutput from "./ui/ExperienceOutput";
+import { useEditionMode } from "./pages/deck/context/UseEditionMode";
 
 export type Tabs = "home" | "deck" | "shop";
 
-const tabs: (({ setCurrentTab }: TabProps) => JSX.Element)[] = [
-  ShopTab,
-  HomeTab,
-  DeckTab,
-];
+const tabs: (({
+  setCurrentTab,
+}: {
+  setCurrentTab: (tab: Tabs) => void;
+}) => JSX.Element)[] = [ShopTab, HomeTab, DeckTab];
 
 const tabsPosition: Record<Tabs, number> = {
   shop: 0,
@@ -39,6 +46,7 @@ export default function Home() {
       >
         <RewardBlockWithContext />
         <HomeBg />
+        <ExperienceModalWatcher />
         <div className="w-full h-full relative flex flex-col items-center justify-between">
           <Header />
           <div
@@ -182,6 +190,7 @@ interface RessourceCounterProps {
   icon: React.ReactNode;
   width?: number;
   name: string;
+  timer?: string;
 }
 
 export function RessourceCounter({
@@ -190,6 +199,7 @@ export function RessourceCounter({
   icon,
   width = 191,
   name,
+  timer,
 }: RessourceCounterProps) {
   return (
     <div className="relative" x-id={`${name}CountInput`} id={`${name}Count`}>
@@ -206,6 +216,7 @@ export function RessourceCounter({
                 <div
                   className="absolute top-0 left-0 h-full bg-blue-400 overflow-hidden"
                   style={{ width: `${(amount / max) * 100}%` }}
+                  id={`${name}CountProgressBar`}
                 />
               )}
               <p
@@ -223,6 +234,11 @@ export function RessourceCounter({
                   </>
                 )}
               </p>
+              {timer && (
+                <div className="absolute top-1/2 -translate-y-1/2 right-1 text-sm w-[40px]">
+                  <Timer name={timer} options={{ removeHours: true }} />
+                </div>
+              )}
             </div>
           </InnerBord>
         </CardIllustartion>
@@ -238,28 +254,8 @@ export function Header() {
 
   return (
     <div className="flex gap-4 px-8 py-4 w-full justify-center">
-      <RessourceCounter
-        amount={26}
-        max={50}
-        icon={
-          <Badge
-            className="absolute z-10 left-0 top-1/2 -translate-x-1/2 -translate-y-1/2"
-            value="1"
-          />
-        }
-        name="xp"
-      />
-      <RessourceCounter
-        amount={4}
-        max={5}
-        icon={
-          <img
-            src="/key.png"
-            className="absolute z-10 left-[3px] top-1/2 -translate-x-1/2 -translate-y-1/2 h-[32px] drop-shadow-[2px_1px_1px_black] rotate-[25deg] contrast-150"
-          />
-        }
-        name="keys"
-      />
+      <ExperienceOutput />
+      <KeysOutput />
       <RessourceCounter
         amount={gold}
         icon={

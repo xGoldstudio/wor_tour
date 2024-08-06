@@ -1,11 +1,8 @@
 import { IS_DEBUG } from "@/isDebug";
-import { callbackService, CallbackServiceName } from "../CallbackService/callbackService";
-import { getSecondsFromDays } from "@repo/lib";
-import { CARDS_ROTATION_TIME } from "@/home/store/shopStore/shopStore";
-
+import { callbackService, CallbackServiceName } from "../inject";
 
 type ClientLoopData = {
-	timersMap: Record<string, { remainingFrames: number, callbackName: CallbackServiceName, cycleDuration: number | null }>,
+	timersMap: Record<string, Timer>,
 	lastTimestamp: number,
 };
 
@@ -16,18 +13,29 @@ function getFirstTimeOfDay() {
 }
 
 function getRemainFramesFromCurrentCycle(elapsedFramesFromLastCycle: number, timeout: number) {
-	return timeout - elapsedFramesFromLastCycle % timeout;
+	const remainingFrames = timeout - elapsedFramesFromLastCycle % timeout;
+	const numberOfCycles = Math.floor(elapsedFramesFromLastCycle / timeout);
+	return {
+		remainingFrames: remainingFrames,
+		numberOfCycles: numberOfCycles,
+	};
 }
 
 interface CycleProps {
 	name: string;
 	callbackName: CallbackServiceName;
 	duration: number;
+	triggerMany?: boolean;
 }
 
-interface Timer { remainingFrames: number, callbackName: CallbackServiceName, cycleDuration: number | null }
+interface Timer {
+	remainingFrames: number,
+	callbackName: CallbackServiceName,
+	cycleDuration: number | null,
+	triggerMany: boolean,
+}
 
-function ClientLoop(cycles: CycleProps[]) {
+export function ClientLoop(cycles: CycleProps[]) {
 	const clientLoopDataFromLocalStorage = JSON.parse(localStorage.getItem('clientLoop') || '{}') as Partial<ClientLoopData>;
 	const timersMap: Record<string, Timer> = clientLoopDataFromLocalStorage.timersMap || {};
 	const listenersMap: Record<string, { listeners: ((remainingFrames: number | null) => void)[] }>
@@ -39,30 +47,53 @@ function ClientLoop(cycles: CycleProps[]) {
 		cycles.forEach(cycle);
 	}
 
-	function cycle({ name, callbackName, duration }: CycleProps) {
+	function cycle({ name, callbackName, duration, triggerMany }: CycleProps) {
 		if (timersMap[name]) {
 			return;
 		}
 		callbackService.call(callbackName);
 		const firstTimeOfDay = getFirstTimeOfDay();
-		const remainFramesFromCurrentCycle = getRemainFramesFromCurrentCycle(
+		const { remainingFrames } = getRemainFramesFromCurrentCycle(
 			Math.floor((Date.now() - firstTimeOfDay) / FRAME_DURATION),
 			duration,
 		);
 		pushTimer(
 			name,
 			callbackName,
-			remainFramesFromCurrentCycle,
+			remainingFrames,
 			duration,
+			triggerMany || false,
+			false,
 		);
 	}
 
-	function pushTimer(name: string, callbackName: CallbackServiceName, timeout: number, cycleDuration: number | null = null) {
+	function pushTimer(
+		name: string,
+		callbackName: CallbackServiceName,
+		timeout: number,
+		cycleDuration: number | null = null,
+		triggerMany: boolean,
+		replace: boolean,
+	) {
+		if (!replace && timersMap[name]) {
+			return;
+		}
 		timersMap[name] = {
 			remainingFrames: timeout,
 			callbackName,
 			cycleDuration,
+			triggerMany,
 		};
+		saveState();
+	}
+
+	function internalRemoveTimer(name: string) {
+		notifyDeletedTimer(name);
+		delete timersMap[name];
+	}
+
+	function removeTimer(name: string) {
+		internalRemoveTimer(name);
 		saveState();
 	}
 
@@ -77,14 +108,29 @@ function ClientLoop(cycles: CycleProps[]) {
 			timer.remainingFrames -= framesToAdd;
 			if (timer.remainingFrames <= 0) {
 				if (timer.cycleDuration !== null) {
-					timer.remainingFrames = getRemainFramesFromCurrentCycle(
+					const { remainingFrames, numberOfCycles } = getRemainFramesFromCurrentCycle(
 						-timer.remainingFrames,
 						timer.cycleDuration,
 					);
+					if (timer.triggerMany) {
+						let i = 0;
+						while (i < (numberOfCycles + 1) && timersMap[timerName]) { // timer could have be removed between two cycles
+							callbackService.call(timer.callbackName);
+							i++;
+						}
+						if (!timersMap[timerName]) {
+							notifyDeletedTimer(timerName);
+							return;
+						}
+					} else {
+						callbackService.call(timer.callbackName);
+					}
+					timer.remainingFrames = remainingFrames;
 				} else {
-					delete timersMap[timerName];
+					callbackService.call(timer.callbackName);
+					internalRemoveTimer(timerName);
+					return;
 				}
-				callbackService.call(timer.callbackName);
 			}
 		});
 
@@ -92,12 +138,18 @@ function ClientLoop(cycles: CycleProps[]) {
 		saveState();
 	}
 
+	function notifyDeletedTimer(timerName: string) {
+		listenersMap[timerName]?.listeners.forEach((listener) => listener(null));
+	}
+
 	function notifiyAllListeners() {
-		Object.keys(timersMap).forEach((timerName) => {
-			listenersMap[timerName]?.listeners.forEach((listener) => listener(
-				timersMap[timerName]?.remainingFrames ?? null
-			));
-		});
+		Object.keys(timersMap).forEach(notifyListeners);
+	}
+
+	function notifyListeners(name: string) {
+		listenersMap[name]?.listeners.forEach((listener) => listener(
+			timersMap[name]?.remainingFrames ?? null
+		));
 	}
 
 	function addListener(name: string, listener: (remainingFrames: number | null) => void) {
@@ -143,17 +195,11 @@ function ClientLoop(cycles: CycleProps[]) {
 
 	return {
 		pushTimer,
+		removeTimer,
 		start: startInterval,
 		addListener,
 		reset,
+		cycle,
 		_unsafeManipulateClock,
 	};
 }
-
-const clientLoop = ClientLoop([
-	{ name: "cardRotationShop", callbackName: "setCardsToBuy", duration: CARDS_ROTATION_TIME },
-	{ name: "dailyGold", callbackName: "resetDailyGold", duration: getSecondsFromDays(1) }
-]);
-clientLoop.start();
-
-export default clientLoop;

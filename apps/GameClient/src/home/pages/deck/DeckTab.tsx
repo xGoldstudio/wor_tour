@@ -5,10 +5,10 @@ import * as _ from "lodash";
 import { useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { CardCollection } from "./cardFilters";
-import { NUMBER_OF_CARD_IN_DECK } from "./cardSorts";
 import Collection from "./Collection";
 import { useEditionMode } from "./context/UseEditionMode";
 import { DeckCardUI } from "./DeckCardUI";
+import { NUMBER_OF_CARD_IN_DECK } from "@/const";
 
 interface DeckStatsProps {
   detailledDeck: CardCollection[];

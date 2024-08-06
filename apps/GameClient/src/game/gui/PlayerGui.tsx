@@ -8,7 +8,7 @@ import { useState } from "react";
 import { dummyCard } from "./card/const";
 import { ManaBar, useGameEventListener } from "@repo/ui";
 import { CardType } from "@repo/lib";
-import { ClockReturn, EventType } from "game_engine";
+import { ClockReturn, EventType, GameStateObject } from "game_engine";
 
 interface PlayerGUIProps {
   isPlayer: boolean;
@@ -77,12 +77,19 @@ function GuiDeckCard({ position }: { position: number }) {
 
   useGameEventListener({
     type: "drawCard",
-    action: (_, data) => {
-      const currentCard = data.playerDeck[position];
-      if (!currentCard) return;
-      setCard(currentCard);
-    },
+    action: (_, data) => setNewCard(data),
   });
+
+  useGameEventListener({
+    type: "shuffleDeck",
+    action: (_, data) => setNewCard(data),
+  });
+  
+  function setNewCard(data: GameStateObject) {
+    const currentCard = data.playerDeck[position];
+    if (!currentCard) return;
+    setCard(currentCard);
+  }
 
   return (
     <StaticCard card={card} />

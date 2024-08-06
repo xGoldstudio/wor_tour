@@ -8,6 +8,7 @@ import useGameInterface from "../stores/gameInterfaceStore";
 import useGameCanvas from "./animation/useGameCanvas";
 import { ClockReturn, EventType } from "game_engine";
 import useGameMetadataStore from "../stores/gameMetadataStore";
+import { matchmakingService } from "@/services/inject";
 
 export const FRAME_TIME = 10;
 
@@ -67,8 +68,6 @@ function useGameEvents(): GameEventsActions {
       triggerEvent: clock.triggerEvent,
     });
     initGameStore(gameState);
-    // shuffleDeck(true); // todo
-    // shuffleDeck(false);
     clock.triggerEvent({ type: "startGameSequence" });
     play();
     setIsInit(true);
@@ -80,6 +79,13 @@ function useGameEvents(): GameEventsActions {
       iaAgent();
     },
   });
+
+  useGameEventListener({
+    type: "gameOver",
+    action: (_, gameState) => {
+      matchmakingService.endGame(gameState);
+    },
+  })
 
   useOnUnMount(() => {
     destroyGame();

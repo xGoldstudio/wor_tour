@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import clientLoop from "./clientLoopService";
+import { clientLoop } from "../inject";
 
 export default function useClientLoop(name: string, listener: (remainingFrames: number | null) => void) {
 	useEffect(() => {

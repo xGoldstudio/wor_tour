@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type RewardType = CardRewardType | GoldRewardType | ChestRewardType;
+export type RewardType = CardRewardType | GoldRewardType | ChestRewardType | KeyRewardType | KeysRewardType;
 
 export interface CardRewardType {
   type: "card";
@@ -15,10 +15,17 @@ export interface GoldRewardType {
   amount: number;
 }
 
+export interface KeysRewardType {
+  type: "keys";
+}
+
 export interface ChestRewardType {
   type: "chest";
 }
 
+export interface KeyRewardType {
+  type: "key";
+}
 
 export function initRewardStore() {
   useRewardStore.setState({ ...RewardStoreDefaultState });
@@ -32,6 +39,7 @@ interface RewardStore {
   rewards: RewardType[];
   addReward: (reward: RewardType) => void;
   collectReward: () => RewardType;
+  removeAllRewards: () => void;
 }
 
 const useRewardStore = create(persist<RewardStore>((set, get) => ({
@@ -43,6 +51,7 @@ const useRewardStore = create(persist<RewardStore>((set, get) => ({
     set({ rewards });
     return reward;
   },
+  removeAllRewards: () => set({ rewards: [] }),
 }), { name: "reward-store" }));
 
 export default useRewardStore;

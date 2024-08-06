@@ -7,7 +7,7 @@ import BoosterIllustration from "../../shop/BoosterIllustration";
 import { cardWorldMultiplier } from "@repo/lib";
 import Field from "./Field";
 import WorldField from "./WorldField";
-import { getGoldPerVictory, getMaxGoldPerDay } from "@/home/services/DailyGoldService/dailyGoldService";
+import { getGoldPerVictory, getMaxGoldPerDay } from "@/services/DailyGoldService/dailyGoldService";
 
 interface WorldModalProps {
   closeModal: () => void;

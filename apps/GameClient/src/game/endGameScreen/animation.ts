@@ -11,7 +11,6 @@ interface EndGameScreenAnimationArgs {
   shinyRef: HTMLDivElement | null;
   buttonRef: HTMLButtonElement;
   nextLevelRef: HTMLDivElement;
-  setCurrentLevel: (level: number) => void;
 }
 
 export default function endGameScreenAnimation({
@@ -25,7 +24,6 @@ export default function endGameScreenAnimation({
   shinyRef,
   buttonRef,
   nextLevelRef,
-  setCurrentLevel,
 }: EndGameScreenAnimationArgs) {
   const tl = gsap.timeline();
   tl.fromTo(
@@ -94,11 +92,14 @@ export default function endGameScreenAnimation({
         duration: 0.3,
       }
     );
+    const badge = boxRef.querySelector("#endGameXpBadge");
     tl.to(nextLevelRef, {
       opacity: 0,
       duration: 0.2,
       onComplete: () => {
-        setCurrentLevel(nextLevel);
+        if (badge) {
+          badge.innerHTML = String(nextLevel);
+        }
       },
     });
   }

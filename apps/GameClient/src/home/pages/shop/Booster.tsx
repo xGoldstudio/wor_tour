@@ -1,4 +1,4 @@
-import useBooster, { BoosterType } from "@/home/store/useBooster/useBooster";
+import { BoosterType } from "@/home/store/useBooster/useBooster";
 import { useState } from "react";
 import BoosterIllustration from "./BoosterIllustration";
 import Modal, { BackgroundModal } from "@/home/ui/modal";
@@ -13,6 +13,7 @@ import {
 } from "@repo/ui";
 import ConfirmationModal from "@/home/ui/ConfirmationModal";
 import { preventDefault } from "@repo/lib";
+import openBooster from "@/home/store/useBooster/useBooster";
 
 interface BoosterProps {
   booster: BoosterType;
@@ -55,7 +56,6 @@ export function BoosterModal({ closeModal, booster }: BoosterModalProps) {
   }));
   const [isBoosterPreview, setIsBoosterPreview] = useState(false);
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
-  const buyBooster = useBooster();
 
   return (
     <Modal closeModal={closeModal} title="booster">
@@ -115,7 +115,7 @@ export function BoosterModal({ closeModal, booster }: BoosterModalProps) {
         <ConfirmationModal
           isOpen={isConfirmationOpen}
           closeModal={() => setIsConfirmationOpen(false)}
-          onConfirm={() => buyBooster(booster.name, true)}
+          onConfirm={() => openBooster(booster.name, true)}
         >
           <Box cover="rare" rarity="legendary" height={150}>
             <div className="flex items-center justify-center p-4">

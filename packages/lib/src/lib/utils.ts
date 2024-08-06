@@ -14,6 +14,10 @@ export function ceilToValue(ceil: number) {
   return (v: number) => Math.ceil(v / ceil) * ceil;
 }
 
+export function roundToTwoMath(num: number): number {
+  return Math.round((num + Number.EPSILON) * 100) / 100;
+}
+
 export function getCenterOfBoundingElement(queryOrElement: string | HTMLElement) {
   const element = getElement(queryOrElement);
   if (!element) {
@@ -119,4 +123,12 @@ export function getSecondsFromHours(hours: number) {
 
 export function getSecondsFromDays(days: 1) {
   return days * 86400;
+}
+
+export function isNotEmpty<T>(array: T[]) {
+  return array.length > 0;
+}
+
+export function getFirst<T>(array: T[]) {
+  return array[0];
 }

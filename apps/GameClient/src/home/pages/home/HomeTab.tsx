@@ -1,4 +1,3 @@
-import { useStartGame } from "@/game/stores/gameMetadataStore";
 import { useState } from "react";
 import { cn, Cover } from "@repo/ui";
 import { numberWithCommas, textureByRarity } from "@repo/lib";
@@ -11,15 +10,14 @@ import WorldIllustration from "./WorldIllustration";
 import { Tabs } from "@/home/Home";
 import { useEditionMode } from "../deck/context/UseEditionMode";
 import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
-import Timer from "@/home/services/LoopService/Timer";
-import { dailyGoldService } from "@/home/services/DailyGoldService/dailyGoldService";
+import { dailyGoldService, matchmakingService } from "@/services/inject";
+import Timer from "@/services/LoopService/Timer";
 
 interface HomeTabProps {
   setCurrentTab?: (tab: Tabs) => void;
 }
 
 export default function HomeTab({ setCurrentTab }: HomeTabProps) {
-  const startGame = useStartGame();
   const { setEditionMode } = useEditionMode();
 
   const { trophies, isDeckFull } = usePlayerStore((state) => ({
@@ -115,12 +113,16 @@ export default function HomeTab({ setCurrentTab }: HomeTabProps) {
         <div
           id="battleButton"
           className={cn(
-            "relative rounded-sm flex p-1 flex-col items-center font-slate-600 cursor-pointer",
+            "relative rounded-sm flex p-1 flex-col items-center font-slate-600 cursor-pointer w-[310px]",
             !isDeckFull && "brightness-75"
           )}
           onClick={() => {
-            isDeckFull ? startGame() : setCurrentTab!("deck"),
-              setEditionMode(true);
+            if (isDeckFull) {
+              matchmakingService.startGame();
+              return;
+            }
+            setCurrentTab!("deck");
+            setEditionMode(true);
           }}
         >
           <div

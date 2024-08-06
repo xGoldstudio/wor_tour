@@ -254,7 +254,13 @@ export class GameStateObject {
 		}
 		card.states[stateIndex].value = value + delta;
 	}
-
+	shuffleDeck(isPlayer: boolean) {
+		if (isPlayer) {
+			this.playerDeck = this.playerDeck.sort(() => Math.random() - 0.5);
+		} else {
+			this.opponentDeck = this.opponentDeck.sort(() => Math.random() - 0.5);
+		}
+	}
 	// utils
 	getCard(isPlayerCard: boolean, cardPosition: number) {
 		return (isPlayerCard ? this.playerBoard : this.opponentBoard)[cardPosition];

@@ -16,7 +16,7 @@ function computeGoldWorldValue(value: number) {
 export const getGoldPerVictory = computeGoldWorldValue(GoldPerVictory);
 export const getMaxGoldPerDay = computeGoldWorldValue(MaxGoldPerDay);
 
-function DailyGoldService() {
+export function DailyGoldService() {
 	const store = create(persist(() => (
 		{
 			dailyGoldConsumed: 0,
@@ -24,9 +24,16 @@ function DailyGoldService() {
 			goldPerVictory: 0,
 		}
 	), { name: "DailyGoldServiceStore" }));
-	
+
+	let currentWorld = usePlayerStore.getState().currentWorld;
+
+	usePlayerStore.subscribe(state => {
+		if (currentWorld < state.currentWorld) {
+			reset();
+		}
+	});
+
 	function setDailyGold() {
-		const currentWorld = usePlayerStore.getState().currentWorld;
 		store.setState({
 			dailyGoldConsumed: 0,
 			dailyGoldLimit: getMaxGoldPerDay(currentWorld),
@@ -34,15 +41,38 @@ function DailyGoldService() {
 		});
 	}
 
-	function getGoldReward() {
-		getGoldPerVictory(usePlayerStore.getState().currentWorld);
+	function getRemainingGold() {
+		return store.getState().dailyGoldLimit - store.getState().dailyGoldConsumed;
+	}
+
+	function getGoldForGame(value: number) {
+		return Math.min(value, getRemainingGold());
+	}
+
+	function getGoldWinReward() {
+		return getGoldForGame(store.getState().goldPerVictory);
+	}
+
+	function getGoldLoseReward() {
+		return getGoldForGame(Math.floor(store.getState().goldPerVictory / 3));
+	}
+
+	function earnReward(isWin: boolean) {
+		const goldAmount = isWin ? getGoldWinReward() : getGoldLoseReward();
+		store.setState({ dailyGoldConsumed: store.getState().dailyGoldConsumed + goldAmount });
+	}
+
+	function reset() {
+		currentWorld = usePlayerStore.getState().currentWorld;
+		setDailyGold();
 	}
 
 	return {
-		getGoldReward,
+		getGoldWinReward,
+		getGoldLoseReward,
 		setDailyGold,
+		earnReward,
 		store,
+		reset,
 	}
 }
-
-export const dailyGoldService = DailyGoldService();

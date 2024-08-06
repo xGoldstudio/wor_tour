@@ -513,38 +513,17 @@
       "stats": [
         {
           "cost": 3,
-          "states": [
-            {
-              "type": "massacre",
-              "trigger": "onDirectAttackHit",
-              "target": "directEnnemyCard",
-              "value": 5
-            }
-          ],
+          "states": [],
           "illustration": "card_15_level_1_1720100170687.png"
         },
         {
           "cost": 3,
-          "states": [
-            {
-              "type": "massacre",
-              "trigger": "onDirectAttackHit",
-              "target": "directEnnemyCard",
-              "value": 10
-            }
-          ],
+          "states": [],
           "illustration": "card_15_level_2_1720100176579.png"
         },
         {
           "cost": 3,
-          "states": [
-            {
-              "type": "massacre",
-              "trigger": "onDirectAttackHit",
-              "target": "directEnnemyCard",
-              "value": 15
-            }
-          ],
+          "states": [],
           "illustration": "card_15_level_3_1720100190398.png"
         }
       ]
@@ -714,7 +693,7 @@
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 10
+              "value": 5
             }
           ],
           "illustration": "card_22_level_1_1721050271270.png"
@@ -726,7 +705,7 @@
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 20
+              "value": 10
             }
           ],
           "illustration": "card_22_level_2_1721050621698.png"
@@ -738,7 +717,7 @@
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 30
+              "value": 15
             }
           ],
           "illustration": "card_22_level_3_1721050624380.png"
@@ -953,16 +932,10 @@
           "cost": 6,
           "states": [
             {
-              "type": "bleeding",
-              "trigger": "onAttack",
-              "target": "selfCard",
-              "value": 30
-            },
-            {
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 30
+              "value": 15
             }
           ],
           "illustration": "card_30_level_1_1721062011136.png"
@@ -971,16 +944,10 @@
           "cost": 6,
           "states": [
             {
-              "type": "bleeding",
-              "trigger": "onAttack",
-              "target": "selfCard",
-              "value": 60
-            },
-            {
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 60
+              "value": 30
             }
           ],
           "illustration": "card_30_level_2_1721062086115.png"
@@ -989,16 +956,10 @@
           "cost": 6,
           "states": [
             {
-              "type": "bleeding",
-              "trigger": "onAttack",
-              "target": "selfCard",
-              "value": 90
-            },
-            {
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 90
+              "value": 60
             }
           ],
           "illustration": "card_30_level_3_1721061680880.png"

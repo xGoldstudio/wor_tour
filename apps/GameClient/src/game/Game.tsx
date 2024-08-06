@@ -4,9 +4,9 @@ import GameDebugPanel from "./GameDebugPanel";
 import PlayerGUI from "./gui/PlayerGui";
 import FlashDamage from "./FlashDamage";
 import AmountEffectOrDamage from "./AmountEffectOrDamage";
-import EndGameScreen from "./endGameScreen/EndGameScreen";
 import StartSequence from "./StartSequence";
 import { GameCard } from "@repo/ui";
+import EndGameScreenWatcher from "./endGameScreen/EndGameScreenWatcher";
 
 export default function Game() {
   const {
@@ -18,7 +18,6 @@ export default function Game() {
     runTicks,
     clock,
   } = useGameEvents();
-  console.log("game render");
 
   return (
     <div
@@ -63,7 +62,7 @@ export default function Game() {
           <div className="bg-black h-full w-full"></div>
         </>
       )}
-      <EndGameScreen />
+      <EndGameScreenWatcher />
     </div>
   );
 }
