@@ -29,6 +29,7 @@ interface PlayerStore {
   getCollection: () => CollectionCard[];
   getCollectionInfo: (id: number) => CollectionCard | undefined;
   getCompleteInfo: (id: number) => CardType & { isInDeck: boolean };
+  getLockedCardInfo: (id: number) => CardType;
   getCollectionCompleteInfo: (
     collection: CollectionCard[]
   ) => (CardType & { isInDeck: boolean })[];
@@ -69,6 +70,7 @@ const usePlayerStore = create(
         ...findCard(id, get().getCollectionInfo(id)!.level),
         isInDeck: get().deck.includes(id),
       }),
+      getLockedCardInfo: (id: number) => findCard(id, 1),
       getCollectionCompleteInfo: (collection: CollectionCard[]) =>
         collection.map((card) => get().getCompleteInfo(card.id)),
       getCollectionNotInDeck: (collection: CollectionCard[]) =>
