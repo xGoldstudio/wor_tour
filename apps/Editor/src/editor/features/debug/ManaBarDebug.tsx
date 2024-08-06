@@ -1,9 +1,9 @@
-import { Button, ManaBar, useOnMount, useRunInstance } from "@repo/ui";
+import { Button, ManaBar, useOnMount, useRunGameInstance } from "@repo/ui";
 import DebugPanelLayout from "./DebugPanelLayout";
 import { MAX_MANA, triggerConsumeMana, triggerIncreaseMana, triggerStartEarningMana } from "game_engine";
 
 export default function ManaBarDebug() {
-  const instance = useRunInstance({});
+  const instance = useRunGameInstance({});
   const { clock, state } = instance;
 
   useOnMount(() => {

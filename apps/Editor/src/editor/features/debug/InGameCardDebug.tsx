@@ -1,5 +1,5 @@
 import { CardState, getOptionsFromType } from "@repo/lib";
-import { Button, GameCard, useOnMount, useRunInstance } from "@repo/ui";
+import { Button, GameCard, useOnMount, useRunGameInstance } from "@repo/ui";
 import {
   bleedingStateTest,
   ClockReturn,
@@ -21,7 +21,7 @@ function defaultActions(clock?: ClockReturn<EventType>) {
 
 export default function InGameCardDebug() {
   const dummyCard = useDummyCard();
-  const instance = useRunInstance({
+  const instance = useRunGameInstance({
     gameData: {
       playerDeck: [dummyCard],
     }
