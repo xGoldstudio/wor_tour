@@ -33,7 +33,7 @@ export default function DebugPanelLayout({
   return (
     <div className="flex gap-4 h-full flex-col justify-center">
       <p className="text-2xl font-semibold">Game management</p>
-      <div className="grid grid-cols-5 gap-4">
+      <div className="grid grid-cols-6 gap-4">
         <Button
           action={() => pause?.()}
           rarity={isPlaying ? "rare" : "epic"}
@@ -45,6 +45,7 @@ export default function DebugPanelLayout({
         {setSpeedButton(0.5)}
         {setSpeedButton(1)}
         {setSpeedButton(2)}
+        {setSpeedButton(10)}
         {addTicksButton(1)}
         {addTicksButton(10)}
       </div>

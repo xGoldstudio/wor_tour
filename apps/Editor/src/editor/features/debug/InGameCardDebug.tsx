@@ -24,7 +24,8 @@ export default function InGameCardDebug() {
   const instance = useRunGameInstance({
     gameData: {
       playerDeck: [dummyCard],
-    }
+    },
+    skipStartGame: true,
   });
   const { clock, state } = instance;
 
