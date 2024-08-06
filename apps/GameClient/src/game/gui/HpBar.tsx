@@ -3,6 +3,7 @@ import { cn, EmptyBar, useGameEventListener, useSyncGameAnimation } from "@repo/
 import { numberWithCommas } from "../../../../../packages/lib/src/lib/utils";
 import { PlayerDamageResolveEvent } from "game_engine";
 import { animationTimeline } from "@repo/lib";
+import PlayerHeart from "./PlayerHeart";
 
 interface HpBarProps {
   maxHp: number;
@@ -92,12 +93,7 @@ function HpBar({ isPlayer, maxHp, withHeart }: HpBarProps) {
       )}
     >
       {!!withHeart && (
-        <img
-          className="absolute z-10 left-[-25px] top-[-10px]"
-          src="/heart.png"
-          width={50}
-          height={50}
-        />
+        <PlayerHeart isPlayer={isPlayer} />
       )}
       <EmptyBar>
         <div className="lifeBar w-full h-full absolute origin-left bg-gradient-to-b  from-[#0fad05] via-[#74cc6f] via-[37%] to-[#0fad05]" />

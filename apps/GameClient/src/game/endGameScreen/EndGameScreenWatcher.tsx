@@ -1,21 +1,14 @@
-import { useGameEventListener } from "@repo/ui";
-import { CurrentWinner } from "game_engine";
-import { useState } from "react";
-import EndGameScreen from "./EndGameScreen";
+import EndGameModal from "./EndGameModal";
+import useGameInterface from "../stores/gameInterfaceStore";
+import useGameStore from "../stores/gameStateStore";
 
 export default function EndGameScreenWatcher() {
-  const [currentWinner, setCurrentWinner] = useState<CurrentWinner>(null);
+  const isGameOver = useGameInterface(s => s.gameOver);
+  const isWinner = useGameStore(s => s.state.isPlayerWinner());
 
-	useGameEventListener({
-    type: "gameOver",
-    action: (_, state) => {
-      setCurrentWinner(state.currentWinner);
-    },
-  });
-
-	if (!currentWinner) {
+	if (!isGameOver) {
 		return null;
 	}
 
-	return <EndGameScreen isWinner={currentWinner === "player"} />;
+	return <EndGameModal isWinner={isWinner} />;
 }

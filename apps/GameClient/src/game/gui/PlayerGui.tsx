@@ -24,7 +24,7 @@ function PlayerGUI({ isPlayer, clock }: PlayerGUIProps) {
   );
 
   return (
-    <div className="relative">
+    <div className="relative z-10">
       <div className="top-0 left-0 w-full h-full absolute bg-gray-500 opacity-80"></div>
       <div className="flex">
         <div

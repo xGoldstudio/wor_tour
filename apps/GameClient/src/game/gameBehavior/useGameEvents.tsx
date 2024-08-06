@@ -1,6 +1,6 @@
 import { useState } from "react";
 import iaAgent from "./aiAgent";
-import { useOnUnMount, useRunInstance, FpsTracker } from "@repo/ui";
+import { useOnUnMount, useRunGameInstance, FpsTracker } from "@repo/ui";
 import { useGameEventListener, useOnMount } from "@repo/ui";
 import { useShallow } from "zustand/react/shallow";
 import useGameStore from "../stores/gameStateStore";
@@ -32,7 +32,7 @@ export const GAME_OPTS = {
 
 export const FPS_OBJ = FpsTracker();
 
-function useGameEvents(): GameEventsActions {
+function useRunGame(): GameEventsActions {
   const initGameStore = useGameStore((s) => s.init);
   const { init: initGameInterfaceStore } = useGameInterface(
     useShallow((state) => {
@@ -50,7 +50,7 @@ function useGameEvents(): GameEventsActions {
     pause,
     isPlaying,
     runTicks,
-  } = useRunInstance({
+  } = useRunGameInstance({
     animationsCompute: async (currentFrame: number) => {
       gameCanvas?.paint(currentFrame);
       if (GAME_OPTS.simulateBadPerformance) {
@@ -106,4 +106,4 @@ function useGameEvents(): GameEventsActions {
   };
 }
 
-export default useGameEvents;
+export default useRunGame;

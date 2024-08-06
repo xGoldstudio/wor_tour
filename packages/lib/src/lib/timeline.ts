@@ -1,6 +1,6 @@
 import { cubicBezier } from "@repo/lib";
 
-type AnimatedProperties = "x" | "y" | "scale" | "opacity" | "scaleX" | "scaleY";
+type AnimatedProperties = "x" | "y" | "scale" | "opacity" | "scaleX" | "scaleY" | "rotate";
 
 type AnimationValues = Partial<Record<AnimatedProperties, number>>;
 
@@ -176,10 +176,11 @@ function transformValues(values: AnimationValues) {
   const scale = values.scale !== undefined ? `scale(${values.scale})` : "";
   const scaleX = values.scaleX !== undefined ? `scaleX(${values.scaleX})` : "";
   const scaleY = values.scaleY !== undefined ? `scaleY(${values.scaleY})` : "";
+  const rotate = values.rotate !== undefined ? `rotate(${values.rotate}deg)` : "";
   const x = values.x !== undefined ? `translateX(${values.x}px)` : "";
   const y = values.y !== undefined ? `translateY(${values.y}px)` : "";
   return {
-    transform: `${x} ${y} ${scaleX} ${scaleY} ${scale} `,
+    transform: `${x} ${y} ${scaleX} ${scaleY} ${scale} ${rotate}`,
     opacity: values.opacity !== undefined ? `${values.opacity}%` : "",
   };
 }

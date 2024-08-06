@@ -1,6 +1,6 @@
 import { FpsTrackerType, resetAllGameEventListeners, runGameEventListeners, useGameSyncAnimationStore, useOnMount, useOnUnMount } from "@repo/ui";
 import { ClockReturn, EventType, FRAME_TIME, GameStateObject, GameStateObjectConstructor, initTest } from "game_engine";
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 export type UseRunInstance = {
 	state: GameStateObject;
@@ -13,7 +13,7 @@ export type UseRunInstance = {
 	runTicks: (tickToDo: number) => void;
 };
 
-export function useRunInstance({
+export function useRunGameInstance({
 	animationsCompute, fpsTracker, gameData,
 }: {
 	animationsCompute?: (currentFrame: number) => Promise<void>,
@@ -22,14 +22,10 @@ export function useRunInstance({
 }): UseRunInstance {
 	const { triggerGameSyncAnimation, reset: resetGameSyncAnimationStore } = useGameSyncAnimationStore();
 	const [instance, setInstance] = useState<UseRunInstance>(runInstance());
-	const isGameOverRef = useRef(false);
 
 	function runInstance() {
 		const { clock, state } = initTest({
 			sideEffectOnEvent: ({ event, state, clock }) => {
-				if (event.type === "gameOver") {
-					isGameOverRef.current = true;
-				}
 				runGameEventListeners(
 					event.type,
 					event,
@@ -41,7 +37,6 @@ export function useRunInstance({
 			gameData,
 		});
 		async function playTick(shouldAnimate: boolean) {
-			if (isGameOverRef.current) return;
 			if (shouldAnimate) {
 				triggerGameSyncAnimation(
 					state,
@@ -84,6 +79,7 @@ export function useRunInstance({
 	})
 
 	useOnUnMount(() => {
+		console.log("unmounting");
 		instance.pause();
 		resetAllGameEventListeners();
 		resetGameSyncAnimationStore();
