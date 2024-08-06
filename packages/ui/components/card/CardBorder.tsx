@@ -1,8 +1,7 @@
 import {
-  CardRarity,
-  getImageUrlCssValue,
+  CardRarity, getImageUrlCssValue,
   inPx,
-  textureByRarity,
+  textureByRarity
 } from "@repo/lib";
 import { cn } from "../../lib/utils";
 
@@ -143,9 +142,9 @@ export function CardContentIllustartion({
       <InnerBord size={size}>
         <div
           className={cn(
-            "w-full h-full grow absolute box-border transition-all duration-300 ease-in-out",
+            "w-full h-full grow absolute box-border transition-transform duration-300 ease-in-out",
             isDisabled && "grayscale",
-            isSelected && "scale-125"
+            isSelected && "scale-150"
           )}
           style={{
             backgroundImage: getImageUrlCssValue(card.worldIllustration),
@@ -154,9 +153,24 @@ export function CardContentIllustartion({
             height: `calc(100% - ${7 * borderUnit}px)`,
           }}
         ></div>
+        <CardImage
+          className={cn(isDisabled && "grayscale", isSelected && "scale-150")}
+          worldIllustration={card.worldIllustration}
+          borderUnit={borderUnit}
+        />
+        {!isDisabled && (
+          <CardImage
+            className={cn(
+              "transition-all blur-[1px] opacity-0",
+              isSelected && "scale-150 opacity-100"
+            )}
+            worldIllustration={card.worldIllustration}
+            borderUnit={borderUnit}
+          />
+        )}
         <div
           className={cn(
-            "w-full h-full grow absolute box-border transition-all duration-200 ease-in-out",
+            "w-full h-full grow absolute box-border transition-transform duration-300 ease-in-out",
             isDisabled && "grayscale",
             isSelected && "scale-125"
           )}
@@ -169,6 +183,31 @@ export function CardContentIllustartion({
         ></div>
       </InnerBord>
     </>
+  );
+}
+
+function CardImage({
+  className,
+  worldIllustration,
+  borderUnit,
+}: {
+  className: string;
+  worldIllustration: string;
+  borderUnit: number;
+}) {
+  return (
+    <div
+      className={cn(
+        "w-full h-full grow absolute box-border transition-transform duration-300 ease-in-out",
+        className
+      )}
+      style={{
+        backgroundImage: getImageUrlCssValue(worldIllustration),
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        height: `calc(100% - ${7 * borderUnit}px)`,
+      }}
+    ></div>
   );
 }
 
