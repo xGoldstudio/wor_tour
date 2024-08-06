@@ -28,24 +28,27 @@ test("removing effect player card", () => {
 	const clock = Clock<EventType>(
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
+	clock.triggerEvent({ type: "startGame" });
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
 	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// deal damage to card
-	clock.triggerEvent({ type: "cardDamageResolve", initiator: {
-		type: "cardDamage",
-		isPlayerCard: true,
-		cardPosition: 0,
-		directAttack: false,
-		amount: 100,
-		instanceId: getInstanceId(state, true, 0),
-		initiator: {
-			type: "cardAttacking",
-			isPlayer: false,
+	clock.triggerEvent({
+		type: "cardDamageResolve", initiator: {
+			type: "cardDamage",
+			isPlayerCard: true,
 			cardPosition: 0,
-			instanceId: 0,
-		},
-	} });
+			directAttack: false,
+			amount: 100,
+			instanceId: getInstanceId(state, true, 0),
+			initiator: {
+				type: "cardAttacking",
+				isPlayer: false,
+				cardPosition: 0,
+				instanceId: 0,
+			},
+		}
+	});
 	clock.nextTick();
 	expect(state.playerBoard[0]?.hp).toBe(100);
 	// heal card

@@ -3,7 +3,7 @@ import { defaultTestHp, drawPlaceCard, healStateDefaultTest, initTest } from "./
 import { describe, expect, test } from 'vitest';
 
 describe("heal state", () => {
-	const { clock, state } = initTest({});
+	const { clock, state } = initTest({ skipStartGame: true });
 	drawPlaceCard(clock, true, 0);
 	drawPlaceCard(clock, true, 1);
 	clock.nextTick();

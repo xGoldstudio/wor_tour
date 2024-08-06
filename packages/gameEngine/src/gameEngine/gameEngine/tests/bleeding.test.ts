@@ -2,7 +2,7 @@ import { bleedingStateTest, drawPlaceCard, getInstanceId, initTest } from "./com
 import { describe, expect, test } from 'vitest';
 
 describe("bleeding state", () => {
-	const { clock, state } = initTest({});
+	const { clock, state } = initTest({ skipStartGame: true });
 	drawPlaceCard(clock, true, 0);
 	clock.nextTick();
 	clock.triggerEvent({ type: "addState", instanceId: getInstanceId(state, true, 0), position: 0, isPlayerCard: true, state: bleedingStateTest });

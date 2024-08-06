@@ -26,6 +26,7 @@ test("complete placement player", () => {
   const clock = Clock<EventType>(
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
+	clock.triggerEvent({ type: "startGame" });
 	state.playerMana = 9;
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 1 });
@@ -53,6 +54,7 @@ test("complete placement opponent", () => {
   const clock = Clock<EventType>(
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
+	clock.triggerEvent({ type: "startGame" });
 	state.opponentMana = 9;
 	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
 	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 1 });

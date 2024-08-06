@@ -13,7 +13,7 @@ usingDeck[0].states.push({
 });
 
 test("start damage to card (animation placeholder)", () => {
-	const { clock, state } = initTest({ playerDeck: usingDeck});
+	const { clock, state } = initTest({ gameData: { playerDeck: usingDeck }, skipStartGame: true });
 	drawPlaceCard(clock, true, 0);
 	drawPlaceCard(clock, false, 0);
 	clock.nextTick();
