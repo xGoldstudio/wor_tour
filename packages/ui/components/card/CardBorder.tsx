@@ -1,4 +1,8 @@
-import { CardRarity, getImageUrlCssValue, inPx, textureByRarity } from "@repo/lib";
+import {
+  CardRarity, getImageUrlCssValue,
+  inPx,
+  textureByRarity
+} from "@repo/lib";
 import { cn } from "../../lib/utils";
 
 interface CardBoardProps {
@@ -124,27 +128,39 @@ export function CardContentIllustartion({
   card,
   size,
   isDisabled = false,
+  isSelected = false,
 }: {
   card: { worldIllustration: string; illustration: string | null };
   size: number;
   isDisabled?: boolean;
+  isSelected?: boolean;
 }) {
   const borderUnit = Math.min(0.5 * size, 2);
 
   return (
     <>
       <InnerBord size={size}>
+        <CardImage
+          className={cn(isDisabled && "grayscale", isSelected && "scale-150")}
+          worldIllustration={card.worldIllustration}
+          borderUnit={borderUnit}
+        />
+        {!isDisabled && (
+          <CardImage
+            className={cn(
+              "transition-all blur-[1px] opacity-0",
+              isSelected && "scale-150 opacity-100"
+            )}
+            worldIllustration={card.worldIllustration}
+            borderUnit={borderUnit}
+          />
+        )}
         <div
-          className={cn("w-full h-full grow absolute box-border", isDisabled && "grayscale")}
-          style={{
-            backgroundImage: getImageUrlCssValue(card.worldIllustration),
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            height: `calc(100% - ${7 * borderUnit}px)`,
-          }}
-        ></div>
-        <div
-          className={cn("w-full h-full grow absolute box-border", isDisabled && "grayscale")}
+          className={cn(
+            "w-full h-full grow absolute box-border transition-transform duration-200 ease-in-out",
+            isDisabled && "grayscale",
+            isSelected && "scale-125"
+          )}
           style={{
             backgroundImage: getImageUrlCssValue(card.illustration),
             backgroundSize: "cover",
@@ -154,6 +170,31 @@ export function CardContentIllustartion({
         ></div>
       </InnerBord>
     </>
+  );
+}
+
+function CardImage({
+  className,
+  worldIllustration,
+  borderUnit,
+}: {
+  className: string;
+  worldIllustration: string;
+  borderUnit: number;
+}) {
+  return (
+    <div
+      className={cn(
+        "w-full h-full grow absolute box-border transition-transform duration-200 ease-in-out",
+        className
+      )}
+      style={{
+        backgroundImage: getImageUrlCssValue(worldIllustration),
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        height: `calc(100% - ${7 * borderUnit}px)`,
+      }}
+    ></div>
   );
 }
 

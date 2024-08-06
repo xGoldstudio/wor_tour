@@ -1,11 +1,34 @@
-
-import { CardStatsInfo, CardType, getRealStrength, getTargetStrength, testIsStrengthValid } from "../../../../packages/gameEngine/src/types/Card";
+import {
+  CardStatsInfo,
+  CardType,
+  getRealStrength,
+  getTargetStrength,
+  testIsStrengthValid,
+} from "../../../../packages/gameEngine/src/types/Card";
 import useDataStore from "./DataStore";
 
 export function findCard(id: number, level: number): CardType {
+  if (id === 0) return getCardEmpty();
   const cards = useDataStore.getState().cards;
   const card = cards.find((card) => card.id === id) || cards[0];
   return getCardFromLevel(card, level);
+}
+
+export function getCardEmpty(): CardType {
+  return {
+    name: "",
+    cost: 0,
+    illustration: "",
+    worldIllustration: "",
+    dmg: 0,
+    hp: 0,
+    attackSpeed: 0,
+    rarity: "common",
+    id: 0,
+    states: [],
+    level: 1,
+    world: 0,
+  };
 }
 
 export function getCardStats(id: number): CardStatsInfo {

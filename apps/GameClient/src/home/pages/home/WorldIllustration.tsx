@@ -1,9 +1,15 @@
-import { Borders, CardIllustartion, Cover, EmptyBar, InnerBord } from "@repo/ui";
-import { getImageUrl, textureByRarity } from "@repo/lib";
-import _ from "lodash";
 import useDataStore from "@/cards/DataStore";
-import { useState } from "react";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
+import { getImageUrl, textureByRarity } from "@repo/lib";
+import {
+  Borders,
+  CardIllustartion,
+  Cover,
+  EmptyBar,
+  InnerBord,
+} from "@repo/ui";
+import _ from "lodash";
+import { useState } from "react";
 
 export default function WorldIllustration({
   setWorldsModalOpen,

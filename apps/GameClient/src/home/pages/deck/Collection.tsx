@@ -1,13 +1,32 @@
-import usePlayerStore from "@/home/store/playerStore/playerStore";
+import { CardType } from "@repo/lib";
 import { useState } from "react";
-import { ActiveFilters, CardFilters, FiltersDescription } from "./cardFilters";
+import ScrollContainer from "react-indiana-drag-scroll";
+import { ActiveFilters, FiltersDescription } from "./cardFilters";
 import { CardSorts, defaultSort, sorts } from "./cardSorts";
 import { DeckCardUI } from "./DeckCardUI";
+import { Tabs } from "./DeckInterface";
+import { getCardsFiltered } from "./getCardsFiltered";
 import { SortAndFilterBox } from "./SortAndFilterBox";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 
-export default function Collection() {
-  let { detailledCollection } = usePlayerStore((state) => ({
+interface CollectionProps {
+  collection: (CardType & { isInDeck: boolean })[];
+  setCurrentTab?: (tab: Tabs) => void;
+  setSelectedCard: (id: number) => void;
+  selectedCard: number;
+  classname?: string;
+}
+
+export default function Collection({
+  collection,
+  setCurrentTab,
+  setSelectedCard,
+  selectedCard,
+  classname = "pb-24",
+}: CollectionProps) {
+  let { cardNotFound } = usePlayerStore((state) => ({
     detailledCollection: state.getCollectionCompleteInfo(state.getCollection()),
+    cardNotFound: state.getAllCardsLocked(),
   }));
   const [currentSort, setcurrentSort] = useState<CardSorts>(defaultSort);
   const [isAscending, setIsAscending] = useState<boolean>(true);
@@ -26,42 +45,62 @@ export default function Collection() {
       max: FiltersDescription.Level.rangeMax!,
     },
   });
-
+  let detailledCollection = [...collection];
   const collectionLength = detailledCollection.length;
 
-  for (const filter in FiltersDescription) {
-    const typedFilter = FiltersDescription[filter as CardFilters];
-    detailledCollection = detailledCollection.filter((card) =>
-      typedFilter
-        .filterFunction(
-          detailledCollection,
-          currentFilter[filter as CardFilters]
-        )
-        .includes(card)
-    );
-  }
-
+  detailledCollection = getCardsFiltered({
+    detailledCollection,
+    currentFilter,
+  });
   detailledCollection = sorts[currentSort].sortFunction(
     detailledCollection,
     isAscending
   );
+  cardNotFound = getCardsFiltered({
+    detailledCollection: cardNotFound,
+    currentFilter,
+  });
+  cardNotFound = sorts[currentSort].sortFunction(cardNotFound, isAscending);
   return (
-    <div className="w-[650px] h-[674px] grid grid-rows-[1fr_auto] top-0 ">
-      <SortAndFilterBox
-        collectionLength={collectionLength}
-        currentSort={currentSort}
-        setCurrentSort={setcurrentSort}
-        isAscending={isAscending}
-        setIsAscending={setIsAscending}
-        currentFilter={currentFilter}
-        setCurrentFilter={setCurrentFilter}
-      />
-      <div className="w-[600px] mx-auto grid grid-cols-4 gap-y-6 pt-10 pb-8">
-        {detailledCollection.map((card) => (
-          <div className="w-full flex justify-center" key={card.id}>
-            <DeckCardUI cardId={card.id} />
+    <div className="flex flex-col w-[650px] ">
+      <div className="grid grid-rows-[1fr_auto] top-0  ">
+        <div className=" ">
+          <SortAndFilterBox
+            collectionLength={collectionLength}
+            currentSort={currentSort}
+            setCurrentSort={setcurrentSort}
+            isAscending={isAscending}
+            setIsAscending={setIsAscending}
+            currentFilter={currentFilter}
+            setCurrentFilter={setCurrentFilter}
+          />
+        </div>
+        <ScrollContainer
+          className={`grow overflow-y-scroll scrollbar-hiden flex flex-col h-[674px] w-[650px], ${classname}`}
+        >
+          <div className="w-[600px] mx-auto grid grid-cols-4 gap-y-6 pt-10 ">
+            {detailledCollection.map((card) => (
+              <div className="w-full flex justify-center" key={card.id}>
+                <DeckCardUI
+                  cardId={card.id}
+                  setCurrentTab={setCurrentTab}
+                  setSelectedCard={setSelectedCard}
+                  selectedCard={selectedCard}
+                />
+              </div>
+            ))}
+            {cardNotFound.map((card) => (
+              <div className="w-full flex justify-center" key={card.id}>
+                <DeckCardUI
+                  cardId={card.id}
+                  locked={true}
+                  setSelectedCard={setSelectedCard}
+                  selectedCard={selectedCard}
+                />
+              </div>
+            ))}
           </div>
-        ))}
+        </ScrollContainer>
       </div>
     </div>
   );

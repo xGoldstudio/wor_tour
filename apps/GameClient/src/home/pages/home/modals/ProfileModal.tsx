@@ -66,7 +66,7 @@ export default function ProfileModal({ closeModal }: ProfileModalProps) {
               <Ribbon className="mt-16 px-16">Deck</Ribbon>
               <div className="grid grid-cols-4 w-auto gap-3">
                 {deckArray.map((cardId) => (
-                  <DeckCardUI cardId={cardId!} unaddble key={cardId} />
+                  <DeckCardUI cardId={cardId!} />
                 ))}
               </div>
               <Ribbon className="mt-16 px-16">Stats</Ribbon>

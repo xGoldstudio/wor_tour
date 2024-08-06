@@ -1,25 +1,24 @@
-import usePlayerStore from "@/home/store/playerStore/playerStore";
+import { CardType, filterUndefined } from "@repo/lib";
 import { ManaBall } from "@repo/ui";
 import * as _ from "lodash";
+import { useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
-import { Card } from "./cardFilters";
 import Collection from "./Collection";
+import { useEditionMode } from "./context/UseEditionMode";
 import { DeckCardUI } from "./DeckCardUI";
-import { getTargetStrength } from "@repo/lib";
 import { NUMBER_OF_CARD_IN_DECK } from "@/const";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
+import { getDeckStrength } from "@/services/MatchmakingService/buildDeck";
 
 interface DeckStatsProps {
-  detailledDeck: Card[];
+  deck: CardType[];
 }
 
-function DeckStats({ detailledDeck }: DeckStatsProps) {
-  const powerTotal = detailledDeck.reduce(
-    (total, card) => total + getTargetStrength(card),
-    0
-  );
+function DeckStats({ deck }: DeckStatsProps) {
+  const powerTotal = getDeckStrength(deck);
+
   const averageCostDeck =
-    detailledDeck.reduce((total, card) => total + card.cost, 0) /
-    detailledDeck.length;
+    deck.reduce((total, card) => total + card.cost, 0) / deck.length;
   return (
     <div className="flex w-full justify-between items-center m-2 pt-4 h-[75px] mx-auto px-4 ">
       <div className="flex items-center text-white gap-2 text-2xl bold ">
@@ -28,7 +27,7 @@ function DeckStats({ detailledDeck }: DeckStatsProps) {
       </div>
       <div className="flex items-center">
         <span className=" text-white text-2xl bold ">
-          {powerTotal.toFixed(0)}
+          {powerTotal.toFixed(1)}
         </span>
         <img
           src="/icons/epees-bouclier.png"
@@ -41,34 +40,66 @@ function DeckStats({ detailledDeck }: DeckStatsProps) {
   );
 }
 
-export default function DeckTab() {
-  const { deck, getCompleteInfo } = usePlayerStore((state) => ({
-    deck: state.deck,
-    getCompleteInfo: state.getCompleteInfo,
-  }));
+function EmptyDeckPlaceholder() {
+  return (
+    <div className="w-full h-full flex justify-center items-center">
+      <div className="mb-2 h-[178px] w-[128px] bg-black bg-opacity-20 border border-slate-700 border-opacity-25 backdrop-filter backdrop-blur-sm rounded-sm " />
+    </div>
+  );
+}
 
+export type selectedCardType = { id: number };
+
+export default function DeckTab() {
+  const { deck, getCompleteInfo, collectionInDeck } = usePlayerStore(
+    (state) => ({
+      deck: state.deck,
+      getCompleteInfo: state.getCompleteInfo,
+      numberOfCardsInDeck: state.numberOfCardsInDeck,
+      currentMissingCards: state.currentMissingCards,
+      collectionInDeck: state.getCollectionNotInDeck(state.getCollection()),
+    })
+  );
+  const { editionMode } = useEditionMode();
+  const [selectedCard, setSelectedCard] = useState<number>(0);
   const deckArray = _.concat(
     deck,
     _.fill(Array(NUMBER_OF_CARD_IN_DECK - deck.length), null)
   );
-  const detailledDeck: Card[] = [];
-  for (let i = 0; i < NUMBER_OF_CARD_IN_DECK; i++)
-    detailledDeck.push(getCompleteInfo(deckArray[i]!));
+  const detailledDeck: (CardType | undefined)[] = [];
+  for (let i = 0; i < NUMBER_OF_CARD_IN_DECK; i++) {
+    const cardId = deckArray[i];
+    detailledDeck.push(cardId ? getCompleteInfo(cardId) : undefined);
+  }
   return (
     <div>
-      <ScrollContainer className="grow overflow-y-scroll scrollbar-hiden flex flex-col h-[674px] w-full">
-        <div className="grid grid-rows-[1fr_auto] top-0 ">
-          <div className="grid grid-cols-4 gap-y-8 pt-8">
-            {detailledDeck.map((card) => (
-              <div className="w-full flex justify-center" key={card.id}>
-                <DeckCardUI cardId={card.id} />
-              </div>
-            ))}
+      <ScrollContainer className="grow scrollbar-hiden flex flex-col h-[674px] w-[650px] overflow-y-scroll">
+        <div className="grid grid-rows-[1fr_auto]  ">
+          <div className="grid grid-cols-4 gap-y-8 pt-8 ">
+            {detailledDeck.map((card, index) =>
+              !card ? (
+                <EmptyDeckPlaceholder />
+              ) : (
+                <div className="w-full flex justify-center" key={index}>
+                  <DeckCardUI
+                    cardId={card.id}
+                    setSelectedCard={setSelectedCard}
+                    selectedCard={selectedCard}
+                  />
+                </div>
+              )
+            )}
           </div>
         </div>
-        <DeckStats detailledDeck={detailledDeck} />
-        Collection :
-        <Collection />
+        <DeckStats deck={filterUndefined(detailledDeck)} />
+        {editionMode && (
+          <Collection
+            collection={collectionInDeck}
+            setSelectedCard={setSelectedCard}
+            selectedCard={selectedCard}
+            classname={"h-full pb-4"}
+          />
+        )}
       </ScrollContainer>
     </div>
   );

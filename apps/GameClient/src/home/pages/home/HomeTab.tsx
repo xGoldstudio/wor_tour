@@ -1,20 +1,31 @@
 import { useState } from "react";
-import { Cover, InnerBord } from "@repo/ui";
+import { cn, Cover } from "@repo/ui";
 import { numberWithCommas, textureByRarity } from "@repo/lib";
-import usePlayerStore from "@/home/store/playerStore/playerStore";
+import { InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
 import AllWorlds from "./allWorlds/AllWorlds";
 import ProfileModal from "./modals/ProfileModal";
 import AnimationContainer from "@/home/animations/AnimationContainer";
 import WorldIllustration from "./WorldIllustration";
+import { Tabs } from "@/home/Home";
+import { useEditionMode } from "../deck/context/UseEditionMode";
 import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 import { dailyGoldService, matchmakingService } from "@/services/inject";
 import Timer from "@/services/LoopService/Timer";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 
-export default function HomeTab() {
-  const { trophies } = usePlayerStore((state) => ({
+interface HomeTabProps {
+  setCurrentTab?: (tab: Tabs) => void;
+}
+
+export default function HomeTab({ setCurrentTab }: HomeTabProps) {
+  const { setEditionMode } = useEditionMode();
+
+  const { trophies, isDeckFull } = usePlayerStore((state) => ({
     trophies: state.trophies,
     currentWorld: state.currentWorld,
+    isDeckFull: state.isDeckFull(),
   }));
+
   const [profileOpen, setProfileOpen] = useState(false);
   const { worldsModalOpen, setWorldsModalOpen } = useClientInterfaceStore(
     (state) => ({
@@ -22,10 +33,12 @@ export default function HomeTab() {
       setWorldsModalOpen: state.setWorldsModalOpen,
     })
   );
-  const { dailyGoldConsumed, dailyGoldLimit } = dailyGoldService.store((state) => ({
-    dailyGoldConsumed: state.dailyGoldConsumed,
-    dailyGoldLimit: state.dailyGoldLimit,
-  }));
+  const { dailyGoldConsumed, dailyGoldLimit } = dailyGoldService.store(
+    (state) => ({
+      dailyGoldConsumed: state.dailyGoldConsumed,
+      dailyGoldLimit: state.dailyGoldLimit,
+    })
+  );
 
   return (
     <div className="w-full h-full flex flex-col items-center">
@@ -94,16 +107,55 @@ export default function HomeTab() {
         </div>
       </div>
       <div className="flex flex-col gap-16 items-center grow pt-20">
-        <WorldIllustration setWorldsModalOpen={() => setWorldsModalOpen("normal")} />
+        <WorldIllustration
+          setWorldsModalOpen={() => setWorldsModalOpen("normal")}
+        />
         <div
           id="battleButton"
-          className="relative rounded-sm flex p-1 flex-col items-center font-slate-600 cursor-pointer w-[310px]"
-          onClick={() => matchmakingService.startGame()}
+          className={cn(
+            "relative rounded-sm flex p-1 flex-col items-center font-slate-600 cursor-pointer w-[310px]",
+            !isDeckFull && "brightness-75"
+          )}
+          onClick={() => {
+            if (isDeckFull) {
+              matchmakingService.startGame();
+              return;
+            }
+            setCurrentTab!("deck");
+            setEditionMode(true);
+          }}
         >
-          <div className="w-[calc(100%_+_6px)] h-[calc(100%_+_6px)] absolute top-[-3px] left-[-3px] blur-sm rounded-sm  bg-amber-100 animate-[shiny_2s_ease-in-out_infinite]"></div>
-          <Cover cardRarity="epic" className="rounded-sm" />
+          <div
+            className={cn(
+              "w-[calc(100%_+_6px)] h-[calc(100%_+_6px)] absolute top-[-3px] left-[-3px] blur-sm rounded-sm bg-amber-100  animate-[shiny_2s_ease-in-out_infinite]",
+              !isDeckFull && "bg-gray-950"
+            )}
+          ></div>
+
+          {isDeckFull ? (
+            <Cover cardRarity="epic" className="rounded-sm" />
+          ) : (
+            <>
+              <div className="h-7 w-3/5 flex items-center justify-center absolute -top-7 bg-gray-800  backdrop-blur-sm opacity-80 rounded-t-sm font-bold text-white">
+                Deck Incomplete
+              </div>
+              <Cover cardRarity="rare" className="rounded-sm" />
+            </>
+          )}
           <div className="relative rounded-sm w-full flex justify-center py-2 mx-4">
-            <div className="bg-white w-full h-full absolute top-0 backdrop-blur-sm opacity-50 rounded-sm"></div>
+            <div
+              className={cn(
+                "bg-white w-full h-full absolute top-0 backdrop-blur-sm opacity-50 rounded-sm",
+                !isDeckFull && "bg-gray-800"
+              )}
+            ></div>
+            {!isDeckFull && (
+              <img
+                src="/padlock-nobg.png"
+                className="h-[22px] absolute top-1/2 -translate-y-1/2 left-12 brightness-75"
+                alt="padlock"
+              />
+            )}
             <p className="text-2xl relative font-bold">Battle</p>
           </div>
           <div className="relative flex items-center gap-3 justify-start w-full pl-16">
@@ -112,8 +164,12 @@ export default function HomeTab() {
               className="h-[48px] drop-shadow-[2px_1px_1px_black]"
             />
             <div className="relative">
-              <p className="text-sm font-semibold leading-4">{dailyGoldConsumed}/{dailyGoldLimit}</p>
-              <p className="text-sm leading-4">reset in: <Timer name="dailyGold" /></p>
+              <p className="text-sm font-semibold leading-4">
+                {dailyGoldConsumed}/{dailyGoldLimit}
+              </p>
+              <p className="text-sm leading-4">
+                reset in: <Timer name="dailyGold" />
+              </p>
             </div>
           </div>
         </div>

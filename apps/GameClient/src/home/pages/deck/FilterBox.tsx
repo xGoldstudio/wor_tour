@@ -105,6 +105,22 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
       : FiltersDescription[filterCriteria].rangeMax;
   }
 
+  function deleteAllFilters() {
+    setCurrentFilter({
+      Common: false,
+      Rare: false,
+      Epic: false,
+      Legendary: false,
+      Level: {
+        min: FiltersDescription.Level.rangeMin!,
+        max: FiltersDescription.Level.rangeMax!,
+      },
+      Cost: {
+        min: FiltersDescription.Cost.rangeMin!,
+        max: FiltersDescription.Cost.rangeMax!,
+      },
+    });
+  }
   return (
     <>
       <Button
@@ -125,7 +141,7 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
       </Button>
       {filterIsOpen && (
         <OutsideClickHandler onOutsideClick={() => setFilterIsOpen(false)}>
-          <div className="absolute -left-[82px] top-14 z-10 flex flex-col items-center justify-center -mt-8 ">
+          <div className="absolute -left-[82px] top-14 z-30 flex flex-col items-center justify-center -mt-8 ">
             <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-b-[16px] border-transparent border-b-white " />
             <div className="h-[371px] w-[170px] bg-[#406799] border-white border-2 rounded-md flex flex-col gap-2 items-center text-white">
               <span className="pt-2">Filter</span>
@@ -184,7 +200,12 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
                 )
               )}
               <div className="w-full h-full flex justify-center items-center border-t-neutral-300 border-t-[1px] border-opacity-30 bg-[#1E3E5B] rounded-b-md">
-                <button className="" onClick={() => setFilterIsOpen(false)}>
+                <button
+                  className=""
+                  onClick={() => {
+                    setFilterIsOpen(false), deleteAllFilters();
+                  }}
+                >
                   <span>Clear</span>
                 </button>
               </div>

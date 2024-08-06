@@ -1,11 +1,16 @@
 import { findCard } from "@/cards";
-import { Card } from "./cardFilters";
+import { CardCollection } from "./cardFilters";
+
+export const NUMBER_OF_CARD_IN_DECK: number = 8;
 
 export type Sorts = Record<CardSorts, CardSort>;
 export type CardSorts = "cost" | "rarity" | "world" | "level";
 export interface CardSort {
   label: string;
-  sortFunction: (detailledCollection: Card[], isAcending: boolean) => Card[];
+  sortFunction: (
+    detailledCollection: CardCollection[],
+    isAcending: boolean
+  ) => CardCollection[];
 }
 export const defaultSort: CardSorts = "world";
 
@@ -15,12 +20,10 @@ export const sorts: Sorts = {
   cost: {
     label: "By Cost",
     sortFunction: (detailledCollection, isAscending) =>
-      detailledCollection.sort(
+      detailledCollection.sort((a, b) =>
         isAscending
-          ? (a, b) =>
-              findCard(a.id, a.level).cost - findCard(b.id, b.level).cost
-          : (a, b) =>
-              findCard(b.id, b.level).cost - findCard(a.id, a.level).cost
+          ? findCard(a.id, a.level).cost - findCard(b.id, b.level).cost
+          : findCard(b.id, b.level).cost - findCard(a.id, a.level).cost
       ),
   },
   rarity: {

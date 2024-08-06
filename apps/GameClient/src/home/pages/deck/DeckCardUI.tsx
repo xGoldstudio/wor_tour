@@ -1,86 +1,186 @@
-import usePlayerStore from "@/home/store/playerStore/playerStore";
-import { Button, CardBorder, CardContentIllustartion, ManaBall } from "@repo/ui";
+import { preventDefault } from "@repo/lib";
+import {
+  Button,
+  CardBorder,
+  CardContentIllustartion,
+  cn,
+  Cover,
+  ManaBall,
+} from "@repo/ui";
 import { useState } from "react";
 import CardModal from "./CardModal";
-import { preventDefault } from "@repo/lib";
+import { Tabs } from "./DeckInterface";
+import { useEditionMode } from "./context/UseEditionMode";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
+import { CardCollection } from "./cardFilters";
 
 interface CardUIProps {
   cardId: number;
   isHand?: boolean;
-  unaddble?: boolean;
+  locked?: boolean;
+  setCurrentTab?: (tab: Tabs) => void;
+  setSelectedCard?: (id: number) => void;
+  selectedCard?: number;
 }
 
-export function DeckCardUI({ cardId, isHand, unaddble: addable }: CardUIProps) {
+export function DeckCardUI({
+  cardId,
+  isHand,
+  locked = false,
+  setCurrentTab,
+  setSelectedCard,
+  selectedCard,
+}: CardUIProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
-  const { card, removeCardFromDeck, addCardToDeck, isDeckFull } =
+  const { setEditionMode } = useEditionMode();
+
+  const { card, removeCardFromDeck, addCardToDeck, isDeckFull, lockPattern } =
     usePlayerStore((state) => ({
-      card: state.getCompleteInfo(cardId),
+      card: locked
+        ? state.getLockedCardInfo(cardId)
+        : state.getCompleteInfo(cardId),
       removeCardFromDeck: state.removeCardFromDeck,
       addCardToDeck: state.addCardToDeck,
       isDeckFull: state.isDeckFull(),
+      lockPattern: state.getTheLockPattern(cardId),
     }));
-
+  const isSelected = selectedCard === card.id;
+  const opacity = locked ? "brightness-[.70]" : "";
   return (
-    <>
+    <div>
       {isDescriptionOpen && (
         <CardModal
           cardId={card.id}
           closeModal={() => setIsDescriptionOpen(false)}
         />
       )}
-      <div className="relative select-none h-min">
-        <div className="" onClick={() => setIsDescriptionOpen(true)}>
-          <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>
-            <div className="w-full h-full flex flex-col relative">
-              <CardContentIllustartion card={card} size={isHand ? 1.6 : 2} />
-              <div className="absolute top-0 right-0">
-                <svg
-                  className="h-full absolute left-0 -translate-x-full"
-                  viewBox="0 0 32 32"
-                >
-                  <polygon points="0,0 32,32 32,0" fill="black" />
-                </svg>
-                <div className=" bg-black text-white text-sm font-[stylised] leading-3 px-2 pl-1 py-[2px]">
-                  {card.level}
+      <div className={cn(isSelected ? "px-2 relative " : "pb-2 relative ")}>
+        {isSelected && (
+          <Cover
+            cardRarity={card.rarity}
+            className="rounded-lg blur-sm absolute "
+            isSelected={isSelected}
+          />
+        )}
+        <div className={cn("relative select-none h-min  ")}>
+          {locked && (
+            <div
+              className="absolute h-full w-full px-5 flex text-center text-sm justify-center items-center z-10"
+              onClick={() => setIsDescriptionOpen(true)}
+            >
+              {lockPattern === 0 ? (
+                <span className="text-slate-200">Not unlocked yet</span>
+              ) : (
+                <span className="text-slate-200">
+                  {" "}
+                  Unlockable at world {lockPattern}
+                </span>
+              )}
+            </div>
+          )}
+          <div
+            className={`${opacity} hover:cursor-pointer`}
+            onClick={() => {
+              isSelected ? setSelectedCard!(0) : setSelectedCard!(card.id),
+                !isDeckFull && setEditionMode(true);
+            }}
+          >
+            <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>
+              <div
+                className={`w-full h-full flex flex-col relative ${opacity}`}
+              >
+                <CardContentIllustartion
+                  isSelected={isSelected}
+                  card={card}
+                  size={isHand ? 1.6 : 2}
+                />
+                <div className={`absolute top-0 right-0 ${opacity}`}>
+                  <svg
+                    className="h-full absolute left-0 -translate-x-full"
+                    viewBox="0 0 32 32"
+                  >
+                    <polygon points="0,0 32,32 32,0" fill="black" />
+                  </svg>
+                  <div className=" bg-black text-white text-sm font-[stylised] leading-3 px-2 pl-1 py-[2px]">
+                    {card.level}
+                  </div>
                 </div>
               </div>
+            </CardBorder>
+            <div className="absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3 scale-[65%]">
+              <ManaBall mana={card.cost} />
             </div>
-          </CardBorder>
-          <div className="absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3 scale-[65%]">
-            <ManaBall mana={card.cost} />
           </div>
+          {isSelected && (
+            <div className="absolute z-20 w-full flex justify-center items-center   -bottom-[3.15rem] gap-x-3  ">
+              <div className=" shadow-2xl group  rounded-lg ">
+                <Cover
+                  cardRarity={card.rarity}
+                  className="rounded-lg blur-sm absolute "
+                  isSelected={isSelected}
+                  isButton={true}
+                />
+                <Button
+                  small={true}
+                  width="w-[3.6rem] "
+                  className="h-10"
+                  rarity={"rare"}
+                  action={() => setIsDescriptionOpen(true)}
+                >
+                  <img
+                    className="p-[0.25rem] group-hover:p-[0.15rem] transition-all duration-100 ease-in-out invert"
+                    src="/information-circle-no-bg.png"
+                    width={30}
+                    height={30}
+                    alt=""
+                  />
+                </Button>
+              </div>
+              <div className="group shadow-2xl">
+                {!locked && (card as CardCollection).isInDeck ? (
+                  <Button
+                    small={true}
+                    width="w-[3.6rem]"
+                    className="h-10"
+                    action={() => {
+                      setEditionMode(true);
+                      removeCardFromDeck(card.id);
+                      setCurrentTab?.("Deck");
+                    }}
+                  >
+                    <img
+                      className="p-[0.25rem] group-hover:p-[0.15rem] transition-all duration-100 ease-in-out"
+                      src="/trash-no-bg.png"
+                      width={27}
+                      height={27}
+                      alt=""
+                    />
+                  </Button>
+                ) : (
+                  <Button
+                    small={true}
+                    width="w-[3.4rem]"
+                    className="h-10"
+                    disabled={isDeckFull}
+                    action={preventDefault(() => {
+                      addCardToDeck(card.id);
+                      setCurrentTab?.("Deck");
+                    })}
+                  >
+                    <img
+                      className="p-[0.25rem] group-hover:p-[0.15rem] transition-all duration-100 ease-in-out"
+                      src="/icons/plus.svg"
+                      width={27}
+                      height={27}
+                      alt=""
+                    />
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
         </div>
-        {!addable && (
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/4">
-            {card.isInDeck ? (
-              <Button
-                action={() => removeCardFromDeck(card.id)}
-                small
-                className="px-4 py-0"
-              >
-                <img
-                  src="/icons/minus.svg"
-                  alt="remove"
-                  className="w-4 h-4 m-1 my-2"
-                />
-              </Button>
-            ) : (
-              <Button
-                action={preventDefault(() => addCardToDeck(card.id))}
-                small
-                className="px-4 py-0"
-                disabled={isDeckFull}
-              >
-                <img
-                  src="/icons/plus.svg"
-                  alt="add"
-                  className="w-4 h-4 m-1 my-2"
-                />
-              </Button>
-            )}
-          </div>
-        )}
       </div>
-    </>
+    </div>
   );
 }

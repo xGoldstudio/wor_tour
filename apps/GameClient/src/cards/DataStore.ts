@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { CardStatsInfo, CardStatsInfoLevel, EditorData, getStats } from "@repo/lib";
 
 interface DataStore {
-  cards: CardStatsInfo[];
+  cards: CardStatsInfo[]; // mapper en cardtype!
   worlds: World[];
   getWorld: (id: number) => World | undefined;
   init: (data: EditorData) => void;
@@ -24,7 +24,7 @@ const useDataStore = create<DataStore>()((set, get) => ({
   },
   init: (data: EditorData) => {
     set({
-      worlds: data.worlds.map(world => ({
+      worlds: data.worlds.map((world) => ({
         ...world,
       })),
       cards: data.cards.map((card) => ({

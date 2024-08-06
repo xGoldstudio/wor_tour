@@ -4,11 +4,12 @@ import Home from "./home/Home";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import useDataStore from "./cards/DataStore";
-import { EditorData } from "../../../packages/gameEngine/src/types/DataStoreType";
+import { EditionModeProvider } from "./home/pages/deck/context/EditionModeContext";
 import usePlayerStore from "./home/store/playerStore/playerStore";
 import { _warningResetPlayStore } from "./home/store/initAllClientData";
 import DebugPanel from "./DebugPanel";
 import ErrorBoundary from "./ErrorBoundary";
+import { EditorData } from "@repo/lib";
 
 const queryClient = new QueryClient();
 
@@ -49,13 +50,23 @@ function AppRouter() {
   }
 
   return (
-    <ErrorBoundary fallback={(
-      <div className="bg-black w-screen h-screen">
-        <h1 className="text-white">Something went wrong.</h1>
-        <DebugPanel />
+    <ErrorBoundary
+      fallback={
+        <div className="bg-black w-screen h-screen">
+          <h1 className="text-white">Something went wrong.</h1>
+          <DebugPanel />
+        </div>
+      }
+    >
+      <div id="app">
+        {isInGame ? (
+          <Game />
+        ) : (
+          <EditionModeProvider>
+            <Home />
+          </EditionModeProvider>
+        )}
       </div>
-  )}>
-      <div id="app">{isInGame ? <Game /> : <Home />}</div>
     </ErrorBoundary>
   );
 }

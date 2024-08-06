@@ -105,6 +105,10 @@ export function filterNulls<T>(array: (T | null)[]): T[] {
 	return array.filter((item): item is T => item !== null);
 }
 
+export function filterUndefined<T>(array: (T | undefined)[]): T[] {
+	return array.filter((item): item is T => item !== undefined);
+}
+
 export function isTrueOr<T, U>(value: T, defaultValue: U) {
   return (bool: boolean) => bool === true ? value : defaultValue;
 }

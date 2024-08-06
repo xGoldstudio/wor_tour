@@ -3,9 +3,13 @@ import { useState } from "react";
 import CollectionTab from "./CollectionTab";
 import DeckTab from "./DeckTab";
 
-type Tabs = "Deck" | "Collection";
+export type Tabs = "Deck" | "Collection";
 
-const tabs: Record<Tabs, () => JSX.Element> = {
+export interface TabProps {
+  setCurrentTab: (tab: Tabs) => void;
+}
+
+const tabs: Record<Tabs, React.FC<TabProps>> = {
   Deck: DeckTab,
   Collection: CollectionTab,
 };
@@ -38,7 +42,6 @@ function TabModal({ children, currentTab, setCurrentTab }: TabModalProps) {
 export function DeckInterface() {
   const [currentTab, setCurrentTab] = useState<Tabs>("Deck");
   const TabElement = tabs[currentTab];
-
   return (
     <div>
       <div className="m-2 relative flex justify-center gap-2 -mb-[0px]">
@@ -55,7 +58,7 @@ export function DeckInterface() {
         </div>
       </div>
       <div className="w-full flex justify-center overflow-hidden">
-        <TabElement />
+        <TabElement setCurrentTab={setCurrentTab} />
       </div>
     </div>
   );

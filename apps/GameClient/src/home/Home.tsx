@@ -7,10 +7,11 @@ import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore/playerStore";
 import {
   Borders,
+  Button,
   CardIllustartion,
   Cover,
   InnerBord,
-  NumberSpan
+  NumberSpan,
 } from "@repo/ui";
 import { cn } from "@repo/ui";
 import { numberWithCommas } from "@repo/lib";
@@ -18,20 +19,24 @@ import KeysOutput from "./ui/KeysOutput";
 import Timer from "@/services/LoopService/Timer";
 import ExperienceModalWatcher from "./experienceModal/ExperienceModalWatcher";
 import ExperienceOutput from "./ui/ExperienceOutput";
+import { useEditionMode } from "./pages/deck/context/UseEditionMode";
 
-type Tabs = "home" | "deck" | "shop";
+export type Tabs = "home" | "deck" | "shop";
 
-const tabs: (() => JSX.Element)[] = [ShopTab, HomeTab, DeckTab];
+const tabs: (({
+  setCurrentTab,
+}: {
+  setCurrentTab: (tab: Tabs) => void;
+}) => JSX.Element)[] = [ShopTab, HomeTab, DeckTab];
 
 const tabsPosition: Record<Tabs, number> = {
   shop: 0,
   home: 1,
   deck: 2,
 };
-
 export default function Home() {
   const [currentTab, setCurrentTab] = useState<Tabs>("home");
-
+  const { editionMode, setEditionMode } = useEditionMode();
   return (
     <div className="w-screen h-screen justify-center bg-black relative flex">
       <DebugPanel />
@@ -56,12 +61,27 @@ export default function Home() {
           >
             {tabs.map((Tab) => (
               <div className="w-full h-full relative" key={Tab.name}>
-                <Tab />
+                <Tab setCurrentTab={setCurrentTab} />
               </div>
             ))}
           </div>
+          {editionMode && (
+            <div className="h-[70px] w-full bg-white relative z-10 ">
+              <div className="grow h-full bg-slate-600 relative flex items-center justify-center">
+                <Cover cardRarity="rare" />
+                <Button rarity="epic" action={() => setEditionMode(false)}>
+                  Done
+                </Button>
+              </div>
+            </div>
+          )}
 
-          <div className="flex w-full bg-black relative z-10">
+          <div
+            className={cn(
+              "flex w-full bg-black relative z-10",
+              editionMode && "hidden"
+            )}
+          >
             <div className="w-full h-full absolute flex overflow-hidden">
               <div className="grow h-full bg-slate-600 relative">
                 <Cover cardRarity="rare" />
