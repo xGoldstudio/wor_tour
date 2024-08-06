@@ -1,4 +1,3 @@
-import usePlayerStore from "@/home/store/playerStore";
 import { CardType } from "@repo/lib";
 import { useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
@@ -8,6 +7,7 @@ import { DeckCardUI } from "./DeckCardUI";
 import { Tabs } from "./DeckInterface";
 import { getCardsFiltered } from "./getCardsFiltered";
 import { SortAndFilterBox } from "./SortAndFilterBox";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 
 interface CollectionProps {
   collection: (CardType & { isInDeck: boolean })[];

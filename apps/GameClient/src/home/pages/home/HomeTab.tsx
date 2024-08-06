@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { cn, Cover } from "@repo/ui";
 import { numberWithCommas, textureByRarity } from "@repo/lib";
-import usePlayerStore from "@/home/store/playerStore";
 import { InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
 import AllWorlds from "./allWorlds/AllWorlds";
 import ProfileModal from "./modals/ProfileModal";
@@ -12,6 +11,7 @@ import { useEditionMode } from "../deck/context/UseEditionMode";
 import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 import { dailyGoldService, matchmakingService } from "@/services/inject";
 import Timer from "@/services/LoopService/Timer";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 
 interface HomeTabProps {
   setCurrentTab?: (tab: Tabs) => void;

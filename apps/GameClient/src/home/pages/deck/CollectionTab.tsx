@@ -2,7 +2,7 @@ import ScrollContainer from "react-indiana-drag-scroll";
 import Collection from "./Collection";
 import { Tabs } from "./DeckInterface";
 import { useState } from "react";
-import usePlayerStore from "@/home/store/playerStore";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 
 interface CollectionTabProps {
   setCurrentTab: (tab: Tabs) => void;

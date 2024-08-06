@@ -1,4 +1,3 @@
-import usePlayerStore from "@/home/store/playerStore";
 import { getTargetStrength } from "@repo/lib";
 import { ManaBall } from "@repo/ui";
 import * as _ from "lodash";
@@ -9,6 +8,7 @@ import Collection from "./Collection";
 import { useEditionMode } from "./context/UseEditionMode";
 import { DeckCardUI } from "./DeckCardUI";
 import { NUMBER_OF_CARD_IN_DECK } from "@/const";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 
 interface DeckStatsProps {
   detailledDeck: CardCollection[];

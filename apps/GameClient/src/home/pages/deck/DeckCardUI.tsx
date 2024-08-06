@@ -1,4 +1,3 @@
-import usePlayerStore from "@/home/store/playerStore";
 import { preventDefault } from "@repo/lib";
 import {
   Button,
@@ -12,6 +11,7 @@ import { useState } from "react";
 import CardModal from "./CardModal";
 import { Tabs } from "./DeckInterface";
 import { useEditionMode } from "./context/UseEditionMode";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 
 interface CardUIProps {
   cardId: number;
