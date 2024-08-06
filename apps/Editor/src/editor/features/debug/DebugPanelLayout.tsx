@@ -48,6 +48,7 @@ export default function DebugPanelLayout({
         {setSpeedButton(10)}
         {addTicksButton(1)}
         {addTicksButton(10)}
+        {addTicksButton(1000)}
       </div>
       {children}
     </div>
