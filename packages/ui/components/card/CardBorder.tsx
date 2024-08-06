@@ -140,19 +140,6 @@ export function CardContentIllustartion({
   return (
     <>
       <InnerBord size={size}>
-        <div
-          className={cn(
-            "w-full h-full grow absolute box-border transition-transform duration-300 ease-in-out",
-            isDisabled && "grayscale",
-            isSelected && "scale-150"
-          )}
-          style={{
-            backgroundImage: getImageUrlCssValue(card.worldIllustration),
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            height: `calc(100% - ${7 * borderUnit}px)`,
-          }}
-        ></div>
         <CardImage
           className={cn(isDisabled && "grayscale", isSelected && "scale-150")}
           worldIllustration={card.worldIllustration}
@@ -170,7 +157,7 @@ export function CardContentIllustartion({
         )}
         <div
           className={cn(
-            "w-full h-full grow absolute box-border transition-transform duration-300 ease-in-out",
+            "w-full h-full grow absolute box-border transition-transform duration-200 ease-in-out",
             isDisabled && "grayscale",
             isSelected && "scale-125"
           )}
@@ -198,7 +185,7 @@ function CardImage({
   return (
     <div
       className={cn(
-        "w-full h-full grow absolute box-border transition-transform duration-300 ease-in-out",
+        "w-full h-full grow absolute box-border transition-transform duration-200 ease-in-out",
         className
       )}
       style={{
