@@ -1,4 +1,4 @@
-import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, StartEarningManaEvent, SetManaIncreaseSpeed, StartGameSequence, StartGameEvent, RemoveStateEvent, TriggerStateEvent, AddStateEvent, IncreaseStateValueEvent, DecreaseStateValueEvent, EndEarningManaEvent, ShuffleDeckEvent } from '../../types/eventType';
+import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, StartEarningManaEvent, SetManaIncreaseSpeed, StartGameSequence, StartGameEvent, RemoveStateEvent, TriggerStateEvent, AddStateEvent, IncreaseStateValueEvent, DecreaseStateValueEvent, EndEarningManaEvent, ShuffleDeckEvent, TimerDecreaseEvent } from '../../types/eventType';
 import startEarningManaEvent from "./events/startEarningMana";
 import manaIncreaseEvent from './events/manaIncrease';
 import { GameStateObject } from './gameState';
@@ -25,6 +25,7 @@ import increaseStateValueEvent from './events/increaseStateValue';
 import decreaseStateValueEvent from './events/decreaseStateValue';
 import endEarningManaEvent from './events/endEarningMana';
 import shuffleDeckEvent from './events/shuffleDeck';
+import timerDecrease from './events/timerDecrease';
 
 export const FRAME_TIME = 10;
 
@@ -59,6 +60,7 @@ type EventTypeMap = {
 	triggerState: TriggerStateEvent;
 	addState: AddStateEvent;
 	shuffleDeck: ShuffleDeckEvent;
+	timerDecrease: TimerDecreaseEvent;
 };
 
 type EventHandlers = {
@@ -90,6 +92,7 @@ const EventsCompute: EventHandlers = {
 	decreaseStateValue: decreaseStateValueEvent,
 	triggerState: triggerStateEvent,
 	shuffleDeck: shuffleDeckEvent,
+	timerDecrease: timerDecrease,
 }
 
 // used in front and back and can be debugged easily (not pure mutate the state)

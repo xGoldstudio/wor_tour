@@ -16,6 +16,7 @@ export { default as EmptyBar } from './components/EmptyBar.tsx';
 export { default as ManaBar } from './components/game/ManaBar.tsx';
 export * from './components/game/useRunGameInstance.ts';
 export * from './components/game/FpsTracker.ts';
+export { default as GameTimer } from './components/game/GameTimer';
 export * from './components/card/useGameSyncAnimation.tsx';
 export * from './lib/rxjsToZustand.ts';
 export * from './lib/lifecycle.ts';

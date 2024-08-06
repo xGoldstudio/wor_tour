@@ -6,7 +6,13 @@ import { useShallow } from "zustand/react/shallow";
 import _ from "lodash";
 import { useState } from "react";
 import { dummyCard } from "./card/const";
-import { ManaBar, useGameEventListener } from "@repo/ui";
+import {
+  Borders,
+  CardIllustartion,
+  GameTimer,
+  ManaBar,
+  useGameEventListener,
+} from "@repo/ui";
 import { CardType } from "@repo/lib";
 import { ClockReturn, EventType, GameStateObject } from "game_engine";
 
@@ -32,7 +38,7 @@ function PlayerGUI({ isPlayer, clock }: PlayerGUIProps) {
           id={getPlayerGuiId(isPlayer)}
         >
           {isPlayer && (
-            <div className="flex gap-4 mb-3 h-[120px] -translate-y-1/3">
+            <div className="flex gap-4 mb-3 h-[120px] -translate-y-1/3 z-10">
               <div
                 id="staticCardWrapper"
                 className="relative w-[113px] h-[160px] translate-y-[12%]"
@@ -60,6 +66,34 @@ function PlayerGUI({ isPlayer, clock }: PlayerGUIProps) {
           <div id={`hpBar_${isPlayer}`} className="w-full">
             <HpBar maxHp={maxHp} withHeart isPlayer={isPlayer} />
           </div>
+          {!isPlayer ? (
+            <>
+              <div className="pt-2"></div>
+              <div className="absolute bottom-0 translate-y-1/2">
+                <Borders
+                  width={800}
+                  height={8}
+                  borderUnit={0.8}
+                  rarity={"epic"}
+                >
+                  <CardIllustartion width={800} height={8} borderUnit={0.6}>
+                    <></>
+                  </CardIllustartion>
+                </Borders>
+              </div>
+              <div className="absolute bottom-0 translate-y-1/2">
+                <GameTimer />
+              </div>
+            </>
+          ) : (
+            <div className="absolute top-0 -translate-y-1/2">
+              <Borders width={800} height={8} borderUnit={0.8} rarity={"epic"}>
+                <CardIllustartion width={800} height={8} borderUnit={0.6}>
+                  <></>
+                </CardIllustartion>
+              </Borders>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -73,7 +107,9 @@ function getPlayerGuiId(isPlayer: boolean) {
 export default PlayerGUI;
 
 function GuiDeckCard({ position }: { position: number }) {
-  const [card, setCard] = useState<CardType>(useGameStore.getState().state.playerDeck[position] || dummyCard);
+  const [card, setCard] = useState<CardType>(
+    useGameStore.getState().state.playerDeck[position] || dummyCard
+  );
 
   useGameEventListener({
     type: "drawCard",
@@ -84,14 +120,12 @@ function GuiDeckCard({ position }: { position: number }) {
     type: "shuffleDeck",
     action: (_, data) => setNewCard(data),
   });
-  
+
   function setNewCard(data: GameStateObject) {
     const currentCard = data.playerDeck[position];
     if (!currentCard) return;
     setCard(currentCard);
   }
 
-  return (
-    <StaticCard card={card} />
-  )
+  return <StaticCard card={card} />;
 }

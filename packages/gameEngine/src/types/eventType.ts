@@ -26,7 +26,8 @@ export type EventType =
   | RemoveStateEvent
   | TriggerStateEvent
   | AddStateEvent
-  | ShuffleDeckEvent;
+  | ShuffleDeckEvent
+  | TimerDecreaseEvent;
 
 export interface DummyEvent { // this event should be ignored
   type: "dummyEvent";
@@ -190,6 +191,10 @@ export interface AddStateEvent {
 export interface ShuffleDeckEvent {
   type: "shuffleDeck";
   isPlayer: boolean;
+}
+
+export interface TimerDecreaseEvent {
+  type: "timerDecrease";
 }
 
 export type InGameCardType = {

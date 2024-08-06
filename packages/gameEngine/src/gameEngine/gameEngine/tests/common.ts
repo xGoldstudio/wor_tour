@@ -188,6 +188,27 @@ export function triggerIncreaseMana(
 	});
 }
 
+export function triggerDamageToPlayer(
+	clock: ClockReturn<EventType>,
+	isPlayer: boolean,
+	amount: number
+) {
+	clock.triggerEvent({
+		type: "playerDamageResolve",
+		initiator: {
+			type: "playerDamage",
+			isPlayer,
+			damage: amount,
+			initiator: {
+				type: "cardAttacking",
+				isPlayer,
+				cardPosition: -1,
+				instanceId: -1,
+			}
+		}
+	});
+}
+
 export function attackAnimation(clock: ClockReturn<EventType>) {
 	for (let i = 0; i < DAMAGE_SPEED; i++) {
 		clock.nextTick();

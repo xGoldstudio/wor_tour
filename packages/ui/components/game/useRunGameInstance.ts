@@ -14,11 +14,13 @@ export type UseRunInstance = {
 };
 
 export function useRunGameInstance({
-	animationsCompute, fpsTracker, gameData,
+	animationsCompute, fpsTracker, gameData, log, skipStartGame
 }: {
 	animationsCompute?: (currentFrame: number) => Promise<void>,
 	fpsTracker?: FpsTrackerType,
 	gameData?: Partial<GameStateObjectConstructor>,
+	log?: boolean;
+	skipStartGame?: boolean;
 }): UseRunInstance {
 	const { triggerGameSyncAnimation, reset: resetGameSyncAnimationStore } = useGameSyncAnimationStore();
 	const [instance, setInstance] = useState<UseRunInstance>(runInstance());
@@ -26,6 +28,7 @@ export function useRunGameInstance({
 	function runInstance() {
 		const { clock, state } = initTest({
 			sideEffectOnEvent: ({ event, state, clock }) => {
+				log && console.log(event);
 				runGameEventListeners(
 					event.type,
 					event,
@@ -35,6 +38,7 @@ export function useRunGameInstance({
 				);
 			},
 			gameData,
+			skipStartGame,
 		});
 		async function playTick(shouldAnimate: boolean) {
 			if (shouldAnimate) {

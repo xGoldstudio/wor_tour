@@ -3,7 +3,7 @@ import DebugPanelLayout from "./DebugPanelLayout";
 import { MAX_MANA, triggerConsumeMana, triggerIncreaseMana, triggerStartEarningMana } from "game_engine";
 
 export default function ManaBarDebug() {
-  const instance = useRunGameInstance({});
+  const instance = useRunGameInstance({ skipStartGame: true });
   const { clock, state } = instance;
 
   useOnMount(() => {
