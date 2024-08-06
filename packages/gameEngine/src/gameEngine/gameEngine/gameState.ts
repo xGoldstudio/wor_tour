@@ -15,6 +15,8 @@ export const defaultManaSpeed = 300;
 
 export const MAX_MANA = 9;
 
+export const MAX_GAME_DURATION = 300;
+
 export class GameStateObject {
 	constructor({ playerDeck, opponentDeck, playerHp, opponentHp }: GameStateObjectConstructor) {
 		this.playerMana = 0;
@@ -37,6 +39,7 @@ export class GameStateObject {
 		this.playerManaSpeed = defaultManaSpeed;
 		this.opponentManaSpeed = defaultManaSpeed;
 		this.isStarted = false;
+		this.timer = MAX_GAME_DURATION;
 	}
 
 	// state (nested properties are forbidden)
@@ -56,6 +59,7 @@ export class GameStateObject {
 	opponentMaxHp: number;
 	playerManaSpeed: number;
 	opponentManaSpeed: number;
+	timer: number;
 
 	currentInstanceId: number;
 	currentWinner: CurrentWinner;
@@ -214,6 +218,11 @@ export class GameStateObject {
 		this.currentWinner = winnerIsPlayer ? "player" : "opponent";
 	}
 
+	decreaseTimer() {
+		this.timer--;
+		return this.timer;
+	}
+
 	// events
 	removeState(
 		instanceId: number,
@@ -304,5 +313,8 @@ export class GameStateObject {
 	}
 	isPlayerWinner() {
 		return this.currentWinner === "player";
+	}
+	getTimer() {
+		return this.timer;
 	}
 }
