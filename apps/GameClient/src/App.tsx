@@ -58,7 +58,7 @@ function AppRouter() {
         </div>
       }
     >
-      <div id="app">
+      <div id="app" className="select-none">
         {isInGame ? (
           <Game />
         ) : (

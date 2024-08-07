@@ -24,6 +24,7 @@ export default function ChestReward({
           animationOver.current = 1;
         },
       });
+      tl.progress(1).progress(0);
       tl.fromTo(
         scope.current.querySelector("img"),
         { scale: 0 },

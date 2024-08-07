@@ -27,7 +27,7 @@ export default function KeyReward({
       tl.fromTo(
         scope.current.querySelector("img"),
         { scale: 0 },
-        { scale: 1, duration: 1.5, ease: "elastic" },
+        { scale: 1, duration: 1, ease: "elastic" },
         "start"
       );
       const imageElement = scope.current!.querySelector("img");
@@ -35,9 +35,8 @@ export default function KeyReward({
         if (imageElement === null) return;
         tl.to(imageElement, {
           rotate: 720,
-          duration: 1,
-          ease: "power2.in",
-          delay: -1,
+          duration: 0.6,
+          ease: "power3.in",
         });
         tl.to(imageElement, {
           y: -100,

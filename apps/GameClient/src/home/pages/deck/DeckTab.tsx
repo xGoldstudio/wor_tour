@@ -75,7 +75,7 @@ export default function DeckTab() {
     <div>
       <ScrollContainer className="grow scrollbar-hiden flex flex-col h-[674px] w-[650px] overflow-y-scroll">
         <div className="grid grid-rows-[1fr_auto]  ">
-          <div className="grid grid-cols-4 gap-y-8 pt-8 ">
+          <div className="grid grid-cols-4 gap-y-6 pt-8 ">
             {detailledDeck.map((card, index) =>
               !card ? (
                 <EmptyDeckPlaceholder />
