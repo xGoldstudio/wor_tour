@@ -83,7 +83,6 @@ export function useRunGameInstance({
 	})
 
 	useOnUnMount(() => {
-		console.log("unmounting");
 		instance.pause();
 		resetAllGameEventListeners();
 		resetGameSyncAnimationStore();

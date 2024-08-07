@@ -8,7 +8,7 @@ export default function playerDamageResolveEvent({ event, gameState, clock }: Co
 	) {
 		clock.triggerEvent({
 			type: "gameOver",
-			winnerIsPlayer: !event.initiator.isPlayer,
+			winner: event.initiator.isPlayer ? "opponent" : "player",
 		});
 	}
 }

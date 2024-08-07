@@ -57,8 +57,7 @@ export function DailyGoldService() {
 		return getGoldForGame(Math.floor(store.getState().goldPerVictory / 3));
 	}
 
-	function earnReward(isWin: boolean) {
-		const goldAmount = isWin ? getGoldWinReward() : getGoldLoseReward();
+	function earnReward(goldAmount: number) {
 		store.setState({ dailyGoldConsumed: store.getState().dailyGoldConsumed + goldAmount });
 	}
 

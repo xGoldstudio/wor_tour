@@ -1,12 +1,13 @@
 import { findCard } from "@/cards";
 import { create } from "zustand";
 import { CardType } from "@repo/lib";
-import { GameStateObjectConstructor } from "game_engine";
+import { CurrentWinner, GameStateObjectConstructor } from "game_engine";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 
 export interface GameRewards {
-  win: GameReward;
-  lose: GameReward;
+  player: GameReward;
+  opponent: GameReward;
+  draw: GameReward;
 }
 
 export interface GameReward {
@@ -32,6 +33,7 @@ interface GameInterfaceStore {
     rewards: GameRewards,
   ) => void;
   reset: () => void;
+  getReward: (currentWinner: CurrentWinner) => GameReward;
 }
 
 const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
@@ -41,14 +43,18 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
   playerHp: 1000,
   opponentHp: 1000,
   rewards: {
-    win: {
+    player: {
       money: 0,
       trophies: 0
     },
-    lose: {
+    opponent: {
       money: 0,
       trophies: 0
-    }
+    },
+    draw: {
+      money: 0,
+      trophies: 0
+    },
   },
   currentGameWorld: 1,
   setInGameData: (
@@ -76,6 +82,7 @@ const useGameMetadataStore = create<GameInterfaceStore>()((set, get) => ({
   }),
   setIsInGame: (isInGame: boolean) => set({ isInGame }),
   reset: () => set({ isInGame: false }),
+  getReward: (currentWinner: CurrentWinner) => get().rewards[currentWinner ?? "draw"],
 }));
 
 

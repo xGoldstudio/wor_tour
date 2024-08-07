@@ -30,18 +30,18 @@ test("normal ending, opponent win", () => {
 	expect(state.getTimer()).toBe(1);
 	goToNextTimer(clock);
 	expect(state.getTimer()).toBe(0);
-	expect(state.currentWinner).toBe("opponent");
+	expect(state.currentWinner).toBe("draw");
 	goToNextTimer(clock);
 	expect(state.getTimer()).toBe(0);
 });
 
-test("player have more hp", () => {
+test("nobody lost hp", () => {
 	const { clock, state } = initTest({ skipStartGame: true, gameData: { playerHp: 2, opponentHp: 1 } });
 	clock.nextTick();
 	for (let i = 0; i < MAX_GAME_DURATION; i++) {
 		goToNextTimer(clock);
 	}
-	expect(state.currentWinner).toBe("player");
+	expect(state.currentWinner).toBe("draw");
 });
 
 test("player have more init hp but lost some", () => {

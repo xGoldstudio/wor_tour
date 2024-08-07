@@ -173,7 +173,11 @@ function GameCard({
   });
   useGameEventListener({
     type: "gameOver",
-    action: (event) => (event as GameOverEvent).winnerIsPlayer !== isPlayerCard && cardDestroyed(),
+    action: (event, state) =>
+      (event as GameOverEvent).winner ===
+        (isPlayerCard ? "opponent" : "player") &&
+      state.getCard(isPlayerCard, position) &&
+      cardDestroyed(),
   });
   useGameEventListener({
     type: "cardDamageResolve",

@@ -22,6 +22,11 @@ export default function GameDebugPanel({
   if (!IS_DEBUG()) {
     return <></>;
   }
+
+  function triggerDrawGame() {
+    clock.triggerEvent({ type: "gameOver", winner: "draw" });
+  }
+
   return (
     <div className="fixed right-2 top-2 border-2 border-white text-white px-4 py-2 flex flex-col gap-4">
       <FpsPrint />
@@ -74,6 +79,7 @@ export default function GameDebugPanel({
       >
         Kill yourself
       </DebugButton>
+      <DebugButton onClick={triggerDrawGame}>Draw game</DebugButton>
       <DebugButton onClick={() => botOptions.disabled = !botOptions.disabled}>Toggle bot activation</DebugButton>
       <DebugButton onClick={() => GAME_OPTS.simulateBadPerformance = !GAME_OPTS.simulateBadPerformance}>Toggle bad perf</DebugButton>
    </div>
