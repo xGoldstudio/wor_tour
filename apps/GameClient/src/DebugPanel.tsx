@@ -46,7 +46,7 @@ export default function DebugPanel() {
   const instantWinGame = () => {
     matchmakingService.startGame();
     const gameObject = new GameStateObject({ playerDeck: [], opponentDeck: [], playerHp: 1, opponentHp: 1 });
-    gameObject.setGameOver(true);
+    gameObject.setGameOver("player");
     matchmakingService.endGame(gameObject);
   };
 

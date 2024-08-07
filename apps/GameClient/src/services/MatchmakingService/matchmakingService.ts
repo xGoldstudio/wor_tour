@@ -40,13 +40,17 @@ export function MatchmakingService() {
 		setInGameData(
 			playerDeck, opponentDeck, getHpFromDeck(playerDeck), getHpFromDeck(opponentDeck),
 			{
-				win: {
+				player: {
 					money: dailyGoldService.getGoldWinReward(),
 					trophies: winTrophies,
 				},
-				lose: {
+				opponent: {
 					money: dailyGoldService.getGoldLoseReward(),
 					trophies: loseTrophies,
+				},
+				draw: {
+					money: dailyGoldService.getGoldLoseReward(),
+					trophies: 0,
 				}
 			},
 		);
@@ -77,8 +81,9 @@ export function MatchmakingService() {
 
 	function endGame(gameState: GameStateObject) {
 		const isWin = gameState.currentWinner === "player";
-		const reward = useGameMetadataStore.getState().rewards[isWin ? "win" : "lose"];
-		collectRewards(isWin, reward);
+		const isLose = gameState.currentWinner === "opponent";
+		const reward = useGameMetadataStore.getState().getReward(gameState.currentWinner);
+		collectRewards(reward);
 		if (isWin) {
 			keysService.consumeKey(usePlayerStore.getState().currentWorld);
 			experienceService.gainExperience();
@@ -87,7 +92,7 @@ export function MatchmakingService() {
 		if (usePlayerStore.getState().currentTier <= MINIMAL_LOSER_QUEUE_TIER) {
 			store.setState({ loserQueue: null });
 		}
-		else if (!isWin) {
+		else if (!isLose) {
 			store.setState({
 				loserQueue: {
 					strength: getStrengthForLoserQueue((useGameMetadataStore.getState().playerCards)),
@@ -119,8 +124,10 @@ export function MatchmakingService() {
 		return Math.max(targetStrength, tierStrength - MAX_LOSER_QUEUE_STRENGTH_REDUCED);
 	}
 
-	function collectRewards(isWin: boolean, rewards: GameReward) {
-		dailyGoldService.earnReward(isWin);
+	function collectRewards(rewards: GameReward) {
+		usePlayerStore.getState().addGold(rewards.money);
+		dailyGoldService.earnReward(rewards.money);
+		const hasChangeWorldOrTier = usePlayerStore.getState().addOrRemoveTrophies(rewards.trophies);
 		if (rewards.money > 0) {
 			useAnimationStore.getState().addAnimation({
 				type: "money",
@@ -136,8 +143,6 @@ export function MatchmakingService() {
 				onEnd: () => useClientInterfaceStore.getState().setWorldsModalOpen(hasChangeWorldOrTier),
 			});
 		}
-		const hasChangeWorldOrTier = usePlayerStore.getState().addOrRemoveTrophies(rewards.trophies);
-		usePlayerStore.getState().addGold(rewards.money);
 	}
 
 	function reset() {

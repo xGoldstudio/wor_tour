@@ -11,6 +11,7 @@ interface EndGameScreenAnimationArgs {
   shinyRef: HTMLDivElement | null;
   buttonRef: HTMLButtonElement;
   nextLevelRef: HTMLDivElement;
+  isXp: boolean;
 }
 
 export default function endGameScreenAnimation({
@@ -24,6 +25,7 @@ export default function endGameScreenAnimation({
   shinyRef,
   buttonRef,
   nextLevelRef,
+  isXp,
 }: EndGameScreenAnimationArgs) {
   const tl = gsap.timeline();
   tl.fromTo(
@@ -32,16 +34,18 @@ export default function endGameScreenAnimation({
     { scale: 1, opacity: 1, duration: 0.4 },
     "appear"
   );
-  if (currentLevel < targetLevel) {
-    barNextLevel(tl, currentXpProgress, 1, currentLevel + 1);
-    if (currentLevel + 1 < targetLevel) {
-      for (let i = currentLevel + 1; i < targetLevel; i++) {
-        barNextLevel(tl, 0, 1, i + 1);
+  if (isXp) {
+    if (currentLevel < targetLevel) {
+      barNextLevel(tl, currentXpProgress, 1, currentLevel + 1);
+      if (currentLevel + 1 < targetLevel) {
+        for (let i = currentLevel + 1; i < targetLevel; i++) {
+          barNextLevel(tl, 0, 1, i + 1);
+        }
       }
+      barNextLevel(tl, 0, targetXpProgress);
+    } else {
+      barNextLevel(tl, currentXpProgress, targetXpProgress);
     }
-    barNextLevel(tl, 0, targetXpProgress);
-  } else {
-    barNextLevel(tl, currentXpProgress, targetXpProgress);
   }
   const rewards = rewardsRef.children;
   for (let i = 0; i < rewards.length; i++) {

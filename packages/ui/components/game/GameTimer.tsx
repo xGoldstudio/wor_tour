@@ -12,7 +12,6 @@ export default function GameTimer() {
   useGameEventListener({
     type: "timerDecrease",
     action: (_, gameState) => {
-      console.log("timerDecrease");
       if (timerRef.current) {
         const timer = gameState.getTimer();
         timerRef.current.textContent = timer.toString();

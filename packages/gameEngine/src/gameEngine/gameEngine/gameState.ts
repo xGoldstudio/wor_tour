@@ -9,7 +9,7 @@ export interface GameStateObjectConstructor {
 	opponentHp: number;
 }
 
-export type CurrentWinner = "player" | "opponent" | null;
+export type CurrentWinner = "player" | "opponent" | "draw" | null;
 
 export const defaultManaSpeed = 300;
 
@@ -214,8 +214,8 @@ export class GameStateObject {
 		card.hp = Math.min(card.maxHp, card.hp + amount);
 	}
 
-	setGameOver(winnerIsPlayer: boolean) {
-		this.currentWinner = winnerIsPlayer ? "player" : "opponent";
+	setGameOver(winner: CurrentWinner) {
+		this.currentWinner = winner;
 	}
 
 	decreaseTimer() {
@@ -311,8 +311,8 @@ export class GameStateObject {
 	getManaSpeed(isPlayer: boolean) {
 		return isPlayer ? this.playerManaSpeed : this.opponentManaSpeed;
 	}
-	isPlayerWinner() {
-		return this.currentWinner === "player";
+	getCurrentWinner() {
+		return this.currentWinner;
 	}
 	getTimer() {
 		return this.timer;

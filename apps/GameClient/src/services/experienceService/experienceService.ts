@@ -21,7 +21,7 @@ export interface ExperienceGain {
 	previousExperienceForNextLevel: number;
 }
 
-const defaultState = {
+const defaultState = () => ({
 	level: 1,
 	experience: 0,
 	experienceForNextLevel: DEFAULT_EXPERIENCE_FOR_NEXT_LEVEL,
@@ -33,13 +33,13 @@ const defaultState = {
 		nextLevel: 0,
 		previousExperienceForNextLevel: 0,
 	} as ExperienceGain,
-};
+});
 
 export default function ExperienceService() {
-	const store = create(persist(() => defaultState, { name: "ExperienceServiceStore" }));
+	const store = create(persist(defaultState, { name: "ExperienceServiceStore" }));
 
 	function reset() {
-		store.setState(defaultState);
+		store.setState(defaultState());
 	}
 
 	function gainExperience() {

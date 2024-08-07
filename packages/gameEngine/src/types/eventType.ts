@@ -1,3 +1,4 @@
+import { CurrentWinner } from "../gameEngine/gameEngine/gameState";
 import { CardState } from "../gameEngine/states/CardStatesData";
 import { CardRarity } from "./DataStoreType";
 
@@ -125,7 +126,7 @@ export interface CardDestroyedEvent {
 
 export interface GameOverEvent {
   type: "gameOver";
-  winnerIsPlayer: boolean;
+  winner: CurrentWinner;
 }
 
 export interface DrawCardEvent {

@@ -6,7 +6,8 @@ import {
 } from "@repo/ui";
 import { GameOverEvent } from "game_engine";
 import { useRef } from "react";
-import useGameInterface from "../stores/gameInterfaceStore";
+
+export const HEART_DEATH_ANIMATION_DURATION = 80;
 
 export default function PlayerHeart({ isPlayer }: { isPlayer: boolean }) {
   const scope = useRef<HTMLDivElement | null>(null);
@@ -23,9 +24,9 @@ export default function PlayerHeart({ isPlayer }: { isPlayer: boolean }) {
       const centerOfScreenY = window.innerHeight / 3;
       const centerOfElement = getCenterOfBoundingElement(scope.current);
       triggerAnimation({
-        duration: 80,
+        duration: HEART_DEATH_ANIMATION_DURATION,
         onComplete: triggerHeartOpeningAnimation,
-        computeStyle: animationTimeline(80).add(
+        computeStyle: animationTimeline(HEART_DEATH_ANIMATION_DURATION).add(
           scope.current,
           { scale: 1, x: 0, y: 0 },
           [
@@ -41,7 +42,7 @@ export default function PlayerHeart({ isPlayer }: { isPlayer: boolean }) {
         ).progress,
       });
     },
-    filter: (event) => (event as GameOverEvent).winnerIsPlayer !== isPlayer,
+    filter: (event) => (event as GameOverEvent).winner === (isPlayer ? "opponent" : "player") || (event as GameOverEvent).winner === "draw",
   });
 
   function triggerHeartOpeningAnimation() {
@@ -55,7 +56,6 @@ export default function PlayerHeart({ isPlayer }: { isPlayer: boolean }) {
     if (!leftHeart || !rightHeart || !fullHeart) {
       return;
     }
-		useGameInterface.getState().setGameOver();
     fullHeart.style.opacity = "0";
     registerHeartAnimation(leftHeart, "left");
 		registerHeartAnimation(rightHeart, "right");

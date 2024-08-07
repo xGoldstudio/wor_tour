@@ -8,16 +8,19 @@ import { useGSAP } from "@gsap/react";
 import { textureByRarity } from "@repo/lib";
 import ShinyRotator from "./ShinyRotator";
 import { experienceService, keysService } from "@/services/inject";
+import { CurrentWinner } from "game_engine";
 
 interface EndGameScreenProps {
-  isWinner: boolean;
+  currentWinner: CurrentWinner;
 }
 
-export default function EndGameModal({ isWinner }: EndGameScreenProps) {
+export default function EndGameModal({ currentWinner }: EndGameScreenProps) {
   const { reset: resetMetadata, rewards } = useGameMetadataStore((state) => ({
     reset: state.reset,
-    rewards: state.rewards[isWinner ? "win" : "lose"],
+    rewards: state.getReward(currentWinner),
   }));
+
+  const isWinner = currentWinner === "player";
 
   const {
     experienceProgress,
@@ -55,6 +58,7 @@ export default function EndGameModal({ isWinner }: EndGameScreenProps) {
         shinyRef: shinyRef.current,
         buttonRef: buttonRef.current,
         nextLevelRef: nextLevelRef.current,
+        isXp: isWinner,
       });
     },
     {
@@ -73,6 +77,12 @@ export default function EndGameModal({ isWinner }: EndGameScreenProps) {
     resetMetadata();
   }
 
+  const modalTitles = {
+    player: "Victory",
+    opponent: "Defeat",
+    draw: "Draw",
+  };
+
   return (
     <div className="w-screen h-full flex justify-center fixed top-0 z-30">
       <div className="w-[700px] h-full overflow-hidden flex flex-col items-center relative">
@@ -83,7 +93,7 @@ export default function EndGameModal({ isWinner }: EndGameScreenProps) {
         >
           {isWinner && <ShinyRotator forwardRef={shinyRef} />}
           <Ribbon className="mb-0 relative top-[1px] z-10">
-            {isWinner ? "Victory" : "Defeat"}
+            {modalTitles[currentWinner!]}
           </Ribbon>
           <div
             className={cn(
