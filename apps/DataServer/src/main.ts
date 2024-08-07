@@ -22,7 +22,9 @@ export default async function initServer() {
 	fastify.register(fastifyStatic, {
 		root: imagesDir,
 		prefix: '/public/',
-	})
+		immutable: true,
+		maxAge: 31536000,
+	});
 
 	async function startServer() {
 		try {

@@ -31,7 +31,7 @@ export function SortAndFilterBox({
   return (
     <div className="px-4">
       <div className="h-16 bg-black bg-opacity-30 mt-4 rounded-lg flex items-center px-4 justify-between">
-        <div className="">
+        <div>
           Cards Found : {collectionLength} / {totalCards}
         </div>
         <div className="flex flex-row space-x-4 relative">

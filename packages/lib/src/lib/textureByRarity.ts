@@ -1,3 +1,4 @@
+import { getImageUrl, TEXTURE } from '@repo/lib';
 import { CardRarity } from "../../../gameEngine/src/types/DataStoreType";
 
 export default function textureByRarity(rarity: CardRarity) {
@@ -7,5 +8,5 @@ export default function textureByRarity(rarity: CardRarity) {
     epic: "gold.jpeg",
     legendary: "diamond.avif",
   };
-  return borderTextureRarity[rarity];
+  return getImageUrl(TEXTURE, borderTextureRarity[rarity]);
 }

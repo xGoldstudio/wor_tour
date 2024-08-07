@@ -1,3 +1,4 @@
+import { getImageUrl, ICONS } from "@repo/lib";
 import { Button, cn } from "@repo/ui";
 
 interface OrderBoxProps {
@@ -18,7 +19,7 @@ export function OrderBox({ isAscending, setIsAscending }: OrderBoxProps) {
         })}
       >
         <div className="h-6 w-6 flex justify-center items-center ">
-          <img src="/icons/triangle.png" alt="arrow" width={40} height={40} />
+          <img src={getImageUrl(ICONS, "triangle.png")} alt="arrow" width={40} height={40} />
         </div>
       </div>
     </Button>

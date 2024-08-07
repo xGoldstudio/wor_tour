@@ -1,6 +1,6 @@
 import { KeyRewardType } from "@/home/store/rewardStore";
 import { useGSAP } from "@gsap/react";
-import { getYCenterBoudingOfElement } from "@repo/lib";
+import { getImageUrl, getYCenterBoudingOfElement, ICONS } from "@repo/lib";
 import gsap from "gsap";
 import { useRef } from "react";
 
@@ -70,7 +70,7 @@ export default function KeyReward({
       ref={scope}
     >
       <img
-        src={"/key.png"}
+        src={getImageUrl(ICONS, "key.png")}
         alt="money"
         className="w-[300px] h-[300px]"
       />

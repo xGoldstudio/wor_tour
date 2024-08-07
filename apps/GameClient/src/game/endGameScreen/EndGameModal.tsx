@@ -5,7 +5,7 @@ import RewardBox from "./RewardBox";
 import { useRef } from "react";
 import endGameScreenAnimation from "./animation";
 import { useGSAP } from "@gsap/react";
-import { textureByRarity } from "@repo/lib";
+import { getImageUrl, ICONS, textureByRarity } from "@repo/lib";
 import ShinyRotator from "./ShinyRotator";
 import { experienceService, keysService } from "@/services/inject";
 import { CurrentWinner } from "game_engine";
@@ -104,17 +104,17 @@ export default function EndGameModal({ currentWinner }: EndGameScreenProps) {
             <div
               className="absolute w-full h-full top-0 left-0 blur-sm"
               style={{
-                backgroundImage: `url(/${textureByRarity(isWinner ? "rare" : "common")})`,
+                backgroundImage: `url(${textureByRarity(isWinner ? "rare" : "common")})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}
             />
             <div className="flex gap-6 items-center relative" ref={rewardsRef}>
               <RewardBox amount={rewards.money}>
-                <img src="/money.png" className="h-[64px]" />
+                <img src={getImageUrl(ICONS, "money.png")} className="h-[64px]" />
               </RewardBox>
               <RewardBox amount={rewards.trophies}>
-                <img src="/trophy.png" className="h-[64px]" />
+                <img src={getImageUrl(ICONS, "trophy.png")} className="h-[64px]" />
               </RewardBox>
             </div>
             <div className="flex gap-2 w-[350px] items-center relative">

@@ -4,7 +4,7 @@ import Modal from "@/home/ui/modal";
 import { boosters, Box, GoldAmount } from "@repo/ui";
 import ScrollContainer from "react-indiana-drag-scroll";
 import BoosterIllustration from "../../shop/BoosterIllustration";
-import { cardWorldMultiplier } from "@repo/lib";
+import { cardWorldMultiplier, getImageUrl, ICONS } from "@repo/lib";
 import Field from "./Field";
 import WorldField from "./WorldField";
 import { getGoldPerVictory, getMaxGoldPerDay } from "@/services/DailyGoldService/dailyGoldService";
@@ -23,7 +23,7 @@ export default function WorldModal({ closeModal, world }: WorldModalProps) {
       <div className="w-full h-full relative flex flex-col items-center justify-center">
         <Box rarity="epic" height={700} width={600} size={1.5}>
           <img
-            src="/cross.svg"
+            src={getImageUrl(ICONS, "/cross.svg")}
             className="absolute top-3 right-3 w-8 h-8 cursor-pointer z-10 drop-shadow-[2px_1px_1px_black]"
             onClick={closeModal}
           />

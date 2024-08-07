@@ -21,7 +21,7 @@ export default function BoosterRarityDrop({
               <div
                 className="absolute w-full h-full top-0 left-0 blur-[2px]"
                 style={{
-                  backgroundImage: `url(/${textureByRarity(rarity)})`,
+                  backgroundImage: `url(${textureByRarity(rarity)})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}

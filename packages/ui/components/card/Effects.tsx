@@ -2,7 +2,9 @@ import {
   CardState,
   CardStateLayoutData,
   getImageEffects,
-  inPx
+  getImageUrl,
+  inPx,
+  STATES_SRC
 } from "@repo/lib";
 import Cover from "../Cover";
 import { useRef, useState } from "react";
@@ -62,7 +64,7 @@ export function EffectLayout({
     >
       <Cover cardRarity="rare" className="rounded-md" />
       <img
-        src={`/${effect.src}`}
+        src={getImageUrl(STATES_SRC, effect.src)}
         width={illustrationSize}
         height={illustrationSize}
         className="relative drop-shadow-[1px_1px_1px_black]"

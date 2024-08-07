@@ -1,4 +1,4 @@
-import { animationTimeline, getCenterOfBoundingElement } from "@repo/lib";
+import { animationTimeline, getCenterOfBoundingElement, getImageUrlCssValue, ICONS } from "@repo/lib";
 import {
   useGameEventListener,
   useRegisterAnimation,
@@ -94,7 +94,7 @@ export default function PlayerHeart({ isPlayer }: { isPlayer: boolean }) {
       <div
         className="w-1/2 h-full absolute opacity-0 leftHeart origin-[100%_85%]"
         style={{
-          backgroundImage: `url(/heart.png)`,
+          backgroundImage: getImageUrlCssValue(ICONS ,"heart.png"),
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
         }}
@@ -102,7 +102,7 @@ export default function PlayerHeart({ isPlayer }: { isPlayer: boolean }) {
       <div
         className="w-[50%] left-1/2 h-full absolute top-0 opacity-0 rightHeart origin-[0%_85%]"
         style={{
-          backgroundImage: `url(/heart.png)`,
+          backgroundImage: getImageUrlCssValue(ICONS ,"heart.png"),
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "right",
@@ -111,7 +111,7 @@ export default function PlayerHeart({ isPlayer }: { isPlayer: boolean }) {
       <div
         className="w-full h-full absolute fullHeart"
         style={{
-          backgroundImage: `url(/heart.png)`,
+          backgroundImage: getImageUrlCssValue(ICONS ,"heart.png"),
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "right",

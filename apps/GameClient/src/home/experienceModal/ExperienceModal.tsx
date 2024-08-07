@@ -2,7 +2,7 @@ import { Badge, Button, cn } from "@repo/ui";
 import Ribbon from "@/home/ui/Ribbon";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { textureByRarity } from "@repo/lib";
+import { getImageUrl, ICONS, textureByRarity } from "@repo/lib";
 import RewardBox from "@/game/endGameScreen/RewardBox";
 import ShinyRotator from "@/game/endGameScreen/ShinyRotator";
 import gsap from "gsap";
@@ -122,17 +122,17 @@ export default function ExperienceModal({ reward, onContinue }: ExperienceModalP
             <div
               className="absolute w-full h-full top-0 left-0 blur-sm"
               style={{
-                backgroundImage: `url(/${textureByRarity("rare")})`,
+                backgroundImage: `url(${textureByRarity("rare")})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}
             />
             <div className="flex gap-6 items-center relative" ref={rewardsRef}>
               <RewardBox amount={reward.gold}>
-                <img src="/money.png" className="h-[64px]" />
+                <img src={getImageUrl(ICONS, "/money.png")} className="h-[64px]" />
               </RewardBox>
               <RewardBox amount={"+max"}>
-                <img src="/key.png" className="h-[64px]" />
+                <img src={getImageUrl(ICONS, "/key.png")} className="h-[64px]" />
               </RewardBox>
             </div>
             <div className="flex gap-1 items-center relative" ref={levelRef}>

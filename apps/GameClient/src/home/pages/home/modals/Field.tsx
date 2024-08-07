@@ -1,3 +1,4 @@
+import { textureByRarity } from "@repo/lib";
 import { Borders, CardIllustartion, InnerBord } from "@repo/ui";
 
 interface FieldProps {
@@ -13,7 +14,7 @@ export default function Field({ children, width = 191 }: FieldProps) {
           <div className="flex w-full items-center justify-start pl-2 gap-2 relative bg-slate-600 h-full">
             <div
               className="absolute top-0 left-0 w-full h-full blur-sm"
-              style={{ backgroundImage: "url(/silver.jpeg)" }}
+              style={{ backgroundImage: `url(${textureByRarity("rare")})` }}
             />
             {children}
           </div>

@@ -1,7 +1,7 @@
-import { stopPropagation } from "@repo/lib";
+import { getImageUrl, ICONS, stopPropagation } from "@repo/lib";
 import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Header } from "../Home";
+import { Header, HomeBg } from "../Home";
 
 interface ModalProps {
   children: React.ReactNode;
@@ -49,22 +49,13 @@ interface CoverModalProps {
 export function CoverModal({ children, closeModal }: CoverModalProps) {
   return (
     <>
-      <div
-        className="w-full h-full absolute brightness-75"
-        style={{
-          backgroundImage: "url('/homeBg.jpeg')",
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-        }}
-      >
-        <div className="w-full h-full absolute bg-[linear-gradient(0deg,_rgba(226,232,240,0.2)_0%,_rgba(226,232,240,0)_100%),_linear-gradient(0deg,_rgba(226,232,240,0)_50%,_rgba(226,232,240,1)_70%)]" />
-      </div>
+      <HomeBg />
 
       <div className="w-full h-full relative flex flex-col gap-4">
         <Header />
         <div className="relative w-full h-full px-8">
           <img
-            src="/cross.svg"
+            src={getImageUrl(ICONS, "cross.svg")}
             className="absolute top-0 right-8 w-8 h-8 cursor-pointer"
             onClick={closeModal}
           />
@@ -89,7 +80,7 @@ export function BackgroundModal({
       <div className="w-full h-full absolute bg-slate-900 opacity-80" />
       <div className="w-full h-full absolute flex justify-center items-center gap-8 flex-col">
         <img
-          src="/cross.svg"
+          src={getImageUrl(ICONS, "/cross.svg")}
           className="absolute top-16 right-8 w-8 h-8 cursor-pointer"
           onClick={stopPropagation(closeModal)}
         />

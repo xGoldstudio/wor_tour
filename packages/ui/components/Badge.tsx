@@ -25,7 +25,7 @@ export default function Badge({
       <div
         className="absolute w-full h-full blur-[1px] left-0 top-0 rounded-full"
         style={{
-          backgroundImage: `url('/${textureByRarity(rarity)}')`,
+          backgroundImage: `url('${textureByRarity(rarity)}')`,
           backgroundSize: "cover",
           backgroundPositionY: "center",
         }}

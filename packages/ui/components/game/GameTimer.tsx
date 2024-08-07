@@ -5,6 +5,7 @@ import {
 	Borders, CardIllustartion,
 	InnerBord
 } from "../card/CardBorder";
+import { textureByRarity } from "@repo/lib";
 
 export default function GameTimer() {
   const timerRef = useRef<HTMLParagraphElement>(null);
@@ -31,7 +32,7 @@ export default function GameTimer() {
           <div className="w-full h-full flex justify-center items-center font-semibold relative bg-black overflow-hidden">
             <div
               className="absolute top-0 left-0 w-full h-full blur-sm"
-              style={{ backgroundImage: "url(/silver.jpeg)" }}
+              style={{ backgroundImage: `url(${textureByRarity("rare")})` }}
             />
             <p ref={timerRef} className="relative">{MAX_GAME_DURATION}</p>
           </div>

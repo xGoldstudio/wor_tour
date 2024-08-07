@@ -7,6 +7,7 @@ import AmountEffectOrDamage from "./AmountEffectOrDamage";
 import StartSequence from "./StartSequence";
 import { GameCard } from "@repo/ui";
 import EndGameScreenWatcher from "./endGameScreen/EndGameScreenWatcher";
+import { HomeBg } from "@/home/Home";
 
 export default function Game() {
   const {
@@ -38,14 +39,7 @@ export default function Game() {
             <FlashDamage />
             <AmountEffectOrDamage />
             <StartSequence />
-            <div
-              className="w-full h-full absolute blur-sm"
-              style={{
-                backgroundImage: "url('/homeBg.jpeg')",
-                backgroundPosition: "center",
-                backgroundSize: "cover",
-              }}
-            ></div>
+            <HomeBg />
             <PlayerGUI isPlayer={false} clock={clock} />
             <div className="w-full flex justify-center relative">
               <div className="grid grid-cols-3 gap-4 px-8">

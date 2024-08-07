@@ -12,7 +12,7 @@ import {
   GoldAmount,
 } from "@repo/ui";
 import ConfirmationModal from "@/home/ui/ConfirmationModal";
-import { preventDefault } from "@repo/lib";
+import { getImageUrl, ICONS, preventDefault } from "@repo/lib";
 import openBooster from "@/home/store/useBooster/useBooster";
 
 interface BoosterProps {
@@ -88,7 +88,7 @@ export function BoosterModal({ closeModal, booster }: BoosterModalProps) {
                   className="px-4"
                 >
                   <div className="w-10 h-10 flex justify-center items-center">
-                    <img src="/glass.svg" className="w-5 h-5" />
+                    <img src={getImageUrl(ICONS, "/glass.svg")} className="w-5 h-5" />
                   </div>
                 </Button>
               </div>

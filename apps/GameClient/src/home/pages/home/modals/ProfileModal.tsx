@@ -8,6 +8,7 @@ import _ from "lodash";
 import { DeckCardUI } from "../../deck/DeckCardUI";
 import WorldField from "./WorldField";
 import Field from "./Field";
+import { COMMON, getImageUrl, getImageUrlCssValue, ICONS } from "@repo/lib";
 
 interface ProfileModalProps {
   closeModal: () => void;
@@ -30,14 +31,14 @@ export default function ProfileModal({ closeModal }: ProfileModalProps) {
       <div className="w-full h-full relative flex flex-col items-center justify-center">
         <Box rarity="epic" height={800} width={600} size={1.5}>
           <img
-            src="/cross.svg"
+            src={getImageUrl(ICONS, "cross.svg")}
             className="absolute top-3 right-3 w-8 h-8 cursor-pointer z-10 drop-shadow-[2px_1px_1px_black]"
             onClick={closeModal}
           />
           <div
             className="w-full h-full absolute brightness-75 top-0 left-0"
             style={{
-              backgroundImage: "url('/homeBg.jpeg')",
+              backgroundImage: getImageUrlCssValue(COMMON, "homeBg.jpeg"),
               backgroundPosition: "center",
               backgroundSize: "cover",
             }}
@@ -55,7 +56,7 @@ export default function ProfileModal({ closeModal }: ProfileModalProps) {
                 <WorldField world={world} />
                 <Field>
                   <img
-                    src="/trophy.png"
+                    src={getImageUrl(ICONS, "trophy.png")}
                     className="w-[32px] drop-shadow-[2px_1px_1px_black]"
                   />
                   <p className="relative font-semibold">450</p>

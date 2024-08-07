@@ -1,11 +1,11 @@
-import { inPx, numberWithCommas } from "@repo/lib";
+import { getImageUrl, ICONS, inPx, numberWithCommas } from "@repo/lib";
 import { GlobalAnimation } from "../store/animationStore";
 import _ from "lodash";
 import gsap from "gsap";
 
-const addTrophy = createImageParticule("/trophy.png");
-const addMoney = createImageParticule("/money.png");
-const addKey = createImageParticule("/key.png");
+const addTrophy = createImageParticule(getImageUrl(ICONS, "/trophy.png"));
+const addMoney = createImageParticule(getImageUrl(ICONS, "/money.png"));
+const addKey = createImageParticule(getImageUrl(ICONS, "/key.png"));
 
 function createImageParticule(src: string) {
   return (container: HTMLElement) => {

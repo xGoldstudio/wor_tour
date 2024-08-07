@@ -6,13 +6,9 @@ import WorldModal from "../modals/WorldModal";
 import { Badge, Button, cn, Cover } from "@repo/ui";
 import StaticCard from "@/game/gui/card/StaticCard";
 import { Tier } from "@/home/store/tiers";
-import { getImageUrl } from "@repo/lib";
+import { EDITOR_SRC, getImageUrl, ICONS } from "@repo/lib";
 
-export default function WorldPreview({
-  tier,
-}: {
-  tier: Tier;
-}) {
+export default function WorldPreview({ tier }: { tier: Tier }) {
   const [isWorldModalOpen, setIsWorldModalOpen] = useState(false);
   const world = useDataStore((state) => state.worlds[tier.world - 1]!);
   const cards = useDataStore((state) => state.cards)
@@ -32,7 +28,10 @@ export default function WorldPreview({
         className={`trophiesField worldField${world.id} flex flex-col relative items-center w-full justify-center`}
       >
         {isWorldModalOpen && (
-          <WorldModal closeModal={() => setIsWorldModalOpen(false)} world={world} />
+          <WorldModal
+            closeModal={() => setIsWorldModalOpen(false)}
+            world={world}
+          />
         )}
 
         <div className="flex flex-col relative items-center gap-2 w-full py-4 justify-center">
@@ -45,7 +44,7 @@ export default function WorldPreview({
                 !isUnlocked && "grayscale-[80%]"
               )}
               onClick={() => setIsWorldModalOpen(true)}
-              src={getImageUrl(world.illustration)}
+              src={getImageUrl(EDITOR_SRC, world.illustration)}
             />
             <p className="text-3xl text-white font-stylised pb-4 drop-shadow-[2px_2px_1px_black]">
               {world.name}
@@ -61,7 +60,7 @@ export default function WorldPreview({
               </div>
               <div className="flex items-center relative">
                 <img
-                  src="/trophy.png"
+                  src={getImageUrl(ICONS, "trophy.png")}
                   className="w-[32px] drop-shadow-[2px_1px_1px_black]"
                 />
                 <p className="relative font-semibold">{worldTrophies}</p>
