@@ -92,7 +92,7 @@ export function MatchmakingService() {
 		if (usePlayerStore.getState().currentTier <= MINIMAL_LOSER_QUEUE_TIER) {
 			store.setState({ loserQueue: null });
 		}
-		else if (!isLose) {
+		else if (isLose) {
 			store.setState({
 				loserQueue: {
 					strength: getStrengthForLoserQueue((useGameMetadataStore.getState().playerCards)),
