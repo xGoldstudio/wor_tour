@@ -63,8 +63,8 @@ export default function Collection({
   cardNotFound = sorts[currentSort].sortFunction(cardNotFound, isAscending);
   return (
     <div className="flex flex-col w-[650px] ">
-      <div className="grid grid-rows-[1fr_auto] top-0  ">
-        <div className=" ">
+      <div className="grid grid-rows-[1fr_auto] top-0">
+        <div>
           <SortAndFilterBox
             collectionLength={collectionLength}
             currentSort={currentSort}
@@ -78,7 +78,7 @@ export default function Collection({
         <ScrollContainer
           className={`grow overflow-y-scroll scrollbar-hiden flex flex-col h-[674px] w-[650px], ${classname}`}
         >
-          <div className="w-[600px] mx-auto grid grid-cols-4 gap-y-6 pt-10 ">
+          <div className="w-[600px] mx-auto grid grid-cols-4 gap-y-4 pt-10 ">
             {detailledCollection.map((card) => (
               <div className="w-full flex justify-center" key={card.id}>
                 <DeckCardUI

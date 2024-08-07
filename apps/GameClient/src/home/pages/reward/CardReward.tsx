@@ -74,16 +74,17 @@ export default function CardReward({
         animationOver.current = true;
       },
     });
+    const shardTargetBounding = document.getElementById(
+      `shard_${reward.shardTargetIndex}`
+    )?.getBoundingClientRect();
     tl.set(cardRef.current, { scale: 0 });
+    tl.progress(1).progress(0);
     tl.to(cardRef.current, { scale: 1.1, duration: 0.2 });
     tl.to(cardRef.current, { scale: 0.9, duration: 0.2 });
     tl.to(cardRef.current, { scale: 1, duration: 0.1 });
 
     if (reward.shardTargetIndex !== null) {
-      const shardTarget = document.getElementById(
-        `shard_${reward.shardTargetIndex}`
-      );
-      if (!shardTarget || !shardRef.current) return;
+      if (!shardTargetBounding || !shardRef.current) return;
       tl.set(shardRef.current, {
         scale: 20,
         left: window.innerWidth / 2,
@@ -93,8 +94,8 @@ export default function CardReward({
       tl.to(shardRef.current, { opacity: 1, duration: 0.25 });
       tl.to(shardRef.current, {
         scale: 1,
-        top: shardTarget.getBoundingClientRect().top - 1,
-        left: shardTarget.getBoundingClientRect().left - 1,
+        top: shardTargetBounding.top - 1,
+        left: shardTargetBounding.left - 1,
         duration: 1.5,
         ease: "bounce",
       });
