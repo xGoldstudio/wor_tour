@@ -17,6 +17,8 @@ const MultiAttackStateAction: StateAction = ({
 				isPlayerCard: !initiator.isPlayer,
 				directAttack: false,
 				initiator: initiator,
+				onDirectHitStates: [],
+				cardInitiator: card,
 			});
 		}
 	});

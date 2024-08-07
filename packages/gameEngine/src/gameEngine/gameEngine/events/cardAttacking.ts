@@ -25,6 +25,7 @@ export function triggerStates({ gameState, trigger, clock, isPlayerCard, cardPos
 				isPlayerCard: isPlayerCard,
 				state,
 				initiator: initiator,
+				cardInitiator: card,
 			});
 		}
 	});
@@ -57,6 +58,8 @@ export default function cardAttackingEvent({ event, gameState, clock }: ComputeE
 			isPlayerCard: !event.isPlayer,
 			directAttack: true,
 			initiator: event,
+			onDirectHitStates: attakerCard.states.filter((state) => state.trigger === "onDirectAttackHit").map((state) => ({ ...state })), // we take the state at its current state
+			cardInitiator: attakerCard,
 		});
 	} else {
 		clock.triggerEvent({

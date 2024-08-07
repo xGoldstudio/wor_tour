@@ -261,7 +261,8 @@ export class GameStateObject {
 		if (value === null) {
 			return;
 		}
-		card.states[stateIndex].value = value + delta;
+		const nextState = { ...card.states[stateIndex], value: value + delta } as CardState;
+		card.states[stateIndex] = nextState; // we mutate the state
 	}
 	shuffleDeck(isPlayer: boolean) {
 		if (isPlayer) {

@@ -90,6 +90,7 @@ export interface CardAttackingEvent {
   isPlayer: boolean;
   cardPosition: number;
   instanceId: number;
+  cardIniator: InGameCardType; // this card may alteady be destroyed, if you need to verify its existance use instanceId
 }
 
 export interface PlayerDamageEvent {
@@ -112,6 +113,8 @@ export interface CardDamageEvent {
   initiator: CardAttackingEvent;
   isPlayerCard: boolean;
   cardPosition: number;
+  onDirectHitStates: CardState[];
+  cardInitiator: InGameCardType; // this card may alteady be destroyed, if you need to verify its existance use instanceId
 }
 
 export interface CardDamagResolveEvent {
@@ -179,6 +182,7 @@ export interface TriggerStateEvent {
   instanceId: number;
   isPlayerCard: boolean;
   position: number;
+  cardInitiator: InGameCardType; // this card may alteady be destroyed, if you need to verify its existance use instanceId
 }
 
 export interface AddStateEvent {

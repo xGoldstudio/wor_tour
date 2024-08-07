@@ -20,6 +20,7 @@ export default function cardStartAttackingEvent({ event, gameState, clock }: Com
 			isPlayer: event.isPlayer,
 			instanceId: event.instanceId,
 			cardPosition: event.cardPosition,
+			cardIniator: usingCard,
 		},
 		getFrameFromAttackSpeed(usingCard.attackSpeed)
 	);

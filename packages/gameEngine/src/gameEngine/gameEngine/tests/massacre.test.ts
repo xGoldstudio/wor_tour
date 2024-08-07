@@ -1,8 +1,9 @@
-import { defaultTestHp, drawPlaceCard, findStateByType, getInstanceId, initTest, massacreStateTest, triggerDirectAttackResolved } from "./common";
+import { attackAnimation, baseCard, defaultTestHp, drawPlaceCard, findStateByType, getInstanceId, initTest, massacreStateTest, triggerDirectAttack } from "./common";
 import { describe, expect, test } from 'vitest';
 
 describe("bleeding state", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const damage = 10;
+	const { clock, state } = initTest({ gameData: { playerDeck: [{ ...baseCard, dmg: damage, attackSpeed: 0 }] }, skipStartGame: true });
 	drawPlaceCard(clock, true, 0);
 	drawPlaceCard(clock, false, 0);
 	clock.nextTick();
@@ -10,23 +11,41 @@ describe("bleeding state", () => {
 	clock.nextTick();
 	expect(state.getStateOfCard(true, 0, "massacre")).toBeDefined();
 
-	const damage = 10;
-	triggerDirectAttackResolved(clock, state, true, 0, damage);
+	triggerDirectAttack(clock, state, true, 0, true);
 	clock.nextTick();
 
 	test("should have added bleeding state", () => {
 		expect(state.getCard(false, 0)!.hp).toBe(defaultTestHp - damage);
-		const massacreState = findStateByType(state, false, 0, "bleeding");
-		expect(massacreState).toBeDefined();
-		expect(massacreState?.value).toBe(massacreStateTest.value);
+		const bleedingState = findStateByType(state, false, 0, "bleeding");
+		expect(bleedingState).toBeDefined();
+		expect(bleedingState?.value).toBe(massacreStateTest.value);
 	});
 
 	test("bleeding state should have been stacked", () => {
-		triggerDirectAttackResolved(clock, state, true, 0, damage);
-		triggerDirectAttackResolved(clock, state, true, 0, damage);
-		triggerDirectAttackResolved(clock, state, true, 0, damage);
+		triggerDirectAttack(clock, state, true, 0, true);
+		triggerDirectAttack(clock, state, true, 0, true);
+		triggerDirectAttack(clock, state, true, 0, true);
 		clock.nextTick();
-		const massacreState = state.getStateOfCard(false, 0, "bleeding");
-		expect(massacreState?.value).toBe(massacreStateTest!.value! * 4);
+		const bleedingState = findStateByType(state, false, 0, "bleeding");
+		expect(bleedingState?.value).toBe(massacreStateTest!.value! * 4);
+	});
+
+	test("bleeding state should have been updated by the strength of massacre at the time of the attack", () => {
+		triggerDirectAttack(clock, state, true, 0);
+		clock.triggerEvent({ type: "increaseStateValue", instanceId: getInstanceId(state, true, 0), isPlayerCard: true, position: 0, stateType: "massacre", increaseBy: 10 });
+		// then we update the massacre strength
+		attackAnimation(clock);
+		clock.nextTick();
+		const bleedingState = findStateByType(state, false, 0, "bleeding");
+		expect(bleedingState?.value).toBe(massacreStateTest.value! * 5);
+	});
+
+	test("bleeding state should have been updated by the strength of massacre at the time of the attack (this time we update state first)", () => {
+		triggerDirectAttack(clock, state, true, 0);
+		// then we update the massacre strength
+		attackAnimation(clock);
+		clock.nextTick();
+		const bleedingState = findStateByType(state, false, 0, "bleeding");
+		expect(bleedingState?.value).toBe(massacreStateTest.value! * 7); // 1+1+3+(2)
 	});
 });
