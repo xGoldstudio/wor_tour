@@ -1,6 +1,6 @@
-import { inPx, textureByRarity } from "@repo/lib";
+import { COMMON, getImageUrl, ICONS, inPx, textureByRarity } from "@repo/lib";
+import { InnerBord } from "@repo/ui";
 import * as _ from "lodash";
-import { InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
 
 export default function BoosterIllustration({
   size,
@@ -107,7 +107,7 @@ export default function BoosterIllustration({
           preserveAspectRatio="xMidYMid slice"
           mask="url(#boosterMask2)"
         />
-        <image href="/homeBg.jpeg" x="0" y="0" width="105%" opacity={0.2} />
+        <image href={getImageUrl(COMMON, "/homeBg.jpeg")} x="0" y="0" width="105%" opacity={0.2} />
         <rect
           href={textureByRarity("epic")}
           x="0"
@@ -137,7 +137,7 @@ export default function BoosterIllustration({
         >
           {title}
         </text>
-        <image href="/logo.png" x="-3" y="100" width="128" height="80" />
+        <image href={getImageUrl(ICONS, "/logo.png")} x="-3" y="100" width="128" height="80" />
       </svg>
       <div className="absolute z-10 h-full w-full top-0">
         <InnerBord size={1}>

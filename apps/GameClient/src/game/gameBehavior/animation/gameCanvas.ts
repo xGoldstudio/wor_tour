@@ -1,5 +1,5 @@
 import { Animation3dType } from "@/game/stores/gameStateStore";
-import { cubicBezier } from "@repo/lib";
+import { cubicBezier, GAME_TEXTURE, getImageUrl } from "@repo/lib";
 import * as THREE from "three";
 
 const ATTACK_ANIMATION_TIMING = 20;
@@ -158,8 +158,8 @@ function setupScene(canvas: HTMLCanvasElement) {
   });
 
   const textureLoader = new THREE.TextureLoader();
-  const attackTexture = textureLoader.load("/textureAttack.png");
-  const healTexture = textureLoader.load("/heal.png");
+  const attackTexture = textureLoader.load(getImageUrl(GAME_TEXTURE, "textureAttack.png"));
+  const healTexture = textureLoader.load(getImageUrl(GAME_TEXTURE, "heal.png"));
   attackTexture.colorSpace = THREE.SRGBColorSpace;
   healTexture.colorSpace = THREE.SRGBColorSpace;
 

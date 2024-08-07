@@ -14,7 +14,7 @@ import {
   NumberSpan,
 } from "@repo/ui";
 import { cn } from "@repo/ui";
-import { numberWithCommas } from "@repo/lib";
+import { COMMON, FOOTER_SRC, getImageUrl, getImageUrlCssValue, ICONS, numberWithCommas, textureByRarity } from "@repo/lib";
 import KeysOutput from "./ui/KeysOutput";
 import Timer from "@/services/LoopService/Timer";
 import ExperienceModalWatcher from "./experienceModal/ExperienceModalWatcher";
@@ -105,7 +105,7 @@ export default function Home() {
               onClick={() => setCurrentTab("shop")}
               label="Shop"
               selected={currentTab === "shop"}
-              imageUrl="footer/backpack.png"
+              imageUrl="backpack.png"
             />
             <FooterButton
               onClick={() => setCurrentTab("home")}
@@ -117,7 +117,7 @@ export default function Home() {
               onClick={() => setCurrentTab("deck")}
               label="Collection"
               selected={currentTab === "deck"}
-              imageUrl="footer/collection.png"
+              imageUrl="collection.png"
             />
           </div>
         </div>
@@ -145,7 +145,7 @@ function FooterButton({
       onClick={onClick}
     >
       <img
-        src={imageUrl}
+        src={getImageUrl(FOOTER_SRC, imageUrl ?? "")}
         alt="chest"
         className={cn(
           "w-[64px] aspect-square relative transition-transform",
@@ -173,7 +173,7 @@ export function HomeBg() {
       <div
         className="w-full h-full absolute blur-sm"
         style={{
-          backgroundImage: "url('/homeBg.jpeg')",
+          backgroundImage: getImageUrlCssValue(COMMON, "homeBg.jpeg"),
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}
@@ -210,7 +210,7 @@ export function RessourceCounter({
             <div className="w-full h-full relative flex items-center justify-center bg-black overflow-hidden">
               <div
                 className="absolute top-0 left-0 w-full h-full blur-sm"
-                style={{ backgroundImage: "url(/silver.jpeg)" }}
+                style={{ backgroundImage: `url(${textureByRarity("rare")})` }}
               />
               {max && (
                 <div
@@ -261,7 +261,7 @@ export function Header() {
         icon={
           <img
             id="moneyCountIcon"
-            src="/money.png"
+            src={getImageUrl(ICONS, "money.png")}
             className="absolute z-10 left-[3px] top-1/2 -translate-x-1/2 -translate-y-1/2 w-[32px] drop-shadow-[2px_1px_1px_black]"
           />
         }

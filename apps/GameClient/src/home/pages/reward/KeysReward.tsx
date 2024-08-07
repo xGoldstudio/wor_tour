@@ -3,6 +3,7 @@ import { KeysRewardType } from "@/home/store/rewardStore";
 import { keysService } from "@/services/inject";
 import { MAX_KEYS } from "@/services/KeysService/KeysService";
 import { useGSAP } from "@gsap/react";
+import { getImageUrl, ICONS } from "@repo/lib";
 import { useSafeTimeout } from "@repo/ui";
 import gsap from "gsap";
 import { useRef } from "react";
@@ -95,7 +96,7 @@ export default function KeysReward({
         }
       }}
     >
-      <img src="/key.png" alt="money" className="w-[300px] h-[300px]" />
+      <img src={getImageUrl(ICONS, "key.png")} alt="money" className="w-[300px] h-[300px]" />
       <p className="text-5xl font-bold text-white drop-shadow-[2px_2px_2px_black] pb-32">
         Max keys
       </p>

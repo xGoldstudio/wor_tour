@@ -39,7 +39,7 @@ export default function Button({
       <div
         className="absolute w-full h-full blur-sm"
         style={{
-          backgroundImage: `url(/${textureByRarity(rarity)})`,
+          backgroundImage: `url(${textureByRarity(rarity)})`,
           backgroundSize: "cover",
           backgroundPositionY: "center",
         }}

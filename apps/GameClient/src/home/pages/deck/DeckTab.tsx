@@ -1,4 +1,4 @@
-import { CardType, filterUndefined } from "@repo/lib";
+import { CardType, filterUndefined, getImageUrl, ICONS } from "@repo/lib";
 import { ManaBall } from "@repo/ui";
 import * as _ from "lodash";
 import { useState } from "react";
@@ -30,7 +30,7 @@ function DeckStats({ deck }: DeckStatsProps) {
           {powerTotal.toFixed(1)}
         </span>
         <img
-          src="/icons/epees-bouclier.png"
+          src={getImageUrl(ICONS, "epees-bouclier.png")}
           alt="swords and a shield"
           width={40}
           height={40}

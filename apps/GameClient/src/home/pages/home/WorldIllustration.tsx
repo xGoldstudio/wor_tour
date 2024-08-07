@@ -1,6 +1,6 @@
 import useDataStore from "@/cards/DataStore";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
-import { getImageUrl, textureByRarity } from "@repo/lib";
+import { EDITOR_SRC, getImageUrl, ICONS, textureByRarity } from "@repo/lib";
 import {
   Borders,
   CardIllustartion,
@@ -32,7 +32,7 @@ export default function WorldIllustration({
       <img
         id="worldIllustration"
         className="w-full aspect-square relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)]"
-        src={getImageUrl(worlds[currentWorld - 1].illustration)}
+        src={getImageUrl(EDITOR_SRC, worlds[currentWorld - 1].illustration)}
       />
       <CurrentWorldProgress />
       {lastUsingWorld !== currentWorld && (
@@ -69,7 +69,7 @@ function CurrentWorldProgress() {
   return (
     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-md">
       <img
-        src="/trophy.png"
+        src={getImageUrl(ICONS, "trophy.png")}
         className="absolute z-10 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[48px] drop-shadow-[2px_1px_1px_black]"
       />
       {rewardToCollect > 0 && (

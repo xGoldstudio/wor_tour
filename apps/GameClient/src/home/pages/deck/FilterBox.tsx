@@ -9,6 +9,7 @@ import {
   CardFiltersStyles,
   FiltersDescription,
 } from "./cardFilters";
+import { getImageUrl, getImageUrlCssValue, ICONS } from "@repo/lib";
 
 interface OutsideClickHandlerProps {
   children: React.ReactNode;
@@ -67,7 +68,7 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
   const isActiveFilter = (filterCriteria: CardFilters) => {
     if (currentFilter[filterCriteria] === true) {
       return {
-        backgroundImage: `url(valid.png)`,
+        backgroundImage: getImageUrlCssValue(ICONS, "valid.png"),
         backgroundSize: "cover",
         backgroundPosition: "center",
       };
@@ -132,7 +133,7 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
       >
         <div className="h-6 w-6 flex justify-center items-center ">
           <img
-            src="/icons/filter.png"
+            src={getImageUrl(ICONS, "filter.png")}
             alt="gear-wheel"
             width={40}
             height={40}

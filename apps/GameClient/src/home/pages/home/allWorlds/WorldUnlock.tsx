@@ -11,7 +11,7 @@ import usePlayerStore from "@/home/store/playerStore/playerStore";
 import useDataStore from "@/cards/DataStore";
 import StaticCard from "@/game/gui/card/StaticCard";
 import { getCardFromLevel } from "@/cards";
-import { getImageUrl, inPx } from "@repo/lib";
+import { EDITOR_SRC, getImageUrl, inPx } from "@repo/lib";
 
 export default function WorldUnlock({
   closeModal,
@@ -159,7 +159,7 @@ function WorldImage() {
         `worldFieldIllustration`,
         "w-[350px] aspect-square relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)] cursor-pointer"
       )}
-      src={getImageUrl(world.illustration)}
+      src={getImageUrl(EDITOR_SRC, world.illustration)}
     />
   );
 }

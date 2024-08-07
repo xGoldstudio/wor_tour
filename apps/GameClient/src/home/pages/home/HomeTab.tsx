@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cn, Cover } from "@repo/ui";
-import { numberWithCommas, textureByRarity } from "@repo/lib";
+import { getImageUrl, ICONS, numberWithCommas, textureByRarity } from "@repo/lib";
 import { InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
 import AllWorlds from "./allWorlds/AllWorlds";
 import ProfileModal from "./modals/ProfileModal";
@@ -89,7 +89,7 @@ export default function HomeTab({ setCurrentTab }: HomeTabProps) {
           <div className="relative w-[110px] h-[32px]" x-id="trophyCountInput">
             <img
               id="trophyCountIcon"
-              src="/trophy.png"
+              src={getImageUrl(ICONS, "trophy.png")}
               className="absolute z-10 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[48px] drop-shadow-[2px_1px_1px_black]"
             />
             <InnerBord size={1.5}>
@@ -151,7 +151,7 @@ export default function HomeTab({ setCurrentTab }: HomeTabProps) {
             ></div>
             {!isDeckFull && (
               <img
-                src="/padlock-nobg.png"
+                src={getImageUrl(ICONS, "padlock-nobg.png")}
                 className="h-[22px] absolute top-1/2 -translate-y-1/2 left-12 brightness-75"
                 alt="padlock"
               />
@@ -160,7 +160,7 @@ export default function HomeTab({ setCurrentTab }: HomeTabProps) {
           </div>
           <div className="relative flex items-center gap-3 justify-start w-full pl-16">
             <img
-              src="/money.png"
+              src={getImageUrl(ICONS, "/money.png")}
               className="h-[48px] drop-shadow-[2px_1px_1px_black]"
             />
             <div className="relative">

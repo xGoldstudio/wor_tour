@@ -3,7 +3,7 @@ import gsap from "gsap";
 import useRewardStore from "@/home/store/rewardStore";
 import CardReward from "./CardReward";
 import GoldReward from "./GoldReward";
-import { Header } from "@/home/Home";
+import { Header, HomeBg } from "@/home/Home";
 import { useGSAP } from "@gsap/react";
 import ChestReward from "./ChestReward";
 import KeyReward from "./KeyReward";
@@ -47,16 +47,7 @@ function RewardSection({ children }: { children: React.ReactNode }) {
     <div className="w-full flex absolute h-full z-50" ref={scope}>
       {transitionReady && (
         <div className="w-full h-full absolute z-10 flex flex-col">
-          <div
-            className="w-full h-full absolute brightness-75"
-            style={{
-              backgroundImage: "url('/homeBg.jpeg')",
-              backgroundPosition: "center",
-              backgroundSize: "cover",
-            }}
-          >
-            <div className="w-full h-full absolute bg-[linear-gradient(0deg,_rgba(226,232,240,0.2)_0%,_rgba(226,232,240,0)_100%),_linear-gradient(0deg,_rgba(226,232,240,0)_50%,_rgba(226,232,240,1)_70%)]" />
-          </div>
+          <HomeBg />
           <Header />
           {transitionReady === "end" && children}
         </div>

@@ -30,7 +30,7 @@ export default function Box({
                 <div
                   className="absolute w-full h-full top-0 left-0 blur-sm"
                   style={{
-                    backgroundImage: `url(/${textureByRarity(cover)})`,
+                    backgroundImage: `url(${textureByRarity(cover)})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                   }}

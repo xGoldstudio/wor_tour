@@ -4,7 +4,7 @@ import { CardRewardType } from "@/home/store/rewardStore";
 import { useEffect, useRef } from "react";
 import _ from "lodash";
 import gsap from "gsap";
-import { getShardsFromLevel } from "@repo/lib";
+import { getImageUrl, getShardsFromLevel, ICONS } from "@repo/lib";
 import { cn } from "@repo/ui";
 
 interface RewardProps {
@@ -138,7 +138,7 @@ export default function CardReward({
   return (
     <>
       <img
-        src="/ruby.png"
+        src={getImageUrl(ICONS, "ruby.png")}
         className="w-4 h-4 bg-transparent drop-shadow-[1px_1px_1px_black] fixed z-10 opacity-0"
         ref={shardRef}
       />

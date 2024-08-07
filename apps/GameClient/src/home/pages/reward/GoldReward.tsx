@@ -2,6 +2,7 @@ import { startContainerAnimation } from "@/home/animations/Animations";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { GoldRewardType } from "@/home/store/rewardStore";
 import { useGSAP } from "@gsap/react";
+import { getImageUrl, ICONS } from "@repo/lib";
 import gsap from "gsap";
 import { useRef } from "react";
 
@@ -85,7 +86,7 @@ export default function GoldReward({
         }
       }}
     >
-      <img src="/money.png" alt="money" className="w-[300px] h-[300px]" />
+      <img src={getImageUrl(ICONS, "money.png")} alt="money" className="w-[300px] h-[300px]" />
       <p className="text-5xl font-bold text-white drop-shadow-[2px_2px_2px_black] pb-32">
         x{reward.amount}
       </p>

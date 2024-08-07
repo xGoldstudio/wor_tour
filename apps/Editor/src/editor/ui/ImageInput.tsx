@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import ImageManager from "../utils/ImageManager";
-import { getImageUrl } from "@repo/lib";
+import { EDITOR_SRC, getImageUrl } from "@repo/lib";
 
 interface ImageInputProps {
   setImage: (imageUrl: string | null) => void;
@@ -36,7 +36,7 @@ export default function ImageInput({
         className="border-2 border-black rounded-md p-2 bg-white flex justify-center hover:border-blue-300"
         onClick={() => imageInputRef.current?.click()}
       >
-        <img src={getImageUrl(fileName)} className="w-[64px] h-min" />
+        <img src={getImageUrl(EDITOR_SRC,fileName)} className="w-[64px] h-min" />
       </div>
     </>
   );

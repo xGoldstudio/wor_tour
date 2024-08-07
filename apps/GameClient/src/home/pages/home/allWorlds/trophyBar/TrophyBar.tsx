@@ -9,7 +9,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { ContextSafeFunc, useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { AllWorldsAnimationContext, AllWorldsAnimationContextType } from "./TrophyBarContext";
-import { getCenterOfBoundingElement, inPx, textureByRarity } from "@repo/lib";
+import { getCenterOfBoundingElement, getImageUrl, ICONS, inPx, textureByRarity } from "@repo/lib";
 
 export default function TrophyBar({
   numberOfTrophies,
@@ -301,7 +301,7 @@ export default function TrophyBar({
         </svg>
         <div className="w-full h-full absolute top-1/2 -translate-x-3 -translate-y-1/2 flex justify-center items-center">
           <img
-            src="/trophy.png"
+            src={getImageUrl(ICONS, "trophy.png")}
             className="w-[28px] drop-shadow-[2px_1px_1px_black]"
           />
           <p className="text-slate-100 drop-shadow-[1px_1px_1px_black]">

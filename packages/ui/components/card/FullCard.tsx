@@ -2,7 +2,7 @@ import ManaBall from "../ManaBall";
 import { CardContentIllustartion, InnerBord, CardBorder } from "./CardBorder";
 import * as _ from "lodash";
 import States from "./Effects";
-import { inPx, CardType } from "@repo/lib";
+import { inPx, CardType, getImageUrl, ICONS } from "@repo/lib";
 import { cn } from "@repo/ui";
 
 export default function FullCard({
@@ -75,7 +75,7 @@ export default function FullCard({
                       <img
                         key={i}
                         id={`shard_${i}`}
-                        src="/ruby.png"
+                        src={getImageUrl(ICONS, "ruby.png")}
                         className={cn(
                           "w-4 h-4 bg-transparent",
                           i % 2 ? "-translate-y-[3px]" : "",

@@ -1,5 +1,5 @@
 import {
-  CardRarity, getImageUrlCssValue,
+  CardRarity, EDITOR_SRC, getImageUrlCssValue,
   inPx,
   textureByRarity
 } from "@repo/lib";
@@ -58,7 +58,7 @@ export function Borders({
           <div
             className="w-full h-full blur-sm"
             style={{
-              backgroundImage: `url(/${textureByRarity(rarity)})`,
+              backgroundImage: `url(${textureByRarity(rarity)})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -162,7 +162,7 @@ export function CardContentIllustartion({
             isSelected && "scale-125"
           )}
           style={{
-            backgroundImage: getImageUrlCssValue(card.illustration),
+            backgroundImage: getImageUrlCssValue(EDITOR_SRC, card.illustration),
             backgroundSize: "cover",
             backgroundPosition: "center",
             height: `calc(100% - ${7 * borderUnit}px)`,
@@ -189,7 +189,7 @@ function CardImage({
         className
       )}
       style={{
-        backgroundImage: getImageUrlCssValue(worldIllustration),
+        backgroundImage: getImageUrlCssValue(EDITOR_SRC, worldIllustration),
         backgroundSize: "cover",
         backgroundPosition: "center",
         height: `calc(100% - ${7 * borderUnit}px)`,
