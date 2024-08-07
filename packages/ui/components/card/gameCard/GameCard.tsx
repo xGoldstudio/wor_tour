@@ -35,6 +35,12 @@ function getTranslateY(element: HTMLElement) {
   return matrix.m42;
 }
 
+function getScale(element: HTMLElement) {
+  const style = window.getComputedStyle(element);
+  const matrix = new DOMMatrixReadOnly(style.transform);
+  return matrix.a;
+}
+
 function GameCard({
   isPlayerCard,
   position,
@@ -138,6 +144,8 @@ function GameCard({
     if (!cardRef.current) {
       return;
     }
+    const yTranslated = getTranslateY(cardRef.current);
+    const scale = getScale(cardRef.current);
     triggerAttackAnimation({
       replace: true,
       duration: 50,
@@ -145,12 +153,12 @@ function GameCard({
         // y is the current translation y of the ref
         .add(
           cardRef.current,
-          { opacity: 100, x: 0, y: getTranslateY(cardRef.current) },
+          { opacity: 100, x: 0, y: yTranslated, scale: scale },
           [
-            { values: { opacity: 75, x: 10, y: 0 }, to: 12 },
-            { values: { opacity: 50, x: -10, y: 0 }, to: 24 },
-            { values: { opacity: 25, x: 10, y: 0 }, to: 36 },
-            { values: { opacity: 0, x: 0, y: 0 } },
+            { values: { opacity: 75, x: 10, y: yTranslated, scale }, to: 12 },
+            { values: { opacity: 50, x: -10, y: yTranslated, scale }, to: 24 },
+            { values: { opacity: 25, x: 10, y: yTranslated, scale }, to: 36 },
+            { values: { opacity: 0, x: 0, y: yTranslated, scale } },
           ]
         ).progress,
       onEnd: () => {
