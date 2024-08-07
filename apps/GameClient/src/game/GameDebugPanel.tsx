@@ -2,7 +2,7 @@ import { IS_DEBUG } from "@/isDebug";
 import { GAME_OPTS } from "./gameBehavior/useGameEvents";
 import { botOptions } from "./gameBehavior/aiAgent";
 import FpsPrint from "./FpsPrint";
-import { ClockReturn, EventType } from "game_engine";
+import { ClockReturn, EventType, InGameCardType } from "game_engine";
 
 interface GameDebugPanelProps {
   play: () => void;
@@ -52,6 +52,7 @@ export default function GameDebugPanel({
                   isPlayer: true,
                   cardPosition: 1,
                   instanceId: 1,
+                  cardIniator: {} as InGameCardType,
               }
             }
           });
@@ -68,10 +69,11 @@ export default function GameDebugPanel({
               isPlayer: true,
               damage: 99999,
               initiator: {
-                  type: "cardAttacking",
-                  isPlayer: false,
-                  cardPosition: 1,
-                  instanceId: 1,
+                type: "cardAttacking",
+                isPlayer: false,
+                cardPosition: 1,
+                instanceId: 1,
+                cardIniator: {} as InGameCardType,
               }
             }
           });
