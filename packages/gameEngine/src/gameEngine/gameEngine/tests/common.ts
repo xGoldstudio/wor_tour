@@ -1,6 +1,6 @@
 import { GameStateObject, GameStateObjectConstructor } from "../gameState";
 import _ from "lodash";
-import { EventType } from "../../../types/eventType";
+import { EventType, InGameCardType } from "../../../types/eventType";
 import Clock, { ClockReturn } from "../../clock/clock";
 import { computeNextFrameState } from "../gameEngine";
 import { CardType } from "../../../types/Card";
@@ -100,13 +100,18 @@ export function triggerDirectAttack(
 	state: GameStateObject,
 	isPlayer: boolean,
 	cardPosition: number,
+	doAnimation?: boolean,
 ) {
 	clock.triggerEvent({
 		type: "cardAttacking",
 		isPlayer,
 		cardPosition,
-		instanceId: state.getCard(isPlayer, cardPosition)!.instanceId
+		instanceId: state.getCard(isPlayer, cardPosition)!.instanceId,
+		cardIniator: state.getCard(isPlayer, cardPosition)!,
 	});
+	if (doAnimation) {
+		attackAnimation(clock);
+	}
 }
 
 export function triggerHealCard(
@@ -149,7 +154,10 @@ export function triggerDirectAttackResolved(
 				isPlayer,
 				cardPosition,
 				instanceId: -1,
-			}
+				cardIniator: state.getCard(isPlayer, cardPosition)!,
+			},
+			cardInitiator: state.getCard(isPlayer, cardPosition)!,
+			onDirectHitStates: [],
 		}
 	});
 }
@@ -204,6 +212,7 @@ export function triggerDamageToPlayer(
 				isPlayer,
 				cardPosition: -1,
 				instanceId: -1,
+				cardIniator: {} as InGameCardType, // may need fixes later
 			}
 		}
 	});

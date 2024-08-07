@@ -15,6 +15,8 @@ const BleedingStateAction: StateAction = ({ event, clock, value }) => {
 			isPlayerCard: initiator.isPlayer,
 			directAttack: false,
 			initiator: initiator,
+			onDirectHitStates: [],
+			cardInitiator: initiator.cardIniator,
 		}
 	});
 }

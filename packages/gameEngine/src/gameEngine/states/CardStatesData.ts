@@ -10,7 +10,7 @@ import { GameStateObject } from '../gameEngine/gameState';
 import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types/DataStoreType';
 import { baseDps } from '../../types/Card';
 
-export type StateAction = ({ card, trigger, target, value, clock, gameState, event }: {
+export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
   trigger: TriggerCardState,
   target: TargetCardState,

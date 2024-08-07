@@ -9,7 +9,7 @@ describe("bleeding state", () => {
 	clock.nextTick();
 	expect(state.getStateOfCard(true, 0, "bleeding")).toBeDefined();
 	const hpBefore = state.playerBoard[0]!.hp;
-	clock.triggerEvent({ type: "cardAttacking", isPlayer: true, cardPosition: 0, instanceId: getInstanceId(state, true, 0) });
+	clock.triggerEvent({ type: "cardAttacking", isPlayer: true, cardPosition: 0, instanceId: getInstanceId(state, true, 0), cardIniator: state.playerBoard[0]! });
 	clock.nextTick();
 
 	test("should take damage when attack", () => {

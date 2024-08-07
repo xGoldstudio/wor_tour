@@ -20,7 +20,10 @@ const RiposteStateAction: StateAction = ({ clock, event, card }) => {
 			isPlayer: defender.isPlayerCard,
 			cardPosition: defender.cardPosition,
 			instanceId: card.instanceId,
+			cardIniator: card,
 		},
+		onDirectHitStates: [],
+		cardInitiator: { ...card },
 		directAttack: false,
 	});
 }

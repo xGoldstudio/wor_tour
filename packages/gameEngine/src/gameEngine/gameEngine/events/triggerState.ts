@@ -4,7 +4,6 @@ import { ComputeEventProps } from "../gameEngine";
 
 export default function triggerStateEvent({ gameState, event, clock }: ComputeEventProps<TriggerStateEvent>) {
 	const card = gameState.getCardInstance(event.instanceId);
-	if (card === null) return;
 	const stateData = CardStatesData[event.state.type];
 	const options = getOptionsFromType(event.state.type);
 	stateData.action({
@@ -12,10 +11,11 @@ export default function triggerStateEvent({ gameState, event, clock }: ComputeEv
 		target: event.state.target,
 		value: event.state.value,
 		clock,
-		card,
 		gameState: gameState,
+		card: event.cardInitiator,
 		event,
 	});
+	if (card === null) return;
 	if (event.state.trigger === "onPlacement") {
 		clock.triggerEvent({
 			type: "removeState",
@@ -23,7 +23,7 @@ export default function triggerStateEvent({ gameState, event, clock }: ComputeEv
 			stateType: event.state.type,
 			position: event.position,
 			isPlayerCard: event.isPlayerCard,
-		})
+		});
 	} else if (options.consume !== undefined && event.state.value !== null) {
 		const nextValue = event.state.value - options.consume;
 		if (nextValue <= 0) {
@@ -33,7 +33,7 @@ export default function triggerStateEvent({ gameState, event, clock }: ComputeEv
 				stateType: event.state.type,
 				position: event.position,
 				isPlayerCard: event.isPlayerCard
-			})
+			});
 		} else {
 			clock.triggerEvent({
 				type: "decreaseStateValue",
@@ -42,7 +42,7 @@ export default function triggerStateEvent({ gameState, event, clock }: ComputeEv
 				stateType: event.state.type,
 				position: event.position,
 				isPlayerCard: event.isPlayerCard
-			})
+			});
 		}
 	}
 }
