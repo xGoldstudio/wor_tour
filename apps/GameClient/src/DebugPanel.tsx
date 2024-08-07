@@ -5,7 +5,7 @@ import usePlayerStore, {
   CollectionCard,
 } from "./home/store/playerStore/playerStore";
 import { _warningResetPlayStore } from "./home/store/initAllClientData";
-import useDataStore from "./cards/DataStore";
+import useDataStore from "../../../packages/ui/services/DataStore";
 import useRewardStore from "./home/store/rewardStore";
 import { GameStateObject } from "game_engine";
 import { clientLoop, experienceService, matchmakingService } from "./services/inject";

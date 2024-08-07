@@ -2,11 +2,11 @@ import { create } from "zustand";
 import usePlayerStore from "../playerStore/playerStore";
 import { CardRarity, CardRarityOrder, CardStatsInfo, CardType, getSecondsFromHours } from "@repo/lib";
 import { persist } from "zustand/middleware";
-import useDataStore from "@/cards/DataStore";
 import { isCardPackable } from "../boosterStore";
 import { arrayOfCardsToRarityMap } from "../useBooster/getRandomCardFromRarity";
 import { findCard } from "@/cards";
 import { addCardOrShardOrEvolve } from "../useBooster/useBooster";
+import { useDataStore } from "@repo/ui";
 
 export const CARDS_ROTATION_TIME = getSecondsFromHours(3);
 

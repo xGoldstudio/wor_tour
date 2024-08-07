@@ -27,3 +27,9 @@ export const clientLoop = ClientLoop([
 clientLoop.start();
 
 export const experienceService = ExperienceService();
+
+// function init(() => {
+// 	if (!usePlayerStore.getState().isInit) {
+// 		_warningResetPlayStore();
+// 	}
+// }) ();

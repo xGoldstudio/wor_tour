@@ -4,7 +4,7 @@ import { CardType } from "@repo/lib";
 import { persist } from "zustand/middleware";
 import { defaultPlayerStoreData } from "./defaultData";
 import { findCard, getCardFromLevel, getCardStats } from "@/cards";
-import useDataStore from "@/cards/DataStore";
+import { useDataStore } from "@repo/ui";
 
 export interface CollectionCard {
   id: number;

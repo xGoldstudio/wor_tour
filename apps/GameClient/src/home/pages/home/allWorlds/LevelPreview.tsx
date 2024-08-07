@@ -5,13 +5,11 @@ import {
   AllWorldsAnimationContextType,
 } from "./trophyBar/TrophyBarContext";
 import { useGSAP } from "@gsap/react";
-import { Button, cn, Cover } from "@repo/ui";
+import { Button, cn, Cover, imageManagerService, useDataStore } from "@repo/ui";
 import gsap from "gsap";
 import { Tier } from "@/home/store/tiers";
 import useCollectTierReward from "./useCollectTierReward";
 import { chestImageByLevel, emptyChestImageByLevel, glowChestImageByLevel } from "./chestsImages";
-import useDataStore from "@/cards/DataStore";
-import { getImageUrlCssValue } from "@repo/lib";
 
 export default function LevelPreview({ tier }: { tier: Tier }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -112,7 +110,7 @@ export default function LevelPreview({ tier }: { tier: Tier }) {
       <div
         className={cn("absolute w-full h-full rounded-md")}
         style={{
-          backgroundImage: getImageUrlCssValue(usingWorld.cardBackground),
+          backgroundImage: imageManagerService.getImageCss(usingWorld.cardBackground),
           backgroundSize: "100%",
           backgroundPositionY: `${100 - (tier.tier % 10) * 10}%`,
         }}

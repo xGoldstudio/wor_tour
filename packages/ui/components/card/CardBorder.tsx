@@ -1,9 +1,9 @@
 import {
-  CardRarity, getImageUrlCssValue,
-  inPx,
+  CardRarity, inPx,
   textureByRarity
 } from "@repo/lib";
 import { cn } from "../../lib/utils";
+import { imageManagerService } from "../../services/inject";
 
 interface CardBoardProps {
   rarity: CardRarity;
@@ -162,7 +162,7 @@ export function CardContentIllustartion({
             isSelected && "scale-125"
           )}
           style={{
-            backgroundImage: getImageUrlCssValue(card.illustration),
+            backgroundImage: imageManagerService.getImageCss(card.illustration),
             backgroundSize: "cover",
             backgroundPosition: "center",
             height: `calc(100% - ${7 * borderUnit}px)`,
@@ -189,7 +189,7 @@ function CardImage({
         className
       )}
       style={{
-        backgroundImage: getImageUrlCssValue(worldIllustration),
+        backgroundImage: imageManagerService.getImageCss(worldIllustration),
         backgroundSize: "cover",
         backgroundPosition: "center",
         height: `calc(100% - ${7 * borderUnit}px)`,

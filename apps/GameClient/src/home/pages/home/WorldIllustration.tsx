@@ -1,12 +1,13 @@
-import useDataStore from "@/cards/DataStore";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
-import { getImageUrl, textureByRarity } from "@repo/lib";
+import { textureByRarity } from "@repo/lib";
 import {
   Borders,
   CardIllustartion,
   Cover,
   EmptyBar,
+  imageManagerService,
   InnerBord,
+  useDataStore,
 } from "@repo/ui";
 import _ from "lodash";
 import { useState } from "react";
@@ -32,7 +33,7 @@ export default function WorldIllustration({
       <img
         id="worldIllustration"
         className="w-full aspect-square relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)]"
-        src={getImageUrl(worlds[currentWorld - 1].illustration)}
+        src={imageManagerService.getImage(worlds[currentWorld - 1].illustration)}
       />
       <CurrentWorldProgress />
       {lastUsingWorld !== currentWorld && (

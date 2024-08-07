@@ -1,7 +1,6 @@
-import useDataStore, { World } from "@/cards/DataStore";
 import Ribbon from "@/home/ui/Ribbon";
 import Modal from "@/home/ui/modal";
-import { boosters, Box, GoldAmount } from "@repo/ui";
+import { boosters, Box, GoldAmount, useDataStore, World } from "@repo/ui";
 import ScrollContainer from "react-indiana-drag-scroll";
 import BoosterIllustration from "../../shop/BoosterIllustration";
 import { cardWorldMultiplier } from "@repo/lib";

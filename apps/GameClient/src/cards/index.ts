@@ -5,7 +5,7 @@ import {
   getTargetStrength,
   testIsStrengthValid,
 } from "../../../../packages/gameEngine/src/types/Card";
-import useDataStore from "./DataStore";
+import useDataStore from "../../../../packages/ui/services/DataStore";
 
 export function findCard(id: number, level: number): CardType {
   if (id === 0) return getCardEmpty();

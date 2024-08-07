@@ -31,3 +31,7 @@ export { default as GameCard } from './components/card/gameCard/GameCard.tsx';
 export * from './components/card/gameEventListener.ts';
 export * from './components/card/useGameSyncAnimation.tsx';
 export {default as useGameEventListener} from './components/card/useGameEventListener.ts';
+
+export { default as useDataStore } from './services/DataStore.ts';
+export * from './services/DataStore.ts';
+export * from './services/inject.ts';

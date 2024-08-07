@@ -1,4 +1,4 @@
-import useDataStore from "@/cards/DataStore";
+import { useDataStore } from "@repo/ui";
 import { findValueInRecordByKey } from "../../ui/utils/findValueInRecordByKey";
 import { ActiveFilters } from "./cardFilters";
 import { CardSorts, sorts } from "./cardSorts";

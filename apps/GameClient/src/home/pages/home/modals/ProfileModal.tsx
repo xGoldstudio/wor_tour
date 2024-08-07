@@ -1,9 +1,8 @@
 import Modal from "@/home/ui/modal";
 import ScrollContainer from "react-indiana-drag-scroll";
-import { Badge, Box } from "@repo/ui";
+import { Badge, Box, useDataStore } from "@repo/ui";
 import Ribbon from "@/home/ui/Ribbon";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
-import useDataStore from "@/cards/DataStore";
 import _ from "lodash";
 import { DeckCardUI } from "../../deck/DeckCardUI";
 import WorldField from "./WorldField";

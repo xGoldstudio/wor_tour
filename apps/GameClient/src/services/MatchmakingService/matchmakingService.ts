@@ -1,4 +1,3 @@
-import useDataStore from "@/cards/DataStore";
 import buildDeck, { getDeckStrength } from "./buildDeck";
 import { findCard } from "@/cards";
 import { CardType, getTargetStrength } from "@repo/lib";
@@ -11,6 +10,7 @@ import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 import { persist } from "zustand/middleware";
 import { create } from "zustand";
 import { dailyGoldService, experienceService, keysService } from "../inject";
+import { useDataStore } from "@repo/ui";
 
 const MAX_TROPHIES_WIN = 35;
 const LOWEST_TROPHIES_WIN = 25;

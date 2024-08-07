@@ -1,12 +1,10 @@
 import { getCardFromLevel } from "@/cards";
-import useDataStore from "@/cards/DataStore";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { useState } from "react";
 import WorldModal from "../modals/WorldModal";
-import { Badge, Button, cn, Cover } from "@repo/ui";
+import { Badge, Button, cn, Cover, imageManagerService, useDataStore } from "@repo/ui";
 import StaticCard from "@/game/gui/card/StaticCard";
 import { Tier } from "@/home/store/tiers";
-import { getImageUrl } from "@repo/lib";
 
 export default function WorldPreview({
   tier,
@@ -45,7 +43,7 @@ export default function WorldPreview({
                 !isUnlocked && "grayscale-[80%]"
               )}
               onClick={() => setIsWorldModalOpen(true)}
-              src={getImageUrl(world.illustration)}
+              src={imageManagerService.getImage(world.illustration)}
             />
             <p className="text-3xl text-white font-stylised pb-4 drop-shadow-[2px_2px_1px_black]">
               {world.name}
