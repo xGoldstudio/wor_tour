@@ -4,15 +4,14 @@ import { ClockReturn } from "../../clock/clock";
 import { GameStateObject } from "../gameState";
 import { CardState } from "../../states/CardStatesData";
 
-export function triggerStates({ gameState, trigger, clock, isPlayerCard, cardPosition, initiator }: {
+export function triggerStates({ gameState, trigger, clock, initiator, instanceId }: {
 	gameState: GameStateObject,
 	trigger: CardState["trigger"],
 	clock: ClockReturn<EventType>,
-	isPlayerCard: boolean,
-	cardPosition: number,
 	initiator: EventType,
+	instanceId: number,
 }) {
-	const card = gameState.getCard(isPlayerCard, cardPosition);
+	const card = gameState.getCardInstance(instanceId);
 	if (card === null) {
 		return;
 	}
@@ -21,8 +20,6 @@ export function triggerStates({ gameState, trigger, clock, isPlayerCard, cardPos
 			clock.triggerEvent({
 				type: "triggerState",
 				instanceId: card.instanceId,
-				position: cardPosition,
-				isPlayerCard: isPlayerCard,
 				state,
 				initiator: initiator,
 				cardInitiator: card,
@@ -32,12 +29,10 @@ export function triggerStates({ gameState, trigger, clock, isPlayerCard, cardPos
 }
 
 export default function cardAttackingEvent({ event, gameState, clock }: ComputeEventProps<CardAttackingEvent>) {
-	const attakerCard = event.isPlayer
-		? gameState.playerBoard[event.cardPosition]
-		: gameState.opponentBoard[event.cardPosition];
-	const defenseBoard = event.isPlayer ? gameState.opponentBoard : gameState.playerBoard;
-	const defenseCard = defenseBoard[event.cardPosition];
-	if (attakerCard === null || attakerCard.instanceId !== event.instanceId) {
+	const attakerCard = gameState.getCardInstance(event.instanceId);
+	const isPlayerCard = gameState.getIsPlayerCard(event.instanceId);
+	const defenseCard = gameState.getOppositeCard(event.instanceId);
+	if (attakerCard === null) {
 		// if card destroyed or replaced during attack
 		return;
 	}
@@ -45,17 +40,14 @@ export default function cardAttackingEvent({ event, gameState, clock }: ComputeE
 		trigger: "onAttack",
 		clock,
 		gameState,
-		isPlayerCard: event.isPlayer,
-		cardPosition: event.cardPosition,
 		initiator: event,
+		instanceId: event.instanceId,
 	});
 	if (defenseCard) {
 		clock.triggerEvent({
 			type: "cardDamage",
 			amount: attakerCard.dmg,
-			cardPosition: event.cardPosition,
 			instanceId: defenseCard.instanceId,
-			isPlayerCard: !event.isPlayer,
 			directAttack: true,
 			initiator: event,
 			onDirectHitStates: attakerCard.states.filter((state) => state.trigger === "onDirectAttackHit").map((state) => ({ ...state })), // we take the state at its current state
@@ -65,14 +57,12 @@ export default function cardAttackingEvent({ event, gameState, clock }: ComputeE
 		clock.triggerEvent({
 			type: "playerDamage",
 			damage: attakerCard.dmg,
-			isPlayer: !event.isPlayer,
+			isPlayer: !isPlayerCard,
 			initiator: event,
 		});
 	}
 	clock.triggerEvent({
 		type: "cardStartAttacking",
-		isPlayer: event.isPlayer,
-		cardPosition: event.cardPosition,
 		instanceId: event.instanceId,
 	});
 }

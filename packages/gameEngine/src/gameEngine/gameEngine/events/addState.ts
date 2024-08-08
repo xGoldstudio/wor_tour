@@ -12,8 +12,6 @@ export default function addStateEvent({ gameState, event, clock }: ComputeEventP
 				stateType: event.state.type,
 				increaseBy: event.state.value,
 				instanceId: event.instanceId,
-				position: event.position,
-				isPlayerCard: event.isPlayerCard,
 			});
 		}
 		return;

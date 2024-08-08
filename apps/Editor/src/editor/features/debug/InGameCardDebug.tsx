@@ -40,8 +40,6 @@ export default function InGameCardDebug() {
     clock?.triggerEvent({
       type: "addState",
       instanceId,
-      isPlayerCard: true,
-      position: 0,
       state: stateArg,
     });
   }
@@ -52,8 +50,6 @@ export default function InGameCardDebug() {
     clock?.triggerEvent({
       type: "removeState",
       instanceId,
-      isPlayerCard: true,
-      position: 0,
       stateType,
     });
   }
@@ -64,21 +60,21 @@ export default function InGameCardDebug() {
     clock?.triggerEvent({
       type: "decreaseStateValue",
       instanceId,
-      isPlayerCard: true,
-      position: 0,
       stateType,
       decreaseBy: consumeState,
     });
   }
 
   function dealDamage(amount: number) {
-    if (!clock || !state) return;
-    triggerDirectAttackResolved(clock, state, false, 0, amount);
+    const instanceId = state?.getCard(true, 0)?.instanceId;
+    if (!clock || !state || instanceId === undefined) return;
+    triggerDirectAttackResolved(clock, state, instanceId, instanceId, amount);
   }
 
   function healCard(amount: number) {
-    if (!clock || !state) return;
-    triggerHealCard(clock, true, 0, amount);
+    const instanceId = state?.getCard(true, 0)?.instanceId;
+    if (!clock || !state || instanceId === undefined) return;
+    triggerHealCard(clock, instanceId, amount);
   }
 
   function addRemoveState(state: CardState) {

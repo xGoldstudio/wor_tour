@@ -21,8 +21,6 @@ export default function triggerStateEvent({ gameState, event, clock }: ComputeEv
 			type: "removeState",
 			instanceId: card.instanceId,
 			stateType: event.state.type,
-			position: event.position,
-			isPlayerCard: event.isPlayerCard,
 		});
 	} else if (options.consume !== undefined && event.state.value !== null) {
 		const nextValue = event.state.value - options.consume;
@@ -31,8 +29,6 @@ export default function triggerStateEvent({ gameState, event, clock }: ComputeEv
 				type: "removeState",
 				instanceId: card.instanceId,
 				stateType: event.state.type,
-				position: event.position,
-				isPlayerCard: event.isPlayerCard
 			});
 		} else {
 			clock.triggerEvent({
@@ -40,8 +36,6 @@ export default function triggerStateEvent({ gameState, event, clock }: ComputeEv
 				instanceId: card.instanceId,
 				decreaseBy: options.consume,
 				stateType: event.state.type,
-				position: event.position,
-				isPlayerCard: event.isPlayerCard
 			});
 		}
 	}

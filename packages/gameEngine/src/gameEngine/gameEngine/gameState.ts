@@ -1,3 +1,4 @@
+import { getFrameFromAttackSpeed } from './events/utils';
 import { CardType } from "../../types/Card";
 import { InGameCardType } from "../../types/eventType";
 import { CardState } from "../states/CardStatesData";
@@ -170,15 +171,13 @@ export class GameStateObject {
 		}
 	}
 	// attack
-	startAttacking(isPlayer: boolean, cardPosition: number, tick: number) {
-		const board = isPlayer ? this.playerBoard : this.opponentBoard;
-		const card = board[cardPosition];
+	startAttacking(instanceId: number, tick: number) {
+		const card = this.getCardInstance(instanceId);
 		if (!card) {
 			console.warn("Card doesnt exist");
 			return {};
 		}
 		card.startAttackingTick = tick;
-		return isPlayer ? { playerBoard: board } : { opponentBoard: board };
 	}
 	// hp
 	dealDamageToPlayer(isPlayer: boolean, damage: number) {
@@ -190,24 +189,27 @@ export class GameStateObject {
 	}
 	// cards dmg
 	dealDamageToCard(
-		isPlayerCard: boolean,
+		instanceId: number,
 		damage: number,
-		cardPosition: number
 	) {
-		const card = this.getCard(isPlayerCard, cardPosition);
+		const card = this.getCardInstance(instanceId);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return false;
 		}
 		card.hp = Math.max(0, card.hp - damage);
 		return card.hp === 0;
 	}
-	destroyCard(isPlayerCard: boolean, cardPosition: number) {
-		const board = isPlayerCard ? this.playerBoard : this.opponentBoard;
-		board[cardPosition] = null;
+	destroyCard(instanceId: number) {
+		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instanceId);
+		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instanceId);
+		if (playerCard !== -1) {
+			this.playerBoard[playerCard] = null;
+		} else if (opponentCard !== -1) {
+			this.opponentBoard[opponentCard] = null;
+		}
 	}
-	healCard(isPlayerCard: boolean, cardPosition: number, amount: number) {
-		const deck = isPlayerCard ? this.playerBoard : this.opponentBoard;
-		const card = deck[cardPosition];
+	healCard(instanceId: number, amount: number) {
+		const card = this.getCardInstance(instanceId);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return;
 		}
@@ -271,12 +273,47 @@ export class GameStateObject {
 			this.opponentDeck = this.opponentDeck.sort(() => Math.random() - 0.5);
 		}
 	}
+	increaseAttackSpeed(instanceId: number, increasePercent: number, currentFrame: number) {
+		const card = this.getCardInstance(instanceId);
+		if (!card) {
+			return;
+		}
+		const previousAttackSpeed = card.attackSpeed;
+		card.attackSpeed = card.attackSpeed * (1 + increasePercent / 100);
+		if (card.startAttackingTick !== null) {
+			const progress = (currentFrame - card.startAttackingTick) / getFrameFromAttackSpeed(previousAttackSpeed);
+			card.startAttackingTick = Math.floor(currentFrame - (getFrameFromAttackSpeed(card.attackSpeed) * progress));
+		}
+	}
 	// utils
 	getCard(isPlayerCard: boolean, cardPosition: number) {
 		return (isPlayerCard ? this.playerBoard : this.opponentBoard)[cardPosition];
 	}
 	getCardInstance(instanceId: number) {
 		return [...this.playerBoard, ...this.opponentBoard].find((c) => c?.instanceId === instanceId) || null;
+	}
+	getCardPosition(instanceId: number) {
+		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instanceId);
+		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instanceId);
+		if (playerCard !== -1) {
+			return { isPlayerCard: true, position: playerCard };
+		} else if (opponentCard !== -1) {
+			return { isPlayerCard: false, position: opponentCard };
+		}
+		return null
+	}
+	getIsPlayerCard(instanceId: number) {
+		return this.playerBoard.findIndex((c) => c?.instanceId === instanceId) !== -1;
+	}
+	getOppositeCard(instaceId: number) {
+		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instaceId);
+		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instaceId);
+		if (playerCard !== -1) {
+			return this.opponentBoard[playerCard];
+		} else if (opponentCard !== -1) {
+			return this.playerBoard[opponentCard];
+		}
+		return null;
 	}
 	getBoard(isPlayer: boolean) {
 		return isPlayer ? this.playerBoard : this.opponentBoard;

@@ -10,6 +10,8 @@ import { GameStateObject } from '../gameEngine/gameState';
 import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types/DataStoreType';
 import { baseDps } from '../../types/Card';
 import CloningStateAction from './stateActions/cloning';
+import RushStateAction from './stateActions/rush';
+import BannerOfCommandStateAction from './stateActions/bannerOfCommand';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -179,6 +181,38 @@ export const CardStatesData = {
     options: {
       stackable: true,
     },
+  },
+  rush: {
+    min: undefined,
+    max: undefined,
+    noValue: true,
+    triggers: ["onPlacement"],
+    targets: ["allyCards"],
+    computeCost: () => {
+      return 0.2;
+    },
+    descrption: ({ trigger, target }) => `${trigger}, ${target} will attack directly the ennemy card in front of him.`,
+    title: "Rush",
+    status: "neutral",
+    src: "rush.png",
+    action: RushStateAction,
+    options: {},
+  },
+  bannerOfComand: {
+    min: 1,
+    max: undefined,
+    noValue: false,
+    triggers: ["onPlacement"],
+    targets: ["allyCards"],
+    computeCost: ({ value }) => {
+      return 0.1 * (value || 0);
+    },
+    status: "buff",
+    descrption: ({ trigger, target, value }) => `${trigger}, ${target} will gain ${value}% attack speed.`,
+    title: "Banner of Command",
+    src: "bannerOfCommand.png",
+    action: BannerOfCommandStateAction,
+    options: {},
   }
 } satisfies Record<string, CardStateDataInterface>;
 

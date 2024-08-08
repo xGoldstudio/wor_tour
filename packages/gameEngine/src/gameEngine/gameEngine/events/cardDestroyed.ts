@@ -7,9 +7,8 @@ export default function cardDestroyedEvent({ gameState, event, clock }: ComputeE
 		gameState,
 		trigger: "onDeath",
 		clock,
-		isPlayerCard: event.initiator.isPlayerCard,
-		cardPosition: event.initiator.cardPosition,
 		initiator: event,
-	})
-	gameState.destroyCard(event.initiator.isPlayerCard, event.initiator.cardPosition);
+		instanceId: event.initiator.instanceId,
+	});
+	gameState.destroyCard(event.initiator.instanceId);
 }

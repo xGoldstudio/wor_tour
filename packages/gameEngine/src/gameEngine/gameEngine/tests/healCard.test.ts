@@ -32,21 +32,18 @@ test("removing effect player card", () => {
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
 	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
+	const playerCardInstanceId = state.playerBoard[0]!.instanceId;
 	// deal damage to card
-	triggerDirectAttackResolved(clock, state, false, 0, 100);
+	triggerDirectAttackResolved(clock, state, playerCardInstanceId, playerCardInstanceId, 100);
 	clock.nextTick();
 	expect(state.playerBoard[0]?.hp).toBe(100);
 	// heal card
 	function healCard(amount: number) {
 		clock.triggerEvent({
 			type: "healCard",
-			isPlayerCard: true,
-			cardPosition: 0,
 			amount: amount,
-			cardInitiator: {
-				isPlayerCard: true,
-				cardPosition: 1,
-			},
+			instanceId: playerCardInstanceId,
+			cardInitiatorInstanceId: playerCardInstanceId,
 		});
 	}
 	healCard(50);

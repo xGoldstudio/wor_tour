@@ -12,14 +12,11 @@ export default function placeCardEvent({ event, gameState, clock }: ComputeEvent
 		trigger: "onPlacement",
 		clock,
 		gameState,
-		isPlayerCard: event.isPlayer,
-		cardPosition: event.position,
+		instanceId: cardInGame.instanceId,
 		initiator: event,
 	});
 	clock.triggerEvent({
 		type: "cardStartAttacking",
-		isPlayer: event.isPlayer,
-		cardPosition: event.position,
 		instanceId: cardInGame.instanceId,
 	});
 }

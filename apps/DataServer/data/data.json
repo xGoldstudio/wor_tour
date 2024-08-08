@@ -746,12 +746,26 @@
         },
         {
           "cost": 1,
-          "states": [],
+          "states": [
+            {
+              "type": "rush",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": null
+            }
+          ],
           "illustration": "card_23_level_2_1721051661386.png"
         },
         {
           "cost": 1,
-          "states": [],
+          "states": [
+            {
+              "type": "rush",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": null
+            }
+          ],
           "illustration": "card_23_level_3_1721051665630.png"
         }
       ]
@@ -766,17 +780,38 @@
       "stats": [
         {
           "cost": 2,
-          "states": [],
+          "states": [
+            {
+              "type": "bannerOfComand",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": 10
+            }
+          ],
           "illustration": "card_24_level_1_1720724823656.png"
         },
         {
           "cost": 2,
-          "states": [],
+          "states": [
+            {
+              "type": "bannerOfComand",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": 20
+            }
+          ],
           "illustration": "card_24_level_2_1720725223340.png"
         },
         {
           "cost": 2,
-          "states": [],
+          "states": [
+            {
+              "type": "bannerOfComand",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": 30
+            }
+          ],
           "illustration": "card_24_level_3_1720725227930.png"
         }
       ]

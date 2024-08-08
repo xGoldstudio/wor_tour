@@ -3,7 +3,10 @@ import { PlaceCardType } from "../../../types/eventType";
 import { StateAction } from "../CardStatesData";
 
 const CloningStateAction: StateAction = ({ clock, event, card, gameState }) => {
-	const board = gameState.getBoard(event.isPlayerCard);
+	return;
+	if (event.initiator.type !== "cardDestroyed") return;
+	const isPlayerCard = gameState.getIsPlayerCard(event.initiator.initiator.instanceId);
+	const board = gameState.getBoard(isPlayerCard);
 	const freeZones: number[] = [];
 	board.forEach((card, index) => {
 		if (card === null) {
@@ -25,7 +28,7 @@ const CloningStateAction: StateAction = ({ clock, event, card, gameState }) => {
 	}
 	clock.triggerEvent({
 		type: "placeCard",
-		isPlayer: event.isPlayerCard,
+		isPlayer: isPlayerCard,
 		position: targetPosition,
 		card: nextCard,
 		isSpecialPlacement: true,

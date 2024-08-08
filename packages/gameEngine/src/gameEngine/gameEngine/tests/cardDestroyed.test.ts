@@ -32,7 +32,7 @@ test("destroying player card", () => {
 	drawPlaceCard(clock, true, 0);
 	clock.nextTick();
 	expect(state.playerBoard[0]?.id).toBe(0);
-	triggerKillCard(clock, true, 0);
+	triggerKillCard(clock, state.playerBoard[0]!.instanceId);
 	clock.nextTick();
 	expect(state.playerBoard[0]).toBe(null);
 });
@@ -47,7 +47,7 @@ test("destroying opponent card", () => {
 	drawPlaceCard(clock, false, 0);
 	clock.nextTick();
 	expect(state.opponentBoard[0]?.id).toBe(0);
-	triggerKillCard(clock, false, 0);
+	triggerKillCard(clock, state.opponentBoard[0]!.instanceId);
 	clock.nextTick();
 	expect(state.opponentBoard[0]).toBe(null);
 });

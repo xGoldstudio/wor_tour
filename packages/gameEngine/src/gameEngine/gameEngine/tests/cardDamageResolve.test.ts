@@ -31,11 +31,12 @@ test("damage and kill player card", () => {
 	clock.triggerEvent({ type: "startGame" });
 	drawPlaceCard(clock, true, 0);
 	clock.nextTick();
-	triggerDirectAttackResolved(clock, state, false, 0, 100);
+	const playerInstanceId = state.playerBoard[0]!.instanceId;
+	triggerDirectAttackResolved(clock, state, playerInstanceId, playerInstanceId, 100);
 	clock.nextTick();
 	expect(state.playerBoard[0]?.hp).toBe(100);
 	// now kill the card
-	triggerDirectAttackResolved(clock, state, false, 0, 100);
+	triggerDirectAttackResolved(clock, state, playerInstanceId, playerInstanceId, 100);
 	clock.nextTick();
 	expect(state.playerBoard[0]).toBe(null);
 });
@@ -49,12 +50,13 @@ test("damage and kill opponent card", () => {
 	clock.triggerEvent({ type: "startGame" });
 	drawPlaceCard(clock, false, 0);
 	clock.nextTick();
+	const opponentInstanceId = state.opponentBoard[0]!.instanceId;
 	// deal damage to card
-	triggerDirectAttackResolved(clock, state, true, 0, 100);
+	triggerDirectAttackResolved(clock, state, opponentInstanceId, opponentInstanceId, 100);
 	clock.nextTick();
 	expect(state.opponentBoard[0]?.hp).toBe(100);
 	// now kill the card
-	triggerDirectAttackResolved(clock, state, true, 0, 100);
+	triggerDirectAttackResolved(clock, state, opponentInstanceId, opponentInstanceId, 100);
 	clock.nextTick();
 	expect(state.opponentBoard[0]).toBe(null);
 });

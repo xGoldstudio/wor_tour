@@ -111,8 +111,6 @@ export function triggerDirectAttack(
 ) {
 	clock.triggerEvent({
 		type: "cardAttacking",
-		isPlayer,
-		cardPosition,
 		instanceId: state.getCard(isPlayer, cardPosition)!.instanceId,
 		cardIniator: state.getCard(isPlayer, cardPosition)!,
 	});
@@ -123,27 +121,22 @@ export function triggerDirectAttack(
 
 export function triggerHealCard(
 	clock: ClockReturn<EventType>,
-	isPlayerCard: boolean,
-	cardPosition: number,
+	instanceId: number,
 	amount: number,
 ) {
 	clock.triggerEvent({
 		type: "healCard",
-		isPlayerCard,
-		cardPosition,
 		amount,
-		cardInitiator: {
-			isPlayerCard,
-			cardPosition,
-		}
+		instanceId: instanceId,
+		cardInitiatorInstanceId: instanceId,
 	})
 }
 
 export function triggerDirectAttackResolved(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,
-	isPlayer: boolean,
-	cardPosition: number,
+	attackerInstanceId: number,
+	targetInstanceId: number,
 	damage: number,
 	notDirect?: true,
 ) {
@@ -151,19 +144,15 @@ export function triggerDirectAttackResolved(
 		type: "cardDamageResolve",
 		initiator: {
 			type: "cardDamage",
-			instanceId: getInstanceId(state, !isPlayer, cardPosition),
+			instanceId: targetInstanceId,
 			directAttack: !notDirect,
-			isPlayerCard: !isPlayer,
-			cardPosition,
 			amount: damage,
 			initiator: {
 				type: "cardAttacking",
-				isPlayer,
-				cardPosition,
-				instanceId: -1,
-				cardIniator: state.getCard(isPlayer, cardPosition)!,
+				instanceId: attackerInstanceId,
+				cardIniator: state.getCardInstance(attackerInstanceId)!,
 			},
-			cardInitiator: state.getCard(isPlayer, cardPosition)!,
+			cardInitiator: state.getCardInstance(targetInstanceId)!,
 			onDirectHitStates: [],
 		}
 	});
@@ -171,23 +160,18 @@ export function triggerDirectAttackResolved(
 
 export function triggerKillCard(
 	clock: ClockReturn<EventType>,
-	isPlayer: boolean,
-	cardPosition: number,
+	instanceId: number,
 ) {
 	clock.triggerEvent({
 		type: "cardDestroyed",
 		initiator: {
 			type: "cardDamage",
-			instanceId: -1,
+			instanceId: instanceId,
 			directAttack: false,
-			isPlayerCard: isPlayer,
-			cardPosition: cardPosition,
 			amount: 0,
 			initiator: {
 				type: "cardAttacking",
-				isPlayer: false,
-				cardPosition: -1,
-				instanceId: -1,
+				instanceId: instanceId,
 				cardIniator: {} as InGameCardType, // may need fixes later
 			},
 			cardInitiator: {} as InGameCardType, // may need fixes later
@@ -243,8 +227,6 @@ export function triggerDamageToPlayer(
 			damage: amount,
 			initiator: {
 				type: "cardAttacking",
-				isPlayer,
-				cardPosition: -1,
 				instanceId: -1,
 				cardIniator: {} as InGameCardType, // may need fixes later
 			}

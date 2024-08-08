@@ -49,8 +49,6 @@ export default function GameDebugPanel({
               damage: 99999,
               initiator: {
                   type: "cardAttacking",
-                  isPlayer: true,
-                  cardPosition: 1,
                   instanceId: 1,
                   cardIniator: {} as InGameCardType,
               }
@@ -70,8 +68,6 @@ export default function GameDebugPanel({
               damage: 99999,
               initiator: {
                 type: "cardAttacking",
-                isPlayer: false,
-                cardPosition: 1,
                 instanceId: 1,
                 cardIniator: {} as InGameCardType,
               }

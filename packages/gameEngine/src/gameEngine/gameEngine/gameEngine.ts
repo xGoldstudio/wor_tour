@@ -1,4 +1,4 @@
-import { NormalPlaceCardEvent } from './../../types/eventType';
+import { IncreaseAttackSpeedEvent, NormalPlaceCardEvent } from './../../types/eventType';
 import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, StartEarningManaEvent, SetManaIncreaseSpeed, StartGameSequence, StartGameEvent, RemoveStateEvent, TriggerStateEvent, AddStateEvent, IncreaseStateValueEvent, DecreaseStateValueEvent, EndEarningManaEvent, ShuffleDeckEvent, TimerDecreaseEvent } from '../../types/eventType';
 import startEarningManaEvent from "./events/startEarningMana";
 import manaIncreaseEvent from './events/manaIncrease';
@@ -28,6 +28,7 @@ import endEarningManaEvent from './events/endEarningMana';
 import shuffleDeckEvent from './events/shuffleDeck';
 import timerDecrease from './events/timerDecrease';
 import normalPlaceCardEvent from './events/normalPlaceCard';
+import increaseAttackSpeed from './events/increaseAttackSpeed';
 
 export const FRAME_TIME = 10;
 
@@ -64,6 +65,7 @@ type EventTypeMap = {
 	addState: AddStateEvent;
 	shuffleDeck: ShuffleDeckEvent;
 	timerDecrease: TimerDecreaseEvent;
+	increaseAttackSpeed: IncreaseAttackSpeedEvent;
 };
 
 type EventHandlers = {
@@ -97,6 +99,7 @@ const EventsCompute: EventHandlers = {
 	triggerState: triggerStateEvent,
 	shuffleDeck: shuffleDeckEvent,
 	timerDecrease: timerDecrease,
+	increaseAttackSpeed: increaseAttackSpeed,
 }
 
 // used in front and back and can be debugged easily (not pure mutate the state)

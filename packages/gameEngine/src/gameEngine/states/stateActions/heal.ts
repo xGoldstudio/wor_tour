@@ -5,16 +5,14 @@ const HealStateAction: StateAction = ({ value, event, gameState, clock }) => {
 	if (initiator.type !== "placeCard" || value === null) {
 		return;
 	}
+	const placedCard = gameState.getCard(initiator.isPlayer, initiator.position);
+	if (placedCard === null) return;
 	gameState.getBoard(initiator.isPlayer).forEach((card, position) => {
 		if (!card || card.hp === card.maxHp || position === initiator.position) return;
 		clock.triggerEvent({
 			type: "healCard",
-			cardPosition: position,
-			isPlayerCard: initiator.isPlayer,
-			cardInitiator: {
-				isPlayerCard: initiator.isPlayer,
-				cardPosition: initiator.position,
-			},
+			instanceId: card.instanceId,
+			cardInitiatorInstanceId: placedCard.instanceId,
 			amount: value,
 		});
 	});
