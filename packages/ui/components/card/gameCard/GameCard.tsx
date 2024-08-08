@@ -390,8 +390,9 @@ function GameCardHpBar({
       }
       setHp(card.hp);
       const lifeBar = scope.current?.querySelector<HTMLElement>(".lifeBar");
-      if (lifeBar) {
+      if (lifeBar && hpBarRef.current) {
         lifeBar.style.transform = `scaleX(${card.hp / card.maxHp})`;
+        hpBarRef.current.innerHTML = numberWithCommas(card.hp);
       }
     },
     filter: (event) =>

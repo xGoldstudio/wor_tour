@@ -1,4 +1,3 @@
-import { CardType } from "@repo/lib";
 import { CurrentWinner } from "../gameEngine/gameEngine/gameState";
 import { CardState } from "../gameEngine/states/CardStatesData";
 import { CardRarity } from "./DataStoreType";
@@ -73,11 +72,13 @@ export interface ManaIncreaseEvent {
   value: number;
 }
 
+export type PlaceCardType = Omit<InGameCardType, "instanceId">;
+
 export interface PlaceCardEvent {
   type: "placeCard";
   isPlayer: boolean;
   position: number;
-  card: CardType;
+  card: PlaceCardType;
   isSpecialPlacement: boolean;
 }
 

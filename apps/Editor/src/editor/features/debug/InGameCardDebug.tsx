@@ -3,6 +3,7 @@ import { Button, GameCard, useOnMount, useRunGameInstance } from "@repo/ui";
 import {
   bleedingStateTest,
   ClockReturn,
+  cloneStateTest,
   drawPlaceCard,
   EventType,
   massacreStateTest,
@@ -124,6 +125,7 @@ export default function InGameCardDebug() {
             {addRemoveState(multiAttackState)}
             {addRemoveState(riposteStateTest)}
             {addRemoveState(massacreStateTest)}
+            {addRemoveState(cloneStateTest)}
           </div>
         </DebugPanelLayout>
       </div>

@@ -169,14 +169,16 @@ export const CardStatesData = {
     triggers: ["onDeath"],
     targets: ["selfCard"],
     computeCost: ({ value }) => {
-      return 0;
+      return 2.5 * (value || 0);
     },
-    descrption: ({ trigger, target }) => `${trigger}, clone ${target} on a random position.`,
+    descrption: ({ trigger, target }) => `${trigger}, clone ${target} on a random position. Cloning purge all states of a card, expect clone stacks.`,
     title: "Clone",
     status: "neutral",
     src: "clone.png",
     action: CloningStateAction,
-    options: {},
+    options: {
+      stackable: true,
+    },
   }
 } satisfies Record<string, CardStateDataInterface>;
 

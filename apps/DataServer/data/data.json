@@ -523,7 +523,14 @@
         },
         {
           "cost": 3,
-          "states": [],
+          "states": [
+            {
+              "type": "clone",
+              "trigger": "onDeath",
+              "target": "selfCard",
+              "value": 1
+            }
+          ],
           "illustration": "card_15_level_3_1720100190398.png"
         }
       ]
@@ -784,17 +791,38 @@
       "stats": [
         {
           "cost": 4,
-          "states": [],
+          "states": [
+            {
+              "type": "clone",
+              "trigger": "onDeath",
+              "target": "selfCard",
+              "value": 1
+            }
+          ],
           "illustration": "card_25_level_1_1720974780704.png"
         },
         {
           "cost": 4,
-          "states": [],
+          "states": [
+            {
+              "type": "clone",
+              "trigger": "onDeath",
+              "target": "selfCard",
+              "value": 1
+            }
+          ],
           "illustration": "card_25_level_2_1720974783343.png"
         },
         {
           "cost": 4,
-          "states": [],
+          "states": [
+            {
+              "type": "clone",
+              "trigger": "onDeath",
+              "target": "selfCard",
+              "value": 2
+            }
+          ],
           "illustration": "card_25_level_3_1720974612545.png"
         }
       ]

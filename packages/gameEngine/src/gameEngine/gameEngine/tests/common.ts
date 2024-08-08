@@ -95,6 +95,13 @@ export const massacreStateTest: CardState = {
 	target: "directEnnemyCard",
 };
 
+export const cloneStateTest: CardState = {
+	type: "clone",
+	value: 2,
+	trigger: "onDeath",
+	target: "selfCard",
+};
+
 export function triggerDirectAttack(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,
