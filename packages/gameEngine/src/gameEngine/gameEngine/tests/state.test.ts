@@ -1,11 +1,11 @@
 import { CardState, CardStatesData } from "../../states/CardStatesData";
-import { attackAnimation, baseCard, drawPlaceCard, getInstanceId, initTest, triggerDirectAttack, triggerDirectAttackResolved } from "./common";
+import { attackAnimation, baseCard, drawPlaceCard, getInstanceId, initTest, triggerKillCard, triggerDirectAttack, triggerDirectAttackResolved } from "./common";
 import { expect, test, vi, describe } from 'vitest';
 
 test("CRUDS operations on states", () => {
 	const { clock, state } = initTest({ skipStartGame: true });
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	expect(state.playerBoard[0]?.states.length).toBe(0);
 
@@ -84,7 +84,7 @@ describe("trigger", () => {
 	test("Trigger: OnDirectAttackHit", () => {
 		// on direct attack hit
 		clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-		clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
+		clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 		const dummyState: CardState = { type: "dummy", value: 4, trigger: "onDirectAttackHit", target: "selfCard" };
 		clock.triggerEvent({ type: "addState", instanceId: getInstanceId(state, true, 0), isPlayerCard: true, position: 0, state: dummyState });
 		clock.nextTick();
@@ -122,7 +122,7 @@ test("Trigger: OnPlacement", () => {
 	card.states = [{ type: "dummy", value: 2, trigger: "onPlacement", target: "selfCard" }];
 	const { clock, state } = initTest({ gameData: { playerDeck: [card] }, skipStartGame: true });
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	vi.spyOn(CardStatesData["dummy"], "action").mockImplementation((props) => {
 		expect(props.trigger).toBe("onPlacement");
 		expect(props.value).toBe(2);
@@ -150,6 +150,22 @@ test("OnDirectAttackWhendDeadAttacker, effect should still go", () => {
 	triggerDirectAttackResolved(clock, state, false, 0, 9999, true);
 	attackAnimation(clock);
 	expect(CardStatesData["dummy"].action).not.toHaveBeenCalled();
+	clock.nextTick();
+	expect(CardStatesData["dummy"].action).toHaveBeenCalled();
+});
+
+test("Trigger: OnDeath", () => {
+	const card = baseCard;
+	card.states = [{ type: "dummy", value: 2, trigger: "onDeath", target: "selfCard" }];
+	const { clock } = initTest({ gameData: { playerDeck: [card] }, skipStartGame: true });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
+	vi.spyOn(CardStatesData["dummy"], "action").mockImplementation((props) => {
+		expect(props.trigger).toBe("onDeath");
+		expect(props.value).toBe(2);
+	});
+	expect(CardStatesData["dummy"].action).not.toBeCalled();
+	triggerKillCard(clock, true, 0);
 	clock.nextTick();
 	expect(CardStatesData["dummy"].action).toHaveBeenCalled();
 });

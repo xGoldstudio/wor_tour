@@ -1,3 +1,4 @@
+import { NormalPlaceCardEvent } from './../../types/eventType';
 import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, StartEarningManaEvent, SetManaIncreaseSpeed, StartGameSequence, StartGameEvent, RemoveStateEvent, TriggerStateEvent, AddStateEvent, IncreaseStateValueEvent, DecreaseStateValueEvent, EndEarningManaEvent, ShuffleDeckEvent, TimerDecreaseEvent } from '../../types/eventType';
 import startEarningManaEvent from "./events/startEarningMana";
 import manaIncreaseEvent from './events/manaIncrease';
@@ -26,6 +27,7 @@ import decreaseStateValueEvent from './events/decreaseStateValue';
 import endEarningManaEvent from './events/endEarningMana';
 import shuffleDeckEvent from './events/shuffleDeck';
 import timerDecrease from './events/timerDecrease';
+import normalPlaceCardEvent from './events/normalPlaceCard';
 
 export const FRAME_TIME = 10;
 
@@ -42,6 +44,7 @@ type EventTypeMap = {
 	manaConsume: ManaConsumeEvent;
 	setManaIncreaseSpeed: SetManaIncreaseSpeed;
 	placeCard: PlaceCardEvent;
+	normalPlaceCard: NormalPlaceCardEvent;
 	startEarningMana: StartEarningManaEvent;
 	endEarningMana: EndEarningManaEvent;
 	cardStartAttacking: CardStartAttackingEvent;
@@ -77,6 +80,7 @@ const EventsCompute: EventHandlers = {
 	manaConsume: manaConsumeEvent,
 	drawCard: drawCardEvent,
 	placeCard: placeCardEvent,
+	normalPlaceCard: normalPlaceCardEvent,
 	cardStartAttacking: cardStartAttackingEvent,
 	cardAttacking: cardAttackingEvent,
 	playerDamage: playerDamageEvent,

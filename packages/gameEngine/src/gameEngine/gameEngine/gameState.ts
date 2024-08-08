@@ -318,4 +318,7 @@ export class GameStateObject {
 	getTimer() {
 		return this.timer;
 	}
+	getCardTypeById(id: number) {
+		return [...this.playerDeck, ...this.opponentDeck].find((c) => c.id === id);
+	}
 }

@@ -4,33 +4,19 @@ import _ from "lodash";
 import { triggerStates } from "./cardAttacking";
 
 export default function placeCardEvent({ event, gameState, clock }: ComputeEventProps<PlaceCardEvent>) {
-	if (!gameState.isStarted) {
-		return;
-	}
-	const card = event.isPlayer
-	? gameState.playerHand[event.cardInHandPosition]
-	: gameState.opponentHand[event.cardInHandPosition];
-	if (card === null) {
-		throw new Error("Card not found in hand");
-	}
 	const cardInGame: InGameCardType = {
-		id: card.id,
-		maxHp: card.hp,
-		hp: card.hp,
-		dmg: card.dmg,
-		attackSpeed: card.attackSpeed,
+		id: event.card.id,
+		maxHp: event.card.hp,
+		hp: event.card.hp,
+		dmg: event.card.dmg,
+		attackSpeed: event.card.attackSpeed,
 		startAttackingTick: null,
 		instanceId: gameState.getNextInstanceId(),
-		rarity: card.rarity,
-		states: _.cloneDeep(card.states) || [],
-		illustration: card.illustration,
-		worldIllustration: card.worldIllustration,
+		rarity: event.card.rarity,
+		states: _.cloneDeep(event.card.states) || [],
+		illustration: event.card.illustration,
+		worldIllustration: event.card.worldIllustration,
 	};
-	clock.triggerEvent({
-		type: "manaConsume",
-		isPlayer: event.isPlayer,
-		delta: card.cost,
-	});
 	gameState.placeCardBoard(event.isPlayer, event.position, cardInGame);
 	triggerStates({
 		trigger: "onPlacement",
@@ -45,10 +31,5 @@ export default function placeCardEvent({ event, gameState, clock }: ComputeEvent
 		isPlayer: event.isPlayer,
 		cardPosition: event.position,
 		instanceId: cardInGame.instanceId,
-	});
-	clock.triggerEvent({
-		type: "drawCard",
-		isPlayer: event.isPlayer,
-		handPosition: event.cardInHandPosition,
 	});
 }

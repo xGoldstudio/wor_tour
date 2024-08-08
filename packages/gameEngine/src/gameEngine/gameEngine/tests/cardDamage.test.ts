@@ -5,7 +5,7 @@ import { expect, test } from 'vitest';
 test("start damage to card (animation placeholder)", () => {
 	const { clock, state } = initTest({ skipStartGame: true });
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// deal damage to player
 	function dealDamageToCard(amount: number) {
@@ -16,11 +16,14 @@ test("start damage to card (animation placeholder)", () => {
 			cardPosition: 0,
 			directAttack: false,
 			amount: amount,
+			cardInitiator: state.playerBoard[0]!,
+			onDirectHitStates: [],
 			initiator: {
 				type: "cardAttacking",
 				isPlayer: false,
 				cardPosition: 0,
 				instanceId: 0,
+				cardIniator: state.opponentBoard[0]!,
 			},
 		});
 	}
@@ -38,7 +41,7 @@ test("start damage to card (animation placeholder)", () => {
 test("start damage to card (animation placeholder)", () => {
 	const { clock, state } = initTest({ skipStartGame : true });
 	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// deal damage to player
 	function dealDamageToCard(amount: number) {
@@ -49,11 +52,14 @@ test("start damage to card (animation placeholder)", () => {
 			cardPosition: 0,
 			directAttack: false,
 			amount: amount,
+			cardInitiator: state.playerBoard[0]!,
+			onDirectHitStates: [],
 			initiator: {
 				type: "cardAttacking",
 				isPlayer: true,
 				cardPosition: 0,
 				instanceId: 0,
+				cardIniator: state.opponentBoard[0]!,
 			},
 		});
 	}

@@ -1,3 +1,4 @@
+import { CardType } from "@repo/lib";
 import { CurrentWinner } from "../gameEngine/gameEngine/gameState";
 import { CardState } from "../gameEngine/states/CardStatesData";
 import { CardRarity } from "./DataStoreType";
@@ -10,6 +11,7 @@ export type EventType =
   | SetManaIncreaseSpeed
   | ManaConsumeEvent
   | PlaceCardEvent
+  | NormalPlaceCardEvent
   | StartEarningManaEvent
   | EndEarningManaEvent
   | CardStartAttackingEvent
@@ -73,6 +75,14 @@ export interface ManaIncreaseEvent {
 
 export interface PlaceCardEvent {
   type: "placeCard";
+  isPlayer: boolean;
+  position: number;
+  card: CardType;
+  isSpecialPlacement: boolean;
+}
+
+export interface NormalPlaceCardEvent {
+  type: "normalPlaceCard";
   isPlayer: boolean;
   position: number;
   cardInHandPosition: number;

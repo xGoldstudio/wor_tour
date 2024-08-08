@@ -5,7 +5,7 @@ import Clock from "../../clock/clock";
 import { computeNextFrameState } from "../gameEngine";
 import { expect, test } from 'vitest';
 import { CardType } from "../../../types/Card";
-import { getInstanceId } from "./common";
+import { triggerDirectAttackResolved } from "./common";
 
 const baseCard = {
 	name: "string",
@@ -30,25 +30,10 @@ test("removing effect player card", () => {
 	);
 	clock.triggerEvent({ type: "startGame" });
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// deal damage to card
-	clock.triggerEvent({
-		type: "cardDamageResolve", initiator: {
-			type: "cardDamage",
-			isPlayerCard: true,
-			cardPosition: 0,
-			directAttack: false,
-			amount: 100,
-			instanceId: getInstanceId(state, true, 0),
-			initiator: {
-				type: "cardAttacking",
-				isPlayer: false,
-				cardPosition: 0,
-				instanceId: 0,
-			},
-		}
-	});
+	triggerDirectAttackResolved(clock, state, false, 0, 100);
 	clock.nextTick();
 	expect(state.playerBoard[0]?.hp).toBe(100);
 	// heal card

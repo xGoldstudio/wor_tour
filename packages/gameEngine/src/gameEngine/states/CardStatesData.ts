@@ -9,6 +9,7 @@ import { ClockReturn } from '../clock/clock';
 import { GameStateObject } from '../gameEngine/gameState';
 import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types/DataStoreType';
 import { baseDps } from '../../types/Card';
+import CloningStateAction from './stateActions/cloning';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -60,7 +61,7 @@ export const CardStatesData = {
     min: 0,
     max: undefined,
     noValue: false,
-    triggers: ["idle", "onPlacement", "onAttack", "onDirectAttackHit", "onDirectlyAttacked"],
+    triggers: ["idle", "onPlacement", "onAttack", "onDirectAttackHit", "onDirectlyAttacked", "onDeath"],
     targets: ["selfCard"],
     computeCost: () => {
       return 0;
@@ -160,6 +161,22 @@ export const CardStatesData = {
     options: {
       stackable: true,
     },
+  },
+  clone: {
+    min: 1,
+    max: undefined,
+    noValue: false,
+    triggers: ["onDeath"],
+    targets: ["selfCard"],
+    computeCost: ({ value }) => {
+      return 0;
+    },
+    descrption: ({ trigger, target }) => `${trigger}, clone ${target} on a random position.`,
+    title: "Clone",
+    status: "neutral",
+    src: "clone.png",
+    action: CloningStateAction,
+    options: {},
   }
 } satisfies Record<string, CardStateDataInterface>;
 

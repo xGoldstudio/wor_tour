@@ -57,7 +57,7 @@ export function initTest({ gameData, sideEffectOnEvent, skipStartGame }: {
 
 export function drawPlaceCard(clock: ClockReturn<EventType>, isPlayer: boolean, position: number) {
 	clock.triggerEvent({ type: "drawCard", isPlayer: isPlayer, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: isPlayer, position: position, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: isPlayer, position: position, cardInHandPosition: 0 });
 }
 
 export const multiAttackState: CardState = {
@@ -160,6 +160,33 @@ export function triggerDirectAttackResolved(
 			onDirectHitStates: [],
 		}
 	});
+}
+
+export function triggerKillCard(
+	clock: ClockReturn<EventType>,
+	isPlayer: boolean,
+	cardPosition: number,
+) {
+	clock.triggerEvent({
+		type: "cardDestroyed",
+		initiator: {
+			type: "cardDamage",
+			instanceId: -1,
+			directAttack: false,
+			isPlayerCard: isPlayer,
+			cardPosition: cardPosition,
+			amount: 0,
+			initiator: {
+				type: "cardAttacking",
+				isPlayer: false,
+				cardPosition: -1,
+				instanceId: -1,
+				cardIniator: {} as InGameCardType, // may need fixes later
+			},
+			cardInitiator: {} as InGameCardType, // may need fixes later
+			onDirectHitStates: [],
+		}
+	})
 }
 
 export function triggerStartEarningMana(
