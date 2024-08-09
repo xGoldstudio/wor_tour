@@ -3,7 +3,6 @@ import { PlaceCardType } from "../../../types/eventType";
 import { StateAction } from "../CardStatesData";
 
 const CloningStateAction: StateAction = ({ clock, event, card, gameState }) => {
-	return;
 	if (event.initiator.type !== "cardDestroyed") return;
 	const isPlayerCard = gameState.getIsPlayerCard(event.initiator.initiator.instanceId);
 	const board = gameState.getBoard(isPlayerCard);

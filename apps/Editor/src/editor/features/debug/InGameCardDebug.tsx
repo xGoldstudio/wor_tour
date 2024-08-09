@@ -77,6 +77,16 @@ export default function InGameCardDebug() {
     triggerHealCard(clock, instanceId, amount);
   }
 
+  function increaseAs(amount: number) {
+    const instanceId = state?.getCard(true, 0)?.instanceId;
+    if (instanceId === undefined) return;
+    clock?.triggerEvent({
+      type: "increaseAttackSpeed",
+      instanceId,
+      increasePercent: amount,
+    });
+  }
+
   function addRemoveState(state: CardState) {
     const options = getOptionsFromType(state.type);
     return (
@@ -114,6 +124,7 @@ export default function InGameCardDebug() {
             <Button action={() => dealDamage(10)}>Deal damage</Button>
             <Button action={() => dealDamage(9999)}>Kill card</Button>
             <Button action={() => healCard(10)}>Heal card</Button>
+            <Button action={() => increaseAs(10)}>Increase as</Button>
           </div>
           <p className="text-2xl font-semibold">States</p>
           <div className="grid grid-cols-3 gap-4">

@@ -205,7 +205,7 @@ export const CardStatesData = {
     triggers: ["onPlacement"],
     targets: ["allyCards"],
     computeCost: ({ value }) => {
-      return 0.1 * (value || 0);
+      return 0.05 * (value || 0);
     },
     status: "buff",
     descrption: ({ trigger, target, value }) => `${trigger}, ${target} will gain ${value}% attack speed.`,

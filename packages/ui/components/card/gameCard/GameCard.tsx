@@ -18,7 +18,6 @@ import {
   CardDestroyedEvent,
   CardStartAttackingEvent,
   EventType,
-  FRAME_TIME,
   GameOverEvent,
   GameStateObject,
   HealCardEvent,
@@ -56,6 +55,7 @@ function GameCard({
     dmg: 1,
     attackSpeed: 1,
     startAttackingTick: null,
+    endAttackingTick: null,
     rarity: "common",
     states: [],
     illustration: "",
@@ -79,21 +79,19 @@ function GameCard({
   const trackedInstanceId = useRef<number | null>(null);
   useGameEventListener({
     type: "cardStartAttacking",
-    action: (_, state) => {
+    action: (event, state, _, clock) => {
       const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
         position
       ];
-      if (card && cardRef.current) {
+      if (card && cardRef.current && event.type === "cardStartAttacking") {
+        const animationDuration =
+          card.endAttackingTick! - card.startAttackingTick! - 1;
         cardRef.current.style.display = "block";
         setIsShown(true);
-        const animationDuration =
-          1000 / (card.attackSpeed ?? 1) / FRAME_TIME - 1;
         triggerAttackAnimation({
           replace: true,
           duration: animationDuration,
-          computeStyle: animationTimeline(
-            1000 / (card.attackSpeed ?? 1) / FRAME_TIME
-          )
+          computeStyle: animationTimeline(animationDuration)
             .add(
               cardRef.current.querySelector<HTMLElement>(".animationProgress"),
               { scaleY: 1 },
@@ -117,7 +115,10 @@ function GameCard({
                 values: { scale: 1.08, y: isPlayerCard ? -15 : 15 },
               },
             ]).progress,
-        });
+        })?.fastForward(
+          clock.getImmutableInternalState().currentFrame -
+            card.startAttackingTick!
+        );
       }
     },
     filter: (e) => {

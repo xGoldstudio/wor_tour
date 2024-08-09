@@ -137,7 +137,6 @@ export function useSyncGameAnimation() {
       store.animations.delete(key);
       removeListener.current = null;
       onEnd?.();
-      computeStyle(duration);
     };
     store.animations.set(key, {
       progress: (frame) => {

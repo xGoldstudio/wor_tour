@@ -28,7 +28,7 @@ export const baseCard: CardType = {
 
 export const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common" }));
 
-export function initTest({ gameData, sideEffectOnEvent, skipStartGame }: {
+export function initTest({ gameData, sideEffectOnEvent, skipStartGame, log }: {
 	gameData?: Partial<GameStateObjectConstructor>,
 	sideEffectOnEvent?: ({ state, clock, event }: {
 		state: GameStateObject;
@@ -36,6 +36,7 @@ export function initTest({ gameData, sideEffectOnEvent, skipStartGame }: {
 		event: EventType;
 	}) => void,
 	skipStartGame?: boolean,
+	log?: boolean
 }) {
 	const state = new GameStateObject({
 		playerDeck: gameData?.playerDeck ?? deck,
@@ -45,6 +46,7 @@ export function initTest({ gameData, sideEffectOnEvent, skipStartGame }: {
 	});
 	const clock = Clock<EventType>(
 		(event, clock) => {
+			log && console.log(clock.getImmutableInternalState().currentFrame, event);
 			computeNextFrameState(state, event, clock);
 			sideEffectOnEvent?.({ state, clock, event });
 		}
@@ -163,7 +165,7 @@ export function triggerKillCard(
 	instanceId: number,
 ) {
 	clock.triggerEvent({
-		type: "cardDestroyed",
+		type: "beforeCardDestroyed",
 		initiator: {
 			type: "cardDamage",
 			instanceId: instanceId,

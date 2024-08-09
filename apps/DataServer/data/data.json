@@ -785,7 +785,7 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 10
+              "value": 15
             }
           ],
           "illustration": "card_24_level_1_1720724823656.png"
@@ -797,7 +797,7 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 20
+              "value": 30
             }
           ],
           "illustration": "card_24_level_2_1720725223340.png"
@@ -809,7 +809,7 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 30
+              "value": 45
             }
           ],
           "illustration": "card_24_level_3_1720725227930.png"

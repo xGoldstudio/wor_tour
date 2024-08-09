@@ -19,6 +19,7 @@ export default function normalPlaceCardEvent({ event, gameState, clock }: Comput
 		dmg: card.dmg,
 		attackSpeed: card.attackSpeed,
 		startAttackingTick: null,
+		endAttackingTick: null,
 		rarity: card.rarity,
 		states: _.cloneDeep(card.states) || [],
 		illustration: card.illustration,

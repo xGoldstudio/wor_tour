@@ -29,6 +29,7 @@ import shuffleDeckEvent from './events/shuffleDeck';
 import timerDecrease from './events/timerDecrease';
 import normalPlaceCardEvent from './events/normalPlaceCard';
 import increaseAttackSpeed from './events/increaseAttackSpeed';
+import beforeCardDestroyed from './events/beforeCardDestroyed';
 
 export const FRAME_TIME = 10;
 
@@ -66,6 +67,7 @@ type EventTypeMap = {
 	shuffleDeck: ShuffleDeckEvent;
 	timerDecrease: TimerDecreaseEvent;
 	increaseAttackSpeed: IncreaseAttackSpeedEvent;
+	beforeCardDestroyed: CardDestroyedEvent;
 };
 
 type EventHandlers = {
@@ -100,6 +102,7 @@ const EventsCompute: EventHandlers = {
 	shuffleDeck: shuffleDeckEvent,
 	timerDecrease: timerDecrease,
 	increaseAttackSpeed: increaseAttackSpeed,
+	beforeCardDestroyed: beforeCardDestroyed,
 }
 
 // used in front and back and can be debugged easily (not pure mutate the state)

@@ -1,7 +1,7 @@
-import { getFrameFromAttackSpeed } from './events/utils';
 import { CardType } from "../../types/Card";
 import { InGameCardType } from "../../types/eventType";
 import { CardState } from "../states/CardStatesData";
+import { getFrameFromAttackSpeed } from "./events/utils";
 
 export interface GameStateObjectConstructor {
 	playerDeck: CardType[];
@@ -171,13 +171,15 @@ export class GameStateObject {
 		}
 	}
 	// attack
-	startAttacking(instanceId: number, tick: number) {
+	startAttacking(instanceId: number, startTick: number) {
 		const card = this.getCardInstance(instanceId);
 		if (!card) {
 			console.warn("Card doesnt exist");
-			return {};
+			return null;
 		}
-		card.startAttackingTick = tick;
+		card.startAttackingTick = startTick;
+		card.endAttackingTick = startTick + getFrameFromAttackSpeed(card.attackSpeed);
+		return card.endAttackingTick - card.startAttackingTick
 	}
 	// hp
 	dealDamageToPlayer(isPlayer: boolean, damage: number) {
@@ -273,17 +275,14 @@ export class GameStateObject {
 			this.opponentDeck = this.opponentDeck.sort(() => Math.random() - 0.5);
 		}
 	}
-	increaseAttackSpeed(instanceId: number, increasePercent: number, currentFrame: number) {
+	increaseAttackSpeed(instanceId: number, increasePercent: number) {
 		const card = this.getCardInstance(instanceId);
 		if (!card) {
 			return;
 		}
 		const previousAttackSpeed = card.attackSpeed;
 		card.attackSpeed = card.attackSpeed * (1 + increasePercent / 100);
-		if (card.startAttackingTick !== null) {
-			const progress = (currentFrame - card.startAttackingTick) / getFrameFromAttackSpeed(previousAttackSpeed);
-			card.startAttackingTick = Math.floor(currentFrame - (getFrameFromAttackSpeed(card.attackSpeed) * progress));
-		}
+		return previousAttackSpeed;
 	}
 	// utils
 	getCard(isPlayerCard: boolean, cardPosition: number) {

@@ -15,6 +15,7 @@ export type EventType =
   | EndEarningManaEvent
   | CardStartAttackingEvent
   | CardAttackingEvent
+  | BeforeCardDestroyedEvent
   | PlayerDamageEvent
   | CardDamageEvent
   | CardDestroyedEvent
@@ -121,11 +122,16 @@ export interface CardDamageEvent {
   directAttack: boolean;
   initiator: CardAttackingEvent;
   onDirectHitStates: CardState[];
-  cardInitiator: InGameCardType; // this card may alteady be destroyed, if you need to verify its existance use instanceId
+  cardInitiator: InGameCardType; // this card may already be destroyed, if you need to verify its existance use instanceId
 }
 
 export interface CardDamagResolveEvent {
   type: "cardDamageResolve";
+  initiator: CardDamageEvent;
+}
+
+export interface BeforeCardDestroyedEvent {
+  type: "beforeCardDestroyed";
   initiator: CardDamageEvent;
 }
 
@@ -209,6 +215,7 @@ export type InGameCardType = {
   dmg: number;
   attackSpeed: number;
   startAttackingTick: number | null;
+  endAttackingTick: number | null;
   rarity: CardRarity;
   states: CardState[];
   illustration: string;

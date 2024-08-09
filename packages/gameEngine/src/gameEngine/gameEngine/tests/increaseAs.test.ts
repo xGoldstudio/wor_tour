@@ -8,7 +8,9 @@ function triggerIncreaseAttackSpeed(clock: ClockReturn<EventType>, instanceId: n
 }
 
 test("increase as", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initTest({ skipStartGame: true, log: false, gameData: {
+		opponentHp: 5000,
+	} });
 	drawPlaceCard(clock, true, 0);
 	clock.nextTick();
 	expect(state.getCard(true, 0)?.startAttackingTick).toBe(0);
@@ -27,9 +29,14 @@ test("increase as", () => {
 	// startAttackingTick should change to fit the new attack speed
 	expect(state.getCard(true, 0)?.attackSpeed).toBe(2);
 	expect(state.getCard(true, 0)?.startAttackingTick).toBe(125);
+	expect(state.getCard(true, 0)?.endAttackingTick).toBe(175);
 	for (let i = 0; i < 25; i++) {
 		clock.nextTick();
 	} // go to 100%
-	// expect(clock.getLastTickEvents().find((e) => e.type === "cardAttacking")).toBeTruthy();
+	expect(clock.getLastTickEvents().find((e) => e.type === "cardAttacking")).toBeTruthy();
 	expect(state.getCard(true, 0)?.startAttackingTick).toBe(175); // attack has been triggered 
+	for (let i = 0; i < 25; i++) {
+		clock.nextTick();
+	} // go to 100%
+	expect(clock.getLastTickEvents().find((e) => e.type === "cardAttacking")).toBeFalsy();
 });
