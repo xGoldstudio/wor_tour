@@ -62,6 +62,8 @@ export function drawPlaceCard(clock: ClockReturn<EventType>, isPlayer: boolean, 
 	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: isPlayer, position: position, cardInHandPosition: 0 });
 }
 
+export const dummyStateTest: CardState = { type: "dummy", value: 2, trigger: "onAttack", target: "selfCard" };
+
 export const multiAttackState: CardState = {
 	type: "multiAttack",
 	value: null,

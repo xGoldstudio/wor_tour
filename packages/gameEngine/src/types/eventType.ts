@@ -34,7 +34,10 @@ export type EventType =
   | IncreaseAttackSpeedEvent
   | StartStateDecayEvent
   | EndStateDecayEvent
-  | AfterPlaceCardEvent;
+  | AfterPlaceCardEvent
+  | StateLifcycleOnAddEvent
+  | StateLifcycleOnRemoveEvent
+  | BeforeRemoveStateEvent;
 
 export interface DummyEvent { // this event should be ignored
   type: "dummyEvent";
@@ -224,6 +227,24 @@ export interface StartStateDecayEvent {
 
 export interface EndStateDecayEvent {
   type: "endStateDecay";
+  stateType: CardState["type"];
+  instanceId: number;
+}
+
+export interface StateLifcycleOnAddEvent {
+  type: "stateLifecycleOnAdd";
+  stateType: CardState["type"];
+  instanceId: number;
+}
+
+export interface BeforeRemoveStateEvent {
+  type: "beforeRemoveState";
+  stateType: CardState["type"];
+  instanceId: number;
+}
+
+export interface StateLifcycleOnRemoveEvent {
+  type: "stateLifecycleOnRemove";
   stateType: CardState["type"];
   instanceId: number;
 }

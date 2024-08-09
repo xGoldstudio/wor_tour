@@ -49,7 +49,7 @@ export default function InGameCardDebug() {
     const instanceId = state?.getCard(true, 0)?.instanceId;
     if (instanceId === undefined) return;
     clock?.triggerEvent({
-      type: "removeState",
+      type: "beforeRemoveState",
       instanceId,
       stateType,
     });

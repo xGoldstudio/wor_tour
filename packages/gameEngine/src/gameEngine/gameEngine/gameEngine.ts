@@ -1,4 +1,4 @@
-import { AfterPlaceCardEvent, EndStateDecayEvent, IncreaseAttackSpeedEvent, NormalPlaceCardEvent, StartStateDecayEvent } from './../../types/eventType';
+import { AfterPlaceCardEvent, BeforeRemoveStateEvent, EndStateDecayEvent, IncreaseAttackSpeedEvent, NormalPlaceCardEvent, StartStateDecayEvent, StateLifcycleOnAddEvent, StateLifcycleOnRemoveEvent } from './../../types/eventType';
 import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, StartEarningManaEvent, SetManaIncreaseSpeed, StartGameSequence, StartGameEvent, RemoveStateEvent, TriggerStateEvent, AddStateEvent, IncreaseStateValueEvent, DecreaseStateValueEvent, EndEarningManaEvent, ShuffleDeckEvent, TimerDecreaseEvent } from '../../types/eventType';
 import startEarningManaEvent from "./events/startEarningMana";
 import manaIncreaseEvent from './events/manaIncrease';
@@ -33,6 +33,9 @@ import beforeCardDestroyed from './events/beforeCardDestroyed';
 import startStateDecay from './events/startStateDecay';
 import endStateDecay from './events/endStateDecay';
 import afterPlaceCard from './events/afterPlaceCard';
+import stateLifecycleOnAdd from './events/stateLifecycleOnAdd';
+import stateLifecycleOnRemove from './events/stateLifecycleOnRemove';
+import beforeRemoveStateEvent from './events/beforeRemoveState';
 
 export const FRAME_TIME = 10;
 
@@ -74,6 +77,9 @@ type EventTypeMap = {
 	startStateDecay: StartStateDecayEvent;
 	endStateDecay: EndStateDecayEvent;
 	afterPlaceCard: AfterPlaceCardEvent;
+	stateLifecycleOnAdd: StateLifcycleOnAddEvent;
+	stateLifecycleOnRemove: StateLifcycleOnRemoveEvent;
+	beforeRemoveState: BeforeRemoveStateEvent;
 };
 
 type EventHandlers = {
@@ -112,6 +118,9 @@ const EventsCompute: EventHandlers = {
 	startStateDecay: startStateDecay,
 	endStateDecay: endStateDecay,
 	afterPlaceCard: afterPlaceCard,
+	stateLifecycleOnAdd: stateLifecycleOnAdd,
+	stateLifecycleOnRemove: stateLifecycleOnRemove,
+	beforeRemoveState: beforeRemoveStateEvent,
 }
 
 // used in front and back and can be debugged easily (not pure mutate the state)

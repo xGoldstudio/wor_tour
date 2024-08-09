@@ -1,10 +1,10 @@
-import DummyStateAction from './stateActions/dummy';
+import DummyStateAction, { OnAddedDummyStateAction, OnRemovedDummyStateAction } from './stateActions/dummy';
 import HealStateAction from './stateActions/heal';
 import RiposteStateAction from './stateActions/riposte';
 import MultiAttackStateAction from './stateActions/multiAttack';
 import MassacreStateAction from './stateActions/massacre';
 import BleedingStateAction from './stateActions/bleeding';
-import { AddStateEvent, EventType, InGameCardType, TriggerStateEvent } from '../../types/eventType';
+import { EventType, InGameCardType, StateLifcycleOnAddEvent, StateLifcycleOnRemoveEvent, TriggerStateEvent } from '../../types/eventType';
 import { ClockReturn } from '../clock/clock';
 import { GameStateObject } from '../gameEngine/gameState';
 import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types/DataStoreType';
@@ -13,6 +13,7 @@ import CloningStateAction from './stateActions/cloning';
 import RushStateAction from './stateActions/rush';
 import BannerOfCommandStateAction from './stateActions/bannerOfCommand';
 import { FRAME_TIME } from '../gameEngine/gameEngine';
+import { onAddedRage, onRemovedRage } from './stateActions/rage';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -24,18 +25,16 @@ export type StateAction = ({ trigger, target, value, clock, gameState, event }: 
   event: TriggerStateEvent,
 }) => void;
 
-export type AddedStateAction = ({ card, clock, gameState, event }: {
-  card: InGameCardType,
+export type AddedStateAction = ({ clock, gameState, event }: {
   clock: ClockReturn<EventType>,
   gameState: GameStateObject,
-  event: AddStateEvent,
+  event: StateLifcycleOnAddEvent,
 }) => void;
 
-export type RemovedStateAction = ({ card, clock, gameState, event }: {
-  card: InGameCardType,
+export type RemovedStateAction = ({ clock, gameState, event }: {
   clock: ClockReturn<EventType>,
   gameState: GameStateObject,
-  event: RemovedStateAction,
+  event: StateLifcycleOnRemoveEvent,
 }) => void;
 
 interface CardStateDataOptions {
@@ -43,6 +42,8 @@ interface CardStateDataOptions {
   stackable?: boolean;
   decay?: number;
   stackableStrategy?: "sum" | "max";
+  onAdded?: AddedStateAction;
+  onRemoved?: RemovedStateAction;
 }
 
 interface CardStateDataInterface {
@@ -73,8 +74,6 @@ interface CardStateDataInterface {
   src: string;
   action: StateAction;
   options: CardStateDataOptions;
-  onAdded?: AddedStateAction;
-  onRemoved?: RemovedStateAction;
 }
 
 export const CardStatesData = {
@@ -92,7 +91,10 @@ export const CardStatesData = {
     status: "neutral",
     src: "",
     action: DummyStateAction,
-    options: {},
+    options: {
+      onAdded: OnAddedDummyStateAction,
+      onRemoved: OnRemovedDummyStateAction,
+    },
   },
   dummyWithDecay: { // using for testing
     min: 0,
@@ -284,12 +286,12 @@ export const CardStatesData = {
     title: "Rage",
     src: "rage.png",
     action: () => {},
-    onAdded: () => {},
-    onRemoved: () => {},
     options: {
       decay: (1000 / FRAME_TIME) * 5,
       stackable: true,
       stackableStrategy: "max",
+      onAdded: onAddedRage,
+      onRemoved: onRemovedRage,
     }
   }
 } satisfies Record<string, CardStateDataInterface>;
