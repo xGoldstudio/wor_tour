@@ -1,10 +1,10 @@
-import DummyStateAction, { OnAddedDummyStateAction, OnRemovedDummyStateAction } from './stateActions/dummy';
+import DummyStateAction, { OnAddedDummyStateAction, OnChangeValueDummyStateAction, OnRemovedDummyStateAction } from './stateActions/dummy';
 import HealStateAction from './stateActions/heal';
 import RiposteStateAction from './stateActions/riposte';
 import MultiAttackStateAction from './stateActions/multiAttack';
 import MassacreStateAction from './stateActions/massacre';
 import BleedingStateAction from './stateActions/bleeding';
-import { EventType, InGameCardType, StateLifcycleOnAddEvent, StateLifcycleOnRemoveEvent, TriggerStateEvent } from '../../types/eventType';
+import { EventType, InGameCardType, StateLifcycleOnAddEvent, StateLifcycleOnChangeValueEvent, StateLifcycleOnRemoveEvent, TriggerStateEvent } from '../../types/eventType';
 import { ClockReturn } from '../clock/clock';
 import { GameStateObject } from '../gameEngine/gameState';
 import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types/DataStoreType';
@@ -31,6 +31,12 @@ export type AddedStateAction = ({ clock, gameState, event }: {
   event: StateLifcycleOnAddEvent,
 }) => void;
 
+export type ChangeValueStateAction = ({ clock, gameState, event }: {
+  clock: ClockReturn<EventType>,
+  gameState: GameStateObject,
+  event: StateLifcycleOnChangeValueEvent,
+}) => void;
+
 export type RemovedStateAction = ({ clock, gameState, event }: {
   clock: ClockReturn<EventType>,
   gameState: GameStateObject,
@@ -44,6 +50,7 @@ interface CardStateDataOptions {
   stackableStrategy?: "sum" | "max";
   onAdded?: AddedStateAction;
   onRemoved?: RemovedStateAction;
+  onChangeValue?: ChangeValueStateAction;
 }
 
 interface CardStateDataInterface {
@@ -92,8 +99,10 @@ export const CardStatesData = {
     src: "",
     action: DummyStateAction,
     options: {
+      stackable: true,
       onAdded: OnAddedDummyStateAction,
       onRemoved: OnRemovedDummyStateAction,
+      onChangeValue: OnChangeValueDummyStateAction,
     },
   },
   dummyWithDecay: { // using for testing

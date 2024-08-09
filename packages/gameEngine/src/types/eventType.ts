@@ -37,7 +37,8 @@ export type EventType =
   | AfterPlaceCardEvent
   | StateLifcycleOnAddEvent
   | StateLifcycleOnRemoveEvent
-  | BeforeRemoveStateEvent;
+  | BeforeRemoveStateEvent
+  | StateLifcycleOnChangeValueEvent;
 
 export interface DummyEvent { // this event should be ignored
   type: "dummyEvent";
@@ -235,6 +236,13 @@ export interface StateLifcycleOnAddEvent {
   type: "stateLifecycleOnAdd";
   stateType: CardState["type"];
   instanceId: number;
+}
+
+export interface StateLifcycleOnChangeValueEvent {
+  type: "stateLifecycleOnChangeValue";
+  stateType: CardState["type"];
+  instanceId: number;
+  delta: number;
 }
 
 export interface BeforeRemoveStateEvent {

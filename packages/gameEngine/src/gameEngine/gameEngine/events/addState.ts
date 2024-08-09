@@ -5,13 +5,6 @@ import { getOptionsFromType } from "../../states/CardStatesData";
 export default function addStateEvent({ gameState, event, clock }: ComputeEventProps<AddStateEvent>) {
 	const existingState = gameState.getStateOfCardByInstanceId(event.instanceId, event.state.type);
 	const options = getOptionsFromType(event.state.type);
-	if (options.onAdded) {
-		clock.triggerEvent({
-			type: "stateLifecycleOnAdd",
-			instanceId: event.instanceId,
-			stateType: event.state.type,
-		});
-	}
 	if (options.decay !== undefined) {
 		clock.triggerEvent({
 			type: "startStateDecay",
@@ -39,6 +32,14 @@ export default function addStateEvent({ gameState, event, clock }: ComputeEventP
 			}
 		}
 		return;
+	} else {
+		if (options.onAdded) {
+			clock.triggerEvent({
+				type: "stateLifecycleOnAdd",
+				instanceId: event.instanceId,
+				stateType: event.state.type,
+			});
+		}
 	}
 	gameState.addState(event.instanceId, event.state);
 }
