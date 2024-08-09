@@ -112,6 +112,25 @@ export const CardStatesData = {
       decay: 2,
     },
   },
+  dummyMaxStacking: { // using for testing
+    min: 0,
+    max: undefined,
+    noValue: false,
+    triggers: ["idle"],
+    targets: ["selfCard"],
+    computeCost: () => {
+      return 0;
+    },
+    descrption: ({ trigger, target }) => `${trigger}, ${target} is a dummy state.`,
+    title: "Dummy",
+    status: "neutral",
+    src: "",
+    action: DummyStateAction,
+    options: {
+      stackable: true,
+      stackableStrategy: "max",
+    },
+  },
   heal: {
     min: 0,
     max: undefined,

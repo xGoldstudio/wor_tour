@@ -15,12 +15,21 @@ export default function addStateEvent({ gameState, event, clock }: ComputeEventP
 	}
 	if (existingState) {
 		if (options?.stackable && existingState.value !== null && event.state.value !== null) {
-			clock.triggerEvent({
-				type: "increaseStateValue",
-				stateType: event.state.type,
-				increaseBy: event.state.value,
-				instanceId: event.instanceId,
-			});
+			const previousValue = existingState.value;
+			let nextValue = existingState.value;
+			if (options.stackableStrategy === "sum" || options.stackableStrategy === undefined) {
+				nextValue += event.state.value;
+			} else if (options.stackableStrategy === "max") {
+				nextValue = Math.max(existingState.value, event.state.value);
+			}
+			if (nextValue > previousValue) {
+				clock.triggerEvent({
+					type: "increaseStateValue",
+					stateType: event.state.type,
+					increaseBy: nextValue - previousValue,
+					instanceId: event.instanceId,
+				});
+			}
 		}
 		return;
 	}
