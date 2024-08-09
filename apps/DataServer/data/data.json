@@ -620,17 +620,38 @@
       "stats": [
         {
           "cost": 1,
-          "states": [],
+          "states": [
+            {
+              "type": "rage",
+              "trigger": "idle",
+              "target": "selfCard",
+              "value": 50
+            }
+          ],
           "illustration": "card_19_level_1_1720977947828.png"
         },
         {
           "cost": 1,
-          "states": [],
+          "states": [
+            {
+              "type": "rage",
+              "trigger": "idle",
+              "target": "selfCard",
+              "value": 75
+            }
+          ],
           "illustration": "card_19_level_2_1720977954509.png"
         },
         {
           "cost": 1,
-          "states": [],
+          "states": [
+            {
+              "type": "rage",
+              "trigger": "idle",
+              "target": "selfCard",
+              "value": 100
+            }
+          ],
           "illustration": "card_19_level_3_1720977959891.png"
         }
       ]

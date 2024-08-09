@@ -1,4 +1,4 @@
-import { IncreaseAttackSpeedEvent, NormalPlaceCardEvent } from './../../types/eventType';
+import { AfterPlaceCardEvent, EndStateDecayEvent, IncreaseAttackSpeedEvent, NormalPlaceCardEvent, StartStateDecayEvent } from './../../types/eventType';
 import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, StartEarningManaEvent, SetManaIncreaseSpeed, StartGameSequence, StartGameEvent, RemoveStateEvent, TriggerStateEvent, AddStateEvent, IncreaseStateValueEvent, DecreaseStateValueEvent, EndEarningManaEvent, ShuffleDeckEvent, TimerDecreaseEvent } from '../../types/eventType';
 import startEarningManaEvent from "./events/startEarningMana";
 import manaIncreaseEvent from './events/manaIncrease';
@@ -30,6 +30,9 @@ import timerDecrease from './events/timerDecrease';
 import normalPlaceCardEvent from './events/normalPlaceCard';
 import increaseAttackSpeed from './events/increaseAttackSpeed';
 import beforeCardDestroyed from './events/beforeCardDestroyed';
+import startStateDecay from './events/startStateDecay';
+import endStateDecay from './events/endStateDecay';
+import afterPlaceCard from './events/afterPlaceCard';
 
 export const FRAME_TIME = 10;
 
@@ -68,6 +71,9 @@ type EventTypeMap = {
 	timerDecrease: TimerDecreaseEvent;
 	increaseAttackSpeed: IncreaseAttackSpeedEvent;
 	beforeCardDestroyed: CardDestroyedEvent;
+	startStateDecay: StartStateDecayEvent;
+	endStateDecay: EndStateDecayEvent;
+	afterPlaceCard: AfterPlaceCardEvent;
 };
 
 type EventHandlers = {
@@ -103,6 +109,9 @@ const EventsCompute: EventHandlers = {
 	timerDecrease: timerDecrease,
 	increaseAttackSpeed: increaseAttackSpeed,
 	beforeCardDestroyed: beforeCardDestroyed,
+	startStateDecay: startStateDecay,
+	endStateDecay: endStateDecay,
+	afterPlaceCard: afterPlaceCard,
 }
 
 // used in front and back and can be debugged easily (not pure mutate the state)

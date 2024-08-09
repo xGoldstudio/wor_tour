@@ -1,22 +1,26 @@
 import { InGameCardType, PlaceCardEvent } from "../../../types/eventType";
 import { ComputeEventProps } from "../gameEngine";
-import { triggerStates } from "./cardAttacking";
 
 export default function placeCardEvent({ event, gameState, clock }: ComputeEventProps<PlaceCardEvent>) {
 	const cardInGame: InGameCardType = {
 		...event.card,
+		states: [],
 		instanceId: gameState.getNextInstanceId(),
 	}
-	gameState.placeCardBoard(event.isPlayer, event.position, cardInGame);
-	triggerStates({
-		trigger: "onPlacement",
-		clock,
-		gameState,
-		instanceId: cardInGame.instanceId,
-		initiator: event,
+	event.card.states.forEach((state) => {
+		clock.triggerEvent({
+			type: "addState",
+			instanceId: cardInGame.instanceId,
+			state,
+		});
 	});
+	gameState.placeCardBoard(event.isPlayer, event.position, cardInGame);
 	clock.triggerEvent({
 		type: "cardStartAttacking",
 		instanceId: cardInGame.instanceId,
 	});
+	clock.triggerEvent({
+		type: "afterPlaceCard",
+		instanceId: cardInGame.instanceId,
+	})
 }

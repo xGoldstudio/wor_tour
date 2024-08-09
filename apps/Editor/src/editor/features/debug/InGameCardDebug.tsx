@@ -8,6 +8,7 @@ import {
   EventType,
   massacreStateTest,
   multiAttackState,
+  rageStateTest,
   riposteStateTest,
   triggerDirectAttackResolved,
   triggerHealCard,
@@ -133,6 +134,7 @@ export default function InGameCardDebug() {
             {addRemoveState(riposteStateTest)}
             {addRemoveState(massacreStateTest)}
             {addRemoveState(cloneStateTest)}
+            {addRemoveState(rageStateTest)}
           </div>
         </DebugPanelLayout>
       </div>

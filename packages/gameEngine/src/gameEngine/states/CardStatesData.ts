@@ -4,7 +4,7 @@ import RiposteStateAction from './stateActions/riposte';
 import MultiAttackStateAction from './stateActions/multiAttack';
 import MassacreStateAction from './stateActions/massacre';
 import BleedingStateAction from './stateActions/bleeding';
-import { EventType, InGameCardType, TriggerStateEvent } from '../../types/eventType';
+import { AddStateEvent, EventType, InGameCardType, TriggerStateEvent } from '../../types/eventType';
 import { ClockReturn } from '../clock/clock';
 import { GameStateObject } from '../gameEngine/gameState';
 import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types/DataStoreType';
@@ -12,6 +12,7 @@ import { baseDps } from '../../types/Card';
 import CloningStateAction from './stateActions/cloning';
 import RushStateAction from './stateActions/rush';
 import BannerOfCommandStateAction from './stateActions/bannerOfCommand';
+import { FRAME_TIME } from '../gameEngine/gameEngine';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -23,9 +24,25 @@ export type StateAction = ({ trigger, target, value, clock, gameState, event }: 
   event: TriggerStateEvent,
 }) => void;
 
+export type AddedStateAction = ({ card, clock, gameState, event }: {
+  card: InGameCardType,
+  clock: ClockReturn<EventType>,
+  gameState: GameStateObject,
+  event: AddStateEvent,
+}) => void;
+
+export type RemovedStateAction = ({ card, clock, gameState, event }: {
+  card: InGameCardType,
+  clock: ClockReturn<EventType>,
+  gameState: GameStateObject,
+  event: RemovedStateAction,
+}) => void;
+
 interface CardStateDataOptions {
   consume?: number;
   stackable?: boolean;
+  decay?: number;
+  stackableStrategy?: "sum" | "max";
 }
 
 interface CardStateDataInterface {
@@ -56,6 +73,8 @@ interface CardStateDataInterface {
   src: string;
   action: StateAction;
   options: CardStateDataOptions;
+  onAdded?: AddedStateAction;
+  onRemoved?: RemovedStateAction;
 }
 
 export const CardStatesData = {
@@ -74,6 +93,24 @@ export const CardStatesData = {
     src: "",
     action: DummyStateAction,
     options: {},
+  },
+  dummyWithDecay: { // using for testing
+    min: 0,
+    max: undefined,
+    noValue: false,
+    triggers: ["idle"],
+    targets: ["selfCard"],
+    computeCost: () => {
+      return 0;
+    },
+    descrption: ({ trigger, target }) => `${trigger}, ${target} is a dummy state.`,
+    title: "Dummy",
+    status: "neutral",
+    src: "",
+    action: DummyStateAction,
+    options: {
+      decay: 2,
+    },
   },
   heal: {
     min: 0,
@@ -213,6 +250,28 @@ export const CardStatesData = {
     src: "bannerOfCommand.png",
     action: BannerOfCommandStateAction,
     options: {},
+  },
+  rage: {
+    min: 1,
+    max: undefined,
+    noValue: false,
+    triggers: ["idle"],
+    targets: ["selfCard"],
+    computeCost: ({ value }) => {
+      return 0.005 * (value || 0);
+    },
+    status: "buff",
+    descrption: ({ target, value }) => `${target} will gain ${value}% attack speed for 5s.`,
+    title: "Rage",
+    src: "rage.png",
+    action: () => {},
+    onAdded: () => {},
+    onRemoved: () => {},
+    options: {
+      decay: (1000 / FRAME_TIME) * 5,
+      stackable: true,
+      stackableStrategy: "max",
+    }
   }
 } satisfies Record<string, CardStateDataInterface>;
 

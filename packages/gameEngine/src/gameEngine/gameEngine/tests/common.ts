@@ -104,6 +104,13 @@ export const cloneStateTest: CardState = {
 	target: "selfCard",
 };
 
+export const rageStateTest: CardState = {
+	type: "rage",
+	value: 50,
+	trigger: "idle",
+	target: "selfCard",
+};
+
 export function triggerDirectAttack(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,

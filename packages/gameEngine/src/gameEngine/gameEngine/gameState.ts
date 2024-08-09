@@ -10,6 +10,13 @@ export interface GameStateObjectConstructor {
 	opponentHp: number;
 }
 
+export interface DecayingState {
+	startFrame: number;
+	endFrame: number;
+	stateType: CardState["type"];
+	instanceId: number;
+}
+
 export type CurrentWinner = "player" | "opponent" | "draw" | null;
 
 export const defaultManaSpeed = 300;
@@ -41,6 +48,7 @@ export class GameStateObject {
 		this.opponentManaSpeed = defaultManaSpeed;
 		this.isStarted = false;
 		this.timer = MAX_GAME_DURATION;
+		this.trackedStateDecaying = [];
 	}
 
 	// state (nested properties are forbidden)
@@ -66,6 +74,8 @@ export class GameStateObject {
 	currentWinner: CurrentWinner;
 
 	isStarted: boolean;
+
+	trackedStateDecaying: DecayingState[];
 
 	// methods
 	startGame() {
@@ -284,6 +294,20 @@ export class GameStateObject {
 		card.attackSpeed = card.attackSpeed * (1 + increasePercent / 100);
 		return previousAttackSpeed;
 	}
+	addStateDecayTimeout(instanceId: number, stateType: CardState["type"], startFrame: number, duration: number) {
+		this.trackedStateDecaying.push({
+			startFrame,
+			endFrame: startFrame + duration,
+			stateType,
+			instanceId,
+		});
+	}
+	getStateDecayTimeout(instanceId: number, stateType: CardState["type"]) {
+		return this.trackedStateDecaying.find((t) => t.instanceId === instanceId && t.stateType === stateType) || null;
+	}
+	removeStateDecayTimeout(instanceId: number, stateType: CardState["type"]) {
+		this.trackedStateDecaying = this.trackedStateDecaying.filter((t) => t.instanceId !== instanceId || t.stateType !== stateType);
+	}
 	// utils
 	getCard(isPlayerCard: boolean, cardPosition: number) {
 		return (isPlayerCard ? this.playerBoard : this.opponentBoard)[cardPosition];
@@ -304,9 +328,9 @@ export class GameStateObject {
 	getIsPlayerCard(instanceId: number) {
 		return this.playerBoard.findIndex((c) => c?.instanceId === instanceId) !== -1;
 	}
-	getOppositeCard(instaceId: number) {
-		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instaceId);
-		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instaceId);
+	getOppositeCard(instanceId: number) {
+		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instanceId);
+		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instanceId);
 		if (playerCard !== -1) {
 			return this.opponentBoard[playerCard];
 		} else if (opponentCard !== -1) {
@@ -316,6 +340,16 @@ export class GameStateObject {
 	}
 	getBoard(isPlayer: boolean) {
 		return isPlayer ? this.playerBoard : this.opponentBoard;
+	}
+	getBoardOfCard(instanceId: number) {
+		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instanceId);
+		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instanceId);
+		if (playerCard !== -1) {
+			return this.playerBoard;
+		} else if (opponentCard !== -1) {
+			return this.opponentBoard;
+		}
+		return null;
 	}
 	getStateOfCard(isPlayerCard: boolean, cardPosition: number, type: CardState["type"]) {
 		const card = this.getCard(isPlayerCard, cardPosition);

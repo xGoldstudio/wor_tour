@@ -31,7 +31,10 @@ export type EventType =
   | AddStateEvent
   | ShuffleDeckEvent
   | TimerDecreaseEvent
-  | IncreaseAttackSpeedEvent;
+  | IncreaseAttackSpeedEvent
+  | StartStateDecayEvent
+  | EndStateDecayEvent
+  | AfterPlaceCardEvent;
 
 export interface DummyEvent { // this event should be ignored
   type: "dummyEvent";
@@ -82,6 +85,11 @@ export interface PlaceCardEvent {
   position: number;
   card: PlaceCardType;
   isSpecialPlacement: boolean;
+}
+
+export interface AfterPlaceCardEvent {
+  type: "afterPlaceCard";
+  instanceId: number;
 }
 
 export interface NormalPlaceCardEvent {
@@ -205,6 +213,19 @@ export interface IncreaseAttackSpeedEvent {
   type: "increaseAttackSpeed";
   instanceId: number;
   increasePercent: number;
+}
+
+export interface StartStateDecayEvent {
+  type: "startStateDecay";
+  stateType: CardState["type"];
+  instanceId: number;
+  duration: number;
+}
+
+export interface EndStateDecayEvent {
+  type: "endStateDecay";
+  stateType: CardState["type"];
+  instanceId: number;
 }
 
 export type InGameCardType = {
