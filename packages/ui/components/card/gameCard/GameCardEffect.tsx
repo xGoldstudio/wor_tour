@@ -10,6 +10,7 @@ import { animationTimeline, getStateData, translateYpx } from "@repo/lib";
 import { EffectLayout } from "../Effects";
 import useConsumeEvents from "../caputeEvents/useConsumeEvents";
 import useGameEventListener from "../useGameEventListener";
+import { useProgressPieChart } from "../../..";
 
 interface GameCardEffectProps {
   state: CardState;
@@ -29,10 +30,12 @@ export function GameCardEffect({
   const size = 0.8;
   const { triggerAnimation } = useSyncGameAnimation();
   const { triggerAnimation: triggerPositionAnimation } = useSyncGameAnimation();
+  const { triggerAnimation: triggerDecayAnimation } = useSyncGameAnimation();
   const ref = useRef<HTMLDivElement>(null);
   const positionRef = useRef<HTMLDivElement>(null);
   const [currentState, setCurrentState] = useState(state);
   const prevStatePosition = useRef(statePosition);
+  const progressPieChart = useProgressPieChart();
 
   function getPaddingOffset(usingStatePosition: number) {
     return usingStatePosition * size * (42 + 8) + 8 * size;
@@ -59,12 +62,16 @@ export function GameCardEffect({
       (event as PlaceCardEvent).position === position &&
       (event as PlaceCardEvent).isPlayer === isPlayerCard,
   });
-  if (prevStatePosition.current !== statePosition) { // checking between value updated by events, and props related to cardStates react useState list
+  if (prevStatePosition.current !== statePosition) {
+    // checking between value updated by events, and props related to cardStates react useState list
     changePostitionAnimation();
   }
   useConsumeEvents((event: EventType, gameState: GameStateObject) => {
     if (event.type === "addState" && event.state.type === currentState.type) {
-      const state = gameState.getStateOfCardByInstanceId(event.instanceId, event.state.type);
+      const state = gameState.getStateOfCardByInstanceId(
+        event.instanceId,
+        event.state.type
+      );
       if (state) setCurrentState({ ...state });
       appearAnimation();
       return true;
@@ -98,6 +105,13 @@ export function GameCardEffect({
       event.state.type === currentState.type
     ) {
       triggerStateAnimation();
+      return true;
+    }
+    if (
+      event.type === "startStateDecay" &&
+      event.stateType === currentState.type
+    ) {
+      decayAnimation(event.duration);
       return true;
     }
     return null;
@@ -210,8 +224,13 @@ export function GameCardEffect({
       ).progress,
     });
   }
-
-  console.log(currentState);
+  function decayAnimation(duration: number) {
+    triggerDecayAnimation({
+      replace: true,
+      duration: duration,
+      computeStyle: p => progressPieChart.update(Math.max(0, 1 - p/duration)),
+    });
+  }
 
   return (
     <div
@@ -227,6 +246,9 @@ export function GameCardEffect({
           size={size}
           showDesc
         />
+        <div className="w-full h-full absolute z-10 top-0 rounded-md opacity-50 overflow-hidden">
+          <progressPieChart.Element />
+        </div>
       </div>
     </div>
   );
