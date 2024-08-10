@@ -9,7 +9,7 @@ import { ClockReturn } from '../clock/clock';
 import { GameStateObject } from '../gameEngine/gameState';
 import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types/DataStoreType';
 import { baseDps } from '../../types/Card';
-import CloningStateAction from './stateActions/cloning';
+import CloneStateAction from './stateActions/clone';
 import RushStateAction from './stateActions/rush';
 import BannerOfCommandStateAction from './stateActions/bannerOfCommand';
 import { FRAME_TIME } from '../gameEngine/gameEngine';
@@ -211,7 +211,9 @@ export const CardStatesData = {
     status: "buff",
     src: "massacre.png",
     action: MassacreStateAction,
-    options: {},
+    options: {
+      stackable: true,
+    },
   },
   bleeding: {
     min: 0,
@@ -244,7 +246,7 @@ export const CardStatesData = {
     title: "Clone",
     status: "neutral",
     src: "clone.png",
-    action: CloningStateAction,
+    action: CloneStateAction,
     options: {
       stackable: true,
     },

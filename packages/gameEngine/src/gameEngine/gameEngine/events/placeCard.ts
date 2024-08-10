@@ -4,6 +4,11 @@ import { ComputeEventProps } from "../gameEngine";
 export default function placeCardEvent({ event, gameState, clock }: ComputeEventProps<PlaceCardEvent>) {
 	const cardInGame: InGameCardType = {
 		...event.card,
+		hp: event.card.maxHp,
+		attackSpeed: event.card.initialAttackSpeed,
+		startAttackingTick: null,
+		endAttackingTick: null,
+		modifierOfAttackSpeedPercentage: 0,
 		states: [],
 		instanceId: gameState.getNextInstanceId(),
 	}

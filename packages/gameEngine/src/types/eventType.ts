@@ -81,7 +81,7 @@ export interface ManaIncreaseEvent {
   value: number;
 }
 
-export type PlaceCardType = Omit<InGameCardType, "instanceId">;
+export type PlaceCardType = Omit<InGameCardType, "instanceId" | "modifierOfAttackSpeedPercentage" | "attackSpeed" | "startAttackingTick" | "endAttackingTick" | "hp">;
 
 export interface PlaceCardEvent {
   type: "placeCard";

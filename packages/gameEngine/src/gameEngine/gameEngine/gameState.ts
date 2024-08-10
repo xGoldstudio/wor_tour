@@ -316,6 +316,16 @@ export class GameStateObject {
 	getCardInstance(instanceId: number) {
 		return [...this.playerBoard, ...this.opponentBoard].find((c) => c?.instanceId === instanceId) || null;
 	}
+	getCardInfo(instanceId: number) {
+		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instanceId);
+		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instanceId);
+		if (playerCard !== -1) {
+			return { isPlayerCard: true, position: playerCard, card: this.playerBoard[playerCard]! };
+		} else if (opponentCard !== -1) {
+			return { isPlayerCard: false, position: opponentCard, card: this.opponentBoard[opponentCard]! };
+		}
+		return null;
+	}
 	getCardPosition(instanceId: number) {
 		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instanceId);
 		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instanceId);
