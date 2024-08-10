@@ -18,6 +18,8 @@ export default function normalPlaceCardEvent({ event, gameState, clock }: Comput
 		hp: card.hp,
 		dmg: card.dmg,
 		attackSpeed: card.attackSpeed,
+		initialAttackSpeed: card.attackSpeed,
+		modifierOfAttackSpeedPercentage: 0,
 		startAttackingTick: null,
 		endAttackingTick: null,
 		rarity: card.rarity,

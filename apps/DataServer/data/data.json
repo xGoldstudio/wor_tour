@@ -649,7 +649,7 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 100
+              "value": 250
             }
           ],
           "illustration": "card_19_level_3_1720977959891.png"
@@ -806,7 +806,7 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 15
+              "value": 40
             }
           ],
           "illustration": "card_24_level_1_1720724823656.png"
@@ -818,7 +818,7 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 30
+              "value": 80
             }
           ],
           "illustration": "card_24_level_2_1720725223340.png"
@@ -830,7 +830,7 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 45
+              "value": 120
             }
           ],
           "illustration": "card_24_level_3_1720725227930.png"

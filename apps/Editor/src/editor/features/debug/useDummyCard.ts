@@ -1,6 +1,6 @@
 import useEditorStore from "@/editor/store/EditorStore";
 import { CardState, CardType } from "@repo/lib";
-import { healStateDefaultTest, massacreStateTest } from "game_engine";
+import { healStateDefaultTest, massacreStateTest, rageStateTest } from "game_engine";
 
 const dummyCard: CardType = {
 	name: "Dummy",
@@ -10,7 +10,9 @@ const dummyCard: CardType = {
 	dmg: 0,
 	hp: 200,
 	attackSpeed: 0.5,
-	states: [healStateDefaultTest, { ...massacreStateTest, value: 100 } as CardState],
+	states: [healStateDefaultTest, { ...massacreStateTest, value: 100 } as CardState,
+		{ ...rageStateTest, value: 50 } as CardState,
+	],
 	level: 1,
 	world: 1,
 	rarity: "common",

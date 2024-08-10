@@ -13,7 +13,7 @@ import CloningStateAction from './stateActions/cloning';
 import RushStateAction from './stateActions/rush';
 import BannerOfCommandStateAction from './stateActions/bannerOfCommand';
 import { FRAME_TIME } from '../gameEngine/gameEngine';
-import { onAddedRage, onRemovedRage } from './stateActions/rage';
+import { onAddedRage, onChangeValueRage, onRemovedRage } from './stateActions/rage';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -272,7 +272,7 @@ export const CardStatesData = {
     triggers: ["onPlacement"],
     targets: ["allyCards"],
     computeCost: ({ value }) => {
-      return 0.05 * (value || 0);
+      return 0.04 * (value || 0);
     },
     status: "buff",
     descrption: ({ trigger, target, value }) => `${trigger}, ${target} will gain ${value}% attack speed.`,
@@ -301,6 +301,7 @@ export const CardStatesData = {
       stackableStrategy: "max",
       onAdded: onAddedRage,
       onRemoved: onRemovedRage,
+      onChangeValue: onChangeValueRage,
     }
   }
 } satisfies Record<string, CardStateDataInterface>;

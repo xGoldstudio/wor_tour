@@ -2,17 +2,22 @@ import { StateAction } from "../CardStatesData";
 
 const BannerOfCommandStateAction: StateAction = ({ value, clock, event, gameState }) => {
 	const initiator = event.initiator;
-	if (initiator.type !== "placeCard" || value === null) {
+	if (initiator.type !== "afterPlaceCard" || value === null) {
 		return;
 	}
 	// select all cards in the board including this one
-	gameState.getBoard(initiator.isPlayer).forEach((card) => {
+	gameState.getBoardOfCard(initiator.instanceId)?.forEach((card) => {
 		if (!card) return;
 		clock.triggerEvent({
-			type: "increaseAttackSpeed",
+			type: "addState",
 			instanceId: card.instanceId,
-			increasePercent: value,
-		});
+			state: {
+				type: "rage",
+				trigger: "idle",
+				target: "selfCard",
+				value: value,
+			},
+		})
 	});
 };
 

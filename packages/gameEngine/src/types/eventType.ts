@@ -31,7 +31,7 @@ export type EventType =
   | AddStateEvent
   | ShuffleDeckEvent
   | TimerDecreaseEvent
-  | IncreaseAttackSpeedEvent
+  | ChangeAttackSpeedEvent
   | StartStateDecayEvent
   | EndStateDecayEvent
   | AfterPlaceCardEvent
@@ -213,10 +213,10 @@ export interface TimerDecreaseEvent {
   type: "timerDecrease";
 }
 
-export interface IncreaseAttackSpeedEvent {
-  type: "increaseAttackSpeed";
+export interface ChangeAttackSpeedEvent {
+  type: "changeAttackSpeed";
   instanceId: number;
-  increasePercent: number;
+  changePercent: number;
 }
 
 export interface StartStateDecayEvent {
@@ -264,6 +264,8 @@ export type InGameCardType = {
   hp: number;
   dmg: number;
   attackSpeed: number;
+  initialAttackSpeed: number;
+  modifierOfAttackSpeedPercentage: number;
   startAttackingTick: number | null;
   endAttackingTick: number | null;
   rarity: CardRarity;

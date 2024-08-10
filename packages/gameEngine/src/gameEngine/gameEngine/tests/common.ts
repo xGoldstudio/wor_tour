@@ -263,3 +263,7 @@ export function findStateByType(
 export function getInstanceId(state: GameStateObject, isPlayer: boolean, cardPosition: number) {
 	return state.getCard(isPlayer, cardPosition)!.instanceId;
 }
+
+export function triggerChangeAttackSpeed(clock: ClockReturn<EventType>, instanceId: number, percentage: number) {
+	clock.triggerEvent({ type: "changeAttackSpeed", instanceId, changePercent: percentage });
+}

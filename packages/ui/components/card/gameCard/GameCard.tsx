@@ -54,6 +54,8 @@ function GameCard({
     hp: 0,
     dmg: 1,
     attackSpeed: 1,
+    initialAttackSpeed: 1,
+    modifierOfAttackSpeedPercentage: 0,
     startAttackingTick: null,
     endAttackingTick: null,
     rarity: "common",
@@ -88,6 +90,8 @@ function GameCard({
           card.endAttackingTick! - card.startAttackingTick! - 1;
         cardRef.current.style.display = "block";
         setIsShown(true);
+        // should check if the animation is already in last stage, if case, slow the end
+        // think of ligh state machines for animations
         triggerAttackAnimation({
           replace: true,
           duration: animationDuration,

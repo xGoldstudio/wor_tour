@@ -291,7 +291,8 @@ export class GameStateObject {
 			return;
 		}
 		const previousAttackSpeed = card.attackSpeed;
-		card.attackSpeed = card.attackSpeed * (1 + increasePercent / 100);
+		card.modifierOfAttackSpeedPercentage = card.modifierOfAttackSpeedPercentage + increasePercent;
+		card.attackSpeed = card.initialAttackSpeed * (1 + card.modifierOfAttackSpeedPercentage / 100);
 		return previousAttackSpeed;
 	}
 	addStateDecayTimeout(instanceId: number, stateType: CardState["type"], startFrame: number, duration: number) {

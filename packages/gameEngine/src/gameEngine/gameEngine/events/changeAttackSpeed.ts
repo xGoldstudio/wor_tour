@@ -1,12 +1,12 @@
-import { IncreaseAttackSpeedEvent } from './../../../types/eventType';
+import { ChangeAttackSpeedEvent } from '../../../types/eventType';
 import { ComputeEventProps } from "../gameEngine";
 import { getFrameFromAttackSpeed } from './utils';
 
 export const TIMER_INCREASE_DELAY = 100; // frame time is 10ms
 
-export default function increaseAttackSpeed({ gameState, event, clock }: ComputeEventProps<IncreaseAttackSpeedEvent>) {
+export default function changeAttackSpeed({ gameState, event, clock }: ComputeEventProps<ChangeAttackSpeedEvent>) {
 	const card = gameState.getCardInstance(event.instanceId);
-	const previousAttackSpeed = gameState.increaseAttackSpeed(event.instanceId, event.increasePercent);
+	const previousAttackSpeed = gameState.increaseAttackSpeed(event.instanceId, event.changePercent);
 	if (previousAttackSpeed === undefined || card === null) {
 		return;
 	}
@@ -17,7 +17,7 @@ export default function increaseAttackSpeed({ gameState, event, clock }: Compute
 			return undefined;
 		}
 		const progress = (currentFrame - card.startAttackingTick) / getFrameFromAttackSpeed(previousAttackSpeed);
-		return Math.floor(currentFrame - (getFrameFromAttackSpeed(card.attackSpeed) * progress));
+		return Math.ceil(currentFrame - (getFrameFromAttackSpeed(card.attackSpeed) * progress));
 	})();
 	clock.triggerEvent({
 		type: "cardStartAttacking",

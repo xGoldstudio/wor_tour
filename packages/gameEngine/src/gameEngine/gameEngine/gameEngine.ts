@@ -1,4 +1,4 @@
-import { AfterPlaceCardEvent, BeforeRemoveStateEvent, EndStateDecayEvent, IncreaseAttackSpeedEvent, NormalPlaceCardEvent, StartStateDecayEvent, StateLifcycleOnAddEvent, StateLifcycleOnChangeValueEvent, StateLifcycleOnRemoveEvent } from './../../types/eventType';
+import { AfterPlaceCardEvent, BeforeRemoveStateEvent, EndStateDecayEvent, ChangeAttackSpeedEvent, NormalPlaceCardEvent, StartStateDecayEvent, StateLifcycleOnAddEvent, StateLifcycleOnChangeValueEvent, StateLifcycleOnRemoveEvent } from './../../types/eventType';
 import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, StartEarningManaEvent, SetManaIncreaseSpeed, StartGameSequence, StartGameEvent, RemoveStateEvent, TriggerStateEvent, AddStateEvent, IncreaseStateValueEvent, DecreaseStateValueEvent, EndEarningManaEvent, ShuffleDeckEvent, TimerDecreaseEvent } from '../../types/eventType';
 import startEarningManaEvent from "./events/startEarningMana";
 import manaIncreaseEvent from './events/manaIncrease';
@@ -28,7 +28,7 @@ import endEarningManaEvent from './events/endEarningMana';
 import shuffleDeckEvent from './events/shuffleDeck';
 import timerDecrease from './events/timerDecrease';
 import normalPlaceCardEvent from './events/normalPlaceCard';
-import increaseAttackSpeed from './events/increaseAttackSpeed';
+import changeAttackSpeed from './events/changeAttackSpeed';
 import beforeCardDestroyed from './events/beforeCardDestroyed';
 import startStateDecay from './events/startStateDecay';
 import endStateDecay from './events/endStateDecay';
@@ -73,7 +73,7 @@ type EventTypeMap = {
 	addState: AddStateEvent;
 	shuffleDeck: ShuffleDeckEvent;
 	timerDecrease: TimerDecreaseEvent;
-	increaseAttackSpeed: IncreaseAttackSpeedEvent;
+	changeAttackSpeed: ChangeAttackSpeedEvent;
 	beforeCardDestroyed: CardDestroyedEvent;
 	startStateDecay: StartStateDecayEvent;
 	endStateDecay: EndStateDecayEvent;
@@ -115,7 +115,7 @@ const EventsCompute: EventHandlers = {
 	triggerState: triggerStateEvent,
 	shuffleDeck: shuffleDeckEvent,
 	timerDecrease: timerDecrease,
-	increaseAttackSpeed: increaseAttackSpeed,
+	changeAttackSpeed: changeAttackSpeed,
 	beforeCardDestroyed: beforeCardDestroyed,
 	startStateDecay: startStateDecay,
 	endStateDecay: endStateDecay,
