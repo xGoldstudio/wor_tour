@@ -6,9 +6,8 @@ import {
 } from "game_engine";
 import * as _ from "lodash";
 import { findCard } from "../../cards/index";
-import { CardType } from "../../../../../packages/gameEngine/src/types/Card";
-import { getRandomElement } from "../../../../../packages/lib/src/lib/list";
 import { addGameEventListener } from "@repo/ui";
+import { CardType, getRandomElement } from "@repo/lib";
 
 export const botOptions = {
   disabled: false,
@@ -55,7 +54,7 @@ export default function iaAgent() {
         return;
       }
       triggerEvent({
-        type: "placeCard",
+        type: "normalPlaceCard",
         isPlayer: false,
         position: target,
         cardInHandPosition: nextCardToUse.position,
@@ -72,7 +71,7 @@ export default function iaAgent() {
   addGameEventListener(
     "cardDestroyed",
     computeMove,
-    (event) => !(event as CardDestroyedEvent).initiator.isPlayerCard
+    (event, state) => !state.getIsPlayerCard((event as CardDestroyedEvent).initiator.instanceId)
   );
 
   // addGameEventListener("startEarningMana", (_, data, triggerEvent) => {

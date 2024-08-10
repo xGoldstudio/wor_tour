@@ -1,8 +1,7 @@
 import { useRef, useState } from "react";
 import { cn, EmptyBar, useGameEventListener, useSyncGameAnimation } from "@repo/ui";
-import { numberWithCommas } from "../../../../../packages/lib/src/lib/utils";
 import { PlayerDamageResolveEvent } from "game_engine";
-import { animationTimeline } from "@repo/lib";
+import { animationTimeline, numberWithCommas } from "@repo/lib";
 import PlayerHeart from "./PlayerHeart";
 
 interface HpBarProps {
@@ -103,7 +102,6 @@ function HpBar({ isPlayer, maxHp, withHeart }: HpBarProps) {
         />
         <div
           className="w-full h-full absolute origin-left bg-gradient-to-b  from-[#2105ad] via-[#4b429d] via-[37%] to-[#2105ad] opacity-0"
-          // ref={healScope}
         />
         <p
           className="text-xl text-center text-white font-[stylised] relative"

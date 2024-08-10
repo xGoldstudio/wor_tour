@@ -11,20 +11,24 @@ export default function AmountEffectOrDamage() {
   const { registerAnimation } = useRegisterAnimation();
   useGameEventListener({
     type: "playerDamageResolve",
-    action: (e) => {
+    action: (e, state) => {
       const event = e as PlayerDamageResolveEvent;
+			const cardPosition = state.getCardPosition(event.initiator.initiator.instanceId);
+			if (cardPosition === null) return;
 			runAnimation(
 				getHpBar(event.initiator.isPlayer),
-				getCard(event.initiator.isPlayer, event.initiator.initiator.cardPosition),
+				getCard(cardPosition.isPlayerCard, cardPosition.position),
 				-event.initiator.damage,
 			);
     },
   });
 	useGameEventListener({
     type: "cardDamageResolve",
-    action: (e) => {
+    action: (e, state) => {
       const event = e as CardDamagResolveEvent;
-			const card = getCard(event.initiator.isPlayerCard, event.initiator.cardPosition);
+			const cardPosition = state.getCardPosition(event.initiator.instanceId);
+			if (cardPosition === null) return;
+			const card = getCard(cardPosition.isPlayerCard, cardPosition.position);
 			runAnimation(
 				card,
 				card,
@@ -34,9 +38,11 @@ export default function AmountEffectOrDamage() {
   });
 	useGameEventListener({
     type: "healCard",
-    action: (e) => {
+    action: (e, state) => {
       const event = e as HealCardEvent;
-			const card = getCard(event.isPlayerCard, event.cardPosition);
+			const cardPosition = state.getCardPosition(event.instanceId);
+			if (cardPosition === null) return;
+			const card = getCard(cardPosition.isPlayerCard, cardPosition.position);
 			runAnimation(
 				card,
 				card,
@@ -85,6 +91,7 @@ export default function AmountEffectOrDamage() {
 			"drop-shadow-[2px_1px_1px_black]",
 			"text-2xl",
 			"transform",
+			"z-30",
 		);
 		dmgText.appendChild(document.createTextNode(`${dmg}`));
 		wrapperRef.current?.appendChild(dmgText);
@@ -95,7 +102,7 @@ export default function AmountEffectOrDamage() {
 
   return (
     <div
-      className="left-0 fixed w-full h-full pointer-events-none z-10"
+      className="left-0 fixed w-full h-full pointer-events-none z-20"
       ref={wrapperRef}
     ></div>
   );

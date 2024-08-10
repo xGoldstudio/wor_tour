@@ -7,7 +7,7 @@ describe("bleeding state", () => {
 	drawPlaceCard(clock, true, 0);
 	drawPlaceCard(clock, false, 0);
 	clock.nextTick();
-	clock.triggerEvent({ type: "addState", instanceId: getInstanceId(state, true, 0), isPlayerCard: true, position: 0, state: massacreStateTest });
+	clock.triggerEvent({ type: "addState", instanceId: getInstanceId(state, true, 0), state: massacreStateTest });
 	clock.nextTick();
 	expect(state.getStateOfCard(true, 0, "massacre")).toBeDefined();
 
@@ -32,7 +32,7 @@ describe("bleeding state", () => {
 
 	test("bleeding state should have been updated by the strength of massacre at the time of the attack", () => {
 		triggerDirectAttack(clock, state, true, 0);
-		clock.triggerEvent({ type: "increaseStateValue", instanceId: getInstanceId(state, true, 0), isPlayerCard: true, position: 0, stateType: "massacre", increaseBy: 10 });
+		clock.triggerEvent({ type: "increaseStateValue", instanceId: getInstanceId(state, true, 0), stateType: "massacre", increaseBy: 10 });
 		// then we update the massacre strength
 		attackAnimation(clock);
 		clock.nextTick();

@@ -10,10 +10,12 @@ export type EventType =
   | SetManaIncreaseSpeed
   | ManaConsumeEvent
   | PlaceCardEvent
+  | NormalPlaceCardEvent
   | StartEarningManaEvent
   | EndEarningManaEvent
   | CardStartAttackingEvent
   | CardAttackingEvent
+  | BeforeCardDestroyedEvent
   | PlayerDamageEvent
   | CardDamageEvent
   | CardDestroyedEvent
@@ -28,7 +30,15 @@ export type EventType =
   | TriggerStateEvent
   | AddStateEvent
   | ShuffleDeckEvent
-  | TimerDecreaseEvent;
+  | TimerDecreaseEvent
+  | ChangeAttackSpeedEvent
+  | StartStateDecayEvent
+  | EndStateDecayEvent
+  | AfterPlaceCardEvent
+  | StateLifcycleOnAddEvent
+  | StateLifcycleOnRemoveEvent
+  | BeforeRemoveStateEvent
+  | StateLifcycleOnChangeValueEvent;
 
 export interface DummyEvent { // this event should be ignored
   type: "dummyEvent";
@@ -71,8 +81,23 @@ export interface ManaIncreaseEvent {
   value: number;
 }
 
+export type PlaceCardType = Omit<InGameCardType, "instanceId" | "modifierOfAttackSpeedPercentage" | "attackSpeed" | "startAttackingTick" | "endAttackingTick" | "hp">;
+
 export interface PlaceCardEvent {
   type: "placeCard";
+  isPlayer: boolean;
+  position: number;
+  card: PlaceCardType;
+  isSpecialPlacement: boolean;
+}
+
+export interface AfterPlaceCardEvent {
+  type: "afterPlaceCard";
+  instanceId: number;
+}
+
+export interface NormalPlaceCardEvent {
+  type: "normalPlaceCard";
   isPlayer: boolean;
   position: number;
   cardInHandPosition: number;
@@ -80,15 +105,12 @@ export interface PlaceCardEvent {
 
 export interface CardStartAttackingEvent {
   type: "cardStartAttacking";
-  isPlayer: boolean;
-  cardPosition: number;
   instanceId: number;
+  alreadyProcessing?: number;
 }
 
 export interface CardAttackingEvent {
   type: "cardAttacking";
-  isPlayer: boolean;
-  cardPosition: number;
   instanceId: number;
   cardIniator: InGameCardType; // this card may alteady be destroyed, if you need to verify its existance use instanceId
 }
@@ -111,14 +133,17 @@ export interface CardDamageEvent {
   instanceId: number;
   directAttack: boolean;
   initiator: CardAttackingEvent;
-  isPlayerCard: boolean;
-  cardPosition: number;
   onDirectHitStates: CardState[];
-  cardInitiator: InGameCardType; // this card may alteady be destroyed, if you need to verify its existance use instanceId
+  cardInitiator: InGameCardType; // this card may already be destroyed, if you need to verify its existance use instanceId
 }
 
 export interface CardDamagResolveEvent {
   type: "cardDamageResolve";
+  initiator: CardDamageEvent;
+}
+
+export interface BeforeCardDestroyedEvent {
+  type: "beforeCardDestroyed";
   initiator: CardDamageEvent;
 }
 
@@ -140,13 +165,9 @@ export interface DrawCardEvent {
 
 export interface HealCardEvent {
   type: "healCard";
-  isPlayerCard: boolean;
-  cardPosition: number;
   amount: number;
-  cardInitiator: {
-    isPlayerCard: boolean;
-    cardPosition: number;
-  };
+  instanceId: number;
+  cardInitiatorInstanceId: number;
 }
 
 export interface IncreaseStateValueEvent {
@@ -154,8 +175,6 @@ export interface IncreaseStateValueEvent {
   stateType: CardState["type"];
   increaseBy: number;
   instanceId: number;
-  isPlayerCard: boolean;
-  position: number;
 }
 
 export interface DecreaseStateValueEvent {
@@ -163,16 +182,12 @@ export interface DecreaseStateValueEvent {
   stateType: CardState["type"];
   instanceId: number;
   decreaseBy: number;
-  isPlayerCard: boolean;
-  position: number;
 }
 
 export interface RemoveStateEvent {
   type: "removeState";
   stateType: CardState["type"];
   instanceId: number;
-  isPlayerCard: boolean;
-  position: number;
 }
 
 export interface TriggerStateEvent {
@@ -180,8 +195,6 @@ export interface TriggerStateEvent {
   state: CardState;
   initiator: EventType;
   instanceId: number;
-  isPlayerCard: boolean;
-  position: number;
   cardInitiator: InGameCardType; // this card may alteady be destroyed, if you need to verify its existance use instanceId
 }
 
@@ -189,8 +202,6 @@ export interface AddStateEvent {
   type: "addState";
   state: CardState;
   instanceId: number;
-  isPlayerCard: boolean;
-  position: number;
 }
 
 export interface ShuffleDeckEvent {
@@ -202,6 +213,50 @@ export interface TimerDecreaseEvent {
   type: "timerDecrease";
 }
 
+export interface ChangeAttackSpeedEvent {
+  type: "changeAttackSpeed";
+  instanceId: number;
+  changePercent: number;
+}
+
+export interface StartStateDecayEvent {
+  type: "startStateDecay";
+  stateType: CardState["type"];
+  instanceId: number;
+  duration: number;
+}
+
+export interface EndStateDecayEvent {
+  type: "endStateDecay";
+  stateType: CardState["type"];
+  instanceId: number;
+}
+
+export interface StateLifcycleOnAddEvent {
+  type: "stateLifecycleOnAdd";
+  stateType: CardState["type"];
+  instanceId: number;
+}
+
+export interface StateLifcycleOnChangeValueEvent {
+  type: "stateLifecycleOnChangeValue";
+  stateType: CardState["type"];
+  instanceId: number;
+  delta: number;
+}
+
+export interface BeforeRemoveStateEvent {
+  type: "beforeRemoveState";
+  stateType: CardState["type"];
+  instanceId: number;
+}
+
+export interface StateLifcycleOnRemoveEvent {
+  type: "stateLifecycleOnRemove";
+  stateType: CardState["type"];
+  instanceId: number;
+}
+
 export type InGameCardType = {
   id: number;
   instanceId: number;
@@ -209,7 +264,10 @@ export type InGameCardType = {
   hp: number;
   dmg: number;
   attackSpeed: number;
+  initialAttackSpeed: number;
+  modifierOfAttackSpeedPercentage: number;
   startAttackingTick: number | null;
+  endAttackingTick: number | null;
   rarity: CardRarity;
   states: CardState[];
   illustration: string;

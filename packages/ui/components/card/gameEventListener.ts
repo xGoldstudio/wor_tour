@@ -18,13 +18,13 @@ function initGameEventListeners() {
 export function addGameEventListener(
   type: EventType["type"] | null, // null is a wildcard
   action: GameEventListenerFunction,
-  filter?: (event: EventType) => boolean // filter allow to listen only to specific event
+  filter?: (event: EventType, state: GameStateObject) => boolean // filter allow to listen only to specific event
 ) {
   let existingEvents = gameEventListeners.get(type);
   const actionComputed: GameEventListenerFunction =
     filter === undefined
       ? action
-      : (e, data, triggerEvent, clock) => filter(e) && action(e, data, triggerEvent, clock);
+      : (e, data, triggerEvent, clock) => filter(e, data) && action(e, data, triggerEvent, clock);
   existingEvents = existingEvents
     ? [...existingEvents, actionComputed]
     : [actionComputed];

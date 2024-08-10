@@ -1,12 +1,20 @@
 import { CardType } from "../../types/Card";
 import { InGameCardType } from "../../types/eventType";
 import { CardState } from "../states/CardStatesData";
+import { getFrameFromAttackSpeed } from "./events/utils";
 
 export interface GameStateObjectConstructor {
 	playerDeck: CardType[];
 	opponentDeck: CardType[];
 	playerHp: number;
 	opponentHp: number;
+}
+
+export interface DecayingState {
+	startFrame: number;
+	endFrame: number;
+	stateType: CardState["type"];
+	instanceId: number;
 }
 
 export type CurrentWinner = "player" | "opponent" | "draw" | null;
@@ -16,6 +24,10 @@ export const defaultManaSpeed = 300;
 export const MAX_MANA = 9;
 
 export const MAX_GAME_DURATION = 300;
+
+export const MAX_ATTACK_SPEED = 3;
+
+export const MIN_ATTACK_SPEED = 0.01;
 
 export class GameStateObject {
 	constructor({ playerDeck, opponentDeck, playerHp, opponentHp }: GameStateObjectConstructor) {
@@ -40,6 +52,7 @@ export class GameStateObject {
 		this.opponentManaSpeed = defaultManaSpeed;
 		this.isStarted = false;
 		this.timer = MAX_GAME_DURATION;
+		this.trackedStateDecaying = [];
 	}
 
 	// state (nested properties are forbidden)
@@ -65,6 +78,8 @@ export class GameStateObject {
 	currentWinner: CurrentWinner;
 
 	isStarted: boolean;
+
+	trackedStateDecaying: DecayingState[];
 
 	// methods
 	startGame() {
@@ -170,15 +185,15 @@ export class GameStateObject {
 		}
 	}
 	// attack
-	startAttacking(isPlayer: boolean, cardPosition: number, tick: number) {
-		const board = isPlayer ? this.playerBoard : this.opponentBoard;
-		const card = board[cardPosition];
+	startAttacking(instanceId: number, startTick: number) {
+		const card = this.getCardInstance(instanceId);
 		if (!card) {
 			console.warn("Card doesnt exist");
-			return {};
+			return null;
 		}
-		card.startAttackingTick = tick;
-		return isPlayer ? { playerBoard: board } : { opponentBoard: board };
+		card.startAttackingTick = startTick;
+		card.endAttackingTick = startTick + getFrameFromAttackSpeed(card.attackSpeed);
+		return card.endAttackingTick - card.startAttackingTick
 	}
 	// hp
 	dealDamageToPlayer(isPlayer: boolean, damage: number) {
@@ -190,24 +205,27 @@ export class GameStateObject {
 	}
 	// cards dmg
 	dealDamageToCard(
-		isPlayerCard: boolean,
+		instanceId: number,
 		damage: number,
-		cardPosition: number
 	) {
-		const card = this.getCard(isPlayerCard, cardPosition);
+		const card = this.getCardInstance(instanceId);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return false;
 		}
 		card.hp = Math.max(0, card.hp - damage);
 		return card.hp === 0;
 	}
-	destroyCard(isPlayerCard: boolean, cardPosition: number) {
-		const board = isPlayerCard ? this.playerBoard : this.opponentBoard;
-		board[cardPosition] = null;
+	destroyCard(instanceId: number) {
+		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instanceId);
+		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instanceId);
+		if (playerCard !== -1) {
+			this.playerBoard[playerCard] = null;
+		} else if (opponentCard !== -1) {
+			this.opponentBoard[opponentCard] = null;
+		}
 	}
-	healCard(isPlayerCard: boolean, cardPosition: number, amount: number) {
-		const deck = isPlayerCard ? this.playerBoard : this.opponentBoard;
-		const card = deck[cardPosition];
+	healCard(instanceId: number, amount: number) {
+		const card = this.getCardInstance(instanceId);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return;
 		}
@@ -271,6 +289,30 @@ export class GameStateObject {
 			this.opponentDeck = this.opponentDeck.sort(() => Math.random() - 0.5);
 		}
 	}
+	increaseAttackSpeed(instanceId: number, increasePercent: number) {
+		const card = this.getCardInstance(instanceId);
+		if (!card) {
+			return;
+		}
+		const previousAttackSpeed = card.attackSpeed;
+		card.modifierOfAttackSpeedPercentage = card.modifierOfAttackSpeedPercentage + increasePercent;
+		card.attackSpeed = Math.min(MAX_ATTACK_SPEED, Math.max(MIN_ATTACK_SPEED, card.initialAttackSpeed * (1 + card.modifierOfAttackSpeedPercentage / 100)));
+		return previousAttackSpeed;
+	}
+	addStateDecayTimeout(instanceId: number, stateType: CardState["type"], startFrame: number, duration: number) {
+		this.trackedStateDecaying.push({
+			startFrame,
+			endFrame: startFrame + duration,
+			stateType,
+			instanceId,
+		});
+	}
+	getStateDecayTimeout(instanceId: number, stateType: CardState["type"]) {
+		return this.trackedStateDecaying.find((t) => t.instanceId === instanceId && t.stateType === stateType) || null;
+	}
+	removeStateDecayTimeout(instanceId: number, stateType: CardState["type"]) {
+		this.trackedStateDecaying = this.trackedStateDecaying.filter((t) => t.instanceId !== instanceId || t.stateType !== stateType);
+	}
 	// utils
 	getCard(isPlayerCard: boolean, cardPosition: number) {
 		return (isPlayerCard ? this.playerBoard : this.opponentBoard)[cardPosition];
@@ -278,8 +320,51 @@ export class GameStateObject {
 	getCardInstance(instanceId: number) {
 		return [...this.playerBoard, ...this.opponentBoard].find((c) => c?.instanceId === instanceId) || null;
 	}
+	getCardInfo(instanceId: number) {
+		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instanceId);
+		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instanceId);
+		if (playerCard !== -1) {
+			return { isPlayerCard: true, position: playerCard, card: this.playerBoard[playerCard]! };
+		} else if (opponentCard !== -1) {
+			return { isPlayerCard: false, position: opponentCard, card: this.opponentBoard[opponentCard]! };
+		}
+		return null;
+	}
+	getCardPosition(instanceId: number) {
+		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instanceId);
+		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instanceId);
+		if (playerCard !== -1) {
+			return { isPlayerCard: true, position: playerCard };
+		} else if (opponentCard !== -1) {
+			return { isPlayerCard: false, position: opponentCard };
+		}
+		return null
+	}
+	getIsPlayerCard(instanceId: number) {
+		return this.playerBoard.findIndex((c) => c?.instanceId === instanceId) !== -1;
+	}
+	getOppositeCard(instanceId: number) {
+		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instanceId);
+		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instanceId);
+		if (playerCard !== -1) {
+			return this.opponentBoard[playerCard];
+		} else if (opponentCard !== -1) {
+			return this.playerBoard[opponentCard];
+		}
+		return null;
+	}
 	getBoard(isPlayer: boolean) {
 		return isPlayer ? this.playerBoard : this.opponentBoard;
+	}
+	getBoardOfCard(instanceId: number) {
+		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instanceId);
+		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instanceId);
+		if (playerCard !== -1) {
+			return this.playerBoard;
+		} else if (opponentCard !== -1) {
+			return this.opponentBoard;
+		}
+		return null;
 	}
 	getStateOfCard(isPlayerCard: boolean, cardPosition: number, type: CardState["type"]) {
 		const card = this.getCard(isPlayerCard, cardPosition);
@@ -317,5 +402,8 @@ export class GameStateObject {
 	}
 	getTimer() {
 		return this.timer;
+	}
+	getCardTypeById(id: number) {
+		return [...this.playerDeck, ...this.playerHand].find((c) => c && c.id === id);
 	}
 }

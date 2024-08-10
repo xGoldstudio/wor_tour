@@ -18,7 +18,6 @@ import {
   CardDestroyedEvent,
   CardStartAttackingEvent,
   EventType,
-  FRAME_TIME,
   GameOverEvent,
   GameStateObject,
   HealCardEvent,
@@ -55,7 +54,10 @@ function GameCard({
     hp: 0,
     dmg: 1,
     attackSpeed: 1,
+    initialAttackSpeed: 1,
+    modifierOfAttackSpeedPercentage: 0,
     startAttackingTick: null,
+    endAttackingTick: null,
     rarity: "common",
     states: [],
     illustration: "",
@@ -76,23 +78,24 @@ function GameCard({
     removeBloodAnimation();
     removeHealAnimation();
   }
+  const trackedInstanceId = useRef<number | null>(null);
   useGameEventListener({
     type: "cardStartAttacking",
-    action: (_, state) => {
+    action: (event, state, _, clock) => {
       const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
         position
       ];
-      if (card && cardRef.current) {
+      if (card && cardRef.current && event.type === "cardStartAttacking") {
+        const animationDuration =
+          card.endAttackingTick! - card.startAttackingTick! - 1;
         cardRef.current.style.display = "block";
         setIsShown(true);
-        const animationDuration =
-          1000 / (card.attackSpeed ?? 1) / FRAME_TIME - 1;
+        // should check if the animation is already in last stage, if case, slow the end
+        // think of ligh state machines for animations
         triggerAttackAnimation({
           replace: true,
           duration: animationDuration,
-          computeStyle: animationTimeline(
-            1000 / (card.attackSpeed ?? 1) / FRAME_TIME
-          )
+          computeStyle: animationTimeline(animationDuration)
             .add(
               cardRef.current.querySelector<HTMLElement>(".animationProgress"),
               { scaleY: 1 },
@@ -116,12 +119,15 @@ function GameCard({
                 values: { scale: 1.08, y: isPlayerCard ? -15 : 15 },
               },
             ]).progress,
-        });
+        })?.fastForward(
+          clock.getImmutableInternalState().currentFrame -
+            card.startAttackingTick!
+        );
       }
     },
     filter: (e) => {
       const event = e as CardStartAttackingEvent;
-      return event.cardPosition === position && event.isPlayer === isPlayerCard;
+      return event.instanceId === trackedInstanceId.current;
     },
   });
   useGameEventListener({
@@ -133,6 +139,7 @@ function GameCard({
       if (card) {
         setCard(card);
         clearAllAnimations();
+        trackedInstanceId.current = card.instanceId;
       }
     },
     filter: (e) => {
@@ -144,6 +151,7 @@ function GameCard({
     if (!cardRef.current) {
       return;
     }
+    trackedInstanceId.current = null;
     const yTranslated = getTranslateY(cardRef.current);
     const scale = getScale(cardRef.current);
     triggerAttackAnimation({
@@ -173,10 +181,7 @@ function GameCard({
     action: cardDestroyed,
     filter: (e) => {
       const event = e as CardDestroyedEvent;
-      return (
-        event.initiator.isPlayerCard === isPlayerCard &&
-        event.initiator.cardPosition === position
-      );
+      return event.initiator.instanceId === trackedInstanceId.current;
     },
   });
   useGameEventListener({
@@ -203,10 +208,7 @@ function GameCard({
     },
     filter: (e) => {
       const event = e as CardDamagResolveEvent;
-      return (
-        event.initiator.cardPosition === position &&
-        event.initiator.isPlayerCard === isPlayerCard
-      );
+      return event.initiator.instanceId === trackedInstanceId.current;
     },
   });
   useGameEventListener({
@@ -225,9 +227,7 @@ function GameCard({
     },
     filter: (e) => {
       const event = e as HealCardEvent;
-      return (
-        event.cardPosition === position && event.isPlayerCard === isPlayerCard
-      );
+      return event.instanceId === trackedInstanceId.current;
     },
   });
 
@@ -257,6 +257,7 @@ function GameCard({
         size={2.5}
         isPlayerCard={isPlayerCard}
         position={position}
+        trackedInstanceId={trackedInstanceId}
       >
         <div className="animationProgress absolute top-0 w-full h-full bg-slate-600 opacity-40 origin-top" />
       </GameCardDesign>
@@ -267,9 +268,11 @@ function GameCard({
 export function CardEffectsElements({
   isPlayerCard,
   position,
+  trackedInstanceId,
 }: {
   isPlayerCard: boolean;
   position: number;
+  trackedInstanceId: React.MutableRefObject<number | null>;
 }) {
   const [states, setStates] = useState<CardState[]>([]);
 
@@ -300,8 +303,7 @@ export function CardEffectsElements({
         event.type === "removeState" ||
         event.type === "increaseStateValue" ||
         event.type === "decreaseStateValue") &&
-      event.isPlayerCard === isPlayerCard &&
-      event.position === position
+      event.instanceId === trackedInstanceId.current
     ) {
       if (event.type === "addState") setStatesFromGameState(state); // side effect
       return true;
@@ -340,6 +342,7 @@ interface GameCardDesign {
   position: number;
   isPlayerCard: boolean;
   card: InGameCardType;
+  trackedInstanceId: React.MutableRefObject<number | null>;
 }
 
 export function GameCardDesign({
@@ -348,6 +351,7 @@ export function GameCardDesign({
   position,
   isPlayerCard,
   children,
+  trackedInstanceId,
 }: GameCardDesign) {
   return (
     <CardBorder rarity={card.rarity} size={size}>
@@ -358,10 +362,18 @@ export function GameCardDesign({
         </div>
         <div className="w-full h-min">
           <InnerBord size={size}>
-            <GameCardHpBar position={position} isPlayerCard={isPlayerCard} />
+            <GameCardHpBar
+              position={position}
+              isPlayerCard={isPlayerCard}
+              trackedInstanceId={trackedInstanceId}
+            />
           </InnerBord>
         </div>
-        <CardEffectsElements isPlayerCard={isPlayerCard} position={position} />
+        <CardEffectsElements
+          isPlayerCard={isPlayerCard}
+          position={position}
+          trackedInstanceId={trackedInstanceId}
+        />
       </div>
     </CardBorder>
   );
@@ -370,9 +382,11 @@ export function GameCardDesign({
 function GameCardHpBar({
   position,
   isPlayerCard,
+  trackedInstanceId,
 }: {
   position: number;
   isPlayerCard: boolean;
+  trackedInstanceId: React.MutableRefObject<number | null>;
 }) {
   const [hp, setHp] = useState(0);
   const hpBarRef = useRef<HTMLDivElement | null>(null);
@@ -390,8 +404,9 @@ function GameCardHpBar({
       }
       setHp(card.hp);
       const lifeBar = scope.current?.querySelector<HTMLElement>(".lifeBar");
-      if (lifeBar) {
+      if (lifeBar && hpBarRef.current) {
         lifeBar.style.transform = `scaleX(${card.hp / card.maxHp})`;
+        hpBarRef.current.innerHTML = numberWithCommas(card.hp);
       }
     },
     filter: (event) =>
@@ -403,16 +418,15 @@ function GameCardHpBar({
     type: "cardDamageResolve",
     action: (_, state) => onHpChange(state),
     filter: (event) =>
-      (event as CardDamagResolveEvent).initiator.cardPosition === position &&
-      (event as CardDamagResolveEvent).initiator.isPlayerCard === isPlayerCard,
+      (event as CardDamagResolveEvent).initiator.instanceId ===
+      trackedInstanceId.current,
   });
 
   useGameEventListener({
     type: "healCard",
     action: (_, state) => onHpChange(state),
     filter: (event) =>
-      (event as HealCardEvent).isPlayerCard === isPlayerCard &&
-      (event as HealCardEvent).cardPosition === position,
+      (event as HealCardEvent).instanceId === trackedInstanceId.current,
   });
 
   function onHpChange(state: GameStateObject) {

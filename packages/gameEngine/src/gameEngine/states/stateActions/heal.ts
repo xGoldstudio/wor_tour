@@ -2,19 +2,15 @@ import { StateAction } from "../CardStatesData";
 
 const HealStateAction: StateAction = ({ value, event, gameState, clock }) => {
 	const initiator = event.initiator;
-	if (initiator.type !== "placeCard" || value === null) {
+	if (initiator.type !== "afterPlaceCard" || value === null) {
 		return;
 	}
-	gameState.getBoard(initiator.isPlayer).forEach((card, position) => {
-		if (!card || card.hp === card.maxHp || position === initiator.position) return;
+	gameState.getBoardOfCard(event.instanceId)?.forEach((card) => {
+		if (!card || card.hp === card.maxHp || card.instanceId === event.instanceId) return;
 		clock.triggerEvent({
 			type: "healCard",
-			cardPosition: position,
-			isPlayerCard: initiator.isPlayer,
-			cardInitiator: {
-				isPlayerCard: initiator.isPlayer,
-				cardPosition: initiator.position,
-			},
+			instanceId: card.instanceId,
+			cardInitiatorInstanceId: event.instanceId,
 			amount: value,
 		});
 	});

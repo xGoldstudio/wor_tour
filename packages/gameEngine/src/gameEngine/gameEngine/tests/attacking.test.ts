@@ -8,7 +8,7 @@ test("attacking pipeline", () => {
 	void state;
 	void clock;
 	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	expect(state.playerBoard[0]?.startAttackingTick).toBe(0);
 
@@ -29,7 +29,7 @@ test("attacking pipeline", () => {
 	expect(state.opponentHp).toBe(100); // damage applied
 
 	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	for (let i = 0; i < attackFrames + DAMAGE_SPEED; i++) {
 		clock.nextTick();

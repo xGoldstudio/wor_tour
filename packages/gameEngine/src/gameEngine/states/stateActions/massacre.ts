@@ -11,8 +11,6 @@ const MassacreStateAction: StateAction = ({ event, clock, value }) => {
 	clock.triggerEvent({
 		type: "addState",
 		instanceId: initiator.initiator.instanceId,
-		position: initiator.initiator.cardPosition,
-		isPlayerCard: initiator.initiator.isPlayerCard,
 		state: {
 			type: "bleeding",
 			trigger: "onAttack",

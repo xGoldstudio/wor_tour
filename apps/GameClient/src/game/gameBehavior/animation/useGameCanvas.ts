@@ -20,11 +20,14 @@ export default function useGameCanvas() {
 
 	useGameEventListener({
 		type: "cardDamage",
-		action: (e, _, __, clock) => {
+		action: (e, state, __, clock) => {
 			const event = e as CardDamageEvent;
+      const originPosition = state.getCardPosition(event.initiator.instanceId);
+      const targetPosition = state.getCardPosition(event.instanceId);
+      if (originPosition === null || targetPosition === null) return;
       gameCanvas?.newAnimation(
-        `card_${event.initiator.isPlayer}_${event.initiator.cardPosition}`,
-        `card_${event.isPlayerCard}_${event.cardPosition}`,
+        `card_${originPosition?.isPlayerCard}_${originPosition.position}`,
+        `card_${targetPosition.isPlayerCard}_${targetPosition.position}`,
         "attack",
         clock.getImmutableInternalState().currentFrame
       );
@@ -33,10 +36,12 @@ export default function useGameCanvas() {
 
 	useGameEventListener({
 		type: "playerDamage",
-		action: (e, _, __, clock) => {
+		action: (e, state, __, clock) => {
 			const event = e as PlayerDamageEvent;
+      const originPosition = state.getCardPosition(event.initiator.instanceId);
+      if (originPosition === null ) return;
       gameCanvas?.newAnimation(
-        `card_${event.initiator.isPlayer}_${event.initiator.cardPosition}`,
+        `card_${originPosition.isPlayerCard}_${originPosition.position}`,
         `hpBar_${event.isPlayer}`,
         "attack",
         clock.getImmutableInternalState().currentFrame,
@@ -49,11 +54,14 @@ export default function useGameCanvas() {
 
 	useGameEventListener({
 		type: "healCard",
-		action: (e, _, __, clock) => {
+		action: (e, state, __, clock) => {
 			const event = e as HealCardEvent;
+      const originPosition = state.getCardPosition(event.cardInitiatorInstanceId);
+      const targetPosition = state.getCardPosition(event.instanceId);
+      if (originPosition === null || targetPosition === null) return;
       gameCanvas.newAnimation(
-        `card_${event.cardInitiator.isPlayerCard}_${event.cardInitiator.cardPosition}`,
-        `card_${event.isPlayerCard}_${event.cardPosition}`,
+        `card_${originPosition.isPlayerCard}_${originPosition.position}`,
+        `card_${targetPosition.isPlayerCard}_${targetPosition.position}`,
         "heal",
         clock.getImmutableInternalState().currentFrame
       );

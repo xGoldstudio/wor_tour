@@ -77,7 +77,7 @@ function InHandCard({ position, clock }: { position: number, clock: ClockReturn<
       return;
     }
     clock.triggerEvent({
-      type: "placeCard",
+      type: "normalPlaceCard",
       isPlayer: true,
       position: targetPosition,
       cardInHandPosition,

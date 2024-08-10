@@ -5,7 +5,7 @@ import Clock from "../../clock/clock";
 import { computeNextFrameState } from "../gameEngine";
 import { expect, test } from 'vitest';
 import { CardType } from "../../../types/Card";
-import { getInstanceId } from "./common";
+import { drawPlaceCard, triggerKillCard } from "./common";
 
 const baseCard = {
 	name: "string",
@@ -29,26 +29,10 @@ test("destroying player card", () => {
 	);
 	clock.triggerEvent({ type: "startGame" });
 	expect(state.playerBoard[0]).toBe(null);
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
+	drawPlaceCard(clock, true, 0);
 	clock.nextTick();
 	expect(state.playerBoard[0]?.id).toBe(0);
-	clock.triggerEvent({
-		type: "cardDestroyed", initiator: {
-			type: "cardDamage",
-			amount: 0,
-			instanceId: getInstanceId(state, true, 0),
-			cardPosition: 0,
-			isPlayerCard: true,
-			directAttack: false,
-			initiator: {
-				type: "cardAttacking",
-				instanceId: -1,
-				isPlayer: false,
-				cardPosition: 0,
-			}
-		}
-	});
+	triggerKillCard(clock, state.playerBoard[0]!.instanceId);
 	clock.nextTick();
 	expect(state.playerBoard[0]).toBe(null);
 });
@@ -60,26 +44,10 @@ test("destroying opponent card", () => {
 	);
 	clock.triggerEvent({ type: "startGame" });
 	expect(state.opponentBoard[0]).toBe(null);
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
+	drawPlaceCard(clock, false, 0);
 	clock.nextTick();
 	expect(state.opponentBoard[0]?.id).toBe(0);
-	clock.triggerEvent({
-		type: "cardDestroyed", initiator: {
-			type: "cardDamage",
-			amount: 0,
-			cardPosition: 0,
-			instanceId: getInstanceId(state, false, 0),
-			isPlayerCard: false,
-			directAttack: false,
-			initiator: {
-				type: "cardAttacking",
-				instanceId: -1,
-				isPlayer: true,
-				cardPosition: 0,
-			}
-		}
-	});
+	triggerKillCard(clock, state.opponentBoard[0]!.instanceId);
 	clock.nextTick();
 	expect(state.opponentBoard[0]).toBe(null);
 });

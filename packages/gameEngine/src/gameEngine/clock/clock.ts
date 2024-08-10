@@ -9,6 +9,7 @@ export interface ClockReturn<EventType> {
   triggerEvent: (event: EventType) => void;
   getCurrentFrameObject: () => FrameObject<EventType> | null;
   setGameEventTimeout: (event: EventType, timeoutFrame: number) => void;
+  removeGameEventTimeout: (event: Partial<EventType>, timeoutFrame: number) => number;
   addEventToNextFrame: (event: EventType) => void;
   nextTick: () => void;
   getImmutableInternalState: () => {
@@ -33,6 +34,7 @@ export default function Clock<EventType>(
     triggerEvent,
     getCurrentFrameObject,
     setGameEventTimeout,
+    removeGameEventTimeout,
     addEventToNextFrame,
     nextTick,
     getImmutableInternalState,
@@ -73,6 +75,24 @@ export default function Clock<EventType>(
       frame: targetFrame,
       events: [event],
     });
+  }
+
+  function removeGameEventTimeout(event: Partial<EventType>, timeoutFrame: number) {
+    const usingFrame = Math.round(timeoutFrame);
+    if (usingFrame < 0) {
+      console.warn("timeoutFrame must be positive");
+      return 0;
+    }
+    for (let i = 0; i < timeoutQueue.length; i++) {
+      if (timeoutQueue[i].frame === timeoutFrame) {
+        const previousSize = timeoutQueue[i].events.length;
+        timeoutQueue[i].events = timeoutQueue[i].events.filter(
+          (e) => !partialVerify(e, event)
+        );
+        return previousSize - timeoutQueue[i].events.length;
+      }
+    }
+    return 0;
   }
 
   function addEventToNextFrame(event: EventType) {
@@ -142,4 +162,13 @@ export default function Clock<EventType>(
   }
 
   return state;
+}
+
+function partialVerify<T>(obj: T, partial: Partial<T>): boolean {
+  for (const key in partial) {
+    if (obj[key] !== partial[key]) {
+      return false;
+    }
+  }
+  return true;
 }

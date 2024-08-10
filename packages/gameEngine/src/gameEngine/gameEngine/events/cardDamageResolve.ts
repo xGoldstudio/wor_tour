@@ -4,17 +4,14 @@ import { triggerStates } from "./cardAttacking";
 
 export default function cardDamageResolveEvent({ gameState, clock, event }: ComputeEventProps<CardDamagResolveEvent>) {
 	const isDead = gameState.dealDamageToCard(
-		event.initiator.isPlayerCard,
+		event.initiator.instanceId,
 		event.initiator.amount,
-		event.initiator.cardPosition
 	);
 	if (event.initiator.directAttack) {
 		event.initiator.onDirectHitStates.forEach((state) => {
 			clock.triggerEvent({
 				type: "triggerState",
 				instanceId: event.initiator.initiator.instanceId,
-				position: event.initiator.initiator.cardPosition,
-				isPlayerCard: event.initiator.initiator.isPlayer,
 				state,
 				initiator: event,
 				cardInitiator: event.initiator.cardInitiator,
@@ -24,14 +21,13 @@ export default function cardDamageResolveEvent({ gameState, clock, event }: Comp
 			trigger: "onDirectlyAttacked",
 			clock,
 			gameState,
-			isPlayerCard: event.initiator.isPlayerCard,
-			cardPosition: event.initiator.cardPosition,
 			initiator: event,
+			instanceId: event.initiator.instanceId,
 		});
 	}
 	if (isDead) {
 		clock.triggerEvent({
-			type: "cardDestroyed",
+			type: "beforeCardDestroyed",
 			initiator: event.initiator,
 		});
 	}

@@ -5,7 +5,7 @@ import Clock from "../../clock/clock";
 import { computeNextFrameState } from "../gameEngine";
 import { expect, test } from 'vitest';
 import { CardType } from "../../../types/Card";
-import { getInstanceId } from "./common";
+import { drawPlaceCard, triggerDirectAttackResolved } from "./common";
 
 const baseCard = {
 	name: "string",
@@ -29,33 +29,14 @@ test("damage and kill player card", () => {
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
 	clock.triggerEvent({ type: "startGame" });
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
+	drawPlaceCard(clock, true, 0);
 	clock.nextTick();
-	// deal damage to card
-	function dealDamage(amount: number) {
-		clock.triggerEvent({
-			type: "cardDamageResolve", initiator: {
-				type: "cardDamage",
-				instanceId: getInstanceId(state, true, 0),
-				isPlayerCard: true,
-				cardPosition: 0,
-				directAttack: false,
-				amount: amount,
-				initiator: {
-					type: "cardAttacking",
-					instanceId: -1,
-					isPlayer: false,
-					cardPosition: 0,
-				},
-			}
-		});
-	}
-	dealDamage(100);
+	const playerInstanceId = state.playerBoard[0]!.instanceId;
+	triggerDirectAttackResolved(clock, state, playerInstanceId, playerInstanceId, 100);
 	clock.nextTick();
 	expect(state.playerBoard[0]?.hp).toBe(100);
 	// now kill the card
-	dealDamage(100);
+	triggerDirectAttackResolved(clock, state, playerInstanceId, playerInstanceId, 100);
 	clock.nextTick();
 	expect(state.playerBoard[0]).toBe(null);
 });
@@ -67,33 +48,15 @@ test("damage and kill opponent card", () => {
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
 	clock.triggerEvent({ type: "startGame" });
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
+	drawPlaceCard(clock, false, 0);
 	clock.nextTick();
+	const opponentInstanceId = state.opponentBoard[0]!.instanceId;
 	// deal damage to card
-	function dealDamage(amount: number) {
-		clock.triggerEvent({
-			type: "cardDamageResolve", initiator: {
-				type: "cardDamage",
-				instanceId: getInstanceId(state, false, 0),
-				isPlayerCard: false,
-				cardPosition: 0,
-				directAttack: false,
-				amount: amount,
-				initiator: {
-					type: "cardAttacking",
-					instanceId: -1,
-					isPlayer: true,
-					cardPosition: 0,
-				},
-			}
-		});
-	}
-	dealDamage(100);
+	triggerDirectAttackResolved(clock, state, opponentInstanceId, opponentInstanceId, 100);
 	clock.nextTick();
 	expect(state.opponentBoard[0]?.hp).toBe(100);
 	// now kill the card
-	dealDamage(100);
+	triggerDirectAttackResolved(clock, state, opponentInstanceId, opponentInstanceId, 100);
 	clock.nextTick();
 	expect(state.opponentBoard[0]).toBe(null);
 });

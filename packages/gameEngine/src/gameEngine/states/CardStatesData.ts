@@ -1,14 +1,19 @@
-import DummyStateAction from './stateActions/dummy';
+import DummyStateAction, { OnAddedDummyStateAction, OnChangeValueDummyStateAction, OnRemovedDummyStateAction } from './stateActions/dummy';
 import HealStateAction from './stateActions/heal';
 import RiposteStateAction from './stateActions/riposte';
 import MultiAttackStateAction from './stateActions/multiAttack';
 import MassacreStateAction from './stateActions/massacre';
 import BleedingStateAction from './stateActions/bleeding';
-import { EventType, InGameCardType, TriggerStateEvent } from '../../types/eventType';
+import { EventType, InGameCardType, StateLifcycleOnAddEvent, StateLifcycleOnChangeValueEvent, StateLifcycleOnRemoveEvent, TriggerStateEvent } from '../../types/eventType';
 import { ClockReturn } from '../clock/clock';
 import { GameStateObject } from '../gameEngine/gameState';
 import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types/DataStoreType';
 import { baseDps } from '../../types/Card';
+import CloneStateAction from './stateActions/clone';
+import RushStateAction from './stateActions/rush';
+import BannerOfCommandStateAction from './stateActions/bannerOfCommand';
+import { FRAME_TIME } from '../gameEngine/gameEngine';
+import { onAddedRage, onChangeValueRage, onRemovedRage } from './stateActions/rage';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -20,9 +25,32 @@ export type StateAction = ({ trigger, target, value, clock, gameState, event }: 
   event: TriggerStateEvent,
 }) => void;
 
+export type AddedStateAction = ({ clock, gameState, event }: {
+  clock: ClockReturn<EventType>,
+  gameState: GameStateObject,
+  event: StateLifcycleOnAddEvent,
+}) => void;
+
+export type ChangeValueStateAction = ({ clock, gameState, event }: {
+  clock: ClockReturn<EventType>,
+  gameState: GameStateObject,
+  event: StateLifcycleOnChangeValueEvent,
+}) => void;
+
+export type RemovedStateAction = ({ clock, gameState, event }: {
+  clock: ClockReturn<EventType>,
+  gameState: GameStateObject,
+  event: StateLifcycleOnRemoveEvent,
+}) => void;
+
 interface CardStateDataOptions {
   consume?: number;
   stackable?: boolean;
+  decay?: number;
+  stackableStrategy?: "sum" | "max";
+  onAdded?: AddedStateAction;
+  onRemoved?: RemovedStateAction;
+  onChangeValue?: ChangeValueStateAction;
 }
 
 interface CardStateDataInterface {
@@ -60,7 +88,7 @@ export const CardStatesData = {
     min: 0,
     max: undefined,
     noValue: false,
-    triggers: ["idle", "onPlacement", "onAttack", "onDirectAttackHit", "onDirectlyAttacked"],
+    triggers: ["idle", "onPlacement", "onAttack", "onDirectAttackHit", "onDirectlyAttacked", "onDeath"],
     targets: ["selfCard"],
     computeCost: () => {
       return 0;
@@ -70,7 +98,49 @@ export const CardStatesData = {
     status: "neutral",
     src: "",
     action: DummyStateAction,
-    options: {},
+    options: {
+      stackable: true,
+      onAdded: OnAddedDummyStateAction,
+      onRemoved: OnRemovedDummyStateAction,
+      onChangeValue: OnChangeValueDummyStateAction,
+    },
+  },
+  dummyWithDecay: { // using for testing
+    min: 0,
+    max: undefined,
+    noValue: false,
+    triggers: ["idle"],
+    targets: ["selfCard"],
+    computeCost: () => {
+      return 0;
+    },
+    descrption: ({ trigger, target }) => `${trigger}, ${target} is a dummy state.`,
+    title: "Dummy",
+    status: "neutral",
+    src: "",
+    action: DummyStateAction,
+    options: {
+      decay: 2,
+    },
+  },
+  dummyMaxStacking: { // using for testing
+    min: 0,
+    max: undefined,
+    noValue: false,
+    triggers: ["idle"],
+    targets: ["selfCard"],
+    computeCost: () => {
+      return 0;
+    },
+    descrption: ({ trigger, target }) => `${trigger}, ${target} is a dummy state.`,
+    title: "Dummy",
+    status: "neutral",
+    src: "",
+    action: DummyStateAction,
+    options: {
+      stackable: true,
+      stackableStrategy: "max",
+    },
   },
   heal: {
     min: 0,
@@ -141,7 +211,9 @@ export const CardStatesData = {
     status: "buff",
     src: "massacre.png",
     action: MassacreStateAction,
-    options: {},
+    options: {
+      stackable: true,
+    },
   },
   bleeding: {
     min: 0,
@@ -160,6 +232,79 @@ export const CardStatesData = {
     options: {
       stackable: true,
     },
+  },
+  clone: {
+    min: 1,
+    max: undefined,
+    noValue: false,
+    triggers: ["onDeath"],
+    targets: ["selfCard"],
+    computeCost: ({ value }) => {
+      return 2.5 * (value || 0);
+    },
+    descrption: ({ trigger, target }) => `${trigger}, clone ${target} on a random position. Cloning purge all states of a card, expect clone stacks.`,
+    title: "Clone",
+    status: "neutral",
+    src: "clone.png",
+    action: CloneStateAction,
+    options: {
+      stackable: true,
+    },
+  },
+  rush: {
+    min: undefined,
+    max: undefined,
+    noValue: true,
+    triggers: ["onPlacement"],
+    targets: ["allyCards"],
+    computeCost: () => {
+      return 0.2;
+    },
+    descrption: ({ trigger, target }) => `${trigger}, ${target} will attack directly the ennemy card in front of him.`,
+    title: "Rush",
+    status: "neutral",
+    src: "rush.png",
+    action: RushStateAction,
+    options: {},
+  },
+  bannerOfComand: {
+    min: 1,
+    max: undefined,
+    noValue: false,
+    triggers: ["onPlacement"],
+    targets: ["allyCards"],
+    computeCost: ({ value }) => {
+      return 0.04 * (value || 0);
+    },
+    status: "buff",
+    descrption: ({ trigger, target, value }) => `${trigger}, ${target} will gain ${value}% attack speed.`,
+    title: "Banner of Command",
+    src: "bannerOfCommand.png",
+    action: BannerOfCommandStateAction,
+    options: {},
+  },
+  rage: {
+    min: 1,
+    max: undefined,
+    noValue: false,
+    triggers: ["idle"],
+    targets: ["selfCard"],
+    computeCost: ({ value }) => {
+      return 0.005 * (value || 0);
+    },
+    status: "buff",
+    descrption: ({ target, value }) => `${target} will gain ${value}% attack speed for 5s.`,
+    title: "Rage",
+    src: "rage.png",
+    action: () => {},
+    options: {
+      decay: (1000 / FRAME_TIME) * 5,
+      stackable: true,
+      stackableStrategy: "max",
+      onAdded: onAddedRage,
+      onRemoved: onRemovedRage,
+      onChangeValue: onChangeValueRage,
+    }
   }
 } satisfies Record<string, CardStateDataInterface>;
 

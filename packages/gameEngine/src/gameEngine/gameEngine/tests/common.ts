@@ -28,7 +28,7 @@ export const baseCard: CardType = {
 
 export const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common" }));
 
-export function initTest({ gameData, sideEffectOnEvent, skipStartGame }: {
+export function initTest({ gameData, sideEffectOnEvent, skipStartGame, log }: {
 	gameData?: Partial<GameStateObjectConstructor>,
 	sideEffectOnEvent?: ({ state, clock, event }: {
 		state: GameStateObject;
@@ -36,6 +36,7 @@ export function initTest({ gameData, sideEffectOnEvent, skipStartGame }: {
 		event: EventType;
 	}) => void,
 	skipStartGame?: boolean,
+	log?: boolean
 }) {
 	const state = new GameStateObject({
 		playerDeck: gameData?.playerDeck ?? deck,
@@ -45,6 +46,7 @@ export function initTest({ gameData, sideEffectOnEvent, skipStartGame }: {
 	});
 	const clock = Clock<EventType>(
 		(event, clock) => {
+			log && console.log(clock.getImmutableInternalState().currentFrame, event);
 			computeNextFrameState(state, event, clock);
 			sideEffectOnEvent?.({ state, clock, event });
 		}
@@ -57,8 +59,10 @@ export function initTest({ gameData, sideEffectOnEvent, skipStartGame }: {
 
 export function drawPlaceCard(clock: ClockReturn<EventType>, isPlayer: boolean, position: number) {
 	clock.triggerEvent({ type: "drawCard", isPlayer: isPlayer, handPosition: 0 });
-	clock.triggerEvent({ type: "placeCard", isPlayer: isPlayer, position: position, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: isPlayer, position: position, cardInHandPosition: 0 });
 }
+
+export const dummyStateTest: CardState = { type: "dummy", value: 2, trigger: "onAttack", target: "selfCard" };
 
 export const multiAttackState: CardState = {
 	type: "multiAttack",
@@ -95,6 +99,27 @@ export const massacreStateTest: CardState = {
 	target: "directEnnemyCard",
 };
 
+export const cloneStateTest: CardState = {
+	type: "clone",
+	value: 2,
+	trigger: "onDeath",
+	target: "selfCard",
+};
+
+export const rageStateTest: CardState = {
+	type: "rage",
+	value: 50,
+	trigger: "idle",
+	target: "selfCard",
+};
+
+export const bannerOfComandStateTest: CardState = {
+	type: "bannerOfComand",
+	value: 50,
+	trigger: "onPlacement",
+	target: "allyCards",
+};
+
 export function triggerDirectAttack(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,
@@ -104,8 +129,6 @@ export function triggerDirectAttack(
 ) {
 	clock.triggerEvent({
 		type: "cardAttacking",
-		isPlayer,
-		cardPosition,
 		instanceId: state.getCard(isPlayer, cardPosition)!.instanceId,
 		cardIniator: state.getCard(isPlayer, cardPosition)!,
 	});
@@ -116,27 +139,22 @@ export function triggerDirectAttack(
 
 export function triggerHealCard(
 	clock: ClockReturn<EventType>,
-	isPlayerCard: boolean,
-	cardPosition: number,
+	instanceId: number,
 	amount: number,
 ) {
 	clock.triggerEvent({
 		type: "healCard",
-		isPlayerCard,
-		cardPosition,
 		amount,
-		cardInitiator: {
-			isPlayerCard,
-			cardPosition,
-		}
+		instanceId: instanceId,
+		cardInitiatorInstanceId: instanceId,
 	})
 }
 
 export function triggerDirectAttackResolved(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,
-	isPlayer: boolean,
-	cardPosition: number,
+	attackerInstanceId: number,
+	targetInstanceId: number,
 	damage: number,
 	notDirect?: true,
 ) {
@@ -144,22 +162,40 @@ export function triggerDirectAttackResolved(
 		type: "cardDamageResolve",
 		initiator: {
 			type: "cardDamage",
-			instanceId: getInstanceId(state, !isPlayer, cardPosition),
+			instanceId: targetInstanceId,
 			directAttack: !notDirect,
-			isPlayerCard: !isPlayer,
-			cardPosition,
 			amount: damage,
 			initiator: {
 				type: "cardAttacking",
-				isPlayer,
-				cardPosition,
-				instanceId: -1,
-				cardIniator: state.getCard(isPlayer, cardPosition)!,
+				instanceId: attackerInstanceId,
+				cardIniator: state.getCardInstance(attackerInstanceId)!,
 			},
-			cardInitiator: state.getCard(isPlayer, cardPosition)!,
+			cardInitiator: state.getCardInstance(targetInstanceId)!,
 			onDirectHitStates: [],
 		}
 	});
+}
+
+export function triggerKillCard(
+	clock: ClockReturn<EventType>,
+	instanceId: number,
+) {
+	clock.triggerEvent({
+		type: "beforeCardDestroyed",
+		initiator: {
+			type: "cardDamage",
+			instanceId: instanceId,
+			directAttack: false,
+			amount: 0,
+			initiator: {
+				type: "cardAttacking",
+				instanceId: instanceId,
+				cardIniator: {} as InGameCardType, // may need fixes later
+			},
+			cardInitiator: {} as InGameCardType, // may need fixes later
+			onDirectHitStates: [],
+		}
+	})
 }
 
 export function triggerStartEarningMana(
@@ -209,8 +245,6 @@ export function triggerDamageToPlayer(
 			damage: amount,
 			initiator: {
 				type: "cardAttacking",
-				isPlayer,
-				cardPosition: -1,
 				instanceId: -1,
 				cardIniator: {} as InGameCardType, // may need fixes later
 			}
@@ -235,4 +269,8 @@ export function findStateByType(
 
 export function getInstanceId(state: GameStateObject, isPlayer: boolean, cardPosition: number) {
 	return state.getCard(isPlayer, cardPosition)!.instanceId;
+}
+
+export function triggerChangeAttackSpeed(clock: ClockReturn<EventType>, instanceId: number, percentage: number) {
+	clock.triggerEvent({ type: "changeAttackSpeed", instanceId, changePercent: percentage });
 }

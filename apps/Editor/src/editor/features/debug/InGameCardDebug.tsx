@@ -3,11 +3,14 @@ import { Button, GameCard, useOnMount, useRunGameInstance } from "@repo/ui";
 import {
   bleedingStateTest,
   ClockReturn,
+  cloneStateTest,
   drawPlaceCard,
   EventType,
   massacreStateTest,
   multiAttackState,
+  rageStateTest,
   riposteStateTest,
+  triggerChangeAttackSpeed,
   triggerDirectAttackResolved,
   triggerHealCard,
 } from "game_engine";
@@ -15,8 +18,8 @@ import DebugPanelLayout from "./DebugPanelLayout";
 import { useDummyCard } from "./useDummyCard";
 
 function defaultActions(clock?: ClockReturn<EventType>) {
-	if (!clock) return;
-	drawPlaceCard(clock, true, 0);
+  if (!clock) return;
+  drawPlaceCard(clock, true, 0);
 }
 
 export default function InGameCardDebug() {
@@ -31,7 +34,7 @@ export default function InGameCardDebug() {
 
   useOnMount(() => {
     defaultActions(clock);
-  })
+  });
 
   function addState(stateArg: CardState) {
     const instanceId = state?.getCard(true, 0)?.instanceId;
@@ -39,8 +42,6 @@ export default function InGameCardDebug() {
     clock?.triggerEvent({
       type: "addState",
       instanceId,
-      isPlayerCard: true,
-      position: 0,
       state: stateArg,
     });
   }
@@ -49,10 +50,8 @@ export default function InGameCardDebug() {
     const instanceId = state?.getCard(true, 0)?.instanceId;
     if (instanceId === undefined) return;
     clock?.triggerEvent({
-      type: "removeState",
+      type: "beforeRemoveState",
       instanceId,
-      isPlayerCard: true,
-      position: 0,
       stateType,
     });
   }
@@ -63,21 +62,27 @@ export default function InGameCardDebug() {
     clock?.triggerEvent({
       type: "decreaseStateValue",
       instanceId,
-      isPlayerCard: true,
-      position: 0,
       stateType,
       decreaseBy: consumeState,
     });
   }
 
   function dealDamage(amount: number) {
-    if (!clock || !state) return;
-    triggerDirectAttackResolved(clock, state, false, 0, amount);
+    const instanceId = state?.getCard(true, 0)?.instanceId;
+    if (!clock || !state || instanceId === undefined) return;
+    triggerDirectAttackResolved(clock, state, instanceId, instanceId, amount);
   }
 
   function healCard(amount: number) {
-    if (!clock || !state) return;
-    triggerHealCard(clock, true, 0, amount);
+    const instanceId = state?.getCard(true, 0)?.instanceId;
+    if (!clock || !state || instanceId === undefined) return;
+    triggerHealCard(clock, instanceId, amount);
+  }
+
+  function changeAs(amount: number) {
+    const instanceId = state?.getCard(true, 0)?.instanceId;
+    if (instanceId === undefined) return;
+    triggerChangeAttackSpeed(clock, instanceId, amount);
   }
 
   function addRemoveState(state: CardState) {
@@ -85,7 +90,7 @@ export default function InGameCardDebug() {
     return (
       <>
         <Button action={() => addState(state)} full>
-          Add {state.type}
+          Add {state.type} {state.value !== null && `(${state.value})`}
         </Button>
         <Button action={() => removeState(state.type)} full rarity="common">
           Remove {state.type}
@@ -117,6 +122,8 @@ export default function InGameCardDebug() {
             <Button action={() => dealDamage(10)}>Deal damage</Button>
             <Button action={() => dealDamage(9999)}>Kill card</Button>
             <Button action={() => healCard(10)}>Heal card</Button>
+            <Button action={() => changeAs(10)}>Increase AS</Button>
+            <Button action={() => changeAs(-10)}>Decrease AS</Button>
           </div>
           <p className="text-2xl font-semibold">States</p>
           <div className="grid grid-cols-3 gap-4">
@@ -124,6 +131,9 @@ export default function InGameCardDebug() {
             {addRemoveState(multiAttackState)}
             {addRemoveState(riposteStateTest)}
             {addRemoveState(massacreStateTest)}
+            {addRemoveState(cloneStateTest)}
+            {addRemoveState({ ...rageStateTest, value: 22 } as CardState)}
+            {addRemoveState({ ...rageStateTest, value: 250 } as CardState)}
           </div>
         </DebugPanelLayout>
       </div>
