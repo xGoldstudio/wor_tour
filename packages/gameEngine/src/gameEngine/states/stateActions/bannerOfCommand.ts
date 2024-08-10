@@ -1,13 +1,11 @@
 import { StateAction } from "../CardStatesData";
+import onAllyCardsTarget from "../utils/onAllyCardsTarget";
+import onPlacementTrigger from "../utils/onPlacementTrigger";
 
 const BannerOfCommandStateAction: StateAction = ({ value, clock, event, gameState }) => {
-	const initiator = event.initiator;
-	if (initiator.type !== "afterPlaceCard" || value === null) {
-		return;
-	}
-	// select all cards in the board including this one
-	gameState.getBoardOfCard(initiator.instanceId)?.forEach((card) => {
-		if (!card) return;
+	const initiator = onPlacementTrigger(event);
+	if (value === null) return;
+	onAllyCardsTarget({ gameState, instanceId: initiator.instanceId })((card) => {
 		clock.triggerEvent({
 			type: "addState",
 			instanceId: card.instanceId,
@@ -17,7 +15,7 @@ const BannerOfCommandStateAction: StateAction = ({ value, clock, event, gameStat
 				target: "selfCard",
 				value: value,
 			},
-		})
+		});
 	});
 };
 
