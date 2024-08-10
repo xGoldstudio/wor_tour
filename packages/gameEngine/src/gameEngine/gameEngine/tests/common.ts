@@ -113,6 +113,13 @@ export const rageStateTest: CardState = {
 	target: "selfCard",
 };
 
+export const bannerOfComandStateTest: CardState = {
+	type: "bannerOfComand",
+	value: 50,
+	trigger: "onPlacement",
+	target: "allyCards",
+};
+
 export function triggerDirectAttack(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,

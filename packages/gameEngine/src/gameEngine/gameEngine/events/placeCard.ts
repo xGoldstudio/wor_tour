@@ -7,6 +7,7 @@ export default function placeCardEvent({ event, gameState, clock }: ComputeEvent
 		states: [],
 		instanceId: gameState.getNextInstanceId(),
 	}
+	gameState.placeCardBoard(event.isPlayer, event.position, cardInGame);
 	event.card.states.forEach((state) => {
 		clock.triggerEvent({
 			type: "addState",
@@ -14,7 +15,6 @@ export default function placeCardEvent({ event, gameState, clock }: ComputeEvent
 			state,
 		});
 	});
-	gameState.placeCardBoard(event.isPlayer, event.position, cardInGame);
 	clock.triggerEvent({
 		type: "cardStartAttacking",
 		instanceId: cardInGame.instanceId,
