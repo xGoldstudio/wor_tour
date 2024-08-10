@@ -15,13 +15,8 @@ export default function normalPlaceCardEvent({ event, gameState, clock }: Comput
 	const cardInGame: PlaceCardType = {
 		id: card.id,
 		maxHp: card.hp,
-		hp: card.hp,
 		dmg: card.dmg,
-		attackSpeed: card.attackSpeed,
 		initialAttackSpeed: card.attackSpeed,
-		modifierOfAttackSpeedPercentage: 0,
-		startAttackingTick: null,
-		endAttackingTick: null,
 		rarity: card.rarity,
 		states: _.cloneDeep(card.states) || [],
 		illustration: card.illustration,
