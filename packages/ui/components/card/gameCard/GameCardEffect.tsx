@@ -64,6 +64,8 @@ export function GameCardEffect({
   }
   useConsumeEvents((event: EventType, gameState: GameStateObject) => {
     if (event.type === "addState" && event.state.type === currentState.type) {
+      const state = gameState.getStateOfCardByInstanceId(event.instanceId, event.state.type);
+      if (state) setCurrentState({ ...state });
       appearAnimation();
       return true;
     }
@@ -208,6 +210,8 @@ export function GameCardEffect({
       ).progress,
     });
   }
+
+  console.log(currentState);
 
   return (
     <div
