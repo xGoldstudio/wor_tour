@@ -302,7 +302,8 @@ export function CardEffectsElements({
         event.type === "triggerState" ||
         event.type === "removeState" ||
         event.type === "increaseStateValue" ||
-        event.type === "decreaseStateValue") &&
+        event.type === "decreaseStateValue" ||
+        event.type === "startStateDecay") &&
       event.instanceId === trackedInstanceId.current
     ) {
       if (event.type === "addState") setStatesFromGameState(state); // side effect
@@ -312,7 +313,7 @@ export function CardEffectsElements({
   };
 
   return (
-    <div className="absolute right-[4px] top-[5px] flex flex-col gap-2">
+    <div className="absolute right-[4px] top-[5px] flex flex-col gap-2 z-10">
       <div
         className="flex flex-col absolute"
         style={{ top: 0, right: inPx(6 * 0.8) }}
