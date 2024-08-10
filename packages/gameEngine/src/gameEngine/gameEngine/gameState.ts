@@ -25,6 +25,10 @@ export const MAX_MANA = 9;
 
 export const MAX_GAME_DURATION = 300;
 
+export const MAX_ATTACK_SPEED = 3;
+
+export const MIN_ATTACK_SPEED = 0.01;
+
 export class GameStateObject {
 	constructor({ playerDeck, opponentDeck, playerHp, opponentHp }: GameStateObjectConstructor) {
 		this.playerMana = 0;
@@ -292,7 +296,7 @@ export class GameStateObject {
 		}
 		const previousAttackSpeed = card.attackSpeed;
 		card.modifierOfAttackSpeedPercentage = card.modifierOfAttackSpeedPercentage + increasePercent;
-		card.attackSpeed = card.initialAttackSpeed * (1 + card.modifierOfAttackSpeedPercentage / 100);
+		card.attackSpeed = Math.min(MAX_ATTACK_SPEED, Math.max(MIN_ATTACK_SPEED, card.initialAttackSpeed * (1 + card.modifierOfAttackSpeedPercentage / 100)));
 		return previousAttackSpeed;
 	}
 	addStateDecayTimeout(instanceId: number, stateType: CardState["type"], startFrame: number, duration: number) {
