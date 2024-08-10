@@ -48,14 +48,24 @@ describe("increase as", () => {
 		expect(state.getCard(true, 0)?.endAttackingTick).toBe(275);
 	});
 
-	test("decrease as by 50%", () => {
+	test("increase again by 20%", () => {
+		triggerChangeAttackSpeed(clock, instanceId, 20);
+		clock.nextTick();
+		expect(state.getCard(true, 0)?.attackSpeed).toBe(2.2);
+		expect(state.getCard(true, 0)?.startAttackingTick).toBe(226);
+		expect(state.getCard(true, 0)?.endAttackingTick).toBe(271);
+	});
+
+	test("decrease as by 120%", () => { // = back to normal
 		for (let i = 0; i < 25; i++) {
 			clock.nextTick();
 		} // go to 50% (250)
-		triggerChangeAttackSpeed(clock, instanceId, -50); // reduce by 50%
+		triggerChangeAttackSpeed(clock, instanceId, -120); // reduce by 50%
 		clock.nextTick();
+		const card = state.getCard(true, 0);
+		expect(card?.attackSpeed).toBe(card?.initialAttackSpeed);
 		// attack is reduced by 50%
-		expect(state.getCard(true, 0)?.startAttackingTick).toBe(199); // due to rounding
-		expect(state.getCard(true, 0)?.endAttackingTick).toBe(299);
+		expect(card?.startAttackingTick).toBe(195); // due to rounding
+		expect(card?.endAttackingTick).toBe(295);
 	});
 });
