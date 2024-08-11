@@ -108,7 +108,7 @@ export default function AsAnimation({ trackedInstanceId }: AsAnimationProps) {
       loop: true,
       computeStyle: animationTimeline(duration).add(
         element,
-        { rotate: 0, opacity: 100 },
+        { rotate: 0 },
         [{ values: { rotate: 360 } }]
       ).progress,
     });
@@ -136,7 +136,7 @@ export default function AsAnimation({ trackedInstanceId }: AsAnimationProps) {
     >
       <div className="w-[200%] h-[200%] top-1/2 left-1/2 opacity-100 absolute transform -translate-x-1/2 -translate-y-1/2">
         <div
-          className="w-full h-full fire hidden opacity-0 absolute"
+          className="w-full h-full fire hidden absolute"
           style={{
             backgroundImage: getImageUrlCssValue(TEXTURE, "fire.avif"),
             backgroundPosition: "center",
