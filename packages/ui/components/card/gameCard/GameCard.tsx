@@ -11,22 +11,25 @@ import {
   CardState,
   numberWithCommas,
   animationTimeline,
-  inPx
+  inPx,
 } from "@repo/lib";
 import {
   CardDamagResolveEvent,
   CardDestroyedEvent,
-  CardStartAttackingEvent, EventType,
+  CardStartAttackingEvent,
+  ChangeAttackSpeedEvent,
+  EventType,
   GameOverEvent,
   GameStateObject,
   HealCardEvent,
   InGameCardType,
-  PlaceCardEvent
+  PlaceCardEvent,
 } from "game_engine";
 import useGameEventListener from "../useGameEventListener";
 import { GameCardEffect } from "./GameCardEffect";
 import { CaptureEvents } from "../caputeEvents/CaptureEvents";
-import AsAnimation from "./asAnimation/AsAnimation";
+import useGameCardRingAnimation from "./gameCardRing/useGameCardRingAnimation";
+import GameCardRing from "./gameCardRing/GameCardRing";
 
 function getTranslateY(element: HTMLElement) {
   const style = window.getComputedStyle(element);
@@ -139,7 +142,8 @@ function GameCard({
         trackedInstanceId.current = card.instanceId;
       }
     },
-    filter: (event) => event.position === position && event.isPlayer === isPlayerCard,
+    filter: (event) =>
+      event.position === position && event.isPlayer === isPlayerCard,
   });
   function cardDestroyed() {
     if (!cardRef.current) {
@@ -178,8 +182,7 @@ function GameCard({
   useGameEventListener<GameOverEvent>({
     type: "gameOver",
     action: (event, state) =>
-      event.winner ===
-        (isPlayerCard ? "opponent" : "player") &&
+      event.winner === (isPlayerCard ? "opponent" : "player") &&
       state.getCard(isPlayerCard, position) &&
       cardDestroyed(),
   });
@@ -233,9 +236,40 @@ function GameCard({
     );
   }
 
+  const {
+    ref: decreaseAsRingRef,
+    activate: activateDecreaseRing,
+    deactivate: deactivateDecreaseRing,
+  } = useGameCardRingAnimation({ trackedInstanceId, rotationSpeed: 0.5 });
+  const {
+    ref: increaseAsRingRef,
+    activate: activateIncreaseRing,
+    deactivate: deactivateIncreaseRing,
+  } = useGameCardRingAnimation({ trackedInstanceId, rotationSpeed: 1 });
+
+  useGameEventListener<ChangeAttackSpeedEvent>({
+    type: "changeAttackSpeed",
+    action: (event, state) => {
+      const card = state.getCardInstance(event.instanceId);
+      if (!card) return;
+      if (card.attackSpeed > card.initialAttackSpeed) {
+        activateIncreaseRing();
+      } else {
+        deactivateIncreaseRing();
+      }
+      if (card.attackSpeed < card.initialAttackSpeed) {
+        activateDecreaseRing();
+      } else {
+        deactivateDecreaseRing();
+      }
+    },
+    filter: (e) => e.instanceId === trackedInstanceId.current,
+  });
+
   return (
     <div className={cn(isShown ? "block" : "hidden")} ref={cardRef}>
-      <AsAnimation trackedInstanceId={trackedInstanceId} />
+      <GameCardRing filter="hue-rotate(180deg)" ringRef={decreaseAsRingRef} />
+      <GameCardRing ringRef={increaseAsRingRef} />
       <div className="cardHeal rounded-sm z-10 absolute top-0 w-full h-full bg-gradient-to-b  from-[#2105ad] via-[#4b429d] via-[37%] to-[#2105ad] opacity-0 origin-top" />
       <div className="cardDamage rounded-sm z-10 absolute top-0 w-full h-full bg-gradient-to-b  from-[#FF0000] via-[#ff6e6e] via-[37%] to-[#FF0000] opacity-0 origin-top" />
       <GameCardDesign

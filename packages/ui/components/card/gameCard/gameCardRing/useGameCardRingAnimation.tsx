@@ -1,19 +1,24 @@
-import { animationTimeline, getImageUrlCssValue, TEXTURE } from "@repo/lib";
+import React from "react";
 import {
+  useGameEventListener,
   useSyncGameAnimation,
   useSyncTimelineAnimation,
-} from "../../useGameSyncAnimation";
-import useGameEventListener from "../../useGameEventListener";
-import { BeforeCardDestroyedEvent, ChangeAttackSpeedEvent } from "game_engine";
+} from "@repo/ui";
+import { useMachine } from "@xstate/react";
 import { useRef } from "react";
 import { asAnimationMachine } from "./asAnimationMachine";
-import { useMachine } from "@xstate/react";
+import { BeforeCardDestroyedEvent } from "game_engine";
+import { animationTimeline } from "@repo/lib";
 
-interface AsAnimationProps {
+interface UseGameCardRingAnimationProps {
   trackedInstanceId: React.MutableRefObject<number | null>;
+  rotationSpeed: number;
 }
 
-export default function AsAnimation({ trackedInstanceId }: AsAnimationProps) {
+export default function useGameCardRingAnimation({
+  rotationSpeed,
+  trackedInstanceId,
+}: UseGameCardRingAnimationProps) {
   const ref = useRef<HTMLDivElement>(null);
   const {
     triggerAnimation: triggerAsAnimation,
@@ -33,7 +38,7 @@ export default function AsAnimation({ trackedInstanceId }: AsAnimationProps) {
           stopAsHigherAnimation();
         },
         onVisible: () => {
-          const element = ref.current?.querySelector<HTMLElement>(".fire");
+          const element = ref.current?.querySelector<HTMLElement>(".ring");
           if (!element) {
             return;
           }
@@ -41,7 +46,7 @@ export default function AsAnimation({ trackedInstanceId }: AsAnimationProps) {
         },
         onInvisible: () => {
           removeAsAnimation();
-          const element = ref.current?.querySelector<HTMLElement>(".fire");
+          const element = ref.current?.querySelector<HTMLElement>(".ring");
           if (!element) {
             return;
           }
@@ -51,20 +56,6 @@ export default function AsAnimation({ trackedInstanceId }: AsAnimationProps) {
     })
   );
 
-  useGameEventListener<ChangeAttackSpeedEvent>({
-    type: "changeAttackSpeed",
-    action: (event, state) => {
-      const card = state.getCardInstance(event.instanceId);
-      if (!card) return;
-      if (card.attackSpeed > card.initialAttackSpeed) {
-        send({ type: "asPositiv" });
-      } else {
-        send({ type: "asNegativOrNormal" });
-      }
-    },
-    filter: (e) => e.instanceId === trackedInstanceId.current,
-  });
-
   useGameEventListener<BeforeCardDestroyedEvent>({
     type: "beforeCardDestroyed",
     action: () => {
@@ -73,10 +64,10 @@ export default function AsAnimation({ trackedInstanceId }: AsAnimationProps) {
     filter: (e) => e.initiator.instanceId === trackedInstanceId.current,
   });
 
-	const AS_ANIMATION_KEY = "asAnimation";
+  const AS_ANIMATION_KEY = "asAnimation";
 
   function stopAsHigherAnimation() {
-    const element = ref.current?.querySelector<HTMLElement>(".fire");
+    const element = ref.current?.querySelector<HTMLElement>(".ring");
     if (!element) {
       return;
     }
@@ -89,7 +80,7 @@ export default function AsAnimation({ trackedInstanceId }: AsAnimationProps) {
           opacity: 100,
         },
         [{ values: { opacity: 0 }, ease: [0, 1, 1, 1] }],
-				{ key: AS_ANIMATION_KEY },
+        { key: AS_ANIMATION_KEY }
       ),
       onComplete: () => {
         send({ type: "animationEnd" });
@@ -98,19 +89,17 @@ export default function AsAnimation({ trackedInstanceId }: AsAnimationProps) {
   }
 
   function startAsHigherAnimation() {
-    const element = ref.current?.querySelector<HTMLElement>(".fire");
+    const element = ref.current?.querySelector<HTMLElement>(".ring");
     if (!element) {
       return;
     }
-    const duration = 1000;
+    const duration = 1000 / rotationSpeed;
     triggerAsAnimation({
       duration: duration,
       loop: true,
-      computeStyle: animationTimeline(duration).add(
-        element,
-        { rotate: 0 },
-        [{ values: { rotate: 360 } }]
-      ).progress,
+      computeStyle: animationTimeline(duration).add(element, { rotate: 0 }, [
+        { values: { rotate: 360 } },
+      ]).progress,
     });
     triggerAsOpacityAnimation({
       replace: true,
@@ -121,7 +110,7 @@ export default function AsAnimation({ trackedInstanceId }: AsAnimationProps) {
           opacity: 0,
         },
         [{ values: { opacity: 100 } }],
-				{ key: AS_ANIMATION_KEY },
+        { key: AS_ANIMATION_KEY }
       ),
       onComplete: () => {
         send({ type: "animationEnd" });
@@ -129,21 +118,12 @@ export default function AsAnimation({ trackedInstanceId }: AsAnimationProps) {
     });
   }
 
-  return (
-    <div
-      className="w-[106%] h-[106%] absolute -top-[3%] -left-[3%] origin-top overflow-hidden rounded-md"
-      ref={ref}
-    >
-      <div className="w-[200%] h-[200%] top-1/2 left-1/2 opacity-100 absolute transform -translate-x-1/2 -translate-y-1/2">
-        <div
-          className="w-full h-full fire hidden absolute"
-          style={{
-            backgroundImage: getImageUrlCssValue(TEXTURE, "fire.avif"),
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-          }}
-        />
-      </div>
-    </div>
-  );
+  const activate = () => send({ type: "asPositiv" });
+  const deactivate = () => send({ type: "asNegativOrNormal" });
+
+  return {
+    ref,
+    activate,
+    deactivate,
+  };
 }
