@@ -99,6 +99,7 @@ interface TriggerAnimationProps {
   queueAnimation?: boolean;
   onEnd?: () => void;
   onComplete?: () => void; // same as on end, but require the animation to fully run to call it
+  loop?: boolean;
 }
 
 export function useSyncGameAnimation() {
@@ -113,6 +114,7 @@ export function useSyncGameAnimation() {
     queueAnimation,
     onEnd,
     onComplete,
+    loop,
   }: TriggerAnimationProps) {
     if (removeListener.current) {
       if (replace) {
@@ -146,6 +148,11 @@ export function useSyncGameAnimation() {
         const referenceFrame = firstFrame - offset;
         computeStyle(frame - referenceFrame);
         if (frame - referenceFrame > duration) {
+          if (loop) {
+            firstFrame = null;
+            offset = 0;
+            return;
+          }
           onComplete?.();
           removeListener.current?.();
           consumeQueue();
@@ -179,6 +186,7 @@ export function useSyncGameAnimation() {
   return {
     triggerAnimation,
     removeAnimation,
+    getIsRunning: () => removeListener.current !== null,
   };
 }
 
