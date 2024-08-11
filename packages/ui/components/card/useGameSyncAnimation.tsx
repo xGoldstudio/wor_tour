@@ -190,6 +190,28 @@ export function useSyncGameAnimation() {
   };
 }
 
+// same as useSyncGameAnimation but store the inner timeline
+export function useSyncTimelineAnimation() {
+  const animation = useSyncGameAnimation();
+  const currentTimeline = useRef<null | AnimationTimeline>(null);
+
+  return {
+    ...animation,
+    triggerAnimation: (props: Omit<TriggerAnimationProps, "computeStyle"> & { timeline: AnimationTimeline }) => {
+      currentTimeline.current = props.timeline;
+      return animation.triggerAnimation({
+        ...props,
+        computeStyle: props.timeline.progress,
+        onComplete: () => {
+          currentTimeline.current = null;
+          props.onComplete?.();
+        },
+      });
+    },
+    timelineRef: currentTimeline,
+  }
+}
+
 function useGameAnimation({
   getProgress,
   tl,

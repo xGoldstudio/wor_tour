@@ -4,10 +4,10 @@ let gameEventListeners = initGameEventListeners();
 
 export type TriggerEventType = (event: EventType) => void;
 
-export type GameEventListenerFunction = (
-  e: EventType,
+export type GameEventListenerFunction<E extends EventType = EventType> = (
+  e: E,
   data: GameStateObject,
-  triggerEvent: (event: EventType) => void,
+  triggerEvent: (event: E) => void,
   clock: ClockReturn<EventType>, 
 ) => void;
 
@@ -15,21 +15,22 @@ function initGameEventListeners() {
   return new Map<EventType["type"] | null, GameEventListenerFunction[]>();
 }
 
-export function addGameEventListener(
-  type: EventType["type"] | null, // null is a wildcard
-  action: GameEventListenerFunction,
-  filter?: (event: EventType, state: GameStateObject) => boolean // filter allow to listen only to specific event
+export function addGameEventListener<E extends EventType>(
+  type: E["type"] | null, // null is a wildcard
+  action: GameEventListenerFunction<E>,
+  filter?: (event: E, state: GameStateObject) => boolean // filter allow to listen only to specific event
 ) {
   let existingEvents = gameEventListeners.get(type);
-  const actionComputed: GameEventListenerFunction =
+  const actionComputed: GameEventListenerFunction<E> =
     filter === undefined
       ? action
-      : (e, data, triggerEvent, clock) => filter(e, data) && action(e, data, triggerEvent, clock);
+      : (e, data, triggerEvent, clock) => filter(e as E, data) && action(e as E, data, triggerEvent, clock);
+  const unspecialisedActionComputed = actionComputed as unknown as GameEventListenerFunction;
   existingEvents = existingEvents
-    ? [...existingEvents, actionComputed]
-    : [actionComputed];
+    ? [...existingEvents, unspecialisedActionComputed]
+    : [unspecialisedActionComputed];
   gameEventListeners.set(type, existingEvents);
-  return () => removeGameEventListener(type, actionComputed);
+  return () => removeGameEventListener(type, unspecialisedActionComputed);
 }
 
 export function removeGameEventListener(
