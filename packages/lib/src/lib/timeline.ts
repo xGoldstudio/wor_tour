@@ -200,7 +200,11 @@ function setValues(animation: RegisteredTimelineAnimation, values: AnimationValu
   animation.cache.lastValue = values;
   const cssValues = transformValues(values) as Record<string, string>;
   for (const key in cssValues) {
-    animation.element.style.setProperty(key, cssValues[key]);
+    const value = cssValues[key];
+    if (value === undefined) {
+      continue;
+    }
+    animation.element.style.setProperty(key, value);
   }
 }
 
@@ -212,8 +216,8 @@ function transformValues(values: AnimationValues) {
   const x = values.x !== undefined ? `translateX(${values.x}px)` : "";
   const y = values.y !== undefined ? `translateY(${values.y}px)` : "";
   return {
-    transform: `${x} ${y} ${scaleX} ${scaleY} ${scale} ${rotate}`,
-    opacity: values.opacity !== undefined ? `${values.opacity}%` : "",
+    transform: (scale || scaleX || scaleY || rotate || x || y) ? `${x} ${y} ${scaleX} ${scaleY} ${scale} ${rotate}` : undefined,
+    opacity: values.opacity !== undefined ? `${values.opacity}%` : undefined,
   };
 }
 

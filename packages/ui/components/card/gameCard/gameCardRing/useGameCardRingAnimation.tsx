@@ -1,14 +1,15 @@
 import React from "react";
 import {
   useGameEventListener,
+  useOnMount,
   useSyncGameAnimation,
   useSyncTimelineAnimation,
 } from "@repo/ui";
-import { useMachine } from "@xstate/react";
 import { useRef } from "react";
 import { asAnimationMachine } from "./asAnimationMachine";
 import { BeforeCardDestroyedEvent } from "game_engine";
 import { animationTimeline } from "@repo/lib";
+import { ActorRefFrom, createActor } from "xstate";
 
 interface UseGameCardRingAnimationProps {
   trackedInstanceId: React.MutableRefObject<number | null>;
@@ -28,37 +29,43 @@ export default function useGameCardRingAnimation({
     triggerAnimation: triggerAsOpacityAnimation,
     timelineRef: asTimelineRef,
   } = useSyncTimelineAnimation();
-  const [, send] = useMachine(
-    asAnimationMachine.provide({
-      actions: {
-        onAppear: () => {
-          startAsHigherAnimation();
-        },
-        onDisappear: () => {
-          stopAsHigherAnimation();
-        },
-        onVisible: () => {
-          const element = ref.current?.querySelector<HTMLElement>(".ring");
-          if (!element) {
-            return;
-          }
-          element.style.display = "block";
-        },
-        onInvisible: () => {
-          removeAsAnimation();
-          const element = ref.current?.querySelector<HTMLElement>(".ring");
-          if (!element) {
-            return;
-          }
-          element.style.display = "none";
-        },
-      },
-    })
+  const machineRef = useRef<ActorRefFrom<typeof asAnimationMachine> | null>(
+    null,
   );
+
+  useOnMount(() => {
+    machineRef.current = createActor(
+      asAnimationMachine.provide({
+        actions: {
+          onAppear: () => {
+            startAsHigherAnimation();
+          },
+          onDisappear: () => {
+            stopAsHigherAnimation();
+          },
+          onVisible: () => {
+            const element = ref.current;
+            if (!element) {
+              return;
+            }
+            element.style.display = "block";
+          },
+          onInvisible: () => {
+            removeAsAnimation();
+            const element = ref.current;
+            if (!element) {
+              return;
+            }
+            element.style.display = "none";
+          },
+        },
+      })
+    ).start();
+  });
 
   useGameEventListener<BeforeCardDestroyedEvent>({
     type: "beforeCardDestroyed",
-    action: () => send({ type: "death" }),
+    action: () => machineRef.current?.send({ type: "death" }),
     filter: (e) => e.instanceId === trackedInstanceId.current,
   });
 
@@ -81,7 +88,7 @@ export default function useGameCardRingAnimation({
         { key: AS_ANIMATION_KEY }
       ),
       onComplete: () => {
-        send({ type: "animationEnd" });
+        machineRef.current?.send({ type: "animationEnd" });
       },
     });
   }
@@ -111,13 +118,15 @@ export default function useGameCardRingAnimation({
         { key: AS_ANIMATION_KEY }
       ),
       onComplete: () => {
-        send({ type: "animationEnd" });
+        machineRef.current?.send({ type: "animationEnd" });
       },
     });
   }
 
-  const activate = () => send({ type: "asPositiv" });
-  const deactivate = () => send({ type: "asNegativOrNormal" });
+  const activate = () => {
+    machineRef.current?.send({ type: "asPositiv" });
+  }
+  const deactivate = () => machineRef.current?.send({ type: "asNegativOrNormal" });
 
   return {
     ref,
