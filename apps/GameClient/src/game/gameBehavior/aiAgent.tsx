@@ -1,8 +1,8 @@
 import {
-  CardDestroyedEvent,
   EventType,
   ManaIncreaseEvent,
   GameStateObject,
+  BeforeCardDestroyedEvent
 } from "game_engine";
 import * as _ from "lodash";
 import { findCard } from "../../cards/index";
@@ -38,7 +38,7 @@ export default function iaAgent() {
   }
 
   function computeMove(
-    _: EventType,
+    _: unknown,
     data: GameStateObject,
     triggerEvent: (event: EventType) => void
   ) {
@@ -68,10 +68,10 @@ export default function iaAgent() {
     computeMove,
     (event) => !(event as ManaIncreaseEvent).isPlayer
   );
-  addGameEventListener(
-    "cardDestroyed",
+  addGameEventListener<BeforeCardDestroyedEvent>(
+    "beforeCardDestroyed",
     computeMove,
-    (event, state) => !state.getIsPlayerCard((event as CardDestroyedEvent).initiator.instanceId)
+    (event, state) => !state.getIsPlayerCard(event.instanceId)
   );
 
   // addGameEventListener("startEarningMana", (_, data, triggerEvent) => {
