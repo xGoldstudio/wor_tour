@@ -14,6 +14,7 @@ import {
   inPx,
 } from "@repo/lib";
 import {
+  AfterPlaceCardEvent,
   CardDamagResolveEvent,
   CardDestroyedEvent,
   CardStartAttackingEvent,
@@ -23,7 +24,6 @@ import {
   GameStateObject,
   HealCardEvent,
   InGameCardType,
-  PlaceCardEvent,
 } from "game_engine";
 import useGameEventListener from "../useGameEventListener";
 import { GameCardEffect } from "./GameCardEffect";
@@ -130,8 +130,8 @@ function GameCard({
     },
     filter: (event) => event.instanceId === trackedInstanceId.current,
   });
-  useGameEventListener<PlaceCardEvent>({
-    type: "placeCard",
+  useGameEventListener<AfterPlaceCardEvent>({
+    type: "afterPlaceCard",
     action: (_, state) => {
       const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
         position
@@ -177,7 +177,7 @@ function GameCard({
   useGameEventListener<CardDestroyedEvent>({
     type: "cardDestroyed",
     action: cardDestroyed,
-    filter: (event) => event.initiator.instanceId === trackedInstanceId.current,
+    filter: (event) => event.instanceId === trackedInstanceId.current,
   });
   useGameEventListener<GameOverEvent>({
     type: "gameOver",
@@ -306,14 +306,14 @@ export function CardEffectsElements({
     setStates((states) => states.filter((s) => s.type !== stateType));
   }
 
-  useGameEventListener({
-    type: "placeCard",
+  useGameEventListener<AfterPlaceCardEvent>({
+    type: "afterPlaceCard",
     action: (_, state) => {
       setStatesFromGameState(state);
     },
     filter: (event) =>
-      (event as PlaceCardEvent).position === position &&
-      (event as PlaceCardEvent).isPlayer === isPlayerCard,
+      event.position === position &&
+      event.isPlayer === isPlayerCard,
   });
 
   const watcher = (event: EventType, state: GameStateObject) => {
@@ -414,8 +414,8 @@ function GameCardHpBar({
   const scope = useRef<HTMLDivElement | null>(null);
   const { triggerAnimation } = useSyncGameAnimation();
 
-  useGameEventListener({
-    type: "placeCard",
+  useGameEventListener<AfterPlaceCardEvent>({
+    type: "afterPlaceCard",
     action: (_, state) => {
       const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
         position
@@ -431,8 +431,8 @@ function GameCardHpBar({
       }
     },
     filter: (event) =>
-      (event as PlaceCardEvent).isPlayer === isPlayerCard &&
-      (event as PlaceCardEvent).position === position,
+      event.isPlayer === isPlayerCard &&
+      event.position === position,
   });
 
   useGameEventListener({

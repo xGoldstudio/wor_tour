@@ -38,7 +38,8 @@ export type EventType =
   | StateLifcycleOnAddEvent
   | StateLifcycleOnRemoveEvent
   | BeforeRemoveStateEvent
-  | StateLifcycleOnChangeValueEvent;
+  | StateLifcycleOnChangeValueEvent
+  | AfterStatePlaceCardEvent;
 
 export interface DummyEvent { // this event should be ignored
   type: "dummyEvent";
@@ -93,6 +94,14 @@ export interface PlaceCardEvent {
 
 export interface AfterPlaceCardEvent {
   type: "afterPlaceCard";
+  isPlayer: boolean;
+  position: number;
+  card: PlaceCardType;
+  isSpecialPlacement: boolean;
+}
+
+export interface AfterStatePlaceCardEvent {
+  type: "afterStatePlaceCard";
   instanceId: number;
 }
 
@@ -144,12 +153,12 @@ export interface CardDamagResolveEvent {
 
 export interface BeforeCardDestroyedEvent {
   type: "beforeCardDestroyed";
-  initiator: CardDamageEvent;
+  instanceId: number;
 }
 
 export interface CardDestroyedEvent {
   type: "cardDestroyed";
-  initiator: CardDamageEvent;
+  instanceId: number;
 }
 
 export interface GameOverEvent {

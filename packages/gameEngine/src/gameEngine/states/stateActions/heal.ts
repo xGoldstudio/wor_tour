@@ -2,7 +2,7 @@ import { StateAction } from "../CardStatesData";
 
 const HealStateAction: StateAction = ({ value, event, gameState, clock }) => {
 	const initiator = event.initiator;
-	if (initiator.type !== "afterPlaceCard" || value === null) {
+	if (initiator.type !== "afterStatePlaceCard" || value === null) {
 		return;
 	}
 	gameState.getBoardOfCard(event.instanceId)?.forEach((card) => {

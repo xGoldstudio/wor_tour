@@ -6,7 +6,7 @@ import onSelfCardTarget from "../utils/onSelfCardTarget";
 
 const CloneStateAction: StateAction = ({ clock, event, gameState }) => {
 	const initiator = onDeathTrigger(event);
-	onSelfCardTarget({ gameState, instanceId: initiator.initiator.instanceId })(({ card, isPlayerCard }) => {
+	onSelfCardTarget({ gameState, instanceId: initiator.instanceId })(({ card, isPlayerCard }) => {
 		const targetPosition = getRandomElement(
 			gameState.getBoard(isPlayerCard)
 				.filter(c => c === null || c.instanceId === card.instanceId)

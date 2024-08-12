@@ -1,8 +1,8 @@
 import {
+  AfterPlaceCardEvent,
   CardState,
   EventType,
-  GameStateObject,
-  PlaceCardEvent,
+  GameStateObject
 } from "game_engine";
 import { useSyncGameAnimation } from "../useGameSyncAnimation";
 import { useRef, useState } from "react";
@@ -40,12 +40,12 @@ export function GameCardEffect({
   function getPaddingOffset(usingStatePosition: number) {
     return usingStatePosition * size * (42 + 8) + 8 * size;
   }
-  useGameEventListener({
-    type: "placeCard",
+  useGameEventListener<AfterPlaceCardEvent>({
+    type: "afterPlaceCard",
     action: (event, gameState) => {
       const cardStateWithIndex = gameState.getStateOfCardWithIndex(
-        (event as PlaceCardEvent).isPlayer,
-        (event as PlaceCardEvent).position,
+        event.isPlayer,
+        event.position,
         state.type
       );
       if (cardStateWithIndex) {
@@ -59,8 +59,8 @@ export function GameCardEffect({
       }
     },
     filter: (event) =>
-      (event as PlaceCardEvent).position === position &&
-      (event as PlaceCardEvent).isPlayer === isPlayerCard,
+      event.position === position &&
+      event.isPlayer === isPlayerCard,
   });
   if (prevStatePosition.current !== statePosition) {
     // checking between value updated by events, and props related to cardStates react useState list

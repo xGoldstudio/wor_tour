@@ -58,10 +58,8 @@ export default function useGameCardRingAnimation({
 
   useGameEventListener<BeforeCardDestroyedEvent>({
     type: "beforeCardDestroyed",
-    action: () => {
-      send({ type: "death" });
-    },
-    filter: (e) => e.initiator.instanceId === trackedInstanceId.current,
+    action: () => send({ type: "death" }),
+    filter: (e) => e.instanceId === trackedInstanceId.current,
   });
 
   const AS_ANIMATION_KEY = "asAnimation";

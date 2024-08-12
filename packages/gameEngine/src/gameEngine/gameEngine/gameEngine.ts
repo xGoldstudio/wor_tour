@@ -1,4 +1,4 @@
-import { AfterPlaceCardEvent, BeforeRemoveStateEvent, EndStateDecayEvent, ChangeAttackSpeedEvent, NormalPlaceCardEvent, StartStateDecayEvent, StateLifcycleOnAddEvent, StateLifcycleOnChangeValueEvent, StateLifcycleOnRemoveEvent } from './../../types/eventType';
+import { AfterPlaceCardEvent, BeforeRemoveStateEvent, EndStateDecayEvent, ChangeAttackSpeedEvent, NormalPlaceCardEvent, StartStateDecayEvent, StateLifcycleOnAddEvent, StateLifcycleOnChangeValueEvent, StateLifcycleOnRemoveEvent, AfterStatePlaceCardEvent } from './../../types/eventType';
 import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, StartEarningManaEvent, SetManaIncreaseSpeed, StartGameSequence, StartGameEvent, RemoveStateEvent, TriggerStateEvent, AddStateEvent, IncreaseStateValueEvent, DecreaseStateValueEvent, EndEarningManaEvent, ShuffleDeckEvent, TimerDecreaseEvent } from '../../types/eventType';
 import startEarningManaEvent from "./events/startEarningMana";
 import manaIncreaseEvent from './events/manaIncrease';
@@ -37,6 +37,7 @@ import stateLifecycleOnAdd from './events/stateLifecycleOnAdd';
 import stateLifecycleOnRemove from './events/stateLifecycleOnRemove';
 import beforeRemoveStateEvent from './events/beforeRemoveState';
 import stateLifecycleOnChangeValue from './events/stateLifecycleOnChangeValue';
+import afterStatePlaceCard from './events/afterStatePlaceCard';
 
 export const FRAME_TIME = 10;
 
@@ -82,6 +83,7 @@ type EventTypeMap = {
 	stateLifecycleOnRemove: StateLifcycleOnRemoveEvent;
 	beforeRemoveState: BeforeRemoveStateEvent;
 	stateLifecycleOnChangeValue: StateLifcycleOnChangeValueEvent;
+	afterStatePlaceCard: AfterStatePlaceCardEvent;
 };
 
 type EventHandlers = {
@@ -124,6 +126,7 @@ const EventsCompute: EventHandlers = {
 	stateLifecycleOnRemove: stateLifecycleOnRemove,
 	beforeRemoveState: beforeRemoveStateEvent,
 	stateLifecycleOnChangeValue: stateLifecycleOnChangeValue,
+	afterStatePlaceCard: afterStatePlaceCard,
 }
 
 // used in front and back and can be debugged easily (not pure mutate the state)
