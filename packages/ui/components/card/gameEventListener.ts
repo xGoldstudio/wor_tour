@@ -7,7 +7,7 @@ export type TriggerEventType = (event: EventType) => void;
 export type GameEventListenerFunction<E extends EventType = EventType> = (
   e: E,
   data: GameStateObject,
-  triggerEvent: (event: E) => void,
+  triggerEvent: (event: EventType) => void,
   clock: ClockReturn<EventType>, 
 ) => void;
 
