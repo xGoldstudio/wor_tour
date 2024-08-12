@@ -14,19 +14,22 @@ import {
   inPx,
 } from "@repo/lib";
 import {
+  AfterPlaceCardEvent,
   CardDamagResolveEvent,
   CardDestroyedEvent,
   CardStartAttackingEvent,
+  ChangeAttackSpeedEvent,
   EventType,
   GameOverEvent,
   GameStateObject,
   HealCardEvent,
   InGameCardType,
-  PlaceCardEvent,
 } from "game_engine";
 import useGameEventListener from "../useGameEventListener";
 import { GameCardEffect } from "./GameCardEffect";
 import { CaptureEvents } from "../caputeEvents/CaptureEvents";
+import useGameCardRingAnimation from "./gameCardRing/useGameCardRingAnimation";
+import GameCardRing from "./gameCardRing/GameCardRing";
 
 function getTranslateY(element: HTMLElement) {
   const style = window.getComputedStyle(element);
@@ -79,13 +82,13 @@ function GameCard({
     removeHealAnimation();
   }
   const trackedInstanceId = useRef<number | null>(null);
-  useGameEventListener({
+  useGameEventListener<CardStartAttackingEvent>({
     type: "cardStartAttacking",
-    action: (event, state, _, clock) => {
+    action: (_, state, __, clock) => {
       const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
         position
       ];
-      if (card && cardRef.current && event.type === "cardStartAttacking") {
+      if (card && cardRef.current) {
         const animationDuration =
           card.endAttackingTick! - card.startAttackingTick! - 1;
         cardRef.current.style.display = "block";
@@ -125,13 +128,10 @@ function GameCard({
         );
       }
     },
-    filter: (e) => {
-      const event = e as CardStartAttackingEvent;
-      return event.instanceId === trackedInstanceId.current;
-    },
+    filter: (event) => event.instanceId === trackedInstanceId.current,
   });
-  useGameEventListener({
-    type: "placeCard",
+  useGameEventListener<AfterPlaceCardEvent>({
+    type: "afterPlaceCard",
     action: (_, state) => {
       const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
         position
@@ -142,10 +142,8 @@ function GameCard({
         trackedInstanceId.current = card.instanceId;
       }
     },
-    filter: (e) => {
-      const event = e as PlaceCardEvent;
-      return event.position === position && event.isPlayer === isPlayerCard;
-    },
+    filter: (event) =>
+      event.position === position && event.isPlayer === isPlayerCard,
   });
   function cardDestroyed() {
     if (!cardRef.current) {
@@ -176,23 +174,19 @@ function GameCard({
       },
     });
   }
-  useGameEventListener({
+  useGameEventListener<CardDestroyedEvent>({
     type: "cardDestroyed",
     action: cardDestroyed,
-    filter: (e) => {
-      const event = e as CardDestroyedEvent;
-      return event.initiator.instanceId === trackedInstanceId.current;
-    },
+    filter: (event) => event.instanceId === trackedInstanceId.current,
   });
-  useGameEventListener({
+  useGameEventListener<GameOverEvent>({
     type: "gameOver",
     action: (event, state) =>
-      (event as GameOverEvent).winner ===
-        (isPlayerCard ? "opponent" : "player") &&
+      event.winner === (isPlayerCard ? "opponent" : "player") &&
       state.getCard(isPlayerCard, position) &&
       cardDestroyed(),
   });
-  useGameEventListener({
+  useGameEventListener<CardDamagResolveEvent>({
     type: "cardDamageResolve",
     action: () => {
       if (!cardRef.current) {
@@ -206,12 +200,9 @@ function GameCard({
         ),
       });
     },
-    filter: (e) => {
-      const event = e as CardDamagResolveEvent;
-      return event.initiator.instanceId === trackedInstanceId.current;
-    },
+    filter: (event) => event.initiator.instanceId === trackedInstanceId.current,
   });
-  useGameEventListener({
+  useGameEventListener<HealCardEvent>({
     type: "healCard",
     action: () => {
       if (!cardRef.current) {
@@ -225,10 +216,7 @@ function GameCard({
         ),
       });
     },
-    filter: (e) => {
-      const event = e as HealCardEvent;
-      return event.instanceId === trackedInstanceId.current;
-    },
+    filter: (event) => event.instanceId === trackedInstanceId.current,
   });
 
   function flash(element: HTMLElement | null) {
@@ -248,8 +236,40 @@ function GameCard({
     );
   }
 
+  const {
+    ref: decreaseAsRingRef,
+    activate: activateDecreaseRing,
+    deactivate: deactivateDecreaseRing,
+  } = useGameCardRingAnimation({ trackedInstanceId, rotationSpeed: 0.5 });
+  const {
+    ref: increaseAsRingRef,
+    activate: activateIncreaseRing,
+    deactivate: deactivateIncreaseRing,
+  } = useGameCardRingAnimation({ trackedInstanceId, rotationSpeed: 1 });
+
+  useGameEventListener<ChangeAttackSpeedEvent>({
+    type: "changeAttackSpeed",
+    action: (event, state) => {
+      const card = state.getCardInstance(event.instanceId);
+      if (!card) return;
+      if (card.attackSpeed > card.initialAttackSpeed) {
+        activateIncreaseRing();
+      } else {
+        deactivateIncreaseRing();
+      }
+      if (card.attackSpeed < card.initialAttackSpeed) {
+        activateDecreaseRing();
+      } else {
+        deactivateDecreaseRing();
+      }
+    },
+    filter: (e) => e.instanceId === trackedInstanceId.current,
+  });
+
   return (
     <div className={cn(isShown ? "block" : "hidden")} ref={cardRef}>
+      <GameCardRing filter="hue-rotate(180deg)" ringRef={decreaseAsRingRef} />
+      <GameCardRing ringRef={increaseAsRingRef} />
       <div className="cardHeal rounded-sm z-10 absolute top-0 w-full h-full bg-gradient-to-b  from-[#2105ad] via-[#4b429d] via-[37%] to-[#2105ad] opacity-0 origin-top" />
       <div className="cardDamage rounded-sm z-10 absolute top-0 w-full h-full bg-gradient-to-b  from-[#FF0000] via-[#ff6e6e] via-[37%] to-[#FF0000] opacity-0 origin-top" />
       <GameCardDesign
@@ -286,14 +306,14 @@ export function CardEffectsElements({
     setStates((states) => states.filter((s) => s.type !== stateType));
   }
 
-  useGameEventListener({
-    type: "placeCard",
+  useGameEventListener<AfterPlaceCardEvent>({
+    type: "afterPlaceCard",
     action: (_, state) => {
       setStatesFromGameState(state);
     },
     filter: (event) =>
-      (event as PlaceCardEvent).position === position &&
-      (event as PlaceCardEvent).isPlayer === isPlayerCard,
+      event.position === position &&
+      event.isPlayer === isPlayerCard,
   });
 
   const watcher = (event: EventType, state: GameStateObject) => {
@@ -394,8 +414,8 @@ function GameCardHpBar({
   const scope = useRef<HTMLDivElement | null>(null);
   const { triggerAnimation } = useSyncGameAnimation();
 
-  useGameEventListener({
-    type: "placeCard",
+  useGameEventListener<AfterPlaceCardEvent>({
+    type: "afterPlaceCard",
     action: (_, state) => {
       const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
         position
@@ -411,8 +431,8 @@ function GameCardHpBar({
       }
     },
     filter: (event) =>
-      (event as PlaceCardEvent).isPlayer === isPlayerCard &&
-      (event as PlaceCardEvent).position === position,
+      event.isPlayer === isPlayerCard &&
+      event.position === position,
   });
 
   useGameEventListener({

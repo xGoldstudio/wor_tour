@@ -14,23 +14,42 @@ interface Sequence {
   onStart?: () => void;
 }
 
-export interface AnimationTimeline {
-  add: (element: HTMLElement | string | null, initialValues: AnimationValues, sequences: Sequence[] | Sequence) => AnimationTimeline;
-  progress: (elapsedFrames: number) => AnimationTimeline;
+export interface AnimationTimelineAddOptions {
+  key?: string;
 }
 
-export interface AnimationSequence {
+export interface AnimationTimeline {
+  add: (
+    element: HTMLElement | string | null,
+    initialValues: AnimationValues,
+    sequences: Sequence[] | Sequence,
+    options?: AnimationTimelineAddOptions,
+  ) => AnimationTimeline;
+  progress: (elapsedFrames: number) => AnimationTimeline;
+  animations: RegisteredTimelineAnimation[];
+  getCache: (title: string) => RegisteredTimelineAnimationCache | undefined;
+}
+
+export interface RegisteredTimelineAnimationCache {  // may be used for future optimization
+  lastValue: AnimationValues;
+}
+
+export interface RegisteredTimelineAnimation {
   element: HTMLElement;
+  key?: string;
   initialValues: AnimationValues;
   sequences: Sequence[] | Sequence;
+  cache: RegisteredTimelineAnimationCache;
 }
 
 export default function animationTimeline(requiredFrames: number): AnimationTimeline {
-  const allAnimations: AnimationSequence[] = [];
+  const allAnimations: RegisteredTimelineAnimation[] = [];
 
   function add(element: HTMLElement | string | null,
     initialValues: AnimationValues,
-    sequences: Sequence[] | Sequence) {
+    sequences: Sequence[] | Sequence,
+    options?: AnimationTimelineAddOptions,
+  ) {
     if (element === null) {
       console.warn("Element is null");
       return state;
@@ -45,6 +64,10 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
       element: elt,
       initialValues,
       sequences: allSequences.map((_, i) => buildSequence(i, allSequences)),
+      cache: {
+        lastValue: { ...initialValues },
+      },
+      key: options?.key,
     });
     return state;
   }
@@ -83,20 +106,20 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
     return state;
   }
 
-  function computeAnimation(frameProgress: number, animation: AnimationSequence) {
+  function computeAnimation(frameProgress: number, animation: RegisteredTimelineAnimation) {
     if (frameProgress === 0) {
-      setValues(animation.element, transformValues(animation.initialValues));
+      setValues(animation, animation.initialValues);
       return;
     } else if (frameProgress === requiredFrames) {
-      setValues(animation.element, transformValues(Array.isArray(animation.sequences) ? animation.sequences[animation.sequences.length - 1].values : animation.sequences.values));
+      setValues(animation, Array.isArray(animation.sequences) ? animation.sequences[animation.sequences.length - 1].values : animation.sequences.values);
       return;
     }
     if (!Array.isArray(animation.sequences)) {
-      setValues(animation.element, transformValues(computeValues(
+      setValues(animation, computeValues(
         animation.initialValues,
         animation.sequences.values,
         easeOrValue(frameProgress / requiredFrames, animation.sequences.ease)
-      )));
+      ));
       return;
     }
     let prevState = animation.initialValues;
@@ -125,18 +148,25 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
         prevState = animation.initialValues;
       }
     }
-    setValues(animation.element, transformValues(
+    setValues(
+      animation,
       computeValues(
         prevState,
         state.values,
         easeOrValue(normalizedProgress, state.ease)
       ),
-    ));
+    );
+  }
+
+  function getCache(title: string) {
+    return allAnimations.find((animation) => animation.key === title)?.cache;
   }
 
   const state: AnimationTimeline = {
     progress,
     add,
+    animations: allAnimations,
+    getCache,
   }
 
   return state;
@@ -146,7 +176,7 @@ function computeValues(
   from: AnimationValues,
   to: AnimationValues,
   normalizedProgress: number
-) {
+): AnimationValues {
   const res: AnimationValues = { ...to, ...from };
   for (const key in from) {
     const typedKey = key as keyof AnimationValues;
@@ -163,12 +193,18 @@ function easeOrValue(value: number, ease?: Ease) {
   return ease ? cubicBezier(value, ease[0], ease[1], ease[2], ease[3]) : value;
 }
 
-function setValues(element: HTMLElement | null, values: { [key: string]: string }) {
-  if (!element) {
+function setValues(animation: RegisteredTimelineAnimation, values: AnimationValues) {
+  if (!animation.element) {
     return;
   }
-  for (const key in values) {
-    element.style.setProperty(key, values[key]);
+  animation.cache.lastValue = values;
+  const cssValues = transformValues(values) as Record<string, string>;
+  for (const key in cssValues) {
+    const value = cssValues[key];
+    if (value === undefined) {
+      continue;
+    }
+    animation.element.style.setProperty(key, value);
   }
 }
 
@@ -180,8 +216,8 @@ function transformValues(values: AnimationValues) {
   const x = values.x !== undefined ? `translateX(${values.x}px)` : "";
   const y = values.y !== undefined ? `translateY(${values.y}px)` : "";
   return {
-    transform: `${x} ${y} ${scaleX} ${scaleY} ${scale} ${rotate}`,
-    opacity: values.opacity !== undefined ? `${values.opacity}%` : "",
+    transform: (scale || scaleX || scaleY || rotate || x || y) ? `${x} ${y} ${scaleX} ${scaleY} ${scale} ${rotate}` : undefined,
+    opacity: values.opacity !== undefined ? `${values.opacity}%` : undefined,
   };
 }
 

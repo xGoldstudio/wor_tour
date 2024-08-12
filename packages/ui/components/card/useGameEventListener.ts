@@ -2,20 +2,20 @@ import { useEffect } from "react";
 import { GameEventListenerFunction, addGameEventListener } from "./gameEventListener";
 import { EventType } from "game_engine";
 
-interface UseGameEventListenerProps {
-	type: EventType["type"] | null,
-	action: GameEventListenerFunction,
-	filter?: (event: EventType) => boolean,
+interface UseGameEventListenerProps<E extends EventType> {
+	type: E["type"] | null,
+	action: GameEventListenerFunction<E>,
+	filter?: (event: E) => boolean,
 	deps?: React.DependencyList;
 }
 
-export default function useGameEventListener({
+export default function useGameEventListener<E extends EventType>({
 	type,
 	action,
 	filter,
 	deps,
-}: UseGameEventListenerProps) {
+}: UseGameEventListenerProps<E>) {
 	useEffect(() => {
-		return addGameEventListener(type, action, filter);
+		return addGameEventListener<E>(type, action, filter);
 	}, deps ?? []);
 }

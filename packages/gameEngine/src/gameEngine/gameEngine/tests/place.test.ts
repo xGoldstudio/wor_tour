@@ -5,6 +5,7 @@ import { GameStateObject } from "../gameState";
 import _ from "lodash";
 import { expect, test } from 'vitest';
 import { CardType } from "../../../types/Card";
+import { drawPlaceCard, initTest } from "./common";
 
 const baseCard = {
   name: "string",
@@ -75,4 +76,17 @@ test("complete placement opponent", () => {
 	expect(state.opponentBoard[0]?.id).toEqual(5);
 
 	expect(state.opponentMana).toEqual(6);
+});
+
+test("place card on another card", () => {
+	const { state, clock } = initTest({ skipStartGame: true });
+
+	drawPlaceCard(clock, true, 0);
+	clock.nextTick();
+	const prevInstanceId = state.playerBoard[0]?.instanceId;
+	drawPlaceCard(clock, true, 0);
+	clock.nextTick();
+	expect(state.playerBoard[0]?.instanceId).not.toEqual(prevInstanceId);
+	expect(clock.getLastTickEvents().find((e) => e.type === "beforeCardDestroyed")?.instanceId).toEqual(prevInstanceId);
+	clock.nextTick();
 });

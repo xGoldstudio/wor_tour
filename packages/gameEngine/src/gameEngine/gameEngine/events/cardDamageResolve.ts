@@ -28,7 +28,7 @@ export default function cardDamageResolveEvent({ gameState, clock, event }: Comp
 	if (isDead) {
 		clock.triggerEvent({
 			type: "beforeCardDestroyed",
-			initiator: event.initiator,
+			instanceId: event.initiator.instanceId,
 		});
 	}
 }

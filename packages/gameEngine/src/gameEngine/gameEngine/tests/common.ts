@@ -182,20 +182,8 @@ export function triggerKillCard(
 ) {
 	clock.triggerEvent({
 		type: "beforeCardDestroyed",
-		initiator: {
-			type: "cardDamage",
-			instanceId: instanceId,
-			directAttack: false,
-			amount: 0,
-			initiator: {
-				type: "cardAttacking",
-				instanceId: instanceId,
-				cardIniator: {} as InGameCardType, // may need fixes later
-			},
-			cardInitiator: {} as InGameCardType, // may need fixes later
-			onDirectHitStates: [],
-		}
-	})
+		instanceId: instanceId,
+	});
 }
 
 export function triggerStartEarningMana(

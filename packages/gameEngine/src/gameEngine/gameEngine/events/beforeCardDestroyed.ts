@@ -9,10 +9,10 @@ export default function beforeCardDestroyed({ gameState, event, clock }: Compute
 		trigger: "onDeath",
 		clock,
 		initiator: event,
-		instanceId: event.initiator.instanceId,
+		instanceId: event.instanceId,
 	});
 	clock.triggerEvent({
 		type: "cardDestroyed",
-		initiator: event.initiator,
+		instanceId: event.instanceId,
 	});
 }
