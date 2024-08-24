@@ -45,7 +45,7 @@ export default function cardStartAttackingEvent({ event, gameState, clock }: Com
 			const framesDone = currentFrame - usingCard.startAttackingAnimationTick;
 			const totalFrame = usingCard.endAttackingTick! - usingCard.startAttackingAnimationTick!;
 			const progress = framesDone / totalFrame;
-			const adjustedTotal = Math.round(timeRemainingBeforeAttack / (1 - progress));
+			const adjustedTotal = Math.round(timeRemainingBeforeAttack / (1 - progress)) + 1; // make the animation slightly smoother and almost always no jump or jump forward (avoiding backgaward jump wich would be more noticeable)
 			const newTarget = usingCard.endAttackingTick! - adjustedTotal;
 			gameState.startAttackAnimation(event.instanceId, newTarget);
 			clock.triggerEvent({ // elapsing the animation
