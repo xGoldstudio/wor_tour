@@ -299,6 +299,19 @@ export class GameStateObject {
 		card.attackSpeed = Math.min(MAX_ATTACK_SPEED, Math.max(MIN_ATTACK_SPEED, card.initialAttackSpeed * (1 + card.modifierOfAttackSpeedPercentage / 100)));
 		return previousAttackSpeed;
 	}
+	startAttackAnimation(instanceId: number, target: number) {
+		this.mutateCard(instanceId, card => {
+			if (!card.endAttackingTick) {
+				return;
+			}
+			card.startAttackingAnimationTick = target;
+		});
+	}
+	endAttackAnimation(instanceId: number) {
+		this.mutateCard(instanceId, card => {
+			card.startAttackingAnimationTick = null;
+		});
+	}
 	addStateDecayTimeout(instanceId: number, stateType: CardState["type"], startFrame: number, duration: number) {
 		this.trackedStateDecaying.push({
 			startFrame,
@@ -314,6 +327,13 @@ export class GameStateObject {
 		this.trackedStateDecaying = this.trackedStateDecaying.filter((t) => t.instanceId !== instanceId || t.stateType !== stateType);
 	}
 	// utils
+	mutateCard(instanceId: number, mutator: (card: InGameCardType) => void) {
+		const card = this.getCardInstance(instanceId);
+		if (!card) {
+			return;
+		}
+		mutator(card);
+	}
 	getCard(isPlayerCard: boolean, cardPosition: number) {
 		return (isPlayerCard ? this.playerBoard : this.opponentBoard)[cardPosition];
 	}

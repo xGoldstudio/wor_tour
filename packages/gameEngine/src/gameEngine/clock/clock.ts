@@ -53,6 +53,10 @@ export default function Clock<EventType>(
       console.warn("timeoutFrame must be positive");
       return;
     }
+    if (usingFrame === 0) {
+      triggerEvent(event);
+      return;
+    }
     const targetFrame = currentFrame + usingFrame;
     for (let i = 0; i < timeoutQueue.length; i++) {
       if (timeoutQueue[i].frame === targetFrame) {
