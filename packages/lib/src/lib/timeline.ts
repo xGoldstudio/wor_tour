@@ -28,10 +28,12 @@ export interface AnimationTimeline {
   progress: (elapsedFrames: number) => AnimationTimeline;
   animations: RegisteredTimelineAnimation[];
   getCache: (title: string) => RegisteredTimelineAnimationCache | undefined;
+  getLastCache: () => AnimationValues;
 }
 
 export interface RegisteredTimelineAnimationCache {  // may be used for future optimization
   lastValue: AnimationValues;
+  progress: number;
 }
 
 export interface RegisteredTimelineAnimation {
@@ -42,8 +44,13 @@ export interface RegisteredTimelineAnimation {
   cache: RegisteredTimelineAnimationCache;
 }
 
+interface LastCacheValue {
+  value: AnimationValues;
+}
+
 export default function animationTimeline(requiredFrames: number): AnimationTimeline {
   const allAnimations: RegisteredTimelineAnimation[] = [];
+  const lastCache: LastCacheValue = { value: {} };
 
   function add(element: HTMLElement | string | null,
     initialValues: AnimationValues,
@@ -66,9 +73,11 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
       sequences: allSequences.map((_, i) => buildSequence(i, allSequences)),
       cache: {
         lastValue: { ...initialValues },
+        progress: 0,
       },
       key: options?.key,
     });
+    lastCache.value = { ...lastCache.value, ...initialValues };
     return state;
   }
 
@@ -108,18 +117,27 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
 
   function computeAnimation(frameProgress: number, animation: RegisteredTimelineAnimation) {
     if (frameProgress === 0) {
-      setValues(animation, animation.initialValues);
+      setCacheAndValues(animation, 0, animation.initialValues);
       return;
     } else if (frameProgress === requiredFrames) {
-      setValues(animation, Array.isArray(animation.sequences) ? animation.sequences[animation.sequences.length - 1].values : animation.sequences.values);
+      setCacheAndValues(
+        animation,
+        1,
+        Array.isArray(animation.sequences) ? animation.sequences[animation.sequences.length - 1].values : animation.sequences.values,
+      );
       return;
     }
     if (!Array.isArray(animation.sequences)) {
-      setValues(animation, computeValues(
-        animation.initialValues,
-        animation.sequences.values,
-        easeOrValue(frameProgress / requiredFrames, animation.sequences.ease)
-      ));
+      const easePrgoress = easeOrValue(frameProgress / requiredFrames, animation.sequences.ease);
+      setCacheAndValues(
+        animation,
+        frameProgress / requiredFrames,
+        computeValues(
+          animation.initialValues,
+          animation.sequences.values,
+          easePrgoress,
+        )
+      );
       return;
     }
     let prevState = animation.initialValues;
@@ -148,18 +166,27 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
         prevState = animation.initialValues;
       }
     }
-    setValues(
-      animation,
-      computeValues(
-        prevState,
-        state.values,
-        easeOrValue(normalizedProgress, state.ease)
-      ),
-    );
+    const easedProgess = easeOrValue(normalizedProgress, state.ease);
+    setCacheAndValues(animation, frameProgress/requiredFrames, computeValues(
+      prevState,
+      state.values,
+      easedProgess
+    ));
   }
 
   function getCache(title: string) {
     return allAnimations.find((animation) => animation.key === title)?.cache;
+  }
+
+  function getLastCache() {
+    return lastCache.value;
+  }
+
+  function setCacheAndValues(animation: RegisteredTimelineAnimation, progress: number, values: AnimationValues) {
+    lastCache.value = { ...lastCache.value, ...values };
+    animation.cache.lastValue = values;
+    animation.cache.progress = progress;
+    setValues(animation, animation.cache.lastValue);
   }
 
   const state: AnimationTimeline = {
@@ -167,6 +194,7 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
     add,
     animations: allAnimations,
     getCache,
+    getLastCache,
   }
 
   return state;
@@ -197,7 +225,6 @@ function setValues(animation: RegisteredTimelineAnimation, values: AnimationValu
   if (!animation.element) {
     return;
   }
-  animation.cache.lastValue = values;
   const cssValues = transformValues(values) as Record<string, string>;
   for (const key in cssValues) {
     const value = cssValues[key];

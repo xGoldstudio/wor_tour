@@ -9,6 +9,7 @@ export default function afterPlaceCard({ event, gameState, clock }: ComputeEvent
 		attackSpeed: event.card.initialAttackSpeed,
 		startAttackingTick: null,
 		endAttackingTick: null,
+		startAttackingAnimationTick: null,
 		modifierOfAttackSpeedPercentage: 0,
 		states: [],
 		instanceId: gameState.getNextInstanceId(),

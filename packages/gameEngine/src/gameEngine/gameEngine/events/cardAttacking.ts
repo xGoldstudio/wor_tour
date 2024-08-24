@@ -36,6 +36,10 @@ export default function cardAttackingEvent({ event, gameState, clock }: ComputeE
 		// if card destroyed or replaced during attack
 		return;
 	}
+	clock.triggerEvent({
+		type: "cardEndAttackingAnimation",
+		instanceId: event.instanceId,
+	});
 	triggerStates({
 		trigger: "onAttack",
 		clock,

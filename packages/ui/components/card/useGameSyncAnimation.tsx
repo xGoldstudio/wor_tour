@@ -100,6 +100,7 @@ interface TriggerAnimationProps {
   onEnd?: () => void;
   onComplete?: () => void; // same as on end, but require the animation to fully run to call it
   loop?: boolean;
+  delay?: number;
 }
 
 export function useSyncGameAnimation() {
@@ -115,6 +116,7 @@ export function useSyncGameAnimation() {
     onEnd,
     onComplete,
     loop,
+    delay,
   }: TriggerAnimationProps) {
     if (removeListener.current) {
       if (replace) {
@@ -145,9 +147,12 @@ export function useSyncGameAnimation() {
         if (firstFrame === null) {
           firstFrame = frame;
         }
-        const referenceFrame = firstFrame - offset;
+        const referenceFrame = firstFrame - offset + (delay ?? 0);
+        if (delay && referenceFrame > frame) {
+          return;
+        }
         computeStyle(frame - referenceFrame);
-        if (frame - referenceFrame > duration) {
+        if (frame - referenceFrame > (duration)) {
           if (loop) {
             firstFrame = null;
             offset = 0;
@@ -203,12 +208,15 @@ export function useSyncTimelineAnimation() {
         ...props,
         computeStyle: props.timeline.progress,
         onComplete: () => {
-          currentTimeline.current = null;
           props.onComplete?.();
         },
       });
     },
     timelineRef: currentTimeline,
+    removeAnimation: () => {
+      currentTimeline.current = null;
+      animation.removeAnimation();
+    }
   }
 }
 

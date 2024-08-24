@@ -39,7 +39,9 @@ export type EventType =
   | StateLifcycleOnRemoveEvent
   | BeforeRemoveStateEvent
   | StateLifcycleOnChangeValueEvent
-  | AfterStatePlaceCardEvent;
+  | AfterStatePlaceCardEvent
+  | CardStartAttackingAnimationEvent
+  | CardEndAttackingAnimationEvent;
 
 export interface DummyEvent { // this event should be ignored
   type: "dummyEvent";
@@ -82,7 +84,7 @@ export interface ManaIncreaseEvent {
   value: number;
 }
 
-export type PlaceCardType = Omit<InGameCardType, "instanceId" | "modifierOfAttackSpeedPercentage" | "attackSpeed" | "startAttackingTick" | "endAttackingTick" | "hp">;
+export type PlaceCardType = Omit<InGameCardType, "instanceId" | "modifierOfAttackSpeedPercentage" | "attackSpeed" | "startAttackingTick" | "endAttackingTick" | "hp" | "startAttackingAnimationTick">;
 
 export interface PlaceCardEvent {
   type: "placeCard";
@@ -116,6 +118,18 @@ export interface CardStartAttackingEvent {
   type: "cardStartAttacking";
   instanceId: number;
   alreadyProcessing?: number;
+}
+
+export interface CardStartAttackingAnimationEvent {
+  type: "cardStartAttackingAnimation";
+  instanceId: number;
+  animationDuration: number;
+  progressFrame: number;
+}
+
+export interface CardEndAttackingAnimationEvent {
+  type: "cardEndAttackingAnimation";
+  instanceId: number;
 }
 
 export interface CardAttackingEvent {
@@ -276,6 +290,7 @@ export type InGameCardType = {
   initialAttackSpeed: number;
   modifierOfAttackSpeedPercentage: number;
   startAttackingTick: number | null;
+  startAttackingAnimationTick: number | null;
   endAttackingTick: number | null;
   rarity: CardRarity;
   states: CardState[];
