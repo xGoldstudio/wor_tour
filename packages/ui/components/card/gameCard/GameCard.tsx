@@ -1,30 +1,35 @@
-import {
-  CardBorder,
-  CardContentIllustartion, EmptyBar,
-  InnerBord,
-  useSyncGameAnimation
-} from "@repo/ui";
 import { useRef, useState } from "react";
-import {
-  CardState,
-  numberWithCommas,
-  animationTimeline,
-  inPx,
-} from "@repo/lib";
 import {
   AfterPlaceCardEvent,
   CardDamagResolveEvent,
-  CardDestroyedEvent, ChangeAttackSpeedEvent,
-  EventType, GameStateObject,
-  HealCardEvent,
+  CardDestroyedEvent, ChangeAttackSpeedEvent, HealCardEvent,
   InGameCardType
 } from "game_engine";
 import useGameEventListener from "../useGameEventListener";
-import { GameCardEffect } from "./GameCardEffect";
-import { CaptureEvents } from "../caputeEvents/CaptureEvents";
 import useGameCardRingAnimation from "./gameCardRing/useGameCardRingAnimation";
 import GameCardRing from "./gameCardRing/GameCardRing";
 import useGameCardAnimation from "./gameCardAnimation/useGameCardAnimation";
+import useGameCardFlash from "./gameCardFlash/useGameCardFlash";
+import GameCardFlash from "./gameCardFlash/gameCardFlash";
+import GameCardDesign from "./gameCardDesign/GameCardDesgin";
+
+const dummyCard: InGameCardType = {
+  id: -1,
+  instanceId: -1,
+  maxHp: 0,
+  hp: 0,
+  dmg: 1,
+  attackSpeed: 1,
+  initialAttackSpeed: 1,
+  modifierOfAttackSpeedPercentage: 0,
+  startAttackingTick: null,
+  endAttackingTick: null,
+  startAttackingAnimationTick: null,
+  rarity: "common",
+  states: [],
+  illustration: "",
+  worldIllustration: "",
+};
 
 function GameCard({
   isPlayerCard,
@@ -33,37 +38,11 @@ function GameCard({
   isPlayerCard: boolean;
   position: number;
 }) {
-  const [card, setCard] = useState<InGameCardType>({
-    id: -1,
-    instanceId: -1,
-    maxHp: 0,
-    hp: 0,
-    dmg: 1,
-    attackSpeed: 1,
-    initialAttackSpeed: 1,
-    modifierOfAttackSpeedPercentage: 0,
-    startAttackingTick: null,
-    endAttackingTick: null,
-    startAttackingAnimationTick: null,
-    rarity: "common",
-    states: [],
-    illustration: "",
-    worldIllustration: "",
-  });
+  const [card, setCard] = useState<InGameCardType>(dummyCard);
   const cardRef = useRef<HTMLDivElement>(null);
-  const {
-    triggerAnimation: triggerBloodAnimation,
-    removeAnimation: removeBloodAnimation,
-  } = useSyncGameAnimation();
-  const {
-    triggerAnimation: triggerHealAnimation,
-    removeAnimation: removeHealAnimation,
-  } = useSyncGameAnimation();
-  function clearAllAnimations() {
-    removeBloodAnimation();
-    removeHealAnimation();
-  }
   const trackedInstanceId = useRef<number | null>(null);
+  const damageFlash = useGameCardFlash();
+  const healFlash = useGameCardFlash();
   useGameCardAnimation({ cardRef, cardPosition: position, isPlayerCard, trackedInstanceId });
 
   useGameEventListener<AfterPlaceCardEvent>({
@@ -74,9 +53,10 @@ function GameCard({
       ];
       if (card) {
         setCard(card);
-        clearAllAnimations();
         trackedInstanceId.current = card.instanceId;
       }
+      damageFlash.clear();
+      healFlash.clear();
     },
     filter: (event) =>
       event.position === position && event.isPlayer === isPlayerCard,
@@ -92,53 +72,14 @@ function GameCard({
 
   useGameEventListener<CardDamagResolveEvent>({
     type: "cardDamageResolve",
-    action: () => {
-      if (!cardRef.current) {
-        return;
-      }
-      triggerBloodAnimation({
-        replace: true,
-        duration: 50,
-        computeStyle: flash(
-          cardRef.current.querySelector<HTMLElement>(".cardDamage")
-        ),
-      });
-    },
+    action: damageFlash.triggerFlash,
     filter: (event) => event.initiator.instanceId === trackedInstanceId.current,
   });
   useGameEventListener<HealCardEvent>({
     type: "healCard",
-    action: () => {
-      if (!cardRef.current) {
-        return;
-      }
-      triggerHealAnimation({
-        replace: true,
-        duration: 50,
-        computeStyle: flash(
-          cardRef.current.querySelector<HTMLElement>(".cardHeal")
-        ),
-      });
-    },
+    action: healFlash.triggerFlash,
     filter: (event) => event.instanceId === trackedInstanceId.current,
   });
-
-  function flash(element: HTMLElement | null) {
-    return (
-      animationTimeline(50)
-        // y is the current translation y of the ref
-        .add(
-          element,
-          {
-            opacity: 0,
-          },
-          [
-            { values: { opacity: 60 }, to: 20, ease: [0, 0.42, 1, 1] },
-            { values: { opacity: 0 }, ease: [0, 0.42, 1, 1] },
-          ]
-        ).progress
-    );
-  }
 
   const {
     ref: decreaseAsRingRef,
@@ -174,8 +115,8 @@ function GameCard({
     <div className="hidden opacity-0" ref={cardRef}>
       <GameCardRing filter="hue-rotate(180deg)" ringRef={decreaseAsRingRef} />
       <GameCardRing ringRef={increaseAsRingRef} />
-      <div className="cardHeal rounded-sm z-10 absolute top-0 w-full h-full bg-gradient-to-b  from-[#2105ad] via-[#4b429d] via-[37%] to-[#2105ad] opacity-0 origin-top" />
-      <div className="cardDamage rounded-sm z-10 absolute top-0 w-full h-full bg-gradient-to-b  from-[#FF0000] via-[#ff6e6e] via-[37%] to-[#FF0000] opacity-0 origin-top" />
+      <GameCardFlash colorA="#2105ad" colorB="#4b429d" flashRef={healFlash.flashRef} />
+      <GameCardFlash colorA="#FF0000" colorB="#ff6e6e" flashRef={damageFlash.flashRef} />
       <GameCardDesign
         card={card}
         size={2.5}
@@ -189,222 +130,4 @@ function GameCard({
   );
 }
 
-export function CardEffectsElements({
-  isPlayerCard,
-  position,
-  trackedInstanceId,
-}: {
-  isPlayerCard: boolean;
-  position: number;
-  trackedInstanceId: React.MutableRefObject<number | null>;
-}) {
-  const [states, setStates] = useState<CardState[]>([]);
-
-  function setStatesFromGameState(state: GameStateObject) {
-    const card = state.getCard(isPlayerCard, position);
-    if (card) {
-      setStates([...card.states]);
-    }
-  }
-  function removeState(stateType: CardState["type"]) {
-    setStates((states) => states.filter((s) => s.type !== stateType));
-  }
-
-  useGameEventListener<AfterPlaceCardEvent>({
-    type: "afterPlaceCard",
-    action: (_, state) => {
-      setStatesFromGameState(state);
-    },
-    filter: (event) =>
-      event.position === position && event.isPlayer === isPlayerCard,
-  });
-
-  const watcher = (event: EventType, state: GameStateObject) => {
-    if (
-      (event.type === "addState" ||
-        event.type === "triggerState" ||
-        event.type === "removeState" ||
-        event.type === "increaseStateValue" ||
-        event.type === "decreaseStateValue" ||
-        event.type === "startStateDecay") &&
-      event.instanceId === trackedInstanceId.current
-    ) {
-      if (event.type === "addState") setStatesFromGameState(state); // side effect
-      return true;
-    }
-    return null;
-  };
-
-  return (
-    <div className="absolute right-[4px] top-[5px] flex flex-col gap-2 z-10">
-      <div
-        className="flex flex-col absolute"
-        style={{ top: 0, right: inPx(6 * 0.8) }}
-      >
-        <CaptureEvents watcher={watcher}>
-          {states.map((state, index) => (
-            <GameCardEffect
-              state={state}
-              removeState={removeState}
-              key={state.type}
-              statePosition={index}
-              position={position}
-              isPlayerCard={isPlayerCard}
-            />
-          ))}
-        </CaptureEvents>
-      </div>
-    </div>
-  );
-}
-
 export default GameCard;
-
-interface GameCardDesign {
-  size: number;
-  children?: React.ReactNode;
-  position: number;
-  isPlayerCard: boolean;
-  card: InGameCardType;
-  trackedInstanceId: React.MutableRefObject<number | null>;
-}
-
-export function GameCardDesign({
-  size,
-  card,
-  position,
-  isPlayerCard,
-  children,
-  trackedInstanceId,
-}: GameCardDesign) {
-  return (
-    <CardBorder rarity={card.rarity} size={size}>
-      <div className="w-full h-full grid grid-rows-[auto_37px] gap-1">
-        <div className="w-full h-full grow relative">
-          <CardContentIllustartion card={card} size={size} />
-          {children}
-        </div>
-        <div className="w-full h-min">
-          <InnerBord size={size}>
-            <GameCardHpBar
-              position={position}
-              isPlayerCard={isPlayerCard}
-              trackedInstanceId={trackedInstanceId}
-            />
-          </InnerBord>
-        </div>
-        <CardEffectsElements
-          isPlayerCard={isPlayerCard}
-          position={position}
-          trackedInstanceId={trackedInstanceId}
-        />
-      </div>
-    </CardBorder>
-  );
-}
-
-function GameCardHpBar({
-  position,
-  isPlayerCard,
-  trackedInstanceId,
-}: {
-  position: number;
-  isPlayerCard: boolean;
-  trackedInstanceId: React.MutableRefObject<number | null>;
-}) {
-  const [hp, setHp] = useState(0);
-  const hpBarRef = useRef<HTMLDivElement | null>(null);
-  const scope = useRef<HTMLDivElement | null>(null);
-  const { triggerAnimation } = useSyncGameAnimation();
-
-  useGameEventListener<AfterPlaceCardEvent>({
-    type: "afterPlaceCard",
-    action: (_, state) => {
-      const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
-        position
-      ];
-      if (card === null) {
-        return;
-      }
-      setHp(card.hp);
-      const lifeBar = scope.current?.querySelector<HTMLElement>(".lifeBar");
-      if (lifeBar && hpBarRef.current) {
-        lifeBar.style.transform = `scaleX(${card.hp / card.maxHp})`;
-        hpBarRef.current.innerHTML = numberWithCommas(card.hp);
-      }
-    },
-    filter: (event) =>
-      event.isPlayer === isPlayerCard && event.position === position,
-  });
-
-  useGameEventListener({
-    type: "cardDamageResolve",
-    action: (_, state) => onHpChange(state),
-    filter: (event) =>
-      (event as CardDamagResolveEvent).initiator.instanceId ===
-      trackedInstanceId.current,
-  });
-
-  useGameEventListener({
-    type: "healCard",
-    action: (_, state) => onHpChange(state),
-    filter: (event) =>
-      (event as HealCardEvent).instanceId === trackedInstanceId.current,
-  });
-
-  function onHpChange(state: GameStateObject) {
-    const card = (isPlayerCard ? state.playerBoard : state.opponentBoard)[
-      position
-    ];
-    if (card === null) {
-      return;
-    }
-    const nextHp = card.hp;
-    setHp(nextHp);
-    if (scope.current && hpBarRef.current) {
-      const lifeBar = scope.current.querySelector<HTMLElement>(".lifeBar");
-      if (lifeBar) {
-        lifeBar.style.transform = `scaleX(${nextHp / card.maxHp})`;
-      }
-      hpBarRef.current.innerHTML = numberWithCommas(nextHp);
-      triggerAnimation({
-        replace: true,
-        duration: 50,
-        computeStyle: animationTimeline(50).add(
-          hpBarRef.current,
-          { scaleX: 1 },
-          [
-            {
-              values: { scaleX: 1.2 },
-              ease: [0, 1, 1, 1],
-            },
-            {
-              values: { scaleX: 0.85 },
-              from: -30,
-              ease: [0, 1, 1, 1],
-            },
-            {
-              values: { scaleX: 1 },
-              from: -15,
-              ease: [0, 0.42, 1, 1],
-            },
-          ]
-        ).progress,
-      });
-    }
-  }
-
-  return (
-    <div ref={scope} className="shadow-md grid grid-cols-1 text-sm relative ">
-      <EmptyBar>
-        <div className="lifeBar w-full h-full absolute origin-left bg-gradient-to-b  from-[#0fad05] via-[#74cc6f] via-[37%] to-[#0fad05]" />
-        <p
-          className="text-xl text-center text-white font-[stylised] relative"
-          ref={hpBarRef}
-        >
-          {numberWithCommas(hp)}
-        </p>
-      </EmptyBar>
-    </div>
-  );
-}

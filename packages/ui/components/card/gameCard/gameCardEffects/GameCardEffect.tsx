@@ -4,13 +4,13 @@ import {
   EventType,
   GameStateObject
 } from "game_engine";
-import { useSyncGameAnimation } from "../useGameSyncAnimation";
+import { useSyncGameAnimation } from "../../useGameSyncAnimation";
 import { useRef, useState } from "react";
 import { animationTimeline, getStateData, translateYpx } from "@repo/lib";
-import { EffectLayout } from "../Effects";
-import useConsumeEvents from "../caputeEvents/useConsumeEvents";
-import useGameEventListener from "../useGameEventListener";
-import { useProgressPieChart } from "../../..";
+import { EffectLayout } from "../../Effects";
+import useConsumeEvents from "../../caputeEvents/useConsumeEvents";
+import useGameEventListener from "../../useGameEventListener";
+import { useProgressPieChart } from "../../../..";
 
 interface GameCardEffectProps {
   state: CardState;
