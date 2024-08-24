@@ -81,10 +81,7 @@ export default function useGameCardAnimation({ cardRef, isPlayerCard, trackedIns
       duration: 50,
       timeline: animationTimeline(50)
         .add(cardRef.current, { opacity: 0, scale: 0.5 }, [
-          { values: { opacity: 25, scale: 0.5 }, to: 12 },
-          { values: { opacity: 50, scale: 0.75 }, to: 24 },
-          { values: { opacity: 75, scale: 1 }, to: 36 },
-          { values: { opacity: 100, scale: 1 } },
+          { values: { opacity: 100, scale: 1 }, ease: [0, 1, 1, 1] },
         ]),
     })
   }

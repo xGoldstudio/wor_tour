@@ -171,7 +171,7 @@ function GameCard({
   });
 
   return (
-    <div className="hidden" ref={cardRef}>
+    <div className="hidden opacity-0" ref={cardRef}>
       <GameCardRing filter="hue-rotate(180deg)" ringRef={decreaseAsRingRef} />
       <GameCardRing ringRef={increaseAsRingRef} />
       <div className="cardHeal rounded-sm z-10 absolute top-0 w-full h-full bg-gradient-to-b  from-[#2105ad] via-[#4b429d] via-[37%] to-[#2105ad] opacity-0 origin-top" />
