@@ -15,7 +15,7 @@ interface UseGameCardAnimationProps {
 }
 
 export default function useGameCardAnimation({ cardRef, isPlayerCard, trackedInstanceId, cardPosition }: UseGameCardAnimationProps) {
-  const { triggerAnimation: triggerAttackAnimation, timelineRef, removeAnimation: removeTriggerAttackAnimation } = useSyncTimelineAnimation();
+  const { triggerAnimation: triggerAttackAnimation, timelineRef } = useSyncTimelineAnimation();
   const { triggerAnimation: triggerAttackAnimation2 } = useSyncGameAnimation();
   const machineRef = useRef<ActorRefFrom<typeof cardAnimationMachine> | null>(null);
 
@@ -28,7 +28,7 @@ export default function useGameCardAnimation({ cardRef, isPlayerCard, trackedIns
           onAttack: (a) => {
             onAttack(a.event.animationDuration, a.event.progressFrame);
           },
-          onIdle: removeTriggerAttackAnimation,
+          onBackToPosition,
           onInvisible: () => {
             const element = cardRef.current;
             if (!element) {
@@ -49,7 +49,6 @@ export default function useGameCardAnimation({ cardRef, isPlayerCard, trackedIns
   });
 
   function onAttack(animationDuration: number, progressFrame: number) {
-    // should get current position and opacity of the card
     const init = timelineRef.current?.getLastCache();
     const unit = animationDuration / 3;
     triggerAttackAnimation({
@@ -63,16 +62,30 @@ export default function useGameCardAnimation({ cardRef, isPlayerCard, trackedIns
             values: { scale: 1.08, y: isPlayerCard ? 15 : -15, opacity: 100 },
           },
           {
-            // to: maxDuration,
             ease: [0, 0.42, 1, 1],
             values: { scale: 1.08, y: isPlayerCard ? -15 : 15, opacity: 100 },
           },
-          // {
-          //   ease: [0, 0.42, 1, 1],
-          //   values: { scale: 1, y: 0, opacity: 100 },
-          // },
         ], { key: "attack" }),
     })?.fastForward(progressFrame);
+  }
+
+  function onBackToPosition() {
+    const currentState = timelineRef.current?.getLastCache();
+    triggerAttackAnimation({
+      replace: true,
+      duration: 20,
+      // not important animation, thus not tracked in game state, can be desynchronized without further issue
+      onComplete: () => machineRef.current?.send({ type: "animationEnd" }),
+      timeline: animationTimeline(20).add(
+        cardRef.current,
+        { ...currentState },
+        {
+          ease: [0, 0.42, 1, 1],
+          values: { scale: 1, y: 0, opacity: 100 },
+        },
+        { key: "backToPosition" }
+      )
+    });
   }
 
   function onPlacement() {

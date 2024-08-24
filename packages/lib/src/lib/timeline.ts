@@ -77,6 +77,7 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
       },
       key: options?.key,
     });
+    lastCache.value = { ...lastCache.value, ...initialValues };
     return state;
   }
 
@@ -182,7 +183,7 @@ export default function animationTimeline(requiredFrames: number): AnimationTime
   }
 
   function setCacheAndValues(animation: RegisteredTimelineAnimation, progress: number, values: AnimationValues) {
-    lastCache.value = { ...lastCache, ...values };
+    lastCache.value = { ...lastCache.value, ...values };
     animation.cache.lastValue = values;
     animation.cache.progress = progress;
     setValues(animation, animation.cache.lastValue);

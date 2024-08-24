@@ -208,7 +208,6 @@ export function useSyncTimelineAnimation() {
         ...props,
         computeStyle: props.timeline.progress,
         onComplete: () => {
-          currentTimeline.current = null;
           props.onComplete?.();
         },
       });

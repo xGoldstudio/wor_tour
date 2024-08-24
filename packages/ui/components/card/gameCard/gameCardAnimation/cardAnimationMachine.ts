@@ -1,7 +1,7 @@
 import { createMachine } from 'xstate';
 
 export const cardAnimationMachine = createMachine({
-	/** @xstate-layout N4IgpgJg5mDOIC5QGMCGAnCBBAdgSwFtUAXPAexwFlVkALPHMAOgYDc9Y8AjAGzAGIADjxqQA2gAYAuolCCynUhVkgAHogBMAZgAcTAGwBGAOwmALPo2GdOgKwmANCACeiW1oCcTQ4Y-GPGgEmGvoAvqFOaJi4hCTkVDT0jEzsnLwCEGAktJIySCDyivEq6gi6EkzuhtoSEnYB+rZOrgiNXjr6fjq+Oh6GWgPhkRjY+ERKCXQMzKncfEIiyOLSKoV4EyWI5ZVa1Vq19SFNLohm1kxanToSurZmu3a2QyBRo7ET1FPJs+n8sMQYYhYYgA5AAa1yqwU62K+VK2yqNTqtgaxxal2MTA6HmuNw0EjMthRxmerxi43inySMw4c2YqEEgiy6AYUH4qDGcQoAFEcBBIfk1hs4YhjIEsQT9DoLMZbHZDGZmm4NGYmDd9GZkSE7B1SSNyVzJtSUrT0kwSKCwaz2ZyJrz+StBdDhaBSmL2pLpfpZfLFScyjoNEwPIjqiZjDcPGY9dFbZTEtMTWk+OaQTQrTg2f9AcDLQK5M7Ya63HdvBI7sZTIZ9BIjGjNHLKrVanL9ForJ4Y28KRQqYmfimIBwGUyMNaOe94vb8wVC8oRQhtHojKZjBYrDZ7MYlQhuk3m1YzoF+mFnjgyJl4PkyXHewnGFCivPiwgALT6HfvrsGj735hsU0+EfGFnzUU4NB3WxaiYfFdgVbVTBCb9byNftALAYCXTAsp2x2PYDhRI4d2qVVmxbb17DuCRDGQyc7y+Glk3pRlmVZTCi2w9wKmo-YFVMSwbkMSDqLVS4zDMYwa3xCxaJ7VDvnQlgICAp0nxwTZdwCbxbDbLQzHxKwpSE-0txgjp1w8TpDC3WTDT7BSmNTS02NUkD1IXdxVWJNsrKMTo-XRFFgyqPTel0e4ngiF59RQ+zGLpJgh1gEdWMzdjQNKWwNFsJhZWMXENEkzwsp3HysSuKxa3ufESXCUIgA */
+	/** @xstate-layout N4IgpgJg5mDOIC5QGMCGAnCBBAdgSwFtUAXPAexwFlVkALPHMAOgYDc9Y8AjAGzAGIADjxqQA2gAYAuolCCynUhVkgAHogBMAZgAcTAGwBGAOyGAnGcMBWbRquH9AGhABPRFYAsHphYvGrZjr6Wh5mWgC+4c5omLiEJORUNPSMTOycvAIQYCS0kjJIIPKKiSrqCLoSTFZahhr6EoaGOhrmVk6uiPo6ev4S-Wb1A1rGkdEY2PhESkl0DMzp3HxCIsji0irFeDNliJXVtUNNLW0dbggeGt5XFvphEp7+OmMgMZPxM9RzqYuZ-LDEDDELDEQHIADW+U2Cm2pUK5X2NTqDWOrTM7Wc5w0OkMTFCFh0Hmsniu+hebzi00SXxSCw4S2YqEEghy6AYUH4qCmCQoAFEcBAoYUtjt4YgmhpjNV+hIelpgg5rJjEB4tGYmFpNVoNGZjKZsYTyRNKTzZrS0vTMkwSGDwezOdyZvzBRthTDRaBysYdUwdBIPMZ9F4rBJdDrlQhsbj8YEiVYSR4yVFXsbHdTkvMLRk+EwuDRwQAVMgABXdiQdH0SzqFcjLyjFCAlUpD-TlCqMVgjUbxvjMjWMsqCVyNsTTFBpmd+OYgHCZLIw9q5lb5AprRTrOF2kd0BhM5ksNm19jOiBx0v6TX0eqMDzMkWTODI2XghQpY7N82hJXrnsQAFoTwQACR3eKlxwzVI2EtPgv1hH81BVDQIxDfQmFlLUrD9f0dGMMIQJNT4ILpbMwFgj0EIqbUDmRRpmjRDFOkbK40JlQwtFbVVVXw98Jx+aDGWZVl2TIuFfwQPtUMJMMrw0K49R0CMiVQrV2NqYxCRMDxuOXD8+JIlgIBgt1v03Bs6h0dUdGPGogk8QwvC7YwtGqHQtQ8CQ7gCJztLA3TiIZa1QXzYTjLg0yxJqbwvKcjQJD1b17C7TDz36doh0TO9kzfHTeP8q08whItSxMkT4PKCyNCYaxgh1dF6i0TCkr0FtUu6fRSUy8ZRxyoiswCmdYDnIScCgUrwoomwrCYfx1KDQJXKvQD9H0KbjHxFplu9WTnnvIA */
 	id: "cardAnimationMachine",
 	initial: "invisible",
 	states: {
@@ -36,9 +36,15 @@ export const cardAnimationMachine = createMachine({
 				},
 				attacking: {
 					on: {
-						animationEnd: "idle",
+						animationEnd: "backToPosition",
 					},
 					entry: "onAttack",
+				},
+				backToPosition: {
+					on: {
+						animationEnd: "idle",
+					},
+					entry: "onBackToPosition",
 				},
 				disappearing: {
 					on: {
