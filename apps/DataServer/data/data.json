@@ -546,17 +546,17 @@
         {
           "cost": 2,
           "states": [],
-          "illustration": "card_16_level_1_1720706342299.png"
+          "illustration": "card_16_level_1_1724596127798.png"
         },
         {
           "cost": 2,
           "states": [],
-          "illustration": "card_16_level_2_1720706346178.png"
+          "illustration": "card_16_level_2_1724596133428.png"
         },
         {
           "cost": 2,
           "states": [],
-          "illustration": "card_16_level_3_1720706351662.png"
+          "illustration": "card_16_level_3_1724596137978.png"
         }
       ]
     },
@@ -571,17 +571,17 @@
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_17_level_1_1720721228258.png"
+          "illustration": "card_17_level_1_1724595447915.png"
         },
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_17_level_2_1720721232627.png"
+          "illustration": "card_17_level_2_1724595455500.png"
         },
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_17_level_3_1720721238278.png"
+          "illustration": "card_17_level_3_1724595458556.png"
         }
       ]
     },
@@ -596,17 +596,17 @@
         {
           "cost": 5,
           "states": [],
-          "illustration": "card_18_level_1_1720722631140.png"
+          "illustration": "card_18_level_1_1724595269419.png"
         },
         {
           "cost": 5,
           "states": [],
-          "illustration": "card_18_level_2_1720722634257.png"
+          "illustration": "card_18_level_2_1724595272677.png"
         },
         {
           "cost": 5,
           "states": [],
-          "illustration": "card_18_level_3_1720722637985.png"
+          "illustration": "card_18_level_3_1724595275671.png"
         }
       ]
     },
@@ -628,7 +628,7 @@
               "value": 50
             }
           ],
-          "illustration": "card_19_level_1_1720977947828.png"
+          "illustration": "card_19_level_1_1724596395599.png"
         },
         {
           "cost": 1,
@@ -640,7 +640,7 @@
               "value": 75
             }
           ],
-          "illustration": "card_19_level_2_1720977954509.png"
+          "illustration": "card_19_level_2_1724596401929.png"
         },
         {
           "cost": 1,
@@ -652,7 +652,7 @@
               "value": 250
             }
           ],
-          "illustration": "card_19_level_3_1720977959891.png"
+          "illustration": "card_19_level_3_1724596406073.png"
         }
       ]
     },
@@ -667,17 +667,17 @@
         {
           "cost": 1,
           "states": [],
-          "illustration": "card_20_level_1_1720975944876.png"
+          "illustration": "card_20_level_1_1724597621790.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": "card_20_level_2_1720975947846.png"
+          "illustration": "card_20_level_2_1724597630638.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": "card_20_level_3_1720975951186.png"
+          "illustration": "card_20_level_3_1724597636328.png"
         }
       ]
     },
@@ -692,17 +692,17 @@
         {
           "cost": 1,
           "states": [],
-          "illustration": "card_21_level_1_1720977466954.png"
+          "illustration": "card_21_level_1_1724595139220.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": "card_21_level_2_1720977471267.png"
+          "illustration": "card_21_level_2_1724595143062.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": "card_21_level_3_1720977474377.png"
+          "illustration": "card_21_level_3_1724595145734.png"
         }
       ]
     },
@@ -724,7 +724,7 @@
               "value": 5
             }
           ],
-          "illustration": "card_22_level_1_1721050271270.png"
+          "illustration": "card_22_level_1_1724595811636.png"
         },
         {
           "cost": 3,
@@ -736,7 +736,7 @@
               "value": 10
             }
           ],
-          "illustration": "card_22_level_2_1721050621698.png"
+          "illustration": "card_22_level_2_1724595815675.png"
         },
         {
           "cost": 3,
@@ -748,25 +748,25 @@
               "value": 15
             }
           ],
-          "illustration": "card_22_level_3_1721050624380.png"
+          "illustration": "card_22_level_3_1724595817743.png"
         }
       ]
     },
     {
-      "name": "Ragh Fighter",
+      "name": "Ragh Commander",
       "rarity": "common",
       "id": 23,
       "world": 2,
-      "attackDefenseRatio": 0.48,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.67,
+      "speedDamageRatio": 0.74,
       "stats": [
         {
-          "cost": 1,
+          "cost": 3,
           "states": [],
-          "illustration": "card_23_level_1_1721051354517.png"
+          "illustration": "card_23_level_1_1724595700918.png"
         },
         {
-          "cost": 1,
+          "cost": 3,
           "states": [
             {
               "type": "rush",
@@ -775,10 +775,10 @@
               "value": null
             }
           ],
-          "illustration": "card_23_level_2_1721051661386.png"
+          "illustration": "card_23_level_2_1724595704638.png"
         },
         {
-          "cost": 1,
+          "cost": 3,
           "states": [
             {
               "type": "rush",
@@ -787,7 +787,7 @@
               "value": null
             }
           ],
-          "illustration": "card_23_level_3_1721051665630.png"
+          "illustration": "card_23_level_3_1724595707693.png"
         }
       ]
     },
@@ -809,7 +809,7 @@
               "value": 20
             }
           ],
-          "illustration": "card_24_level_1_1720724823656.png"
+          "illustration": "card_24_level_1_1724595174403.png"
         },
         {
           "cost": 2,
@@ -821,7 +821,7 @@
               "value": 40
             }
           ],
-          "illustration": "card_24_level_2_1720725223340.png"
+          "illustration": "card_24_level_2_1724595179097.png"
         },
         {
           "cost": 2,
@@ -833,7 +833,7 @@
               "value": 60
             }
           ],
-          "illustration": "card_24_level_3_1720725227930.png"
+          "illustration": "card_24_level_3_1724595182071.png"
         }
       ]
     },
@@ -855,7 +855,7 @@
               "value": 1
             }
           ],
-          "illustration": "card_25_level_1_1720974780704.png"
+          "illustration": "card_25_level_1_1724597999583.png"
         },
         {
           "cost": 4,
@@ -867,7 +867,7 @@
               "value": 1
             }
           ],
-          "illustration": "card_25_level_2_1720974783343.png"
+          "illustration": "card_25_level_2_1724598004927.png"
         },
         {
           "cost": 4,
@@ -879,7 +879,7 @@
               "value": 2
             }
           ],
-          "illustration": "card_25_level_3_1720974612545.png"
+          "illustration": "card_25_level_3_1724598010005.png"
         }
       ]
     },
@@ -894,47 +894,47 @@
         {
           "cost": 1,
           "states": [],
-          "illustration": "card_26_level_1_1721055659853.png"
+          "illustration": "card_26_level_1_1724596834901.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": "card_26_level_2_1721055653476.png"
+          "illustration": "card_26_level_2_1724596844539.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": "card_26_level_3_1721055277711.png"
+          "illustration": "card_26_level_3_1724596851616.png"
         }
       ]
     },
     {
-      "name": "Gar The Crusader",
+      "name": "Gar The Truthfinder",
       "rarity": "rare",
       "id": 27,
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.65,
+      "speedDamageRatio": 0.44,
       "stats": [
         {
-          "cost": 1,
+          "cost": 3,
           "states": [],
-          "illustration": "card_27_level_1_1721057309461.png"
+          "illustration": "card_27_level_1_1724597834484.png"
         },
         {
-          "cost": 1,
+          "cost": 3,
           "states": [],
-          "illustration": "card_27_level_2_1721057402888.png"
+          "illustration": "card_27_level_2_1724597837967.png"
         },
         {
-          "cost": 1,
+          "cost": 3,
           "states": [],
-          "illustration": "card_27_level_3_1721057505007.png"
+          "illustration": "card_27_level_3_1724597840216.png"
         }
       ]
     },
     {
-      "name": "Flying Scorpion",
+      "name": "Migthy Cave Dragon",
       "rarity": "epic",
       "id": 28,
       "world": 2,
@@ -951,7 +951,7 @@
               "value": null
             }
           ],
-          "illustration": "card_28_level_1_1720723376133.png"
+          "illustration": "card_28_level_1_1724597294808.png"
         },
         {
           "cost": 7,
@@ -963,7 +963,7 @@
               "value": null
             }
           ],
-          "illustration": "card_28_level_2_1720723379187.png"
+          "illustration": "card_28_level_2_1724597281965.png"
         },
         {
           "cost": 7,
@@ -975,7 +975,7 @@
               "value": null
             }
           ],
-          "illustration": "card_28_level_3_1720723381906.png"
+          "illustration": "card_28_level_3_1724597271463.png"
         }
       ]
     },
@@ -984,23 +984,23 @@
       "rarity": "epic",
       "id": 29,
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.64,
+      "speedDamageRatio": 0.47,
       "stats": [
         {
-          "cost": 1,
+          "cost": 5,
           "states": [],
-          "illustration": "card_29_level_1_1721060115017.png"
+          "illustration": "card_29_level_1_1724598452257.png"
         },
         {
-          "cost": 1,
+          "cost": 5,
           "states": [],
-          "illustration": "card_29_level_2_1721059979891.png"
+          "illustration": "card_29_level_2_1724598470056.png"
         },
         {
-          "cost": 1,
+          "cost": 5,
           "states": [],
-          "illustration": "card_29_level_3_1721059885396.png"
+          "illustration": "card_29_level_3_1724598475148.png"
         }
       ]
     },
@@ -1022,7 +1022,7 @@
               "value": 15
             }
           ],
-          "illustration": "card_30_level_1_1721062011136.png"
+          "illustration": "card_30_level_1_1724595407619.png"
         },
         {
           "cost": 6,
@@ -1034,7 +1034,7 @@
               "value": 30
             }
           ],
-          "illustration": "card_30_level_2_1721062086115.png"
+          "illustration": "card_30_level_2_1724595412137.png"
         },
         {
           "cost": 6,
@@ -1046,162 +1046,195 @@
               "value": 60
             }
           ],
-          "illustration": "card_30_level_3_1721061680880.png"
+          "illustration": "card_30_level_3_1724595417108.png"
         }
       ]
     },
     {
-      "name": "common card 1",
+      "name": "Dark Mage",
       "rarity": "common",
       "id": 31,
       "world": 3,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.29,
+      "speedDamageRatio": 0.73,
       "stats": [
         {
-          "cost": 1,
+          "cost": 3,
           "states": [],
-          "illustration": null
+          "illustration": "card_31_level_1_1724546374794.png"
         },
         {
-          "cost": 1,
+          "cost": 3,
           "states": [],
-          "illustration": null
+          "illustration": "card_31_level_2_1724546381800.png"
         },
         {
-          "cost": 1,
+          "cost": 3,
           "states": [],
-          "illustration": null
+          "illustration": "card_31_level_3_1724546385330.png"
         }
       ]
     },
     {
-      "name": "common card 2",
+      "name": "Royals Assassin",
       "rarity": "common",
       "id": 32,
       "world": 3,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.42,
+      "speedDamageRatio": 0.2,
       "stats": [
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_32_level_1_1724547440893.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_32_level_2_1724547447088.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_32_level_3_1724547450834.png"
         }
       ]
     },
     {
-      "name": "common card 3",
+      "name": "Spar Royals Guard",
       "rarity": "common",
       "id": 33,
       "world": 3,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.72,
+      "speedDamageRatio": 0.54,
       "stats": [
         {
-          "cost": 1,
-          "states": [],
-          "illustration": null
+          "cost": 2,
+          "states": [
+            {
+              "type": "bannerOfComand",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": 10
+            }
+          ],
+          "illustration": "card_33_level_1_1724547536275.png"
         },
         {
-          "cost": 1,
-          "states": [],
-          "illustration": null
+          "cost": 2,
+          "states": [
+            {
+              "type": "bannerOfComand",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": 20
+            },
+            {
+              "type": "riposte",
+              "trigger": "onDirectlyAttacked",
+              "target": "directEnnemyCard",
+              "value": 1
+            }
+          ],
+          "illustration": "card_33_level_2_1724547558676.png"
         },
         {
-          "cost": 1,
-          "states": [],
-          "illustration": null
+          "cost": 2,
+          "states": [
+            {
+              "type": "bannerOfComand",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": 30
+            },
+            {
+              "type": "riposte",
+              "trigger": "onDirectlyAttacked",
+              "target": "directEnnemyCard",
+              "value": 1
+            }
+          ],
+          "illustration": "card_33_level_3_1724547562817.png"
         }
       ]
     },
     {
-      "name": "common card 4",
+      "name": "Ultra: Mega Royal",
       "rarity": "common",
       "id": 34,
       "world": 3,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.71,
+      "speedDamageRatio": 0.34,
       "stats": [
         {
-          "cost": 1,
+          "cost": 5,
           "states": [],
-          "illustration": null
+          "illustration": "card_34_level_1_1724547688780.png"
         },
         {
-          "cost": 1,
+          "cost": 5,
           "states": [],
-          "illustration": null
+          "illustration": "card_34_level_2_1724547684095.png"
         },
         {
-          "cost": 1,
+          "cost": 5,
           "states": [],
-          "illustration": null
+          "illustration": "card_34_level_3_1724547670093.png"
         }
       ]
     },
     {
-      "name": "common card 5",
+      "name": "Wind Mage",
       "rarity": "common",
       "id": 35,
       "world": 3,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.36,
+      "speedDamageRatio": 0.4,
       "stats": [
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_35_level_1_1724548795332.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_35_level_2_1724548822540.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_35_level_3_1724548825896.png"
         }
       ]
     },
     {
-      "name": "common card 6",
+      "name": "Black Guard",
       "rarity": "common",
       "id": 36,
       "world": 3,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.12,
+      "speedDamageRatio": 0.13,
       "stats": [
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_36_level_1_1724588519389.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_36_level_2_1724588523774.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_36_level_3_1724588527337.png"
         }
       ]
     },
     {
-      "name": "common card 7",
+      "name": "Dragon Hunter",
       "rarity": "common",
       "id": 37,
       "world": 3,
@@ -1211,22 +1244,22 @@
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_37_level_1_1724599084738.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_37_level_2_1724599100311.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_37_level_3_1724599117480.png"
         }
       ]
     },
     {
-      "name": "common card 8",
+      "name": "King's Soldier",
       "rarity": "common",
       "id": 38,
       "world": 3,
@@ -1236,72 +1269,72 @@
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_38_level_1_1724599146811.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_38_level_2_1724599170922.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_38_level_3_1724599174364.png"
         }
       ]
     },
     {
-      "name": "rare card 1",
+      "name": "Royals Sergent",
       "rarity": "rare",
       "id": 39,
       "world": 3,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.71,
+      "speedDamageRatio": 0.46,
       "stats": [
         {
-          "cost": 1,
+          "cost": 2,
           "states": [],
-          "illustration": null
+          "illustration": "card_39_level_1_1724548043272.png"
         },
         {
-          "cost": 1,
+          "cost": 2,
           "states": [],
-          "illustration": null
+          "illustration": "card_39_level_2_1724548050955.png"
         },
         {
-          "cost": 1,
+          "cost": 2,
           "states": [],
-          "illustration": null
+          "illustration": "card_39_level_3_1724548056544.png"
         }
       ]
     },
     {
-      "name": "rare card 2",
+      "name": "The Apprentice",
       "rarity": "rare",
       "id": 40,
       "world": 3,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.83,
+      "speedDamageRatio": 0.81,
       "stats": [
         {
-          "cost": 1,
+          "cost": 4,
           "states": [],
-          "illustration": null
+          "illustration": "card_40_level_1_1724548861970.png"
         },
         {
-          "cost": 1,
+          "cost": 4,
           "states": [],
-          "illustration": null
+          "illustration": "card_40_level_2_1724548866577.png"
         },
         {
-          "cost": 1,
+          "cost": 4,
           "states": [],
-          "illustration": null
+          "illustration": "card_40_level_3_1724548870336.png"
         }
       ]
     },
     {
-      "name": "rare card 3",
+      "name": "Ray, Dragon Hunter",
       "rarity": "rare",
       "id": 41,
       "world": 3,
@@ -1309,24 +1342,24 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
-          "cost": 1,
+          "cost": 3,
           "states": [],
-          "illustration": null
+          "illustration": "card_41_level_1_1724588120924.png"
         },
         {
-          "cost": 1,
+          "cost": 3,
           "states": [],
-          "illustration": null
+          "illustration": "card_41_level_2_1724588125538.png"
         },
         {
-          "cost": 1,
+          "cost": 3,
           "states": [],
-          "illustration": null
+          "illustration": "card_41_level_3_1724588132331.png"
         }
       ]
     },
     {
-      "name": "rare card 4",
+      "name": "Shloppy Fire Clown",
       "rarity": "rare",
       "id": 42,
       "world": 3,
@@ -1336,22 +1369,22 @@
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_42_level_1_1724598741051.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_42_level_2_1724598743562.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_42_level_3_1724598746305.png"
         }
       ]
     },
     {
-      "name": "epic card 1",
+      "name": "Axar The Imperial",
       "rarity": "epic",
       "id": 43,
       "world": 3,
@@ -1359,69 +1392,108 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
-          "cost": 1,
-          "states": [],
-          "illustration": null
+          "cost": 3,
+          "states": [
+            {
+              "type": "rage",
+              "trigger": "idle",
+              "target": "selfCard",
+              "value": 20
+            },
+            {
+              "type": "massacre",
+              "trigger": "onDirectAttackHit",
+              "target": "directEnnemyCard",
+              "value": 10
+            }
+          ],
+          "illustration": "card_43_level_1_1724548148872.png"
         },
         {
-          "cost": 1,
-          "states": [],
-          "illustration": null
+          "cost": 3,
+          "states": [
+            {
+              "type": "rage",
+              "trigger": "idle",
+              "target": "selfCard",
+              "value": 30
+            },
+            {
+              "type": "massacre",
+              "trigger": "onDirectAttackHit",
+              "target": "directEnnemyCard",
+              "value": 15
+            }
+          ],
+          "illustration": "card_43_level_2_1724548152771.png"
         },
         {
-          "cost": 1,
-          "states": [],
-          "illustration": null
+          "cost": 3,
+          "states": [
+            {
+              "type": "rage",
+              "trigger": "idle",
+              "target": "selfCard",
+              "value": 40
+            },
+            {
+              "type": "massacre",
+              "trigger": "onDirectAttackHit",
+              "target": "directEnnemyCard",
+              "value": 20
+            }
+          ],
+          "illustration": "card_43_level_3_1724548159076.png"
         }
       ]
     },
     {
-      "name": "epic card 2",
+      "name": "King's Guardian",
       "rarity": "epic",
       "id": 44,
       "world": 3,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.19,
+      "speedDamageRatio": 0.11,
       "stats": [
         {
-          "cost": 1,
+          "cost": 2,
           "states": [],
-          "illustration": null
+          "illustration": "card_44_level_1_1724599005923.png"
         },
         {
-          "cost": 1,
+          "cost": 2,
           "states": [],
-          "illustration": null
+          "illustration": "card_44_level_2_1724599035924.png"
         },
         {
-          "cost": 1,
+          "cost": 2,
           "states": [],
-          "illustration": null
+          "illustration": "card_44_level_3_1724599046389.png"
         }
       ]
     },
     {
-      "name": "legendary card 1",
+      "name": "Le Comte",
       "rarity": "legendary",
       "id": 45,
       "world": 3,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.17,
+      "speedDamageRatio": 0.83,
       "stats": [
         {
-          "cost": 1,
+          "cost": 7,
           "states": [],
-          "illustration": null
+          "illustration": "card_45_level_1_1724548721554.png"
         },
         {
-          "cost": 1,
+          "cost": 7,
           "states": [],
-          "illustration": null
+          "illustration": "card_45_level_2_1724548729769.png"
         },
         {
-          "cost": 1,
+          "cost": 7,
           "states": [],
-          "illustration": null
+          "illustration": "card_45_level_3_1724548736343.png"
         }
       ]
     },
@@ -2186,15 +2258,15 @@
     },
     {
       "id": 2,
-      "illustration": "world_2_illustration_1720702007262.jpeg",
-      "cardBackground": "world_2_cardBackground_1720701361373.jpeg",
-      "name": "Krag Desert",
+      "illustration": "world_2_illustration_1724599786064.png",
+      "cardBackground": "world_2_cardBackground_1724600115619.png",
+      "name": "Ragh Dream",
       "description": "New world description"
     },
     {
       "id": 3,
-      "illustration": null,
-      "cardBackground": null,
+      "illustration": "world_3_illustration_1724599596337.png",
+      "cardBackground": "world_3_cardBackground_1724600017645.png",
       "name": "Human Kingdom",
       "description": "New world description"
     },

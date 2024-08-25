@@ -23,7 +23,7 @@ const dummyCard: CardType = {
 
 export function useDummyCard() {
 	const cardIllustartion = useEditorStore(
-		(state) => state.cards[28]?.stats[2].illustration
+		(state) => state.cards[44]?.stats[2].illustration
 	);
 	const worldIllustration = useEditorStore(
 		(state) => state.worlds[1].cardBackground

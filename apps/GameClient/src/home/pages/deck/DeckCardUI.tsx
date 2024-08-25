@@ -130,8 +130,8 @@ export function DeckCardUI({
                   <img
                     className="p-[0.25rem] group-hover:p-[0.15rem] transition-all duration-100 ease-in-out invert"
                     src={getImageUrl(ICONS, "/information-circle-no-bg.png")}
-                    width={30}
-                    height={30}
+                    width={64}
+                    height={64}
                     alt=""
                   />
                 </Button>
@@ -151,8 +151,8 @@ export function DeckCardUI({
                     <img
                       className="p-[0.25rem] group-hover:p-[0.15rem] transition-all duration-100 ease-in-out"
                       src={getImageUrl(ICONS, "/trash-no-bg.png")}
-                      width={27}
-                      height={27}
+                      width={64}
+                      height={64}
                       alt=""
                     />
                   </Button>
