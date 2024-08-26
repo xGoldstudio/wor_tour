@@ -50,14 +50,13 @@ export default function useGameCardAnimation({ cardRef, isPlayerCard, trackedIns
 
   function onAttack(animationDuration: number, progressFrame: number) {
     const init = timelineRef.current?.getLastCache();
-    const unit = animationDuration / 3;
     triggerAttackAnimation({
       replace: true,
       duration: animationDuration,
       timeline: animationTimeline(animationDuration)
         .add(cardRef.current, { scale: 1, y: 0, ...init }, [
           {
-            to: unit * 2,
+            to: (2/3) * animationDuration,
             ease: [0, 1, 1, 1],
             values: { scale: 1.08, y: isPlayerCard ? 15 : -15, opacity: 100 },
           },
@@ -127,7 +126,7 @@ export default function useGameCardAnimation({ cardRef, isPlayerCard, trackedIns
       if (trackedInstanceId.current === null) {
         return;
       }
-      const card = state.getCardInstance(trackedInstanceId.current);
+      const card = state.getCardByInstance(trackedInstanceId.current);
       if (card && cardRef.current) {
         const animationDuration = card.endAttackingTick! - card.startAttackingTick! - 1;
         const remainingFrames = card.endAttackingTick! - clock.getImmutableInternalState().currentFrame;
@@ -179,7 +178,7 @@ export default function useGameCardAnimation({ cardRef, isPlayerCard, trackedIns
     action: (event, state) =>
       event.winner === (isPlayerCard ? "opponent" : "player") &&
       trackedInstanceId.current !== null &&
-      state.getCardInstance(trackedInstanceId.current) &&
+      state.getCardByInstance(trackedInstanceId.current) &&
       sendDeath(),
   });
 }

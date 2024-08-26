@@ -1,6 +1,6 @@
 import { GameStateObject, GameStateObjectConstructor } from "../gameState";
 import _ from "lodash";
-import { EventType, InGameCardType } from "../../../types/eventType";
+import { EventType, InGameCardType, PlaceCardType } from "../../../types/eventType";
 import Clock, { ClockReturn } from "../../clock/clock";
 import { computeNextFrameState } from "../gameEngine";
 import { CardType } from "../../../types/Card";
@@ -62,6 +62,10 @@ export function drawPlaceCard(clock: ClockReturn<EventType>, isPlayer: boolean, 
 	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: isPlayer, position: position, cardInHandPosition: 0 });
 }
 
+export function triggerPlaceCard(clock: ClockReturn<EventType>, isPlayer: boolean, position: number, card: PlaceCardType) {
+	clock.triggerEvent({ type: "placeCard", isPlayer: isPlayer, position: position, card, isSpecialPlacement: false });
+}
+
 export const dummyStateTest: CardState = { type: "dummy", value: 2, trigger: "onAttack", target: "selfCard" };
 
 export const multiAttackState: CardState = {
@@ -120,6 +124,13 @@ export const bannerOfComandStateTest: CardState = {
 	target: "allyCards",
 };
 
+export const rushStateTest: CardState = {
+	type: "rush",
+	value: null,
+	trigger: "onPlacement",
+	target: "allyCards",
+};
+
 export function triggerDirectAttack(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,
@@ -168,9 +179,9 @@ export function triggerDirectAttackResolved(
 			initiator: {
 				type: "cardAttacking",
 				instanceId: attackerInstanceId,
-				cardIniator: state.getCardInstance(attackerInstanceId)!,
+				cardIniator: state.getCardByInstance(attackerInstanceId)!,
 			},
-			cardInitiator: state.getCardInstance(targetInstanceId)!,
+			cardInitiator: state.getCardByInstance(targetInstanceId)!,
 			onDirectHitStates: [],
 		}
 	});

@@ -2,8 +2,10 @@ import { CardStartAttackingEvent, EventType } from "../../../types/eventType";
 import { ClockReturn } from "../../clock/clock";
 import { ComputeEventProps } from "../gameEngine";
 
+export const CARD_ATTACK_ANIMATION_DURATION = 45;
+
 export default function cardStartAttackingEvent({ event, gameState, clock }: ComputeEventProps<CardStartAttackingEvent>) {
-	const usingCard = gameState.getCardInstance(event.instanceId);
+	const usingCard = gameState.getCardByInstance(event.instanceId);
 	if (!usingCard) {
 		return;
 	}
@@ -55,7 +57,7 @@ export default function cardStartAttackingEvent({ event, gameState, clock }: Com
 				progressFrame: currentFrame - newTarget,
 			});
 		} else { // before (we must recompute the animation duration)
-			const animationDuration = Math.min(timeRemainingBeforeAttack, 45);
+			const animationDuration = Math.min(timeRemainingBeforeAttack, CARD_ATTACK_ANIMATION_DURATION);
 			const newTarget = usingCard.startAttackingTick! + attackDuration - animationDuration;
 			if (newTarget === usingCard.startAttackingAnimationTick) {
 				return;
@@ -73,7 +75,7 @@ export default function cardStartAttackingEvent({ event, gameState, clock }: Com
 			);
 		}
 	} else { // first trigger
-		const animationDuration = Math.min(timeRemainingBeforeAttack, 45);
+		const animationDuration = Math.min(timeRemainingBeforeAttack, CARD_ATTACK_ANIMATION_DURATION);
 		gameState.startAttackAnimation(event.instanceId, usingCard.endAttackingTick! - animationDuration);
 		clock.setGameEventTimeout(
 			{

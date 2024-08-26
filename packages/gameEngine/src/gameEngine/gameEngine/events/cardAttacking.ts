@@ -11,7 +11,7 @@ export function triggerStates({ gameState, trigger, clock, initiator, instanceId
 	initiator: EventType,
 	instanceId: number,
 }) {
-	const card = gameState.getCardInstance(instanceId);
+	const card = gameState.getCardByInstance(instanceId);
 	if (card === null) {
 		return;
 	}
@@ -29,7 +29,7 @@ export function triggerStates({ gameState, trigger, clock, initiator, instanceId
 }
 
 export default function cardAttackingEvent({ event, gameState, clock }: ComputeEventProps<CardAttackingEvent>) {
-	const attakerCard = gameState.getCardInstance(event.instanceId);
+	const attakerCard = gameState.getCardByInstance(event.instanceId);
 	const isPlayerCard = gameState.getIsPlayerCard(event.instanceId);
 	const defenseCard = gameState.getOppositeCard(event.instanceId);
 	if (attakerCard === null) {

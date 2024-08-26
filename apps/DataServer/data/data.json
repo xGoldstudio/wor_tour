@@ -555,7 +555,14 @@
         },
         {
           "cost": 2,
-          "states": [],
+          "states": [
+            {
+              "type": "rush",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": null
+            }
+          ],
           "illustration": "card_16_level_3_1724596137978.png"
         }
       ]
@@ -1478,7 +1485,7 @@
       "id": 45,
       "world": 3,
       "attackDefenseRatio": 0.17,
-      "speedDamageRatio": 0.83,
+      "speedDamageRatio": 0.65,
       "stats": [
         {
           "cost": 7,

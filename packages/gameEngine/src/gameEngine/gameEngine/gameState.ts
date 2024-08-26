@@ -186,7 +186,7 @@ export class GameStateObject {
 	}
 	// attack
 	startAttacking(instanceId: number, startTick: number) {
-		const card = this.getCardInstance(instanceId);
+		const card = this.getCardByInstance(instanceId);
 		if (!card) {
 			console.warn("Card doesnt exist");
 			return null;
@@ -208,7 +208,7 @@ export class GameStateObject {
 		instanceId: number,
 		damage: number,
 	) {
-		const card = this.getCardInstance(instanceId);
+		const card = this.getCardByInstance(instanceId);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return false;
 		}
@@ -225,7 +225,7 @@ export class GameStateObject {
 		}
 	}
 	healCard(instanceId: number, amount: number) {
-		const card = this.getCardInstance(instanceId);
+		const card = this.getCardByInstance(instanceId);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return;
 		}
@@ -246,7 +246,7 @@ export class GameStateObject {
 		instanceId: number,
 		type: CardState["type"],
 	) {
-		const card = this.getCardInstance(instanceId);
+		const card = this.getCardByInstance(instanceId);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return;
 		}
@@ -256,7 +256,7 @@ export class GameStateObject {
 		instanceId: number,
 		state: CardState,
 	) {
-		const card = this.getCardInstance(instanceId);
+		const card = this.getCardByInstance(instanceId);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return;
 		}
@@ -267,7 +267,7 @@ export class GameStateObject {
 		stateType: CardState["type"],
 		delta: number,
 	) {
-		const card = this.getCardInstance(instanceId);
+		const card = this.getCardByInstance(instanceId);
 		if (!card) { // this is a common case, the card can be already destroyed
 			return;
 		}
@@ -290,7 +290,7 @@ export class GameStateObject {
 		}
 	}
 	increaseAttackSpeed(instanceId: number, increasePercent: number) {
-		const card = this.getCardInstance(instanceId);
+		const card = this.getCardByInstance(instanceId);
 		if (!card) {
 			return;
 		}
@@ -328,7 +328,7 @@ export class GameStateObject {
 	}
 	// utils
 	mutateCard(instanceId: number, mutator: (card: InGameCardType) => void) {
-		const card = this.getCardInstance(instanceId);
+		const card = this.getCardByInstance(instanceId);
 		if (!card) {
 			return;
 		}
@@ -337,7 +337,7 @@ export class GameStateObject {
 	getCard(isPlayerCard: boolean, cardPosition: number) {
 		return (isPlayerCard ? this.playerBoard : this.opponentBoard)[cardPosition];
 	}
-	getCardInstance(instanceId: number) {
+	getCardByInstance(instanceId: number) {
 		return [...this.playerBoard, ...this.opponentBoard].find((c) => c?.instanceId === instanceId) || null;
 	}
 	getCardInfo(instanceId: number) {
@@ -402,7 +402,7 @@ export class GameStateObject {
 		return index === -1 ? null : [index, card.states[index]];
 	}
 	getStateOfCardByInstanceId(instanceId: number, type: CardState["type"]) {
-		const card = this.getCardInstance(instanceId);
+		const card = this.getCardByInstance(instanceId);
 		if (!card) {
 			return null;
 		}

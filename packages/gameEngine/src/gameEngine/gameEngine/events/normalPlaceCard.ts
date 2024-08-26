@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { NormalPlaceCardEvent, PlaceCardType } from "../../../types/eventType";
 import { ComputeEventProps } from "../gameEngine";
+import { CardType } from "@repo/lib";
 
 export default function normalPlaceCardEvent({ event, gameState, clock }: ComputeEventProps<NormalPlaceCardEvent>) {
 	if (!gameState.isStarted) {
@@ -12,16 +13,6 @@ export default function normalPlaceCardEvent({ event, gameState, clock }: Comput
 	if (card === null) {
 		throw new Error("Card not found in hand");
 	}
-	const cardInGame: PlaceCardType = {
-		id: card.id,
-		maxHp: card.hp,
-		dmg: card.dmg,
-		initialAttackSpeed: card.attackSpeed,
-		rarity: card.rarity,
-		states: _.cloneDeep(card.states) || [],
-		illustration: card.illustration,
-		worldIllustration: card.worldIllustration,
-	};
 	clock.triggerEvent({
 		type: "manaConsume",
 		isPlayer: event.isPlayer,
@@ -36,7 +27,20 @@ export default function normalPlaceCardEvent({ event, gameState, clock }: Comput
 		type: "placeCard",
 		isPlayer: event.isPlayer,
 		position: event.position,
-		card: cardInGame,
+		card: placeCardFromCardType(card),
 		isSpecialPlacement: false,
 	})
+}
+
+export function placeCardFromCardType(card: CardType): PlaceCardType {
+	return {
+		id: card.id,
+		maxHp: card.hp,
+		dmg: card.dmg,
+		initialAttackSpeed: card.attackSpeed,
+		rarity: card.rarity,
+		states: _.cloneDeep(card.states) || [],
+		illustration: card.illustration,
+		worldIllustration: card.worldIllustration,
+	};
 }

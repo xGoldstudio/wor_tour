@@ -95,7 +95,7 @@ function GameCard({
   useGameEventListener<ChangeAttackSpeedEvent>({
     type: "changeAttackSpeed",
     action: (event, state) => {
-      const card = state.getCardInstance(event.instanceId);
+      const card = state.getCardByInstance(event.instanceId);
       if (!card) return;
       if (card.attackSpeed > card.initialAttackSpeed) {
         activateIncreaseRing();
