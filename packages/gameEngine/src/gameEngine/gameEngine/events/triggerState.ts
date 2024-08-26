@@ -3,7 +3,7 @@ import { TriggerStateEvent } from "../../../types/eventType";
 import { ComputeEventProps } from "../gameEngine";
 
 export default function triggerStateEvent({ gameState, event, clock }: ComputeEventProps<TriggerStateEvent>) {
-	const card = gameState.getCardInstance(event.instanceId);
+	const card = gameState.getCardByInstance(event.instanceId);
 	const stateData = CardStatesData[event.state.type];
 	const options = getOptionsFromType(event.state.type);
 	stateData.action({

@@ -5,14 +5,14 @@ import { getFrameFromAttackSpeed } from './utils';
 export const TIMER_INCREASE_DELAY = 100; // frame time is 10ms
 
 export default function changeAttackSpeed({ gameState, event, clock }: ComputeEventProps<ChangeAttackSpeedEvent>) {
-	const card = gameState.getCardInstance(event.instanceId);
+	const card = gameState.getCardByInstance(event.instanceId);
 	const previousAttackSpeed = gameState.increaseAttackSpeed(event.instanceId, event.changePercent);
 	if (previousAttackSpeed === undefined || card === null) {
 		return;
 	}
 	const computedStartAttackSpeed = (() => {
 		const currentFrame = clock.getImmutableInternalState().currentFrame;
-		const card = gameState.getCardInstance(event.instanceId);
+		const card = gameState.getCardByInstance(event.instanceId);
 		if (card === null || card.startAttackingTick === null) {
 			return undefined;
 		}

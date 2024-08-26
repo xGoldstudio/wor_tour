@@ -79,11 +79,11 @@ test("AS limits upper and lower", () => {
 	const instanceId = state.getCard(true, 0)!.instanceId;
 	triggerChangeAttackSpeed(clock, instanceId, 99999);
 	clock.nextTick();
-	expect(state.getCardInstance(instanceId)?.attackSpeed).toBe(MAX_ATTACK_SPEED); // max is 3
-	expect(state.getCardInstance(instanceId)?.modifierOfAttackSpeedPercentage).toBe(99999);
+	expect(state.getCardByInstance(instanceId)?.attackSpeed).toBe(MAX_ATTACK_SPEED); // max is 3
+	expect(state.getCardByInstance(instanceId)?.modifierOfAttackSpeedPercentage).toBe(99999);
 	clock.nextTick();
 	triggerChangeAttackSpeed(clock, instanceId, -999999);
 	clock.nextTick();
-	expect(state.getCardInstance(instanceId)?.attackSpeed).toBe(MIN_ATTACK_SPEED); // min is 0.1
-	expect(state.getCardInstance(instanceId)?.modifierOfAttackSpeedPercentage).toBe(-900000);
+	expect(state.getCardByInstance(instanceId)?.attackSpeed).toBe(MIN_ATTACK_SPEED); // min is 0.1
+	expect(state.getCardByInstance(instanceId)?.modifierOfAttackSpeedPercentage).toBe(-900000);
 });

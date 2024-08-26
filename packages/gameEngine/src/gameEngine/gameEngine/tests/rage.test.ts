@@ -23,7 +23,7 @@ describe("rage", () => {
 			state: { ...rageStateTest, value: 50 } as CardState,
 		});
 		clock.nextTick();
-		const card = state.getCardInstance(instanceId);
+		const card = state.getCardByInstance(instanceId);
 		expect(card?.attackSpeed).toBe(1.5);
 		expect(clock.getLastTickEvents().find(e => e.type === "changeAttackSpeed")?.changePercent).toBe(50);
 	});
@@ -35,7 +35,7 @@ describe("rage", () => {
 			state: { ...rageStateTest, value: 100 } as CardState,
 		});
 		clock.nextTick();
-		const card = state.getCardInstance(instanceId);
+		const card = state.getCardByInstance(instanceId);
 		expect(card?.attackSpeed).toBe(2);
 		expect(card?.modifierOfAttackSpeedPercentage).toBe(100);
 		// as increase by 50 to a total of 100
@@ -49,7 +49,7 @@ describe("rage", () => {
 			stateType: "rage",
 		});
 		clock.nextTick();
-		const card = state.getCardInstance(instanceId);
+		const card = state.getCardByInstance(instanceId);
 		expect(card?.attackSpeed).toBe(1);
 		expect(clock.getLastTickEvents().find(e => e.type === "changeAttackSpeed")?.changePercent).toBe(-100);
 	});
