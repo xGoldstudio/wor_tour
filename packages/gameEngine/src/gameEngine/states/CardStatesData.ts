@@ -260,7 +260,7 @@ export const CardStatesData = {
     computeCost: () => {
       return 0.2;
     },
-    descrption: ({ trigger, target }) => `${trigger}, ${target} will attack directly the ennemy card in front of him.`,
+    descrption: ({ trigger, target }) => `${trigger}, ${target} will attack instantly.`,
     title: "Rush",
     status: "neutral",
     src: "rush.png",
