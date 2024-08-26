@@ -131,6 +131,13 @@ export const rushStateTest: CardState = {
 	target: "allyCards",
 };
 
+export const sacredDuelistTest: CardState = {
+	type: "sacredDuelist",
+	value: null,
+	trigger: "idle",
+	target: "selfCard",
+};
+
 export function triggerDirectAttack(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,

@@ -10,6 +10,7 @@ import {
   multiAttackState,
   rageStateTest,
   riposteStateTest,
+  sacredDuelistTest,
   triggerChangeAttackSpeed,
   triggerDirectAttackResolved,
   triggerHealCard,
@@ -67,10 +68,10 @@ export default function InGameCardDebug() {
     });
   }
 
-  function dealDamage(amount: number) {
+  function dealDamage(amount: number, directDamage: boolean) {
     const instanceId = state?.getCard(true, 0)?.instanceId;
     if (!clock || !state || instanceId === undefined) return;
-    triggerDirectAttackResolved(clock, state, instanceId, instanceId, amount);
+    triggerDirectAttackResolved(clock, state, instanceId, instanceId, amount, directDamage ? undefined : true);
   }
 
   function healCard(amount: number) {
@@ -119,8 +120,9 @@ export default function InGameCardDebug() {
           <p className="text-2xl font-semibold">Basic operations</p>
           <div className="flex gap-4">
             <Button action={() => defaultActions(clock)}>PlaceCard</Button>
-            <Button action={() => dealDamage(10)}>Deal damage</Button>
-            <Button action={() => dealDamage(9999)}>Kill card</Button>
+            <Button action={() => dealDamage(10, true)}>Deal damage</Button>
+            <Button action={() => dealDamage(10, false)}>Deal undirect damage</Button>
+            <Button action={() => dealDamage(9999, true)}>Kill card</Button>
             <Button action={() => healCard(10)}>Heal card</Button>
             <Button action={() => changeAs(10)}>Increase AS</Button>
             <Button action={() => changeAs(-10)}>Decrease AS</Button>
@@ -132,6 +134,7 @@ export default function InGameCardDebug() {
             {addRemoveState(riposteStateTest)}
             {addRemoveState(massacreStateTest)}
             {addRemoveState(cloneStateTest)}
+            {addRemoveState(sacredDuelistTest)}
             {addRemoveState({ ...rageStateTest, value: 22 } as CardState)}
             {addRemoveState({ ...rageStateTest, value: 250 } as CardState)}
           </div>

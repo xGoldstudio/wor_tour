@@ -163,6 +163,7 @@ export interface CardDamageEvent {
 
 export interface CardDamagResolveEvent {
   type: "cardDamageResolve";
+  damage: number;
   initiator: CardDamageEvent;
 }
 
