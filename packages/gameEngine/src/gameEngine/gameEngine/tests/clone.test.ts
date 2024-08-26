@@ -83,3 +83,23 @@ test("Clone should remove all states expect clone, and rese stats to initial", (
 	expect(state.getCard(true, 0)!.hp).toBe(baseCard.hp);
 	expect(state.getCard(true, 0)!.attackSpeed).toBe(baseCard.attackSpeed);
 });
+
+test("Clone should not target alive cards", () => {
+	const { clock, state } = initTest({ gameData: { playerDeck: [{ ...baseCard, states: [{...cloneStateTest, value: 2} as CardState, dummyStateTest] }] } ,skipStartGame: true });
+	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 1);
+	drawPlaceCard(clock, true, 2);
+	clock.nextTick();
+	expect(state.getStateOfCard(true, 0, "clone")?.value).toBe(cloneStateTest.value);
+	expect(state.getStateOfCard(true, 0, "dummy")).toBeDefined();
+
+	const instanceId = getInstanceId(state, true, 1);
+
+	vi.spyOn(global.Math, 'random').mockReturnValue(0.9);
+	triggerKillCard(clock, instanceId);
+	clock.nextTick();
+
+	expect(state.getStateOfCard(true, 1, "clone")?.value).toBe(1);
+	expect(state.getCard(true, 0)).toBeDefined();
+	expect(state.getCard(true, 2)).toBeDefined();
+});

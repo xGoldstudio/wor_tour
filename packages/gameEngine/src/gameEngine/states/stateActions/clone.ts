@@ -9,8 +9,7 @@ const CloneStateAction: StateAction = ({ clock, event, gameState }) => {
 	onSelfCardTarget({ gameState, instanceId: initiator.instanceId })(({ card, isPlayerCard }) => {
 		const targetPosition = getRandomElement(
 			gameState.getBoard(isPlayerCard)
-				.filter(c => c === null || c.instanceId === card.instanceId)
-				.map((_, index) => index)
+				.flatMap((c, i) => c === null || c.instanceId === card.instanceId ? [i] : [])
 		);
 		const nextCard = purgeStates(card);
 		const state = card.states.find(state => state.type === "clone");
