@@ -23,6 +23,7 @@ export type EventType =
   | DrawCardEvent
   | HealCardEvent
   | CardDamagResolveEvent
+  | BeforeCardDamageResolveEvent
   | PlayerDamageResolveEvent
   | IncreaseStateValueEvent
   | DecreaseStateValueEvent
@@ -162,6 +163,11 @@ export interface CardDamageEvent {
 
 export interface CardDamagResolveEvent {
   type: "cardDamageResolve";
+  initiator: CardDamageEvent;
+}
+
+export interface BeforeCardDamageResolveEvent {
+  type: "beforeCardDamageResolve";
   initiator: CardDamageEvent;
 }
 

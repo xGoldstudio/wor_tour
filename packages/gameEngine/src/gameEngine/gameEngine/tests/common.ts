@@ -170,7 +170,7 @@ export function triggerDirectAttackResolved(
 	notDirect?: true,
 ) {
 	clock.triggerEvent({
-		type: "cardDamageResolve",
+		type: "beforeCardDamageResolve",
 		initiator: {
 			type: "cardDamage",
 			instanceId: targetInstanceId,

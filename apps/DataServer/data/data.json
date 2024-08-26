@@ -1001,12 +1001,26 @@
         },
         {
           "cost": 5,
-          "states": [],
+          "states": [
+            {
+              "type": "sacredDuelist",
+              "trigger": "onDamage",
+              "target": "selfCard",
+              "value": null
+            }
+          ],
           "illustration": "card_29_level_2_1724598470056.png"
         },
         {
           "cost": 5,
-          "states": [],
+          "states": [
+            {
+              "type": "sacredDuelist",
+              "trigger": "onDamage",
+              "target": "selfCard",
+              "value": null
+            }
+          ],
           "illustration": "card_29_level_3_1724598475148.png"
         }
       ]

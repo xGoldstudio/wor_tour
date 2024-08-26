@@ -6,7 +6,7 @@ const BleedingStateAction: StateAction = ({ event, clock, value }) => {
 		return;
 	}
 	clock.triggerEvent({
-		type: "cardDamageResolve", // The damage is instantly resolved
+		type: "beforeCardDamageResolve", // The damage is instantly resolved
 		initiator: {
 			type: "cardDamage",
 			amount: value,

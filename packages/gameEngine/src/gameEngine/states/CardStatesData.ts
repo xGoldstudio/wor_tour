@@ -305,6 +305,22 @@ export const CardStatesData = {
       onRemoved: onRemovedRage,
       onChangeValue: onChangeValueRage,
     }
+  },
+  sacredDuelist: {
+    min: undefined,
+    max: undefined,
+    noValue: true,
+    triggers: ["onDamage"],
+    targets: ["selfCard"],
+    computeCost: () => {
+      return 0.5;
+    },
+    status: "buff",
+    descrption: ({ target }) => `${target} can only receive damage from direct attacks.`,
+    title: "Sacred Duelist",
+    action: () => {},
+    options: {},
+    src: "sacredDuelist.png",
   }
 } satisfies Record<string, CardStateDataInterface>;
 
