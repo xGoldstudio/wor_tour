@@ -32,7 +32,7 @@ export default function AmountEffectOrDamage() {
 			runAnimation(
 				card,
 				card,
-				-event.initiator.amount,
+				-event.damage,
 			);
     },
   });

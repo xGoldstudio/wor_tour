@@ -5,7 +5,7 @@ import { triggerStates } from "./cardAttacking";
 export default function cardDamageResolveEvent({ gameState, clock, event }: ComputeEventProps<CardDamagResolveEvent>) {
 	const isDead = gameState.dealDamageToCard(
 		event.initiator.instanceId,
-		event.initiator.amount,
+		event.damage,
 	);
 	if (event.initiator.directAttack) {
 		event.initiator.onDirectHitStates.forEach((state) => {

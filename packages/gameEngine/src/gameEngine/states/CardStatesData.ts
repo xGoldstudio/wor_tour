@@ -4,7 +4,7 @@ import RiposteStateAction from './stateActions/riposte';
 import MultiAttackStateAction from './stateActions/multiAttack';
 import MassacreStateAction from './stateActions/massacre';
 import BleedingStateAction from './stateActions/bleeding';
-import { EventType, InGameCardType, StateLifcycleOnAddEvent, StateLifcycleOnChangeValueEvent, StateLifcycleOnRemoveEvent, TriggerStateEvent } from '../../types/eventType';
+import { BeforeCardDamageResolveEvent, EventType, InGameCardType, StateLifcycleOnAddEvent, StateLifcycleOnChangeValueEvent, StateLifcycleOnRemoveEvent, TriggerStateEvent } from '../../types/eventType';
 import { ClockReturn } from '../clock/clock';
 import { GameStateObject } from '../gameEngine/gameState';
 import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types/DataStoreType';
@@ -14,6 +14,7 @@ import RushStateAction from './stateActions/rush';
 import BannerOfCommandStateAction from './stateActions/bannerOfCommand';
 import { FRAME_TIME } from '../gameEngine/gameEngine';
 import { onAddedRage, onChangeValueRage, onRemovedRage } from './stateActions/rage';
+import { sacredDuelistOnDamageModifier } from './stateActions/sacredDuelist';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -43,6 +44,12 @@ export type RemovedStateAction = ({ clock, gameState, event }: {
   event: StateLifcycleOnRemoveEvent,
 }) => void;
 
+export type AttackModifierStateAction = ({ clock, gameState, event }: {
+  clock: ClockReturn<EventType>,
+  gameState: GameStateObject,
+  event: BeforeCardDamageResolveEvent,
+}) => number;
+
 interface CardStateDataOptions {
   consume?: number;
   stackable?: boolean;
@@ -51,6 +58,7 @@ interface CardStateDataOptions {
   onAdded?: AddedStateAction;
   onRemoved?: RemovedStateAction;
   onChangeValue?: ChangeValueStateAction;
+  onDamageModifier?: AttackModifierStateAction;
 }
 
 interface CardStateDataInterface {
@@ -204,7 +212,7 @@ export const CardStatesData = {
     triggers: ["onDirectAttackHit"],
     targets: ["directEnnemyCard"],
     computeCost: ({ value, attackSpeed }) => {
-      return ((value || 0) * (attackSpeed * 4)) / 7;
+      return ((value || 0) * (attackSpeed * 2)) / 7;
     },
     descrption: ({ trigger, target, value }) => `${trigger}, give bleeding ${value} to ${target}.`,
     title: "Massacre",
@@ -305,6 +313,24 @@ export const CardStatesData = {
       onRemoved: onRemovedRage,
       onChangeValue: onChangeValueRage,
     }
+  },
+  sacredDuelist: {
+    min: undefined,
+    max: undefined,
+    noValue: true,
+    triggers: ["idle"],
+    targets: ["selfCard"],
+    computeCost: () => {
+      return 0.5;
+    },
+    status: "buff",
+    descrption: ({ target }) => `${target} can only receive damage from direct attacks.`,
+    title: "Sacred Duelist",
+    action: () => {},
+    options: {
+      onDamageModifier: sacredDuelistOnDamageModifier,
+    },
+    src: "sacredDuelist.png",
   }
 } satisfies Record<string, CardStateDataInterface>;
 
