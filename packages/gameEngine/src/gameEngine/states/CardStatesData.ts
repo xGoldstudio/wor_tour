@@ -382,7 +382,7 @@ export const CardStatesData = {
     triggers: ["onDirectAttackHit"],
     targets: ["enemyCards"],
     computeCost: ({ value, attackSpeed }) => {
-      return 0.4 * (value || 0) * attackSpeed;
+      return 0.8 * (value || 0) * attackSpeed;
     },
     status: "buff",
     descrption: ({ target, value }) => `On attack, add ${value} scorch to ${target}.`,
