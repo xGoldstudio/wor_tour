@@ -159,6 +159,13 @@ export const flameThrowerTest: CardState = {
 	target: "enemyCards",
 };
 
+export const windShuffleTest: CardState = {
+	type: "windShuffle",
+	value: null,
+	trigger: "onPlacement",
+	target: "notSpecified",
+};
+
 export function triggerDirectAttack(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,

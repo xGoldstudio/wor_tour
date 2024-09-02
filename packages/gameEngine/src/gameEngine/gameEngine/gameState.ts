@@ -29,18 +29,22 @@ export const MAX_ATTACK_SPEED = 3;
 
 export const MIN_ATTACK_SPEED = 0.01;
 
+export const HAND_SIZE = 4;
+
+export const BOARD_SIZE = 3;
+
 export class GameStateObject {
 	constructor({ playerDeck, opponentDeck, playerHp, opponentHp }: GameStateObjectConstructor) {
 		this.playerMana = 0;
 		this.opponentMana = 0;
 		this.playerTickStartEarningMana = null;
 		this.opponentTickStartEarningMana = null;
-		this.playerHand = [null, null, null, null];
-		this.opponentHand = [null, null, null, null];
+		this.playerHand = Array(HAND_SIZE).fill(null);
+		this.opponentHand = Array(HAND_SIZE).fill(null);
 		this.playerDeck = [...playerDeck];
 		this.opponentDeck = [...opponentDeck];
-		this.playerBoard = [null, null, null];
-		this.opponentBoard = [null, null, null];
+		this.playerBoard = Array(BOARD_SIZE).fill(null);
+		this.opponentBoard = Array(BOARD_SIZE).fill(null);
 		this.currentInstanceId = 0;
 		this.playerHp = playerHp;
 		this.opponentHp = opponentHp;
@@ -281,6 +285,15 @@ export class GameStateObject {
 		}
 		const nextState = { ...card.states[stateIndex], value: value + delta } as CardState;
 		card.states[stateIndex] = nextState; // we mutate the state
+	}
+	discardHand(isPlayer: boolean) {
+		if (isPlayer) {
+			this.playerDeck = [...this.playerDeck, ...this.playerHand.filter((c) => c !== null)];
+			this.playerHand = Array(HAND_SIZE).fill(null);
+		} else {
+			this.opponentDeck = [...this.opponentDeck, ...this.opponentHand.filter((c) => c !== null)];
+			this.opponentHand = Array(HAND_SIZE).fill(null);
+		}
 	}
 	shuffleDeck(isPlayer: boolean) {
 		if (isPlayer) {

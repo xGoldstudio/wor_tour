@@ -1227,18 +1227,25 @@
       "speedDamageRatio": 0.4,
       "stats": [
         {
-          "cost": 1,
+          "cost": 2,
           "states": [],
           "illustration": "card_35_level_1_1724548795332.png"
         },
         {
-          "cost": 1,
+          "cost": 2,
           "states": [],
           "illustration": "card_35_level_2_1724548822540.png"
         },
         {
-          "cost": 1,
-          "states": [],
+          "cost": 2,
+          "states": [
+            {
+              "type": "windShuffle",
+              "trigger": "onPlacement",
+              "target": "notSpecified",
+              "value": null
+            }
+          ],
           "illustration": "card_35_level_3_1724548825896.png"
         }
       ]
@@ -1423,12 +1430,12 @@
       "speedDamageRatio": 0.11,
       "stats": [
         {
-          "cost": 5,
+          "cost": 4,
           "states": [],
           "illustration": "card_42_level_1_1724598741051.png"
         },
         {
-          "cost": 5,
+          "cost": 4,
           "states": [
             {
               "type": "flameThrower",
@@ -1440,7 +1447,7 @@
           "illustration": "card_42_level_2_1724598743562.png"
         },
         {
-          "cost": 5,
+          "cost": 4,
           "states": [
             {
               "type": "flameThrower",
