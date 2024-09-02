@@ -62,15 +62,15 @@ export const maxDelta = 0.0001;
 const survavibilityRatio = 7;
 export const baseHp = 100; // card of level 1, rarity common, world 1
 export const baseDps = baseHp / survavibilityRatio;
-export const cardLevelMultiplier = 1.5;
+export const cardLevelMultiplier = 1.4;
 export const cardWorldMultiplier = 1.2;
-export const cardCostMultiplier = 1.35;
+export const cardCostMultiplier = 1.30;
 export const speedMaxLevel1 = 0.8;
 export const cardRarityMultiplier = {
   common: 1,
   rare: 1.1,
   epic: 1.2,
-  legendary: 1.5,
+  legendary: 1.4,
 };
 
 // score is the sum of the stats

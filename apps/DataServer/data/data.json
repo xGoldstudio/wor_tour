@@ -1419,22 +1419,36 @@
       "rarity": "rare",
       "id": 42,
       "world": 3,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.67,
+      "speedDamageRatio": 0.11,
       "stats": [
         {
-          "cost": 1,
+          "cost": 5,
           "states": [],
           "illustration": "card_42_level_1_1724598741051.png"
         },
         {
-          "cost": 1,
-          "states": [],
+          "cost": 5,
+          "states": [
+            {
+              "type": "flameThrower",
+              "trigger": "onDirectAttackHit",
+              "target": "enemyCards",
+              "value": 5
+            }
+          ],
           "illustration": "card_42_level_2_1724598743562.png"
         },
         {
-          "cost": 1,
-          "states": [],
+          "cost": 5,
+          "states": [
+            {
+              "type": "flameThrower",
+              "trigger": "onDirectAttackHit",
+              "target": "enemyCards",
+              "value": 10
+            }
+          ],
           "illustration": "card_42_level_3_1724598746305.png"
         }
       ]
@@ -1554,8 +1568,8 @@
       "rarity": "legendary",
       "id": 45,
       "world": 3,
-      "attackDefenseRatio": 0.17,
-      "speedDamageRatio": 0.65,
+      "attackDefenseRatio": 0.32,
+      "speedDamageRatio": 0.56,
       "stats": [
         {
           "cost": 7,
@@ -1564,12 +1578,26 @@
         },
         {
           "cost": 7,
-          "states": [],
+          "states": [
+            {
+              "type": "flameThrower",
+              "trigger": "onDirectAttackHit",
+              "target": "enemyCards",
+              "value": 25
+            }
+          ],
           "illustration": "card_45_level_2_1724548729769.png"
         },
         {
           "cost": 7,
-          "states": [],
+          "states": [
+            {
+              "type": "flameThrower",
+              "trigger": "onDirectAttackHit",
+              "target": "enemyCards",
+              "value": 50
+            }
+          ],
           "illustration": "card_45_level_3_1724548736343.png"
         }
       ]

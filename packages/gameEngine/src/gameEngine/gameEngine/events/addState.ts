@@ -38,6 +38,7 @@ export default function addStateEvent({ gameState, event, clock }: ComputeEventP
 				type: "stateLifecycleOnAdd",
 				instanceId: event.instanceId,
 				stateType: event.state.type,
+				state: event.state,
 			});
 		}
 	}

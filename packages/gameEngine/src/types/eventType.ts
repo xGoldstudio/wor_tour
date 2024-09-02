@@ -266,6 +266,7 @@ export interface StateLifcycleOnAddEvent {
   type: "stateLifecycleOnAdd";
   stateType: CardState["type"];
   instanceId: number;
+  state: CardState;
 }
 
 export interface StateLifcycleOnChangeValueEvent {

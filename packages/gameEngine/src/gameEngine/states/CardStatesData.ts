@@ -16,6 +16,8 @@ import { FRAME_TIME } from '../gameEngine/gameEngine';
 import { onAddedRage, onChangeValueRage, onRemovedRage } from './stateActions/rage';
 import { sacredDuelistOnDamageModifier } from './stateActions/sacredDuelist';
 import { divineShieldOnDamageModifier } from './stateActions/divineShield';
+import { onAddedScorch, onChangeValueScorch } from './stateActions/scorch';
+import FlameThrowerStateAction from './stateActions/flameThrower';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -353,6 +355,42 @@ export const CardStatesData = {
     },
     src: "divineShield.png",
   },
+  scorch: {
+    min: 1,
+    max: undefined,
+    noValue: false,
+    triggers: ["idle"],
+    targets: ["selfCard"],
+    computeCost: () => {
+      return 0;
+    },
+    status: "debuff",
+    descrption: ({ target }) => `When the value increase, deal the amount of scorch in damage to ${target}`,
+    title: "Scorch",
+    action: () => {},
+    options: {
+      stackable: true,
+      onChangeValue: onChangeValueScorch,
+      onAdded: onAddedScorch,
+    },
+    src: "scorch.png",
+  },
+  flameThrower: {
+    min: 1,
+    max: undefined,
+    noValue: false,
+    triggers: ["onDirectAttackHit"],
+    targets: ["enemyCards"],
+    computeCost: ({ value, attackSpeed }) => {
+      return 0.8 * (value || 0) * attackSpeed;
+    },
+    status: "buff",
+    descrption: ({ target, value }) => `On attack, add ${value} scorch to ${target}.`,
+    title: "Flame Thrower",
+    action: FlameThrowerStateAction,
+    options: {},
+    src: "flameThrower.png",
+  }
 } satisfies Record<string, CardStateDataInterface>;
 
 type CardStateTypeof = typeof CardStatesData;

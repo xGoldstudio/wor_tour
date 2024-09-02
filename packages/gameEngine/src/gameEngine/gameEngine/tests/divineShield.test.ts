@@ -8,16 +8,16 @@ test("Divine shield, not stacked", () => {
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;
 	expect(state.getStateOfCard(true, 0, "divineShield")).toBeDefined();
-	triggerDirectAttackResolved(clock, state, instanceId, instanceId, 10, true); // not direct attack, should receive the damage normally
+	triggerDirectAttackResolved(clock, state, instanceId, instanceId, 10, true); // not direct attack, should not receive the damage
 	clock.nextTick();
-	expect(state.getCardByInstance(instanceId)?.hp).toBe(baseCard.hp - 10);
+	expect(state.getCardByInstance(instanceId)?.hp).toBe(baseCard.hp);
 	triggerDirectAttackResolved(clock, state, instanceId, instanceId, 10); // direct attack, blocked by the shield
 	clock.nextTick();
-	expect(state.getCardByInstance(instanceId)?.hp).toBe(baseCard.hp - 10);
+	expect(state.getCardByInstance(instanceId)?.hp).toBe(baseCard.hp);
 	expect(state.getStateOfCard(true, 0, "divineShield")).toBeUndefined();
 	triggerDirectAttackResolved(clock, state, instanceId, instanceId, 10); // direct attack, not blocked anymore
 	clock.nextTick();
-	expect(state.getCardByInstance(instanceId)?.hp).toBe(baseCard.hp - 20);
+	expect(state.getCardByInstance(instanceId)?.hp).toBe(baseCard.hp - 10);
 });
 
 test("Divine shield, stacked", () => {

@@ -11,6 +11,7 @@ import {
   rageStateTest,
   riposteStateTest,
   sacredDuelistTest,
+  scorchTest,
   triggerChangeAttackSpeed,
   triggerDirectAttackResolved,
   triggerHealCard,
@@ -137,6 +138,7 @@ export default function InGameCardDebug() {
             {addRemoveState(sacredDuelistTest)}
             {addRemoveState({ ...rageStateTest, value: 22 } as CardState)}
             {addRemoveState({ ...rageStateTest, value: 250 } as CardState)}
+            {addRemoveState(scorchTest)}
           </div>
         </DebugPanelLayout>
       </div>
