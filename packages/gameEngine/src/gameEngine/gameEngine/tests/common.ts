@@ -145,6 +145,13 @@ export const divineShieldTest: CardState = {
 	target: "selfCard",
 };
 
+export const scorchTest: CardState = {
+	type: "scorch",
+	value: 10,
+	trigger: "idle",
+	target: "selfCard",
+};
+
 export function triggerDirectAttack(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,
@@ -286,4 +293,8 @@ export function getInstanceId(state: GameStateObject, isPlayer: boolean, cardPos
 
 export function triggerChangeAttackSpeed(clock: ClockReturn<EventType>, instanceId: number, percentage: number) {
 	clock.triggerEvent({ type: "changeAttackSpeed", instanceId, changePercent: percentage });
+}
+
+export function triggerAddState(clock: ClockReturn<EventType>, instanceId: number, state: CardState) {
+	clock.triggerEvent({ type: "addState", instanceId, state });
 }
