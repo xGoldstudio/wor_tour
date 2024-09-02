@@ -23,7 +23,7 @@ export function getStateData(state: CardState): CardStateLayoutData {
     description: desc.descrption({
       trigger: triggerLabels[state.trigger],
       target: targetLabels[state.target],
-      value: String(state.value),
+      value: state.value,
     }),
   };
 }

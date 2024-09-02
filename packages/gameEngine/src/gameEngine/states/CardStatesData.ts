@@ -15,6 +15,7 @@ import BannerOfCommandStateAction from './stateActions/bannerOfCommand';
 import { FRAME_TIME } from '../gameEngine/gameEngine';
 import { onAddedRage, onChangeValueRage, onRemovedRage } from './stateActions/rage';
 import { sacredDuelistOnDamageModifier } from './stateActions/sacredDuelist';
+import { divineShieldOnDamageModifier } from './stateActions/divineShield';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -84,7 +85,7 @@ interface CardStateDataInterface {
     value: number | null;
     attackSpeed: number;
   }) => number;
-  descrption: ({ trigger, target, value }: { trigger: string, target: string, value: string }) => string; title: string;
+  descrption: ({ trigger, target, value }: { trigger: string, target: string, value: number | null }) => string; title: string;
   status: StatusEffectType;
   src: string;
   action: StateAction;
@@ -331,7 +332,27 @@ export const CardStatesData = {
       onDamageModifier: sacredDuelistOnDamageModifier,
     },
     src: "sacredDuelist.png",
-  }
+  },
+  divineShield: {
+    min: 1,
+    max: undefined,
+    noValue: false,
+    triggers: ["onDirectlyAttacked"],
+    targets: ["selfCard"],
+    computeCost: ({ value }) => {
+      return 0.5 * (value || 0);
+    },
+    status: "buff",
+    descrption: ({ target, value }) => `${target} will ignore the next ${value && value > 1 ? value : ""} direct attack${value && value > 1 ? "s" : ""}.`,
+    title: "Divine Shield",
+    action: () => {},
+    options: {
+      onDamageModifier: divineShieldOnDamageModifier,
+      stackable: true,
+      consume: 1,
+    },
+    src: "divineShield.png",
+  },
 } satisfies Record<string, CardStateDataInterface>;
 
 type CardStateTypeof = typeof CardStatesData;

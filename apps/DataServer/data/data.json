@@ -679,7 +679,7 @@
           "states": [
             {
               "type": "sacredDuelist",
-              "trigger": "onDamage",
+              "trigger": "idle",
               "target": "selfCard",
               "value": null
             }
@@ -938,7 +938,7 @@
           "states": [
             {
               "type": "sacredDuelist",
-              "trigger": "onDamage",
+              "trigger": "idle",
               "target": "selfCard",
               "value": null
             }
@@ -1011,7 +1011,7 @@
           "states": [
             {
               "type": "sacredDuelist",
-              "trigger": "onDamage",
+              "trigger": "idle",
               "target": "selfCard",
               "value": null
             }
@@ -1023,7 +1023,7 @@
           "states": [
             {
               "type": "sacredDuelist",
-              "trigger": "onDamage",
+              "trigger": "idle",
               "target": "selfCard",
               "value": null
             }
@@ -1206,7 +1206,14 @@
         },
         {
           "cost": 5,
-          "states": [],
+          "states": [
+            {
+              "type": "divineShield",
+              "trigger": "onDirectlyAttacked",
+              "target": "selfCard",
+              "value": 1
+            }
+          ],
           "illustration": "card_34_level_3_1724547670093.png"
         }
       ]
@@ -1321,17 +1328,38 @@
       "stats": [
         {
           "cost": 2,
-          "states": [],
+          "states": [
+            {
+              "type": "divineShield",
+              "trigger": "onDirectlyAttacked",
+              "target": "selfCard",
+              "value": 1
+            }
+          ],
           "illustration": "card_39_level_1_1724548043272.png"
         },
         {
           "cost": 2,
-          "states": [],
+          "states": [
+            {
+              "type": "divineShield",
+              "trigger": "onDirectlyAttacked",
+              "target": "selfCard",
+              "value": 1
+            }
+          ],
           "illustration": "card_39_level_2_1724548050955.png"
         },
         {
           "cost": 2,
-          "states": [],
+          "states": [
+            {
+              "type": "divineShield",
+              "trigger": "onDirectlyAttacked",
+              "target": "selfCard",
+              "value": 1
+            }
+          ],
           "illustration": "card_39_level_3_1724548056544.png"
         }
       ]
@@ -1485,17 +1513,38 @@
       "stats": [
         {
           "cost": 2,
-          "states": [],
+          "states": [
+            {
+              "type": "divineShield",
+              "trigger": "onDirectlyAttacked",
+              "target": "selfCard",
+              "value": 1
+            }
+          ],
           "illustration": "card_44_level_1_1724599005923.png"
         },
         {
           "cost": 2,
-          "states": [],
+          "states": [
+            {
+              "type": "divineShield",
+              "trigger": "onDirectlyAttacked",
+              "target": "selfCard",
+              "value": 1
+            }
+          ],
           "illustration": "card_44_level_2_1724599035924.png"
         },
         {
           "cost": 2,
-          "states": [],
+          "states": [
+            {
+              "type": "divineShield",
+              "trigger": "onDirectlyAttacked",
+              "target": "selfCard",
+              "value": 1
+            }
+          ],
           "illustration": "card_44_level_3_1724599046389.png"
         }
       ]

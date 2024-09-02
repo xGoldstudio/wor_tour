@@ -138,6 +138,13 @@ export const sacredDuelistTest: CardState = {
 	target: "selfCard",
 };
 
+export const divineShieldTest: CardState = {
+	type: "divineShield",
+	value: 1,
+	trigger: "onDirectlyAttacked",
+	target: "selfCard",
+};
+
 export function triggerDirectAttack(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,
