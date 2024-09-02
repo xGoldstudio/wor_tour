@@ -508,8 +508,8 @@
       "rarity": "legendary",
       "id": 15,
       "world": 1,
-      "attackDefenseRatio": 0.11,
-      "speedDamageRatio": 0.01,
+      "attackDefenseRatio": 0.08,
+      "speedDamageRatio": 0.02,
       "stats": [
         {
           "cost": 3,
@@ -523,14 +523,7 @@
         },
         {
           "cost": 3,
-          "states": [
-            {
-              "type": "clone",
-              "trigger": "onDeath",
-              "target": "selfCard",
-              "value": 1
-            }
-          ],
+          "states": [],
           "illustration": "card_15_level_3_1720100190398.png"
         }
       ]
@@ -668,8 +661,8 @@
       "rarity": "common",
       "id": 20,
       "world": 2,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.39,
+      "speedDamageRatio": 0.75,
       "stats": [
         {
           "cost": 1,
@@ -872,7 +865,7 @@
           "illustration": "card_25_level_1_1724597999583.png"
         },
         {
-          "cost": 4,
+          "cost": 3,
           "states": [
             {
               "type": "clone",
@@ -884,7 +877,7 @@
           "illustration": "card_25_level_2_1724598004927.png"
         },
         {
-          "cost": 4,
+          "cost": 3,
           "states": [
             {
               "type": "clone",
@@ -1423,8 +1416,8 @@
       "rarity": "epic",
       "id": 43,
       "world": 3,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.24,
+      "speedDamageRatio": 0.24,
       "stats": [
         {
           "cost": 3,
@@ -1433,7 +1426,7 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 20
+              "value": 40
             },
             {
               "type": "massacre",
@@ -1451,7 +1444,7 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 30
+              "value": 70
             },
             {
               "type": "massacre",
@@ -1469,13 +1462,13 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 40
+              "value": 300
             },
             {
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 20
+              "value": 70
             }
           ],
           "illustration": "card_43_level_3_1724548159076.png"
@@ -2112,8 +2105,8 @@
       "rarity": "rare",
       "id": 69,
       "world": 5,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.99,
+      "speedDamageRatio": 0.99,
       "stats": [
         {
           "cost": 1,
@@ -2262,8 +2255,8 @@
       "rarity": "legendary",
       "id": 75,
       "world": 5,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.01,
+      "speedDamageRatio": 0.01,
       "stats": [
         {
           "cost": 1,

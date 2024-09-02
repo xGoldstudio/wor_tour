@@ -139,7 +139,7 @@ test("OnDirectAttackWhendDeadAttacker, effect should still go", () => {
 	drawPlaceCard(clock, true, 0);
 	drawPlaceCard(clock, false, 0);
 	clock.nextTick();
-	const opponentInstanceId = state.opponentBoard[0]!.instanceId;
+	const playerInstanceId = state.playerBoard[0]!.instanceId;
 	const dummyState: CardState = { type: "dummy", value: 4, trigger: "onDirectAttackHit", target: "selfCard" };
 	clock.triggerEvent({ type: "addState", instanceId: getInstanceId(state, true, 0), state: dummyState });
 	clock.nextTick();
@@ -148,7 +148,7 @@ test("OnDirectAttackWhendDeadAttacker, effect should still go", () => {
 		expect(props.value).toBe(4);
 	});
 	triggerDirectAttack(clock, state, true, 0);
-	triggerDirectAttackResolved(clock, state, opponentInstanceId, opponentInstanceId, 9999, true);
+	triggerDirectAttackResolved(clock, state, playerInstanceId, playerInstanceId, 9999, true);
 	attackAnimation(clock);
 	expect(CardStatesData["dummy"].action).not.toHaveBeenCalled();
 	clock.nextTick();

@@ -212,7 +212,7 @@ export const CardStatesData = {
     triggers: ["onDirectAttackHit"],
     targets: ["directEnnemyCard"],
     computeCost: ({ value, attackSpeed }) => {
-      return ((value || 0) * (attackSpeed * 4)) / 7;
+      return ((value || 0) * (attackSpeed * 2)) / 7;
     },
     descrption: ({ trigger, target, value }) => `${trigger}, give bleeding ${value} to ${target}.`,
     title: "Massacre",
