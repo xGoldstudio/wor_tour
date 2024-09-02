@@ -18,6 +18,7 @@ import { sacredDuelistOnDamageModifier } from './stateActions/sacredDuelist';
 import { divineShieldOnDamageModifier } from './stateActions/divineShield';
 import { onAddedScorch, onChangeValueScorch } from './stateActions/scorch';
 import FlameThrowerStateAction from './stateActions/flameThrower';
+import WindShuffleStateAction from './stateActions/windShuffle';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -390,7 +391,23 @@ export const CardStatesData = {
     action: FlameThrowerStateAction,
     options: {},
     src: "flameThrower.png",
-  }
+  },
+  windShuffle: {
+    min: undefined,
+    max: undefined,
+    noValue: true,
+    triggers: ["onPlacement"],
+    targets: ["notSpecified"],
+    computeCost: () => {
+      return 2;
+    },
+    descrption: ({ trigger }) => `${trigger}, shuffle all your cards from hand and deck, then draw 4 cards.`,
+    title: "Wind Shuffle",
+    status: "neutral",
+    src: "windShuffle.png",
+    action: WindShuffleStateAction,
+    options: {},
+  },
 } satisfies Record<string, CardStateDataInterface>;
 
 type CardStateTypeof = typeof CardStatesData;
