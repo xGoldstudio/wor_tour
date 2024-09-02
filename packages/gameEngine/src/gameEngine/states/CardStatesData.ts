@@ -85,7 +85,7 @@ interface CardStateDataInterface {
     value: number | null;
     attackSpeed: number;
   }) => number;
-  descrption: ({ trigger, target, value }: { trigger: string, target: string, value: string }) => string; title: string;
+  descrption: ({ trigger, target, value }: { trigger: string, target: string, value: number | null }) => string; title: string;
   status: StatusEffectType;
   src: string;
   action: StateAction;
@@ -343,7 +343,7 @@ export const CardStatesData = {
       return 0.5 * (value || 0);
     },
     status: "buff",
-    descrption: ({ target, value }) => `${target} will ignore the next ${value} direct attack.`,
+    descrption: ({ target, value }) => `${target} will ignore the next ${value && value > 1 ? value : ""} direct attack${value && value > 1 ? "s" : ""}.`,
     title: "Divine Shield",
     action: () => {},
     options: {
