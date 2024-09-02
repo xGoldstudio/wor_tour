@@ -152,6 +152,13 @@ export const scorchTest: CardState = {
 	target: "selfCard",
 };
 
+export const flameThrowerTest: CardState = {
+	type: "flameThrower",
+	value: 10,
+	trigger: "onDirectAttackHit",
+	target: "enemyCards",
+};
+
 export function triggerDirectAttack(
 	clock: ClockReturn<EventType>,
 	state: GameStateObject,

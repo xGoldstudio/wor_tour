@@ -376,13 +376,13 @@ export class GameStateObject {
 	getBoard(isPlayer: boolean) {
 		return isPlayer ? this.playerBoard : this.opponentBoard;
 	}
-	getBoardOfCard(instanceId: number) {
+	getBoardOfCard(instanceId: number, opposite: boolean = false) {
 		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instanceId);
 		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instanceId);
 		if (playerCard !== -1) {
-			return this.playerBoard;
+			return this.getBoard(true && !opposite);
 		} else if (opponentCard !== -1) {
-			return this.opponentBoard;
+			return this.getBoard(false || opposite);
 		}
 		return null;
 	}

@@ -4,7 +4,6 @@ import { ClockReturn } from "../../clock/clock";
 import { EventType } from "../../../types/eventType";
 
 const onChangeValueScorch: ChangeValueStateAction = ({ clock, event, gameState }) => {
-	console.log("hey event", event);
 	if (event.delta <= 0) {
 		return;
 	}

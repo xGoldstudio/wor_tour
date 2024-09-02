@@ -17,6 +17,7 @@ import { onAddedRage, onChangeValueRage, onRemovedRage } from './stateActions/ra
 import { sacredDuelistOnDamageModifier } from './stateActions/sacredDuelist';
 import { divineShieldOnDamageModifier } from './stateActions/divineShield';
 import { onAddedScorch, onChangeValueScorch } from './stateActions/scorch';
+import FlameThrowerStateAction from './stateActions/flameThrower';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -374,6 +375,22 @@ export const CardStatesData = {
     },
     src: "scorch.png",
   },
+  flameThrower: {
+    min: 1,
+    max: undefined,
+    noValue: false,
+    triggers: ["onDirectAttackHit"],
+    targets: ["enemyCards"],
+    computeCost: ({ value }) => {
+      return 0.1 * (value || 0);
+    },
+    status: "buff",
+    descrption: ({ target, value }) => `On attack, add ${value} scorch to ${target}.`,
+    title: "Flame Thrower",
+    action: FlameThrowerStateAction,
+    options: {},
+    src: "flameThrower.png",
+  }
 } satisfies Record<string, CardStateDataInterface>;
 
 type CardStateTypeof = typeof CardStatesData;
