@@ -12,18 +12,24 @@ export default function normalPlaceCardEvent({ event, gameState, clock }: Comput
 		throw new Error("Card not found in hand");
 	}
 	const positionOfCardInHand = gameState.getPositionInHand(event.instanceId, event.isPlayer);
+	if (positionOfCardInHand === -1) {
+		console.warn("Card already placed");
+		return;
+	}
+	if (card.cost > gameState.getMana(event.isPlayer)) {
+		console.warn("Not enough mana");
+		return;
+	}
 	clock.triggerEvent({
 		type: "manaConsume",
 		isPlayer: event.isPlayer,
 		delta: card.cost,
 	});
-	if (positionOfCardInHand !== undefined) {
-		clock.triggerEvent({
-			type: "drawCard",
-			isPlayer: event.isPlayer,
-			handPosition: positionOfCardInHand,
-		});
-	}
+	clock.triggerEvent({
+		type: "drawCard",
+		isPlayer: event.isPlayer,
+		handPosition: positionOfCardInHand,
+	});
 	clock.triggerEvent({
 		type: "placeCard",
 		isPlayer: event.isPlayer,
