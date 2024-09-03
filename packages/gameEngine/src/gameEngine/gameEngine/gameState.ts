@@ -415,6 +415,16 @@ export class GameStateObject {
 		}
 		return card.states.find((s) => s.type === type);
 	}
+	getStateOfDeckCard(instanceId: number, type: CardState["type"]) {
+		const card = this.getDeckCardByInstanceId(instanceId);
+		if (!card) {
+			return null;
+		}
+		return this.extratStateOfCard(card, type);
+	}
+	extratStateOfCard(card: { states: CardState[] }, type: CardState["type"]) {
+		return card.states.find((s) => s.type === type);
+	}
 	getStateOfCardWithIndex(isPlayerCard: boolean, cardPosition: number, type: CardState["type"]): null | [number, CardState] {
 		const card = this.getCard(isPlayerCard, cardPosition);
 		if (!card) {
@@ -449,7 +459,7 @@ export class GameStateObject {
 		return [...this.playerDeck, ...this.playerHand].find((c) => c && c.id === id);
 	}
 	getDeckCardByInstanceId(instanceId: number) {
-		return [...this.playerDeck, ...this.opponentDeck, ...this.playerHand, ...this.opponentHand].find((c) => c?.id === instanceId);
+		return [...this.playerDeck, ...this.opponentDeck, ...this.playerHand, ...this.opponentHand].find((c) => c?.id === instanceId) ?? null;
 	}
 	getStateOfDeckCardByInstaceId(instanceId: number, type: CardState["type"]) {
 		const card = this.getDeckCardByInstanceId(instanceId);

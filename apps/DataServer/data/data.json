@@ -1391,7 +1391,14 @@
         },
         {
           "cost": 4,
-          "states": [],
+          "states": [
+            {
+              "type": "iteration",
+              "trigger": "onPlacement",
+              "target": "selfCard",
+              "value": 0
+            }
+          ],
           "illustration": "card_40_level_3_1724548870336.png"
         }
       ]

@@ -1,17 +1,39 @@
-import { BeforeNormalPlacementStateAction, CardState } from "../CardStatesData";
+import { BeforeNormalPlacementStateAction, StateAction } from "../CardStatesData";
+import onPlacementTrigger from "../utils/onPlacementTrigger";
 
-const BeforeNormalPlacementStateActionIteration: BeforeNormalPlacementStateAction = ({ card, clock, event, gameState }) => {
-	// const state = gameState.getStateOfDeckCardByInstaceId(event., "iteration");
-	
-	// clock.triggerEvent({
-	// 	type: "addDeckCardStateValue",
-	// 	state: {
-	// 		...state,
-	// 		value: state!.value! + 1
-	// 	} as CardState,
-	// 	instanceId: card.id,
-	// });
-	return card;
+const IterationStateAction: StateAction = ({ clock, gameState, event }) => {
+	const initiator = onPlacementTrigger(event);
+	const state = gameState.getStateOfCardByInstanceId(initiator.instanceId, "iteration");
+	const card = gameState.getCardByInstance(initiator.instanceId);
+	if (typeof state?.value !== "number" || card === null) {
+		return;
+	}
+	const deckCard = gameState.getDeckCardByInstanceId(card.initiatorId);
+	if (!deckCard) {
+		return;
+	}
+	clock.triggerEvent({
+		type: "addDeckCardStateValue", instanceId: deckCard.id, state: {
+			...state,
+			value: state.value + 1,
+		}
+	});
 };
 
-export default BeforeNormalPlacementStateActionIteration;
+const BeforeNormalPlacementStateActionIteration: BeforeNormalPlacementStateAction = ({ card, gameState }) => {
+	const state = gameState.extratStateOfCard(card, "iteration");
+	if (!state?.value || state.value <= 0) {
+		return card;
+	}
+	return {
+		...card,
+		maxHp: card.maxHp * (1.5 ** state.value),
+		initialAttackSpeed: card.initialAttackSpeed * (1.5 ** state.value),
+		dmg: card.dmg * (1.5 ** state.value),
+	};
+};
+
+export {
+	IterationStateAction,
+	BeforeNormalPlacementStateActionIteration,
+};

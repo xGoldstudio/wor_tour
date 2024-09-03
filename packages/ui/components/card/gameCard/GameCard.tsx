@@ -29,6 +29,7 @@ const dummyCard: InGameCardType = {
   states: [],
   illustration: "",
   worldIllustration: "",
+  initiatorId: -1,
 };
 
 function GameCard({

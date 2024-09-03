@@ -19,7 +19,7 @@ import { divineShieldOnDamageModifier } from './stateActions/divineShield';
 import { onAddedScorch, onChangeValueScorch } from './stateActions/scorch';
 import FlameThrowerStateAction from './stateActions/flameThrower';
 import WindShuffleStateAction from './stateActions/windShuffle';
-import BeforeNormalPlacementStateActionIteration from './stateActions/iteration';
+import { BeforeNormalPlacementStateActionIteration, IterationStateAction } from './stateActions/iteration';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -405,7 +405,7 @@ export const CardStatesData = {
     min: 0,
     max: undefined,
     noValue: false,
-    triggers: ["idle"],
+    triggers: ["onPlacement"],
     targets: ["selfCard"],
     computeCost: () => {
       return 2.5;
@@ -414,7 +414,7 @@ export const CardStatesData = {
     title: "Iteration",
     status: "buff",
     src: "iteration.png",
-    action: () => {},
+    action: IterationStateAction,
     options: {
       onBeforeNormalPlacement: BeforeNormalPlacementStateActionIteration,
     },

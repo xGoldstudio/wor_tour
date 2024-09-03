@@ -319,4 +319,5 @@ export type InGameCardType = {
   states: CardState[];
   illustration: string;
   worldIllustration: string;
+  initiatorId: number;
 };

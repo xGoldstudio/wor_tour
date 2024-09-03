@@ -1,24 +1,11 @@
 import Clock from "../../clock/clock";
 import { EventType } from "../../../types/eventType";
 import { computeNextFrameState } from "../gameEngine";
-import { GameStateObject } from "../gameState";
+import { GameStateObject, MIN_ATTACK_SPEED } from "../gameState";
 import _ from "lodash";
 import { expect, test } from 'vitest';
 import { CardType } from "../../../types/Card";
-import { drawPlaceCard, initTest } from "./common";
-
-const baseCard = {
-  name: "string",
-  cost: 1,
-  illustration: "string",
-  worldIllustration: "string",
-  dmg: 100,
-  hp: 200,
-  attackSpeed: 1,
-  states: [],
-  level: 1,
-  world: 1,
-}
+import { baseCard, drawPlaceCard, initTest } from "./common";
 
 const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, name: String(i), dmg: i, rarity: "common"}));
 
@@ -88,4 +75,17 @@ test("place card on another card", () => {
 	expect(state.playerBoard[0]?.instanceId).not.toEqual(prevInstanceId);
 	expect(clock.getLastTickEvents().find((e) => e.type === "beforeCardDestroyed")?.instanceId).toEqual(prevInstanceId);
 	clock.nextTick();
+});
+
+test("place card attack limit", () => {
+	const { state, clock } = initTest({
+		skipStartGame: true, gameData: { playerDeck: [{ ...baseCard, attackSpeed: 0 }, { ...baseCard, attackSpeed: 999 }] }
+	});
+
+	drawPlaceCard(clock, true, 0, state);
+	clock.nextTick();
+	expect(state.getCard(true, 0)?.attackSpeed).toEqual(MIN_ATTACK_SPEED);
+	drawPlaceCard(clock, true, 0, state);
+	clock.nextTick();
+	expect(state.getCard(true, 0)?.attackSpeed).toEqual(MIN_ATTACK_SPEED);
 });

@@ -63,6 +63,10 @@ export function drawPlaceCard(clock: ClockReturn<EventType>, isPlayer: boolean, 
 	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: isPlayer, position: position, instanceId });
 }
 
+export function triggerNormalPlaceCard(clock: ClockReturn<EventType>, isPlayer: boolean, position: number, instanceId: number) {
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: isPlayer, position: position, instanceId });
+}
+
 export function triggerPlaceCard(clock: ClockReturn<EventType>, isPlayer: boolean, position: number, card: PlaceCardType) {
 	clock.triggerEvent({ type: "placeCard", isPlayer: isPlayer, position: position, card, isSpecialPlacement: false });
 }
