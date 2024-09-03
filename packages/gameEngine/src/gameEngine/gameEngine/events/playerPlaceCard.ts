@@ -1,35 +1,32 @@
 import _ from "lodash";
-import { NormalPlaceCardEvent, PlaceCardType } from "../../../types/eventType";
+import { PlaceCardType, PlayerPlaceCardEvent } from "../../../types/eventType";
 import { ComputeEventProps } from "../gameEngine";
 import { CardType } from "@repo/lib";
 
-export default function normalPlaceCardEvent({ event, gameState, clock }: ComputeEventProps<NormalPlaceCardEvent>) {
+// this event is a securtiy to avoid placing a card that is not in the hand or not enough mana
+export default function playerPlaceCardEvent({ event, gameState, clock }: ComputeEventProps<PlayerPlaceCardEvent>) {
 	if (!gameState.isStarted) {
 		return;
 	}
 	const card = gameState.getDeckCardByInstanceId(event.instanceId);
 	if (!card) {
-		throw new Error("Card not found in hand");
+		console.warn("Card not found in hand");
+		return;
 	}
 	const positionOfCardInHand = gameState.getPositionInHand(event.instanceId, event.isPlayer);
-	clock.triggerEvent({
-		type: "manaConsume",
-		isPlayer: event.isPlayer,
-		delta: card.cost,
-	});
-	if (positionOfCardInHand !== -1) {
-		clock.triggerEvent({
-			type: "drawCard",
-			isPlayer: event.isPlayer,
-			handPosition: positionOfCardInHand,
-		});
+	if (positionOfCardInHand === -1) {
+		console.warn("Card already placed");
+		return;
+	}
+	if (card.cost > gameState.getMana(event.isPlayer)) {
+		console.warn("Not enough mana");
+		return;
 	}
 	clock.triggerEvent({
-		type: "placeCard",
+		type: "normalPlaceCard",
 		isPlayer: event.isPlayer,
 		position: event.position,
-		card: placeCardFromCardType(card),
-		isSpecialPlacement: false,
+		instanceId: event.instanceId,
 	});
 }
 

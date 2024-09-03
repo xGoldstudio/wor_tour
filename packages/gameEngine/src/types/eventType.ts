@@ -43,7 +43,8 @@ export type EventType =
   | AfterStatePlaceCardEvent
   | CardStartAttackingAnimationEvent
   | CardEndAttackingAnimationEvent
-  | AddDeckCardStateValue;
+  | AddDeckCardStateValue
+  | PlayerPlaceCardEvent;
 
 export interface DummyEvent { // this event should be ignored
   type: "dummyEvent";
@@ -111,6 +112,13 @@ export interface AfterStatePlaceCardEvent {
 
 export interface NormalPlaceCardEvent {
   type: "normalPlaceCard";
+  isPlayer: boolean;
+  position: number;
+  instanceId: number;
+}
+
+export interface PlayerPlaceCardEvent {
+  type: "playerPlaceCard";
   isPlayer: boolean;
   position: number;
   instanceId: number;
