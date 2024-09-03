@@ -19,9 +19,10 @@ import { ClockReturn, EventType, GameStateObject } from "game_engine";
 interface PlayerGUIProps {
   isPlayer: boolean;
   clock: ClockReturn<EventType>;
+  gameState: GameStateObject;
 }
 
-function PlayerGUI({ isPlayer, clock }: PlayerGUIProps) {
+function PlayerGUI({ isPlayer, clock, gameState }: PlayerGUIProps) {
   const { deck, maxHp } = useGameStore(
     useShallow((s) => ({
       deck: s.state.playerDeck,
@@ -58,7 +59,7 @@ function PlayerGUI({ isPlayer, clock }: PlayerGUIProps) {
                 ))}
               </div>
               {_.times(4).map((index) => (
-                <InHandCard position={index} clock={clock} key={index} />
+                <InHandCard position={index} clock={clock} key={index} gameState={gameState} />
               ))}
             </div>
           )}

@@ -8,7 +8,7 @@ describe("State stack strategy max", () => {
 	const card = baseCard;
 	card.states = [{ ...dummyStateTest }];
 	const { state, clock } = initTest({ gameData: { playerDeck: [card] }, skipStartGame: true });
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	expect(state.getStateOfCard(true, 0, "dummyMaxStacking")?.value).toBe(1);
 

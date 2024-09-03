@@ -18,6 +18,7 @@ export default function Game() {
     isPlaying,
     runTicks,
     clock,
+    gameState,
   } = useRunGame();
 
   return (
@@ -40,7 +41,7 @@ export default function Game() {
             <AmountEffectOrDamage />
             <StartSequence />
             <HomeBg />
-            <PlayerGUI isPlayer={false} clock={clock} />
+            <PlayerGUI isPlayer={false} clock={clock} gameState={gameState} />
             <div className="w-full flex justify-center relative">
               <div className="grid grid-cols-3 gap-4 px-8">
                 <CardPlaceholder position={0} isPlayer={false} />
@@ -51,7 +52,7 @@ export default function Game() {
                 <CardPlaceholder position={2} isPlayer />
               </div>
             </div>
-            <PlayerGUI isPlayer clock={clock} />
+            <PlayerGUI isPlayer clock={clock} gameState={gameState} />
           </div>
           <div className="bg-black h-full w-full"></div>
         </>
@@ -67,10 +68,11 @@ interface CardPlaceholderProps {
 }
 
 function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
-  const { setCardTarget, removeCardTarget, cardTarget, cardSelected } = useGameInterface();
+  const { setCardTarget, removeCardTarget, cardTarget } = useGameInterface();
   const isSelected = isPlayer && cardTarget === position;
 
   function onEnter() {
+    const cardSelected = useGameInterface.getState().cardSelected;
     if (!isPlayer || cardSelected === null) {
       return;
     }
@@ -78,6 +80,7 @@ function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
   }
 
   function onLeave() {
+    const cardSelected = useGameInterface.getState().cardSelected;
     if (!isPlayer || cardSelected !== null) {
       removeCardTarget();
     }

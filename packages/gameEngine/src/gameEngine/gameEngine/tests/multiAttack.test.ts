@@ -4,9 +4,9 @@ import { expect, test } from 'vitest';
 
 test("multi attack", () => {
 	const { clock, state } = initTest({ skipStartGame: true });
-	drawPlaceCard(clock, true, 1);
-	drawPlaceCard(clock, false, 0);
-	drawPlaceCard(clock, false, 2);
+	drawPlaceCard(clock, true, 1, state);
+	drawPlaceCard(clock, false, 0, state);
+	drawPlaceCard(clock, false, 2, state);
 	clock.nextTick();
 	clock.triggerEvent({ type: "addState", instanceId: getInstanceId(state, true, 1), state: multiAttackState });
 	clock.nextTick();
@@ -31,7 +31,7 @@ test("multi attack", () => {
 	expect(state.opponentBoard[0]?.hp).toBe(defaultTestHp - defaultTestDamage); // took damage from side effect
 	expect(state.opponentBoard[2]?.hp).toBe(defaultTestHp - defaultTestDamage); // took damage from side effect
 
-	drawPlaceCard(clock, false, 1);
+	drawPlaceCard(clock, false, 1, state);
 	triggerDirectAttack(clock, state, true, 1);
 	clock.nextTick();
 	/**

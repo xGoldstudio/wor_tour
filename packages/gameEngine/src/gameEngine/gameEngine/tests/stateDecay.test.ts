@@ -8,7 +8,7 @@ test("Normal decay", () => {
 	const card = baseCard;
 	card.states = [{ ...dummyStateTest }];
 	const { state, clock } = initTest({ gameData: { playerDeck: [card] }, skipStartGame: true });
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	expect(clock.getLastTickEvents().find(e => e.type === "startStateDecay")).toBeDefined();
 	expect(clock)
@@ -22,7 +22,7 @@ test("Decay but state added again before end of the decay", () => {
 	const card = baseCard;
 	card.states = [{ ...dummyStateTest }];
 	const { clock, state } = initTest({ gameData: { playerDeck: [card] }, skipStartGame: true });
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	expect(clock.getLastTickEvents().find(e => e.type === "startStateDecay")).toBeDefined();
 	expect(clock)

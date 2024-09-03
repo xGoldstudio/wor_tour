@@ -29,7 +29,7 @@ test("damage and kill player card", () => {
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
 	clock.triggerEvent({ type: "startGame" });
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	const playerInstanceId = state.playerBoard[0]!.instanceId;
 	triggerDirectAttackResolved(clock, state, playerInstanceId, playerInstanceId, 100);
@@ -48,7 +48,7 @@ test("damage and kill opponent card", () => {
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
 	clock.triggerEvent({ type: "startGame" });
-	drawPlaceCard(clock, false, 0);
+	drawPlaceCard(clock, false, 0, state);
 	clock.nextTick();
 	const opponentInstanceId = state.opponentBoard[0]!.instanceId;
 	// deal damage to card

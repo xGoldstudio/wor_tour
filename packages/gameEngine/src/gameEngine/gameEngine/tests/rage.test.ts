@@ -8,7 +8,7 @@ import { CardState } from "@repo/lib";
 
 describe("rage", () => {
 	const { clock, state } = initTest({ skipStartGame: true });
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;
 

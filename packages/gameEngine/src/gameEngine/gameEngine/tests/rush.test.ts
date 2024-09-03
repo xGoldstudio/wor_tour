@@ -6,7 +6,7 @@ import { placeCardFromCardType } from '../events/normalPlaceCard';
 
 test("self card, attack longer than 45", () => {
 	const { clock, state } = initTest({ skipStartGame: true, gameData: { playerDeck: [ { ...baseCard, states: [rushStateTest] } ] } });
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;
 	expect(state.getStateOfCard(true, 0, "rush")).toBeUndefined();
@@ -16,7 +16,7 @@ test("self card, attack longer than 45", () => {
 test("self card, attack shorter than 45 (shouldn't change anything)", () => {
 	const AS = 3;
 	const { clock, state } = initTest({ skipStartGame: true, gameData: { playerDeck: [ { ...baseCard, attackSpeed: AS, states: [rushStateTest] } ] } });
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;
 	expect(state.getStateOfCard(true, 0, "rush")).toBeUndefined();

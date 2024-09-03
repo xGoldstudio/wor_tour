@@ -5,9 +5,9 @@ import { CardBorder, CardContentIllustartion, Effects, ManaBall, useGameAnimatio
 import { useRef, useState } from "react";
 import { dummyCard } from "./const";
 import { animationTimeline, CardType, getCenterOfBoundingElement } from "@repo/lib";
-import { ClockReturn, DrawCardEvent, EventType } from "game_engine";
+import { ClockReturn, DrawCardEvent, EventType, GameStateObject } from "game_engine";
 
-function InHandCard({ position, clock }: { position: number, clock: ClockReturn<EventType> }) {
+function InHandCard({ position, clock, gameState }: { position: number, clock: ClockReturn<EventType>, gameState: GameStateObject }) {
   const setSelectedCard = useGameInterface((state) => state.setSelectedCard);
   const removeCardTarget = useGameInterface((state) => state.removeCardTarget);
   const unselectCard = useGameInterface((state) => state.unselectCard);
@@ -61,26 +61,30 @@ function InHandCard({ position, clock }: { position: number, clock: ClockReturn<
 
   function onUnselectCard() {
     const cardTarget = useGameInterface.getState().cardTarget;
-    placeNewCard(position, cardTarget);
+    const cardSelected = useGameInterface.getState().cardSelected;
+    placeNewCard(cardSelected, cardTarget);
     unselectCard();
   }
 
   function onSelectCard() {
-    setSelectedCard(position);
+    const handCardInstanceId = gameState.getHandCardInstanceId(position, true);
+    if (handCardInstanceId !== undefined) {
+      setSelectedCard(handCardInstanceId);
+    }
   }
 
   function placeNewCard(
-    cardInHandPosition: number,
+    instanceId: number | null,
     targetPosition: number | null
   ) {
-    if (targetPosition === null) {
+    if (targetPosition === null || instanceId === null) {
       return;
     }
     clock.triggerEvent({
       type: "normalPlaceCard",
       isPlayer: true,
       position: targetPosition,
-      cardInHandPosition,
+      instanceId,
     });
     removeCardTarget();
   }

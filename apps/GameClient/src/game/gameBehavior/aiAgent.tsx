@@ -14,12 +14,12 @@ export const botOptions = {
 };
 
 export default function iaAgent() {
-  let nextCardToUse: { position: number; card: CardType } | null = null;
+  let nextCardToUse: { instanceId: number; card: CardType } | null = null;
 
   function setNextCardToUse(data: GameStateObject) {
     const position = getRandomElement(_.range(4));
     nextCardToUse = {
-      position,
+      instanceId: data.opponentHand[position]!.id,
       card: findCard(data.opponentHand[position]!.id, 1),
     };
   }
@@ -57,7 +57,7 @@ export default function iaAgent() {
         type: "normalPlaceCard",
         isPlayer: false,
         position: target,
-        cardInHandPosition: nextCardToUse.position,
+        instanceId: nextCardToUse.instanceId,
       });
       setNextCardToUse(data);
     }

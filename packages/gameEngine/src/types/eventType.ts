@@ -113,7 +113,7 @@ export interface NormalPlaceCardEvent {
   type: "normalPlaceCard";
   isPlayer: boolean;
   position: number;
-  cardInHandPosition: number;
+  instanceId: number;
 }
 
 export interface CardStartAttackingEvent {

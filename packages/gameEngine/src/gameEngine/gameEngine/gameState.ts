@@ -1,3 +1,4 @@
+import { filterNulls } from "@repo/lib";
 import { CardType } from "../../types/Card";
 import { InGameCardType } from "../../types/eventType";
 import { CardState } from "../states/CardStatesData";
@@ -289,10 +290,10 @@ export class GameStateObject {
 	}
 	discardHand(isPlayer: boolean) {
 		if (isPlayer) {
-			this.playerDeck = [...this.playerDeck, ...this.playerHand.filter((c) => c !== null)];
+			this.playerDeck = filterNulls([...this.playerDeck, ...this.playerHand]);
 			this.playerHand = Array(HAND_SIZE).fill(null);
 		} else {
-			this.opponentDeck = [...this.opponentDeck, ...this.opponentHand.filter((c) => c !== null)];
+			this.opponentDeck = filterNulls([...this.opponentDeck, ...this.opponentHand]);
 			this.opponentHand = Array(HAND_SIZE).fill(null);
 		}
 	}
@@ -456,5 +457,15 @@ export class GameStateObject {
 			return null;
 		}
 		return card.states.find((s) => s.type === type);
+	}
+	getPositionInHand(instanceId: number, isPlayer: boolean) {
+		const hand = isPlayer ? this.playerHand : this.opponentHand;
+		return hand.findIndex((c) => c?.id === instanceId);
+	}
+	getDeck(isPlayer: boolean) {
+		return isPlayer ? this.playerDeck : this.opponentDeck;
+	}
+	getHandCardInstanceId(position: number, isPlayer: boolean) {
+		return (isPlayer ? this.playerHand : this.opponentHand)[position]?.id;
 	}
 }

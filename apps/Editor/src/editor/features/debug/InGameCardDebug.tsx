@@ -6,6 +6,7 @@ import {
   cloneStateTest,
   drawPlaceCard,
   EventType,
+  GameStateObject,
   massacreStateTest,
   multiAttackState,
   rageStateTest,
@@ -19,9 +20,9 @@ import {
 import DebugPanelLayout from "./DebugPanelLayout";
 import { useDummyCard } from "./useDummyCard";
 
-function defaultActions(clock?: ClockReturn<EventType>) {
-  if (!clock) return;
-  drawPlaceCard(clock, true, 0);
+function defaultActions(clock: ClockReturn<EventType>, state: GameStateObject) {
+  if (!clock || !state) return;
+  drawPlaceCard(clock, true, 0, state);
 }
 
 export default function InGameCardDebug() {
@@ -35,7 +36,7 @@ export default function InGameCardDebug() {
   const { clock, state } = instance;
 
   useOnMount(() => {
-    defaultActions(clock);
+    defaultActions(clock, state);
   });
 
   function addState(stateArg: CardState) {
@@ -120,7 +121,7 @@ export default function InGameCardDebug() {
         <DebugPanelLayout instance={instance}>
           <p className="text-2xl font-semibold">Basic operations</p>
           <div className="flex gap-4">
-            <Button action={() => defaultActions(clock)}>PlaceCard</Button>
+            <Button action={() => defaultActions(clock, state)}>PlaceCard</Button>
             <Button action={() => dealDamage(10, true)}>Deal damage</Button>
             <Button action={() => dealDamage(10, false)}>Deal undirect damage</Button>
             <Button action={() => dealDamage(9999, true)}>Kill card</Button>

@@ -36,15 +36,15 @@ test("complete placement player", () => {
 	clock.nextTick();
 	expect(state.playerDeck.length).toEqual(4);
 
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, instanceId: state.getHandCardInstanceId(0, true)!, position: 0 });
 	clock.nextTick();
 	// card should be replaced
 	expect(state.playerHand[0]?.name).toEqual(deck[4].name);
 
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, instanceId: state.getHandCardInstanceId(0, true)! });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, instanceId: state.getHandCardInstanceId(0, true)! });
 	clock.nextTick();
-	expect(state.playerBoard[0]?.dmg).toEqual(5);
+	expect(state.playerBoard[0]?.dmg).toEqual(4);
 
 	expect(state.playerMana).toEqual(6);
 });
@@ -63,16 +63,16 @@ test("complete placement opponent", () => {
 	clock.nextTick();
 	expect(state.opponentDeck.length).toEqual(4);
 
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, instanceId: state.getHandCardInstanceId(0, false)! });
 	clock.nextTick();
 	// card should be replaced
 	expect(state.opponentHand[0]?.name).toEqual(deck[4].name);
 	expect(state.opponentBoard[0]?.dmg).toEqual(0);
 
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, instanceId: state.getHandCardInstanceId(0, false)! });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, instanceId: state.getHandCardInstanceId(0, false)! });
 	clock.nextTick();
-	expect(state.opponentBoard[0]?.dmg).toEqual(5);
+	expect(state.opponentBoard[0]?.dmg).toEqual(4);
 
 	expect(state.opponentMana).toEqual(6);
 });
@@ -80,10 +80,10 @@ test("complete placement opponent", () => {
 test("place card on another card", () => {
 	const { state, clock } = initTest({ skipStartGame: true });
 
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	const prevInstanceId = state.playerBoard[0]?.instanceId;
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	expect(state.playerBoard[0]?.instanceId).not.toEqual(prevInstanceId);
 	expect(clock.getLastTickEvents().find((e) => e.type === "beforeCardDestroyed")?.instanceId).toEqual(prevInstanceId);
