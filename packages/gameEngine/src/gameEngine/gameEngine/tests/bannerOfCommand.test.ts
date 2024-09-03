@@ -1,16 +1,16 @@
 import { expect, test } from "vitest";
-import { bannerOfComandStateTest, baseCard, drawPlaceCard, initTest } from "./common";
+import { bannerOfComandStateTest, baseCard, initTest, triggerPlaceCard } from "./common";
+import { placeCardFromCardType } from "../events/normalPlaceCard";
 
 // pretty straight forward effect, should give rage of value to all ally cards, that's it
 test("rage", () => {
-	const { clock, state } = initTest({ gameData: { playerDeck: [baseCard, baseCard, baseCard] } ,skipStartGame: true });
-	drawPlaceCard(clock, true, 0);
-	drawPlaceCard(clock, true, 1);
+	const { clock, state } = initTest({ skipStartGame: true });
+	triggerPlaceCard(clock, true, 0, placeCardFromCardType(baseCard));
+	triggerPlaceCard(clock, true, 1, placeCardFromCardType(baseCard));
 	clock.nextTick();
-	state.playerHand[0]!.states = [bannerOfComandStateTest]; // hijaking and card to set state
-	drawPlaceCard(clock, true, 2);
+	triggerPlaceCard(clock, true, 2, placeCardFromCardType({ ...baseCard, states: [bannerOfComandStateTest] }));
 	clock.nextTick();
 	expect(state.getStateOfCard(true, 0, "rage")?.value).toBe(bannerOfComandStateTest.value);
 	expect(state.getStateOfCard(true, 1, "rage")?.value).toBe(bannerOfComandStateTest.value);
 	expect(state.getStateOfCard(true, 2, "rage")?.value).toBe(bannerOfComandStateTest.value);
-})
+});

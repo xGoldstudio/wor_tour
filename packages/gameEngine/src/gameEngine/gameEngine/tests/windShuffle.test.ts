@@ -15,8 +15,8 @@ test("Divine shield, not stacked", () => {
 	clock.nextTick();
 	expect(state.playerHand.filter(c => c).length).toBe(4); // card has been shuffled
 	triggerPlaceCard(clock, true, 0, placeCardFromCardType({ ...baseCard, states: [windShuffleTest] }));
-	checkHand(state.playerHand, [0, 2, 3, 4]);
+	checkHand(state.playerHand, [1,2,3,4]);
 	clock.nextTick();
 	expect(state.playerHand.filter(c => c).length).toBe(4); // card has been shuffled
-	checkHand(state.playerHand, [5,0,2,3]);
+	checkHand(state.playerHand, [5,1,2,3]);
 });

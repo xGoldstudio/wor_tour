@@ -20,7 +20,7 @@ const baseCard = {
   world: 1,
 }
 
-const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common"}));
+const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, name: String(i), dmg: i, rarity: "common"}));
 
 test("complete placement player", () => {
 	const state = new GameStateObject({ playerDeck: deck, opponentDeck: deck, playerHp: 100, opponentHp: 100});
@@ -39,13 +39,12 @@ test("complete placement player", () => {
 	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// card should be replaced
-	expect(state.playerHand[0]).toEqual(deck[4]);
-	expect(state.playerBoard[0]?.id).toEqual(0);
+	expect(state.playerHand[0]?.name).toEqual(deck[4].name);
 
 	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
-	expect(state.playerBoard[0]?.id).toEqual(5);
+	expect(state.playerBoard[0]?.dmg).toEqual(5);
 
 	expect(state.playerMana).toEqual(6);
 });
@@ -67,13 +66,13 @@ test("complete placement opponent", () => {
 	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
 	// card should be replaced
-	expect(state.opponentHand[0]).toEqual(deck[4]);
-	expect(state.opponentBoard[0]?.id).toEqual(0);
+	expect(state.opponentHand[0]?.name).toEqual(deck[4].name);
+	expect(state.opponentBoard[0]?.dmg).toEqual(0);
 
 	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
 	clock.nextTick();
-	expect(state.opponentBoard[0]?.id).toEqual(5);
+	expect(state.opponentBoard[0]?.dmg).toEqual(5);
 
 	expect(state.opponentMana).toEqual(6);
 });

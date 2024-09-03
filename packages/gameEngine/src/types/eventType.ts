@@ -42,7 +42,8 @@ export type EventType =
   | StateLifcycleOnChangeValueEvent
   | AfterStatePlaceCardEvent
   | CardStartAttackingAnimationEvent
-  | CardEndAttackingAnimationEvent;
+  | CardEndAttackingAnimationEvent
+  | AddDeckCardStateValue;
 
 export interface DummyEvent { // this event should be ignored
   type: "dummyEvent";
@@ -286,6 +287,12 @@ export interface StateLifcycleOnRemoveEvent {
   type: "stateLifecycleOnRemove";
   stateType: CardState["type"];
   instanceId: number;
+}
+
+export interface AddDeckCardStateValue {
+  type: "addDeckCardStateValue";
+  instanceId: number;
+  state: CardState;
 }
 
 export type InGameCardType = {

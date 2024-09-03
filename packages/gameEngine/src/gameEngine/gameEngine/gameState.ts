@@ -35,17 +35,18 @@ export const BOARD_SIZE = 3;
 
 export class GameStateObject {
 	constructor({ playerDeck, opponentDeck, playerHp, opponentHp }: GameStateObjectConstructor) {
+		this.currentInstanceId = 0;
+
 		this.playerMana = 0;
 		this.opponentMana = 0;
 		this.playerTickStartEarningMana = null;
 		this.opponentTickStartEarningMana = null;
 		this.playerHand = Array(HAND_SIZE).fill(null);
 		this.opponentHand = Array(HAND_SIZE).fill(null);
-		this.playerDeck = [...playerDeck];
-		this.opponentDeck = [...opponentDeck];
+		this.playerDeck = [...playerDeck].map((c) => ({ ...c, id: this.getNextInstanceId() }));
+		this.opponentDeck = [...opponentDeck].map((c) => ({ ...c, id: this.getNextInstanceId() }));
 		this.playerBoard = Array(BOARD_SIZE).fill(null);
 		this.opponentBoard = Array(BOARD_SIZE).fill(null);
-		this.currentInstanceId = 0;
 		this.playerHp = playerHp;
 		this.opponentHp = opponentHp;
 		this.currentWinner = null;
@@ -340,6 +341,13 @@ export class GameStateObject {
 		this.trackedStateDecaying = this.trackedStateDecaying.filter((t) => t.instanceId !== instanceId || t.stateType !== stateType);
 	}
 	// utils
+	updateDeckCard(instanceId: number, mutator: (card: CardType) => void) {
+		const card = this.getDeckCardByInstanceId(instanceId);
+		if (!card) {
+			return;
+		}
+		mutator(card);		
+	}
 	mutateCard(instanceId: number, mutator: (card: InGameCardType) => void) {
 		const card = this.getCardByInstance(instanceId);
 		if (!card) {
@@ -438,5 +446,15 @@ export class GameStateObject {
 	}
 	getCardTypeById(id: number) {
 		return [...this.playerDeck, ...this.playerHand].find((c) => c && c.id === id);
+	}
+	getDeckCardByInstanceId(instanceId: number) {
+		return [...this.playerDeck, ...this.opponentDeck, ...this.playerHand, ...this.opponentHand].find((c) => c?.id === instanceId);
+	}
+	getStateOfDeckCardByInstaceId(instanceId: number, type: CardState["type"]) {
+		const card = this.getDeckCardByInstanceId(instanceId);
+		if (!card) {
+			return null;
+		}
+		return card.states.find((s) => s.type === type);
 	}
 }

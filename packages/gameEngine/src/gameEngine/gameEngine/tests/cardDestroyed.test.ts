@@ -20,7 +20,7 @@ const baseCard = {
 	world: 1,
 }
 
-const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common" }));
+const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, dmg: i, rarity: "common" }));
 
 test("destroying player card", () => {
 	const state = new GameStateObject({ playerDeck: deck, opponentDeck: deck, playerHp: 100, opponentHp: 100 });
@@ -31,7 +31,7 @@ test("destroying player card", () => {
 	expect(state.playerBoard[0]).toBe(null);
 	drawPlaceCard(clock, true, 0);
 	clock.nextTick();
-	expect(state.playerBoard[0]?.id).toBe(0);
+	expect(state.playerBoard[0]?.dmg).toBe(0);
 	triggerKillCard(clock, state.playerBoard[0]!.instanceId);
 	clock.nextTick();
 	expect(state.playerBoard[0]).toBe(null);
@@ -46,7 +46,7 @@ test("destroying opponent card", () => {
 	expect(state.opponentBoard[0]).toBe(null);
 	drawPlaceCard(clock, false, 0);
 	clock.nextTick();
-	expect(state.opponentBoard[0]?.id).toBe(0);
+	expect(state.opponentBoard[0]?.dmg).toBe(0);
 	triggerKillCard(clock, state.opponentBoard[0]!.instanceId);
 	clock.nextTick();
 	expect(state.opponentBoard[0]).toBe(null);
