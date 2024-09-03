@@ -8,7 +8,7 @@ describe("increase as", () => {
 			opponentHp: 5000,
 		}
 	});
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 
 	test("normal as", () => {
@@ -71,10 +71,9 @@ describe("increase as", () => {
 	});
 });
 
-
 test("AS limits upper and lower", () => {
 	const { clock, state } = initTest({ skipStartGame: true  });
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;
 	triggerChangeAttackSpeed(clock, instanceId, 99999);

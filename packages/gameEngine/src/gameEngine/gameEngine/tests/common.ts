@@ -57,9 +57,14 @@ export function initTest({ gameData, sideEffectOnEvent, skipStartGame, log }: {
 	return { state, clock };
 }
 
-export function drawPlaceCard(clock: ClockReturn<EventType>, isPlayer: boolean, position: number) {
+export function drawPlaceCard(clock: ClockReturn<EventType>, isPlayer: boolean, position: number, gameState: GameStateObject) {
+	const instanceId = gameState.getDeck(isPlayer)[0].id;
 	clock.triggerEvent({ type: "drawCard", isPlayer: isPlayer, handPosition: 0 });
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: isPlayer, position: position, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: isPlayer, position: position, instanceId });
+}
+
+export function triggerNormalPlaceCard(clock: ClockReturn<EventType>, isPlayer: boolean, position: number, instanceId: number) {
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: isPlayer, position: position, instanceId });
 }
 
 export function triggerPlaceCard(clock: ClockReturn<EventType>, isPlayer: boolean, position: number, card: PlaceCardType) {

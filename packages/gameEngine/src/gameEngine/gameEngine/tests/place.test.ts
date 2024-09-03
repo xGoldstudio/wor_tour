@@ -1,26 +1,13 @@
 import Clock from "../../clock/clock";
 import { EventType } from "../../../types/eventType";
 import { computeNextFrameState } from "../gameEngine";
-import { GameStateObject } from "../gameState";
+import { GameStateObject, MIN_ATTACK_SPEED } from "../gameState";
 import _ from "lodash";
 import { expect, test } from 'vitest';
 import { CardType } from "../../../types/Card";
-import { drawPlaceCard, initTest } from "./common";
+import { baseCard, drawPlaceCard, initTest } from "./common";
 
-const baseCard = {
-  name: "string",
-  cost: 1,
-  illustration: "string",
-  worldIllustration: "string",
-  dmg: 100,
-  hp: 200,
-  attackSpeed: 1,
-  states: [],
-  level: 1,
-  world: 1,
-}
-
-const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common"}));
+const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, name: String(i), dmg: i, rarity: "common"}));
 
 test("complete placement player", () => {
 	const state = new GameStateObject({ playerDeck: deck, opponentDeck: deck, playerHp: 100, opponentHp: 100});
@@ -36,16 +23,15 @@ test("complete placement player", () => {
 	clock.nextTick();
 	expect(state.playerDeck.length).toEqual(4);
 
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, instanceId: state.getHandCardInstanceId(0, true)!, position: 0 });
 	clock.nextTick();
 	// card should be replaced
-	expect(state.playerHand[0]).toEqual(deck[4]);
-	expect(state.playerBoard[0]?.id).toEqual(0);
+	expect(state.playerHand[0]?.name).toEqual(deck[4].name);
 
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, instanceId: state.getHandCardInstanceId(0, true)! });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, instanceId: state.getHandCardInstanceId(0, true)! });
 	clock.nextTick();
-	expect(state.playerBoard[0]?.id).toEqual(5);
+	expect(state.playerBoard[0]?.dmg).toEqual(4);
 
 	expect(state.playerMana).toEqual(6);
 });
@@ -64,16 +50,16 @@ test("complete placement opponent", () => {
 	clock.nextTick();
 	expect(state.opponentDeck.length).toEqual(4);
 
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, instanceId: state.getHandCardInstanceId(0, false)! });
 	clock.nextTick();
 	// card should be replaced
-	expect(state.opponentHand[0]).toEqual(deck[4]);
-	expect(state.opponentBoard[0]?.id).toEqual(0);
+	expect(state.opponentHand[0]?.name).toEqual(deck[4].name);
+	expect(state.opponentBoard[0]?.dmg).toEqual(0);
 
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, instanceId: state.getHandCardInstanceId(0, false)! });
+	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, instanceId: state.getHandCardInstanceId(0, false)! });
 	clock.nextTick();
-	expect(state.opponentBoard[0]?.id).toEqual(5);
+	expect(state.opponentBoard[0]?.dmg).toEqual(4);
 
 	expect(state.opponentMana).toEqual(6);
 });
@@ -81,12 +67,25 @@ test("complete placement opponent", () => {
 test("place card on another card", () => {
 	const { state, clock } = initTest({ skipStartGame: true });
 
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	const prevInstanceId = state.playerBoard[0]?.instanceId;
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	expect(state.playerBoard[0]?.instanceId).not.toEqual(prevInstanceId);
 	expect(clock.getLastTickEvents().find((e) => e.type === "beforeCardDestroyed")?.instanceId).toEqual(prevInstanceId);
 	clock.nextTick();
+});
+
+test("place card attack limit", () => {
+	const { state, clock } = initTest({
+		skipStartGame: true, gameData: { playerDeck: [{ ...baseCard, attackSpeed: 0 }, { ...baseCard, attackSpeed: 999 }] }
+	});
+
+	drawPlaceCard(clock, true, 0, state);
+	clock.nextTick();
+	expect(state.getCard(true, 0)?.attackSpeed).toEqual(MIN_ATTACK_SPEED);
+	drawPlaceCard(clock, true, 0, state);
+	clock.nextTick();
+	expect(state.getCard(true, 0)?.attackSpeed).toEqual(MIN_ATTACK_SPEED);
 });

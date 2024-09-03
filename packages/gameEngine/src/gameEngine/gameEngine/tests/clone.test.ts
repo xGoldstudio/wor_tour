@@ -5,7 +5,7 @@ import { CardState } from "@repo/lib";
 // pretty straight forward effect, should give rage of value to all ally cards, that's it
 test("Clone on empty board", () => {
 	const { clock, state } = initTest({ gameData: { playerDeck: [{ ...baseCard, states: [{...cloneStateTest, value: 2} as CardState] }] } ,skipStartGame: true });
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	expect(state.getStateOfCard(true, 0, "clone")?.value).toBe(cloneStateTest.value);
 
@@ -26,9 +26,9 @@ test("Clone on empty board", () => {
 
 test("Clone on full board", () => {
 	const { clock, state } = initTest({ gameData: { playerDeck: [{ ...baseCard, states: [{...cloneStateTest, value: 2} as CardState] }] } ,skipStartGame: true });
-	drawPlaceCard(clock, true, 0);
-	drawPlaceCard(clock, true, 1);
-	drawPlaceCard(clock, true, 2);
+	drawPlaceCard(clock, true, 0, state);
+	drawPlaceCard(clock, true, 1, state);
+	drawPlaceCard(clock, true, 2, state);
 	clock.nextTick();
 	expect(state.getStateOfCard(true, 0, "clone")?.value).toBe(cloneStateTest.value);
 
@@ -62,7 +62,7 @@ test("Clone on full board", () => {
 // also test purging states
 test("Clone should remove all states expect clone, and rese stats to initial", () => {
 	const { clock, state } = initTest({ gameData: { playerDeck: [{ ...baseCard, states: [{...cloneStateTest, value: 2} as CardState, dummyStateTest] }] } ,skipStartGame: true });
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	expect(state.getStateOfCard(true, 0, "clone")?.value).toBe(cloneStateTest.value);
 	expect(state.getStateOfCard(true, 0, "dummy")).toBeDefined();
@@ -86,9 +86,9 @@ test("Clone should remove all states expect clone, and rese stats to initial", (
 
 test("Clone should not target alive cards", () => {
 	const { clock, state } = initTest({ gameData: { playerDeck: [{ ...baseCard, states: [{...cloneStateTest, value: 2} as CardState, dummyStateTest] }] } ,skipStartGame: true });
-	drawPlaceCard(clock, true, 0);
-	drawPlaceCard(clock, true, 1);
-	drawPlaceCard(clock, true, 2);
+	drawPlaceCard(clock, true, 0, state);
+	drawPlaceCard(clock, true, 1, state);
+	drawPlaceCard(clock, true, 2, state);
 	clock.nextTick();
 	expect(state.getStateOfCard(true, 0, "clone")?.value).toBe(cloneStateTest.value);
 	expect(state.getStateOfCard(true, 0, "dummy")).toBeDefined();

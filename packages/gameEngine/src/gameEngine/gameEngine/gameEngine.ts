@@ -1,4 +1,4 @@
-import { AfterPlaceCardEvent, BeforeRemoveStateEvent, EndStateDecayEvent, ChangeAttackSpeedEvent, NormalPlaceCardEvent, StartStateDecayEvent, StateLifcycleOnAddEvent, StateLifcycleOnChangeValueEvent, StateLifcycleOnRemoveEvent, AfterStatePlaceCardEvent, CardStartAttackingAnimationEvent, CardEndAttackingAnimationEvent, BeforeCardDamageResolveEvent } from './../../types/eventType';
+import { AfterPlaceCardEvent, BeforeRemoveStateEvent, EndStateDecayEvent, ChangeAttackSpeedEvent, NormalPlaceCardEvent, StartStateDecayEvent, StateLifcycleOnAddEvent, StateLifcycleOnChangeValueEvent, StateLifcycleOnRemoveEvent, AfterStatePlaceCardEvent, CardStartAttackingAnimationEvent, CardEndAttackingAnimationEvent, BeforeCardDamageResolveEvent, AddDeckCardStateValue, PlayerPlaceCardEvent } from './../../types/eventType';
 import { CardAttackingEvent, CardDamagResolveEvent, CardDamageEvent, CardDestroyedEvent, CardStartAttackingEvent, DrawCardEvent, EventType, GameOverEvent, HealCardEvent, ManaConsumeEvent, ManaIncreaseEvent, PlaceCardEvent, PlayerDamageEvent, PlayerDamageResolveEvent, StartEarningManaEvent, SetManaIncreaseSpeed, StartGameSequence, StartGameEvent, RemoveStateEvent, TriggerStateEvent, AddStateEvent, IncreaseStateValueEvent, DecreaseStateValueEvent, EndEarningManaEvent, ShuffleDeckEvent, TimerDecreaseEvent } from '../../types/eventType';
 import startEarningManaEvent from "./events/startEarningMana";
 import manaIncreaseEvent from './events/manaIncrease';
@@ -41,6 +41,8 @@ import afterStatePlaceCard from './events/afterStatePlaceCard';
 import cardStartAttackingAnimation from './events/cardStartAttackingAnimation';
 import cardEndAttackingAnimation from './events/cardEndAttackingAnimation';
 import beforeCardDamageResolve from './events/beforeCardDamageResolve';
+import addDeckCardStateValue from './events/addDeckCardStateValue';
+import playerPlaceCardEvent from './events/playerPlaceCard';
 
 export const FRAME_TIME = 10;
 
@@ -90,6 +92,8 @@ type EventTypeMap = {
 	cardStartAttackingAnimation: CardStartAttackingAnimationEvent;
 	cardEndAttackingAnimation: CardEndAttackingAnimationEvent;
 	beforeCardDamageResolve: BeforeCardDamageResolveEvent;
+	addDeckCardStateValue: AddDeckCardStateValue;
+	playerPlaceCard: PlayerPlaceCardEvent;
 };
 
 type EventHandlers = {
@@ -136,6 +140,8 @@ const EventsCompute: EventHandlers = {
 	cardStartAttackingAnimation: cardStartAttackingAnimation,
 	cardEndAttackingAnimation: cardEndAttackingAnimation,
 	beforeCardDamageResolve: beforeCardDamageResolve,
+	addDeckCardStateValue: addDeckCardStateValue,
+	playerPlaceCard: playerPlaceCardEvent,
 }
 
 // used in front and back and can be debugged easily (not pure mutate the state)

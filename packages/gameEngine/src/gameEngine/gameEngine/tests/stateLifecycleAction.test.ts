@@ -3,7 +3,7 @@ import { expect, test, vi } from 'vitest';
 
 test("State lifecylce actions", () => {
 	const { state, clock } = initTest({ skipStartGame: true });
-	drawPlaceCard(clock, true, 0);
+	drawPlaceCard(clock, true, 0, state);
 	const options = CardStatesData["dummy"].options;
 	let onAddedActionSpy = vi.spyOn(options, "onAdded");
 	let onRemovedActionSpy = vi.spyOn(options, "onRemoved");

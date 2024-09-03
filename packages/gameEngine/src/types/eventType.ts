@@ -42,7 +42,9 @@ export type EventType =
   | StateLifcycleOnChangeValueEvent
   | AfterStatePlaceCardEvent
   | CardStartAttackingAnimationEvent
-  | CardEndAttackingAnimationEvent;
+  | CardEndAttackingAnimationEvent
+  | AddDeckCardStateValue
+  | PlayerPlaceCardEvent;
 
 export interface DummyEvent { // this event should be ignored
   type: "dummyEvent";
@@ -112,7 +114,14 @@ export interface NormalPlaceCardEvent {
   type: "normalPlaceCard";
   isPlayer: boolean;
   position: number;
-  cardInHandPosition: number;
+  instanceId: number;
+}
+
+export interface PlayerPlaceCardEvent {
+  type: "playerPlaceCard";
+  isPlayer: boolean;
+  position: number;
+  instanceId: number;
 }
 
 export interface CardStartAttackingEvent {
@@ -288,6 +297,12 @@ export interface StateLifcycleOnRemoveEvent {
   instanceId: number;
 }
 
+export interface AddDeckCardStateValue {
+  type: "addDeckCardStateValue";
+  instanceId: number;
+  state: CardState;
+}
+
 export type InGameCardType = {
   id: number;
   instanceId: number;
@@ -304,4 +319,5 @@ export type InGameCardType = {
   states: CardState[];
   illustration: string;
   worldIllustration: string;
+  initiatorId: number;
 };

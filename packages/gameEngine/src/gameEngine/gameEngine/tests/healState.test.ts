@@ -4,14 +4,14 @@ import { describe, expect, test } from 'vitest';
 
 describe("heal state", () => {
 	const { clock, state } = initTest({ skipStartGame: true });
-	drawPlaceCard(clock, true, 0);
-	drawPlaceCard(clock, true, 1);
+	drawPlaceCard(clock, true, 0, state);
+	drawPlaceCard(clock, true, 1, state);
 	clock.nextTick();
 	const reduceHpTo = defaultTestHp - healStateDefaultTest.value!
 	state.getCard(true, 0)!.hp = reduceHpTo;
 	state.getCard(true, 1)!.hp = reduceHpTo;
 	state.playerDeck[0].states = [healStateDefaultTest]
-	drawPlaceCard(clock, true, 2);
+	drawPlaceCard(clock, true, 2, state);
 	expect(state.playerBoard[0]?.hp).toBe(reduceHpTo);
 	expect(state.playerBoard[1]?.hp).toBe(reduceHpTo);
 	clock.nextTick();
@@ -34,7 +34,7 @@ describe("heal state", () => {
 		state.playerDeck[0].states = [healStateDefaultTest]
 		expect(state.playerBoard[0]?.hp).toBe(reduceHpTo);
 		clock.nextTick();
-		drawPlaceCard(clock, true, 1);
+		drawPlaceCard(clock, true, 1, state);
 		clock.nextTick();
 
 		expect(state.playerBoard[0]?.hp).toBe(defaultTestHp);

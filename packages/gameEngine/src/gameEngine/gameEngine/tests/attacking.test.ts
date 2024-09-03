@@ -1,14 +1,13 @@
 import { DAMAGE_SPEED } from "../events/cardDamage";
 import { getFrameFromAttackSpeed } from "../events/utils";
-import { initTest } from "./common";
+import { drawPlaceCard, initTest } from "./common";
 import { expect, test } from 'vitest';
 
 test("attacking pipeline", () => {
 	const { state, clock } = initTest({ skipStartGame: true });
 	void state;
 	void clock;
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: true, position: 0, cardInHandPosition: 0 });
+	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	expect(state.playerBoard[0]?.startAttackingTick).toBe(0);
 
@@ -28,8 +27,8 @@ test("attacking pipeline", () => {
 	clock.nextTick();
 	expect(state.opponentHp).toBe(100); // damage applied
 
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "normalPlaceCard", isPlayer: false, position: 0, cardInHandPosition: 0 });
+	drawPlaceCard(clock, false, 0, state);
+
 	clock.nextTick();
 	for (let i = 0; i < attackFrames + DAMAGE_SPEED; i++) {
 		clock.nextTick();

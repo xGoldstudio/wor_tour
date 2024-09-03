@@ -4,8 +4,8 @@ import { describe, expect, test } from 'vitest';
 describe("bleeding state", () => {
 	const damage = 10;
 	const { clock, state } = initTest({ gameData: { playerDeck: [{ ...baseCard, dmg: damage, attackSpeed: 0 }] }, skipStartGame: true });
-	drawPlaceCard(clock, true, 0);
-	drawPlaceCard(clock, false, 0);
+	drawPlaceCard(clock, true, 0, state);
+	drawPlaceCard(clock, false, 0, state);
 	clock.nextTick();
 	clock.triggerEvent({ type: "addState", instanceId: getInstanceId(state, true, 0), state: massacreStateTest });
 	clock.nextTick();

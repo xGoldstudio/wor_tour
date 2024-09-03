@@ -6,7 +6,7 @@ import { useShallow } from "zustand/react/shallow";
 import useGameStore from "../stores/gameStateStore";
 import useGameInterface from "../stores/gameInterfaceStore";
 import useGameCanvas from "./animation/useGameCanvas";
-import { ClockReturn, EventType } from "game_engine";
+import { ClockReturn, EventType, GameStateObject } from "game_engine";
 import useGameMetadataStore from "../stores/gameMetadataStore";
 import { matchmakingService } from "@/services/inject";
 
@@ -20,6 +20,7 @@ interface GameEventsActions {
   gameRef: React.MutableRefObject<HTMLDivElement | null>;
   isInit: boolean;
   clock: ClockReturn<EventType>;
+  gameState: GameStateObject;
 }
 
 export function getDeathAnimationKey(isPlayerCard: boolean, position: number) {
@@ -103,6 +104,7 @@ function useRunGame(): GameEventsActions {
     gameRef,
     isInit,
     clock,
+    gameState,
   };
 }
 

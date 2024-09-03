@@ -4,7 +4,7 @@ import RiposteStateAction from './stateActions/riposte';
 import MultiAttackStateAction from './stateActions/multiAttack';
 import MassacreStateAction from './stateActions/massacre';
 import BleedingStateAction from './stateActions/bleeding';
-import { BeforeCardDamageResolveEvent, EventType, InGameCardType, StateLifcycleOnAddEvent, StateLifcycleOnChangeValueEvent, StateLifcycleOnRemoveEvent, TriggerStateEvent } from '../../types/eventType';
+import { BeforeCardDamageResolveEvent, EventType, InGameCardType, NormalPlaceCardEvent, PlaceCardType, StateLifcycleOnAddEvent, StateLifcycleOnChangeValueEvent, StateLifcycleOnRemoveEvent, TriggerStateEvent } from '../../types/eventType';
 import { ClockReturn } from '../clock/clock';
 import { GameStateObject } from '../gameEngine/gameState';
 import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types/DataStoreType';
@@ -19,6 +19,7 @@ import { divineShieldOnDamageModifier } from './stateActions/divineShield';
 import { onAddedScorch, onChangeValueScorch } from './stateActions/scorch';
 import FlameThrowerStateAction from './stateActions/flameThrower';
 import WindShuffleStateAction from './stateActions/windShuffle';
+import { BeforeNormalPlacementStateActionIteration, IterationStateAction } from './stateActions/iteration';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -54,6 +55,13 @@ export type AttackModifierStateAction = ({ clock, gameState, event }: {
   event: BeforeCardDamageResolveEvent,
 }) => number;
 
+export type BeforeNormalPlacementStateAction = ({ clock, gameState, event }: {
+  clock: ClockReturn<EventType>,
+  gameState: GameStateObject,
+  event: NormalPlaceCardEvent,
+  card: PlaceCardType,
+}) => PlaceCardType;
+
 interface CardStateDataOptions {
   consume?: number;
   stackable?: boolean;
@@ -63,6 +71,7 @@ interface CardStateDataOptions {
   onRemoved?: RemovedStateAction;
   onChangeValue?: ChangeValueStateAction;
   onDamageModifier?: AttackModifierStateAction;
+  onBeforeNormalPlacement?: BeforeNormalPlacementStateAction;
 }
 
 interface CardStateDataInterface {
@@ -391,6 +400,24 @@ export const CardStatesData = {
     action: FlameThrowerStateAction,
     options: {},
     src: "flameThrower.png",
+  },
+  iteration: {
+    min: 0,
+    max: undefined,
+    noValue: false,
+    triggers: ["onPlacement"],
+    targets: ["selfCard"],
+    computeCost: () => {
+      return 2.5;
+    },
+    descrption: ({ target, value }) => `${target} will gain ${value} power 1.5 strength per stack, next time this card is placed, iteration + 1.`,
+    title: "Iteration",
+    status: "buff",
+    src: "iteration.png",
+    action: IterationStateAction,
+    options: {
+      onBeforeNormalPlacement: BeforeNormalPlacementStateActionIteration,
+    },
   },
   windShuffle: {
     min: undefined,
