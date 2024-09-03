@@ -4,16 +4,16 @@ import { healStateDefaultTest, massacreStateTest, rageStateTest } from "game_eng
 
 const dummyCard: CardType = {
 	name: "Dummy",
-	cost: 1,
+	cost: 9,
 	illustration: "string",
 	worldIllustration: "string",
 	dmg: 0,
 	hp: 200,
 	attackSpeed: 0.5,
 	states: [
-		healStateDefaultTest,
-		{ ...massacreStateTest, value: 100 } as CardState,
-		{ ...rageStateTest, value: 50 } as CardState,
+		// healStateDefaultTest,
+		// { ...massacreStateTest, value: 100 } as CardState,
+		// { ...rageStateTest, value: 50 } as CardState,
 	],
 	level: 1,
 	world: 1,

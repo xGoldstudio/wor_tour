@@ -8,6 +8,7 @@ export { default as Badge } from './components/Badge.tsx';
 export { default as NumberSpan } from './components/NumberSpan.tsx';
 export { default as useProgressPieChart } from './components/useProgressPieChart.tsx';
 export * from './components/card/CardBorder.tsx';
+export { default as HandCard } from './components/card/handCard/HandCard.tsx';
 export { default as Effects } from './components/card/Effects.tsx';
 export { default as ManaBall } from './components/ManaBall.tsx';
 export { default as FullCard } from './components/card/FullCard.tsx';
