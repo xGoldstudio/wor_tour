@@ -1,9 +1,9 @@
 import { EventType } from "../../../types/eventType";
-import { defaultTestHp, drawPlaceCard, healStateDefaultTest, initTest } from "./common";
+import { defaultTestHp, drawPlaceCard, healStateDefaultTest, initGame } from "./common";
 import { describe, expect, test } from 'vitest';
 
 describe("heal state", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	drawPlaceCard(clock, true, 0, state);
 	drawPlaceCard(clock, true, 1, state);
 	clock.nextTick();

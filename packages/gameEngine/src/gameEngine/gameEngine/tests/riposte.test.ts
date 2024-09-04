@@ -1,4 +1,4 @@
-import { attackAnimation, baseCard, defaultTestDamage, defaultTestHp, drawPlaceCard, initTest, triggerDirectAttackResolved } from "./common";
+import { attackAnimation, baseCard, defaultTestDamage, defaultTestHp, drawPlaceCard, initGame, triggerDirectAttackResolved } from "./common";
 import * as _ from "lodash";
 import { expect, test } from 'vitest';
 import { CardType } from "../../../types/Card";
@@ -13,7 +13,7 @@ usingDeck[0].states.push({
 });
 
 test("start damage to card (animation placeholder)", () => {
-	const { clock, state } = initTest({ gameData: { playerDeck: usingDeck }, skipStartGame: true });
+	const { clock, state } = initGame({ gameData: { playerDeck: usingDeck }, skipStartGame: true });
 	drawPlaceCard(clock, true, 0, state);
 	drawPlaceCard(clock, false, 0, state);
 	clock.nextTick();

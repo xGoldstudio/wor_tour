@@ -1,5 +1,5 @@
 import { CardState } from '@repo/lib';
-import { baseCard, drawPlaceCard, initTest } from './common';
+import { baseCard, drawPlaceCard, initGame } from './common';
 import { describe, expect, test } from 'vitest';
 
 const dummyStateTest: CardState = { type: "dummyMaxStacking", value: 1, trigger: "idle", target: "selfCard" };
@@ -7,7 +7,7 @@ const dummyStateTest: CardState = { type: "dummyMaxStacking", value: 1, trigger:
 describe("State stack strategy max", () => {
 	const card = baseCard;
 	card.states = [{ ...dummyStateTest }];
-	const { state, clock } = initTest({ gameData: { playerDeck: [card] }, skipStartGame: true });
+	const { state, clock } = initGame({ gameData: { playerDeck: [card] }, skipStartGame: true });
 	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	expect(state.getStateOfCard(true, 0, "dummyMaxStacking")?.value).toBe(1);

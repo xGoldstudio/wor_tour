@@ -3,6 +3,7 @@ import { CardType } from "../../types/Card";
 import { InGameCardType } from "../../types/eventType";
 import { CardState } from "../states/CardStatesData";
 import { getFrameFromAttackSpeed } from "./events/utils";
+import { cloneDeep } from "lodash";
 
 export interface GameStateObjectConstructor {
 	playerDeck: CardType[];
@@ -44,8 +45,8 @@ export class GameStateObject {
 		this.opponentTickStartEarningMana = null;
 		this.playerHand = Array(HAND_SIZE).fill(null);
 		this.opponentHand = Array(HAND_SIZE).fill(null);
-		this.playerDeck = [...playerDeck].map((c) => ({ ...c, id: this.getNextInstanceId() }));
-		this.opponentDeck = [...opponentDeck].map((c) => ({ ...c, id: this.getNextInstanceId() }));
+		this.playerDeck = cloneDeep(playerDeck).map((c) => ({ ...c, id: this.getNextInstanceId() }));
+		this.opponentDeck = cloneDeep(opponentDeck).map((c) => ({ ...c, id: this.getNextInstanceId() }));
 		this.playerBoard = Array(BOARD_SIZE).fill(null);
 		this.opponentBoard = Array(BOARD_SIZE).fill(null);
 		this.playerHp = playerHp;

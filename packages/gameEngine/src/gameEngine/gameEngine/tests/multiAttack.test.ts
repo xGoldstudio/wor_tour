@@ -1,9 +1,9 @@
 import { EventType } from "../../../types/eventType";
-import { attackAnimation, defaultTestDamage, defaultTestHp, drawPlaceCard, getInstanceId, initTest, multiAttackState, triggerDirectAttack } from "./common";
+import { attackAnimation, defaultTestDamage, defaultTestHp, drawPlaceCard, getInstanceId, initGame, multiAttackState, triggerDirectAttack } from "./common";
 import { expect, test } from 'vitest';
 
 test("multi attack", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	drawPlaceCard(clock, true, 1, state);
 	drawPlaceCard(clock, false, 0, state);
 	drawPlaceCard(clock, false, 2, state);

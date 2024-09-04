@@ -1,10 +1,10 @@
 import { expect, test } from "vitest";
-import { bannerOfComandStateTest, baseCard, initTest, triggerPlaceCard } from "./common";
+import { bannerOfComandStateTest, baseCard, initGame, triggerPlaceCard } from "./common";
 import { placeCardFromCardType } from "../events/normalPlaceCard";
 
 // pretty straight forward effect, should give rage of value to all ally cards, that's it
 test("rage", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	triggerPlaceCard(clock, true, 0, placeCardFromCardType(baseCard));
 	triggerPlaceCard(clock, true, 1, placeCardFromCardType(baseCard));
 	clock.nextTick();

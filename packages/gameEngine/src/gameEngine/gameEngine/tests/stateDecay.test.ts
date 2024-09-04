@@ -1,5 +1,5 @@
 import { CardState } from '@repo/lib';
-import { baseCard, drawPlaceCard, initTest } from './common';
+import { baseCard, drawPlaceCard, initGame } from './common';
 import { expect, test } from 'vitest';
 
 const dummyStateTest: CardState = { type: "dummyWithDecay", value: 2, trigger: "idle", target: "selfCard" };
@@ -7,7 +7,7 @@ const dummyStateTest: CardState = { type: "dummyWithDecay", value: 2, trigger: "
 test("Normal decay", () => {
 	const card = baseCard;
 	card.states = [{ ...dummyStateTest }];
-	const { state, clock } = initTest({ gameData: { playerDeck: [card] }, skipStartGame: true });
+	const { state, clock } = initGame({ gameData: { playerDeck: [card] }, skipStartGame: true });
 	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	expect(clock.getLastTickEvents().find(e => e.type === "startStateDecay")).toBeDefined();
@@ -21,7 +21,7 @@ test("Normal decay", () => {
 test("Decay but state added again before end of the decay", () => {
 	const card = baseCard;
 	card.states = [{ ...dummyStateTest }];
-	const { clock, state } = initTest({ gameData: { playerDeck: [card] }, skipStartGame: true });
+	const { clock, state } = initGame({ gameData: { playerDeck: [card] }, skipStartGame: true });
 	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	expect(clock.getLastTickEvents().find(e => e.type === "startStateDecay")).toBeDefined();

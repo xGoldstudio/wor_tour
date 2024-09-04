@@ -1,9 +1,9 @@
-import { baseCard, CardState, divineShieldTest, initTest, triggerDirectAttackResolved, triggerPlaceCard } from 'game_engine';
+import { baseCard, CardState, divineShieldTest, initGame, triggerDirectAttackResolved, triggerPlaceCard } from 'game_engine';
 import { expect, test } from 'vitest';
 import { placeCardFromCardType } from '../events/normalPlaceCard';
 
 test("Divine shield, not stacked", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	triggerPlaceCard(clock, true, 0, placeCardFromCardType({ ...baseCard, states: [divineShieldTest] }));
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;
@@ -22,7 +22,7 @@ test("Divine shield, not stacked", () => {
 
 test("Divine shield, stacked", () => {
 	const amount = 3;
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	triggerPlaceCard(clock, true, 0, placeCardFromCardType({ ...baseCard, states: [{ ...divineShieldTest, value: amount } as CardState] }));
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;
@@ -43,7 +43,7 @@ test("Divine shield, stacked", () => {
 });
 
 test("Case two attacks in the same frame", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	triggerPlaceCard(clock, true, 0, placeCardFromCardType({ ...baseCard, states: [divineShieldTest] }));
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;

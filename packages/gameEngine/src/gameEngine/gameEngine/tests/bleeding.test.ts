@@ -1,8 +1,8 @@
-import { bleedingStateTest, drawPlaceCard, getInstanceId, initTest } from "./common";
+import { bleedingStateTest, drawPlaceCard, getInstanceId, initGame } from "./common";
 import { describe, expect, test } from 'vitest';
 
 describe("bleeding state", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	clock.triggerEvent({ type: "addState", instanceId: getInstanceId(state, true, 0), state: bleedingStateTest });

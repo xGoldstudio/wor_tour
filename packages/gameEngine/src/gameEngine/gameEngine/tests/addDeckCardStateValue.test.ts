@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
-import { baseCard, dummyStateTest, initTest, } from "./common";
+import { baseCard, dummyStateTest, initGame, } from "./common";
 
 // pretty straight forward effect, should give rage of value to all ally cards, that's it
 describe("addDeckCardStateValue", () => {
-	const { clock, state } = initTest({ skipStartGame: true, gameData: { playerDeck: [baseCard] } });
+	const { clock, state } = initGame({ skipStartGame: true, gameData: { playerDeck: [baseCard] } });
 	const instanceId = state.playerDeck[0]!.id;
 
 	test("adding state", () => {

@@ -1,5 +1,5 @@
 import { FpsTrackerType, resetAllGameEventListeners, runGameEventListeners, useGameSyncAnimationStore, useOnMount, useOnUnMount } from "@repo/ui";
-import { ClockReturn, EventType, FRAME_TIME, GameStateObject, GameStateObjectConstructor, initTest } from "game_engine";
+import { ClockReturn, EventType, FRAME_TIME, GameStateObject, GameStateObjectConstructor, initGame } from "game_engine";
 import { useState } from "react";
 
 export type UseRunInstance = {
@@ -26,7 +26,7 @@ export function useRunGameInstance({
 	const [instance, setInstance] = useState<UseRunInstance>(runInstance());
 
 	function runInstance() {
-		const { clock, state } = initTest({
+		const { clock, state } = initGame({
 			sideEffectOnEvent: ({ event, state, clock }) => {
 				log && console.log(event);
 				runGameEventListeners(

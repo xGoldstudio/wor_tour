@@ -1,8 +1,8 @@
-import { CardStatesData, drawPlaceCard, dummyStateTest, initTest } from 'game_engine';
+import { CardStatesData, drawPlaceCard, dummyStateTest, initGame } from 'game_engine';
 import { expect, test, vi } from 'vitest';
 
 test("State lifecylce actions", () => {
-	const { state, clock } = initTest({ skipStartGame: true });
+	const { state, clock } = initGame({ skipStartGame: true });
 	drawPlaceCard(clock, true, 0, state);
 	const options = CardStatesData["dummy"].options;
 	let onAddedActionSpy = vi.spyOn(options, "onAdded");

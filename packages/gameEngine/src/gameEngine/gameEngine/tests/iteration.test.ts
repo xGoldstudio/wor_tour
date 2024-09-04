@@ -1,9 +1,9 @@
 import { expect, test } from "vitest";
-import { baseCard, drawPlaceCard, initTest, triggerNormalPlaceCard } from "./common";
+import { baseCard, drawPlaceCard, initGame, triggerNormalPlaceCard } from "./common";
 import { MAX_ATTACK_SPEED } from "../gameState";
 
 test("Iteration", () => {
-	const { clock, state } = initTest({
+	const { clock, state } = initGame({
 		skipStartGame: true,
 		gameData: { playerDeck: [{ ...baseCard, states: [{ type: "iteration", value: 0, trigger: "onPlacement", target: "selfCard"  }] }] },
 	});
@@ -23,7 +23,7 @@ test("Iteration", () => {
 });
 
 test("Limits", () => {
-	const { clock, state } = initTest({
+	const { clock, state } = initGame({
 		skipStartGame: true,
 		gameData: { playerDeck: [{ ...baseCard, hp: 16, attackSpeed: 2.5, dmg: 13, states: [{ type: "iteration", value: 10, trigger: "onPlacement", target: "selfCard"  }] }] },
 	});

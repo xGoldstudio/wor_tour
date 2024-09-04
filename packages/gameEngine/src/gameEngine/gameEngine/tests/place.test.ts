@@ -5,7 +5,7 @@ import { GameStateObject, MIN_ATTACK_SPEED } from "../gameState";
 import _ from "lodash";
 import { expect, test } from 'vitest';
 import { CardType } from "../../../types/Card";
-import { baseCard, drawPlaceCard, initTest } from "./common";
+import { baseCard, drawPlaceCard, initGame } from "./common";
 
 const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, name: String(i), dmg: i, rarity: "common"}));
 
@@ -65,7 +65,7 @@ test("complete placement opponent", () => {
 });
 
 test("place card on another card", () => {
-	const { state, clock } = initTest({ skipStartGame: true });
+	const { state, clock } = initGame({ skipStartGame: true });
 
 	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
@@ -78,7 +78,7 @@ test("place card on another card", () => {
 });
 
 test("place card attack limit", () => {
-	const { state, clock } = initTest({
+	const { state, clock } = initGame({
 		skipStartGame: true, gameData: { playerDeck: [{ ...baseCard, attackSpeed: 0 }, { ...baseCard, attackSpeed: 999 }] }
 	});
 
