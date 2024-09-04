@@ -54,7 +54,7 @@ export default function iaAgent() {
         return;
       }
       triggerEvent({
-        type: "normalPlaceCard",
+        type: "playerPlaceCard",
         isPlayer: false,
         position: target,
         instanceId: nextCardToUse.instanceId,
