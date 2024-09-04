@@ -13,12 +13,14 @@ const IterationStateAction: StateAction = ({ clock, gameState, event }) => {
 		return;
 	}
 	clock.triggerEvent({
-		type: "addDeckCardState", instanceId: deckCard.id, state: {
+		type: "addDeckCardState",
+		instanceId: deckCard.id,
+		state: {
 			type: "iteration",
-			value: state.value,
+			value: 1,
 			trigger: "onPlacement",
 			target: "selfCard",
-		}
+		},
 	});
 };
 

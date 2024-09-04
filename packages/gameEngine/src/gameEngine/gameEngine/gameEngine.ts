@@ -41,7 +41,7 @@ import afterStatePlaceCard from './events/afterStatePlaceCard';
 import cardStartAttackingAnimation from './events/cardStartAttackingAnimation';
 import cardEndAttackingAnimation from './events/cardEndAttackingAnimation';
 import beforeCardDamageResolve from './events/beforeCardDamageResolve';
-import addDeckCardStateValue from './events/addDeckCardStateValue';
+import addDeckCardState from './events/addDeckCardStateValue';
 import playerPlaceCardEvent from './events/playerPlaceCard';
 import increaseDeckCardStateValueEvent from './events/increaseDeckCardStateValue';
 import decreaseDeckCardStateValueEvent from './events/decreaseDeckCardStateValue';
@@ -146,7 +146,7 @@ const EventsCompute: EventHandlers = {
 	cardStartAttackingAnimation: cardStartAttackingAnimation,
 	cardEndAttackingAnimation: cardEndAttackingAnimation,
 	beforeCardDamageResolve: beforeCardDamageResolve,
-	addDeckCardState: addDeckCardStateValue,
+	addDeckCardState: addDeckCardState,
 	playerPlaceCard: playerPlaceCardEvent,
 	increaseDeckCardStateValue: increaseDeckCardStateValueEvent,
 	decreaseDeckCardStateValue: decreaseDeckCardStateValueEvent,

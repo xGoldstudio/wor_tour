@@ -7,7 +7,7 @@ import { getStackingIncreaseBy } from "./addState";
  * Behaviour here is simpler than the state management of placed cards, there is no rules, state must explictetly tell what they want.
  * AddState will add or replace state, no stacking, no decay or anything else.
  */
-export default function addDeckCardStateValue({ gameState, event, clock }: ComputeEventProps<AddDeckCardStateEvent>) {
+export default function addDeckCardState({ gameState, event, clock }: ComputeEventProps<AddDeckCardStateEvent>) {
 	const existingState = gameState.getStateOfDeckCardByInstaceId(event.instanceId, event.state.type);
 	const options = getOptionsFromType(event.state.type);
 	if (existingState) {

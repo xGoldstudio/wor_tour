@@ -416,6 +416,7 @@ export const CardStatesData = {
     src: "iteration.png",
     action: IterationStateAction,
     options: {
+      stackable: true,
       onBeforeNormalPlacement: BeforeNormalPlacementStateActionIteration,
     },
   },
