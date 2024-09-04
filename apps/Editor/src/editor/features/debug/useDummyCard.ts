@@ -1,6 +1,5 @@
 import useEditorStore from "@/editor/store/EditorStore";
-import { CardState, CardType } from "@repo/lib";
-import { healStateDefaultTest, massacreStateTest, rageStateTest } from "game_engine";
+import { CardType } from "@repo/lib";
 
 const dummyCard: CardType = {
 	name: "Dummy",
