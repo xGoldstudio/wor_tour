@@ -1,7 +1,6 @@
 import {
   CardBorder,
   CardContentIllustartion,
-  Effects,
   ManaBall,
   useGameAnimation,
   useGameEventListener
@@ -12,6 +11,7 @@ import {
   CardType,
 } from "@repo/lib";
 import { DrawCardEvent } from "game_engine";
+import HandCardEffects from "./HandCardEffetcs";
 
 const dummyCard: CardType = {
   name: "string",
@@ -52,7 +52,7 @@ function HandCard({
       <CardBorder rarity={card.rarity} size={1.8}>
         <InHandCardIllustration card={card} position={position} />
         <div className="absolute right-[3px] top-[4px] flex flex-col gap-2">
-          <Effects states={card.states} size={0.7} />
+          <HandCardEffects isPlayerCard={true} position={position} />
         </div>
       </CardBorder>
       <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 scale-75">

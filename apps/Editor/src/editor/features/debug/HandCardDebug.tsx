@@ -1,7 +1,10 @@
-import { CardState, getOptionsFromType } from "@repo/lib";
+import { CardState } from "@repo/lib";
 import { Button, HandCard, useOnMount, useRunGameInstance } from "@repo/ui";
 import {
+  bleedingStateTest,
   ClockReturn, EventType,
+  getOptionsFromType,
+  riposteStateTest,
   scorchTest
 } from "game_engine";
 import DebugPanelLayout from "./DebugPanelLayout";
@@ -20,7 +23,7 @@ export default function HandCardDebug() {
   const dummyCard = useDummyCard();
   const instance = useRunGameInstance({
     gameData: {
-      playerDeck: [dummyCard],
+      playerDeck: [{...dummyCard, rarity: "rare"}, {...dummyCard, rarity: "common"}],
     },
     skipStartGame: true,
   });
@@ -31,20 +34,31 @@ export default function HandCardDebug() {
   });
 
   function addState(stateArg: CardState) {
-    const instanceId = state?.getCard(true, 0)?.instanceId;
+    const instanceId = state?.playerHand[0]?.id;
     if (instanceId === undefined) return;
     clock?.triggerEvent({
-      type: ",
+      type: "addDeckCardState",
       instanceId,
       state: stateArg,
     });
   }
 
-  function removeState(stateType: CardState["type"]) {
-    const instanceId = state?.getCard(true, 0)?.instanceId;
+  function consumeState(stateType: CardState["type"], consumeState: number) {
+    const instanceId = state?.playerHand[0]?.id;
     if (instanceId === undefined) return;
     clock?.triggerEvent({
-      type: "beforeRemoveState",
+      type: "decreaseDeckCardStateValue",
+      instanceId,
+      stateType,
+      decreaseBy: consumeState,
+    });
+  }
+
+  function removeState(stateType: CardState["type"]) {
+    const instanceId = state?.playerHand[0]?.id;
+    if (instanceId === undefined) return;
+    clock?.triggerEvent({
+      type: "removeDeckCardState",
       instanceId,
       stateType,
     });
@@ -83,11 +97,14 @@ export default function HandCardDebug() {
         <DebugPanelLayout instance={instance}>
           <p className="text-2xl font-semibold">Basic operations</p>
           <div className="flex gap-4">
-            <Button action={() => {}}>Decrease AS</Button>
+            <Button action={() => defaultActions(clock)}>Draw Card</Button>
           </div>
           <p className="text-2xl font-semibold">States</p>
           <div className="grid grid-cols-3 gap-4">
+            {addRemoveState(bleedingStateTest)}
+            {addRemoveState(riposteStateTest)}
             {addRemoveState(scorchTest)}
+            {addRemoveState({ ...scorchTest, value: 50 } as CardState)}
           </div>
         </DebugPanelLayout>
       </div>

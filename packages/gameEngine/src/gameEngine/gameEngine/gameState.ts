@@ -258,6 +258,13 @@ export class GameStateObject {
 		}
 		card.states = card.states.filter((s) => s.type !== type);
 	}
+	removeDeckCardState(instanceId: number, type: CardState["type"]) {
+		const card = this.getDeckCardByInstanceId(instanceId);
+		if (!card) {
+			return;
+		}
+		card.states = card.states.filter((s) => s.type !== type);
+	}
 	addState(
 		instanceId: number,
 		state: CardState,
@@ -287,6 +294,17 @@ export class GameStateObject {
 		}
 		const nextState = { ...card.states[stateIndex], value: value + delta } as CardState;
 		card.states[stateIndex] = nextState; // we mutate the state
+	}
+	modifyDeckCardStateValue(
+		instanceId: number,
+		stateType: CardState["type"],
+		delta: number,
+	) {
+		const state = this.getStateOfDeckCard(instanceId, stateType);
+		if (!state || state.value === null) {
+			return;
+		}
+		state.value = state.value + delta;
 	}
 	discardHand(isPlayer: boolean) {
 		if (isPlayer) {
@@ -466,7 +484,7 @@ export class GameStateObject {
 		if (!card) {
 			return null;
 		}
-		return card.states.find((s) => s.type === type);
+		return card.states.find((s) => s.type === type) ?? null;
 	}
 	getPositionInHand(instanceId: number, isPlayer: boolean) {
 		const hand = isPlayer ? this.playerHand : this.opponentHand;

@@ -62,7 +62,7 @@ export type BeforeNormalPlacementStateAction = ({ clock, gameState, event }: {
   card: PlaceCardType,
 }) => PlaceCardType;
 
-interface CardStateDataOptions {
+export interface CardStateDataOptions {
   consume?: number;
   stackable?: boolean;
   decay?: number;

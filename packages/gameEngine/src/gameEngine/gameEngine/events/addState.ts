@@ -1,6 +1,6 @@
 import { AddStateEvent } from "../../../types/eventType";
 import { ComputeEventProps } from "../gameEngine";
-import { getOptionsFromType } from "../../states/CardStatesData";
+import { CardState, CardStateDataOptions, getOptionsFromType } from "../../states/CardStatesData";
 
 export default function addStateEvent({ gameState, event, clock }: ComputeEventProps<AddStateEvent>) {
 	const existingState = gameState.getStateOfCardByInstanceId(event.instanceId, event.state.type);
@@ -14,22 +14,14 @@ export default function addStateEvent({ gameState, event, clock }: ComputeEventP
 		});
 	}
 	if (existingState) {
-		if (options.stackable && existingState.value !== null && event.state.value !== null) {
-			const previousValue = existingState.value;
-			let nextValue = existingState.value;
-			if (options.stackableStrategy === "sum" || options.stackableStrategy === undefined) {
-				nextValue += event.state.value;
-			} else if (options.stackableStrategy === "max") {
-				nextValue = Math.max(existingState.value, event.state.value);
-			}
-			if (nextValue > previousValue) {
-				clock.triggerEvent({
-					type: "increaseStateValue",
-					stateType: event.state.type,
-					increaseBy: nextValue - previousValue,
-					instanceId: event.instanceId,
-				});
-			}
+		const increaseBy = getStackingIncreaseBy(options, existingState, event.state.value);
+		if (increaseBy !== null) {
+			clock.triggerEvent({
+				type: "increaseStateValue",
+				stateType: event.state.type,
+				increaseBy,
+				instanceId: event.instanceId,
+			});
 		}
 		return;
 	} else {
@@ -43,4 +35,20 @@ export default function addStateEvent({ gameState, event, clock }: ComputeEventP
 		}
 	}
 	gameState.addState(event.instanceId, event.state);
+}
+
+export function getStackingIncreaseBy(options: CardStateDataOptions, existingState: CardState, value: number | null) {
+	if (options.stackable && existingState.value !== null && value !== null) {
+		const previousValue = existingState.value;
+		let nextValue = existingState.value;
+		if (options.stackableStrategy === "sum" || options.stackableStrategy === undefined) {
+			nextValue += value;
+		} else if (options.stackableStrategy === "max") {
+			nextValue = Math.max(existingState.value, value);
+		}
+		if (nextValue > previousValue) {
+			return nextValue - previousValue;
+		}
+	}
+	return null;
 }
