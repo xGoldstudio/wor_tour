@@ -27,26 +27,26 @@ test("complete draw player", () => {
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
 	expect(state.playerDeck.length).toEqual(8);
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 0 });
 	clock.nextTick();
 	expect(state.playerDeck.length).toEqual(7);
 	expect(state.playerHand[0]?.name).toEqual(deck[0].name);
 	expect(state.playerHand[1]).toEqual(null);
 	clock.nextTick();
 
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 1 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 2 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 3 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 1 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 2 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 3 });
 	clock.nextTick();
 	expect(state.playerDeck.length).toEqual(4);
 	expect(state.playerHand[1]?.name).toEqual(deck[1].name);
 	expect(state.playerHand[2]?.name).toEqual(deck[2].name);
 	expect(state.playerHand[3]?.name).toEqual(deck[3].name);
 
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 1 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 2 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 3 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 0 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 1 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 2 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 3 });
 	clock.nextTick();
 	expect(state.playerDeck.length).toEqual(4);
 	expect(state.playerHand[0]?.name).toEqual(deck[4].name);
@@ -54,10 +54,10 @@ test("complete draw player", () => {
 	expect(state.playerHand[2]?.name).toEqual(deck[6].name);
 	expect(state.playerHand[3]?.name).toEqual(deck[7].name);
 
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 1 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 2 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 3 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 0 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 1 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 2 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 3 });
 	clock.nextTick();
 	expect(state.playerDeck.length).toEqual(4);
 	expect(state.playerHand[0]?.name).toEqual(deck[0].name);
@@ -72,7 +72,7 @@ test("complete draw opponent", () => {
 		(event, clock) => computeNextFrameState(state, event, clock)
 	);
 	expect(state.opponentDeck.length).toEqual(8);
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 0 });
 	clock.nextTick();
 	expect(state.opponentDeck.length).toEqual(7);
 	expect(state.opponentHand[0]?.name).toEqual(deck[0].name);
@@ -80,19 +80,19 @@ test("complete draw opponent", () => {
 
 	clock.nextTick();
 
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 1 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 2 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 3 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 1 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 2 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 3 });
 	clock.nextTick();
 	expect(state.opponentDeck.length).toEqual(4);
 	expect(state.opponentHand[1]?.name).toEqual(deck[1].name);
 	expect(state.opponentHand[2]?.name).toEqual(deck[2].name);
 	expect(state.opponentHand[3]?.name).toEqual(deck[3].name);
 
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 1 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 2 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 3 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 0 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 1 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 2 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 3 });
 	clock.nextTick();
 	expect(state.opponentDeck.length).toEqual(4);
 	expect(state.opponentHand[0]?.name).toEqual(deck[4].name);
@@ -100,10 +100,10 @@ test("complete draw opponent", () => {
 	expect(state.opponentHand[2]?.name).toEqual(deck[6].name);
 	expect(state.opponentHand[3]?.name).toEqual(deck[7].name);
 
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 1 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 2 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 3 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 0 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 1 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 2 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 3 });
 	clock.nextTick();
 	expect(state.opponentDeck.length).toEqual(4);
 	expect(state.opponentHand[0]?.name).toEqual(deck[0].name);

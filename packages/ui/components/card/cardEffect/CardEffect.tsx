@@ -1,48 +1,53 @@
 import {
-	CardState,
-	DrawCardEvent,
-	EventType,
-	GameStateObject
+  AfterPlaceCardEvent,
+  CardState,
+  DrawCardEvent,
+  EventType,
+  GameStateObject,
 } from "game_engine";
-import { useRef, useState } from "react";
-import { animationTimeline, getStateData, translateYpx } from "@repo/lib";
 import { useSyncGameAnimation } from "../useGameSyncAnimation";
-import useGameEventListener from "../useGameEventListener";
+import { useRef, useState } from "react";
+import { useGameEventListener, useProgressPieChart } from "../../..";
+import { animationTimeline, getStateData, translateYpx } from "@repo/lib";
 import useConsumeEvents from "../caputeEvents/useConsumeEvents";
 import { EffectLayout } from "../Effects";
 
-interface GameCardEffectProps {
+interface CardEffectProps {
   state: CardState;
   removeState: (type: CardState["type"]) => void;
   statePosition: number;
   position: number;
   isPlayerCard: boolean;
+  eventType: "afterPlaceCard" | "drawCard";
 }
 
-export function HandCardEffect({
+export default function CardEffect({
   state,
   removeState,
   statePosition,
   position,
   isPlayerCard,
-}: GameCardEffectProps) {
+  eventType,
+}: CardEffectProps) {
   const size = 0.8;
   const { triggerAnimation } = useSyncGameAnimation();
   const { triggerAnimation: triggerPositionAnimation } = useSyncGameAnimation();
+  const { triggerAnimation: triggerDecayAnimation } = useSyncGameAnimation();
   const ref = useRef<HTMLDivElement>(null);
   const positionRef = useRef<HTMLDivElement>(null);
   const [currentState, setCurrentState] = useState(state);
   const prevStatePosition = useRef(statePosition);
+  const progressPieChart = useProgressPieChart();
 
   function getPaddingOffset(usingStatePosition: number) {
     return usingStatePosition * size * (42 + 8) + 8 * size;
   }
-  useGameEventListener<DrawCardEvent>({
-    type: "drawCard",
+  useGameEventListener<AfterPlaceCardEvent | DrawCardEvent>({
+    type: eventType,
     action: (event, gameState) => {
       const cardStateWithIndex = gameState.getStateOfCardWithIndex(
         event.isPlayer,
-        event.handPosition,
+        event.position,
         state.type
       );
       if (cardStateWithIndex) {
@@ -56,15 +61,17 @@ export function HandCardEffect({
       }
     },
     filter: (event) =>
-      event.handPosition === position &&
-      event.isPlayer === isPlayerCard,
+      event.position === position && event.isPlayer === isPlayerCard,
   });
   if (prevStatePosition.current !== statePosition) {
     // checking between value updated by events, and props related to cardStates react useState list
     changePostitionAnimation();
   }
   useConsumeEvents((event: EventType, gameState: GameStateObject) => {
-    if (event.type === "addDeckCardState" && event.state.type === currentState.type) {
+    if (
+      (event.type === "addState" || event.type === "addDeckCardState") &&
+      event.state.type === currentState.type
+    ) {
       const state = gameState.getStateOfCardByInstanceId(
         event.instanceId,
         event.state.type
@@ -73,32 +80,62 @@ export function HandCardEffect({
       appearAnimation();
       return true;
     }
-    if (event.type === "removeDeckCardState" && event.stateType === currentState.type) {
+    if (
+      (event.type === "removeState" || event.type === "removeDeckCardState") &&
+      event.stateType === currentState.type
+    ) {
       removeAnimation();
       return true;
     }
     if (
-      event.type === "increaseDeckCardStateValue" &&
+      (event.type === "increaseStateValue" ||
+        event.type === "increaseDeckCardStateValue") &&
       event.stateType === currentState.type
     ) {
       scaleAnimation(
         true,
-        gameState.getStateOfDeckCardByInstaceId(event.instanceId, event.stateType)
+        getStateFromCard(gameState, event.instanceId, event.stateType)
       );
       return true;
     }
-		if (
-      event.type === "decreaseDeckCardStateValue" &&
+    if (
+      (event.type === "decreaseStateValue" ||
+        event.type === "decreaseDeckCardStateValue") &&
       event.stateType === currentState.type
     ) {
       scaleAnimation(
         false,
-        gameState.getStateOfDeckCardByInstaceId(event.instanceId, event.stateType)
+        getStateFromCard(gameState, event.instanceId, event.stateType)
       );
+      return true;
+    }
+    if (
+      event.type === "triggerState" &&
+      event.state.type === currentState.type
+    ) {
+      triggerStateAnimation();
+      return true;
+    }
+    if (
+      event.type === "startStateDecay" &&
+      event.stateType === currentState.type
+    ) {
+      decayAnimation(event.duration);
       return true;
     }
     return null;
   });
+
+  function getStateFromCard(
+    gameState: GameStateObject,
+    instanceId: number,
+    stateType: CardState["type"]
+  ) {
+    if (eventType === "drawCard") {
+      return gameState.getStateOfDeckCardByInstaceId(instanceId, stateType);
+    }
+    return gameState.getStateOfCardByInstanceId(instanceId, stateType);
+  }
 
   function appearAnimation() {
     triggerAnimation({
@@ -169,6 +206,24 @@ export function HandCardEffect({
       ).progress,
     });
   }
+  function triggerStateAnimation() {
+    if (!ref.current) {
+      return;
+    }
+    triggerAnimation({
+      replace: true,
+      duration: 40,
+      computeStyle: animationTimeline(40)
+        // y is the current translation y of the ref
+        .add(ref.current, { scaleX: 1 }, [
+          {
+            values: { scaleX: 1.3 },
+            ease: [0, 1, 1, 1],
+          },
+          { values: { scaleX: 1 }, from: -10, ease: [0, 1, 1, 1] },
+        ]).progress,
+    });
+  }
   function changePostitionAnimation() {
     // since its an array, we are forced to relay on react props (which can lead to small desyncronisation from the game loop)
     triggerPositionAnimation({
@@ -189,6 +244,14 @@ export function HandCardEffect({
       ).progress,
     });
   }
+  function decayAnimation(duration: number) {
+    triggerDecayAnimation({
+      replace: true,
+      duration: duration,
+      computeStyle: (p) =>
+        progressPieChart.update(Math.max(0, 1 - p / duration)),
+    });
+  }
 
   return (
     <div
@@ -204,6 +267,9 @@ export function HandCardEffect({
           size={size}
           showDesc
         />
+        <div className="w-full h-full absolute z-10 top-0 rounded-md opacity-50 overflow-hidden">
+          <progressPieChart.Element />
+        </div>
       </div>
     </div>
   );

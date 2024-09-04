@@ -3,8 +3,8 @@ import { DrawCardEvent } from "../../../types/eventType";
 
 export default function drawCardEvent({ event, gameState }: ComputeEventProps<DrawCardEvent>) {
 	// if a card exist at the position we replace it
-	if (gameState.getHandFromState(event.isPlayer)[event.handPosition] !== null) {
-		gameState.cardHandToDeck(event.isPlayer, event.handPosition);
+	if (gameState.getHandFromState(event.isPlayer)[event.position] !== null) {
+		gameState.cardHandToDeck(event.isPlayer, event.position);
 	}
-	gameState.cardDeckToHand(event.isPlayer, event.handPosition);
+	gameState.cardDeckToHand(event.isPlayer, event.position);
 }

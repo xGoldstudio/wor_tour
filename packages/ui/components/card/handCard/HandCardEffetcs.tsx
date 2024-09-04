@@ -8,7 +8,7 @@ import { useRef, useState } from "react";
 import { inPx } from "@repo/lib";
 import useGameEventListener from "../useGameEventListener";
 import { CaptureEvents } from "../caputeEvents/CaptureEvents.tsx";
-import { HandCardEffect } from "./HandCardEffect.tsx";
+import CardEffect from "../cardEffect/CardEffect.tsx";
 
 export default function HandCardEffects({
   isPlayerCard,
@@ -39,7 +39,7 @@ export default function HandCardEffects({
       setStatesFromGameState(state);
     },
     filter: (event) =>
-      event.handPosition === position && event.isPlayer === isPlayerCard,
+      event.position === position && event.isPlayer === isPlayerCard,
   });
 
   const watcher = (event: EventType, state: GameStateObject) => {
@@ -63,13 +63,14 @@ export default function HandCardEffects({
     >
       <CaptureEvents watcher={watcher}>
         {states.map((state, index) => (
-          <HandCardEffect
+          <CardEffect
             state={state}
             removeState={removeState}
             key={state.type}
             statePosition={index}
             position={position}
             isPlayerCard={isPlayerCard}
+            eventType="drawCard"
           />
         ))}
       </CaptureEvents>

@@ -3,7 +3,7 @@ import { useState } from "react";
 import useGameEventListener from "../../useGameEventListener";
 import { CaptureEvents } from "../../caputeEvents/CaptureEvents";
 import { inPx } from "@repo/lib";
-import { GameCardEffect } from "./GameCardEffect";
+import CardEffect from "../../cardEffect/CardEffect";
 
 export default function CardEffectsElements({
   isPlayerCard,
@@ -59,13 +59,14 @@ export default function CardEffectsElements({
       >
         <CaptureEvents watcher={watcher}>
           {states.map((state, index) => (
-            <GameCardEffect
+            <CardEffect
               state={state}
               removeState={removeState}
               key={state.type}
               statePosition={index}
               position={position}
               isPlayerCard={isPlayerCard}
+              eventType="afterPlaceCard"
             />
           ))}
         </CaptureEvents>

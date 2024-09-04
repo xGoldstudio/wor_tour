@@ -51,7 +51,7 @@ export default function InHandCard({ position, clock, gameState }: { position: n
       });
     },
     filter: (e) =>
-      (e as DrawCardEvent).handPosition === position &&
+      (e as DrawCardEvent).position === position &&
       (e as DrawCardEvent).isPlayer,
   });
 

@@ -202,7 +202,7 @@ export interface GameOverEvent {
 export interface DrawCardEvent {
   type: "drawCard";
   isPlayer: boolean;
-  handPosition: number;
+  position: number;
 }
 
 export interface HealCardEvent {

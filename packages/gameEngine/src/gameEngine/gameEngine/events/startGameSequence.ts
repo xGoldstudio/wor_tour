@@ -15,8 +15,8 @@ export default function startGameSequence({ clock }: ComputeEventProps<StartGame
 	const drawCardTime = time * 8 / 5;
 	for (let i = 0; i < 4; i++) {
 		const delay = drawCardTime * (i + 1);
-		clock.setGameEventTimeout({ type: "drawCard", isPlayer: true, handPosition: i }, delay);
-		clock.setGameEventTimeout({ type: "drawCard", isPlayer: false, handPosition: i }, delay);
+		clock.setGameEventTimeout({ type: "drawCard", isPlayer: true, position: i }, delay);
+		clock.setGameEventTimeout({ type: "drawCard", isPlayer: false, position: i }, delay);
 	}
 	clock.setGameEventTimeout({ type: "startGame" }, time * 8);
 }

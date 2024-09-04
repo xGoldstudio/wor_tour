@@ -14,7 +14,7 @@ function defaultActions(clock?: ClockReturn<EventType>) {
   if (!clock) return;
   clock.triggerEvent({
     type: "drawCard",
-    handPosition: 0,
+    position: 0,
     isPlayer: true,
   });
 }

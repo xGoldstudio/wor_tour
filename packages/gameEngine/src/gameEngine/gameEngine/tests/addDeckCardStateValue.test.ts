@@ -8,20 +8,20 @@ describe("addDeckCardStateValue", () => {
 	const instanceId = state.playerDeck[0]!.id;
 
 	test("adding state", () => {
-		clock.triggerEvent({ type: "addDeckCardStateValue", instanceId, state: dummyStateTest });
+		clock.triggerEvent({ type: "addDeckCardState", instanceId, state: dummyStateTest });
 		clock.nextTick();
 		expect(state.getStateOfDeckCardByInstaceId(instanceId, "dummy")?.value).toBe(dummyStateTest.value);
 	});
 
 	test("no stacking", () => {
-		clock.triggerEvent({ type: "addDeckCardStateValue", instanceId, state: dummyStateTest });
+		clock.triggerEvent({ type: "addDeckCardState", instanceId, state: dummyStateTest });
 		clock.nextTick();
 		expect(state.getStateOfDeckCardByInstaceId(instanceId, "dummy")?.value).toBe(dummyStateTest.value);
 	});
 
 	test("replace state correctly", () => {
 		const value = 2;
-		clock.triggerEvent({ type: "addDeckCardStateValue", instanceId, state: { ...dummyStateTest, value: value } as CardState });
+		clock.triggerEvent({ type: "addDeckCardState", instanceId, state: { ...dummyStateTest, value: value } as CardState });
 		clock.nextTick();
 		expect(state.getStateOfDeckCardByInstaceId(instanceId, "dummy")?.value).toBe(value);
 	});
