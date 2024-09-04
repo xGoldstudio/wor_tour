@@ -45,11 +45,15 @@ export default function CardEffect({
   useGameEventListener<AfterPlaceCardEvent | DrawCardEvent>({
     type: eventType,
     action: (event, gameState) => {
-      const cardStateWithIndex = gameState.getStateOfCardWithIndex(
+      const cardStateWithIndex =  event.type === "afterPlaceCard" ? gameState.getStateOfCardWithIndex(
         event.isPlayer,
         event.position,
         state.type
-      );
+      ) : gameState.getStateOfDeckCardWithIndex(
+        event.isPlayer,
+        event.position,
+        state.type
+        );
       if (cardStateWithIndex) {
         setCurrentState({ ...cardStateWithIndex[1] });
         prevStatePosition.current = cardStateWithIndex[0]; // in case a new card is placed with an effect present in the current card,

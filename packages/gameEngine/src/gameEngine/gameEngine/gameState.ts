@@ -417,6 +417,9 @@ export class GameStateObject {
 	getBoard(isPlayer: boolean) {
 		return isPlayer ? this.playerBoard : this.opponentBoard;
 	}
+	getHand(isPlayer: boolean) {
+		return isPlayer ? this.playerHand : this.opponentHand;
+	}
 	getBoardOfCard(instanceId: number, opposite: boolean = false) {
 		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instanceId);
 		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instanceId);
@@ -449,6 +452,16 @@ export class GameStateObject {
 		if (!card) {
 			return null;
 		}
+		return this.getStateOfCardWithIndexByCard(card, type);
+	}
+	getStateOfDeckCardWithIndex(isPlayerCard: boolean, cardPosition: number, type: CardState["type"]): null | [number, CardState] {
+		const card = this.getHand(isPlayerCard)[cardPosition];
+		if (!card) {
+			return null;
+		}
+		return this.getStateOfCardWithIndexByCard(card, type);
+	}
+	getStateOfCardWithIndexByCard(card: { states: CardState[] }, type: CardState["type"]): null | [number, CardState] {
 		const index = card.states.findIndex((s) => s.type === type);
 		return index === -1 ? null : [index, card.states[index]];
 	}
