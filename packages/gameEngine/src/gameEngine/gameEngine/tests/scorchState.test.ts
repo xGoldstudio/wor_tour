@@ -1,9 +1,9 @@
-import { baseCard, initTest, scorchTest, triggerAddState, triggerPlaceCard } from 'game_engine';
+import { baseCard, initGame, scorchTest, triggerAddState, triggerPlaceCard } from 'game_engine';
 import { expect, test } from 'vitest';
 import { placeCardFromCardType } from '../events/normalPlaceCard';
 
 test("Scorch stacking", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	triggerPlaceCard(clock, true, 0, placeCardFromCardType({ ...baseCard, states: [scorchTest] }));
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;
@@ -22,7 +22,7 @@ test("Scorch stacking", () => {
 });
 
 test("Scorch stacking, not already exisiting", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	triggerPlaceCard(clock, true, 0, placeCardFromCardType({ ...baseCard }));
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;

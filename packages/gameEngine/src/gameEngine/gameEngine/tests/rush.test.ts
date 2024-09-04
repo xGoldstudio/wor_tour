@@ -1,11 +1,11 @@
-import { baseCard, drawPlaceCard, initTest, rushStateTest, triggerPlaceCard } from 'game_engine';
+import { baseCard, drawPlaceCard, initGame, rushStateTest, triggerPlaceCard } from 'game_engine';
 import { expect, test } from 'vitest';
 import { CARD_ATTACK_ANIMATION_DURATION } from '../events/cardStartAttacking';
 import { getFrameFromAttackSpeed } from '../events/utils';
 import { placeCardFromCardType } from '../events/normalPlaceCard';
 
 test("self card, attack longer than 45", () => {
-	const { clock, state } = initTest({ skipStartGame: true, gameData: { playerDeck: [ { ...baseCard, states: [rushStateTest] } ] } });
+	const { clock, state } = initGame({ skipStartGame: true, gameData: { playerDeck: [ { ...baseCard, states: [rushStateTest] } ] } });
 	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;
@@ -15,7 +15,7 @@ test("self card, attack longer than 45", () => {
 
 test("self card, attack shorter than 45 (shouldn't change anything)", () => {
 	const AS = 3;
-	const { clock, state } = initTest({ skipStartGame: true, gameData: { playerDeck: [ { ...baseCard, attackSpeed: AS, states: [rushStateTest] } ] } });
+	const { clock, state } = initGame({ skipStartGame: true, gameData: { playerDeck: [ { ...baseCard, attackSpeed: AS, states: [rushStateTest] } ] } });
 	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;
@@ -24,7 +24,7 @@ test("self card, attack shorter than 45 (shouldn't change anything)", () => {
 });
 
 test("allies card and self, normal behavior", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	triggerPlaceCard(clock, true, 0, placeCardFromCardType(baseCard));
 	triggerPlaceCard(clock, true, 1, placeCardFromCardType(baseCard));
 	triggerPlaceCard(clock, true, 2, placeCardFromCardType({ ...baseCard, states: [rushStateTest] }));
@@ -37,7 +37,7 @@ test("allies card and self, normal behavior", () => {
 });
 
 test("ally card already attacking (shouldn't reset the attack)", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	triggerPlaceCard(clock, true, 0, placeCardFromCardType(baseCard));
 	triggerPlaceCard(clock, true, 1, placeCardFromCardType(baseCard));
 	clock.nextTick();

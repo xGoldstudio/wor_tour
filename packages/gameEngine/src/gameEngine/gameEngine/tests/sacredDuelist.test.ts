@@ -1,9 +1,9 @@
-import { baseCard, initTest, sacredDuelistTest, triggerDirectAttackResolved, triggerPlaceCard } from 'game_engine';
+import { baseCard, initGame, sacredDuelistTest, triggerDirectAttackResolved, triggerPlaceCard } from 'game_engine';
 import { expect, test } from 'vitest';
 import { placeCardFromCardType } from '../events/normalPlaceCard';
 
 test("self card, attack longer than 45", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	triggerPlaceCard(clock, true, 0, placeCardFromCardType({ ...baseCard, states: [sacredDuelistTest] }));
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;

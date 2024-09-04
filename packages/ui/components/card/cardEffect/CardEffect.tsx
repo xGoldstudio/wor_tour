@@ -1,32 +1,34 @@
 import {
   AfterPlaceCardEvent,
   CardState,
+  DrawCardEvent,
   EventType,
-  GameStateObject
+  GameStateObject,
 } from "game_engine";
-import { useSyncGameAnimation } from "../../useGameSyncAnimation";
+import { useSyncGameAnimation } from "../useGameSyncAnimation";
 import { useRef, useState } from "react";
+import { useGameEventListener, useProgressPieChart } from "../../..";
 import { animationTimeline, getStateData, translateYpx } from "@repo/lib";
-import { EffectLayout } from "../../Effects";
-import useConsumeEvents from "../../caputeEvents/useConsumeEvents";
-import useGameEventListener from "../../useGameEventListener";
-import { useProgressPieChart } from "../../../..";
+import useConsumeEvents from "../caputeEvents/useConsumeEvents";
+import { EffectLayout } from "../Effects";
 
-interface GameCardEffectProps {
+interface CardEffectProps {
   state: CardState;
   removeState: (type: CardState["type"]) => void;
   statePosition: number;
   position: number;
   isPlayerCard: boolean;
+  eventType: "afterPlaceCard" | "drawCard";
 }
 
-export function GameCardEffect({
+export default function CardEffect({
   state,
   removeState,
   statePosition,
   position,
   isPlayerCard,
-}: GameCardEffectProps) {
+  eventType,
+}: CardEffectProps) {
   const size = 0.8;
   const { triggerAnimation } = useSyncGameAnimation();
   const { triggerAnimation: triggerPositionAnimation } = useSyncGameAnimation();
@@ -40,14 +42,18 @@ export function GameCardEffect({
   function getPaddingOffset(usingStatePosition: number) {
     return usingStatePosition * size * (42 + 8) + 8 * size;
   }
-  useGameEventListener<AfterPlaceCardEvent>({
-    type: "afterPlaceCard",
+  useGameEventListener<AfterPlaceCardEvent | DrawCardEvent>({
+    type: eventType,
     action: (event, gameState) => {
-      const cardStateWithIndex = gameState.getStateOfCardWithIndex(
+      const cardStateWithIndex =  event.type === "afterPlaceCard" ? gameState.getStateOfCardWithIndex(
         event.isPlayer,
         event.position,
         state.type
-      );
+      ) : gameState.getStateOfDeckCardWithIndex(
+        event.isPlayer,
+        event.position,
+        state.type
+        );
       if (cardStateWithIndex) {
         setCurrentState({ ...cardStateWithIndex[1] });
         prevStatePosition.current = cardStateWithIndex[0]; // in case a new card is placed with an effect present in the current card,
@@ -59,15 +65,17 @@ export function GameCardEffect({
       }
     },
     filter: (event) =>
-      event.position === position &&
-      event.isPlayer === isPlayerCard,
+      event.position === position && event.isPlayer === isPlayerCard,
   });
   if (prevStatePosition.current !== statePosition) {
     // checking between value updated by events, and props related to cardStates react useState list
     changePostitionAnimation();
   }
   useConsumeEvents((event: EventType, gameState: GameStateObject) => {
-    if (event.type === "addState" && event.state.type === currentState.type) {
+    if (
+      (event.type === "addState" || event.type === "addDeckCardState") &&
+      event.state.type === currentState.type
+    ) {
       const state = gameState.getStateOfCardByInstanceId(
         event.instanceId,
         event.state.type
@@ -76,27 +84,32 @@ export function GameCardEffect({
       appearAnimation();
       return true;
     }
-    if (event.type === "removeState" && event.stateType === currentState.type) {
+    if (
+      (event.type === "removeState" || event.type === "removeDeckCardState") &&
+      event.stateType === currentState.type
+    ) {
       removeAnimation();
       return true;
     }
     if (
-      event.type === "increaseStateValue" &&
+      (event.type === "increaseStateValue" ||
+        event.type === "increaseDeckCardStateValue") &&
       event.stateType === currentState.type
     ) {
       scaleAnimation(
         true,
-        gameState.getStateOfCardByInstanceId(event.instanceId, event.stateType)
+        getStateFromCard(gameState, event.instanceId, event.stateType)
       );
       return true;
     }
     if (
-      event.type === "decreaseStateValue" &&
+      (event.type === "decreaseStateValue" ||
+        event.type === "decreaseDeckCardStateValue") &&
       event.stateType === currentState.type
     ) {
       scaleAnimation(
         false,
-        gameState.getStateOfCardByInstanceId(event.instanceId, event.stateType)
+        getStateFromCard(gameState, event.instanceId, event.stateType)
       );
       return true;
     }
@@ -116,6 +129,17 @@ export function GameCardEffect({
     }
     return null;
   });
+
+  function getStateFromCard(
+    gameState: GameStateObject,
+    instanceId: number,
+    stateType: CardState["type"]
+  ) {
+    if (eventType === "drawCard") {
+      return gameState.getStateOfDeckCardByInstaceId(instanceId, stateType);
+    }
+    return gameState.getStateOfCardByInstanceId(instanceId, stateType);
+  }
 
   function appearAnimation() {
     triggerAnimation({
@@ -228,7 +252,8 @@ export function GameCardEffect({
     triggerDecayAnimation({
       replace: true,
       duration: duration,
-      computeStyle: p => progressPieChart.update(Math.max(0, 1 - p/duration)),
+      computeStyle: (p) =>
+        progressPieChart.update(Math.max(0, 1 - p / duration)),
     });
   }
 

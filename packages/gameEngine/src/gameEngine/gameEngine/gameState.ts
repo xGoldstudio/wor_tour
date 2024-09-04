@@ -3,6 +3,7 @@ import { CardType } from "../../types/Card";
 import { InGameCardType } from "../../types/eventType";
 import { CardState } from "../states/CardStatesData";
 import { getFrameFromAttackSpeed } from "./events/utils";
+import { cloneDeep } from "lodash";
 
 export interface GameStateObjectConstructor {
 	playerDeck: CardType[];
@@ -44,8 +45,8 @@ export class GameStateObject {
 		this.opponentTickStartEarningMana = null;
 		this.playerHand = Array(HAND_SIZE).fill(null);
 		this.opponentHand = Array(HAND_SIZE).fill(null);
-		this.playerDeck = [...playerDeck].map((c) => ({ ...c, id: this.getNextInstanceId() }));
-		this.opponentDeck = [...opponentDeck].map((c) => ({ ...c, id: this.getNextInstanceId() }));
+		this.playerDeck = cloneDeep(playerDeck).map((c) => ({ ...c, id: this.getNextInstanceId() }));
+		this.opponentDeck = cloneDeep(opponentDeck).map((c) => ({ ...c, id: this.getNextInstanceId() }));
 		this.playerBoard = Array(BOARD_SIZE).fill(null);
 		this.opponentBoard = Array(BOARD_SIZE).fill(null);
 		this.playerHp = playerHp;
@@ -258,6 +259,13 @@ export class GameStateObject {
 		}
 		card.states = card.states.filter((s) => s.type !== type);
 	}
+	removeDeckCardState(instanceId: number, type: CardState["type"]) {
+		const card = this.getDeckCardByInstanceId(instanceId);
+		if (!card) {
+			return;
+		}
+		card.states = card.states.filter((s) => s.type !== type);
+	}
 	addState(
 		instanceId: number,
 		state: CardState,
@@ -287,6 +295,17 @@ export class GameStateObject {
 		}
 		const nextState = { ...card.states[stateIndex], value: value + delta } as CardState;
 		card.states[stateIndex] = nextState; // we mutate the state
+	}
+	modifyDeckCardStateValue(
+		instanceId: number,
+		stateType: CardState["type"],
+		delta: number,
+	) {
+		const state = this.getStateOfDeckCard(instanceId, stateType);
+		if (!state || state.value === null) {
+			return;
+		}
+		state.value = state.value + delta;
 	}
 	discardHand(isPlayer: boolean) {
 		if (isPlayer) {
@@ -398,6 +417,9 @@ export class GameStateObject {
 	getBoard(isPlayer: boolean) {
 		return isPlayer ? this.playerBoard : this.opponentBoard;
 	}
+	getHand(isPlayer: boolean) {
+		return isPlayer ? this.playerHand : this.opponentHand;
+	}
 	getBoardOfCard(instanceId: number, opposite: boolean = false) {
 		const playerCard = this.playerBoard.findIndex((c) => c?.instanceId === instanceId);
 		const opponentCard = this.opponentBoard.findIndex((c) => c?.instanceId === instanceId);
@@ -430,6 +452,16 @@ export class GameStateObject {
 		if (!card) {
 			return null;
 		}
+		return this.getStateOfCardWithIndexByCard(card, type);
+	}
+	getStateOfDeckCardWithIndex(isPlayerCard: boolean, cardPosition: number, type: CardState["type"]): null | [number, CardState] {
+		const card = this.getHand(isPlayerCard)[cardPosition];
+		if (!card) {
+			return null;
+		}
+		return this.getStateOfCardWithIndexByCard(card, type);
+	}
+	getStateOfCardWithIndexByCard(card: { states: CardState[] }, type: CardState["type"]): null | [number, CardState] {
 		const index = card.states.findIndex((s) => s.type === type);
 		return index === -1 ? null : [index, card.states[index]];
 	}
@@ -466,7 +498,7 @@ export class GameStateObject {
 		if (!card) {
 			return null;
 		}
-		return card.states.find((s) => s.type === type);
+		return card.states.find((s) => s.type === type) ?? null;
 	}
 	getPositionInHand(instanceId: number, isPlayer: boolean) {
 		const hand = isPlayer ? this.playerHand : this.opponentHand;

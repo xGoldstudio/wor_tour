@@ -1,9 +1,9 @@
 import { DAMAGE_SPEED } from "../events/cardDamage";
-import { drawPlaceCard, getInstanceId, initTest } from "./common";
+import { drawPlaceCard, getInstanceId, initGame } from "./common";
 import { expect, test } from 'vitest';
 
 test("start damage to card (animation placeholder)", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	// deal damage to player
@@ -34,7 +34,7 @@ test("start damage to card (animation placeholder)", () => {
 });
 
 test("start damage to card (animation placeholder)", () => {
-	const { clock, state } = initTest({ skipStartGame : true });
+	const { clock, state } = initGame({ skipStartGame : true });
 	drawPlaceCard(clock, false, 0, state);
 	clock.nextTick();
 	// deal damage to player

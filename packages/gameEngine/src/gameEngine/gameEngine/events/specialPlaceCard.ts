@@ -6,8 +6,8 @@ export default function placeCardEvent({ event, gameState, clock }: ComputeEvent
 		return;
 	}
 	const card = event.isPlayer
-	? gameState.playerHand[event.cardInHandPosition]
-	: gameState.opponentHand[event.cardInHandPosition];
+	? gameState.playerHand[event.position]
+	: gameState.opponentHand[event.position];
 	if (card === null) {
 		throw new Error("Card not found in hand");
 	}
@@ -19,6 +19,6 @@ export default function placeCardEvent({ event, gameState, clock }: ComputeEvent
 	clock.triggerEvent({
 		type: "drawCard",
 		isPlayer: event.isPlayer,
-		handPosition: event.cardInHandPosition,
+		position: event.position,
 	});
 }

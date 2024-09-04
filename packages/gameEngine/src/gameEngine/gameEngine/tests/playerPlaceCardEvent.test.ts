@@ -1,10 +1,10 @@
 import { expect, test } from "vitest";
-import { baseCard, initTest } from "./common";
+import { baseCard, initGame } from "./common";
 
 test("Not enough mana", () => {
-	const { clock, state } = initTest({ skipStartGame: true, gameData: { playerDeck: [{ ...baseCard, cost: 1 }]} });
+	const { clock, state } = initGame({ skipStartGame: true, gameData: { playerDeck: [{ ...baseCard, cost: 1 }]} });
 
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 0 });
 	clock.nextTick();
 	clock.triggerEvent({
 		type: "playerPlaceCard",
@@ -17,9 +17,9 @@ test("Not enough mana", () => {
 });
 
 test("Card not in hand", () => {
-	const { clock, state } = initTest({ skipStartGame: true, gameData: { playerDeck: [baseCard, { ...baseCard, cost: 0 }]} });
+	const { clock, state } = initGame({ skipStartGame: true, gameData: { playerDeck: [baseCard, { ...baseCard, cost: 0 }]} });
 
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 0 });
 	clock.nextTick();
 	clock.triggerEvent({
 		type: "playerPlaceCard",
@@ -32,9 +32,9 @@ test("Card not in hand", () => {
 });
 
 test("Ok + double placement (one invalid)", () => {
-	const { clock, state } = initTest({ skipStartGame: true, gameData: { playerDeck: [{ ...baseCard, cost: 1 }, baseCard]} });
+	const { clock, state } = initGame({ skipStartGame: true, gameData: { playerDeck: [{ ...baseCard, cost: 1 }, baseCard]} });
 
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 0 });
 	clock.triggerEvent({ type: "manaIncrease", isPlayer: true, value: 1 });
 	clock.triggerEvent({ type: "manaIncrease", isPlayer: true, value: 1 });
 	clock.nextTick();

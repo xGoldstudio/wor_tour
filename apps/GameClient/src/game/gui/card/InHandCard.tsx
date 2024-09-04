@@ -1,17 +1,14 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore from "@/game/stores/gameStateStore";
-
-import { CardBorder, CardContentIllustartion, Effects, ManaBall, useGameAnimation, useGameEventListener, useSyncGameAnimation } from "@repo/ui";
-import { useRef, useState } from "react";
-import { dummyCard } from "./const";
-import { animationTimeline, CardType, getCenterOfBoundingElement } from "@repo/lib";
+import { HandCard, useGameEventListener, useSyncGameAnimation } from "@repo/ui";
+import { useRef } from "react";
+import { animationTimeline, getCenterOfBoundingElement } from "@repo/lib";
 import { ClockReturn, DrawCardEvent, EventType, GameStateObject } from "game_engine";
 
-function InHandCard({ position, clock, gameState }: { position: number, clock: ClockReturn<EventType>, gameState: GameStateObject }) {
+export default function InHandCard({ position, clock, gameState }: { position: number, clock: ClockReturn<EventType>, gameState: GameStateObject }) {
   const setSelectedCard = useGameInterface((state) => state.setSelectedCard);
   const removeCardTarget = useGameInterface((state) => state.removeCardTarget);
   const unselectCard = useGameInterface((state) => state.unselectCard);
-  const [card, setCard] = useState<CardType>(dummyCard);
   const ref = useRef<HTMLDivElement | null>(null);
 
   const { triggerAnimation: triggerDrawAnimation } = useSyncGameAnimation();
@@ -24,7 +21,6 @@ function InHandCard({ position, clock, gameState }: { position: number, clock: C
         .getElementById("staticCardWrapper")
         ?.querySelector(".staticCard") as HTMLDivElement;
       if (!drawedCard || !ref.current || !staticCardTarget) return;
-      setCard(drawedCard);
       const originTransformX =
         staticCardTarget.getBoundingClientRect().left -
         ref.current.getBoundingClientRect().left;
@@ -55,7 +51,7 @@ function InHandCard({ position, clock, gameState }: { position: number, clock: C
       });
     },
     filter: (e) =>
-      (e as DrawCardEvent).handPosition === position &&
+      (e as DrawCardEvent).position === position &&
       (e as DrawCardEvent).isPlayer,
   });
 
@@ -143,61 +139,10 @@ function InHandCard({ position, clock, gameState }: { position: number, clock: C
             onMouseDown={tryToMoveCard}
             ref={cardRef}
           >
-            <CardBorder rarity={card.rarity} size={1.8}>
-              <InHandCardIllustration card={card} position={position} />
-              <div className="absolute right-[3px] top-[4px] flex flex-col gap-2">
-                <Effects states={card.states} size={0.7} />
-              </div>
-            </CardBorder>
-            <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 scale-75">
-              <ManaBall mana={card.cost} />
-            </div>
+            <HandCard position={position} />
           </div>
         </div>
       </div>
     </>
   );
 }
-
-function InHandCardIllustration({
-  card,
-  position,
-}: {
-  card: CardType;
-  position: number;
-}) {
-  const animationRef = useGameAnimation({
-    tl: (ref, state) => {
-      const usingCard = state.playerHand[position];
-      return animationTimeline(
-        (usingCard?.cost ?? 0) * state.playerManaSpeed
-      ).add(ref, { scaleY: 1 }, { values: { scaleY: 0 } });
-    },
-    getProgress: (state, currentTick) => {
-      const usingCard = state.playerHand[position];
-      if (
-        !usingCard ||
-        (usingCard.cost !== null && state.playerMana > usingCard.cost) ||
-        state.playerTickStartEarningMana === null
-      ) {
-        return -1;
-      }
-      return (
-        state.playerMana * state.playerManaSpeed +
-        (currentTick - state.playerTickStartEarningMana!)
-      );
-    },
-  });
-
-  return (
-    <div className="relative w-full h-full">
-      <CardContentIllustartion card={card} size={1.8} />
-      <div
-        ref={animationRef}
-        className="absolute top-0 w-full h-full bg-slate-600 opacity-40 origin-top"
-      />
-    </div>
-  );
-}
-
-export default InHandCard;

@@ -8,7 +8,7 @@ const WindShuffleStateAction: StateAction = ({ clock, gameState, event }) => {
 	gameState.discardHand(isPlayer);
 	clock.triggerEvent({ type: "shuffleDeck", isPlayer });
 	for (let i = 0; i < HAND_SIZE; i++) {
-		clock.setGameEventTimeout({ type: "drawCard", isPlayer, handPosition: i }, 0);
+		clock.setGameEventTimeout({ type: "drawCard", isPlayer, position: i }, 0);
 	}
 };
 

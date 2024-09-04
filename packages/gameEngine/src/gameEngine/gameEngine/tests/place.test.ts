@@ -5,7 +5,7 @@ import { GameStateObject, MIN_ATTACK_SPEED } from "../gameState";
 import _ from "lodash";
 import { expect, test } from 'vitest';
 import { CardType } from "../../../types/Card";
-import { baseCard, drawPlaceCard, initTest } from "./common";
+import { baseCard, drawPlaceCard, initGame } from "./common";
 
 const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, name: String(i), dmg: i, rarity: "common"}));
 
@@ -16,10 +16,10 @@ test("complete placement player", () => {
 	);
 	clock.triggerEvent({ type: "startGame" });
 	state.playerMana = 9;
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 0 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 1 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 2 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: true, handPosition: 3 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 0 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 1 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 2 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: true, position: 3 });
 	clock.nextTick();
 	expect(state.playerDeck.length).toEqual(4);
 
@@ -43,10 +43,10 @@ test("complete placement opponent", () => {
 	);
 	clock.triggerEvent({ type: "startGame" });
 	state.opponentMana = 9;
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 0 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 1 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 2 });
-	clock.triggerEvent({ type: "drawCard", isPlayer: false, handPosition: 3 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 0 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 1 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 2 });
+	clock.triggerEvent({ type: "drawCard", isPlayer: false, position: 3 });
 	clock.nextTick();
 	expect(state.opponentDeck.length).toEqual(4);
 
@@ -65,7 +65,7 @@ test("complete placement opponent", () => {
 });
 
 test("place card on another card", () => {
-	const { state, clock } = initTest({ skipStartGame: true });
+	const { state, clock } = initGame({ skipStartGame: true });
 
 	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
@@ -78,7 +78,7 @@ test("place card on another card", () => {
 });
 
 test("place card attack limit", () => {
-	const { state, clock } = initTest({
+	const { state, clock } = initGame({
 		skipStartGame: true, gameData: { playerDeck: [{ ...baseCard, attackSpeed: 0 }, { ...baseCard, attackSpeed: 999 }] }
 	});
 

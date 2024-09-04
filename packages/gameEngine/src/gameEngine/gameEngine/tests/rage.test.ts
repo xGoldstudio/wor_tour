@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { drawPlaceCard, initTest, rageStateTest } from "./common";
+import { drawPlaceCard, initGame, rageStateTest } from "./common";
 import { CardState } from "@repo/lib";
 
 // max stacking already test,
@@ -7,7 +7,7 @@ import { CardState } from "@repo/lib";
 // we have to test as change value
 
 describe("rage", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;

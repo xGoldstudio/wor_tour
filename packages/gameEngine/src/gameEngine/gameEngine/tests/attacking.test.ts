@@ -1,10 +1,10 @@
 import { DAMAGE_SPEED } from "../events/cardDamage";
 import { getFrameFromAttackSpeed } from "../events/utils";
-import { drawPlaceCard, initTest } from "./common";
+import { drawPlaceCard, initGame } from "./common";
 import { expect, test } from 'vitest';
 
 test("attacking pipeline", () => {
-	const { state, clock } = initTest({ skipStartGame: true });
+	const { state, clock } = initGame({ skipStartGame: true });
 	void state;
 	void clock;
 	drawPlaceCard(clock, true, 0, state);

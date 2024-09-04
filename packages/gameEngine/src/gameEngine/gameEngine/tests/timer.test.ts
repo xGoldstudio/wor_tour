@@ -2,7 +2,7 @@ import { EventType } from "../../../types/eventType";
 import { ClockReturn } from "../../clock/clock";
 import { TIMER_INCREASE_DELAY } from "../events/timerDecrease";
 import { MAX_GAME_DURATION } from "../gameState";
-import { initTest, triggerDamageToPlayer } from "./common";
+import { initGame, triggerDamageToPlayer } from "./common";
 import { expect, test } from 'vitest';
 
 function goToNextTimer(clock: ClockReturn<EventType>) {
@@ -12,7 +12,7 @@ function goToNextTimer(clock: ClockReturn<EventType>) {
 }
 
 test("normal ending, opponent win", () => {
-	const { clock, state } = initTest({ skipStartGame: true });
+	const { clock, state } = initGame({ skipStartGame: true });
 	expect(state.getTimer()).toBe(MAX_GAME_DURATION);
 	clock.nextTick();
 	goToNextTimer(clock);
@@ -36,7 +36,7 @@ test("normal ending, opponent win", () => {
 });
 
 test("nobody lost hp", () => {
-	const { clock, state } = initTest({ skipStartGame: true, gameData: { playerHp: 2, opponentHp: 1 } });
+	const { clock, state } = initGame({ skipStartGame: true, gameData: { playerHp: 2, opponentHp: 1 } });
 	clock.nextTick();
 	for (let i = 0; i < MAX_GAME_DURATION; i++) {
 		goToNextTimer(clock);
@@ -45,7 +45,7 @@ test("nobody lost hp", () => {
 });
 
 test("player have more init hp but lost some", () => {
-	const { clock, state } = initTest({ skipStartGame: true, gameData: { playerHp: 10, opponentHp: 5 } });
+	const { clock, state } = initGame({ skipStartGame: true, gameData: { playerHp: 10, opponentHp: 5 } });
 	triggerDamageToPlayer(clock, true, 1);
 	clock.nextTick();
 	for (let i = 0; i < MAX_GAME_DURATION; i++) {
@@ -55,7 +55,7 @@ test("player have more init hp but lost some", () => {
 });
 
 test("player have lost hp, opponent more", () => {
-	const { clock, state } = initTest({ skipStartGame: true, gameData: { playerHp: 10, opponentHp: 5 } });
+	const { clock, state } = initGame({ skipStartGame: true, gameData: { playerHp: 10, opponentHp: 5 } });
 	triggerDamageToPlayer(clock, true, 1);
 	triggerDamageToPlayer(clock, false, 2);
 	clock.nextTick();

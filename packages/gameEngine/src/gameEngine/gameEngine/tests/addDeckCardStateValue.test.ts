@@ -1,28 +1,49 @@
 import { describe, expect, test } from "vitest";
-import { baseCard, dummyStateTest, initTest, } from "./common";
-import { CardState } from "@repo/lib";
+import { baseCard, dummyStateTest, initGame, } from "./common";
 
 // pretty straight forward effect, should give rage of value to all ally cards, that's it
 describe("addDeckCardStateValue", () => {
-	const { clock, state } = initTest({ skipStartGame: true, gameData: { playerDeck: [baseCard] } });
+	const { clock, state } = initGame({ skipStartGame: true, gameData: { playerDeck: [baseCard] } });
 	const instanceId = state.playerDeck[0]!.id;
 
 	test("adding state", () => {
-		clock.triggerEvent({ type: "addDeckCardStateValue", instanceId, state: dummyStateTest });
+		clock.triggerEvent({ type: "addDeckCardState", instanceId, state: dummyStateTest });
 		clock.nextTick();
 		expect(state.getStateOfDeckCardByInstaceId(instanceId, "dummy")?.value).toBe(dummyStateTest.value);
 	});
 
-	test("no stacking", () => {
-		clock.triggerEvent({ type: "addDeckCardStateValue", instanceId, state: dummyStateTest });
+	test("normal stacking", () => {
+		clock.triggerEvent({ type: "addDeckCardState", instanceId, state: dummyStateTest });
 		clock.nextTick();
-		expect(state.getStateOfDeckCardByInstaceId(instanceId, "dummy")?.value).toBe(dummyStateTest.value);
+		expect(state.getStateOfDeckCardByInstaceId(instanceId, "dummy")?.value).toBe(dummyStateTest.value! * 2);
 	});
+});
 
-	test("replace state correctly", () => {
-		const value = 2;
-		clock.triggerEvent({ type: "addDeckCardStateValue", instanceId, state: { ...dummyStateTest, value: value } as CardState });
-		clock.nextTick();
-		expect(state.getStateOfDeckCardByInstaceId(instanceId, "dummy")?.value).toBe(value);
-	});
+test("removeDeckCardStateValue", () => {
+	const { clock, state } = initGame({ skipStartGame: true, gameData: { playerDeck: [baseCard] } });
+	const instanceId = state.playerDeck[0]!.id;
+
+	clock.triggerEvent({ type: "addDeckCardState", instanceId, state: dummyStateTest });
+	clock.nextTick();
+	expect(state.getStateOfDeckCardByInstaceId(instanceId, "dummy")).not.toBeNull();
+	clock.triggerEvent({ type: "removeDeckCardState", instanceId, stateType: dummyStateTest.type });
+	clock.nextTick();
+	expect(state.getStateOfDeckCardByInstaceId(instanceId, "dummy")).toBeNull();
+});
+
+test("increase/decrease deckCardStateValue", () => {
+	const { clock, state } = initGame({ skipStartGame: true, gameData: { playerDeck: [baseCard] } });
+	const instanceId = state.playerDeck[0]!.id;
+
+	clock.triggerEvent({ type: "addDeckCardState", instanceId, state: dummyStateTest });
+	clock.nextTick();
+	expect(state.getStateOfDeckCardByInstaceId(instanceId, "dummy")?.value).toBe(dummyStateTest.value);
+
+	clock.triggerEvent({ type: "increaseDeckCardStateValue", instanceId, stateType: dummyStateTest.type, increaseBy: 2 });
+	clock.nextTick();
+	expect(state.getStateOfDeckCardByInstaceId(instanceId, "dummy")?.value).toBe(dummyStateTest.value! + 2);
+
+	clock.triggerEvent({ type: "decreaseDeckCardStateValue", instanceId, stateType: dummyStateTest.type, decreaseBy: 1 });
+	clock.nextTick();
+	expect(state.getStateOfDeckCardByInstaceId(instanceId, "dummy")?.value).toBe(dummyStateTest.value! + 1);
 });

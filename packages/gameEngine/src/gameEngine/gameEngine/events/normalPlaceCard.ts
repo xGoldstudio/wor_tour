@@ -24,7 +24,7 @@ export default function normalPlaceCardEvent({ event, gameState, clock }: Comput
 		clock.triggerEvent({
 			type: "drawCard",
 			isPlayer: event.isPlayer,
-			handPosition: positionOfCardInHand,
+			position: positionOfCardInHand,
 		});
 	}
 	clock.triggerEvent({

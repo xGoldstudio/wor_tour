@@ -1,9 +1,9 @@
-import { attackAnimation, baseCard, defaultTestHp, drawPlaceCard, findStateByType, getInstanceId, initTest, massacreStateTest, triggerDirectAttack } from "./common";
+import { attackAnimation, baseCard, defaultTestHp, drawPlaceCard, findStateByType, getInstanceId, initGame, massacreStateTest, triggerDirectAttack } from "./common";
 import { describe, expect, test } from 'vitest';
 
 describe("bleeding state", () => {
 	const damage = 10;
-	const { clock, state } = initTest({ gameData: { playerDeck: [{ ...baseCard, dmg: damage, attackSpeed: 0 }] }, skipStartGame: true });
+	const { clock, state } = initGame({ gameData: { playerDeck: [{ ...baseCard, dmg: damage, attackSpeed: 0 }] }, skipStartGame: true });
 	drawPlaceCard(clock, true, 0, state);
 	drawPlaceCard(clock, false, 0, state);
 	clock.nextTick();

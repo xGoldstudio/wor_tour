@@ -1,6 +1,5 @@
 import HpBar from "./HpBar";
 import useGameStore from "@/game/stores/gameStateStore";
-import InHandCard from "./card/InHandCard";
 import StaticCard from "./card/StaticCard";
 import { useShallow } from "zustand/react/shallow";
 import _ from "lodash";
@@ -15,6 +14,7 @@ import {
 } from "@repo/ui";
 import { CardType } from "@repo/lib";
 import { ClockReturn, EventType, GameStateObject } from "game_engine";
+import InHandCard from "./card/InHandCard";
 
 interface PlayerGUIProps {
   isPlayer: boolean;

@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
-import { drawPlaceCard, initTest, triggerChangeAttackSpeed } from "./common";
+import { drawPlaceCard, initGame, triggerChangeAttackSpeed } from "./common";
 import { MAX_ATTACK_SPEED, MIN_ATTACK_SPEED } from "../gameState";
 
 describe("increase as", () => {
-	const { clock, state } = initTest({
+	const { clock, state } = initGame({
 		skipStartGame: true, log: false, gameData: {
 			opponentHp: 5000,
 		}
@@ -72,7 +72,7 @@ describe("increase as", () => {
 });
 
 test("AS limits upper and lower", () => {
-	const { clock, state } = initTest({ skipStartGame: true  });
+	const { clock, state } = initGame({ skipStartGame: true  });
 	drawPlaceCard(clock, true, 0, state);
 	clock.nextTick();
 	const instanceId = state.getCard(true, 0)!.instanceId;
