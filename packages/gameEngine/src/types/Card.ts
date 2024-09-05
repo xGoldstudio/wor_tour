@@ -81,20 +81,37 @@ export function getRealStrength(card: {
   dmg: number;
   attackSpeed: number;
   cost: number;
+  level: number;
+  world: number;
+  rarity: CardRarity;
   states: CardState[];
 }): number {
+  const costDivisor = cardCostMultiplier ** (card.cost - 1); // to normalize the strength no matter the cost
+
+  const statCost = getStatsStrength({ hp: card.hp, dmg: card.dmg, attackSpeed: card.attackSpeed, cost: card.cost });
+
+  const targetCost = getTargetStrength({
+    level: card.level,
+    rarity: card.rarity,
+    world: card.world,
+  });
+
+  const stateCosts = computeCosts(card.states, card, statCost, targetCost) / costDivisor;
+  
+  return statCost + stateCosts;
+}
+
+export function getStatsStrength(card: { hp: number; dmg: number; attackSpeed: number, cost: number }) {
   const dmg = card.dmg / Math.sqrt(baseDps) / Math.sqrt(baseDps);
   const speed = card.attackSpeed;
   const dps = dmg * speed;
 
-  const stateCosts = computeCosts(card.states, card);
   const costDivisor = cardCostMultiplier ** (card.cost - 1); // to normalize the strength no matter the cost
-  return (
-    ((card.hp / baseHp + dps) + stateCosts) / costDivisor
-  );
+
+  return (card.hp / baseHp + dps) / costDivisor;
 }
 
-function computeCosts(states: CardState[], stats: { hp: number; dmg: number; attackSpeed: number }) {
+function computeCosts(states: CardState[], stats: { hp: number; dmg: number; attackSpeed: number }, statCost: number, targetCost: number ) {
   let total = 0;
   
   states.forEach((state) => {
@@ -106,6 +123,8 @@ function computeCosts(states: CardState[], stats: { hp: number; dmg: number; att
       target: state.target,
       value: state.value,
       attackSpeed: stats.attackSpeed,
+      statCost: statCost,
+      targetCost: targetCost,
     });
     total += cost;
   });

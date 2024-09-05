@@ -9,6 +9,9 @@ function cardStrengthMultiplier(card: CardStat, cost: number) {
     cardWorldMultiplier ** (card.world - 1);
 }
 
+/**
+ * Iterater to find the stats of the card
+ */
 export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
   const attackRatio = 1 - card.attackDefenseRatio;
   const defenseRatio = card.attackDefenseRatio;
@@ -20,6 +23,9 @@ export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
     ...values,
     cost: card.stats[level - 1].cost,
     states: [],
+    level,
+    rarity: card.rarity,
+    world: card.world,
   });
 
   function getCurrentStats(divisor: number) {
@@ -42,6 +48,9 @@ export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
       cost: card.stats[level - 1].cost,
       states: card.stats[level - 1].states,
       illustration: card.stats[level - 1].illustration,
+      level,
+      rarity: card.rarity,
+      world: card.world,
     };
   }
 

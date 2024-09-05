@@ -20,6 +20,8 @@ import {
   TriggersOf,
   TargetsOf,
   ValueOf,
+  getStatsStrength,
+  cardCostMultiplier,
 } from "@repo/lib";
 import { DeleteIcon, PlusCircle } from "lucide-react";
 
@@ -166,6 +168,8 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
             </option>
           ))}
         </select>
+        <p>Stat cost:</p>
+        <p>{getStatsStrength(card)}</p>
         <p className="w-full text-center col-span-2 text-xl font-semibold pt-2">
           Effects
         </p>
@@ -259,11 +263,12 @@ function EffectFields({
   card: CardType;
 }) {
   const stateRestriction = CardStatesData[state.type];
+
   return (
     <div className="w-full col-span-2 flex gap-2">
       <div className="h-full flex items-center">
         (
-        {stateRestriction
+        {(stateRestriction
           .computeCost({
             dmg: card.dmg,
             dps: card.dmg * card.attackSpeed,
@@ -272,7 +277,9 @@ function EffectFields({
             target: state.target,
             value: state.value,
             attackSpeed: card.attackSpeed,
-          })
+            targetCost: getTargetStrength(card),
+            statCost: getStatsStrength(card),
+          }) / (cardCostMultiplier ** (card.cost - 1)))
           .toFixed(2)}
         )
       </div>

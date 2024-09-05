@@ -96,6 +96,8 @@ interface CardStateDataInterface {
     target: TargetCardState;
     value: number | null;
     attackSpeed: number;
+    statCost: number;
+    targetCost: number;
   }) => number;
   descrption: ({ trigger, target, value }: { trigger: string, target: string, value: number | null }) => string; title: string;
   status: StatusEffectType;
