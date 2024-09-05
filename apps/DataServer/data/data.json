@@ -5,6 +5,7 @@
       "rarity": "common",
       "id": 1,
       "world": 1,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.79,
       "speedDamageRatio": 0.85,
       "stats": [
@@ -30,6 +31,7 @@
       "rarity": "common",
       "id": 2,
       "world": 1,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.61,
       "speedDamageRatio": 0.74,
       "stats": [
@@ -76,6 +78,7 @@
       "rarity": "common",
       "id": 3,
       "world": 1,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.25,
       "speedDamageRatio": 0.68,
       "stats": [
@@ -121,6 +124,7 @@
       "rarity": "common",
       "id": 4,
       "world": 1,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.73,
       "speedDamageRatio": 0.67,
       "stats": [
@@ -160,6 +164,7 @@
       "rarity": "common",
       "id": 5,
       "world": 1,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.2,
       "speedDamageRatio": 0.4,
       "stats": [
@@ -185,6 +190,7 @@
       "rarity": "common",
       "id": 6,
       "world": 1,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.41,
       "speedDamageRatio": 0.42,
       "stats": [
@@ -210,6 +216,7 @@
       "rarity": "common",
       "id": 7,
       "world": 1,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.4,
       "speedDamageRatio": 0.85,
       "stats": [
@@ -249,6 +256,7 @@
       "rarity": "common",
       "id": 8,
       "world": 1,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.74,
       "speedDamageRatio": 0.8,
       "stats": [
@@ -274,8 +282,9 @@
       "rarity": "rare",
       "id": 9,
       "world": 1,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "adjustementStrength": 0,
+      "attackDefenseRatio": 0.56,
+      "speedDamageRatio": 0.54,
       "stats": [
         {
           "cost": 3,
@@ -308,7 +317,7 @@
               "type": "heal",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 150
+              "value": 100
             }
           ],
           "illustration": "card_9_level_3_1719012820414.png"
@@ -320,6 +329,7 @@
       "rarity": "rare",
       "id": 10,
       "world": 1,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.36,
       "speedDamageRatio": 0.9,
       "stats": [
@@ -345,6 +355,7 @@
       "rarity": "rare",
       "id": 11,
       "world": 1,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.8,
       "speedDamageRatio": 0.41,
       "stats": [
@@ -370,6 +381,7 @@
       "rarity": "rare",
       "id": 12,
       "world": 1,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.9,
       "speedDamageRatio": 0.75,
       "stats": [
@@ -416,6 +428,7 @@
       "rarity": "epic",
       "id": 13,
       "world": 1,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.67,
       "speedDamageRatio": 0.8,
       "stats": [
@@ -462,6 +475,7 @@
       "rarity": "epic",
       "id": 14,
       "world": 1,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.2,
       "speedDamageRatio": 0.21,
       "stats": [
@@ -508,6 +522,7 @@
       "rarity": "legendary",
       "id": 15,
       "world": 1,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.08,
       "speedDamageRatio": 0.02,
       "stats": [
@@ -533,6 +548,7 @@
       "rarity": "common",
       "id": 16,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.27,
       "speedDamageRatio": 0.27,
       "stats": [
@@ -565,6 +581,7 @@
       "rarity": "common",
       "id": 17,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.45,
       "speedDamageRatio": 0.67,
       "stats": [
@@ -590,6 +607,7 @@
       "rarity": "common",
       "id": 18,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.73,
       "speedDamageRatio": 0.63,
       "stats": [
@@ -615,6 +633,7 @@
       "rarity": "common",
       "id": 19,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.62,
       "speedDamageRatio": 0.61,
       "stats": [
@@ -661,6 +680,7 @@
       "rarity": "common",
       "id": 20,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.39,
       "speedDamageRatio": 0.75,
       "stats": [
@@ -693,6 +713,7 @@
       "rarity": "common",
       "id": 21,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -718,6 +739,7 @@
       "rarity": "common",
       "id": 22,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.7,
       "speedDamageRatio": 0.39,
       "stats": [
@@ -764,6 +786,7 @@
       "rarity": "common",
       "id": 23,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.67,
       "speedDamageRatio": 0.74,
       "stats": [
@@ -803,6 +826,7 @@
       "rarity": "rare",
       "id": 24,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.3,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -849,6 +873,7 @@
       "rarity": "rare",
       "id": 25,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -883,7 +908,7 @@
               "type": "clone",
               "trigger": "onDeath",
               "target": "selfCard",
-              "value": 2
+              "value": 1
             }
           ],
           "illustration": "card_25_level_3_1724598010005.png"
@@ -895,6 +920,7 @@
       "rarity": "rare",
       "id": 26,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -920,6 +946,7 @@
       "rarity": "rare",
       "id": 27,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.65,
       "speedDamageRatio": 0.44,
       "stats": [
@@ -952,6 +979,7 @@
       "rarity": "epic",
       "id": 28,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.95,
       "speedDamageRatio": 0.25,
       "stats": [
@@ -998,6 +1026,7 @@
       "rarity": "epic",
       "id": 29,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.64,
       "speedDamageRatio": 0.47,
       "stats": [
@@ -1037,6 +1066,7 @@
       "rarity": "legendary",
       "id": 30,
       "world": 2,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.77,
       "speedDamageRatio": 0.44,
       "stats": [
@@ -1083,6 +1113,7 @@
       "rarity": "common",
       "id": 31,
       "world": 3,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.29,
       "speedDamageRatio": 0.73,
       "stats": [
@@ -1108,6 +1139,7 @@
       "rarity": "common",
       "id": 32,
       "world": 3,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.42,
       "speedDamageRatio": 0.2,
       "stats": [
@@ -1133,6 +1165,7 @@
       "rarity": "common",
       "id": 33,
       "world": 3,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.72,
       "speedDamageRatio": 0.54,
       "stats": [
@@ -1191,6 +1224,7 @@
       "rarity": "common",
       "id": 34,
       "world": 3,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.71,
       "speedDamageRatio": 0.34,
       "stats": [
@@ -1223,6 +1257,7 @@
       "rarity": "common",
       "id": 35,
       "world": 3,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.36,
       "speedDamageRatio": 0.4,
       "stats": [
@@ -1255,6 +1290,7 @@
       "rarity": "common",
       "id": 36,
       "world": 3,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.12,
       "speedDamageRatio": 0.13,
       "stats": [
@@ -1280,8 +1316,9 @@
       "rarity": "common",
       "id": 37,
       "world": 3,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "adjustementStrength": 0,
+      "attackDefenseRatio": 0.09,
+      "speedDamageRatio": 0.2,
       "stats": [
         {
           "cost": 1,
@@ -1305,6 +1342,7 @@
       "rarity": "common",
       "id": 38,
       "world": 3,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1330,6 +1368,7 @@
       "rarity": "rare",
       "id": 39,
       "world": 3,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.71,
       "speedDamageRatio": 0.46,
       "stats": [
@@ -1376,6 +1415,7 @@
       "rarity": "rare",
       "id": 40,
       "world": 3,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.83,
       "speedDamageRatio": 0.81,
       "stats": [
@@ -1408,6 +1448,7 @@
       "rarity": "rare",
       "id": 41,
       "world": 3,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1433,6 +1474,7 @@
       "rarity": "rare",
       "id": 42,
       "world": 3,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.67,
       "speedDamageRatio": 0.11,
       "stats": [
@@ -1472,6 +1514,7 @@
       "rarity": "epic",
       "id": 43,
       "world": 3,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.24,
       "speedDamageRatio": 0.24,
       "stats": [
@@ -1536,6 +1579,7 @@
       "rarity": "epic",
       "id": 44,
       "world": 3,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.19,
       "speedDamageRatio": 0.11,
       "stats": [
@@ -1582,6 +1626,7 @@
       "rarity": "legendary",
       "id": 45,
       "world": 3,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.32,
       "speedDamageRatio": 0.56,
       "stats": [
@@ -1621,6 +1666,7 @@
       "rarity": "common",
       "id": 46,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1646,6 +1692,7 @@
       "rarity": "common",
       "id": 47,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1671,6 +1718,7 @@
       "rarity": "common",
       "id": 48,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1696,6 +1744,7 @@
       "rarity": "common",
       "id": 49,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1721,6 +1770,7 @@
       "rarity": "common",
       "id": 50,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1746,6 +1796,7 @@
       "rarity": "common",
       "id": 51,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1771,6 +1822,7 @@
       "rarity": "common",
       "id": 52,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1796,6 +1848,7 @@
       "rarity": "common",
       "id": 53,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1821,6 +1874,7 @@
       "rarity": "rare",
       "id": 54,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1846,6 +1900,7 @@
       "rarity": "rare",
       "id": 55,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1871,6 +1926,7 @@
       "rarity": "rare",
       "id": 56,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1896,6 +1952,7 @@
       "rarity": "rare",
       "id": 57,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1921,6 +1978,7 @@
       "rarity": "epic",
       "id": 58,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1946,6 +2004,7 @@
       "rarity": "epic",
       "id": 59,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1971,6 +2030,7 @@
       "rarity": "legendary",
       "id": 60,
       "world": 4,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -1992,10 +2052,11 @@
       ]
     },
     {
-      "name": "common card 1",
+      "name": "TEST",
       "rarity": "common",
       "id": 61,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -2021,6 +2082,7 @@
       "rarity": "common",
       "id": 62,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -2046,6 +2108,7 @@
       "rarity": "common",
       "id": 63,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -2071,6 +2134,7 @@
       "rarity": "common",
       "id": 64,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -2096,6 +2160,7 @@
       "rarity": "common",
       "id": 65,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -2121,6 +2186,7 @@
       "rarity": "common",
       "id": 66,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -2146,6 +2212,7 @@
       "rarity": "common",
       "id": 67,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -2171,6 +2238,7 @@
       "rarity": "common",
       "id": 68,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -2196,6 +2264,7 @@
       "rarity": "rare",
       "id": 69,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.99,
       "speedDamageRatio": 0.99,
       "stats": [
@@ -2221,6 +2290,7 @@
       "rarity": "rare",
       "id": 70,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -2246,6 +2316,7 @@
       "rarity": "rare",
       "id": 71,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -2271,6 +2342,7 @@
       "rarity": "rare",
       "id": 72,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -2296,6 +2368,7 @@
       "rarity": "epic",
       "id": 73,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -2321,6 +2394,7 @@
       "rarity": "epic",
       "id": 74,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.5,
       "speedDamageRatio": 0.5,
       "stats": [
@@ -2346,6 +2420,7 @@
       "rarity": "legendary",
       "id": 75,
       "world": 5,
+      "adjustementStrength": 0,
       "attackDefenseRatio": 0.01,
       "speedDamageRatio": 0.01,
       "stats": [

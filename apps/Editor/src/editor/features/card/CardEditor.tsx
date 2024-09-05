@@ -55,6 +55,13 @@ export default function CardEditor() {
     };
   }
 
+  function adjustementStrengthChange(delta: number) {
+    if (!card) return;
+    setCard({
+      adjustementStrength: card.adjustementStrength + delta,
+    });
+  }
+
   return (
     <div className="flex w-full items-center flex-col pt-4 gap-2">
       <div className="flex gap-2">
@@ -79,8 +86,26 @@ export default function CardEditor() {
           }}
         />
       </div>
-      <div className="py-8">
+      <div className="py-8 flex gap-8 items-center">
         <Ratios setCard={setCard} card={card} />
+        <div className="flex gap-4 flex-col items-center">
+          <p>Strength Adjustement</p>
+          <div className="flex gap-4 items-center">
+            <Button action={() => adjustementStrengthChange(-10)} small>
+              -10
+            </Button>
+            <Button action={() => adjustementStrengthChange(-1)} small>
+              -1
+            </Button>
+            <p>{card.adjustementStrength}%</p>
+            <Button action={() => adjustementStrengthChange(+1)} small>
+              +1
+            </Button>
+            <Button action={() => adjustementStrengthChange(+10)} small>
+              +10
+            </Button>
+          </div>
+        </div>
       </div>
 
       <div className="flex gap-8">
@@ -125,7 +150,8 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
 
   const realStrength = getRealStrength(card);
   const targetStrength = getTargetStrength(card);
-  const isStrengthValid = testIsStrengthValid(realStrength, targetStrength);
+  const adjustedStrength = targetStrength * (100 + cardStats.adjustementStrength) / 100;
+  const isStrengthValid = testIsStrengthValid(realStrength, adjustedStrength);
 
   return (
     <div className="flex flex-col items-center">
@@ -137,9 +163,9 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
           <span
             className={cn(isStrengthValid ? "text-green-500" : "text-red-500")}
           >
-            {realStrength}
+            {realStrength.toFixed(2)}
           </span>{" "}
-          / <span className="text-blue-500">{targetStrength}</span>
+          / <span className="text-blue-500">{adjustedStrength.toFixed(2)}({targetStrength}+{(adjustedStrength-targetStrength).toFixed(2)})</span>
         </p>
         <label>Illustration: </label>
         <input
@@ -268,8 +294,8 @@ function EffectFields({
     <div className="w-full col-span-2 flex gap-2">
       <div className="h-full flex items-center">
         (
-        {(stateRestriction
-          .computeCost({
+        {(
+          stateRestriction.computeCost({
             dmg: card.dmg,
             dps: card.dmg * card.attackSpeed,
             hp: card.hp,
@@ -279,8 +305,9 @@ function EffectFields({
             attackSpeed: card.attackSpeed,
             targetCost: getTargetStrength(card),
             statCost: getStatsStrength(card),
-          }) / (cardCostMultiplier ** (card.cost - 1)))
-          .toFixed(2)}
+          }) /
+          cardCostMultiplier ** (card.cost - 1)
+        ).toFixed(2)}
         )
       </div>
       <div className="w-full col-span-2 grid grid-cols-4 gap-2">
@@ -304,12 +331,11 @@ function EffectFields({
           }}
           className="border-2 border-black p-2 rounded-md"
         >
-          {stateRestriction.targets
-            .map((target) => (
-              <option key={target} value={target}>
-                {target}
-              </option>
-            ))}
+          {stateRestriction.targets.map((target) => (
+            <option key={target} value={target}>
+              {target}
+            </option>
+          ))}
         </select>
         <select
           value={state.trigger}
@@ -318,12 +344,11 @@ function EffectFields({
           }}
           className="border-2 border-black p-2 rounded-md"
         >
-          {stateRestriction.triggers
-            .map((trigger) => (
-              <option key={trigger} value={trigger}>
-                {trigger}
-              </option>
-            ))}
+          {stateRestriction.triggers.map((trigger) => (
+            <option key={trigger} value={trigger}>
+              {trigger}
+            </option>
+          ))}
         </select>
         <input
           type="number"

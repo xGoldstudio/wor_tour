@@ -16,6 +16,7 @@ function validateCard(card: Partial<CardStat>, index: number): CardStat {
 		rarity: card.rarity || "common",
 		id: index + 1,
 		world: card.world ?? 1,
+		adjustementStrength: defaultValue(0)(card.adjustementStrength),
 		attackDefenseRatio: inRatioRange(card.attackDefenseRatio),
 		speedDamageRatio: inRatioRange(card.speedDamageRatio),
 		stats: validateCardStatsArray(card.stats),

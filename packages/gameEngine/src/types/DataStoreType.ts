@@ -48,6 +48,7 @@ export interface CardStat {
   rarity: CardRarity;
   id: number;
   world: number;
+  adjustementStrength: number; // in percentage
   attackDefenseRatio: number; // ]0,1[
   speedDamageRatio: number; // ]0,1[
   stats: [CardStatLevel, CardStatLevel, CardStatLevel];

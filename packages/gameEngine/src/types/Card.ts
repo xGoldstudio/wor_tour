@@ -58,7 +58,7 @@ export function getTargetStrength(card: {
 }
 
 const baseStats = 1;
-export const maxDelta = 0.0001;
+export const maxDelta = 0.01;
 const survavibilityRatio = 7;
 export const baseHp = 100; // card of level 1, rarity common, world 1
 export const baseDps = baseHp / survavibilityRatio;

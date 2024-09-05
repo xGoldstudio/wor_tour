@@ -1,4 +1,4 @@
-import { baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, CardStatsInfoLevel, cardWorldMultiplier, getRealStrength, speedMaxLevel1, testIsStrengthValid } from "../../../gameEngine/src/types/Card";
+import { baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, CardStatsInfoLevel, cardWorldMultiplier, getRealStrength, getTargetStrength, speedMaxLevel1, testIsStrengthValid } from "../../../gameEngine/src/types/Card";
 import { CardStat } from "../../../gameEngine/src/types/DataStoreType";
 
 function cardStrengthMultiplier(card: CardStat, cost: number) {
@@ -18,15 +18,11 @@ export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
   const speedRatio = 1 - card.speedDamageRatio;
   const cost = card.stats[level - 1].cost;
 
-  const values = getCurrentStats(1);
-  const score = getRealStrength({
-    ...values,
-    cost: card.stats[level - 1].cost,
-    states: [],
+  const targetStrength = getTargetStrength({
     level,
     rarity: card.rarity,
     world: card.world,
-  });
+  }) * (100 + card.adjustementStrength) / 100;
 
   function getCurrentStats(divisor: number) {
     const multiplier = cardStrengthMultiplier(card, cost);
@@ -60,12 +56,12 @@ export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
     );
   }
 
-  let higherDivisor = 1;
-  let lowerDivisor = Object.keys(card.stats[level - 1].states).length ? 0 : 1; // if we have an effect
+  let higherDivisor = 2;
+  let lowerDivisor = 0;
   let iteration = 0;
   let currentStrength = realStrength();
-  while (iteration < 100 && !testIsStrengthValid(currentStrength, score)) {
-    if (currentStrength > score) {
+  while (iteration < 100 && !testIsStrengthValid(currentStrength, targetStrength)) {
+    if (currentStrength > targetStrength) {
       // divisor is too high so lower range
       higherDivisor -= (higherDivisor - lowerDivisor) / 2;
     } else {
