@@ -13,6 +13,7 @@ import {
   getValueInRange,
   testIsStrengthValid,
   CardStatesData,
+  getOptionsFromType,
   CardState,
   CardStatsInfoLevel,
   CardStatLevel,
@@ -22,6 +23,7 @@ import {
   ValueOf,
   getStatsStrength,
   cardCostMultiplier,
+  CardStateInfo,
 } from "@repo/lib";
 import { DeleteIcon, PlusCircle } from "lucide-react";
 
@@ -124,14 +126,13 @@ interface CardLevelProps {
 }
 
 function cardStatsToCard(cardStats: CardStat, level: number): CardType {
-  const levelStat = cardStats.stats[level - 1];
   const stats = getStats(cardStats, level);
   const world = useEditorStore.getState().getWorld(cardStats.world);
 
   return {
     name: cardStats.name,
-    cost: levelStat.cost,
-    illustration: levelStat.illustration || "",
+    cost: stats.cost,
+    illustration: stats.illustration || "",
     worldIllustration: world?.cardBackground || "",
     dmg: stats.dmg,
     hp: stats.hp,
@@ -140,7 +141,7 @@ function cardStatsToCard(cardStats: CardStat, level: number): CardType {
     id: cardStats.id,
     level,
     world: cardStats.world,
-    states: levelStat.states,
+    states: stats.states,
   };
 }
 
@@ -148,9 +149,12 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
   const card = cardStatsToCard(cardStats, level);
   const cardStat = cardStats.stats[level - 1];
 
+  console.log("a");
   const realStrength = getRealStrength(card);
+  console.log("b");
   const targetStrength = getTargetStrength(card);
-  const adjustedStrength = targetStrength * (100 + cardStats.adjustementStrength) / 100;
+  const adjustedStrength =
+    (targetStrength * (100 + cardStats.adjustementStrength)) / 100;
   const isStrengthValid = testIsStrengthValid(realStrength, adjustedStrength);
 
   return (
@@ -165,7 +169,11 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
           >
             {realStrength.toFixed(2)}
           </span>{" "}
-          / <span className="text-blue-500">{adjustedStrength.toFixed(2)}({targetStrength}+{(adjustedStrength-targetStrength).toFixed(2)})</span>
+          /{" "}
+          <span className="text-blue-500">
+            {adjustedStrength.toFixed(2)}({targetStrength}+
+            {(adjustedStrength - targetStrength).toFixed(2)})
+          </span>
         </p>
         <label>Illustration: </label>
         <input
@@ -195,7 +203,7 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
           ))}
         </select>
         <p>Stat cost:</p>
-        <p>{getStatsStrength(card)}</p>
+        <p>{getStatsStrength(card) / cardCostMultiplier ** (card.cost - 1)}</p>
         <p className="w-full text-center col-span-2 text-xl font-semibold pt-2">
           Effects
         </p>
@@ -210,6 +218,7 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
                     trigger: "onPlacement",
                     target: "allyCards",
                     value: 0,
+                    costPercentage: 0,
                   },
                 ],
               });
@@ -220,7 +229,7 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
           </Button>
         </div>
         {cardStat.states.map((state, i) => (
-          <EffectFields
+          <StateFields
             key={`${i}_${state.type}`}
             deleteState={() => {
               setCardStats({
@@ -228,17 +237,19 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
               });
             }}
             card={card}
+            realState={card.states[i]}
             state={state}
             changeState={(newState) => {
               setCardStats({
                 states: [
-                  ...cardStat.states.map((s, j): CardState => {
+                  ...cardStat.states.map((s, j): CardStateInfo => {
                     if (i === j) {
                       const type = (newState.type || s.type) as "heal"; // just the same value to make typescript happy (can be something else)
                       const typeRestrictions = CardStatesData[type];
+                      const options = getOptionsFromType(type);
 
                       const computeValue = () => {
-                        if (typeRestrictions.noValue) return null;
+                        if (typeRestrictions.noValue || !!options.computeValueFromCost) return null;
                         return getValueInRange(
                           typeRestrictions.min,
                           typeRestrictions.max
@@ -260,9 +271,10 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
                           typeRestrictions.targets as TargetsOf<"heal">[]
                         ),
                         value: computeValue() as ValueOf<"heal">,
+                        costPercentage: newState.costPercentage || null,
                       };
                       console.log("next", next);
-                      return next;
+                      return next as CardStateInfo;
                     }
                     return s;
                   }),
@@ -277,18 +289,21 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
   );
 }
 
-function EffectFields({
+function StateFields({
   deleteState,
   changeState,
   state,
   card,
+  realState,
 }: {
   deleteState: () => void;
-  changeState: (newState: Partial<CardState>) => void;
-  state: CardState;
+  changeState: (newState: Partial<CardStateInfo>) => void;
+  state: CardStateInfo;
+  realState: CardState;
   card: CardType;
 }) {
   const stateRestriction = CardStatesData[state.type];
+  const options = getOptionsFromType(state.type);
 
   return (
     <div className="w-full col-span-2 flex gap-2">
@@ -299,18 +314,17 @@ function EffectFields({
             dmg: card.dmg,
             dps: card.dmg * card.attackSpeed,
             hp: card.hp,
-            trigger: state.trigger,
-            target: state.target,
-            value: state.value,
+            trigger: realState.trigger,
+            target: realState.target,
+            value: realState.value,
             attackSpeed: card.attackSpeed,
             targetCost: getTargetStrength(card),
             statCost: getStatsStrength(card),
-          }) /
-          cardCostMultiplier ** (card.cost - 1)
+          }) / cardCostMultiplier ** (card.cost - 1)
         ).toFixed(2)}
         )
       </div>
-      <div className="w-full col-span-2 grid grid-cols-4 gap-2">
+      <div className="w-full col-span-2 grid grid-cols-5 gap-2">
         <select
           value={state.type}
           onChange={(v) => {
@@ -353,9 +367,26 @@ function EffectFields({
         <input
           type="number"
           value={state.value?.toString()}
-          onChange={(v) => changeState({ value: parseInt(v.target.value) })}
+          onChange={(v) => {
+            if (options.computeValueFromCost) {
+              changeState({ value: parseInt(v.target.value) });
+            } else {
+              changeState({ value: parseInt(v.target.value) });
+            }
+          }}
           className="border-2 border-black p-2 rounded-md"
-          disabled={stateRestriction.noValue}
+          disabled={stateRestriction.noValue || !!options.computeValueFromCost}
+          min={stateRestriction.min}
+          max={stateRestriction.max}
+        />
+        <input
+          type="number"
+          value={state.costPercentage?.toString()}
+          onChange={(v) => {
+            changeState({ costPercentage: parseInt(v.target.value) });
+          }}
+          className="border-2 border-black p-2 rounded-md"
+          disabled={stateRestriction.noValue || !options.computeValueFromCost}
           min={stateRestriction.min}
           max={stateRestriction.max}
         />

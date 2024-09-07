@@ -1,4 +1,4 @@
-import { CardStat, CardState, CardStatesData, CardStateShape, CardStatLevel, DeepPartial, defaultValue, EditorData, filterNulls, findInOrFirst, inRangeValue, isTrueOr, safeMap, WorldStats } from '@repo/lib';
+import { CardStat, CardState, CardStateInfo, CardStatesData, CardStatLevel, DeepPartial, defaultValue, EditorData, filterNulls, findInOrFirst, getOptionsFromType, inRangeValue, isTrueOr, safeMap, WorldStats } from '@repo/lib';
 
 export function purifyAppState(data: Partial<EditorData>): EditorData {
 	const safeCards: CardStat[] = safeMap<Partial<CardStat>, CardStat>(data.cards)(validateCard);
@@ -48,22 +48,23 @@ const defaultCardStatLevel: CardStatLevel = {
 	illustration: null,
 }
 
-function validateStates(states?: DeepPartial<CardState>[]): CardState[] {
-	return filterNulls(safeMap<DeepPartial<CardState>, (CardState | null)>(states)(validateState));
+function validateStates(states?: DeepPartial<CardState>[]): CardStateInfo[] {
+	return filterNulls(safeMap<DeepPartial<CardStateInfo>, (CardStateInfo | null)>(states)(validateState));
 }
 
 // make sure the state is valid (type exists, trigger exists, target exists, value is in range)
-function validateState(state: Partial<CardState>): CardState | null {
+function validateState(state: Partial<CardStateInfo>): CardStateInfo | null {
 	const type = state.type;
 	if (!type) return null;
 	const data = CardStatesData[type];
-	const res: CardStateShape = {
+	const options = getOptionsFromType(type);
+	return {
 		type,
 		trigger: findInOrFirst(data.triggers)(state.trigger),
 		target: findInOrFirst(data.targets)(state.target),
-		value: isTrueOr(null, defaultValue(data.min ?? data.max ?? 0)(state.value))(data.noValue),
-	}
-	return res as CardState;
+		value: isTrueOr(null, defaultValue(data.min ?? data.max ?? 0)(state.value))(data.noValue || !!options.computeValueFromCost),
+		costPercentage: isTrueOr(null, state.costPercentage ?? 0)(!options.computeValueFromCost),
+	} as CardStateInfo;
 }
 
 function validateWorld(world: Partial<WorldStats>, index: number): WorldStats {

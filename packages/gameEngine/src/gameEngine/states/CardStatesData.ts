@@ -72,6 +72,18 @@ export interface CardStateDataOptions {
   onChangeValue?: ChangeValueStateAction;
   onDamageModifier?: AttackModifierStateAction;
   onBeforeNormalPlacement?: BeforeNormalPlacementStateAction;
+  computeValueFromCost?: (props: {
+    dmg: number;
+    dps: number;
+    hp: number;
+    trigger: TriggerCardState;
+    target: TargetCardState;
+    value: number | null;
+    attackSpeed: number;
+    statCost: number;
+    targetCost: number;
+    costPercentage: number;
+  }) => number;
 }
 
 interface CardStateDataInterface {
@@ -171,19 +183,21 @@ export const CardStatesData = {
     noValue: false,
     triggers: ["onPlacement"],
     targets: ["allyCards"],
-    computeCost: ({ value, trigger, target }) => {
-      let triggerRatio = 0;
-      let targetRatio = 0;
-      if (trigger === "onPlacement") triggerRatio = 1;
-      if (target === "allyCards") targetRatio = 1;
-      return ((value || 0) / (baseDps * 3)) * triggerRatio * targetRatio;
+    computeCost: ({ value }) => {
+      return (value || 0) / (baseDps * 4);
     },
     descrption: ({ trigger, target, value }) => `${trigger}, heal ${target} for ${value} health points.`,
     title: "Heal",
     status: "buff",
     src: "heal.png",
     action: HealStateAction,
-    options: {},
+    options: {
+      computeValueFromCost: ({ costPercentage, targetCost }) => {
+        return Math.round(
+          (targetCost * (costPercentage) / 100) * baseDps * 4
+        );
+      },
+    },
   },
   riposte: {
     min: 1,

@@ -96,9 +96,9 @@ export function getRealStrength(card: {
     world: card.world,
   });
 
-  const stateCosts = computeCosts(card.states, card, statCost, targetCost) / costDivisor;
+  const stateCosts = computeCosts(card.states, card, statCost, targetCost);
   
-  return statCost + stateCosts;
+  return (statCost + stateCosts) / costDivisor;
 }
 
 export function getStatsStrength(card: { hp: number; dmg: number; attackSpeed: number, cost: number }) {
@@ -106,9 +106,7 @@ export function getStatsStrength(card: { hp: number; dmg: number; attackSpeed: n
   const speed = card.attackSpeed;
   const dps = dmg * speed;
 
-  const costDivisor = cardCostMultiplier ** (card.cost - 1); // to normalize the strength no matter the cost
-
-  return (card.hp / baseHp + dps) / costDivisor;
+  return (card.hp / baseHp + dps);
 }
 
 function computeCosts(states: CardState[], stats: { hp: number; dmg: number; attackSpeed: number }, statCost: number, targetCost: number ) {

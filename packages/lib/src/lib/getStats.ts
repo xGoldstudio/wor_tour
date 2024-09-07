@@ -1,5 +1,6 @@
-import { baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, CardStatsInfoLevel, cardWorldMultiplier, getRealStrength, getTargetStrength, speedMaxLevel1, testIsStrengthValid } from "../../../gameEngine/src/types/Card";
-import { CardStat } from "../../../gameEngine/src/types/DataStoreType";
+import { CardState, getOptionsFromType } from "../../../gameEngine";
+import { baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, CardStatsInfoLevel, cardWorldMultiplier, getRealStrength, getStatsStrength, getTargetStrength, speedMaxLevel1, testIsStrengthValid } from "../../../gameEngine/src/types/Card";
+import { CardStat, CardStateInfo } from "../../../gameEngine/src/types/DataStoreType";
 
 function cardStrengthMultiplier(card: CardStat, cost: number) {
   return (value: number) =>
@@ -18,11 +19,17 @@ export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
   const speedRatio = 1 - card.speedDamageRatio;
   const cost = card.stats[level - 1].cost;
 
-  const targetStrength = getTargetStrength({
+  const statesSpaceTaken = card.stats[level - 1].states.reduce(
+    (acc, state) => acc + (state.costPercentage ?? 0),
+    0,
+  );
+  const ajustedTargetStrength = getTargetStrength({
     level,
     rarity: card.rarity,
     world: card.world,
   }) * (100 + card.adjustementStrength) / 100;
+
+  const targetStrength = ajustedTargetStrength * ((100 - statesSpaceTaken) / 100);
 
   function getCurrentStats(divisor: number) {
     const multiplier = cardStrengthMultiplier(card, cost);
@@ -71,5 +78,50 @@ export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
     iteration++;
   }
 
-  return getCurrentStats(higherDivisor - (higherDivisor - lowerDivisor) / 2);
+  const res = getCurrentStats(higherDivisor - (higherDivisor - lowerDivisor) / 2);
+  const states = getStatesFromStatesInfo(res.states, {
+    dmg: res.dmg,
+    attackSpeed: res.attackSpeed,
+    hp: res.hp,
+  }, cost, ajustedTargetStrength);
+  return {
+    cost: res.cost,
+    dmg: res.dmg,
+    hp: res.hp,
+    attackSpeed: res.attackSpeed,
+    illustration: res.illustration,
+    states: states,
+  };
+}
+
+function getStatesFromStatesInfo(states: CardStateInfo[], stats: {
+  dmg: number;
+  attackSpeed: number;
+  hp: number;
+}, cost: number, targetStrength: number) {
+  return states.map(state => {
+    const options = getOptionsFromType(state.type);
+    let value = state.value;
+    const statCost = getStatsStrength({
+      hp: stats.hp, dmg: stats.dmg, attackSpeed: stats.attackSpeed, cost
+    });
+    if (options.computeValueFromCost) {
+      value = options.computeValueFromCost({
+        dmg: stats.dmg,
+        dps: stats.attackSpeed * stats.dmg,
+        hp: stats.hp,
+        attackSpeed: stats.attackSpeed,
+        trigger: state.trigger,
+        target: state.target,
+        value: state.value,
+        statCost: statCost,
+        targetCost: targetStrength * (cardCostMultiplier ** (cost - 1)),
+        costPercentage: state.costPercentage!,
+      }); 
+    }
+    return {
+      ...state,
+      value: value,
+    } as CardState;
+  });
 }
