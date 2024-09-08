@@ -95,6 +95,7 @@ export function getStats(card: CardStat, level: number, isPvp?: boolean): CardSt
     attackSpeed: res.attackSpeed,
     illustration: res.illustration,
     states: states,
+    isPvp: !!isPvp,
   };
 }
 

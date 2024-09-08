@@ -13,6 +13,7 @@ const baseCard = {
 	attackSpeed: 1,
 	level: 1,
 	world: 1,
+	isPvp: false,
 }
 
 const commons: CardType[] = _.times(1, (i) => ({

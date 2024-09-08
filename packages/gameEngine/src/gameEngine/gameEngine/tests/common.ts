@@ -24,6 +24,7 @@ export const baseCard: CardType = {
 	world: 1,
 	rarity: "common",
 	id: 0,
+	isPvp: false,
 }
 
 export const deck: CardType[] = _.times(8, (i) => ({ ...baseCard, id: i, rarity: "common" }));

@@ -33,10 +33,12 @@ export function MatchmakingService() {
 		const deck = usePlayerStore.getState().deck;
 		const setInGameData = useGameMetadataStore.getState().setInGameData;
 
+		const isPvp = useDataStore.getState().isPvp;
+
 		const playerDeck: CardType[] = deck.map((cardId) => findCard(cardId, usePlayerStore.getState().getCollectionInfo(cardId)!.level));
 		const cardPool = getCardsPoolFromTier(usePlayerStore.getState().getCurrentTier());
 		const { targetStrength, winTrophies, loseTrophies } = getTargetStrengthForGame();
-		const opponentDeck = buildDeck(targetStrength, 0.2, cardPool);
+		const opponentDeck = isPvp ? playerDeck : buildDeck(targetStrength, 0.2, cardPool);
 		setInGameData(
 			playerDeck, opponentDeck, getHpFromDeck(playerDeck), getHpFromDeck(opponentDeck),
 			{
@@ -162,7 +164,7 @@ function getCardsPoolFromTier(tier: Tier) {
 		if (card.world > tier.world) return;
 		for (let i = 0; i < 3; i++) {
 			const cardType = findCard(card.id, i + 1);
-			pool.push([getTargetStrength(cardType), cardType]);
+			pool.push([getTargetStrength(cardType, cardType.isPvp), cardType]);
 		}
 	});
 	return pool.sort((a, b) => a[0] - b[0]);

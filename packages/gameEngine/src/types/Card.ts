@@ -14,6 +14,7 @@ export type CardType = {
   id: number;
   level: number;
   world: number;
+  isPvp: boolean;
   states: CardState[];
 };
 
@@ -38,6 +39,7 @@ export interface CardStatsInfoLevel {
   hp: number;
   attackSpeed: number;
   illustration: string | null;
+  isPvp: boolean;
   states: CardState[];
 }
 

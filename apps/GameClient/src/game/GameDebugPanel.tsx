@@ -3,6 +3,8 @@ import { GAME_OPTS } from "./gameBehavior/useGameEvents";
 import { botOptions } from "./gameBehavior/aiAgent";
 import FpsPrint from "./FpsPrint";
 import { ClockReturn, EventType, InGameCardType } from "game_engine";
+import { cn } from "@repo/ui";
+import { CheckCircle } from "lucide-react";
 
 interface GameDebugPanelProps {
   play: () => void;
@@ -48,11 +50,11 @@ export default function GameDebugPanel({
               isPlayer: false,
               damage: 99999,
               initiator: {
-                  type: "cardAttacking",
-                  instanceId: 1,
-                  cardIniator: {} as InGameCardType,
-              }
-            }
+                type: "cardAttacking",
+                instanceId: 1,
+                cardIniator: {} as InGameCardType,
+              },
+            },
           });
         }}
       >
@@ -70,30 +72,47 @@ export default function GameDebugPanel({
                 type: "cardAttacking",
                 instanceId: 1,
                 cardIniator: {} as InGameCardType,
-              }
-            }
+              },
+            },
           });
         }}
       >
         Kill yourself
       </DebugButton>
       <DebugButton onClick={triggerDrawGame}>Draw game</DebugButton>
-      <DebugButton onClick={() => botOptions.disabled = !botOptions.disabled}>Toggle bot activation</DebugButton>
-      <DebugButton onClick={() => GAME_OPTS.simulateBadPerformance = !GAME_OPTS.simulateBadPerformance}>Toggle bad perf</DebugButton>
-   </div>
+      <DebugButton onClick={() => (botOptions.disabled = !botOptions.disabled)}>
+        Toggle bot activation
+      </DebugButton>
+      <DebugButton
+        onClick={() =>
+          (GAME_OPTS.simulateBadPerformance = !GAME_OPTS.simulateBadPerformance)
+        }
+      >
+        Toggle bad perf
+      </DebugButton>
+    </div>
   );
 }
 
 export function DebugButton({
   children,
   onClick,
+  selected,
 }: {
   children: React.ReactNode;
   onClick: (event: React.MouseEvent) => void;
+  selected?: boolean;
 }) {
   return (
-    <button className="px-2 py-1 border-2 border-white" onClick={onClick}>
+    <button
+      className={cn(
+        "px-2 py-1 flex gap-2 items-center justify-center rounded-sm bg-slate-600",
+        selected && "bg-white text-black"
+      )}
+      onClick={onClick}
+    >
       {children}
+      {selected && <CheckCircle size={16} />}
     </button>
   );
 }

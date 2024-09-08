@@ -61,5 +61,5 @@ function getRandomInList<T>(list: T[]) {
 }
 
 export function getDeckStrength(deck: CardType[]) {
-  return deck.reduce((acc, card) => acc + getTargetStrength(card), 0);
+  return deck.reduce((acc, card) => acc + getTargetStrength(card, card.isPvp), 0);
 }

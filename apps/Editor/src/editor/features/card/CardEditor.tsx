@@ -153,6 +153,7 @@ function cardStatsToCard(cardStats: CardStat, level: number, isPvp: boolean): Ca
     level,
     world: cardStats.world,
     states: stats.states,
+    isPvp: stats.isPvp,
   };
 }
 
