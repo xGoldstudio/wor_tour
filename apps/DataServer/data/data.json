@@ -777,8 +777,8 @@
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 5,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 30
             }
           ],
           "illustration": "card_22_level_1_1724595811636.png"
@@ -790,8 +790,8 @@
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 10,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 30
             }
           ],
           "illustration": "card_22_level_2_1724595815675.png"
@@ -803,8 +803,8 @@
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 15,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 33
             }
           ],
           "illustration": "card_22_level_3_1724595817743.png"
@@ -945,7 +945,7 @@
               "type": "clone",
               "trigger": "onDeath",
               "target": "selfCard",
-              "value": 1,
+              "value": 2,
               "costPercentage": null
             }
           ],
@@ -1121,8 +1121,8 @@
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 15,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 38
             }
           ],
           "illustration": "card_30_level_1_1724595407619.png"
@@ -1134,8 +1134,8 @@
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 30,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 40
             }
           ],
           "illustration": "card_30_level_2_1724595412137.png"
@@ -1147,8 +1147,8 @@
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 60,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 40
             }
           ],
           "illustration": "card_30_level_3_1724595417108.png"
@@ -1592,8 +1592,8 @@
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 10,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 0
             }
           ],
           "illustration": "card_43_level_1_1724548148872.png"
@@ -1612,8 +1612,8 @@
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 15,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 0
             }
           ],
           "illustration": "card_43_level_2_1724548152771.png"
@@ -1632,8 +1632,8 @@
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
-              "value": 70,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 0
             }
           ],
           "illustration": "card_43_level_3_1724548159076.png"

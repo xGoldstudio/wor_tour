@@ -52,8 +52,8 @@ export function getTargetStrength(card: {
   level: number;
   rarity: CardRarity;
   world: number;
-}) {
-  const targetStrength = getCardStrength(card);
+}, isPvp?: boolean) {
+  const targetStrength = getCardStrength(card, isPvp);
   return roundToTwoMath(baseStats * targetStrength);
 }
 
@@ -130,11 +130,18 @@ function computeCosts(states: CardState[], stats: { hp: number; dmg: number; att
   return total;
 }
 
+export const pvpStrengthByLevel = (level: number) => {
+  return [5, 7.5, 10][level - 1];
+}
+
 export function getCardStrength(card: {
   level: number;
   rarity: CardRarity;
   world: number;
-}) {
+}, isPvp?: boolean) {
+  if (isPvp) {
+    return pvpStrengthByLevel(card.level);
+  }
   return (
     1 *
     cardLevelMultiplier ** (card.level - 1) *

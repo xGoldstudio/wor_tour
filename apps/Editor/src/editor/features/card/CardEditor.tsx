@@ -26,10 +26,12 @@ import {
   CardStateInfo,
 } from "@repo/lib";
 import { DeleteIcon, PlusCircle } from "lucide-react";
+import { useState } from "react";
 
 export default function CardEditor() {
   const { cardId: cardIdParam } = useParams();
   const navigate = useNavigate();
+  const [isPvp, setIsPvp] = useState(false);
 
   const cardId = cardIdParam ? parseInt(cardIdParam) : undefined;
 
@@ -88,6 +90,14 @@ export default function CardEditor() {
           }}
         />
       </div>
+      <div className="flex gap-2">
+        <p>Is pvp:</p>
+        <input
+          type="checkbox"
+          checked={isPvp}
+          onChange={(v) => setIsPvp(v.target.checked)}
+        />
+      </div>
       <div className="py-8 flex gap-8 items-center">
         <Ratios setCard={setCard} card={card} />
         <div className="flex gap-4 flex-col items-center">
@@ -111,9 +121,9 @@ export default function CardEditor() {
       </div>
 
       <div className="flex gap-8">
-        <CardLevel cardStats={card} setCardStats={setCardLevel(1)} level={1} />
-        <CardLevel cardStats={card} setCardStats={setCardLevel(2)} level={2} />
-        <CardLevel cardStats={card} setCardStats={setCardLevel(3)} level={3} />
+        <CardLevel cardStats={card} setCardStats={setCardLevel(1)} level={1} isPvp={isPvp} />
+        <CardLevel cardStats={card} setCardStats={setCardLevel(2)} level={2} isPvp={isPvp} />
+        <CardLevel cardStats={card} setCardStats={setCardLevel(3)} level={3} isPvp={isPvp} />
       </div>
     </div>
   );
@@ -123,10 +133,11 @@ interface CardLevelProps {
   cardStats: CardStat;
   setCardStats: (card: Partial<CardStatLevel>) => void;
   level: number;
+  isPvp: boolean;
 }
 
-function cardStatsToCard(cardStats: CardStat, level: number): CardType {
-  const stats = getStats(cardStats, level);
+function cardStatsToCard(cardStats: CardStat, level: number, isPvp: boolean): CardType {
+  const stats = getStats(cardStats, level, isPvp);
   const world = useEditorStore.getState().getWorld(cardStats.world);
 
   return {
@@ -145,14 +156,12 @@ function cardStatsToCard(cardStats: CardStat, level: number): CardType {
   };
 }
 
-function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
-  const card = cardStatsToCard(cardStats, level);
+function CardLevel({ cardStats, setCardStats, level, isPvp }: CardLevelProps) {
+  const card = cardStatsToCard(cardStats, level, isPvp);
   const cardStat = cardStats.stats[level - 1];
 
-  console.log("a");
   const realStrength = getRealStrength(card);
-  console.log("b");
-  const targetStrength = getTargetStrength(card);
+  const targetStrength = getTargetStrength(card, isPvp);
   const adjustedStrength =
     (targetStrength * (100 + cardStats.adjustementStrength)) / 100;
   const isStrengthValid = testIsStrengthValid(realStrength, adjustedStrength);
@@ -249,7 +258,11 @@ function CardLevel({ cardStats, setCardStats, level }: CardLevelProps) {
                       const options = getOptionsFromType(type);
 
                       const computeValue = () => {
-                        if (typeRestrictions.noValue || !!options.computeValueFromCost) return null;
+                        if (
+                          typeRestrictions.noValue ||
+                          !!options.computeValueFromCost
+                        )
+                          return null;
                         return getValueInRange(
                           typeRestrictions.min,
                           typeRestrictions.max
@@ -320,7 +333,8 @@ function StateFields({
             attackSpeed: card.attackSpeed,
             targetCost: getTargetStrength(card),
             statCost: getStatsStrength(card),
-          }) / cardCostMultiplier ** (card.cost - 1)
+          }) /
+          cardCostMultiplier ** (card.cost - 1)
         ).toFixed(2)}
         )
       </div>

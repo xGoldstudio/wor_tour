@@ -241,7 +241,7 @@ export const CardStatesData = {
     triggers: ["onDirectAttackHit"],
     targets: ["directEnnemyCard"],
     computeCost: ({ value, attackSpeed }) => {
-      return ((value || 0) * (attackSpeed * 2)) / 7;
+      return ((value || 0) * (attackSpeed * 2)) / 12;
     },
     descrption: ({ trigger, target, value }) => `${trigger}, give bleeding ${value} to ${target}.`,
     title: "Massacre",
@@ -250,6 +250,12 @@ export const CardStatesData = {
     action: MassacreStateAction,
     options: {
       stackable: true,
+      computeValueFromCost: ({ costPercentage, targetCost, attackSpeed }) => {
+        const scoreTarget = targetCost * (costPercentage) / 100;
+        return Math.round(
+          scoreTarget * 12 / (attackSpeed * 2)
+        );
+      }
     },
   },
   bleeding: {

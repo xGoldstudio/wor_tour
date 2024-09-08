@@ -1,8 +1,12 @@
 import { CardState, getOptionsFromType } from "../../../gameEngine";
-import { baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, CardStatsInfoLevel, cardWorldMultiplier, getRealStrength, getStatsStrength, getTargetStrength, speedMaxLevel1, testIsStrengthValid } from "../../../gameEngine/src/types/Card";
+import { baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, CardStatsInfoLevel, cardWorldMultiplier, getRealStrength, getStatsStrength, getTargetStrength, pvpStrengthByLevel, speedMaxLevel1, testIsStrengthValid } from "../../../gameEngine/src/types/Card";
 import { CardStat, CardStateInfo } from "../../../gameEngine/src/types/DataStoreType";
 
-function cardStrengthMultiplier(card: CardStat, cost: number) {
+function cardStrengthMultiplier(card: CardStat, cost: number, isPvp?: boolean) {
+  if (isPvp) {
+    return (value: number) => value *
+    cardCostMultiplier ** (cost - 1);
+  }
   return (value: number) =>
     value *
     cardCostMultiplier ** (cost - 1) *
@@ -13,7 +17,7 @@ function cardStrengthMultiplier(card: CardStat, cost: number) {
 /**
  * Iterater to find the stats of the card
  */
-export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
+export function getStats(card: CardStat, level: number, isPvp?: boolean): CardStatsInfoLevel {
   const attackRatio = 1 - card.attackDefenseRatio;
   const defenseRatio = card.attackDefenseRatio;
   const speedRatio = 1 - card.speedDamageRatio;
@@ -27,14 +31,14 @@ export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
     level,
     rarity: card.rarity,
     world: card.world,
-  }) * (100 + card.adjustementStrength) / 100;
+  }, isPvp) * (100 + card.adjustementStrength) / 100;
 
   const targetStrength = ajustedTargetStrength * ((100 - statesSpaceTaken) / 100);
 
   function getCurrentStats(divisor: number) {
-    const multiplier = cardStrengthMultiplier(card, cost);
+    const multiplier = cardStrengthMultiplier(card, cost, isPvp);
 
-    const levelMultiplier = cardLevelMultiplier ** (level - 1);
+    const levelMultiplier = isPvp ? pvpStrengthByLevel(level) : cardLevelMultiplier ** (level - 1);
     const dps = multiplier(attackRatio * baseDps * divisor * levelMultiplier);
 
     const speed =
