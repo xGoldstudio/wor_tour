@@ -135,6 +135,7 @@ function createCard(
     name: `${rarity} card ${position}`,
     rarity,
     world: world,
+    adjustementStrength: 0,
     attackDefenseRatio: 0.5,
     speedDamageRatio: 0.5,
     stats: [

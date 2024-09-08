@@ -8,7 +8,7 @@ export default function Ratios({
   setCard: (card: Partial<CardStat>) => void;
 }) {
   return (
-    <>
+    <div>
       <Ratio
         ratio={card.attackDefenseRatio}
         setRatio={(ratio) => setCard({ attackDefenseRatio: ratio })}
@@ -21,7 +21,7 @@ export default function Ratios({
         firstRatioLabel="Attack Speed"
         secondRatioLabel="Damage"
       />
-    </>
+    </div>
   );
 }
 

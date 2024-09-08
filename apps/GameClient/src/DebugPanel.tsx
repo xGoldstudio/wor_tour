@@ -15,6 +15,8 @@ export default function DebugPanel() {
     addGold: state.addGold,
     setTrophies: state.addOrRemoveTrophies,
   }));
+  const isPvp = useDataStore((state) => state.isPvp);
+  const isMirror = matchmakingService.wathcIsMirror();
 
   const addTrophies = (amount: number) =>
     useAnimationStore.getState().addAnimation({
@@ -51,7 +53,8 @@ export default function DebugPanel() {
   };
 
   return (
-    <div className="fixed right-2 top-2 border-2 border-white text-white px-4 py-2 flex flex-col gap-4">
+    <div className="fixed right-2 top-2 text-white px-4 py-2 flex flex-col gap-4">
+      <p>Gold: </p>
       <div className="flex gap-4">
         <DebugButton onClick={() => addGold(1000)}>Give 1000 gold</DebugButton>
         <DebugButton onClick={() => addGold(1000000)}>
@@ -112,6 +115,11 @@ export default function DebugPanel() {
       <p>Collection: </p>
       <div className="grid grid-cols-2 gap-4">
         <DebugButton onClick={() => giveAllCards()}>Give all cards</DebugButton>
+      </div>
+      <p>Matchmaking:</p>
+      <div className="grid grid-cols-2 gap-4">
+        <DebugButton onClick={() => useDataStore.getState().setIsPvp(!useDataStore.getState().isPvp)} selected={isPvp}>Mode pvp</DebugButton>
+        <DebugButton onClick={() => matchmakingService.toggleMirror()} selected={isMirror}>Mirror</DebugButton>
       </div>
       <p className="text-red-600">Danger zone:</p>
       <div className="grid grid-cols-2 gap-4 border-4 border-red-600 text-red-600 p-2">

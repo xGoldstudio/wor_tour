@@ -14,6 +14,7 @@ export type CardType = {
   id: number;
   level: number;
   world: number;
+  isPvp: boolean;
   states: CardState[];
 };
 
@@ -38,6 +39,7 @@ export interface CardStatsInfoLevel {
   hp: number;
   attackSpeed: number;
   illustration: string | null;
+  isPvp: boolean;
   states: CardState[];
 }
 
@@ -52,13 +54,13 @@ export function getTargetStrength(card: {
   level: number;
   rarity: CardRarity;
   world: number;
-}) {
-  const targetStrength = getCardStrength(card);
+}, isPvp?: boolean) {
+  const targetStrength = getCardStrength(card, isPvp);
   return roundToTwoMath(baseStats * targetStrength);
 }
 
 const baseStats = 1;
-export const maxDelta = 0.0001;
+export const maxDelta = 0.01;
 const survavibilityRatio = 7;
 export const baseHp = 100; // card of level 1, rarity common, world 1
 export const baseDps = baseHp / survavibilityRatio;
@@ -81,20 +83,35 @@ export function getRealStrength(card: {
   dmg: number;
   attackSpeed: number;
   cost: number;
+  level: number;
+  world: number;
+  rarity: CardRarity;
   states: CardState[];
 }): number {
+  const costDivisor = cardCostMultiplier ** (card.cost - 1); // to normalize the strength no matter the cost
+
+  const statCost = getStatsStrength({ hp: card.hp, dmg: card.dmg, attackSpeed: card.attackSpeed, cost: card.cost });
+
+  const targetCost = getTargetStrength({
+    level: card.level,
+    rarity: card.rarity,
+    world: card.world,
+  });
+
+  const stateCosts = computeCosts(card.states, card, statCost, targetCost);
+  
+  return (statCost + stateCosts) / costDivisor;
+}
+
+export function getStatsStrength(card: { hp: number; dmg: number; attackSpeed: number, cost: number }) {
   const dmg = card.dmg / Math.sqrt(baseDps) / Math.sqrt(baseDps);
   const speed = card.attackSpeed;
   const dps = dmg * speed;
 
-  const stateCosts = computeCosts(card.states, card);
-  const costDivisor = cardCostMultiplier ** (card.cost - 1); // to normalize the strength no matter the cost
-  return (
-    ((card.hp / baseHp + dps) + stateCosts) / costDivisor
-  );
+  return (card.hp / baseHp + dps);
 }
 
-function computeCosts(states: CardState[], stats: { hp: number; dmg: number; attackSpeed: number }) {
+function computeCosts(states: CardState[], stats: { hp: number; dmg: number; attackSpeed: number }, statCost: number, targetCost: number ) {
   let total = 0;
   
   states.forEach((state) => {
@@ -106,6 +123,8 @@ function computeCosts(states: CardState[], stats: { hp: number; dmg: number; att
       target: state.target,
       value: state.value,
       attackSpeed: stats.attackSpeed,
+      statCost: statCost,
+      targetCost: targetCost,
     });
     total += cost;
   });
@@ -113,11 +132,18 @@ function computeCosts(states: CardState[], stats: { hp: number; dmg: number; att
   return total;
 }
 
+export const pvpStrengthByLevel = (level: number) => {
+  return [5, 7.5, 10][level - 1];
+}
+
 export function getCardStrength(card: {
   level: number;
   rarity: CardRarity;
   world: number;
-}) {
+}, isPvp?: boolean) {
+  if (isPvp) {
+    return pvpStrengthByLevel(card.level);
+  }
   return (
     1 *
     cardLevelMultiplier ** (card.level - 1) *

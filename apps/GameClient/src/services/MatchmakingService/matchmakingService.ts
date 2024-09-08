@@ -26,6 +26,7 @@ export function MatchmakingService() {
 	const store = create(persist(() => (
 		{
 			loserQueue: null as LoserQueue | null,
+			isMirror: false,
 		}
 	), { name: "MatchmakingServiceStore" }));
 
@@ -33,10 +34,13 @@ export function MatchmakingService() {
 		const deck = usePlayerStore.getState().deck;
 		const setInGameData = useGameMetadataStore.getState().setInGameData;
 
+		const isPvp = useDataStore.getState().isPvp;
+		const isMirror = store.getState().isMirror;
+
 		const playerDeck: CardType[] = deck.map((cardId) => findCard(cardId, usePlayerStore.getState().getCollectionInfo(cardId)!.level));
 		const cardPool = getCardsPoolFromTier(usePlayerStore.getState().getCurrentTier());
 		const { targetStrength, winTrophies, loseTrophies } = getTargetStrengthForGame();
-		const opponentDeck = buildDeck(targetStrength, 0.2, cardPool);
+		const opponentDeck = isMirror ? playerDeck : buildDeck(isPvp ? 80 : targetStrength, 0.2, cardPool);
 		setInGameData(
 			playerDeck, opponentDeck, getHpFromDeck(playerDeck), getHpFromDeck(opponentDeck),
 			{
@@ -149,7 +153,15 @@ export function MatchmakingService() {
 		store.setState({ loserQueue: null });
 	}
 
-	return { startGame, endGame, reset };
+	function wathcIsMirror() {
+		return store((state) => state.isMirror);
+	}
+
+	function toggleMirror() {
+		store.setState({ isMirror: !store.getState().isMirror });
+	}
+
+	return { startGame, endGame, reset, wathcIsMirror, toggleMirror };
 }
 
 function getHpFromDeck(deck: CardType[]) {
@@ -162,7 +174,7 @@ function getCardsPoolFromTier(tier: Tier) {
 		if (card.world > tier.world) return;
 		for (let i = 0; i < 3; i++) {
 			const cardType = findCard(card.id, i + 1);
-			pool.push([getTargetStrength(cardType), cardType]);
+			pool.push([getTargetStrength(cardType, cardType.isPvp), cardType]);
 		}
 	});
 	return pool.sort((a, b) => a[0] - b[0]);

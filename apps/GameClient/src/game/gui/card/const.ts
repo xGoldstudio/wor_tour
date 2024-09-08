@@ -13,4 +13,5 @@ export const dummyCard: CardType = {
   states: [],
   level: 1,
   world: 1,
+  isPvp: false,
 };

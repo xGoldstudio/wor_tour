@@ -18,6 +18,7 @@ const dummyCard: CardType = {
 	world: 1,
 	rarity: "epic",
 	id: 0,
+	isPvp: false,
 };
 
 export function useDummyCard() {

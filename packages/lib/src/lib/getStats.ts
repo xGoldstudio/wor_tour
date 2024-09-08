@@ -1,7 +1,12 @@
-import { baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, CardStatsInfoLevel, cardWorldMultiplier, getRealStrength, speedMaxLevel1, testIsStrengthValid } from "../../../gameEngine/src/types/Card";
-import { CardStat } from "../../../gameEngine/src/types/DataStoreType";
+import { CardState, getOptionsFromType } from "../../../gameEngine";
+import { baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, CardStatsInfoLevel, cardWorldMultiplier, getRealStrength, getStatsStrength, getTargetStrength, pvpStrengthByLevel, speedMaxLevel1, testIsStrengthValid } from "../../../gameEngine/src/types/Card";
+import { CardStat, CardStateInfo } from "../../../gameEngine/src/types/DataStoreType";
 
-function cardStrengthMultiplier(card: CardStat, cost: number) {
+function cardStrengthMultiplier(card: CardStat, cost: number, isPvp?: boolean) {
+  if (isPvp) {
+    return (value: number) => value *
+    cardCostMultiplier ** (cost - 1);
+  }
   return (value: number) =>
     value *
     cardCostMultiplier ** (cost - 1) *
@@ -9,23 +14,31 @@ function cardStrengthMultiplier(card: CardStat, cost: number) {
     cardWorldMultiplier ** (card.world - 1);
 }
 
-export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
+/**
+ * Iterater to find the stats of the card
+ */
+export function getStats(card: CardStat, level: number, isPvp?: boolean): CardStatsInfoLevel {
   const attackRatio = 1 - card.attackDefenseRatio;
   const defenseRatio = card.attackDefenseRatio;
   const speedRatio = 1 - card.speedDamageRatio;
   const cost = card.stats[level - 1].cost;
 
-  const values = getCurrentStats(1);
-  const score = getRealStrength({
-    ...values,
-    cost: card.stats[level - 1].cost,
-    states: [],
-  });
+  const statesSpaceTaken = card.stats[level - 1].states.reduce(
+    (acc, state) => acc + (state.costPercentage ?? 0),
+    0,
+  );
+  const ajustedTargetStrength = getTargetStrength({
+    level,
+    rarity: card.rarity,
+    world: card.world,
+  }, isPvp) * (100 + card.adjustementStrength) / 100;
+
+  const targetStrength = ajustedTargetStrength * ((100 - statesSpaceTaken) / 100);
 
   function getCurrentStats(divisor: number) {
-    const multiplier = cardStrengthMultiplier(card, cost);
+    const multiplier = cardStrengthMultiplier(card, cost, isPvp);
 
-    const levelMultiplier = cardLevelMultiplier ** (level - 1);
+    const levelMultiplier = isPvp ? pvpStrengthByLevel(level) : cardLevelMultiplier ** (level - 1);
     const dps = multiplier(attackRatio * baseDps * divisor * levelMultiplier);
 
     const speed =
@@ -42,6 +55,9 @@ export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
       cost: card.stats[level - 1].cost,
       states: card.stats[level - 1].states,
       illustration: card.stats[level - 1].illustration,
+      level,
+      rarity: card.rarity,
+      world: card.world,
     };
   }
 
@@ -51,12 +67,12 @@ export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
     );
   }
 
-  let higherDivisor = 1;
-  let lowerDivisor = Object.keys(card.stats[level - 1].states).length ? 0 : 1; // if we have an effect
+  let higherDivisor = 2;
+  let lowerDivisor = 0;
   let iteration = 0;
   let currentStrength = realStrength();
-  while (iteration < 100 && !testIsStrengthValid(currentStrength, score)) {
-    if (currentStrength > score) {
+  while (iteration < 100 && !testIsStrengthValid(currentStrength, targetStrength)) {
+    if (currentStrength > targetStrength) {
       // divisor is too high so lower range
       higherDivisor -= (higherDivisor - lowerDivisor) / 2;
     } else {
@@ -66,5 +82,53 @@ export function getStats(card: CardStat, level: number): CardStatsInfoLevel {
     iteration++;
   }
 
-  return getCurrentStats(higherDivisor - (higherDivisor - lowerDivisor) / 2);
+  const res = getCurrentStats(higherDivisor - (higherDivisor - lowerDivisor) / 2);
+  const states = getStatesFromStatesInfo(res.states, {
+    dmg: res.dmg,
+    attackSpeed: res.attackSpeed,
+    hp: res.hp,
+  }, cost, ajustedTargetStrength);
+  return {
+    cost: res.cost,
+    dmg: res.dmg,
+    hp: res.hp,
+    attackSpeed: res.attackSpeed,
+    illustration: res.illustration,
+    states: states,
+    isPvp: !!isPvp,
+  };
+}
+
+function getStatesFromStatesInfo(states: CardStateInfo[], stats: {
+  dmg: number;
+  attackSpeed: number;
+  hp: number;
+}, cost: number, targetStrength: number) {
+  return states.map(state => {
+    const options = getOptionsFromType(state.type);
+    let value = state.value;
+    const statCost = getStatsStrength({
+      hp: stats.hp, dmg: stats.dmg, attackSpeed: stats.attackSpeed, cost
+    });
+    if (options.computeValueFromCost) {
+      value = options.computeValueFromCost({
+        dmg: stats.dmg,
+        dps: stats.attackSpeed * stats.dmg,
+        hp: stats.hp,
+        attackSpeed: stats.attackSpeed,
+        trigger: state.trigger,
+        target: state.target,
+        value: state.value,
+        statCost: statCost,
+        targetCost: targetStrength * (cardCostMultiplier ** (cost - 1)),
+        costPercentage: state.costPercentage!,
+      }); 
+    }
+    return {
+      type: state.type,
+      trigger: state.trigger,
+      target: state.target,
+      value: value,
+    } as CardState;
+  });
 }

@@ -1,4 +1,4 @@
-import { CardState } from "../gameEngine/states/CardStatesData";
+import { CardState } from "@repo/lib";
 
 export interface EditorData {
   cards: CardStat[];
@@ -48,6 +48,7 @@ export interface CardStat {
   rarity: CardRarity;
   id: number;
   world: number;
+  adjustementStrength: number; // in percentage
   attackDefenseRatio: number; // ]0,1[
   speedDamageRatio: number; // ]0,1[
   stats: [CardStatLevel, CardStatLevel, CardStatLevel];
@@ -55,8 +56,12 @@ export interface CardStat {
 
 export interface CardStatLevel {
   cost: number;
-  states: CardState[];
+  states: CardStateInfo[];
   illustration: string | null;
+}
+
+export type CardStateInfo = CardState & {
+  costPercentage: number | null;
 }
 
 export type TriggerCardState = "idle" | "onAttack" | "onDamage" | "onPlacement" | "onDeath" | "onHeal" | "onKill" | "onDirectlyAttacked" | "onDirectAttackHit";

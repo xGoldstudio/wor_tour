@@ -28,6 +28,7 @@ export function getCardEmpty(): CardType {
     states: [],
     level: 1,
     world: 0,
+    isPvp: false,
   };
 }
 
@@ -53,6 +54,7 @@ export function getCardFromLevel(card: CardStatsInfo, level: number): CardType {
     states: card.stats[levelIndex].states,
     level: level,
     world: card.world,
+    isPvp: card.stats[levelIndex].isPvp,
   };
 }
 

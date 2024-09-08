@@ -1,5 +1,5 @@
-import { baseCard } from './common';
-import { initGame, triggerPlaceCard, windShuffleTest } from 'game_engine';
+import { baseCard, initGame } from './common';
+import { triggerPlaceCard, windShuffleTest } from './common';
 import { expect, test, vi } from 'vitest';
 import { placeCardFromCardType } from '../events/normalPlaceCard';
 import { CardType } from '@repo/lib';
