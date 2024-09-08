@@ -16,6 +16,7 @@ export default function DebugPanel() {
     setTrophies: state.addOrRemoveTrophies,
   }));
   const isPvp = useDataStore((state) => state.isPvp);
+  const isMirror = matchmakingService.wathcIsMirror();
 
   const addTrophies = (amount: number) =>
     useAnimationStore.getState().addAnimation({
@@ -118,6 +119,7 @@ export default function DebugPanel() {
       <p>Matchmaking:</p>
       <div className="grid grid-cols-2 gap-4">
         <DebugButton onClick={() => useDataStore.getState().setIsPvp(!useDataStore.getState().isPvp)} selected={isPvp}>Mode pvp</DebugButton>
+        <DebugButton onClick={() => matchmakingService.toggleMirror()} selected={isMirror}>Mirror</DebugButton>
       </div>
       <p className="text-red-600">Danger zone:</p>
       <div className="grid grid-cols-2 gap-4 border-4 border-red-600 text-red-600 p-2">
