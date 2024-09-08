@@ -125,7 +125,9 @@ function getStatesFromStatesInfo(states: CardStateInfo[], stats: {
       }); 
     }
     return {
-      ...state,
+      type: state.type,
+      trigger: state.trigger,
+      target: state.target,
       value: value,
     } as CardState;
   });

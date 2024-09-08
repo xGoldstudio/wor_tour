@@ -36,8 +36,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "multiAttack",
                     "trigger": "onAttack",
                     "target": "otherEnnemyCards",
-                    "value": null,
-                    "costPercentage": null
+                    "value": null
                 }
             ],
             "level": 1,
@@ -170,8 +169,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "heal",
                     "trigger": "onPlacement",
                     "target": "allyCards",
-                    "value": 50,
-                    "costPercentage": 47
+                    "value": 50
                 }
             ],
             "level": 1,
@@ -232,8 +230,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "riposte",
                     "trigger": "onDirectlyAttacked",
                     "target": "directEnnemyCard",
-                    "value": 1,
-                    "costPercentage": null
+                    "value": 1
                 }
             ],
             "level": 1,
@@ -258,8 +255,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "riposte",
                     "trigger": "onDirectlyAttacked",
                     "target": "directEnnemyCard",
-                    "value": 1,
-                    "costPercentage": null
+                    "value": 1
                 }
             ],
             "level": 1,
@@ -284,8 +280,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "heal",
                     "trigger": "onPlacement",
                     "target": "allyCards",
-                    "value": 0,
-                    "costPercentage": 0
+                    "value": 0
                 }
             ],
             "level": 1,
@@ -364,8 +359,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "rage",
                     "trigger": "idle",
                     "target": "selfCard",
-                    "value": 50,
-                    "costPercentage": null
+                    "value": 50
                 }
             ],
             "level": 1,
@@ -426,8 +420,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "massacre",
                     "trigger": "onDirectAttackHit",
                     "target": "directEnnemyCard",
-                    "value": 9,
-                    "costPercentage": 30
+                    "value": 9
                 }
             ],
             "level": 1,
@@ -470,8 +463,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "bannerOfComand",
                     "trigger": "onPlacement",
                     "target": "allyCards",
-                    "value": 20,
-                    "costPercentage": null
+                    "value": 20
                 }
             ],
             "level": 1,
@@ -496,8 +488,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "clone",
                     "trigger": "onDeath",
                     "target": "selfCard",
-                    "value": 1,
-                    "costPercentage": null
+                    "value": 1
                 }
             ],
             "level": 1,
@@ -576,8 +567,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "multiAttack",
                     "trigger": "onAttack",
                     "target": "otherEnnemyCards",
-                    "value": null,
-                    "costPercentage": null
+                    "value": null
                 }
             ],
             "level": 2,
@@ -602,8 +592,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "riposte",
                     "trigger": "onDirectlyAttacked",
                     "target": "directEnnemyCard",
-                    "value": 1,
-                    "costPercentage": null
+                    "value": 1
                 }
             ],
             "level": 2,
@@ -628,8 +617,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "riposte",
                     "trigger": "onDirectlyAttacked",
                     "target": "directEnnemyCard",
-                    "value": 1,
-                    "costPercentage": null
+                    "value": 1
                 }
             ],
             "level": 2,
@@ -690,8 +678,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "heal",
                     "trigger": "onPlacement",
                     "target": "allyCards",
-                    "value": 0,
-                    "costPercentage": 0
+                    "value": 0
                 }
             ],
             "level": 2,
@@ -752,8 +739,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "multiAttack",
                     "trigger": "onAttack",
                     "target": "otherEnnemyCards",
-                    "value": null,
-                    "costPercentage": null
+                    "value": null
                 }
             ],
             "level": 1,
@@ -780,158 +766,6 @@ const cardForTest: [number, CardType][] = [
         }
     ],
     [
-        1.44,
-        {
-            "name": "Dark Mage",
-            "cost": 3,
-            "illustration": "card_31_level_1_1724546374794.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 114,
-            "hp": 70,
-            "attackSpeed": 0.21600000000000003,
-            "rarity": "common",
-            "id": 31,
-            "states": [],
-            "level": 1,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        1.44,
-        {
-            "name": "Royals Assassin",
-            "cost": 1,
-            "illustration": "card_32_level_1_1724547440893.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 18,
-            "hp": 62,
-            "attackSpeed": 0.649923072370877,
-            "rarity": "common",
-            "id": 32,
-            "states": [],
-            "level": 1,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        1.44,
-        {
-            "name": "Spar Royals Guard",
-            "cost": 2,
-            "illustration": "card_33_level_1_1724547536275.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 18,
-            "hp": 107,
-            "attackSpeed": 0.3285057077129711,
-            "rarity": "common",
-            "id": 33,
-            "states": [
-                {
-                    "type": "bannerOfComand",
-                    "trigger": "onPlacement",
-                    "target": "allyCards",
-                    "value": 10,
-                    "costPercentage": null
-                }
-            ],
-            "level": 1,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        1.44,
-        {
-            "name": "Ultra: Mega Royal",
-            "cost": 5,
-            "illustration": "card_34_level_1_1724547688780.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 32,
-            "hp": 292,
-            "attackSpeed": 0.5279999999999999,
-            "rarity": "common",
-            "id": 34,
-            "states": [],
-            "level": 1,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        1.44,
-        {
-            "name": "Wind Mage",
-            "cost": 2,
-            "illustration": "card_35_level_1_1724548795332.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 35,
-            "hp": 68,
-            "attackSpeed": 0.4837354648979129,
-            "rarity": "common",
-            "id": 35,
-            "states": [],
-            "level": 1,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        1.44,
-        {
-            "name": "Black Guard",
-            "cost": 1,
-            "illustration": "card_36_level_1_1724588519389.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 26,
-            "hp": 17,
-            "attackSpeed": 0.6960000000000001,
-            "rarity": "common",
-            "id": 36,
-            "states": [],
-            "level": 1,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        1.44,
-        {
-            "name": "Dragon Hunter",
-            "cost": 1,
-            "illustration": "card_37_level_1_1724599084738.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 29,
-            "hp": 13,
-            "attackSpeed": 0.649923072370877,
-            "rarity": "common",
-            "id": 37,
-            "states": [],
-            "level": 1,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        1.44,
-        {
-            "name": "King's Soldier",
-            "cost": 1,
-            "illustration": "card_38_level_1_1724599146811.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 25,
-            "hp": 73,
-            "attackSpeed": 0.40311288741492746,
-            "rarity": "common",
-            "id": 38,
-            "states": [],
-            "level": 1,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
         1.54,
         {
             "name": "Friendly Crabvor",
@@ -948,8 +782,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "heal",
                     "trigger": "onPlacement",
                     "target": "allyCards",
-                    "value": 70,
-                    "costPercentage": 47
+                    "value": 70
                 }
             ],
             "level": 2,
@@ -1010,92 +843,11 @@ const cardForTest: [number, CardType][] = [
                     "type": "riposte",
                     "trigger": "onDirectlyAttacked",
                     "target": "directEnnemyCard",
-                    "value": 1,
-                    "costPercentage": null
+                    "value": 1
                 }
             ],
             "level": 2,
             "world": 1,
-            "isPvp": false
-        }
-    ],
-    [
-        1.58,
-        {
-            "name": "Royals Sergent",
-            "cost": 2,
-            "illustration": "card_39_level_1_1724548043272.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 17,
-            "hp": 111,
-            "attackSpeed": 0.37800000000000006,
-            "rarity": "rare",
-            "id": 39,
-            "states": [
-                {
-                    "type": "divineShield",
-                    "trigger": "onDirectlyAttacked",
-                    "target": "selfCard",
-                    "value": 1,
-                    "costPercentage": null
-                }
-            ],
-            "level": 1,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        1.58,
-        {
-            "name": "The Apprentice",
-            "cost": 4,
-            "illustration": "card_40_level_1_1724548861970.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 55,
-            "hp": 288,
-            "attackSpeed": 0.15199999999999997,
-            "rarity": "rare",
-            "id": 40,
-            "states": [],
-            "level": 1,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        1.58,
-        {
-            "name": "Ray, Dragon Hunter",
-            "cost": 3,
-            "illustration": "card_41_level_1_1724588120924.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 47,
-            "hp": 134,
-            "attackSpeed": 0.40155946010522525,
-            "rarity": "rare",
-            "id": 41,
-            "states": [],
-            "level": 1,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        1.58,
-        {
-            "name": "Shloppy Fire Clown",
-            "cost": 4,
-            "illustration": "card_42_level_1_1724598741051.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 23,
-            "hp": 233,
-            "attackSpeed": 0.7120000000000001,
-            "rarity": "rare",
-            "id": 42,
-            "states": [],
-            "level": 1,
-            "world": 3,
             "isPvp": false
         }
     ],
@@ -1116,8 +868,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "riposte",
                     "trigger": "onDirectlyAttacked",
                     "target": "directEnnemyCard",
-                    "value": 2,
-                    "costPercentage": null
+                    "value": 2
                 }
             ],
             "level": 2,
@@ -1142,8 +893,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "heal",
                     "trigger": "onPlacement",
                     "target": "allyCards",
-                    "value": 0,
-                    "costPercentage": 0
+                    "value": 0
                 }
             ],
             "level": 2,
@@ -1222,8 +972,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "rage",
                     "trigger": "idle",
                     "target": "selfCard",
-                    "value": 75,
-                    "costPercentage": null
+                    "value": 75
                 }
             ],
             "level": 2,
@@ -1284,8 +1033,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "massacre",
                     "trigger": "onDirectAttackHit",
                     "target": "directEnnemyCard",
-                    "value": 10,
-                    "costPercentage": 30
+                    "value": 10
                 }
             ],
             "level": 2,
@@ -1310,8 +1058,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "rush",
                     "trigger": "onPlacement",
                     "target": "allyCards",
-                    "value": null,
-                    "costPercentage": null
+                    "value": null
                 }
             ],
             "level": 2,
@@ -1336,71 +1083,11 @@ const cardForTest: [number, CardType][] = [
                     "type": "massacre",
                     "trigger": "onDirectAttackHit",
                     "target": "directEnnemyCard",
-                    "value": 40,
-                    "costPercentage": 38
+                    "value": 40
                 }
             ],
             "level": 1,
             "world": 2,
-            "isPvp": false
-        }
-    ],
-    [
-        1.73,
-        {
-            "name": "Axar The Imperial",
-            "cost": 3,
-            "illustration": "card_43_level_1_1724548148872.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 50,
-            "hp": 65,
-            "attackSpeed": 0.5886934686235274,
-            "rarity": "epic",
-            "id": 43,
-            "states": [
-                {
-                    "type": "rage",
-                    "trigger": "idle",
-                    "target": "selfCard",
-                    "value": 40,
-                    "costPercentage": null
-                },
-                {
-                    "type": "massacre",
-                    "trigger": "onDirectAttackHit",
-                    "target": "directEnnemyCard",
-                    "value": 0,
-                    "costPercentage": 0
-                }
-            ],
-            "level": 1,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        1.73,
-        {
-            "name": "King's Guardian",
-            "cost": 2,
-            "illustration": "card_44_level_1_1724599005923.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 32,
-            "hp": 33,
-            "attackSpeed": 0.6293250352560273,
-            "rarity": "epic",
-            "id": 44,
-            "states": [
-                {
-                    "type": "divineShield",
-                    "trigger": "onDirectlyAttacked",
-                    "target": "selfCard",
-                    "value": 1,
-                    "costPercentage": null
-                }
-            ],
-            "level": 1,
-            "world": 3,
             "isPvp": false
         }
     ],
@@ -1421,8 +1108,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "bannerOfComand",
                     "trigger": "onPlacement",
                     "target": "allyCards",
-                    "value": 40,
-                    "costPercentage": null
+                    "value": 40
                 }
             ],
             "level": 2,
@@ -1447,8 +1133,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "clone",
                     "trigger": "onDeath",
                     "target": "selfCard",
-                    "value": 1,
-                    "costPercentage": null
+                    "value": 1
                 }
             ],
             "level": 2,
@@ -1527,8 +1212,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "multiAttack",
                     "trigger": "onAttack",
                     "target": "otherEnnemyCards",
-                    "value": null,
-                    "costPercentage": null
+                    "value": null
                 }
             ],
             "level": 3,
@@ -1553,15 +1237,13 @@ const cardForTest: [number, CardType][] = [
                     "type": "riposte",
                     "trigger": "onDirectlyAttacked",
                     "target": "directEnnemyCard",
-                    "value": 1,
-                    "costPercentage": null
+                    "value": 1
                 },
                 {
                     "type": "multiAttack",
                     "trigger": "onAttack",
                     "target": "otherEnnemyCards",
-                    "value": null,
-                    "costPercentage": null
+                    "value": null
                 }
             ],
             "level": 3,
@@ -1586,8 +1268,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "riposte",
                     "trigger": "onDirectlyAttacked",
                     "target": "directEnnemyCard",
-                    "value": 2,
-                    "costPercentage": null
+                    "value": 2
                 }
             ],
             "level": 3,
@@ -1648,8 +1329,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "heal",
                     "trigger": "onPlacement",
                     "target": "allyCards",
-                    "value": 0,
-                    "costPercentage": 0
+                    "value": 0
                 }
             ],
             "level": 3,
@@ -1710,8 +1390,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "multiAttack",
                     "trigger": "onAttack",
                     "target": "otherEnnemyCards",
-                    "value": null,
-                    "costPercentage": null
+                    "value": null
                 }
             ],
             "level": 2,
@@ -1736,189 +1415,11 @@ const cardForTest: [number, CardType][] = [
                     "type": "sacredDuelist",
                     "trigger": "idle",
                     "target": "selfCard",
-                    "value": null,
-                    "costPercentage": null
+                    "value": null
                 }
             ],
             "level": 2,
             "world": 2,
-            "isPvp": false
-        }
-    ],
-    [
-        2.02,
-        {
-            "name": "Dark Mage",
-            "cost": 3,
-            "illustration": "card_31_level_2_1724546381800.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 135,
-            "hp": 99,
-            "attackSpeed": 0.2565710427932194,
-            "rarity": "common",
-            "id": 31,
-            "states": [],
-            "level": 2,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.02,
-        {
-            "name": "Royals Assassin",
-            "cost": 1,
-            "illustration": "card_32_level_2_1724547447088.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 22,
-            "hp": 85,
-            "attackSpeed": 0.7631513611335566,
-            "rarity": "common",
-            "id": 32,
-            "states": [],
-            "level": 2,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.02,
-        {
-            "name": "Spar Royals Guard",
-            "cost": 2,
-            "illustration": "card_33_level_2_1724547558676.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 18,
-            "hp": 114,
-            "attackSpeed": 0.33990233891516547,
-            "rarity": "common",
-            "id": 33,
-            "states": [
-                {
-                    "type": "bannerOfComand",
-                    "trigger": "onPlacement",
-                    "target": "allyCards",
-                    "value": 20,
-                    "costPercentage": null
-                },
-                {
-                    "type": "riposte",
-                    "trigger": "onDirectlyAttacked",
-                    "target": "directEnnemyCard",
-                    "value": 1,
-                    "costPercentage": null
-                }
-            ],
-            "level": 2,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.02,
-        {
-            "name": "Ultra: Mega Royal",
-            "cost": 5,
-            "illustration": "card_34_level_2_1724547684095.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 38,
-            "hp": 408,
-            "attackSpeed": 0.6247380250953193,
-            "rarity": "common",
-            "id": 34,
-            "states": [],
-            "level": 2,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.02,
-        {
-            "name": "Wind Mage",
-            "cost": 2,
-            "illustration": "card_35_level_2_1724548822540.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 42,
-            "hp": 95,
-            "attackSpeed": 0.5723635208501673,
-            "rarity": "common",
-            "id": 35,
-            "states": [],
-            "level": 2,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.02,
-        {
-            "name": "Black Guard",
-            "cost": 1,
-            "illustration": "card_36_level_2_1724588523774.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 30,
-            "hp": 24,
-            "attackSpeed": 0.8295318181818183,
-            "rarity": "common",
-            "id": 36,
-            "states": [],
-            "level": 2,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.02,
-        {
-            "name": "Dragon Hunter",
-            "cost": 1,
-            "illustration": "card_37_level_2_1724599100311.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 35,
-            "hp": 18,
-            "attackSpeed": 0.7658119658119661,
-            "rarity": "common",
-            "id": 37,
-            "states": [],
-            "level": 2,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.02,
-        {
-            "name": "King's Soldier",
-            "cost": 1,
-            "illustration": "card_38_level_2_1724599170922.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 30,
-            "hp": 102,
-            "attackSpeed": 0.4769696007084728,
-            "rarity": "common",
-            "id": 38,
-            "states": [],
-            "level": 2,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.02,
-        {
-            "name": "Le Comte",
-            "cost": 7,
-            "illustration": "card_45_level_1_1724548721554.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 268,
-            "hp": 311,
-            "attackSpeed": 0.352,
-            "rarity": "legendary",
-            "id": 45,
-            "states": [],
-            "level": 1,
-            "world": 3,
             "isPvp": false
         }
     ],
@@ -1939,8 +1440,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "heal",
                     "trigger": "onPlacement",
                     "target": "allyCards",
-                    "value": 100,
-                    "costPercentage": 48
+                    "value": 100
                 }
             ],
             "level": 3,
@@ -2001,100 +1501,11 @@ const cardForTest: [number, CardType][] = [
                     "type": "riposte",
                     "trigger": "onDirectlyAttacked",
                     "target": "directEnnemyCard",
-                    "value": 1,
-                    "costPercentage": null
+                    "value": 1
                 }
             ],
             "level": 3,
             "world": 1,
-            "isPvp": false
-        }
-    ],
-    [
-        2.22,
-        {
-            "name": "Royals Sergent",
-            "cost": 2,
-            "illustration": "card_39_level_2_1724548050955.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 21,
-            "hp": 169,
-            "attackSpeed": 0.4651528780949335,
-            "rarity": "rare",
-            "id": 39,
-            "states": [
-                {
-                    "type": "divineShield",
-                    "trigger": "onDirectlyAttacked",
-                    "target": "selfCard",
-                    "value": 1,
-                    "costPercentage": null
-                }
-            ],
-            "level": 2,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.22,
-        {
-            "name": "The Apprentice",
-            "cost": 4,
-            "illustration": "card_40_level_2_1724548866577.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 65,
-            "hp": 404,
-            "attackSpeed": 0.1798488254062283,
-            "rarity": "rare",
-            "id": 40,
-            "states": [],
-            "level": 2,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.22,
-        {
-            "name": "Ray, Dragon Hunter",
-            "cost": 3,
-            "illustration": "card_41_level_2_1724588125538.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 56,
-            "hp": 188,
-            "attackSpeed": 0.47513156072818397,
-            "rarity": "rare",
-            "id": 41,
-            "states": [],
-            "level": 2,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.22,
-        {
-            "name": "Shloppy Fire Clown",
-            "cost": 4,
-            "illustration": "card_42_level_2_1724598743562.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 19,
-            "hp": 167,
-            "attackSpeed": 0.6026423898133951,
-            "rarity": "rare",
-            "id": 42,
-            "states": [
-                {
-                    "type": "flameThrower",
-                    "trigger": "onDirectAttackHit",
-                    "target": "enemyCards",
-                    "value": 5,
-                    "costPercentage": null
-                }
-            ],
-            "level": 2,
-            "world": 3,
             "isPvp": false
         }
     ],
@@ -2115,8 +1526,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "riposte",
                     "trigger": "onDirectlyAttacked",
                     "target": "directEnnemyCard",
-                    "value": 3,
-                    "costPercentage": null
+                    "value": 3
                 }
             ],
             "level": 3,
@@ -2141,8 +1551,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "heal",
                     "trigger": "onPlacement",
                     "target": "allyCards",
-                    "value": 0,
-                    "costPercentage": 0
+                    "value": 0
                 }
             ],
             "level": 3,
@@ -2167,8 +1576,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "rush",
                     "trigger": "onPlacement",
                     "target": "allyCards",
-                    "value": null,
-                    "costPercentage": null
+                    "value": null
                 }
             ],
             "level": 3,
@@ -2229,8 +1637,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "rage",
                     "trigger": "idle",
                     "target": "selfCard",
-                    "value": 250,
-                    "costPercentage": null
+                    "value": 250
                 }
             ],
             "level": 3,
@@ -2255,8 +1662,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "sacredDuelist",
                     "trigger": "idle",
                     "target": "selfCard",
-                    "value": null,
-                    "costPercentage": null
+                    "value": null
                 }
             ],
             "level": 3,
@@ -2299,8 +1705,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "massacre",
                     "trigger": "onDirectAttackHit",
                     "target": "directEnnemyCard",
-                    "value": 14,
-                    "costPercentage": 33
+                    "value": 14
                 }
             ],
             "level": 3,
@@ -2325,8 +1730,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "rush",
                     "trigger": "onPlacement",
                     "target": "allyCards",
-                    "value": null,
-                    "costPercentage": null
+                    "value": null
                 }
             ],
             "level": 3,
@@ -2351,71 +1755,11 @@ const cardForTest: [number, CardType][] = [
                     "type": "massacre",
                     "trigger": "onDirectAttackHit",
                     "target": "directEnnemyCard",
-                    "value": 51,
-                    "costPercentage": 40
+                    "value": 51
                 }
             ],
             "level": 2,
             "world": 2,
-            "isPvp": false
-        }
-    ],
-    [
-        2.42,
-        {
-            "name": "Axar The Imperial",
-            "cost": 3,
-            "illustration": "card_43_level_2_1724548152771.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 59,
-            "hp": 90,
-            "attackSpeed": 0.6907225202641073,
-            "rarity": "epic",
-            "id": 43,
-            "states": [
-                {
-                    "type": "rage",
-                    "trigger": "idle",
-                    "target": "selfCard",
-                    "value": 70,
-                    "costPercentage": null
-                },
-                {
-                    "type": "massacre",
-                    "trigger": "onDirectAttackHit",
-                    "target": "directEnnemyCard",
-                    "value": 0,
-                    "costPercentage": 0
-                }
-            ],
-            "level": 2,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.42,
-        {
-            "name": "King's Guardian",
-            "cost": 2,
-            "illustration": "card_44_level_2_1724599035924.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 39,
-            "hp": 51,
-            "attackSpeed": 0.7791948729297441,
-            "rarity": "epic",
-            "id": 44,
-            "states": [
-                {
-                    "type": "divineShield",
-                    "trigger": "onDirectlyAttacked",
-                    "target": "selfCard",
-                    "value": 1,
-                    "costPercentage": null
-                }
-            ],
-            "level": 2,
-            "world": 3,
             "isPvp": false
         }
     ],
@@ -2436,8 +1780,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "bannerOfComand",
                     "trigger": "onPlacement",
                     "target": "allyCards",
-                    "value": 60,
-                    "costPercentage": null
+                    "value": 60
                 }
             ],
             "level": 3,
@@ -2462,8 +1805,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "clone",
                     "trigger": "onDeath",
                     "target": "selfCard",
-                    "value": 2,
-                    "costPercentage": null
+                    "value": 2
                 }
             ],
             "level": 3,
@@ -2506,8 +1848,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "sacredDuelist",
                     "trigger": "idle",
                     "target": "selfCard",
-                    "value": null,
-                    "costPercentage": null
+                    "value": null
                 }
             ],
             "level": 3,
@@ -2550,8 +1891,7 @@ const cardForTest: [number, CardType][] = [
                     "type": "multiAttack",
                     "trigger": "onAttack",
                     "target": "otherEnnemyCards",
-                    "value": null,
-                    "costPercentage": null
+                    "value": null
                 }
             ],
             "level": 3,
@@ -2576,309 +1916,11 @@ const cardForTest: [number, CardType][] = [
                     "type": "sacredDuelist",
                     "trigger": "idle",
                     "target": "selfCard",
-                    "value": null,
-                    "costPercentage": null
+                    "value": null
                 }
             ],
             "level": 3,
             "world": 2,
-            "isPvp": false
-        }
-    ],
-    [
-        2.82,
-        {
-            "name": "Dark Mage",
-            "cost": 3,
-            "illustration": "card_31_level_3_1724546385330.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 160,
-            "hp": 138,
-            "attackSpeed": 0.30299004934155843,
-            "rarity": "common",
-            "id": 31,
-            "states": [],
-            "level": 3,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.82,
-        {
-            "name": "Royals Assassin",
-            "cost": 1,
-            "illustration": "card_32_level_3_1724547450834.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 26,
-            "hp": 118,
-            "attackSpeed": 0.8960000000000001,
-            "rarity": "common",
-            "id": 32,
-            "states": [],
-            "level": 3,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.82,
-        {
-            "name": "Spar Royals Guard",
-            "cost": 2,
-            "illustration": "card_33_level_3_1724547562817.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 21,
-            "hp": 157,
-            "attackSpeed": 0.39788034188034177,
-            "rarity": "common",
-            "id": 33,
-            "states": [
-                {
-                    "type": "bannerOfComand",
-                    "trigger": "onPlacement",
-                    "target": "allyCards",
-                    "value": 30,
-                    "costPercentage": null
-                },
-                {
-                    "type": "riposte",
-                    "trigger": "onDirectlyAttacked",
-                    "target": "directEnnemyCard",
-                    "value": 1,
-                    "costPercentage": null
-                }
-            ],
-            "level": 3,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.82,
-        {
-            "name": "Ultra: Mega Royal",
-            "cost": 5,
-            "illustration": "card_34_level_3_1724547670093.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 43,
-            "hp": 541,
-            "attackSpeed": 0.7187033323980068,
-            "rarity": "common",
-            "id": 34,
-            "states": [
-                {
-                    "type": "divineShield",
-                    "trigger": "onDirectlyAttacked",
-                    "target": "selfCard",
-                    "value": 1,
-                    "costPercentage": null
-                }
-            ],
-            "level": 3,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.82,
-        {
-            "name": "Wind Mage",
-            "cost": 2,
-            "illustration": "card_35_level_3_1724548825896.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 33,
-            "hp": 60,
-            "attackSpeed": 0.456236780630409,
-            "rarity": "common",
-            "id": 35,
-            "states": [
-                {
-                    "type": "windShuffle",
-                    "trigger": "onPlacement",
-                    "target": "notSpecified",
-                    "value": null,
-                    "costPercentage": null
-                }
-            ],
-            "level": 3,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.82,
-        {
-            "name": "Black Guard",
-            "cost": 1,
-            "illustration": "card_36_level_3_1724588527337.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 36,
-            "hp": 34,
-            "attackSpeed": 0.9819829937427632,
-            "rarity": "common",
-            "id": 36,
-            "states": [],
-            "level": 3,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.82,
-        {
-            "name": "Dragon Hunter",
-            "cost": 1,
-            "illustration": "card_37_level_3_1724599117480.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 41,
-            "hp": 25,
-            "attackSpeed": 0.8977482943453585,
-            "rarity": "common",
-            "id": 37,
-            "states": [],
-            "level": 3,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.82,
-        {
-            "name": "King's Soldier",
-            "cost": 1,
-            "illustration": "card_38_level_3_1724599174364.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 36,
-            "hp": 141,
-            "attackSpeed": 0.5599999999999999,
-            "rarity": "common",
-            "id": 38,
-            "states": [],
-            "level": 3,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        2.82,
-        {
-            "name": "Le Comte",
-            "cost": 7,
-            "illustration": "card_45_level_2_1724548729769.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 234,
-            "hp": 238,
-            "attackSpeed": 0.308,
-            "rarity": "legendary",
-            "id": 45,
-            "states": [
-                {
-                    "type": "flameThrower",
-                    "trigger": "onDirectAttackHit",
-                    "target": "enemyCards",
-                    "value": 25,
-                    "costPercentage": null
-                }
-            ],
-            "level": 2,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        3.1,
-        {
-            "name": "Royals Sergent",
-            "cost": 2,
-            "illustration": "card_39_level_3_1724548056544.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 25,
-            "hp": 253,
-            "attackSpeed": 0.568572818555372,
-            "rarity": "rare",
-            "id": 39,
-            "states": [
-                {
-                    "type": "divineShield",
-                    "trigger": "onDirectlyAttacked",
-                    "target": "selfCard",
-                    "value": 1,
-                    "costPercentage": null
-                }
-            ],
-            "level": 3,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        3.1,
-        {
-            "name": "The Apprentice",
-            "cost": 4,
-            "illustration": "card_40_level_3_1724548870336.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 61,
-            "hp": 358,
-            "attackSpeed": 0.16928136341605943,
-            "rarity": "rare",
-            "id": 40,
-            "states": [
-                {
-                    "type": "iteration",
-                    "trigger": "onPlacement",
-                    "target": "selfCard",
-                    "value": 0,
-                    "costPercentage": null
-                }
-            ],
-            "level": 3,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        3.1,
-        {
-            "name": "Ray, Dragon Hunter",
-            "cost": 3,
-            "illustration": "card_41_level_3_1724588132331.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 67,
-            "hp": 262,
-            "attackSpeed": 0.5606831770260279,
-            "rarity": "rare",
-            "id": 41,
-            "states": [],
-            "level": 3,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        3.1,
-        {
-            "name": "Shloppy Fire Clown",
-            "cost": 4,
-            "illustration": "card_42_level_3_1724598746305.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 18,
-            "hp": 151,
-            "attackSpeed": 0.5743776196893469,
-            "rarity": "rare",
-            "id": 42,
-            "states": [
-                {
-                    "type": "flameThrower",
-                    "trigger": "onDirectAttackHit",
-                    "target": "enemyCards",
-                    "value": 10,
-                    "costPercentage": null
-                }
-            ],
-            "level": 3,
-            "world": 3,
             "isPvp": false
         }
     ],
@@ -2899,97 +1941,11 @@ const cardForTest: [number, CardType][] = [
                     "type": "massacre",
                     "trigger": "onDirectAttackHit",
                     "target": "directEnnemyCard",
-                    "value": 60,
-                    "costPercentage": 40
+                    "value": 60
                 }
             ],
             "level": 3,
             "world": 2,
-            "isPvp": false
-        }
-    ],
-    [
-        3.39,
-        {
-            "name": "Axar The Imperial",
-            "cost": 3,
-            "illustration": "card_43_level_3_1724548159076.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 63,
-            "hp": 102,
-            "attackSpeed": 0.7345167652859961,
-            "rarity": "epic",
-            "id": 43,
-            "states": [
-                {
-                    "type": "rage",
-                    "trigger": "idle",
-                    "target": "selfCard",
-                    "value": 300,
-                    "costPercentage": null
-                },
-                {
-                    "type": "massacre",
-                    "trigger": "onDirectAttackHit",
-                    "target": "directEnnemyCard",
-                    "value": 0,
-                    "costPercentage": 0
-                }
-            ],
-            "level": 3,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        3.39,
-        {
-            "name": "King's Guardian",
-            "cost": 2,
-            "illustration": "card_44_level_3_1724599046389.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 48,
-            "hp": 74,
-            "attackSpeed": 0.9407093706347355,
-            "rarity": "epic",
-            "id": 44,
-            "states": [
-                {
-                    "type": "divineShield",
-                    "trigger": "onDirectlyAttacked",
-                    "target": "selfCard",
-                    "value": 1,
-                    "costPercentage": null
-                }
-            ],
-            "level": 3,
-            "world": 3,
-            "isPvp": false
-        }
-    ],
-    [
-        3.95,
-        {
-            "name": "Le Comte",
-            "cost": 7,
-            "illustration": "card_45_level_3_1724548736343.png",
-            "worldIllustration": "world_3_cardBackground_1724600017645.png",
-            "dmg": 229,
-            "hp": 226,
-            "attackSpeed": 0.300201265820116,
-            "rarity": "legendary",
-            "id": 45,
-            "states": [
-                {
-                    "type": "flameThrower",
-                    "trigger": "onDirectAttackHit",
-                    "target": "enemyCards",
-                    "value": 50,
-                    "costPercentage": null
-                }
-            ],
-            "level": 3,
-            "world": 3,
             "isPvp": false
         }
     ]
