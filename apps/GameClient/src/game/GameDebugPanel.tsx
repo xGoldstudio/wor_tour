@@ -3,8 +3,7 @@ import { GAME_OPTS } from "./gameBehavior/useGameEvents";
 import { botOptions } from "./gameBehavior/aiAgent";
 import FpsPrint from "./FpsPrint";
 import { ClockReturn, EventType, InGameCardType } from "game_engine";
-import { cn } from "@repo/ui";
-import { CheckCircle } from "lucide-react";
+import DebugButton from "@/debug/DebugButton";
 
 interface GameDebugPanelProps {
   play: () => void;
@@ -91,28 +90,5 @@ export default function GameDebugPanel({
         Toggle bad perf
       </DebugButton>
     </div>
-  );
-}
-
-export function DebugButton({
-  children,
-  onClick,
-  selected,
-}: {
-  children: React.ReactNode;
-  onClick: (event: React.MouseEvent) => void;
-  selected?: boolean;
-}) {
-  return (
-    <button
-      className={cn(
-        "px-2 py-1 flex gap-2 items-center justify-center rounded-sm bg-slate-600",
-        selected && "bg-white text-black"
-      )}
-      onClick={onClick}
-    >
-      {children}
-      {selected && <CheckCircle size={16} />}
-    </button>
   );
 }

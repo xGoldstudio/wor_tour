@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { DebugButton } from "./game/GameDebugPanel";
 import useAnimationStore from "./home/store/animationStore";
 import usePlayerStore, {
   CollectionCard,
@@ -8,7 +7,16 @@ import { _warningResetPlayStore } from "./home/store/initAllClientData";
 import useDataStore from "./cards/DataStore";
 import useRewardStore from "./home/store/rewardStore";
 import { GameStateObject } from "game_engine";
-import { clientLoop, experienceService, matchmakingService } from "./services/inject";
+import {
+  clientLoop,
+  experienceService,
+  matchmakingService,
+} from "./services/inject";
+import DebugButton from "./debug/DebugButton";
+import DebugSection from "./debug/DebugSection";
+import { CornerUpLeft } from "lucide-react";
+import usePersistentState from "./debug/usePersistentState";
+import { cn } from "@repo/ui";
 
 export default function DebugPanel() {
   const { addGold, setTrophies } = usePlayerStore((state) => ({
@@ -47,101 +55,180 @@ export default function DebugPanel() {
 
   const instantWinGame = () => {
     matchmakingService.startGame();
-    const gameObject = new GameStateObject({ playerDeck: [], opponentDeck: [], playerHp: 1, opponentHp: 1 });
+    const gameObject = new GameStateObject({
+      playerDeck: [],
+      opponentDeck: [],
+      playerHp: 1,
+      opponentHp: 1,
+    });
     gameObject.setGameOver("player");
     matchmakingService.endGame(gameObject);
   };
 
+  const [isOpen, setIsOpen] = usePersistentState("debug-panel-open", false);
+
   return (
-    <div className="fixed right-2 top-2 text-white px-4 py-2 flex flex-col gap-4">
-      <p>Gold: </p>
-      <div className="flex gap-4">
-        <DebugButton onClick={() => addGold(1000)}>Give 1000 gold</DebugButton>
-        <DebugButton onClick={() => addGold(1000000)}>
-          Give 1 000 000 gold
-        </DebugButton>
-      </div>
-      <p>Trophies: </p>
-      <div className="grid grid-cols-4 gap-4">
-        <DebugButton onClick={() => addTrophies(1000)}>+1000</DebugButton>
-        <DebugButton onClick={() => addTrophies(100)}>+100</DebugButton>
-        <DebugButton onClick={() => addTrophies(10)}>+10</DebugButton>
-        <DebugButton onClick={() => addTrophies(1)}>+1</DebugButton>
-        <DebugButton onClick={() => setTrophies(-1000)}>-1000</DebugButton>
-        <DebugButton onClick={() => setTrophies(-100)}>-100</DebugButton>
-        <DebugButton onClick={() => setTrophies(-10)}>-10</DebugButton>
-        <DebugButton onClick={() => setTrophies(-1)}>-1</DebugButton>
-        <DebugButton onClick={() => setTrophies(100)}>+100</DebugButton>
-      </div>
-      <p>Experience</p>
-      <div className="grid grid-cols-2 gap-4">
-        <DebugButton onClick={() => experienceService.gainExperience()}>Gain experience</DebugButton>
-      </div>
-      <p>Rewards</p>
-      <div className="grid grid-cols-2 gap-4">
-        <DebugButton onClick={() => useRewardStore.getState().removeAllRewards()}>Clear rewards</DebugButton>
-        <DebugButton onClick={() => addKeyReward()}>Key reward</DebugButton>
-        <DebugButton onClick={() => addKeysReward()}>Keys reward</DebugButton>
-        <DebugButton onClick={instantWinGame}>Instant win game</DebugButton>
-      </div>
-      <p>Event Clock: </p>
-      <div className="grid grid-cols-2 gap-4">
-        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(1)}>
-          Fast Forward 1 second
-        </DebugButton>
-        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(10)}>
-          Fast Forward 10 seconds
-        </DebugButton>
-        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(60)}>
-          Fast Forward 1 minutes
-        </DebugButton>
-        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(10 * 60)}>
-          Fast Forward 10 minutes
-        </DebugButton>
-        <DebugButton onClick={() => clientLoop._unsafeManipulateClock(60 * 60)}>
-          Fast Forward 1 hours
-        </DebugButton>
-        <DebugButton
-          onClick={() => clientLoop._unsafeManipulateClock(60 * 60 * 24)}
-        >
-          Fast Forward 1 day
-        </DebugButton>
-        <DebugButton
-          onClick={() => clientLoop._unsafeManipulateClock(7 * 60 * 60 * 24)}
-        >
-          Fast Forward 1 week
-        </DebugButton>
-      </div>
-      <p>Collection: </p>
-      <div className="grid grid-cols-2 gap-4">
-        <DebugButton onClick={() => giveAllCards()}>Give all cards</DebugButton>
-      </div>
-      <p>Matchmaking:</p>
-      <div className="grid grid-cols-2 gap-4">
-        <DebugButton onClick={() => useDataStore.getState().setIsPvp(!useDataStore.getState().isPvp)} selected={isPvp}>Mode pvp</DebugButton>
-        <DebugButton onClick={() => matchmakingService.toggleMirror()} selected={isMirror}>Mirror</DebugButton>
-      </div>
-      <p className="text-red-600">Danger zone:</p>
-      <div className="grid grid-cols-2 gap-4 border-4 border-red-600 text-red-600 p-2">
-        {confirmationResetPlayer ? (
+    <div className={cn("fixed right-0 top-0 text-white h-screen overflow-y-auto bg-slate-900 z-20 w-[470px]", !isOpen && "w-min")}>
+      <div className="flex flex-col gap-4">
+        <div className="w-full flex justify-end pt-4 px-4">
+          <CornerUpLeft
+            className={cn("cursor-pointer transition-transform", isOpen && "transform rotate-180")}
+            onClick={() => setIsOpen(!isOpen)}
+          />
+        </div>
+        {isOpen && (
           <>
-            <p className="col-span-2">Are you sure to reset player?</p>
-            <DebugButton onClick={() => setConfirmationResetPlayer(false)}>
-              No
-            </DebugButton>
-            <DebugButton
-              onClick={() => {
-                _warningResetPlayStore();
-                setConfirmationResetPlayer(false);
-              }}
-            >
-              Yes
-            </DebugButton>
+            <DebugSection title={"Gold"}>
+              <div className="flex gap-4">
+                <DebugButton onClick={() => addGold(1000)}>
+                  Give 1000 gold
+                </DebugButton>
+                <DebugButton onClick={() => addGold(1000000)}>
+                  Give 1 000 000 gold
+                </DebugButton>
+              </div>
+            </DebugSection>
+            <DebugSection title={"Trophies"}>
+              <div className="grid grid-cols-4 gap-4">
+                <DebugButton onClick={() => addTrophies(1000)}>
+                  +1000
+                </DebugButton>
+                <DebugButton onClick={() => addTrophies(100)}>+100</DebugButton>
+                <DebugButton onClick={() => addTrophies(10)}>+10</DebugButton>
+                <DebugButton onClick={() => addTrophies(1)}>+1</DebugButton>
+                <DebugButton onClick={() => setTrophies(-1000)}>
+                  -1000
+                </DebugButton>
+                <DebugButton onClick={() => setTrophies(-100)}>
+                  -100
+                </DebugButton>
+                <DebugButton onClick={() => setTrophies(-10)}>-10</DebugButton>
+                <DebugButton onClick={() => setTrophies(-1)}>-1</DebugButton>
+                <DebugButton onClick={() => setTrophies(100)}>+100</DebugButton>
+              </div>
+            </DebugSection>
+            <DebugSection title="Experience">
+              <div className="grid grid-cols-2 gap-4">
+                <DebugButton onClick={() => experienceService.gainExperience()}>
+                  Gain experience
+                </DebugButton>
+              </div>
+            </DebugSection>
+            <DebugSection title="Rewards">
+              <div className="grid grid-cols-2 gap-4">
+                <DebugButton
+                  onClick={() => useRewardStore.getState().removeAllRewards()}
+                >
+                  Clear rewards
+                </DebugButton>
+                <DebugButton onClick={() => addKeyReward()}>
+                  Key reward
+                </DebugButton>
+                <DebugButton onClick={() => addKeysReward()}>
+                  Keys reward
+                </DebugButton>
+                <DebugButton onClick={instantWinGame}>
+                  Instant win game
+                </DebugButton>
+              </div>
+            </DebugSection>
+            <DebugSection title="Event clock">
+              <div className="grid grid-cols-2 gap-4">
+                <DebugButton
+                  onClick={() => clientLoop._unsafeManipulateClock(1)}
+                >
+                  Fast Forward 1 second
+                </DebugButton>
+                <DebugButton
+                  onClick={() => clientLoop._unsafeManipulateClock(10)}
+                >
+                  Fast Forward 10 seconds
+                </DebugButton>
+                <DebugButton
+                  onClick={() => clientLoop._unsafeManipulateClock(60)}
+                >
+                  Fast Forward 1 minutes
+                </DebugButton>
+                <DebugButton
+                  onClick={() => clientLoop._unsafeManipulateClock(10 * 60)}
+                >
+                  Fast Forward 10 minutes
+                </DebugButton>
+                <DebugButton
+                  onClick={() => clientLoop._unsafeManipulateClock(60 * 60)}
+                >
+                  Fast Forward 1 hours
+                </DebugButton>
+                <DebugButton
+                  onClick={() =>
+                    clientLoop._unsafeManipulateClock(60 * 60 * 24)
+                  }
+                >
+                  Fast Forward 1 day
+                </DebugButton>
+                <DebugButton
+                  onClick={() =>
+                    clientLoop._unsafeManipulateClock(7 * 60 * 60 * 24)
+                  }
+                >
+                  Fast Forward 1 week
+                </DebugButton>
+              </div>
+            </DebugSection>
+            <DebugSection title="Collection">
+              <div className="grid grid-cols-2 gap-4">
+                <DebugButton onClick={() => giveAllCards()}>
+                  Give all cards
+                </DebugButton>
+              </div>
+            </DebugSection>
+            <DebugSection title="Matchmaking">
+              <div className="grid grid-cols-2 gap-4">
+                <DebugButton
+                  onClick={() =>
+                    useDataStore
+                      .getState()
+                      .setIsPvp(!useDataStore.getState().isPvp)
+                  }
+                  selected={isPvp}
+                >
+                  Mode pvp
+                </DebugButton>
+                <DebugButton
+                  onClick={() => matchmakingService.toggleMirror()}
+                  selected={isMirror}
+                >
+                  Mirror
+                </DebugButton>
+              </div>
+            </DebugSection>
+            <DebugSection title="Danger zone" dangerous>
+              <div className="grid grid-cols-2 gap-4">
+                {confirmationResetPlayer ? (
+                  <>
+                    <p className="col-span-2">Are you sure to reset player?</p>
+                    <DebugButton
+                      onClick={() => setConfirmationResetPlayer(false)}
+                    >
+                      No
+                    </DebugButton>
+                    <DebugButton
+                      onClick={() => {
+                        _warningResetPlayStore();
+                        setConfirmationResetPlayer(false);
+                      }}
+                    >
+                      Yes
+                    </DebugButton>
+                  </>
+                ) : (
+                  <DebugButton onClick={() => setConfirmationResetPlayer(true)}>
+                    Reset Player
+                  </DebugButton>
+                )}
+              </div>
+            </DebugSection>
           </>
-        ) : (
-          <DebugButton onClick={() => setConfirmationResetPlayer(true)}>
-            Reset Player
-          </DebugButton>
         )}
       </div>
     </div>
