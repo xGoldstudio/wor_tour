@@ -68,7 +68,7 @@ export default function DebugPanel() {
   const [isOpen, setIsOpen] = usePersistentState("debug-panel-open", false);
 
   return (
-    <div className={cn("fixed right-0 top-0 text-white h-screen overflow-y-auto bg-slate-900 z-20 w-[470px]", !isOpen && "w-min")}>
+    <div className={cn("fixed right-0 top-0 text-white h-screen overflow-y-auto bg-slate-900 z-[9999] w-[470px]", !isOpen && "w-min")}>
       <div className="flex flex-col gap-4">
         <div className="w-full flex justify-end pt-4 px-4">
           <CornerUpLeft
