@@ -1548,8 +1548,8 @@
               "type": "flameThrower",
               "trigger": "onDirectAttackHit",
               "target": "enemyCards",
-              "value": 5,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 50
             }
           ],
           "illustration": "card_42_level_2_1724598743562.png"
@@ -1561,8 +1561,8 @@
               "type": "flameThrower",
               "trigger": "onDirectAttackHit",
               "target": "enemyCards",
-              "value": 10,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 60
             }
           ],
           "illustration": "card_42_level_3_1724598746305.png"
@@ -1701,7 +1701,15 @@
       "stats": [
         {
           "cost": 7,
-          "states": [],
+          "states": [
+            {
+              "type": "flameThrower",
+              "trigger": "onDirectAttackHit",
+              "target": "enemyCards",
+              "value": null,
+              "costPercentage": 40
+            }
+          ],
           "illustration": "card_45_level_1_1724548721554.png"
         },
         {
@@ -1711,8 +1719,8 @@
               "type": "flameThrower",
               "trigger": "onDirectAttackHit",
               "target": "enemyCards",
-              "value": 25,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 60
             }
           ],
           "illustration": "card_45_level_2_1724548729769.png"
@@ -1724,8 +1732,8 @@
               "type": "flameThrower",
               "trigger": "onDirectAttackHit",
               "target": "enemyCards",
-              "value": 50,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 63
             }
           ],
           "illustration": "card_45_level_3_1724548736343.png"
