@@ -33,7 +33,7 @@ export default function WorldUnlock({
         setState("normal");
       },
     });
-		tl.fromTo(
+    tl.fromTo(
       ref.current.querySelector(".footer"),
       {
         opacity: 0,
@@ -81,8 +81,8 @@ export default function WorldUnlock({
       },
       "start+=0.5"
     );
-		const cards = ref.current.querySelectorAll(".cards>div");
-		tl.set(cards, { opacity: 0, y: -100 }, "start");
+    const cards = ref.current.querySelectorAll(".cards>div");
+    tl.set(cards, { opacity: 0, y: -100 }, "start");
     tl.fromTo(
       cards,
       {
@@ -106,7 +106,7 @@ export default function WorldUnlock({
         opacity: 0,
         x: -20,
         duration: 0.3,
-				delay: 0.5,
+        delay: 0.5,
       }
     );
   }, [ref]);
@@ -132,7 +132,9 @@ export default function WorldUnlock({
         <WorldImage />
         <div className="cards flex gap-2 pt-8 flex-wrap w-full justify-center max-w-[400px]">
           {cards.map((card) => (
-            <StaticCard card={card} size={0.65} key={card.id} />
+            <div className="opacity-0">
+              <StaticCard card={card} size={0.65} key={card.id} />
+            </div>
           ))}
         </div>
       </div>

@@ -11,6 +11,7 @@ import KeysReward from "./KeysReward";
 import RawGoldReward from "./RawGoldReward";
 import RawTrophiesReward from "./RawTrophiesReward";
 import ExperienceModal from "@/home/experienceModal/ExperienceModal";
+import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 
 function RewardSection({ children }: { children: React.ReactNode }) {
   const scope = useRef<HTMLDivElement>(null);
@@ -75,6 +76,12 @@ export function RewardBlockWithContext() {
     return <RawTrophiesReward reward={currentReward} removeCurrentReward={() => collectReward()}/>;
   } else if (currentReward.type === "nextLevel") {
     return <ExperienceModal reward={currentReward} removeCurrentReward={() => collectReward()}/>;
+  } else if (currentReward.type === "tier") {
+    useClientInterfaceStore.getState().setWorldsModalOpen("tier");
+    collectReward();
+  } else if (currentReward.type === "world") {
+    useClientInterfaceStore.getState().setWorldsModalOpen("world");
+    collectReward();
   }
 
   const getRewardBlock = (() => {

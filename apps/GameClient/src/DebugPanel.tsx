@@ -99,7 +99,8 @@ export default function DebugPanel() {
                 </DebugButton>
                 <DebugButton onClick={() => setTrophies(-10)}>-10</DebugButton>
                 <DebugButton onClick={() => setTrophies(-1)}>-1</DebugButton>
-                <DebugButton onClick={() => setTrophies(100)}>+100</DebugButton>
+                <DebugButton onClick={() => useRewardStore.getState().addReward({ type: "rawTrophies", amount: 100 })}>+100</DebugButton>
+                <DebugButton onClick={() => useRewardStore.getState().addReward({ type: "rawTrophies", amount: 1000 })}>+1000</DebugButton>
               </div>
             </DebugSection>
             <DebugSection title="Experience">

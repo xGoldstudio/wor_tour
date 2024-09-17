@@ -130,21 +130,12 @@ export function MatchmakingService() {
 	function collectRewards(rewards: GameReward) {
 		// usePlayerStore.getState().addGold(rewards.money);
 		dailyGoldService.earnReward(rewards.money);
-		// const hasChangeWorldOrTier = usePlayerStore.getState().addOrRemoveTrophies(rewards.trophies);
 		if (rewards.money > 0) {
 			useRewardStore.getState().addReward({ type: "rawGold", amount: rewards.money });
 		}
 		if (rewards.trophies > 0) {
 			useRewardStore.getState().addReward({ type: "rawTrophies", amount: rewards.trophies });
 		}
-		// if (rewards.trophies > 0) {
-		// 	useAnimationStore.getState().addAnimation({
-		// 		type: "trophy",
-		// 		previousValue: usePlayerStore.getState().trophies - rewards.trophies,
-		// 		amount: rewards.trophies,
-		// 		// onEnd: () => useClientInterfaceStore.getState().setWorldsModalOpen(hasChangeWorldOrTier),
-		// 	});
-		// }
 	}
 
 	function reset() {

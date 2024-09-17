@@ -1,13 +1,21 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-export type RewardType = CardRewardType | GoldRewardType | ChestRewardType | KeyRewardType | KeysRewardType | RawGoldRewardType | RawTrophiesRewardType | NextLevelRewardType;
+export type RewardType = CardRewardType | GoldRewardType | ChestRewardType | KeyRewardType | KeysRewardType | RawGoldRewardType | RawTrophiesRewardType | NextLevelRewardType | TierRewardType | WorldRewardType;
 
 export interface CardRewardType {
   type: "card";
   cardId: number;
   level: number;
   shardTargetIndex: number | null;
+}
+
+export interface TierRewardType {
+  type: "tier";
+}
+
+export interface WorldRewardType {
+  type: "world";
 }
 
 export interface GoldRewardType {
@@ -57,6 +65,8 @@ const RewardPriorityOrder: Record<RewardType["type"], number> = {
   card: 2,
   rawGold: 3,
   rawTrophies: 3,
+  tier: 4,
+  world: 4,
 };
 
 const RewardStoreDefaultState = {
