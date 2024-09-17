@@ -6,11 +6,10 @@ import usePlayerStore from "@/home/store/playerStore/playerStore";
 import useGameMetadataStore, { GameReward } from "@/game/stores/gameMetadataStore";
 import { Tier } from "@/home/store/tiers";
 import { GameStateObject } from "game_engine";
-import useAnimationStore from "@/home/store/animationStore";
-import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 import { persist } from "zustand/middleware";
 import { create } from "zustand";
 import { dailyGoldService, experienceService, keysService } from "../inject";
+import useRewardStore from "@/home/store/rewardStore";
 
 const MAX_TROPHIES_WIN = 35;
 const LOWEST_TROPHIES_WIN = 25;
@@ -87,11 +86,11 @@ export function MatchmakingService() {
 		const isWin = gameState.currentWinner === "player";
 		const isLose = gameState.currentWinner === "opponent";
 		const reward = useGameMetadataStore.getState().getReward(gameState.currentWinner);
-		collectRewards(reward);
 		if (isWin) {
 			keysService.consumeKey(usePlayerStore.getState().currentWorld);
 			experienceService.gainExperience();
 		}
+		collectRewards(reward);
 		const loserQueue = store.getState().loserQueue;
 		if (usePlayerStore.getState().currentTier <= MINIMAL_LOSER_QUEUE_TIER) {
 			store.setState({ loserQueue: null });
@@ -129,24 +128,23 @@ export function MatchmakingService() {
 	}
 
 	function collectRewards(rewards: GameReward) {
-		usePlayerStore.getState().addGold(rewards.money);
+		// usePlayerStore.getState().addGold(rewards.money);
 		dailyGoldService.earnReward(rewards.money);
-		const hasChangeWorldOrTier = usePlayerStore.getState().addOrRemoveTrophies(rewards.trophies);
+		// const hasChangeWorldOrTier = usePlayerStore.getState().addOrRemoveTrophies(rewards.trophies);
 		if (rewards.money > 0) {
-			useAnimationStore.getState().addAnimation({
-				type: "money",
-				previousValue: usePlayerStore.getState().gold,
-				amount: rewards.money,
-			});
+			useRewardStore.getState().addReward({ type: "rawGold", amount: rewards.money });
 		}
 		if (rewards.trophies > 0) {
-			useAnimationStore.getState().addAnimation({
-				type: "trophy",
-				previousValue: usePlayerStore.getState().trophies,
-				amount: rewards.trophies,
-				onEnd: () => useClientInterfaceStore.getState().setWorldsModalOpen(hasChangeWorldOrTier),
-			});
+			useRewardStore.getState().addReward({ type: "rawTrophies", amount: rewards.trophies });
 		}
+		// if (rewards.trophies > 0) {
+		// 	useAnimationStore.getState().addAnimation({
+		// 		type: "trophy",
+		// 		previousValue: usePlayerStore.getState().trophies - rewards.trophies,
+		// 		amount: rewards.trophies,
+		// 		// onEnd: () => useClientInterfaceStore.getState().setWorldsModalOpen(hasChangeWorldOrTier),
+		// 	});
+		// }
 	}
 
 	function reset() {

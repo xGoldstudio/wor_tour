@@ -1,5 +1,4 @@
 import { useState } from "react";
-import useAnimationStore from "./home/store/animationStore";
 import usePlayerStore, {
   CollectionCard,
 } from "./home/store/playerStore/playerStore";
@@ -27,11 +26,7 @@ export default function DebugPanel() {
   const isMirror = matchmakingService.wathcIsMirror();
 
   const addTrophies = (amount: number) =>
-    useAnimationStore.getState().addAnimation({
-      type: "trophy",
-      previousValue: usePlayerStore.getState().trophies,
-      amount,
-    });
+    usePlayerStore.getState().addOrRemoveTrophies(amount);
 
   const [confirmationResetPlayer, setConfirmationResetPlayer] = useState(false);
 
