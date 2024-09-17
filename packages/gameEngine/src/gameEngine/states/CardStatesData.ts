@@ -92,15 +92,7 @@ interface CardStateDataInterface {
   noValue: boolean;
   triggers: TriggerCardState[];
   targets: TargetCardState[];
-  computeCost: ({
-    dmg,
-    dps,
-    hp,
-    trigger,
-    target,
-    value,
-    attackSpeed,
-  }: {
+  computeCost: (props: {
     dmg: number;
     dps: number;
     hp: number;
@@ -199,7 +191,7 @@ export const CardStatesData = {
       },
     },
   },
-  riposte: {
+  riposte: { // todo
     min: 1,
     max: undefined,
     noValue: false,
@@ -218,7 +210,7 @@ export const CardStatesData = {
       stackable: true,
     },
   },
-  multiAttack: {
+  multiAttack: { // todo
     min: undefined,
     max: undefined,
     noValue: true,
@@ -276,7 +268,7 @@ export const CardStatesData = {
       stackable: true,
     },
   },
-  clone: {
+  clone: { // todo
     min: 1,
     max: undefined,
     noValue: false,
@@ -294,7 +286,7 @@ export const CardStatesData = {
       stackable: true,
     },
   },
-  rush: {
+  rush: { // todo
     min: undefined,
     max: undefined,
     noValue: true,
@@ -310,7 +302,7 @@ export const CardStatesData = {
     action: RushStateAction,
     options: {},
   },
-  bannerOfComand: {
+  bannerOfComand: { // todo
     min: 1,
     max: undefined,
     noValue: false,
@@ -326,7 +318,7 @@ export const CardStatesData = {
     action: BannerOfCommandStateAction,
     options: {},
   },
-  rage: {
+  rage: { // todo
     min: 1,
     max: undefined,
     noValue: false,
@@ -349,7 +341,7 @@ export const CardStatesData = {
       onChangeValue: onChangeValueRage,
     }
   },
-  sacredDuelist: {
+  sacredDuelist: { // todo
     min: undefined,
     max: undefined,
     noValue: true,
@@ -367,7 +359,7 @@ export const CardStatesData = {
     },
     src: "sacredDuelist.png",
   },
-  divineShield: {
+  divineShield: { // todo 
     min: 1,
     max: undefined,
     noValue: false,
@@ -407,7 +399,7 @@ export const CardStatesData = {
     },
     src: "scorch.png",
   },
-  flameThrower: {
+  flameThrower: { // todo
     min: 1,
     max: undefined,
     noValue: false,
@@ -423,7 +415,7 @@ export const CardStatesData = {
     options: {},
     src: "flameThrower.png",
   },
-  iteration: {
+  iteration: { // todo
     min: 0,
     max: undefined,
     noValue: false,
@@ -448,8 +440,8 @@ export const CardStatesData = {
     noValue: true,
     triggers: ["onPlacement"],
     targets: ["notSpecified"],
-    computeCost: () => {
-      return 2;
+    computeCost: (args) => {
+      return args.targetCost * 0.75;
     },
     descrption: ({ trigger }) => `${trigger}, shuffle all your cards from hand and deck, then draw 4 cards.`,
     title: "Wind Shuffle",
