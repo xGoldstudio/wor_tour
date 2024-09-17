@@ -7,14 +7,14 @@ import RewardBox from "@/game/endGameScreen/RewardBox";
 import ShinyRotator from "@/game/endGameScreen/ShinyRotator";
 import gsap from "gsap";
 import { ArrowBigRight } from "lucide-react";
-import { ExperienceReward } from "@/services/experienceService/experienceService";
+import { NextLevelRewardType } from "../store/rewardStore";
 
 interface ExperienceModalProps {
-  reward: ExperienceReward;
-  onContinue: () => void;
+  reward: NextLevelRewardType;
+  removeCurrentReward: () => void;
 }
 
-export default function ExperienceModal({ reward, onContinue }: ExperienceModalProps) {
+export default function ExperienceModal({ reward, removeCurrentReward }: ExperienceModalProps) {
   const boxRef = useRef<HTMLDivElement>(null);
   const shinyRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -143,7 +143,7 @@ export default function ExperienceModal({ reward, onContinue }: ExperienceModalP
               <Badge value={String(reward.nextLevel)} rarity="rare" />
             </div>
           </div>
-          <Button action={onContinue} forwardRef={buttonRef}>
+          <Button action={removeCurrentReward} forwardRef={buttonRef}>
             Continue
           </Button>
         </div>

@@ -17,7 +17,6 @@ import { cn } from "@repo/ui";
 import { COMMON, FOOTER_SRC, getImageUrl, getImageUrlCssValue, ICONS, numberWithCommas, textureByRarity } from "@repo/lib";
 import KeysOutput from "./ui/KeysOutput";
 import Timer from "@/services/LoopService/Timer";
-import ExperienceModalWatcher from "./experienceModal/ExperienceModalWatcher";
 import ExperienceOutput from "./ui/ExperienceOutput";
 import { useEditionMode } from "./pages/deck/context/UseEditionMode";
 
@@ -46,7 +45,6 @@ export default function Home() {
       >
         <RewardBlockWithContext />
         <HomeBg />
-        <ExperienceModalWatcher />
         <div className="w-full h-full relative flex flex-col items-center justify-between">
           <Header />
           <div

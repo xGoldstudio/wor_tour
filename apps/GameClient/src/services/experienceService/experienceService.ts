@@ -7,12 +7,6 @@ const DEFAULT_EXPERIENCE_FOR_NEXT_LEVEL = 25;
 const GOLD_FOR_NEXT_LEVEL = 1500;
 const LINERA_EXPERIENCE_GROWTH = 7;
 
-export interface ExperienceReward {
-	previousLevel: number;
-	nextLevel: number;
-	gold: number;
-}
-
 export interface ExperienceGain {
 	previousExperience: number;
 	nextExperience: number;
@@ -25,7 +19,6 @@ const defaultState = () => ({
 	level: 1,
 	experience: 0,
 	experienceForNextLevel: DEFAULT_EXPERIENCE_FOR_NEXT_LEVEL,
-	levelReward: [] as ExperienceReward[],
 	lastExperienceGain: {
 		previousExperience: 0,
 		nextExperience: 0,
@@ -53,30 +46,19 @@ export default function ExperienceService() {
 		const diff = nextLevel - previousLevel;
 		if (diff) {
 			for (let i = 0; i < diff; i++) {
-				store.setState((state) => {
-					const levelReward = state.levelReward;
-					levelReward.push({ previousLevel: previousLevel + i, nextLevel: previousLevel + 1 + i, gold: GOLD_FOR_NEXT_LEVEL });
-					return { levelReward: [...levelReward] };
+				const rewardGoldAmount = GOLD_FOR_NEXT_LEVEL;
+				useRewardStore.getState().addReward({
+					type: "nextLevel",
+					previousLevel: previousLevel + i,
+					nextLevel: previousLevel + 1 + i,
+					gold: rewardGoldAmount,
 				});
+				useRewardStore.getState().addReward({ type: "gold", amount: rewardGoldAmount });
+				useRewardStore.getState().addReward({ type: "keys" });
 			}
 			store.setState({ experienceForNextLevel: DEFAULT_EXPERIENCE_FOR_NEXT_LEVEL + nextLevel * LINERA_EXPERIENCE_GROWTH });
 		}
 		store.setState({ lastExperienceGain: { previousExperience, previousExperienceForNextLevel, nextExperience, previousLevel, nextLevel } });
-	}
-
-	function collectReward() {
-		const reward = store.getState().levelReward.shift();
-		store.setState({ levelReward: [...store.getState().levelReward] });
-		if (!reward) {
-			return;
-		}
-		useRewardStore.getState().addReward({ type: "gold", amount: reward.gold });
-		useRewardStore.getState().addReward({ type: "keys" });
-		return reward;
-	}
-
-	function useWatchRewards() {
-		return store((state) => state.levelReward);
 	}
 
 	function useWatchLevels() {
@@ -111,8 +93,6 @@ export default function ExperienceService() {
 	return {
 		reset,
 		gainExperience,
-		collectReward,
-		useWatchRewards,
 		useWatchLevels,
 		useWatchExperience,
 		useWatchExperienceForNextLevel,
