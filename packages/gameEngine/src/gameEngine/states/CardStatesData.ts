@@ -19,7 +19,7 @@ import { divineShieldOnDamageModifier } from './stateActions/divineShield';
 import { onAddedScorch, onChangeValueScorch } from './stateActions/scorch';
 import FlameThrowerStateAction from './stateActions/flameThrower';
 import WindShuffleStateAction from './stateActions/windShuffle';
-import { BeforeNormalPlacementStateActionIteration, IterationStateAction } from './stateActions/iteration';
+import { BeforeNormalPlacementStateActionIteration, ITERATION_STRENGTH_MULTIPLIER, IterationStateAction } from './stateActions/iteration';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -421,10 +421,10 @@ export const CardStatesData = {
     noValue: false,
     triggers: ["onPlacement"],
     targets: ["selfCard"],
-    computeCost: () => {
-      return 2.5;
+    computeCost: (args) => {
+      return args.targetCost * 0.5; // reduce strenght by 50%
     },
-    descrption: ({ target, value }) => `${target} will gain ${value} power 1.5 strength per stack, next time this card is placed, iteration + 1.`,
+    descrption: ({ target, value }) => `${target} will gain ${value} power ${ITERATION_STRENGTH_MULTIPLIER} strength per stack, next time this card is placed, iteration + 1.`,
     title: "Iteration",
     status: "buff",
     src: "iteration.png",

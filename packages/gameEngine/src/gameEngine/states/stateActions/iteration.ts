@@ -1,6 +1,8 @@
 import { BeforeNormalPlacementStateAction, StateAction } from "../CardStatesData";
 import onPlacementTrigger from "../utils/onPlacementTrigger";
 
+export const ITERATION_STRENGTH_MULTIPLIER = 1.40;
+
 const IterationStateAction: StateAction = ({ clock, gameState, event }) => {
 	const initiator = onPlacementTrigger(event);
 	const state = gameState.getStateOfCardByInstanceId(initiator.instanceId, "iteration");
@@ -31,9 +33,9 @@ const BeforeNormalPlacementStateActionIteration: BeforeNormalPlacementStateActio
 	}
 	return {
 		...card,
-		maxHp: card.maxHp * (1.5 ** state.value),
-		initialAttackSpeed: card.initialAttackSpeed * (1.5 ** state.value),
-		dmg: card.dmg * (1.5 ** state.value),
+		maxHp: card.maxHp * (ITERATION_STRENGTH_MULTIPLIER ** state.value),
+		initialAttackSpeed: card.initialAttackSpeed * (ITERATION_STRENGTH_MULTIPLIER ** state.value),
+		dmg: card.dmg * (ITERATION_STRENGTH_MULTIPLIER ** state.value),
 	};
 };
 
