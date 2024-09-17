@@ -399,23 +399,30 @@ export const CardStatesData = {
     },
     src: "scorch.png",
   },
-  flameThrower: { // todo
+  flameThrower: {
     min: 1,
     max: undefined,
     noValue: false,
     triggers: ["onDirectAttackHit"],
     targets: ["enemyCards"],
     computeCost: ({ value, attackSpeed }) => {
-      return 0.8 * (value || 0) * attackSpeed;
+      return ((value || 0) * (attackSpeed * 4)) / 4;
     },
     status: "buff",
     descrption: ({ target, value }) => `On attack, add ${value} scorch to ${target}.`,
     title: "Flame Thrower",
     action: FlameThrowerStateAction,
-    options: {},
+    options: {
+      computeValueFromCost: ({ costPercentage, targetCost, attackSpeed }) => {
+        const scoreTarget = targetCost * (costPercentage) / 100;
+        return Math.round(
+          scoreTarget * 4 * (attackSpeed * 4)
+        );
+      }
+    },
     src: "flameThrower.png",
   },
-  iteration: { // todo
+  iteration: {
     min: 0,
     max: undefined,
     noValue: false,
