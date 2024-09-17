@@ -8,7 +8,10 @@ import { useGSAP } from "@gsap/react";
 import ChestReward from "./ChestReward";
 import KeyReward from "./KeyReward";
 import KeysReward from "./KeysReward";
-import { experienceService } from "@/services/inject";
+import RawGoldReward from "./RawGoldReward";
+import RawTrophiesReward from "./RawTrophiesReward";
+import ExperienceModal from "@/home/experienceModal/ExperienceModal";
+import useClientInterfaceStore from "@/home/store/clientInterfaceStore";
 
 function RewardSection({ children }: { children: React.ReactNode }) {
   const scope = useRef<HTMLDivElement>(null);
@@ -62,11 +65,23 @@ export function RewardBlockWithContext() {
   const { currentReward, collectReward } = useRewardStore((state) => ({
     collectReward: state.collectReward,
     currentReward: state.rewards[0] ?? null,
+    rewards: state.rewards,
   }));
-  const experienceRewards = experienceService.useWatchRewards(); 
 
-  if (!currentReward || experienceRewards.length) { // experience rewards are prioritized
-    return <></>;
+  if (!currentReward) return null;
+
+  if (currentReward.type === "rawGold") {
+    return <RawGoldReward reward={currentReward} removeCurrentReward={() => collectReward()}/>;
+  } else if (currentReward.type === "rawTrophies") {
+    return <RawTrophiesReward reward={currentReward} removeCurrentReward={() => collectReward()}/>;
+  } else if (currentReward.type === "nextLevel") {
+    return <ExperienceModal reward={currentReward} removeCurrentReward={() => collectReward()}/>;
+  } else if (currentReward.type === "tier") {
+    useClientInterfaceStore.getState().setWorldsModalOpen("tier");
+    collectReward();
+  } else if (currentReward.type === "world") {
+    useClientInterfaceStore.getState().setWorldsModalOpen("world");
+    collectReward();
   }
 
   const getRewardBlock = (() => {

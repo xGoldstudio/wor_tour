@@ -178,6 +178,10 @@ function orchestrateTrophyAnimation({
   }
 }
 
+export function canStartAnimationContainer() {
+  return document.getElementById("animationsContainer") !== null;
+}
+
 export function startContainerAnimation({
   animationObject,
   delay = 0,

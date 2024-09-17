@@ -3,9 +3,6 @@ import useAnimationStore from "../store/animationStore";
 import { createPortal } from "react-dom";
 import useRewardStore from "../store/rewardStore";
 import { startContainerAnimation } from "./Animations";
-import { experienceService } from "@/services/inject";
-
-
 
 export default function AnimationContainer() {
   const { animationsQueue, clearQueue } = useAnimationStore((state) => ({
@@ -15,14 +12,12 @@ export default function AnimationContainer() {
   const container = useRef<HTMLDivElement | null>(null);
   const appContainer = document.getElementById("app");
   const rewards = useRewardStore((state) => state.rewards);
-  const experienceRewards = experienceService.useWatchRewards();
 
   useEffect(() => {
     if (
       container.current !== null &&
       animationsQueue.length > 0 &&
-      rewards.length === 0 &&
-      experienceRewards.length === 0
+      rewards.length === 0
     ) {
       clearQueue().forEach((currentAnimation, index) => {
         startContainerAnimation({
