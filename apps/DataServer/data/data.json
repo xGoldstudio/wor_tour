@@ -581,7 +581,15 @@
         },
         {
           "cost": 2,
-          "states": [],
+          "states": [
+            {
+              "type": "rush",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": null,
+              "costPercentage": null
+            }
+          ],
           "illustration": "card_16_level_2_1724596133428.png"
         },
         {
@@ -667,8 +675,8 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 50,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 40
             }
           ],
           "illustration": "card_19_level_1_1724596395599.png"
@@ -680,8 +688,8 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 75,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 50
             }
           ],
           "illustration": "card_19_level_2_1724596401929.png"
@@ -693,8 +701,8 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 250,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 56
             }
           ],
           "illustration": "card_19_level_3_1724596406073.png"
@@ -869,8 +877,8 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 20,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 20
             }
           ],
           "illustration": "card_24_level_1_1724595174403.png"
@@ -882,8 +890,8 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 40,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 25
             }
           ],
           "illustration": "card_24_level_2_1724595179097.png"
@@ -895,8 +903,8 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 60,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 30
             }
           ],
           "illustration": "card_24_level_3_1724595182071.png"
@@ -909,8 +917,8 @@
       "id": 25,
       "world": 2,
       "adjustementStrength": 0,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.58,
+      "speedDamageRatio": 0.42,
       "stats": [
         {
           "cost": 4,
@@ -1223,8 +1231,8 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 10,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 5
             }
           ],
           "illustration": "card_33_level_1_1724547536275.png"
@@ -1236,8 +1244,8 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 20,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 10
             },
             {
               "type": "riposte",
@@ -1256,8 +1264,8 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 30,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 15
             },
             {
               "type": "riposte",
@@ -1548,8 +1556,8 @@
               "type": "flameThrower",
               "trigger": "onDirectAttackHit",
               "target": "enemyCards",
-              "value": 5,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 50
             }
           ],
           "illustration": "card_42_level_2_1724598743562.png"
@@ -1561,8 +1569,8 @@
               "type": "flameThrower",
               "trigger": "onDirectAttackHit",
               "target": "enemyCards",
-              "value": 10,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 60
             }
           ],
           "illustration": "card_42_level_3_1724598746305.png"
@@ -1585,15 +1593,15 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 40,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 31
             },
             {
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
               "value": null,
-              "costPercentage": 0
+              "costPercentage": 10
             }
           ],
           "illustration": "card_43_level_1_1724548148872.png"
@@ -1605,15 +1613,15 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 70,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 38
             },
             {
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
               "value": null,
-              "costPercentage": 0
+              "costPercentage": 10
             }
           ],
           "illustration": "card_43_level_2_1724548152771.png"
@@ -1625,15 +1633,15 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 300,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 46
             },
             {
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
               "value": null,
-              "costPercentage": 0
+              "costPercentage": 12
             }
           ],
           "illustration": "card_43_level_3_1724548159076.png"
@@ -1701,7 +1709,15 @@
       "stats": [
         {
           "cost": 7,
-          "states": [],
+          "states": [
+            {
+              "type": "flameThrower",
+              "trigger": "onDirectAttackHit",
+              "target": "enemyCards",
+              "value": null,
+              "costPercentage": 40
+            }
+          ],
           "illustration": "card_45_level_1_1724548721554.png"
         },
         {
@@ -1711,8 +1727,8 @@
               "type": "flameThrower",
               "trigger": "onDirectAttackHit",
               "target": "enemyCards",
-              "value": 25,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 60
             }
           ],
           "illustration": "card_45_level_2_1724548729769.png"
@@ -1724,8 +1740,8 @@
               "type": "flameThrower",
               "trigger": "onDirectAttackHit",
               "target": "enemyCards",
-              "value": 50,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 63
             }
           ],
           "illustration": "card_45_level_3_1724548736343.png"

@@ -1,6 +1,7 @@
 import { expect, test } from "vitest";
 import { baseCard, drawPlaceCard, initGame, triggerNormalPlaceCard } from "./common";
 import { MAX_ATTACK_SPEED } from "../gameState";
+import { ITERATION_STRENGTH_MULTIPLIER } from "../../states/stateActions/iteration";
 
 test("Iteration", () => {
 	const { clock, state } = initGame({
@@ -17,9 +18,9 @@ test("Iteration", () => {
 	expect(state.getStateOfDeckCard(instanceId, "iteration")?.value).toBe(2);
 	triggerNormalPlaceCard(clock, true, 0, instanceId);
 	clock.nextTick();
-	expect(state.getCard(true, 0)?.maxHp).toBe(baseCard.hp * 1.5 ** 2);
-	expect(state.getCard(true, 0)?.initialAttackSpeed).toBe(baseCard.attackSpeed * 1.5 ** 2);
-	expect(state.getCard(true, 0)?.dmg).toBe(baseCard.dmg * 1.5 ** 2);
+	expect(state.getCard(true, 0)?.maxHp).toBe(Math.floor(baseCard.hp * ITERATION_STRENGTH_MULTIPLIER ** 2));
+	expect(state.getCard(true, 0)?.initialAttackSpeed).toBe(baseCard.attackSpeed * ITERATION_STRENGTH_MULTIPLIER ** 2);
+	expect(state.getCard(true, 0)?.dmg).toBe(Math.floor(baseCard.dmg * ITERATION_STRENGTH_MULTIPLIER ** 2));
 });
 
 test("Limits", () => {

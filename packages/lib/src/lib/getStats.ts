@@ -17,7 +17,7 @@ function cardStrengthMultiplier(card: CardStat, cost: number, isPvp?: boolean) {
 /**
  * Iterater to find the stats of the card
  */
-export function getStats(card: CardStat, level: number, isPvp?: boolean): CardStatsInfoLevel {
+export function getStats(card: CardStat, level: number, isPvp: boolean): CardStatsInfoLevel {
   const attackRatio = 1 - card.attackDefenseRatio;
   const defenseRatio = card.attackDefenseRatio;
   const speedRatio = 1 - card.speedDamageRatio;
@@ -64,6 +64,7 @@ export function getStats(card: CardStat, level: number, isPvp?: boolean): CardSt
   function realStrength() {
     return getRealStrength(
       getCurrentStats(higherDivisor - (higherDivisor - lowerDivisor) / 2),
+      isPvp,
     );
   }
 

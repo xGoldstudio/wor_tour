@@ -59,6 +59,15 @@ export function getTargetStrength(card: {
   return roundToTwoMath(baseStats * targetStrength);
 }
 
+export function getAbsoluteTargetStrength(card: {
+  level: number;
+  rarity: CardRarity;
+  world: number;
+  cost: number;
+}, isPvp?: boolean) {
+  return getTargetStrength(card, isPvp) * (cardCostMultiplier ** (card.cost - 1));
+}
+
 const baseStats = 1;
 export const maxDelta = 0.01;
 const survavibilityRatio = 7;
@@ -87,18 +96,19 @@ export function getRealStrength(card: {
   world: number;
   rarity: CardRarity;
   states: CardState[];
-}): number {
+}, isPvp: boolean): number {
   const costDivisor = cardCostMultiplier ** (card.cost - 1); // to normalize the strength no matter the cost
 
   const statCost = getStatsStrength({ hp: card.hp, dmg: card.dmg, attackSpeed: card.attackSpeed, cost: card.cost });
 
-  const targetCost = getTargetStrength({
+  const targetCost = getAbsoluteTargetStrength({
     level: card.level,
     rarity: card.rarity,
     world: card.world,
-  });
+    cost: card.cost,
+  }, isPvp);
 
-  const stateCosts = computeCosts(card.states, card, statCost, targetCost);
+  const stateCosts = computeCosts(card.states, { ...card, manaCost: card.cost }, statCost, targetCost);
   
   return (statCost + stateCosts) / costDivisor;
 }
@@ -111,7 +121,7 @@ export function getStatsStrength(card: { hp: number; dmg: number; attackSpeed: n
   return (card.hp / baseHp + dps);
 }
 
-function computeCosts(states: CardState[], stats: { hp: number; dmg: number; attackSpeed: number }, statCost: number, targetCost: number ) {
+function computeCosts(states: CardState[], stats: { hp: number; dmg: number; attackSpeed: number, manaCost: number }, statCost: number, targetCost: number ) {
   let total = 0;
   
   states.forEach((state) => {
@@ -125,6 +135,7 @@ function computeCosts(states: CardState[], stats: { hp: number; dmg: number; att
       attackSpeed: stats.attackSpeed,
       statCost: statCost,
       targetCost: targetCost,
+      manaCost: stats.manaCost,
     });
     total += cost;
   });

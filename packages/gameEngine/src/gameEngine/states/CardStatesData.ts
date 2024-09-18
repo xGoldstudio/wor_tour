@@ -6,7 +6,6 @@ import MassacreStateAction from './stateActions/massacre';
 import BleedingStateAction from './stateActions/bleeding';
 import { BeforeCardDamageResolveEvent, EventType, InGameCardType, NormalPlaceCardEvent, PlaceCardType, StateLifcycleOnAddEvent, StateLifcycleOnChangeValueEvent, StateLifcycleOnRemoveEvent, TriggerStateEvent } from '../../types/eventType';
 import { ClockReturn } from '../clock/clock';
-import { GameStateObject } from '../gameEngine/gameState';
 import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types/DataStoreType';
 import { baseDps } from '../../types/Card';
 import CloneStateAction from './stateActions/clone';
@@ -19,7 +18,8 @@ import { divineShieldOnDamageModifier } from './stateActions/divineShield';
 import { onAddedScorch, onChangeValueScorch } from './stateActions/scorch';
 import FlameThrowerStateAction from './stateActions/flameThrower';
 import WindShuffleStateAction from './stateActions/windShuffle';
-import { BeforeNormalPlacementStateActionIteration, IterationStateAction } from './stateActions/iteration';
+import { BeforeNormalPlacementStateActionIteration, ITERATION_STRENGTH_MULTIPLIER, IterationStateAction } from './stateActions/iteration';
+import { GameStateObject, MAX_COST_CARD, MIN_COST_CARD } from '../gameEngine/gameState';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -92,15 +92,7 @@ interface CardStateDataInterface {
   noValue: boolean;
   triggers: TriggerCardState[];
   targets: TargetCardState[];
-  computeCost: ({
-    dmg,
-    dps,
-    hp,
-    trigger,
-    target,
-    value,
-    attackSpeed,
-  }: {
+  computeCost: (props: {
     dmg: number;
     dps: number;
     hp: number;
@@ -110,6 +102,7 @@ interface CardStateDataInterface {
     attackSpeed: number;
     statCost: number;
     targetCost: number;
+    manaCost: number;
   }) => number;
   descrption: ({ trigger, target, value }: { trigger: string, target: string, value: number | null }) => string; title: string;
   status: StatusEffectType;
@@ -205,8 +198,9 @@ export const CardStatesData = {
     noValue: false,
     triggers: ["onDirectlyAttacked"],
     targets: ["directEnnemyCard"],
-    computeCost: ({ dmg, value }) => {
-      return (dmg / baseDps * 0.15) * ((value || 1) + 0.35); // +0.5 because the first one is more expansive
+    computeCost: ({ value, targetCost, dmg }) => {
+      const baseCost = targetCost * 0.015 + (dmg / baseDps) * 0.15;
+      return baseCost + (((value ?? 1) - 1) * baseCost * 0.75);
     },
     descrption: ({ trigger, target }) => `${trigger}, instantly attack the ${target}.`,
     title: "Riposte",
@@ -282,8 +276,8 @@ export const CardStatesData = {
     noValue: false,
     triggers: ["onDeath"],
     targets: ["selfCard"],
-    computeCost: ({ value }) => {
-      return 2.5 * (value || 0);
+    computeCost: ({ value, targetCost }) => {
+      return targetCost - targetCost / (((value ?? 1) + 1) ** 0.8);
     },
     descrption: ({ trigger, target }) => `${trigger}, clone ${target} on a random position. Cloning purge all states of a card, expect clone stacks.`,
     title: "Clone",
@@ -300,8 +294,8 @@ export const CardStatesData = {
     noValue: true,
     triggers: ["onPlacement"],
     targets: ["allyCards"],
-    computeCost: () => {
-      return 0.2;
+    computeCost: ({ targetCost, manaCost }) => {
+      return targetCost * decreaseValueFromCost(0.6, 0.2, manaCost);
     },
     descrption: ({ trigger, target }) => `${trigger}, ${target} will attack instantly.`,
     title: "Rush",
@@ -316,15 +310,19 @@ export const CardStatesData = {
     noValue: false,
     triggers: ["onPlacement"],
     targets: ["allyCards"],
-    computeCost: ({ value }) => {
-      return 0.04 * (value || 0);
+    computeCost: ({ value, targetCost }) => {
+      return targetCost * (value ?? 0) / 2 * 0.01; // cost 1% of the target's cost
     },
     status: "buff",
     descrption: ({ trigger, target, value }) => `${trigger}, ${target} will gain ${value}% attack speed.`,
     title: "Banner of Command",
     src: "bannerOfCommand.png",
     action: BannerOfCommandStateAction,
-    options: {},
+    options: {
+      computeValueFromCost: ({ costPercentage }) => {
+        return Math.round(costPercentage * 2);
+      }
+    },
   },
   rage: {
     min: 1,
@@ -332,8 +330,8 @@ export const CardStatesData = {
     noValue: false,
     triggers: ["idle"],
     targets: ["selfCard"],
-    computeCost: ({ value }) => {
-      return 0.005 * (value || 0);
+    computeCost: ({ value, targetCost }) => {
+      return targetCost * (value ?? 0) / 3 * 0.01; // cost 1% of the target's cost
     },
     status: "buff",
     descrption: ({ target, value }) => `${target} will gain ${value}% attack speed for 5s.`,
@@ -347,7 +345,10 @@ export const CardStatesData = {
       onAdded: onAddedRage,
       onRemoved: onRemovedRage,
       onChangeValue: onChangeValueRage,
-    }
+      computeValueFromCost: ({ costPercentage }) => {
+        return Math.round(costPercentage * 3);
+      }
+    },
   },
   sacredDuelist: {
     min: undefined,
@@ -355,8 +356,8 @@ export const CardStatesData = {
     noValue: true,
     triggers: ["idle"],
     targets: ["selfCard"],
-    computeCost: () => {
-      return 0.5;
+    computeCost: ({ targetCost }) => {
+      return targetCost * 0.35;
     },
     status: "buff",
     descrption: ({ target }) => `${target} can only receive damage from direct attacks.`,
@@ -373,8 +374,8 @@ export const CardStatesData = {
     noValue: false,
     triggers: ["onDirectlyAttacked"],
     targets: ["selfCard"],
-    computeCost: ({ value }) => {
-      return 0.5 * (value || 0);
+    computeCost: ({ targetCost }) => {
+      return targetCost * 0.05; // cost 10% of the target's cost
     },
     status: "buff",
     descrption: ({ target, value }) => `${target} will ignore the next ${value && value > 1 ? value : ""} direct attack${value && value > 1 ? "s" : ""}.`,
@@ -414,13 +415,20 @@ export const CardStatesData = {
     triggers: ["onDirectAttackHit"],
     targets: ["enemyCards"],
     computeCost: ({ value, attackSpeed }) => {
-      return 0.8 * (value || 0) * attackSpeed;
+      return ((value || 0) * (attackSpeed * 1.5)) / 2;
     },
     status: "buff",
     descrption: ({ target, value }) => `On attack, add ${value} scorch to ${target}.`,
     title: "Flame Thrower",
     action: FlameThrowerStateAction,
-    options: {},
+    options: {
+      computeValueFromCost: ({ costPercentage, targetCost, attackSpeed }) => {
+        const scoreTarget = targetCost * (costPercentage) / 100;
+        return Math.round(
+          (scoreTarget * 2) / (attackSpeed * 1.5)
+        );
+      }
+    },
     src: "flameThrower.png",
   },
   iteration: {
@@ -429,10 +437,10 @@ export const CardStatesData = {
     noValue: false,
     triggers: ["onPlacement"],
     targets: ["selfCard"],
-    computeCost: () => {
-      return 2.5;
+    computeCost: (args) => {
+      return args.targetCost * 0.5; // reduce strenght by 50%
     },
-    descrption: ({ target, value }) => `${target} will gain ${value} power 1.5 strength per stack, next time this card is placed, iteration + 1.`,
+    descrption: ({ target, value }) => `${target} will gain ${value} power ${ITERATION_STRENGTH_MULTIPLIER} strength per stack, next time this card is placed, iteration + 1.`,
     title: "Iteration",
     status: "buff",
     src: "iteration.png",
@@ -448,8 +456,8 @@ export const CardStatesData = {
     noValue: true,
     triggers: ["onPlacement"],
     targets: ["notSpecified"],
-    computeCost: () => {
-      return 2;
+    computeCost: (args) => {
+      return args.targetCost * 0.75;
     },
     descrption: ({ trigger }) => `${trigger}, shuffle all your cards from hand and deck, then draw 4 cards.`,
     title: "Wind Shuffle",
@@ -484,4 +492,10 @@ export function getOptionsFromType (
   type: keyof CardStateTypeof,
 ): CardStateDataOptions {
   return CardStatesData[type].options;
+}
+
+function decreaseValueFromCost(valueAtMinCost: number, valueAtMaxCost: number, manaCost: number) {
+  // manaCost is between MIN_COST_CARD and MAX_COST_CARD
+  const normalizedCost = (manaCost - MIN_COST_CARD) / (MAX_COST_CARD - MIN_COST_CARD);
+  return valueAtMinCost + (valueAtMaxCost - valueAtMinCost) * normalizedCost;
 }

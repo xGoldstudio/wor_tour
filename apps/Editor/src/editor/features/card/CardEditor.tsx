@@ -24,6 +24,7 @@ import {
   getStatsStrength,
   cardCostMultiplier,
   CardStateInfo,
+  getAbsoluteTargetStrength,
 } from "@repo/lib";
 import { DeleteIcon, PlusCircle } from "lucide-react";
 import { useState } from "react";
@@ -161,7 +162,7 @@ function CardLevel({ cardStats, setCardStats, level, isPvp }: CardLevelProps) {
   const card = cardStatsToCard(cardStats, level, isPvp);
   const cardStat = cardStats.stats[level - 1];
 
-  const realStrength = getRealStrength(card);
+  const realStrength = getRealStrength(card, isPvp);
   const targetStrength = getTargetStrength(card, isPvp);
   const adjustedStrength =
     (targetStrength * (100 + cardStats.adjustementStrength)) / 100;
@@ -240,6 +241,7 @@ function CardLevel({ cardStats, setCardStats, level, isPvp }: CardLevelProps) {
         </div>
         {cardStat.states.map((state, i) => (
           <StateFields
+            isPvp={isPvp}
             key={`${i}_${state.type}`}
             deleteState={() => {
               setCardStats({
@@ -309,12 +311,14 @@ function StateFields({
   state,
   card,
   realState,
+  isPvp,
 }: {
   deleteState: () => void;
   changeState: (newState: Partial<CardStateInfo>) => void;
   state: CardStateInfo;
   realState: CardState;
   card: CardType;
+  isPvp: boolean;
 }) {
   const stateRestriction = CardStatesData[state.type];
   const options = getOptionsFromType(state.type);
@@ -332,8 +336,9 @@ function StateFields({
             target: realState.target,
             value: realState.value,
             attackSpeed: card.attackSpeed,
-            targetCost: getTargetStrength(card),
+            targetCost: getAbsoluteTargetStrength(card, isPvp),
             statCost: getStatsStrength(card),
+            manaCost: card.cost,
           }) /
           cardCostMultiplier ** (card.cost - 1)
         ).toFixed(2)}

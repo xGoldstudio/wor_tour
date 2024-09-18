@@ -60,6 +60,6 @@ export function getCardFromLevel(card: CardStatsInfo, level: number): CardType {
 
 export function isLevelValid(cardId: number, level: number): boolean {
   const card = findCard(cardId, level);
-  const statsLevel = getRealStrength(card);
+  const statsLevel = getRealStrength(card, false);
   return testIsStrengthValid(statsLevel, getTargetStrength(card));
 }
