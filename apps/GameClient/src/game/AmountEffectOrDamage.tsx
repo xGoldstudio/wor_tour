@@ -57,11 +57,11 @@ export default function AmountEffectOrDamage() {
 		}
 		const dmgText = appendText(target, initiator, dmg);
 		registerAnimation({
-			duration: 40,
-			computeStyle: animationTimeline(40).add(
+			duration: 80,
+			computeStyle: animationTimeline(80).add(
 				dmgText,
 				{ y: 0, opacity: 100 },
-				{ values: { y: -40, opacity: 0 }, ease: [0, 0.42, 1, 1]}
+				{ values: { y: -60, opacity: 0 }, ease: [0, 0.42, 1, 1]}
 			).progress,
 			onEnd: () => {
 				dmgText.remove();
