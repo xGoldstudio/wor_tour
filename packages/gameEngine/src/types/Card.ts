@@ -108,7 +108,7 @@ export function getRealStrength(card: {
     cost: card.cost,
   }, isPvp);
 
-  const stateCosts = computeCosts(card.states, card, statCost, targetCost);
+  const stateCosts = computeCosts(card.states, { ...card, manaCost: card.cost }, statCost, targetCost);
   
   return (statCost + stateCosts) / costDivisor;
 }
@@ -121,7 +121,7 @@ export function getStatsStrength(card: { hp: number; dmg: number; attackSpeed: n
   return (card.hp / baseHp + dps);
 }
 
-function computeCosts(states: CardState[], stats: { hp: number; dmg: number; attackSpeed: number }, statCost: number, targetCost: number ) {
+function computeCosts(states: CardState[], stats: { hp: number; dmg: number; attackSpeed: number, manaCost: number }, statCost: number, targetCost: number ) {
   let total = 0;
   
   states.forEach((state) => {
@@ -135,6 +135,7 @@ function computeCosts(states: CardState[], stats: { hp: number; dmg: number; att
       attackSpeed: stats.attackSpeed,
       statCost: statCost,
       targetCost: targetCost,
+      manaCost: stats.manaCost,
     });
     total += cost;
   });

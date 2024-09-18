@@ -6,7 +6,6 @@ import MassacreStateAction from './stateActions/massacre';
 import BleedingStateAction from './stateActions/bleeding';
 import { BeforeCardDamageResolveEvent, EventType, InGameCardType, NormalPlaceCardEvent, PlaceCardType, StateLifcycleOnAddEvent, StateLifcycleOnChangeValueEvent, StateLifcycleOnRemoveEvent, TriggerStateEvent } from '../../types/eventType';
 import { ClockReturn } from '../clock/clock';
-import { GameStateObject } from '../gameEngine/gameState';
 import { StatusEffectType, TargetCardState, TriggerCardState } from '../../types/DataStoreType';
 import { baseDps } from '../../types/Card';
 import CloneStateAction from './stateActions/clone';
@@ -20,6 +19,7 @@ import { onAddedScorch, onChangeValueScorch } from './stateActions/scorch';
 import FlameThrowerStateAction from './stateActions/flameThrower';
 import WindShuffleStateAction from './stateActions/windShuffle';
 import { BeforeNormalPlacementStateActionIteration, ITERATION_STRENGTH_MULTIPLIER, IterationStateAction } from './stateActions/iteration';
+import { GameStateObject, MAX_COST_CARD, MIN_COST_CARD } from '../gameEngine/gameState';
 
 export type StateAction = ({ trigger, target, value, clock, gameState, event }: {
   card: InGameCardType,
@@ -102,6 +102,7 @@ interface CardStateDataInterface {
     attackSpeed: number;
     statCost: number;
     targetCost: number;
+    manaCost: number;
   }) => number;
   descrption: ({ trigger, target, value }: { trigger: string, target: string, value: number | null }) => string; title: string;
   status: StatusEffectType;
@@ -287,14 +288,14 @@ export const CardStatesData = {
       stackable: true,
     },
   },
-  rush: { // todo
+  rush: {
     min: undefined,
     max: undefined,
     noValue: true,
     triggers: ["onPlacement"],
     targets: ["allyCards"],
-    computeCost: () => {
-      return 0.2;
+    computeCost: ({ targetCost, manaCost }) => {
+      return targetCost * decreaseValueFromCost(0.6, 0.2, manaCost);
     },
     descrption: ({ trigger, target }) => `${trigger}, ${target} will attack instantly.`,
     title: "Rush",
@@ -487,4 +488,10 @@ export function getOptionsFromType (
   type: keyof CardStateTypeof,
 ): CardStateDataOptions {
   return CardStatesData[type].options;
+}
+
+function decreaseValueFromCost(valueAtMinCost: number, valueAtMaxCost: number, manaCost: number) {
+  // manaCost is between MIN_COST_CARD and MAX_COST_CARD
+  const normalizedCost = (manaCost - MIN_COST_CARD) / (MAX_COST_CARD - MIN_COST_CARD);
+  return valueAtMinCost + (valueAtMaxCost - valueAtMinCost) * normalizedCost;
 }

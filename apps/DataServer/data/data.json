@@ -581,7 +581,15 @@
         },
         {
           "cost": 2,
-          "states": [],
+          "states": [
+            {
+              "type": "rush",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": null,
+              "costPercentage": null
+            }
+          ],
           "illustration": "card_16_level_2_1724596133428.png"
         },
         {

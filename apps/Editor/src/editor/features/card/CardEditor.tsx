@@ -338,6 +338,7 @@ function StateFields({
             attackSpeed: card.attackSpeed,
             targetCost: getAbsoluteTargetStrength(card, isPvp),
             statCost: getStatsStrength(card),
+            manaCost: card.cost,
           }) /
           cardCostMultiplier ** (card.cost - 1)
         ).toFixed(2)}
