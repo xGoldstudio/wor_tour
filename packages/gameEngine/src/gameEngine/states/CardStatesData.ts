@@ -365,8 +365,8 @@ export const CardStatesData = {
     noValue: false,
     triggers: ["onDirectlyAttacked"],
     targets: ["selfCard"],
-    computeCost: ({ value }) => {
-      return 0.5 * (value || 0);
+    computeCost: ({ targetCost }) => {
+      return targetCost * 0.05; // cost 10% of the target's cost
     },
     status: "buff",
     descrption: ({ target, value }) => `${target} will ignore the next ${value && value > 1 ? value : ""} direct attack${value && value > 1 ? "s" : ""}.`,
