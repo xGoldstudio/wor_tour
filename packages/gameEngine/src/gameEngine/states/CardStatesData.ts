@@ -211,7 +211,7 @@ export const CardStatesData = {
       stackable: true,
     },
   },
-  multiAttack: { // todo
+  multiAttack: {
     min: undefined,
     max: undefined,
     noValue: true,
@@ -269,14 +269,14 @@ export const CardStatesData = {
       stackable: true,
     },
   },
-  clone: { // todo
+  clone: {
     min: 1,
     max: undefined,
     noValue: false,
     triggers: ["onDeath"],
     targets: ["selfCard"],
-    computeCost: ({ value }) => {
-      return 2.5 * (value || 0);
+    computeCost: ({ value, targetCost }) => {
+      return targetCost - targetCost / (((value ?? 1) + 1) ** 0.8);
     },
     descrption: ({ trigger, target }) => `${trigger}, clone ${target} on a random position. Cloning purge all states of a card, expect clone stacks.`,
     title: "Clone",

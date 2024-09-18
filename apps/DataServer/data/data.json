@@ -909,8 +909,8 @@
       "id": 25,
       "world": 2,
       "adjustementStrength": 0,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.58,
+      "speedDamageRatio": 0.42,
       "stats": [
         {
           "cost": 4,
