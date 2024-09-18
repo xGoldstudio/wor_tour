@@ -318,14 +318,14 @@ export const CardStatesData = {
     action: BannerOfCommandStateAction,
     options: {},
   },
-  rage: { // todo
+  rage: {
     min: 1,
     max: undefined,
     noValue: false,
     triggers: ["idle"],
     targets: ["selfCard"],
-    computeCost: ({ value }) => {
-      return 0.005 * (value || 0);
+    computeCost: ({ value, targetCost }) => {
+      return targetCost * (value ?? 0) / 3 * 0.01; // cost 1% of the target's cost
     },
     status: "buff",
     descrption: ({ target, value }) => `${target} will gain ${value}% attack speed for 5s.`,
@@ -339,16 +339,19 @@ export const CardStatesData = {
       onAdded: onAddedRage,
       onRemoved: onRemovedRage,
       onChangeValue: onChangeValueRage,
-    }
+      computeValueFromCost: ({ costPercentage }) => {
+        return Math.round(costPercentage * 3);
+      }
+    },
   },
-  sacredDuelist: { // todo
+  sacredDuelist: {
     min: undefined,
     max: undefined,
     noValue: true,
     triggers: ["idle"],
     targets: ["selfCard"],
     computeCost: ({ targetCost }) => {
-      return targetCost * 0.2;
+      return targetCost * 0.35;
     },
     status: "buff",
     descrption: ({ target }) => `${target} can only receive damage from direct attacks.`,
