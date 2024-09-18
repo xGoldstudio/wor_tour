@@ -304,21 +304,25 @@ export const CardStatesData = {
     action: RushStateAction,
     options: {},
   },
-  bannerOfComand: { // todo
+  bannerOfComand: {
     min: 1,
     max: undefined,
     noValue: false,
     triggers: ["onPlacement"],
     targets: ["allyCards"],
-    computeCost: ({ value }) => {
-      return 0.04 * (value || 0);
+    computeCost: ({ value, targetCost }) => {
+      return targetCost * (value ?? 0) / 2 * 0.01; // cost 1% of the target's cost
     },
     status: "buff",
     descrption: ({ trigger, target, value }) => `${trigger}, ${target} will gain ${value}% attack speed.`,
     title: "Banner of Command",
     src: "bannerOfCommand.png",
     action: BannerOfCommandStateAction,
-    options: {},
+    options: {
+      computeValueFromCost: ({ costPercentage }) => {
+        return Math.round(costPercentage * 2);
+      }
+    },
   },
   rage: {
     min: 1,
@@ -411,7 +415,7 @@ export const CardStatesData = {
     triggers: ["onDirectAttackHit"],
     targets: ["enemyCards"],
     computeCost: ({ value, attackSpeed }) => {
-      return ((value || 0) * (attackSpeed * 3)) / 2;
+      return ((value || 0) * (attackSpeed * 1.5)) / 2;
     },
     status: "buff",
     descrption: ({ target, value }) => `On attack, add ${value} scorch to ${target}.`,
@@ -421,7 +425,7 @@ export const CardStatesData = {
       computeValueFromCost: ({ costPercentage, targetCost, attackSpeed }) => {
         const scoreTarget = targetCost * (costPercentage) / 100;
         return Math.round(
-          (scoreTarget * 2) / (attackSpeed * 3)
+          (scoreTarget * 2) / (attackSpeed * 1.5)
         );
       }
     },

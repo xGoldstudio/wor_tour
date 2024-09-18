@@ -877,8 +877,8 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 20,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 20
             }
           ],
           "illustration": "card_24_level_1_1724595174403.png"
@@ -890,8 +890,8 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 40,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 25
             }
           ],
           "illustration": "card_24_level_2_1724595179097.png"
@@ -903,8 +903,8 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 60,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 30
             }
           ],
           "illustration": "card_24_level_3_1724595182071.png"
@@ -1231,8 +1231,8 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 10,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 5
             }
           ],
           "illustration": "card_33_level_1_1724547536275.png"
@@ -1244,8 +1244,8 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 20,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 10
             },
             {
               "type": "riposte",
@@ -1264,8 +1264,8 @@
               "type": "bannerOfComand",
               "trigger": "onPlacement",
               "target": "allyCards",
-              "value": 30,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 15
             },
             {
               "type": "riposte",
