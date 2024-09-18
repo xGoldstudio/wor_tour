@@ -667,8 +667,8 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 50,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 40
             }
           ],
           "illustration": "card_19_level_1_1724596395599.png"
@@ -680,8 +680,8 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 75,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 50
             }
           ],
           "illustration": "card_19_level_2_1724596401929.png"
@@ -693,8 +693,8 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 250,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 56
             }
           ],
           "illustration": "card_19_level_3_1724596406073.png"
@@ -1585,15 +1585,15 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 40,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 31
             },
             {
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
               "value": null,
-              "costPercentage": 0
+              "costPercentage": 10
             }
           ],
           "illustration": "card_43_level_1_1724548148872.png"
@@ -1605,15 +1605,15 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 70,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 38
             },
             {
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
               "value": null,
-              "costPercentage": 0
+              "costPercentage": 10
             }
           ],
           "illustration": "card_43_level_2_1724548152771.png"
@@ -1625,15 +1625,15 @@
               "type": "rage",
               "trigger": "idle",
               "target": "selfCard",
-              "value": 300,
-              "costPercentage": null
+              "value": null,
+              "costPercentage": 46
             },
             {
               "type": "massacre",
               "trigger": "onDirectAttackHit",
               "target": "directEnnemyCard",
               "value": null,
-              "costPercentage": 0
+              "costPercentage": 12
             }
           ],
           "illustration": "card_43_level_3_1724548159076.png"
