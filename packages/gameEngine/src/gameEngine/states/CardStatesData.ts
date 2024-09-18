@@ -191,14 +191,15 @@ export const CardStatesData = {
       },
     },
   },
-  riposte: { // todo
+  riposte: {
     min: 1,
     max: undefined,
     noValue: false,
     triggers: ["onDirectlyAttacked"],
     targets: ["directEnnemyCard"],
-    computeCost: ({ dmg, value }) => {
-      return (dmg / baseDps * 0.15) * ((value || 1) + 0.35); // +0.5 because the first one is more expansive
+    computeCost: ({ value, targetCost, dmg }) => {
+      const baseCost = targetCost * 0.015 + (dmg / baseDps) * 0.15;
+      return baseCost + (((value ?? 1) - 1) * baseCost * 0.75);
     },
     descrption: ({ trigger, target }) => `${trigger}, instantly attack the ${target}.`,
     title: "Riposte",
