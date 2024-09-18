@@ -347,8 +347,8 @@ export const CardStatesData = {
     noValue: true,
     triggers: ["idle"],
     targets: ["selfCard"],
-    computeCost: () => {
-      return 0.5;
+    computeCost: ({ targetCost }) => {
+      return targetCost * 0.2;
     },
     status: "buff",
     descrption: ({ target }) => `${target} can only receive damage from direct attacks.`,
@@ -359,7 +359,7 @@ export const CardStatesData = {
     },
     src: "sacredDuelist.png",
   },
-  divineShield: { // todo 
+  divineShield: {
     min: 1,
     max: undefined,
     noValue: false,
