@@ -4,6 +4,8 @@ import { botOptions } from "./gameBehavior/aiAgent";
 import FpsPrint from "./FpsPrint";
 import { ClockReturn, EventType, InGameCardType } from "game_engine";
 import DebugButton from "@/debug/DebugButton";
+import usePersistentState from "@/debug/usePersistentState";
+import { useOnMount, useOnUnMount } from "@repo/ui";
 
 interface GameDebugPanelProps {
   play: () => void;
@@ -20,7 +22,23 @@ export default function GameDebugPanel({
   runTicks,
   clock,
 }: GameDebugPanelProps) {
-  if (!IS_DEBUG()) {
+  const [isOpen, setIsOpen] = usePersistentState<boolean>("game-debug-panel-open", true);
+
+  function toggleDebugPanel(e: KeyboardEvent) {
+    if (e.key === " ") {
+      setIsOpen(prev => !prev);
+    }
+  }
+
+  useOnMount(() => {
+    window.addEventListener("keydown", toggleDebugPanel);
+  });
+
+  useOnUnMount(() => {
+    window.removeEventListener("keydown", toggleDebugPanel);
+  });
+
+  if (!IS_DEBUG() || !isOpen) {
     return <></>;
   }
 
@@ -29,7 +47,7 @@ export default function GameDebugPanel({
   }
 
   return (
-    <div className="fixed right-2 top-2 border-2 border-white text-white px-4 py-2 flex flex-col gap-4">
+    <div className="fixed right-2 top-2 border-2 border-white text-white px-4 py-2 flex flex-col gap-4 z-50">
       <FpsPrint />
       <DebugButton onClick={isPlaying ? pause : play}>
         {isPlaying ? "pause" : "play"}

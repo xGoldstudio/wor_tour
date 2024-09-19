@@ -19,6 +19,7 @@ interface CardEffectProps {
   position: number;
   isPlayerCard: boolean;
   eventType: "afterPlaceCard" | "drawCard";
+  noPieChart?: boolean;
 }
 
 export default function CardEffect({
@@ -28,6 +29,7 @@ export default function CardEffect({
   position,
   isPlayerCard,
   eventType,
+  noPieChart,
 }: CardEffectProps) {
   const size = 0.8;
   const { triggerAnimation } = useSyncGameAnimation();
@@ -45,15 +47,18 @@ export default function CardEffect({
   useGameEventListener<AfterPlaceCardEvent | DrawCardEvent>({
     type: eventType,
     action: (event, gameState) => {
-      const cardStateWithIndex =  event.type === "afterPlaceCard" ? gameState.getStateOfCardWithIndex(
-        event.isPlayer,
-        event.position,
-        state.type
-      ) : gameState.getStateOfDeckCardWithIndex(
-        event.isPlayer,
-        event.position,
-        state.type
-        );
+      const cardStateWithIndex =
+        event.type === "afterPlaceCard"
+          ? gameState.getStateOfCardWithIndex(
+              event.isPlayer,
+              event.position,
+              state.type
+            )
+          : gameState.getStateOfDeckCardWithIndex(
+              event.isPlayer,
+              event.position,
+              state.type
+            );
       if (cardStateWithIndex) {
         setCurrentState({ ...cardStateWithIndex[1] });
         prevStatePosition.current = cardStateWithIndex[0]; // in case a new card is placed with an effect present in the current card,
@@ -271,9 +276,11 @@ export default function CardEffect({
           size={size}
           showDesc
         />
-        <div className="w-full h-full absolute z-10 top-0 rounded-md opacity-50 overflow-hidden">
-          <progressPieChart.Element />
-        </div>
+        {noPieChart !== true && (
+          <div className="w-full h-full absolute z-10 top-0 rounded-md opacity-50 overflow-hidden">
+            <progressPieChart.Element />
+          </div>
+        )}
       </div>
     </div>
   );

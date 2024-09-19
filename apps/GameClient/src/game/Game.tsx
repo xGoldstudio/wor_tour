@@ -9,11 +9,9 @@ import { cn, GameCard, useGameEventListener } from "@repo/ui";
 import EndGameScreenWatcher from "./endGameScreen/EndGameScreenWatcher";
 import { HomeBg } from "@/home/Home";
 import { useRef, useState } from "react";
-import {
-  AfterPlaceCardEvent,
-  CardDestroyedEvent,
-} from "game_engine";
-import { Skull } from "lucide-react";
+import { AfterPlaceCardEvent, CardDestroyedEvent } from "game_engine";
+import { Skull, Target } from "lucide-react";
+import { StatesHistory } from "@repo/ui";
 
 export default function Game() {
   const {
@@ -26,6 +24,7 @@ export default function Game() {
     clock,
     gameState,
   } = useRunGame();
+  const setFocusedCard = useGameInterface((state) => state.setFocusedCard);
 
   return (
     <div
@@ -41,26 +40,29 @@ export default function Game() {
       />
       {isInit && (
         <>
-          <div className="bg-black h-full w-full"></div>
-          <div className="h-screen flex flex-col gap-4 justify-between relative overflow-hidden w-[700px]">
+          <div className="h-screen w-screen relative overflow-hidden justify-center flex">
             <FlashDamage />
             <AmountEffectOrDamage />
             <StartSequence />
             <HomeBg />
-            <PlayerGUI isPlayer={false} clock={clock} gameState={gameState} />
-            <div className="w-full flex justify-center relative">
-              <div className="grid grid-cols-3 gap-4 px-8">
-                <CardPlaceholder position={0} isPlayer={false} />
-                <CardPlaceholder position={1} isPlayer={false} />
-                <CardPlaceholder position={2} isPlayer={false} />
-                <CardPlaceholder position={0} isPlayer />
-                <CardPlaceholder position={1} isPlayer />
-                <CardPlaceholder position={2} isPlayer />
+            <div className="w-screen h-screen flex relative flex-col justify-between max-w-[900px]">
+              <PlayerGUI isPlayer={false} clock={clock} gameState={gameState} />
+              <div className="w-full flex justify-center items-center relative grow">
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 h-[90%] translate-x-full">
+                  <StatesHistory setFocusedCard={setFocusedCard} />
+                </div>
+                <div className="grid grid-cols-3 gap-4 px-8">
+                  <CardPlaceholder position={0} isPlayer={false} />
+                  <CardPlaceholder position={1} isPlayer={false} />
+                  <CardPlaceholder position={2} isPlayer={false} />
+                  <CardPlaceholder position={0} isPlayer />
+                  <CardPlaceholder position={1} isPlayer />
+                  <CardPlaceholder position={2} isPlayer />
+                </div>
               </div>
+              <PlayerGUI isPlayer clock={clock} gameState={gameState} />
             </div>
-            <PlayerGUI isPlayer clock={clock} gameState={gameState} />
           </div>
-          <div className="bg-black h-full w-full"></div>
         </>
       )}
       <EndGameScreenWatcher />
@@ -74,15 +76,18 @@ interface CardPlaceholderProps {
 }
 
 function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
-  const { setCardTarget, removeCardTarget, cardTarget } = useGameInterface();
+  const { setCardTarget, removeCardTarget, cardTarget, focusedCard } = useGameInterface();
   const isSelected = isPlayer && cardTarget === position;
-  const [trackedInstanceId, setTrackedInstanceId] = useState<number | null>(null);
+  const [trackedInstanceId, setTrackedInstanceId] = useState<number | null>(
+    null
+  );
   const trackedInstanceIdRef = useRef<number | null>(null);
 
   useGameEventListener<AfterPlaceCardEvent>({
     type: "afterPlaceCard",
     action: (_, gameState) => {
-      const instanceId = gameState.getCard(isPlayer, position)?.instanceId ?? null;
+      const instanceId =
+        gameState.getCard(isPlayer, position)?.instanceId ?? null;
       setTrackedInstanceId(instanceId);
       trackedInstanceIdRef.current = instanceId;
     },
@@ -136,6 +141,15 @@ function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
       >
         <div className="bg-slate-800 bg-opacity-40 w-full h-full absolute" />
         <Skull size={96} />
+      </div>
+      <div
+        className={cn(
+          "w-full h-full opacity-0 absolute top-0 left-0 rounded-md flex justify-center items-center overflow-hidden transition-opacity",
+          focusedCard !== null && focusedCard === trackedInstanceId && "opacity-100"
+        )}
+      >
+        <div className="bg-sky-800 bg-opacity-40 w-full h-full absolute" />
+        <Target size={96} />
       </div>
     </div>
   );

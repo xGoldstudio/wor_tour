@@ -42,10 +42,14 @@ export function EffectLayout({
   effect,
   size,
   showDesc,
+  onShowDesc,
+  onHideShowDesc,
 }: {
   effect: CardStateLayoutData;
   size: number;
   showDesc?: boolean;
+  onShowDesc?: () => void;
+  onHideShowDesc?: () => void;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const illustrationSize = 32 * size;
@@ -58,9 +62,15 @@ export function EffectLayout({
       ref={ref}
       key={effect.src}
       className="relative flex justify-center items-center rounded-md bg-slate-800 drop-shadow-[1px_1px_1px_black] group"
-      style={{ width: `${wrapperSize}px`, height: `${wrapperSize}px` }}
-      onMouseEnter={() => setShow(true)}
-      onMouseLeave={() => setShow(false)}
+      style={{ width: inPx(wrapperSize), height: inPx(wrapperSize), minHeight: inPx(wrapperSize) }}
+      onMouseEnter={() => {
+        setShow(true);
+        onShowDesc?.();
+      }}
+      onMouseLeave={() => {
+        setShow(false);
+        onHideShowDesc?.();
+      }}
     >
       <Cover cardRarity="rare" className="rounded-md" />
       <img

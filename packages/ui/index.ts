@@ -16,6 +16,7 @@ export { default as BoosterRarityDrop } from './components/booster/BoosterRarity
 export { default as Cover } from './components/Cover.tsx';
 export { default as EmptyBar } from './components/EmptyBar.tsx';
 export { default as ManaBar } from './components/game/ManaBar.tsx';
+export { default as StatesHistory } from './components/game/stateHistory/StatesHistory.tsx';
 export * from './components/game/useRunGameInstance.ts';
 export * from './components/game/FpsTracker.ts';
 export { default as GameTimer } from './components/game/GameTimer';
