@@ -6,13 +6,11 @@ import _ from "lodash";
 import { useState } from "react";
 import { dummyCard } from "./card/const";
 import {
-  Borders,
-  CardIllustartion,
   GameTimer,
   ManaBar,
   useGameEventListener,
 } from "@repo/ui";
-import { CardType } from "@repo/lib";
+import { CardType, textureByRarity } from "@repo/lib";
 import { ClockReturn, EventType, GameStateObject } from "game_engine";
 import InHandCard from "./card/InHandCard";
 
@@ -33,7 +31,7 @@ function PlayerGUI({ isPlayer, clock, gameState }: PlayerGUIProps) {
   return (
     <div className="relative z-10 flex justify-center">
       <div className="relative max-w-[900px] w-full">
-        <div className="top-0 left-0 w-full h-full absolute bg-gray-500 opacity-60"></div>
+        <div className="top-0 left-0 w-full h-full absolute bg-gray-500 opacity-50"></div>
         <div className="flex">
           <div
             className="w-full flex flex-col px-6 py-4 items-center"
@@ -44,16 +42,16 @@ function PlayerGUI({ isPlayer, clock, gameState }: PlayerGUIProps) {
                 <div
                   id="staticCardWrapper"
                   className="relative w-[113px] h-[160px] translate-y-[12%]"
-                >
+                  >
                   {_.times(4).map((index) => (
                     <div
-                      className="staticCard absolute"
-                      style={{
-                        top: `${(-3 + index) * 5}px`,
-                        left: `${(-3 + index) * 5}px`,
-                        zIndex: deck.length - index,
-                      }}
-                      key={`${index}`}
+                    className="staticCard absolute"
+                    style={{
+                      top: `${(-3 + index) * 5}px`,
+                      left: `${(-3 + index) * 5}px`,
+                      zIndex: deck.length - index,
+                    }}
+                    key={`${index}`}
                     >
                       <GuiDeckCard position={index} />
                     </div>
@@ -61,10 +59,10 @@ function PlayerGUI({ isPlayer, clock, gameState }: PlayerGUIProps) {
                 </div>
                 {_.times(4).map((index) => (
                   <InHandCard
-                    position={index}
-                    clock={clock}
-                    key={index}
-                    gameState={gameState}
+                  position={index}
+                  clock={clock}
+                  key={index}
+                  gameState={gameState}
                   />
                 ))}
               </div>
@@ -75,36 +73,96 @@ function PlayerGUI({ isPlayer, clock, gameState }: PlayerGUIProps) {
             </div>
             {!isPlayer ? (
               <>
-                <div className="pt-2"></div>
-                <div className="absolute bottom-0 translate-y-1/2">
-                  <Borders
-                    width={900}
-                    height={8}
-                    borderUnit={0.8}
-                    rarity={"epic"}
-                  >
-                    <CardIllustartion width={900} height={8} borderUnit={0.6}>
-                      <></>
-                    </CardIllustartion>
-                  </Borders>
-                </div>
-                <div className="absolute bottom-0 translate-y-1/2">
+                <div className="h-[16px]"></div>
+                <>
+                  <svg
+                    width="100%"
+                    height="100%"
+                    className="absolute top-0 left-0 rounded-t-sm brightness-75 rounded-b-sm"
+                    >
+                    <mask id="guiOpponent">
+                      <rect
+                        fill="#ffffff"
+                        x={0}
+                        y={0}
+                        width="100%"
+                        height="100%"
+                        />
+                      <rect
+                        fill="black"
+                        x={8}
+                        y={0}
+                        width="calc(100% - 16px)"
+                        height="calc(100% - 8px)"
+                        />
+                    </mask>
+                    <rect
+                      fill="black"
+                      x={0}
+                      y={0}
+                      width="100%"
+                      height="100%"
+                      mask="url(#guiOpponent)"
+                      />
+                    <image
+                      className="blur-[6px]"
+                      href={textureByRarity("legendary")}
+                      x="0"
+                      y="0"
+                      width="100%"
+                      height="100%"
+                      preserveAspectRatio="xMidYMid slice"
+                      mask="url(#guiOpponent)"
+                      />
+                  </svg>
+                </>
+                <div className="absolute bottom-[4px] translate-y-1/2">
                   <GameTimer />
                 </div>
               </>
             ) : (
-              <div className="absolute top-0 -translate-y-1/2">
-                <Borders
-                  width={900}
-                  height={8}
-                  borderUnit={0.8}
-                  rarity={"epic"}
+              <>
+                <svg
+                  width="100%"
+                  height="100%"
+                  className="absolute top-0 left-0 rounded-t-sm brightness-75"
                 >
-                  <CardIllustartion width={900} height={8} borderUnit={0.6}>
-                    <></>
-                  </CardIllustartion>
-                </Borders>
-              </div>
+                  <mask id="guiPlayer">
+                    <rect
+                      fill="#ffffff"
+                      x={0}
+                      y={0}
+                      width="100%"
+                      height="100%"
+                    />
+                    <rect
+                      fill="black"
+                      x={8}
+                      y={8}
+                      width="calc(100% - 16px)"
+                      height="100%"
+                    />
+                  </mask>
+                  <rect
+                    fill="black"
+                    x={0}
+                    y={0}
+                    width="100%"
+                    height="100%"
+                    mask="url(#guiPlayer)"
+                  />
+                  <image
+                    className="blur-[6px]"
+                    href={textureByRarity("legendary")}
+                    x="0"
+                    y="0"
+                    width="100%"
+                    height="100%"
+                    preserveAspectRatio="xMidYMid slice"
+                    mask="url(#guiPlayer)"
+                  />
+                </svg>
+              </>
             )}
           </div>
         </div>

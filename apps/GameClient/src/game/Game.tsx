@@ -12,6 +12,7 @@ import { useRef, useState } from "react";
 import { AfterPlaceCardEvent, CardDestroyedEvent } from "game_engine";
 import { Skull, Target } from "lucide-react";
 import { StatesHistory } from "@repo/ui";
+import PlayerProfile from "./gui/PlayerProfile";
 
 export default function Game() {
   const {
@@ -51,6 +52,9 @@ export default function Game() {
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 h-[90%] translate-x-full">
                   <StatesHistory setFocusedCard={setFocusedCard} />
                 </div>
+                <div className="absolute top-0 left-0">
+                  <PlayerProfile />
+                </div>
                 <div className="grid grid-cols-3 gap-4 px-8">
                   <CardPlaceholder position={0} isPlayer={false} />
                   <CardPlaceholder position={1} isPlayer={false} />
@@ -76,7 +80,8 @@ interface CardPlaceholderProps {
 }
 
 function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
-  const { setCardTarget, removeCardTarget, cardTarget, focusedCard } = useGameInterface();
+  const { setCardTarget, removeCardTarget, cardTarget, focusedCard } =
+    useGameInterface();
   const isSelected = isPlayer && cardTarget === position;
   const [trackedInstanceId, setTrackedInstanceId] = useState<number | null>(
     null
@@ -145,7 +150,9 @@ function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
       <div
         className={cn(
           "w-full h-full opacity-0 absolute top-0 left-0 rounded-md flex justify-center items-center overflow-hidden transition-opacity",
-          focusedCard !== null && focusedCard === trackedInstanceId && "opacity-100"
+          focusedCard !== null &&
+            focusedCard === trackedInstanceId &&
+            "opacity-100"
         )}
       >
         <div className="bg-sky-800 bg-opacity-40 w-full h-full absolute" />
