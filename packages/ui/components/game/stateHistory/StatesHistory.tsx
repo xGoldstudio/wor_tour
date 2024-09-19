@@ -21,6 +21,7 @@ export default function StatesHistory() {
   const height = 450;
 
   const [listOfStates, setListOfStates] = useState<CardState[]>([]);
+  const [isUseScrolling, setIsUserScrolling] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useGameEventListener<AddStateEvent>({
@@ -34,35 +35,49 @@ export default function StatesHistory() {
     requestAnimationFrame(() => {
       afterPaint(scrollToBottom);
     });
-  }, [listOfStates])
+  }, [listOfStates]);
 
   function scrollToBottom() {
-    if (scrollRef.current) {
+    if (scrollRef.current && !isUseScrolling) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }
 
   return (
-    <Borders width={width} height={height} borderUnit={1} rarity={"rare"}>
-      <CardIllustartion width={width} height={height} borderUnit={0.6}>
-        <InnerBord size={1}>
-          <div className="flex w-full items-center justify-start gap-2 relative h-full">
-            <ScrollContainer
-              className="w-full h-full absolute flex flex-col z-10 gap-2 pt-2 items-center pb-4 overflow-y-scroll"
-              innerRef={scrollRef}
-            >
-              {listOfStates.map((state, index) => (
-                <EffectLayout
-                  key={state.type + " " + state.value + " " + index}
-                  effect={getStateData(state)}
-                  size={1}
-                  showDesc
-                />
-              ))}
-            </ScrollContainer>
-          </div>
-        </InnerBord>
-      </CardIllustartion>
-    </Borders>
+    <div onMouseLeave={() => {
+      setIsUserScrolling(false);
+    }}>
+      <Borders width={width} height={height} borderUnit={1} rarity={"rare"}>
+        <CardIllustartion width={width} height={height} borderUnit={0.6}>
+          <InnerBord size={1}>
+            <div className="flex w-full items-center justify-start gap-2 relative h-full">
+              <ScrollContainer
+                className="w-full h-full absolute flex flex-col z-10 gap-2 pt-2 items-center pb-2 overflow-y-scroll"
+                innerRef={scrollRef}
+                onScroll={() => {
+                  // if scroll to bottom
+                  if (scrollRef.current && Math.round(scrollRef.current.scrollTop + scrollRef.current.clientHeight) === scrollRef.current.scrollHeight) {
+                    setIsUserScrolling(false);
+                    return;
+                  }
+                  if (!isUseScrolling) {
+                    setIsUserScrolling(true);
+                  }
+                }}
+              >
+                {listOfStates.map((state, index) => (
+                  <EffectLayout
+                    key={state.type + " " + state.value + " " + index}
+                    effect={getStateData(state)}
+                    size={1}
+                    showDesc
+                  />
+                ))}
+              </ScrollContainer>
+            </div>
+          </InnerBord>
+        </CardIllustartion>
+      </Borders>
+    </div>
   );
 }
