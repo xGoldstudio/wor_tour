@@ -11,15 +11,15 @@ function afterPaint(cb: () => void) {
   });
 }
 
-export default function StatesHistory() {
-  const [listOfStates, setListOfStates] = useState<CardState[]>([]);
+export default function StatesHistory({ setFocusedCard }: { setFocusedCard: (id: number | null) => void }) {
+  const [listOfStates, setListOfStates] = useState<[number, CardState][]>([]);
   const [isUseScrolling, setIsUserScrolling] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useGameEventListener<AddStateEvent>({
     type: "addState",
     action: (event) => {
-      setListOfStates((states) => [...states, { ...event.state }]);
+      setListOfStates((states) => [...states, [event.instanceId, { ...event.state }]]);
     },
   });
 
@@ -81,10 +81,12 @@ export default function StatesHistory() {
               }
             }}
           >
-            {listOfStates.map((state, index) => (
+            {listOfStates.map((state) => (
               <StatesHistoryState
-                key={state.type + " " + state.value + " " + index}
-                state={state}
+                key={state[1].type + " " + state[1].value + " " + state[0]}
+                state={state[1]}
+                instanceId={state[0]}
+                setFocusedCard={setFocusedCard}
               />
             ))}
           </ScrollContainer>

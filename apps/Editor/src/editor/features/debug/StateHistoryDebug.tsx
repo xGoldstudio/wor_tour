@@ -64,7 +64,7 @@ export default function StateHistoryDebug() {
     <div>
       <div className="w-full flex justify-center pt-16 gap-32">
         <div className="w-150px h-[600px]">
-          <StatesHistory />
+          <StatesHistory setFocusedCard={() => {}}/>
         </div>
         <DebugPanelLayout instance={instance}>
           <p className="text-2xl font-semibold">Basic operations</p>

@@ -13,11 +13,15 @@ interface GameInterfaceStore {
   init: ({
     triggerEvent
   }: { triggerEvent: (event: EventType) => void }) => void;
+
+  focusedCard: number | null;
+  setFocusedCard: (cardPosition: number | null) => void;
 }
 
 const state = {
   cardSelected: null,
   cardTarget: null,
+  focusedCard: null,
 };
 
 // This store is used to manage the game interface state (data exclusively and uniquely to the client side)
@@ -30,6 +34,9 @@ const useGameInterface = create<GameInterfaceStore>()((set) => ({
 
   setCardTarget: (target: number) => set({ cardTarget: target }),
   removeCardTarget: () => set({ cardTarget: null }),
+
+  setFocusedCard: (cardPosition: number | null) =>
+    set({ focusedCard: cardPosition }),
 
   init: () => set({ ...state }),
 }));

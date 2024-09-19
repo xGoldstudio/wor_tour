@@ -10,7 +10,7 @@ import EndGameScreenWatcher from "./endGameScreen/EndGameScreenWatcher";
 import { HomeBg } from "@/home/Home";
 import { useRef, useState } from "react";
 import { AfterPlaceCardEvent, CardDestroyedEvent } from "game_engine";
-import { Skull } from "lucide-react";
+import { Skull, Target } from "lucide-react";
 import { StatesHistory } from "@repo/ui";
 
 export default function Game() {
@@ -24,6 +24,7 @@ export default function Game() {
     clock,
     gameState,
   } = useRunGame();
+  const setFocusedCard = useGameInterface((state) => state.setFocusedCard);
 
   return (
     <div
@@ -48,7 +49,7 @@ export default function Game() {
               <PlayerGUI isPlayer={false} clock={clock} gameState={gameState} />
               <div className="w-full flex justify-center items-center relative grow">
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 h-[90%] translate-x-full">
-                  <StatesHistory />
+                  <StatesHistory setFocusedCard={setFocusedCard} />
                 </div>
                 <div className="grid grid-cols-3 gap-4 px-8">
                   <CardPlaceholder position={0} isPlayer={false} />
@@ -75,7 +76,7 @@ interface CardPlaceholderProps {
 }
 
 function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
-  const { setCardTarget, removeCardTarget, cardTarget } = useGameInterface();
+  const { setCardTarget, removeCardTarget, cardTarget, focusedCard } = useGameInterface();
   const isSelected = isPlayer && cardTarget === position;
   const [trackedInstanceId, setTrackedInstanceId] = useState<number | null>(
     null
@@ -140,6 +141,15 @@ function CardPlaceholder({ position, isPlayer }: CardPlaceholderProps) {
       >
         <div className="bg-slate-800 bg-opacity-40 w-full h-full absolute" />
         <Skull size={96} />
+      </div>
+      <div
+        className={cn(
+          "w-full h-full opacity-0 absolute top-0 left-0 rounded-md flex justify-center items-center overflow-hidden transition-opacity",
+          focusedCard !== null && focusedCard === trackedInstanceId && "opacity-100"
+        )}
+      >
+        <div className="bg-sky-800 bg-opacity-40 w-full h-full absolute" />
+        <Target size={96} />
       </div>
     </div>
   );
