@@ -46,7 +46,10 @@ export default function Game() {
             <HomeBg />
             <div className="w-screen h-screen flex relative flex-col justify-between max-w-[900px]">
               <PlayerGUI isPlayer={false} clock={clock} gameState={gameState} />
-              <div className="w-full flex justify-center relative">
+              <div className="w-full flex justify-center items-center relative grow">
+                <div className="absolute right-0 top-1/2 -translate-y-1/2 h-[90%] translate-x-full">
+                  <StatesHistory />
+                </div>
                 <div className="grid grid-cols-3 gap-4 px-8">
                   <CardPlaceholder position={0} isPlayer={false} />
                   <CardPlaceholder position={1} isPlayer={false} />
@@ -54,9 +57,6 @@ export default function Game() {
                   <CardPlaceholder position={0} isPlayer />
                   <CardPlaceholder position={1} isPlayer />
                   <CardPlaceholder position={2} isPlayer />
-                </div>
-                <div className="absolute top-1/2 -translate-y-1/2 left-0 -translate-x-[120%]">
-                  <StatesHistory />
                 </div>
               </div>
               <PlayerGUI isPlayer clock={clock} gameState={gameState} />

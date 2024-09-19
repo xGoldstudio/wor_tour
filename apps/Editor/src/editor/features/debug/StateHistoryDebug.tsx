@@ -63,7 +63,9 @@ export default function StateHistoryDebug() {
   return (
     <div>
       <div className="w-full flex justify-center pt-16 gap-32">
-        <StatesHistory />
+        <div className="w-150px h-[600px]">
+          <StatesHistory />
+        </div>
         <DebugPanelLayout instance={instance}>
           <p className="text-2xl font-semibold">Basic operations</p>
           <div className="flex gap-4">
