@@ -58,7 +58,7 @@ export function EffectLayout({
       ref={ref}
       key={effect.src}
       className="relative flex justify-center items-center rounded-md bg-slate-800 drop-shadow-[1px_1px_1px_black] group"
-      style={{ width: `${wrapperSize}px`, height: `${wrapperSize}px` }}
+      style={{ width: inPx(wrapperSize), height: inPx(wrapperSize), minHeight: inPx(wrapperSize) }}
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}
     >
