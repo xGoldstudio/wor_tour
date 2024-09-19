@@ -11,7 +11,7 @@ import { HomeBg } from "@/home/Home";
 import { useRef, useState } from "react";
 import { AfterPlaceCardEvent, CardDestroyedEvent } from "game_engine";
 import { Skull } from "lucide-react";
-import StatesHistory from "./StatesHistory/StatesHistory";
+import { StatesHistory } from "@repo/ui";
 
 export default function Game() {
   const {

@@ -5,7 +5,7 @@ import {
 	InnerBord,
 	useGameEventListener,
 } from "@repo/ui";
-import { EffectLayout } from "../../../../../packages/ui/components/card/Effects";
+import { EffectLayout } from "../../card/Effects";
 import { AddStateEvent } from "game_engine";
 import { useState } from "react";
 
