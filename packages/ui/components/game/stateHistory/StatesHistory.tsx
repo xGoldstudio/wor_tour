@@ -1,5 +1,5 @@
 import { CardState, inPx } from "@repo/lib";
-import { Borders, CardIllustartion, cn, useGameEventListener } from "@repo/ui";
+import { cn, useGameEventListener } from "@repo/ui";
 import { AddStateEvent } from "game_engine";
 import { useEffect, useRef, useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";

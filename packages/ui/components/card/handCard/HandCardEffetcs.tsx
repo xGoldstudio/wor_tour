@@ -71,6 +71,7 @@ export default function HandCardEffects({
             position={position}
             isPlayerCard={isPlayerCard}
             eventType="drawCard"
+            noPieChart={true}
           />
         ))}
       </CaptureEvents>
