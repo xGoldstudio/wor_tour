@@ -91,7 +91,7 @@ export default function HandCardDebug() {
       <div className="w-full flex justify-center items-center pt-16 gap-32">
         <div className="h-[333.75px] w-[240px] flex justify-center items-center border-2 border-black p-2 box-content">
           <div className="scale-[200%]">
-            <HandCard position={0} />
+            <HandCard position={0} size={1} />
           </div>
         </div>
         <DebugPanelLayout instance={instance}>

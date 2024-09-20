@@ -1,5 +1,4 @@
-import useGameInterface from "@/game/stores/gameInterfaceStore";
-import useGameStore from "@/game/stores/gameStateStore";
+import useGameStore from "../../stores/gameStateStore";
 import {
   CARD_BORDER_HEIGHT,
   CARD_BORDER_WIDTH,
@@ -15,6 +14,7 @@ import {
   EventType,
   GameStateObject,
 } from "game_engine";
+import useGameInterface from "../../stores/gameInterfaceStore";
 
 export const HAND_CARD_RATIO = 1.8;
 
