@@ -57,7 +57,7 @@ export default function HandCardResizer({
 
   return (
     <div
-      className={`max-w-full flex flex justify-between`}
+      className={`max-w-full flex justify-between`}
       ref={wrapperRef}
       style={{ height: CARD_BORDER_HEIGHT * HAND_CARD_RATIO * size * 0.77 }} // 0.77 is 1 - 0.33 wich is the translated y value
     >
@@ -86,11 +86,10 @@ export default function HandCardResizer({
       </div>
       <div className={`flex grow gap-[${GAP}px] justify-center`}>
         {_.times(CARD_IN_HAND).map((index) => (
-          <div>
+          <div key={`${index}`}>
             <InHandCard
               position={index}
               clock={clock}
-              key={index}
               gameState={gameState}
               size={size}
             />
