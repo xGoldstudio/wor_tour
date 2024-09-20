@@ -8,8 +8,8 @@ export default function FlashDamage() {
   const { triggerAnimation } = useSyncGameAnimation();
   useGameEventListener({
     type: "playerDamageResolve",
-    action: (event) => {
-			if ((event as PlayerDamageResolveEvent).initiator.damage < 200) {
+    action: (event, state) => {
+			if ((event as PlayerDamageResolveEvent).initiator.damage < (state.playerHp * 0.1)) {
 				return;
 			}
       if (bloodRef) {

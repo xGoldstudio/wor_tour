@@ -11,9 +11,12 @@ interface CardBoardProps {
   size: number;
 }
 
+export const CARD_BORDER_WIDTH = 64;
+export const CARD_BORDER_HEIGHT = 89;
+
 export function CardBorder({ rarity, children, size }: CardBoardProps) {
-  const width = 64 * size;
-  const height = 89 * size;
+  const width = CARD_BORDER_WIDTH * size;
+  const height = CARD_BORDER_HEIGHT * size;
   const borderUnit = Math.min(0.5 * size, 2);
 
   return (

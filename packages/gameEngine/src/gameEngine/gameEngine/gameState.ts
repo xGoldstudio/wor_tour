@@ -31,6 +31,8 @@ export const MAX_ATTACK_SPEED = 3;
 
 export const MAX_COST_CARD = 9;
 
+export const CARD_IN_HAND = 4;
+
 export const MIN_COST_CARD = 1;
 
 export const MIN_ATTACK_SPEED = 0.01;

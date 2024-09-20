@@ -22,7 +22,7 @@ export default function GameDebugPanel({
   runTicks,
   clock,
 }: GameDebugPanelProps) {
-  const [isOpen, setIsOpen] = usePersistentState<boolean>("game-debug-panel-open", true);
+  const [isOpen, setIsOpen] = usePersistentState<boolean>("gameDebugPanelOpen", true);
 
   function toggleDebugPanel(e: KeyboardEvent) {
     if (e.key === " ") {

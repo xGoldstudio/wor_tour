@@ -1,11 +1,34 @@
-import useGameInterface from "@/game/stores/gameInterfaceStore";
-import useGameStore from "@/game/stores/gameStateStore";
-import { HandCard, useGameEventListener, useSyncGameAnimation } from "@repo/ui";
+import useGameStore from "../../stores/gameStateStore";
+import {
+  CARD_BORDER_HEIGHT,
+  CARD_BORDER_WIDTH,
+  HandCard,
+  useGameEventListener,
+  useSyncGameAnimation,
+} from "@repo/ui";
 import { useRef } from "react";
-import { animationTimeline, getCenterOfBoundingElement } from "@repo/lib";
-import { ClockReturn, DrawCardEvent, EventType, GameStateObject } from "game_engine";
+import { animationTimeline, inPx } from "@repo/lib";
+import {
+  ClockReturn,
+  DrawCardEvent,
+  EventType,
+  GameStateObject,
+} from "game_engine";
+import useGameInterface from "../../stores/gameInterfaceStore";
 
-export default function InHandCard({ position, clock, gameState }: { position: number, clock: ClockReturn<EventType>, gameState: GameStateObject }) {
+export const HAND_CARD_RATIO = 1.8;
+
+export default function InHandCard({
+  position,
+  clock,
+  gameState,
+  size = HAND_CARD_RATIO,
+}: {
+  position: number;
+  clock: ClockReturn<EventType>;
+  gameState: GameStateObject;
+  size?: number;
+}) {
   const setSelectedCard = useGameInterface((state) => state.setSelectedCard);
   const removeCardTarget = useGameInterface((state) => state.removeCardTarget);
   const unselectCard = useGameInterface((state) => state.unselectCard);
@@ -99,16 +122,26 @@ export default function InHandCard({ position, clock, gameState }: { position: n
     if (isPressed.current || !canStartDrag()) {
       return;
     }
-    function onMove(e: MouseEvent) {
+    function onMove(e: MouseEvent | TouchEvent) {
       if (cardRef.current && ref.current && dragRef.current) {
-        // we compare mouse position with ref bouding box
-        const centers = getCenterOfBoundingElement(ref.current);
-        dragRef.current.style.transform = `translate(${e.clientX - centers.x}px, ${e.clientY - centers.y}px)`;
+        const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
+        const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
+
+        const rect = ref.current.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const offsetX = clientX - centerX;
+        const offsetY = clientY - centerY;
+
+        dragRef.current.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
       }
     }
     function mouseUp() {
       document.removeEventListener("mouseup", mouseUp);
+      document.removeEventListener("touchend", mouseUp);
       document.removeEventListener("mousemove", onMove);
+      document.removeEventListener("touchmove", onMove);
       isPressed.current = false;
       onUnselectCard();
       if (cardRef.current && ref.current && dragRef.current) {
@@ -121,7 +154,9 @@ export default function InHandCard({ position, clock, gameState }: { position: n
     }
     onSelectCard();
     document.addEventListener("mousemove", onMove);
+    document.addEventListener("touchmove", onMove);
     document.addEventListener("mouseup", mouseUp);
+    document.addEventListener("touchend", mouseUp);
     if (cardRef.current && dragRef.current) {
       cardRef.current.style.zIndex = "9999";
       cardRef.current.style.transform = "scale(1.2)";
@@ -136,10 +171,15 @@ export default function InHandCard({ position, clock, gameState }: { position: n
         <div ref={dragRef}>
           <div
             className="w-fit h-fit bg-black rounded-sm select-none relative"
+            style={{
+              width: inPx(size * CARD_BORDER_WIDTH * HAND_CARD_RATIO),
+              height: inPx(size * CARD_BORDER_HEIGHT * HAND_CARD_RATIO),
+            }}
             onMouseDown={tryToMoveCard}
+            onTouchStartCapture={tryToMoveCard}
             ref={cardRef}
           >
-            <HandCard position={position} />
+            <HandCard position={position} size={size} />
           </div>
         </div>
       </div>

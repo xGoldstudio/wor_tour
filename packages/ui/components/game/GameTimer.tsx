@@ -26,7 +26,7 @@ export default function GameTimer() {
   const width = 80;
 
   return (
-    <Borders width={width} height={40} borderUnit={0.8} rarity={"epic"}>
+    <Borders width={width} height={40} borderUnit={0.8} rarity={"legendary"}>
       <CardIllustartion width={width} height={40} borderUnit={0.6}>
         <InnerBord size={1}>
           <div className="w-full h-full flex justify-center items-center font-semibold relative bg-black overflow-hidden">
