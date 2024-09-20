@@ -43,16 +43,21 @@ export default function Game() {
             <AmountEffectOrDamage />
             <StartSequence />
             <HomeBg />
-            <div className="w-screen h-screen flex relative flex-col justify-between max-w-[900px]">
-              <PlayerGUI isPlayer={false} clock={clock} gameState={gameState} />
+            <div className="w-screen h-screen flex relative flex-col justify-between max-w-[900px] lg:mx-20 mx-0">
+              <PlayerGUI
+                isPlayer={false}
+                clock={clock}
+                gameState={gameState}
+              />
               <div className="w-full flex justify-center items-center relative grow">
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 h-[90%] translate-x-full">
-                  <StatesHistory setFocusedCard={setFocusedCard} />
-                </div>
                 <div className="absolute top-0 left-0">
                   <PlayerProfile />
                 </div>
+                <div className="lg:hidden w-[70px]" />
                 <CardsBoard />
+                <div className="lg:right-0 lg:top-1/2 lg:-translate-y-1/2 h-[90%] lg:absolute relative">
+                  <StatesHistory setFocusedCard={setFocusedCard} />
+                </div>
               </div>
               <PlayerGUI isPlayer clock={clock} gameState={gameState} />
             </div>

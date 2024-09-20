@@ -2,7 +2,7 @@ import { getImageUrl, ICONS } from "@repo/lib";
 
 export default function PlayerProfile() {
   return (
-    <div className="pt-3 flex gap-2 items-center">
+    <div className="max-lg:pl-3 pt-3 flex gap-2 items-center">
       <div className="w-12 h-12 bg-slate-600 rounded-sm overflow-hidden">
         <img
           src={getImageUrl(ICONS, "default_profile_picture.png")}
