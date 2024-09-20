@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import useGameInterface from "../stores/gameInterfaceStore";
 import { AfterPlaceCardEvent, CardDestroyedEvent } from "game_engine";
-import { cn, GameCard, useGameEventListener } from "@repo/ui";
+import { cn, GameCard, useGameEventListener, useOnMount, useOnUnMount } from "@repo/ui";
 import { Skull, Target } from "lucide-react";
 
 interface CardPlaceholderProps {
@@ -54,6 +54,37 @@ export default function CardPlaceholder({ position, isPlayer }: CardPlaceholderP
     }
   }
 
+	const isInside = useRef(false);
+
+	function onMove(e: PointerEvent) {
+		const cardSelected = useGameInterface.getState().cardSelected;
+		if (!isPlayer || cardSelected === null || !ref.current) {
+			return;
+		}
+		if (ref.current) {
+			const rect = ref.current.getBoundingClientRect();
+			const x = e.clientX;
+			const y = e.clientY;
+			const isInsideNow = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
+			if (isInsideNow) {
+				onEnter();
+			} else if(isInside.current) {
+				onLeave();
+			}
+			isInside.current = isInsideNow;
+		}
+	}
+
+	useOnMount(() => {
+		window.addEventListener("pointermove", onMove)
+	});
+
+	useOnUnMount(() => {
+		window.removeEventListener("pointermove", onMove)
+	});
+
+	const ref = useRef<HTMLDivElement>(null);
+
   return (
     <div
       className="p-1 border-2 rounded-md ring-2 ring-black w-[160px] h-[222.5px] box-content relative"
@@ -62,8 +93,7 @@ export default function CardPlaceholder({ position, isPlayer }: CardPlaceholderP
         borderColor: "#cbd5e1",
       }}
       id={getBoardTileId(!!isPlayer, position)}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
+			ref={ref}
     >
       <div id={`card_${isPlayer}_${position}`}>
         <GameCard isPlayerCard={isPlayer} position={position} />
