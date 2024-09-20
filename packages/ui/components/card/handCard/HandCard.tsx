@@ -1,17 +1,17 @@
 import {
+  CARD_BORDER_HEIGHT,
+  CARD_BORDER_WIDTH,
   CardBorder,
   CardContentIllustartion,
   ManaBall,
   useGameAnimation,
-  useGameEventListener
+  useGameEventListener,
 } from "@repo/ui";
 import { useState } from "react";
-import {
-  animationTimeline,
-  CardType,
-} from "@repo/lib";
+import { animationTimeline, CardType, inPx } from "@repo/lib";
 import { DrawCardEvent } from "game_engine";
 import HandCardEffects from "./HandCardEffetcs";
+import { HAND_CARD_RATIO } from "../../../../../apps/GameClient/src/game/gui/card/InHandCard";
 
 const dummyCard: CardType = {
   name: "string",
@@ -29,11 +29,7 @@ const dummyCard: CardType = {
   isPvp: false,
 };
 
-function HandCard({
-  position,
-}: {
-  position: number;
-}) {
+function HandCard({ position, size }: { position: number; size: number }) {
   const [card, setCard] = useState<CardType>(dummyCard);
 
   useGameEventListener({
@@ -49,13 +45,24 @@ function HandCard({
   });
 
   return (
-    <div className="relative">
-      <CardBorder rarity={card.rarity} size={1.8}>
-        <InHandCardIllustration card={card} position={position} />
-        <div className="absolute right-[3px] top-[4px] flex flex-col gap-2">
-          <HandCardEffects isPlayerCard={true} position={position} />
-        </div>
-      </CardBorder>
+    <div
+      className="relative"
+      style={{
+        width: inPx(size * CARD_BORDER_WIDTH * HAND_CARD_RATIO),
+        height: inPx(size * CARD_BORDER_HEIGHT * HAND_CARD_RATIO),
+      }}
+    >
+      <div
+        className="relative"
+        style={{ transform: `scale(${size})`, transformOrigin: "top left" }}
+      >
+        <CardBorder rarity={card.rarity} size={1.8}>
+          <InHandCardIllustration card={card} position={position} />
+          <div className="absolute right-[3px] top-[4px] flex flex-col gap-2">
+            <HandCardEffects isPlayerCard={true} position={position} />
+          </div>
+        </CardBorder>
+      </div>
       <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 scale-75">
         <ManaBall mana={card.cost} />
       </div>

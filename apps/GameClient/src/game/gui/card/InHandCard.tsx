@@ -1,11 +1,13 @@
 import useGameInterface from "@/game/stores/gameInterfaceStore";
 import useGameStore from "@/game/stores/gameStateStore";
-import { HandCard, useGameEventListener, useSyncGameAnimation } from "@repo/ui";
+import { CARD_BORDER_HEIGHT, CARD_BORDER_WIDTH, HandCard, useGameEventListener, useSyncGameAnimation } from "@repo/ui";
 import { useRef } from "react";
-import { animationTimeline, getCenterOfBoundingElement } from "@repo/lib";
+import { animationTimeline, getCenterOfBoundingElement, inPx } from "@repo/lib";
 import { ClockReturn, DrawCardEvent, EventType, GameStateObject } from "game_engine";
 
-export default function InHandCard({ position, clock, gameState }: { position: number, clock: ClockReturn<EventType>, gameState: GameStateObject }) {
+export const HAND_CARD_RATIO = 1.8;
+
+export default function InHandCard({ position, clock, gameState, size = HAND_CARD_RATIO }: { position: number, clock: ClockReturn<EventType>, gameState: GameStateObject, size?: number }) {
   const setSelectedCard = useGameInterface((state) => state.setSelectedCard);
   const removeCardTarget = useGameInterface((state) => state.removeCardTarget);
   const unselectCard = useGameInterface((state) => state.unselectCard);
@@ -136,10 +138,11 @@ export default function InHandCard({ position, clock, gameState }: { position: n
         <div ref={dragRef}>
           <div
             className="w-fit h-fit bg-black rounded-sm select-none relative"
+            style={{ width: inPx(size * CARD_BORDER_WIDTH * HAND_CARD_RATIO), height: inPx(size * CARD_BORDER_HEIGHT * HAND_CARD_RATIO) }}
             onMouseDown={tryToMoveCard}
             ref={cardRef}
           >
-            <HandCard position={position} />
+            <HandCard position={position} size={size} />
           </div>
         </div>
       </div>

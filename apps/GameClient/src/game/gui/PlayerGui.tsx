@@ -2,17 +2,12 @@ import HpBar from "./HpBar";
 import useGameStore from "@/game/stores/gameStateStore";
 import StaticCard from "./card/StaticCard";
 import { useShallow } from "zustand/react/shallow";
-import _ from "lodash";
 import { useState } from "react";
 import { dummyCard } from "./card/const";
-import {
-  GameTimer,
-  ManaBar,
-  useGameEventListener,
-} from "@repo/ui";
+import { GameTimer, ManaBar, useGameEventListener } from "@repo/ui";
 import { CardType, textureByRarity } from "@repo/lib";
 import { ClockReturn, EventType, GameStateObject } from "game_engine";
-import InHandCard from "./card/InHandCard";
+import HandCardResizer from "./HandCardResizer";
 
 interface PlayerGUIProps {
   isPlayer: boolean;
@@ -38,33 +33,8 @@ function PlayerGUI({ isPlayer, clock, gameState }: PlayerGUIProps) {
             id={getPlayerGuiId(isPlayer)}
           >
             {isPlayer && (
-              <div className="flex gap-4 mb-3 h-[120px] -translate-y-1/3 z-10">
-                <div
-                  id="staticCardWrapper"
-                  className="relative w-[113px] h-[160px] translate-y-[12%]"
-                  >
-                  {_.times(4).map((index) => (
-                    <div
-                    className="staticCard absolute"
-                    style={{
-                      top: `${(-3 + index) * 5}px`,
-                      left: `${(-3 + index) * 5}px`,
-                      zIndex: deck.length - index,
-                    }}
-                    key={`${index}`}
-                    >
-                      <GuiDeckCard position={index} />
-                    </div>
-                  ))}
-                </div>
-                {_.times(4).map((index) => (
-                  <InHandCard
-                  position={index}
-                  clock={clock}
-                  key={index}
-                  gameState={gameState}
-                  />
-                ))}
+              <div className="mb-3 -translate-y-1/3 z-10 w-full">
+                <HandCardResizer clock={clock} gameState={gameState} deck={deck} />
               </div>
             )}
             {isPlayer && <ManaBar />}
@@ -79,7 +49,7 @@ function PlayerGUI({ isPlayer, clock, gameState }: PlayerGUIProps) {
                     width="100%"
                     height="100%"
                     className="absolute top-0 left-0 rounded-t-sm brightness-75 rounded-b-sm"
-                    >
+                  >
                     <mask id="guiOpponent">
                       <rect
                         fill="#ffffff"
@@ -87,14 +57,14 @@ function PlayerGUI({ isPlayer, clock, gameState }: PlayerGUIProps) {
                         y={0}
                         width="100%"
                         height="100%"
-                        />
+                      />
                       <rect
                         fill="black"
                         x={8}
                         y={0}
                         width="calc(100% - 16px)"
                         height="calc(100% - 8px)"
-                        />
+                      />
                     </mask>
                     <rect
                       fill="black"
@@ -103,7 +73,7 @@ function PlayerGUI({ isPlayer, clock, gameState }: PlayerGUIProps) {
                       width="100%"
                       height="100%"
                       mask="url(#guiOpponent)"
-                      />
+                    />
                     <image
                       className="blur-[6px]"
                       href={textureByRarity("legendary")}
@@ -113,7 +83,7 @@ function PlayerGUI({ isPlayer, clock, gameState }: PlayerGUIProps) {
                       height="100%"
                       preserveAspectRatio="xMidYMid slice"
                       mask="url(#guiOpponent)"
-                      />
+                    />
                   </svg>
                 </>
                 <div className="absolute bottom-[4px] translate-y-1/2">
@@ -177,7 +147,7 @@ function getPlayerGuiId(isPlayer: boolean) {
 
 export default PlayerGUI;
 
-function GuiDeckCard({ position }: { position: number }) {
+export function GuiDeckCard({ position, size }: { position: number, size: number }) {
   const [card, setCard] = useState<CardType>(
     useGameStore.getState().state.playerDeck[position] || dummyCard
   );
@@ -198,5 +168,5 @@ function GuiDeckCard({ position }: { position: number }) {
     setCard(currentCard);
   }
 
-  return <StaticCard card={card} />;
+  return <StaticCard card={card} size={1.35 * size} />;
 }
