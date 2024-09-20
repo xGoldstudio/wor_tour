@@ -55,7 +55,7 @@ export default function Game() {
                 </div>
                 <div className="lg:hidden w-[70px]" />
                 <CardsBoard />
-                <div className="lg:right-0 lg:top-1/2 lg:-translate-y-1/2 h-[90%] lg:absolute relative">
+                <div className="lg:right-0 lg:top-1/2 lg:-translate-y-1/2 h-[90%] lg:absolute translate-x-full">
                   <StatesHistory setFocusedCard={setFocusedCard} />
                 </div>
               </div>
