@@ -375,6 +375,9 @@ importers:
 
   packages/ui:
     dependencies:
+      '@gsap/react':
+        specifier: ^2.1.1
+        version: 2.1.1
       '@repo/lib':
         specifier: workspace:*
         version: link:../lib
@@ -384,6 +387,9 @@ importers:
       game_engine:
         specifier: workspace:*
         version: link:../gameEngine
+      gsap:
+        specifier: ^3.12.5
+        version: 3.12.5
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
