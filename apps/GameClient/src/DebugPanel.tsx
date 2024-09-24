@@ -15,7 +15,7 @@ import DebugButton from "./debug/DebugButton";
 import DebugSection from "./debug/DebugSection";
 import { CornerUpLeft } from "lucide-react";
 import usePersistentState from "./debug/usePersistentState";
-import { cn } from "@repo/ui";
+import { cn, useOnMount, useOnUnMount } from "@repo/ui";
 
 export default function DebugPanel() {
   const { addGold, setTrophies } = usePlayerStore((state) => ({
@@ -61,6 +61,26 @@ export default function DebugPanel() {
   };
 
   const [isOpen, setIsOpen] = usePersistentState("debug-panel-open", false);
+
+  const [isShow, setIsShow] = usePersistentState<boolean>("debug-panel-show", true);
+
+  function toggleDebugPanel(e: KeyboardEvent) {
+    if (e.key === " ") {
+      setIsShow (prev => !prev);
+    }
+  }
+
+  useOnMount(() => {
+    window.addEventListener("keydown", toggleDebugPanel);
+  });
+
+  useOnUnMount(() => {
+    window.removeEventListener("keydown", toggleDebugPanel);
+  });
+
+  if (!isShow) {
+    return <></>;
+  }
 
   return (
     <div className={cn("fixed right-0 top-0 text-white h-screen overflow-y-auto bg-slate-900 z-[9999] w-[470px]", !isOpen && "w-min")}>

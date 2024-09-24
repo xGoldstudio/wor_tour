@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import CardPlaceholder from "./CardPlaceholder";
-import { useOnMount, useOnUnMount } from "@repo/ui";
+import { useOnWrapperResize } from "@repo/ui";
 import { inPx } from "@repo/lib";
 
 const GAP = 16;
@@ -44,27 +44,4 @@ export default function CardsBoard() {
 			</div>
 		</div>
   );
-}
-
-function useOnWrapperResize(
-	onResize: (inputRef: HTMLDivElement) => void, 
-	containerRef: React.RefObject<HTMLDivElement>,
-) {
-	function resize() {
-		if (containerRef.current) {
-			onResize(containerRef.current);
-		}
-	}
-
-	useOnMount(() => {
-		window.addEventListener("resize", resize);
-	});
-
-	useOnUnMount(() => {
-		window.removeEventListener("resize", resize);
-	});
-
-	useEffect(() => {
-		resize();
-	}, [containerRef.current]);
 }

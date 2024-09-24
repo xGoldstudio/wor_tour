@@ -28,12 +28,14 @@ export default function WorldIllustration({
   }
 
   return (
-    <div className="relative w-1/2" onClick={setWorldsModalOpen}>
-      <img
-        id="worldIllustration"
-        className="w-full aspect-square relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)]"
-        src={getImageUrl(EDITOR_SRC, worlds[currentWorld - 1].illustration)}
-      />
+    <div className="relative w-full h-1/2 max-h-[450px] max-w-[450px]" onClick={setWorldsModalOpen}>
+      <div className="w-full h-full aspect-square">
+        <img
+          id="worldIllustration"
+          className="w-full h-full relative drop-shadow-[-25px_15px_1px_rgba(0,0,0,0.5)]"
+          src={getImageUrl(EDITOR_SRC, worlds[currentWorld - 1].illustration)}
+        />
+      </div>
       <CurrentWorldProgress />
       {lastUsingWorld !== currentWorld && (
         <div className="absolute top-0 left-0 w-full h-full bg-black opacity-50 z-10" />

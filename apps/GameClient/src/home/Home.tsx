@@ -1,6 +1,6 @@
 import DebugPanel from "@/DebugPanel";
 import HomeTab from "./pages/home/HomeTab";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { DeckInterface as DeckTab } from "./pages/deck/DeckInterface";
 import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
@@ -12,13 +12,21 @@ import {
   Cover,
   InnerBord,
   NumberSpan,
+  useOnWrapperResize,
 } from "@repo/ui";
 import { cn } from "@repo/ui";
-import { COMMON, FOOTER_SRC, getImageUrl, getImageUrlCssValue, ICONS, numberWithCommas, textureByRarity } from "@repo/lib";
+import {
+  COMMON, getImageUrl,
+  getImageUrlCssValue,
+  ICONS,
+  numberWithCommas,
+  textureByRarity
+} from "@repo/lib";
 import KeysOutput from "./ui/KeysOutput";
 import Timer from "@/services/LoopService/Timer";
 import ExperienceOutput from "./ui/ExperienceOutput";
 import { useEditionMode } from "./pages/deck/context/UseEditionMode";
+import Footer from "./ui/Footer";
 
 export type Tabs = "home" | "deck" | "shop";
 
@@ -40,7 +48,7 @@ export default function Home() {
     <div className="w-screen h-screen justify-center bg-black relative flex">
       <DebugPanel />
       <div
-        className="w-[700px] h-full relative overflow-hidden bg-slate-900"
+        className="w-full h-full relative overflow-hidden bg-slate-900"
         id="home"
       >
         <RewardBlockWithContext />
@@ -58,7 +66,10 @@ export default function Home() {
             }}
           >
             {tabs.map((Tab) => (
-              <div className="w-full h-full relative" key={Tab.name}>
+              <div
+                className="w-full h-full relative flex justify-center"
+                key={Tab.name}
+              >
                 <Tab setCurrentTab={setCurrentTab} />
               </div>
             ))}
@@ -74,92 +85,14 @@ export default function Home() {
             </div>
           )}
 
-          <div
-            className={cn(
-              "flex w-full bg-black relative z-10",
-              editionMode && "hidden"
-            )}
-          >
-            <div className="w-full h-full absolute flex overflow-hidden">
-              <div className="grow h-full bg-slate-600 relative">
-                <Cover cardRarity="rare" />
-              </div>
-              <div className="grow h-full bg-slate-600 relative">
-                <Cover cardRarity="rare" />
-              </div>
-              <div className="grow h-full bg-slate-600 relative">
-                <Cover cardRarity="rare" />
-              </div>
-            </div>
-            <div
-              className="w-1/3 h-full absolute transition-transform overflow-hidden"
-              style={{
-                transform: `translateX(${100 * tabsPosition[currentTab]}%)`,
-              }}
-            >
-              <Cover cardRarity="epic" />
-            </div>
-            <FooterButton
-              onClick={() => setCurrentTab("shop")}
-              label="Shop"
-              selected={currentTab === "shop"}
-              imageUrl="backpack.png"
-            />
-            <FooterButton
-              onClick={() => setCurrentTab("home")}
-              label="Battle"
-              selected={currentTab === "home"}
-              imageUrl="fightback.png"
-            />
-            <FooterButton
-              onClick={() => setCurrentTab("deck")}
-              label="Collection"
-              selected={currentTab === "deck"}
-              imageUrl="collection.png"
-            />
-          </div>
+          <Footer
+            setCurrentTab={setCurrentTab}
+            currentTab={currentTab}
+            tabsPosition={tabsPosition}
+            editionMode={editionMode}
+          />
         </div>
       </div>
-    </div>
-  );
-}
-
-interface FooterButtonProps {
-  onClick: () => void;
-  label: string;
-  selected?: boolean;
-  imageUrl?: string;
-}
-
-function FooterButton({
-  onClick,
-  label,
-  selected,
-  imageUrl,
-}: FooterButtonProps) {
-  return (
-    <div
-      className="relative grow font-semibold text-xl flex justify-center items-center flex-col h-[70px] cursor-pointer select-none"
-      onClick={onClick}
-    >
-      <img
-        src={getImageUrl(FOOTER_SRC, imageUrl ?? "")}
-        alt="chest"
-        className={cn(
-          "w-[64px] aspect-square relative transition-transform",
-          selected && "scale-110 -translate-y-6"
-        )}
-      />
-      {selected && (
-        <p
-          className={cn(
-            "absolute bottom-[3px] opacity-0 transition-opacity",
-            selected && "opacity-100"
-          )}
-        >
-          {label}
-        </p>
-      )}
     </div>
   );
 }
@@ -171,7 +104,7 @@ export function HomeBg() {
       <div
         className="w-full h-full absolute blur-sm"
         style={{
-          backgroundImage: getImageUrlCssValue(COMMON, "homeBg.jpeg"),
+          backgroundImage: getImageUrlCssValue(COMMON, "homeBg.png"),
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}
@@ -186,7 +119,6 @@ interface RessourceCounterProps {
   amount: number;
   max?: number;
   icon: React.ReactNode;
-  width?: number;
   name: string;
   timer?: string;
 }
@@ -195,12 +127,19 @@ export function RessourceCounter({
   amount,
   max,
   icon,
-  width = 191,
   name,
   timer,
 }: RessourceCounterProps) {
+  const container = useRef<HTMLDivElement>(null);
+
+  const [width, setWidth] = useState(0);
+
+  useOnWrapperResize(() => {
+    setWidth(container.current?.clientWidth || 0);
+  }, container);
+
   return (
-    <div className="relative" x-id={`${name}CountInput`} id={`${name}Count`}>
+    <div className="relative w-full" x-id={`${name}CountInput`} id={`${name}Count`} ref={container}>
       {icon}
       <Borders width={width} height={45} borderUnit={1} rarity={"epic"}>
         <CardIllustartion width={width} height={45} borderUnit={0.6}>
@@ -251,7 +190,7 @@ export function Header() {
   }));
 
   return (
-    <div className="flex gap-4 px-8 py-4 w-full justify-center">
+    <div className="grid grid-cols-3 gap-4 px-4 py-4 w-full justify-between max-w-[700px]">
       <ExperienceOutput />
       <KeysOutput />
       <RessourceCounter
