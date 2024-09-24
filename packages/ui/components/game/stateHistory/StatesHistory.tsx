@@ -81,9 +81,9 @@ export default function StatesHistory({ setFocusedCard }: { setFocusedCard: (id:
               }
             }}
           >
-            {listOfStates.map((state) => (
+            {listOfStates.map((state, index) => (
               <StatesHistoryState
-                key={state[1].type + " " + state[1].value + " " + state[0]}
+                key={state[1].type + " " + state[1].value + " " + state[0] + " " + index}
                 state={state[1]}
                 instanceId={state[0]}
                 setFocusedCard={setFocusedCard}

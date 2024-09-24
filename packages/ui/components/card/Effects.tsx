@@ -4,11 +4,13 @@ import {
   getImageEffects,
   getImageUrl,
   inPx,
-  STATES_SRC
+  STATES_SRC,
 } from "@repo/lib";
 import Cover from "../Cover";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 export default function States({
   states,
@@ -62,7 +64,11 @@ export function EffectLayout({
       ref={ref}
       key={effect.src}
       className="relative flex justify-center items-center rounded-md bg-slate-800 drop-shadow-[1px_1px_1px_black] group"
-      style={{ width: inPx(wrapperSize), height: inPx(wrapperSize), minHeight: inPx(wrapperSize) }}
+      style={{
+        width: inPx(wrapperSize),
+        height: inPx(wrapperSize),
+        minHeight: inPx(wrapperSize),
+      }}
       onMouseEnter={() => {
         setShow(true);
         onShowDesc?.();
@@ -111,24 +117,80 @@ function EffectDesc({
   show: boolean;
 }) {
   const home = document.body;
+  const width = 180;
+  const margin = 5;
+  const animationDuration = 0.3;
 
-  if (!home) {
+  const [container, setContainer] = useState<HTMLDivElement | undefined>(
+    undefined
+  );
+
+  const [active, setActive] = useState<"LEFT" | "RIGHT" | false>(false);
+
+  const { contextSafe } = useGSAP({ scope: container });
+
+  function getXAnimation() {
+    return active === "LEFT" ? -10 : 10;
+  }
+
+  const appear = contextSafe(() => {
+    if (!container) return;
+    gsap.fromTo(
+      container,
+      { opacity: 0, x: getXAnimation() },
+      { opacity: 1, x: 0, duration: animationDuration }
+    );
+  });
+
+  const remove = contextSafe(() => {
+    if (!container) return;
+    gsap.to(container, {
+      opacity: 0,
+      x: getXAnimation(),
+      duration: animationDuration,
+      onComplete: () => setActive(false),
+    });
+  });
+
+  useEffect(() => {
+    if (show) {
+      if (!active) {
+        if ((getLeft() + width) < window.innerWidth) {
+          setActive("RIGHT");
+        } else {
+          setActive("LEFT");
+        }
+      } else {
+        appear();
+      }
+    } else {
+      remove();
+    }
+  }, [show, container]);
+
+  if (!home || !active) {
     return null;
+  }
+
+  function getLeft() {
+    if (active === "LEFT") {
+      return effectRef.getBoundingClientRect().left - width - margin;
+    }
+    return (
+      effectRef.getBoundingClientRect().left +
+      effectRef.getBoundingClientRect().width +
+      margin
+    );
   }
 
   return createPortal(
     <div
-      className="fixed rounded-sm px-2 py-1 bg-slate-900 w-[180px] z-[999999] pointer-events-none drop-shadow-[1px_1px_1px_black] opacity-0 transition duration-300 group-hover:opacity-100"
+      className={`fixed w-[${width}px] z-[999999] pointer-events-none bg-slate-900 drop-shadow-[1px_1px_1px_black] px-2 py-1 rounded-sm`}
       style={{
-        opacity: show ? 1 : 0,
-        transform: show ? "translateX(0)" : "translateX(10%)",
         top: inPx(effectRef.getBoundingClientRect().top),
-        left: inPx(
-          effectRef.getBoundingClientRect().left +
-            effectRef.getBoundingClientRect().width +
-            5
-        ),
+        left: inPx(getLeft()),
       }}
+      ref={(container) => setContainer(container ?? undefined)}
     >
       <Cover cardRarity="epic" className="rounded-sm" />
       <h3 className="relative text-md font-semibold">{effect.title}</h3>

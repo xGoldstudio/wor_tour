@@ -1,3 +1,6 @@
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+
 // components
 export { default as Button } from './components/Button.tsx';
 export { default as Box } from './components/Box.tsx';
@@ -10,6 +13,7 @@ export { default as useProgressPieChart } from './components/useProgressPieChart
 export * from './components/card/CardBorder.tsx';
 export { default as HandCard } from './components/card/handCard/HandCard.tsx';
 export { default as Effects } from './components/card/Effects.tsx';
+export * from './components/card/Effects.tsx';
 export { default as ManaBall } from './components/ManaBall.tsx';
 export { default as FullCard } from './components/card/FullCard.tsx';
 export { default as BoosterRarityDrop } from './components/booster/BoosterRarityDrop.tsx';
@@ -34,3 +38,5 @@ export { default as GameCard } from './components/card/gameCard/GameCard.tsx';
 export * from './components/card/gameEventListener.ts';
 export * from './components/card/useGameSyncAnimation.tsx';
 export {default as useGameEventListener} from './components/card/useGameEventListener.ts';
+
+gsap.registerPlugin(useGSAP);
