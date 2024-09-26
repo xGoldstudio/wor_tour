@@ -1,4 +1,4 @@
-import { CardState } from "@repo/lib";
+import { CardState } from "../gameEngine/states/CardStatesData";
 
 export interface EditorData {
   cards: CardStat[];

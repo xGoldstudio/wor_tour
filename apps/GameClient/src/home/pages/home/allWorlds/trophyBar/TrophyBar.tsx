@@ -9,7 +9,8 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { ContextSafeFunc, useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { AllWorldsAnimationContext, AllWorldsAnimationContextType } from "./TrophyBarContext";
-import { getCenterOfBoundingElement, getImageUrl, ICONS, inPx, textureByRarity } from "@repo/lib";
+import { getCenterOfBoundingElement, getImageUrl, ICONS, inPx } from "@repo/lib";
+import { textureByRarity } from "@repo/ui";
 
 export default function TrophyBar({
   numberOfTrophies,

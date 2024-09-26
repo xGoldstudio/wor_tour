@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import { CardStatsInfo, CardStatsInfoLevel, EditorData, getStats } from "@repo/lib";
+import { CardStatsInfo, CardStatsInfoLevel, EditorData } from "@repo/lib";
 import { persist } from "zustand/middleware";
+import { getStats } from "game_engine";
 
 interface DataStore {
   cards: CardStatsInfo[]; // mapper en cardtype!

@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { Cover } from "@repo/ui";
+import { Cover, textureByRarity } from "@repo/ui";
 import {
   getImageUrl,
   ICONS,
   numberWithCommas,
-  textureByRarity,
 } from "@repo/lib";
 import { InnerBord } from "../../../../../../packages/ui/components/card/CardBorder";
 import AllWorlds from "./allWorlds/AllWorlds";

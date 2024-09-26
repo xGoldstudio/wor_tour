@@ -1,5 +1,6 @@
-import { CardRarity, textureByRarity } from "@repo/lib";
+import { CardRarity } from "@repo/lib";
 import { cn } from "../lib/utils";
+import textureByRarity from "../lib/textureByRarity";
 
 interface ButtonProps {
   children: React.ReactNode;

@@ -4,8 +4,8 @@ import StaticCard from "./card/StaticCard";
 import { useShallow } from "zustand/react/shallow";
 import { useState } from "react";
 import { dummyCard } from "./card/const";
-import { GameTimer, ManaBar, useGameEventListener } from "@repo/ui";
-import { CardType, textureByRarity } from "@repo/lib";
+import { GameTimer, ManaBar, textureByRarity, useGameEventListener } from "@repo/ui";
+import { CardType } from "@repo/lib";
 import { ClockReturn, EventType, GameStateObject } from "game_engine";
 import HandCardResizer from "./HandCardResizer";
 

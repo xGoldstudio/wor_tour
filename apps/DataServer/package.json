@@ -12,6 +12,7 @@
     "@fastify/multipart": "^8.2.0",
     "@fastify/static": "^7.0.4",
     "@repo/lib": "workspace:*",
+    "game_engine": "workspace:*",
     "@rollup/plugin-typescript": "^11.1.6",
     "fastify": "^4.27.0",
     "uuid": "^9.0.1"

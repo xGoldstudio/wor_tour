@@ -1,7 +1,8 @@
-import { CardRarity, textureByRarity } from "@repo/lib";
+import { CardRarity } from "@repo/lib";
 import { Borders, CardIllustartion, InnerBord } from "./card/CardBorder";
 import useOnWrapperResize from "../lib/useOnWrapperResize";
 import { useRef, useState } from "react";
+import textureByRarity from "../lib/textureByRarity";
 
 interface BoxProps {
   children: React.ReactNode;

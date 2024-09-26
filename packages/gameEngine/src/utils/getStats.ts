@@ -1,6 +1,6 @@
-import { CardState, getOptionsFromType } from "../../../gameEngine";
-import { baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, CardStatsInfoLevel, cardWorldMultiplier, getRealStrength, getStatsStrength, getTargetStrength, pvpStrengthByLevel, speedMaxLevel1, testIsStrengthValid } from "../../../gameEngine/src/types/Card";
-import { CardStat, CardStateInfo } from "../../../gameEngine/src/types/DataStoreType";
+import { CardState, getOptionsFromType } from "../..";
+import { baseDps, baseHp, cardCostMultiplier, cardLevelMultiplier, cardRarityMultiplier, CardStatsInfoLevel, cardWorldMultiplier, getRealStrength, getStatsStrength, getTargetStrength, pvpStrengthByLevel, speedMaxLevel1, testIsStrengthValid } from "../types/Card";
+import { CardStat, CardStateInfo } from "../types/DataStoreType";
 
 function cardStrengthMultiplier(card: CardStat, cost: number, isPvp?: boolean) {
   if (isPvp) {

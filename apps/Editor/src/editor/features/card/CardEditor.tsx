@@ -8,7 +8,6 @@ import {
   arrayfindElementOrFirst,
   CardType,
   getRealStrength,
-  getStats,
   getTargetStrength,
   getValueInRange,
   testIsStrengthValid,
@@ -28,6 +27,7 @@ import {
 } from "@repo/lib";
 import { DeleteIcon, PlusCircle } from "lucide-react";
 import { useState } from "react";
+import { getStats } from "game_engine";
 
 export default function CardEditor() {
   const { cardId: cardIdParam } = useParams();

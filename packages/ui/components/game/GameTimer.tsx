@@ -1,11 +1,8 @@
 import { useRef } from "react";
 import useGameEventListener from "../card/useGameEventListener";
 import { MAX_GAME_DURATION } from "game_engine";
-import {
-	Borders, CardIllustartion,
-	InnerBord
-} from "../card/CardBorder";
-import { textureByRarity } from "@repo/lib";
+import { Borders, CardIllustartion, InnerBord } from "../card/CardBorder";
+import textureByRarity from "../../lib/textureByRarity";
 
 export default function GameTimer() {
   const timerRef = useRef<HTMLParagraphElement>(null);
@@ -16,9 +13,9 @@ export default function GameTimer() {
       if (timerRef.current) {
         const timer = gameState.getTimer();
         timerRef.current.textContent = timer.toString();
-				if (timer === 0) {
-					timerRef.current.style.color = "red";
-				}
+        if (timer === 0) {
+          timerRef.current.style.color = "red";
+        }
       }
     },
   });
@@ -34,7 +31,9 @@ export default function GameTimer() {
               className="absolute top-0 left-0 w-full h-full blur-sm"
               style={{ backgroundImage: `url(${textureByRarity("rare")})` }}
             />
-            <p ref={timerRef} className="relative">{MAX_GAME_DURATION}</p>
+            <p ref={timerRef} className="relative">
+              {MAX_GAME_DURATION}
+            </p>
           </div>
         </InnerBord>
       </CardIllustartion>

@@ -3,9 +3,9 @@ import {
   EDITOR_SRC,
   getImageUrlCssValue,
   inPx,
-  textureByRarity,
 } from "@repo/lib";
 import { cn } from "../../lib/utils";
+import textureByRarity from "../../lib/textureByRarity";
 
 interface CardBoardProps {
   rarity: CardRarity;

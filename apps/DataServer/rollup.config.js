@@ -4,8 +4,8 @@ import ignoreBlocksPlugin from './rollup/rollup-plugin-ignore.js';
 export default {
   input: 'src/index.ts',
   output: {
-    file: 'dist/bundle.cjs',
-    format: 'cjs',
+    file: 'dist/bundle.js',
+    format: 'es',
   },
   plugins: [
     typescript(),
