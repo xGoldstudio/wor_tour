@@ -101,7 +101,6 @@ export function BackgroundModal({
 }: BackgroundModalProps) {
   return (
     <>
-      <div className="w-full h-full absolute bg-slate-900 opacity-80" />
       <div className="w-full h-full absolute flex justify-center items-center gap-8 flex-col">
         <img
           src={getImageUrl(ICONS, "/cross.svg")}

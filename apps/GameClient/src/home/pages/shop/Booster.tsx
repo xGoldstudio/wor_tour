@@ -24,10 +24,10 @@ export function Booster({ booster }: BoosterProps) {
 
   return (
     <div
-      className="flex flex-col items-center gap-2 p-1 cursor-pointer"
+      className="flex flex-col items-center gap-4 cursor-pointer"
       onClick={() => setIsModalOpen(true)}
     >
-      <BoosterIllustration size={1} title={booster.name} />
+      <BoosterIllustration size={0.95} title={booster.name} />
       <Button action={() => setIsModalOpen(true)} full small>
         <GoldAmount amount={booster.cost} />
       </Button>

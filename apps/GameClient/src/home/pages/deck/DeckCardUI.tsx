@@ -125,6 +125,7 @@ export function DeckCardUI({
               <div className="shadow-2xl group rounded-lg w-full h-full">
                 <Button
                   full
+                  hFull
                   rarity={"rare"}
                   className="p-0"
                   action={() => setIsDescriptionOpen(true)}
@@ -144,6 +145,7 @@ export function DeckCardUI({
                 {!locked && (card as CardCollection).isInDeck ? (
                   <Button
                     full
+                    hFull
                     rarity={"rare"}
                     className="p-0"
                     action={() => {
@@ -163,6 +165,7 @@ export function DeckCardUI({
                 ) : (
                   <Button
                     full
+                    hFull
                     rarity={"rare"}
                     className="p-0"
                     action={preventDefault(() => {

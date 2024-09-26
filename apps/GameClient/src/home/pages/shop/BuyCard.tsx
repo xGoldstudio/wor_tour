@@ -28,7 +28,7 @@ export default function BuyCard({ card }: BuyCardProps) {
   }
 
   return (
-    <div className={cn("flex flex-col gap-2", unavalaible && "brightness-50")}>
+    <div className={cn("flex flex-col gap-4", unavalaible && "brightness-50")}>
       <ConfirmationModal
         isOpen={isConfirmationOpen}
         closeModal={() => setIsConfirmationOpen(false)}
@@ -45,7 +45,7 @@ export default function BuyCard({ card }: BuyCardProps) {
         />
         <Box cover="rare" rarity="legendary" height={150}>
           <p className="text-left p-4">
-            Are you sure you want to buy{" "}
+            Buy{" "}
             <span className="font-stylised text-blue-500">
               {card.name} lv.{card.level}
             </span>{" "}
