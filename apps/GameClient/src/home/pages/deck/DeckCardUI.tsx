@@ -16,20 +16,20 @@ import { CardCollection } from "./cardFilters";
 
 interface CardUIProps {
   cardId: number;
-  isHand?: boolean;
   locked?: boolean;
   setCurrentTab?: (tab: Tabs) => void;
   setSelectedCard?: (id: number) => void;
   selectedCard?: number;
+  size?: number;
 }
 
 export function DeckCardUI({
   cardId,
-  isHand,
   locked = false,
   setCurrentTab,
   setSelectedCard,
   selectedCard,
+  size = 1,
 }: CardUIProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
   const { setEditionMode } = useEditionMode();
@@ -56,9 +56,13 @@ export function DeckCardUI({
       )}
       <div
         className={cn(
-          "relative w-[128px] h-[178px] transition-transform",
+          `relative transition-transform`,
           isSelected && "z-50 scale-105"
         )}
+        style={{
+          width: `${size * 128}px`,
+          height: `${size * 178}px`,
+        }}
       >
         <div className="absolute top-0 left-0">
           <Cover
@@ -87,17 +91,25 @@ export function DeckCardUI({
             <div
               className={`${opacity} hover:cursor-pointer`}
               onClick={() => {
-                isSelected ? setSelectedCard!(0) : setSelectedCard!(card.id),
+                if (setSelectedCard === undefined) {
+                  setIsDescriptionOpen(true);
+                  return;
+                }
+                if (isSelected) {
+                  setSelectedCard(0);
+                } else {
+                  setSelectedCard!(card.id);
                   !isDeckFull && setEditionMode(true);
+                }
               }}
             >
-              <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>
+              <CardBorder rarity={card.rarity} size={size * 2}>
                 <div
                   className={`w-full h-full flex flex-col relative ${opacity}`}
                 >
                   <CardContentIllustartion
                     card={card}
-                    size={isHand ? 1.6 : 2}
+                    size={size * 2}
                   />
                   <div className={`absolute top-0 right-0 ${opacity}`}>
                     <svg

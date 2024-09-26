@@ -65,13 +65,13 @@ export default function ProfileModal({ closeModal }: ProfileModalProps) {
 
               <Stat label="Victory" value="45" />
             </div>
-            <Ribbon className="mt-16 px-16">Deck</Ribbon>
-            <div className="grid grid-cols-4 w-auto gap-3">
+            <Ribbon className="my-16 px-16">Deck</Ribbon>
+            <div className="grid grid-cols-4 w-auto gap-4">
               {deckArray.map((cardId) => (
-                <DeckCardUI cardId={cardId!} />
+                <DeckCardUI cardId={cardId!} size={0.7} />
               ))}
             </div>
-            <Ribbon className="mt-16 px-16">Stats</Ribbon>
+            <Ribbon className="my-16 px-16">Stats</Ribbon>
             <div className="grid grid-cols-2 gap-4">
               <Stat label="Victory" value="45" />
               <Stat label="Winrate" value="62%" />

@@ -2,7 +2,6 @@ import { CardRarity, textureByRarity } from "@repo/lib";
 import { Borders, CardIllustartion, InnerBord } from "./card/CardBorder";
 import useOnWrapperResize from "../lib/useOnWrapperResize";
 import { useRef, useState } from "react";
-import { set } from "lodash";
 
 interface BoxProps {
   children: React.ReactNode;
@@ -37,8 +36,17 @@ export default function Box({
 
   return (
     <div className={className} ref={containerRef}>
-      <Borders width={widthState} height={heightState} borderUnit={size} rarity={rarity}>
-        <CardIllustartion width={widthState} height={heightState} borderUnit={size}>
+      <Borders
+        width={widthState}
+        height={heightState}
+        borderUnit={size}
+        rarity={rarity}
+      >
+        <CardIllustartion
+          width={widthState}
+          height={heightState}
+          borderUnit={size}
+        >
           <InnerBord size={size}>
             <div className="w-full h-full relative bg-slate-800 text-center">
               {cover && (
