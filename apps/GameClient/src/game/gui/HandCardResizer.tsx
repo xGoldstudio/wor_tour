@@ -16,7 +16,7 @@ import {
   useOnUnMount,
 } from "@repo/ui";
 import { GuiDeckCard } from "./PlayerGui";
-import { CardType } from "@repo/lib";
+import { CardType, inPx } from "@repo/lib";
 
 interface HandCardResizerProps {
   clock: ClockReturn<EventType>;
@@ -84,7 +84,7 @@ export default function HandCardResizer({
           </div>
         ))}
       </div>
-      <div className={`flex grow gap-[${GAP}px] justify-center`}>
+      <div className={`flex grow justify-center`} style={{ gap: inPx(GAP) }}>
         {_.times(CARD_IN_HAND).map((index) => (
           <div key={`${index}`}>
             <InHandCard
