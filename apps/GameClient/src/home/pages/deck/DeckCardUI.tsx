@@ -54,94 +54,98 @@ export function DeckCardUI({
           closeModal={() => setIsDescriptionOpen(false)}
         />
       )}
-      <div className={cn("relative")}>
-        {isSelected && (
-          <Cover
-            cardRarity={card.rarity}
-            className="rounded-lg blur-sm absolute "
-            isSelected={isSelected}
-          />
+      <div
+        className={cn(
+          "relative w-[128px] h-[178px] transition-transform",
+          isSelected && "z-50 scale-105"
         )}
-        <div className={cn("relative select-none h-min  ")}>
-          {locked && (
-            <div
-              className="absolute h-full w-full px-5 flex text-center text-sm justify-center items-center z-10"
-              onClick={() => setIsDescriptionOpen(true)}
-            >
-              {lockPattern === 0 ? (
-                <span className="text-slate-200">Not unlocked yet</span>
-              ) : (
-                <span className="text-slate-200">
-                  {" "}
-                  Unlockable at world {lockPattern}
-                </span>
-              )}
-            </div>
-          )}
-          <div
-            className={`${opacity} hover:cursor-pointer`}
-            onClick={() => {
-              isSelected ? setSelectedCard!(0) : setSelectedCard!(card.id),
-                !isDeckFull && setEditionMode(true);
-            }}
-          >
-            <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>
+      >
+        <div className="absolute top-0 left-0">
+          <Cover
+            cardRarity={"rare"}
+            className={cn(
+              "absolute w-[calc(100%_+17px)] h-[calc(100%_+17px)] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 blur-[2px] rounded-sm opacity-0 transition-opacity",
+              isSelected && "opacity-100"
+            )}
+          />
+          <div className={cn("relative select-none h-min  ")}>
+            {locked && (
               <div
-                className={`w-full h-full flex flex-col relative ${opacity}`}
+                className="absolute h-full w-full px-5 flex text-center text-sm justify-center items-center z-10"
+                onClick={() => setIsDescriptionOpen(true)}
               >
-                <CardContentIllustartion
-                  isSelected={isSelected}
-                  card={card}
-                  size={isHand ? 1.6 : 2}
-                />
-                <div className={`absolute top-0 right-0 ${opacity}`}>
-                  <svg
-                    className="h-full absolute left-0 -translate-x-full"
-                    viewBox="0 0 32 32"
-                  >
-                    <polygon points="0,0 32,32 32,0" fill="black" />
-                  </svg>
-                  <div className=" bg-black text-white text-sm font-[stylised] leading-3 px-2 pl-1 py-[2px]">
-                    {card.level}
+                {lockPattern === 0 ? (
+                  <span className="text-slate-200">Not unlocked yet</span>
+                ) : (
+                  <span className="text-slate-200">
+                    {" "}
+                    Unlockable at world {lockPattern}
+                  </span>
+                )}
+              </div>
+            )}
+            <div
+              className={`${opacity} hover:cursor-pointer`}
+              onClick={() => {
+                isSelected ? setSelectedCard!(0) : setSelectedCard!(card.id),
+                  !isDeckFull && setEditionMode(true);
+              }}
+            >
+              <CardBorder rarity={card.rarity} size={isHand ? 1.6 : 2}>
+                <div
+                  className={`w-full h-full flex flex-col relative ${opacity}`}
+                >
+                  <CardContentIllustartion
+                    card={card}
+                    size={isHand ? 1.6 : 2}
+                  />
+                  <div className={`absolute top-0 right-0 ${opacity}`}>
+                    <svg
+                      className="h-full absolute left-0 -translate-x-full"
+                      viewBox="0 0 32 32"
+                    >
+                      <polygon points="0,0 32,32 32,0" fill="black" />
+                    </svg>
+                    <div className=" bg-black text-white text-sm font-[stylised] leading-3 px-2 pl-1 py-[2px]">
+                      {card.level}
+                    </div>
                   </div>
                 </div>
+              </CardBorder>
+              <div className="absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3 scale-[65%]">
+                <ManaBall mana={card.cost} />
               </div>
-            </CardBorder>
-            <div className="absolute top-0 left-0 -translate-x-1/3 -translate-y-1/3 scale-[65%]">
-              <ManaBall mana={card.cost} />
             </div>
-          </div>
-          {isSelected && (
-            <div className="absolute z-20 w-full flex justify-center items-center   -bottom-[3.15rem] gap-x-3  ">
-              <div className=" shadow-2xl group  rounded-lg ">
-                <Cover
-                  cardRarity={card.rarity}
-                  className="rounded-lg blur-sm absolute "
-                  isSelected={isSelected}
-                  isButton={true}
-                />
+            <div
+              className={cn(
+                "z-20 w-full grid-cols-2 gap-2 py-2 h-12 opacity-0 hidden",
+                isSelected && "opacity-100 grid"
+              )}
+            >
+              <div className="shadow-2xl group rounded-lg w-full h-full">
                 <Button
-                  small={true}
-                  width="w-[3.6rem] "
-                  className="h-10"
+                  full
                   rarity={"rare"}
+                  className="p-0"
                   action={() => setIsDescriptionOpen(true)}
                 >
                   <img
-                    className="p-[0.25rem] group-hover:p-[0.15rem] transition-all duration-100 ease-in-out invert"
+                    className="transition-all duration-100 ease-in-out group-hover:scale-125"
                     src={getImageUrl(ICONS, "/information-circle-no-bg.png")}
-                    width={64}
-                    height={64}
+                    width={32}
+                    height={32}
                     alt=""
                   />
                 </Button>
               </div>
-              <div className="group shadow-2xl">
+              <div
+                className={"shadow-2xl group rounded-lg w-full h-full"}
+              >
                 {!locked && (card as CardCollection).isInDeck ? (
                   <Button
-                    small={true}
-                    width="w-[3.6rem]"
-                    className="h-10"
+                    full
+                    rarity={"rare"}
+                    className="p-0"
                     action={() => {
                       setEditionMode(true);
                       removeCardFromDeck(card.id);
@@ -149,36 +153,35 @@ export function DeckCardUI({
                     }}
                   >
                     <img
-                      className="p-[0.25rem] group-hover:p-[0.15rem] transition-all duration-100 ease-in-out"
+                      className="transition-all duration-100 ease-in-out group-hover:scale-125"
                       src={getImageUrl(ICONS, "/trash-no-bg.png")}
-                      width={64}
-                      height={64}
+                      width={32}
+                      height={32}
                       alt=""
                     />
                   </Button>
                 ) : (
                   <Button
-                    small={true}
-                    width="w-[3.4rem]"
-                    className="h-10"
-                    disabled={isDeckFull}
+                    full
+                    rarity={"rare"}
+                    className="p-0"
                     action={preventDefault(() => {
                       addCardToDeck(card.id);
                       setCurrentTab?.("Deck");
                     })}
                   >
                     <img
-                      className="p-[0.25rem] group-hover:p-[0.15rem] transition-all duration-100 ease-in-out"
+                      className="transition-all duration-100 ease-in-out group-hover:scale-125"
                       src={getImageUrl(ICONS, "plus.svg")}
-                      width={27}
-                      height={27}
+                      width={22}
+                      height={22}
                       alt=""
                     />
                   </Button>
                 )}
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>

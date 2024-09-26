@@ -1,7 +1,9 @@
 import {
-  CardRarity, EDITOR_SRC, getImageUrlCssValue,
+  CardRarity,
+  EDITOR_SRC,
+  getImageUrlCssValue,
   inPx,
-  textureByRarity
+  textureByRarity,
 } from "@repo/lib";
 import { cn } from "../../lib/utils";
 
@@ -131,12 +133,10 @@ export function CardContentIllustartion({
   card,
   size,
   isDisabled = false,
-  isSelected = false,
 }: {
   card: { worldIllustration: string; illustration: string | null };
   size: number;
   isDisabled?: boolean;
-  isSelected?: boolean;
 }) {
   const borderUnit = Math.min(0.5 * size, 2);
 
@@ -144,25 +144,14 @@ export function CardContentIllustartion({
     <>
       <InnerBord size={size}>
         <CardImage
-          className={cn(isDisabled && "grayscale", isSelected && "scale-150")}
+          className={cn(isDisabled && "grayscale")}
           worldIllustration={card.worldIllustration}
           borderUnit={borderUnit}
         />
-        {!isDisabled && (
-          <CardImage
-            className={cn(
-              "transition-all blur-[1px] opacity-0",
-              isSelected && "scale-150 opacity-100"
-            )}
-            worldIllustration={card.worldIllustration}
-            borderUnit={borderUnit}
-          />
-        )}
         <div
           className={cn(
             "w-full h-full grow absolute box-border transition-transform duration-200 ease-in-out",
-            isDisabled && "grayscale",
-            isSelected && "scale-125"
+            isDisabled && "grayscale"
           )}
           style={{
             backgroundImage: getImageUrlCssValue(EDITOR_SRC, card.illustration),
