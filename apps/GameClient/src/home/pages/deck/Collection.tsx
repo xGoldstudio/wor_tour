@@ -63,27 +63,27 @@ export default function Collection({
   cardNotFound = sorts[currentSort].sortFunction(cardNotFound, isAscending);
 
   const content = (
-    <div className="absolute top-0 left-0 w-full mx-auto grid grid-cols-4 gap-y-4 pt-10 pb-4">
-      {detailledCollection.map((card) => (
-        <div className="w-full flex justify-center" key={card.id}>
+    <div className="absolute top-0 left-0 w-full flex justify-center py-10 px-4">
+      <div className="max-w-full w-fit gap-6 grid grid-cols-[repeat(auto-fill,_128px)]">
+        {detailledCollection.map((card) => (
           <DeckCardUI
             cardId={card.id}
             setCurrentTab={setCurrentTab}
             setSelectedCard={setSelectedCard}
             selectedCard={selectedCard}
+            key={card.id}
           />
-        </div>
-      ))}
-      {cardNotFound.map((card) => (
-        <div className="w-full flex justify-center" key={card.id}>
+        ))}
+        {cardNotFound.map((card) => (
           <DeckCardUI
             cardId={card.id}
             locked={true}
             setSelectedCard={setSelectedCard}
             selectedCard={selectedCard}
+            key={card.id}
           />
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 

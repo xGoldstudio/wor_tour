@@ -190,7 +190,7 @@ export function Header() {
   }));
 
   return (
-    <div className="grid grid-cols-3 gap-4 px-4 py-4 w-full justify-between max-w-[700px]">
+    <div className="grid grid-cols-3 gap-4 max-[700px]:px-4 py-4 w-full justify-between max-w-[700px]">
       <ExperienceOutput />
       <KeysOutput />
       <RessourceCounter

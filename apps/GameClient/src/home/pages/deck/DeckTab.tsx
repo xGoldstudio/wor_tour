@@ -74,20 +74,22 @@ export default function DeckTab() {
     <ScrollContainer className="grow scrollbar-hiden flex flex-col w-full overflow-y-scroll relative">
       <div className="absolute top-0 left-0 w-full">
         <div className="grid grid-rows-[1fr_auto]">
-          <div className="grid grid-cols-4 gap-y-6 py-12">
-            {detailledDeck.map((card, index) =>
-              !card ? (
-                <EmptyDeckPlaceholder />
-              ) : (
-                <div className="w-full flex justify-center" key={index}>
-                  <DeckCardUI
-                    cardId={card.id}
-                    setSelectedCard={setSelectedCard}
-                    selectedCard={selectedCard}
-                  />
-                </div>
-              )
-            )}
+          <div className="flex justify-center">
+            <div className="py-12 max-w-full w-fit gap-6 grid grid-cols-[repeat(auto-fill,_128px)]">
+              {detailledDeck.map((card, index) =>
+                !card ? (
+                  <EmptyDeckPlaceholder />
+                ) : (
+                  <div className="w-full flex justify-center" key={index}>
+                    <DeckCardUI
+                      cardId={card.id}
+                      setSelectedCard={setSelectedCard}
+                      selectedCard={selectedCard}
+                    />
+                  </div>
+                )
+              )}
+            </div>
           </div>
         </div>
         <DeckStats deck={filterUndefined(detailledDeck)} />

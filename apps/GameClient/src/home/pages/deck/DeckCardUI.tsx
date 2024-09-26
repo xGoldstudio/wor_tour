@@ -54,7 +54,7 @@ export function DeckCardUI({
           closeModal={() => setIsDescriptionOpen(false)}
         />
       )}
-      <div className={cn(isSelected ? "px-2 relative " : "pb-2 relative ")}>
+      <div className={cn("relative")}>
         {isSelected && (
           <Cover
             cardRarity={card.rarity}

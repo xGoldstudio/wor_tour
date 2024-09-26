@@ -18,7 +18,7 @@ export default function Footer({
   return (
     <div
       className={cn(
-        "flex max-w-[700px] w-full bg-black relative z-10",
+        "flex max-w-[700px] w-full relative z-10",
         editionMode && "hidden"
       )}
     >

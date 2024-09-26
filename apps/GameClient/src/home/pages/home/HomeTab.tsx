@@ -44,7 +44,7 @@ export default function HomeTab({ setCurrentTab }: HomeTabProps) {
       )}
       {profileOpen && <ProfileModal closeModal={() => setProfileOpen(false)} />}
       <div
-        className="flex items-center gap-2 relative w-full px-4"
+        className="flex items-center gap-2 relative w-full max-[700px]:px-4"
         onClick={() => setProfileOpen(true)}
         id="trophyCount"
       >
