@@ -27,6 +27,8 @@ export { default as GameTimer } from './components/game/GameTimer';
 export * from './components/card/useGameSyncAnimation.tsx';
 export * from './lib/rxjsToZustand.ts';
 export * from './lib/lifecycle.ts';
+export { default as useOnWrapperResize } from './lib/useOnWrapperResize.ts';
+
 export { default as useSafeTimeout } from './lib/useSafeTimeout.ts';
 export * from "./lib/utils.ts";
 export * from './lib/transformLevelStatInlevels.ts';

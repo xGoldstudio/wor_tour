@@ -21,16 +21,17 @@ export default function ConfirmationModal({
       <BackgroundModal closeModal={closeModal}>
         <div className="w-full h-full flex flex-col justify-center items-center gap-8">
           {children}
-          <div className="flex gap-16">
+          <div className="w-full max-w-[500px] flex gap-8">
             <Button
               action={() => {
                 onConfirm();
                 closeModal();
               }}
+              full
             >
               Yes
             </Button>
-            <Button action={closeModal}>No</Button>
+            <Button action={closeModal} rarity="common" className="text-white" full>No</Button>
           </div>
         </div>
       </BackgroundModal>

@@ -25,12 +25,12 @@ function TabModal({ children, currentTab, setCurrentTab }: TabModalProps) {
     <div
       className={cn(
         currentTab !== children?.toString() ? "opacity-70" : null,
-        "w-[200px] h-[45px] hover:cursor-pointer bg-black shadow-md rounded-t-md "
+        "w-full h-[45px] hover:cursor-pointer shadow-md rounded-t-md "
       )}
       onClick={() => setCurrentTab(children?.toString() as Tabs)}
     >
-      <div className="rounded-t-md overflow-hidden text-nowrap relative z-10 font-semibold  h-full">
-        <Cover cardRarity="common" />
+      <div className="rounded-t-md overflow-hidden text-nowrap relative z-10 font-semibold h-full">
+        <Cover cardRarity="rare" className="bg-slate-900" />
         <div className="text-black h-full flex justify-center items-center relative px-12 ">
           {children}
         </div>
@@ -43,8 +43,8 @@ export function DeckInterface() {
   const [currentTab, setCurrentTab] = useState<Tabs>("Deck");
   const TabElement = tabs[currentTab];
   return (
-    <div>
-      <div className="m-2 relative flex justify-center gap-2 -mb-[0px]">
+    <div className="w-full max-w-[700px] pt-4 flex flex-col">
+      <div className="mx-8 relative flex justify-around gap-4">
         <TabModal currentTab={currentTab} setCurrentTab={setCurrentTab}>
           Deck
         </TabModal>
@@ -54,12 +54,10 @@ export function DeckInterface() {
       </div>
       <div className="w-full h-[55px] hover:cursor-pointer bg-black">
         <div className="overflow-hidden relative z-10 font-semibold h-full">
-          <Cover cardRarity="common" />
+          <Cover cardRarity="rare" />
         </div>
       </div>
-      <div className="w-full flex justify-center overflow-hidden">
-        <TabElement setCurrentTab={setCurrentTab} />
-      </div>
+      <TabElement setCurrentTab={setCurrentTab} />
     </div>
   );
 }
