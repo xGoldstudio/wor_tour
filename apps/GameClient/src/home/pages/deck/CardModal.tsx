@@ -1,10 +1,12 @@
 import { getCardFromLevel, getCardStats } from "@/cards";
 import CardDisplay from "@/game/gui/card/FullCard";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
-import Modal, { CoverModal } from "@/home/ui/modal";
+import Modal from "@/home/ui/modal";
 import useScrollCardList from "./useScrollCardList";
-import { Button, cn } from "@repo/ui";
+import { Button } from "@repo/ui";
 import { preventDefault } from "@repo/lib";
+import { useContext } from "react";
+import { HomeTabContext, HomeTabContextType } from "@/home/HomeTabContext";
 
 interface CardModalProps {
   cardId: number;
@@ -16,6 +18,9 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
   const collectionInfo = usePlayerStore((state) =>
     state.getCollectionInfo(cardId)
   );
+  const { setCurrentTab } = useContext(
+    HomeTabContext
+  ) as unknown as HomeTabContextType;
 
   const { isPlayed, isDeckFull } = usePlayerStore((state) => ({
     isPlayed: state.isPlayed(cardId),
@@ -29,35 +34,27 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
     3
   );
 
-  const isLevelOwned = level > currentPosition;
+  const isLevelOwned = level >= currentPosition;
 
   return (
-    <Modal title={`card_${cardId}`} closeModal={closeModal}>
-      <CoverModal closeModal={closeModal}>
-        <div
-          className="flex flex-col items-center gap-16 w-full h-full"
-          onMouseDown={preventDefault(() => setIsPressed(true))}
-          onMouseUp={preventDefault(() => setIsPressed(false))}
-          onMouseMove={changePosition}
-        >
-          <div className="flex gap-3 rounded-sm bg-slate-900 px-3 py-2">
-            {card.stats.map((_, index) => (
-              <BulletPosition
-                selected={index === currentPosition}
-                key={`${_.cost}_${index}`}
-              />
-            ))}
-          </div>
-          <div className="relative h-[430px]">
-            {card.stats.map((_, index) => (
-              <CardDisplay
-                key={`level_${index}`}
-                card={getCardFromLevel(card, index + 1)}
-                position={index - currentPosition}
-                cardData={collectionInfo}
-              />
-            ))}
-          </div>
+    <Modal title={`card_${cardId}`} closeModal={closeModal} cover>
+      <div
+        className="flex flex-col items-center justify-center gap-16 w-full h-full"
+        onMouseDown={preventDefault(() => setIsPressed(true))}
+        onMouseUp={preventDefault(() => setIsPressed(false))}
+        onMouseMove={changePosition}
+      >
+        <div className="relative h-[430px]">
+          {card.stats.map((_, index) => (
+            <CardDisplay
+              key={`level_${index}`}
+              card={getCardFromLevel(card, index + 1)}
+              position={index - currentPosition}
+              cardData={collectionInfo}
+            />
+          ))}
+        </div>
+        <div className="flex flex-col items-center gap-4">
           {isLevelOwned ? (
             isPlayed ? (
               <Button
@@ -76,21 +73,24 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
               </Button>
             )
           ) : (
-            <Button action={() => {}}>Buy more cards</Button>
+            <Button
+              action={() => {
+                setCurrentTab("shop");
+                closeModal();
+              }}
+            >
+              Buy more cards
+            </Button>
           )}
+          <Button
+            action={closeModal}
+            rarity="common"
+            className="text-white"
+          >
+            Leave
+          </Button>
         </div>
-      </CoverModal>
+      </div>
     </Modal>
-  );
-}
-
-function BulletPosition({ selected }: { selected: boolean }) {
-  return (
-    <div
-      className={cn(
-        "w-4 h-4 bg-slate-50 rounded-full shadow-[0px_0px_5px_0px_#fca5a5] ",
-        !selected && "bg-slate-500 shadow-none"
-      )}
-    ></div>
   );
 }

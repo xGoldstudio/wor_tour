@@ -7,9 +7,15 @@ interface ModalProps {
   children: React.ReactNode;
   closeModal: () => void;
   title: string;
+  cover?: boolean;
 }
 
-export default function Modal({ children, closeModal, title }: ModalProps) {
+export default function Modal({
+  children,
+  closeModal,
+  title,
+  cover = true,
+}: ModalProps) {
   useEffect(() => {
     function keyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
@@ -36,7 +42,25 @@ export default function Modal({ children, closeModal, title }: ModalProps) {
   if (!home) return null;
 
   return createPortal(
-    <div className="absolute w-full h-full top-0 z-20">{children}</div>,
+    <div className="absolute w-full h-full top-0 z-20">
+      {cover ? (
+        <>
+          <div className="w-full h-full bg-slate-700 opacity-80 absolute"></div>
+          <div className="w-full h-full relative flex flex-col items-center justify-center">
+            {/* <div className="w-full max-w-[700px] absolute left-1/2 -translate-x-1/2 top-0">
+              <img
+                src={getImageUrl(ICONS, "cross.svg")}
+                className="absolute right-0 max-[700px]:right-8 top-4 w-8 h-8 cursor-pointer"
+                onClick={closeModal}
+              />
+            </div> */}
+            {children}
+          </div>
+        </>
+      ) : (
+        children
+      )}
+    </div>,
     home
   );
 }

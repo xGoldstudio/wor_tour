@@ -10,6 +10,7 @@ import { _warningResetPlayStore } from "./home/store/initAllClientData";
 import DebugPanel from "./DebugPanel";
 import ErrorBoundary from "./ErrorBoundary";
 import { EditorData } from "@repo/lib";
+import HomeTabContextProvider from "./home/HomeTabContext";
 
 const queryClient = new QueryClient();
 
@@ -63,7 +64,9 @@ function AppRouter() {
           <Game />
         ) : (
           <EditionModeProvider>
-            <Home />
+            <HomeTabContextProvider>
+              <Home />
+            </HomeTabContextProvider>
           </EditionModeProvider>
         )}
       </div>

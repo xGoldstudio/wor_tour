@@ -1,6 +1,6 @@
 import DebugPanel from "@/DebugPanel";
 import HomeTab from "./pages/home/HomeTab";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { DeckInterface as DeckTab } from "./pages/deck/DeckInterface";
 import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
@@ -27,6 +27,7 @@ import Timer from "@/services/LoopService/Timer";
 import ExperienceOutput from "./ui/ExperienceOutput";
 import { useEditionMode } from "./pages/deck/context/UseEditionMode";
 import Footer from "./ui/Footer";
+import { HomeTabContext, HomeTabContextType } from "./HomeTabContext";
 
 export type Tabs = "home" | "deck" | "shop";
 
@@ -42,7 +43,7 @@ const tabsPosition: Record<Tabs, number> = {
   deck: 2,
 };
 export default function Home() {
-  const [currentTab, setCurrentTab] = useState<Tabs>("home");
+  const { currentTab, setCurrentTab } = useContext(HomeTabContext) as unknown as HomeTabContextType;
   const { editionMode, setEditionMode } = useEditionMode();
   return (
     <div className="w-screen h-screen justify-center bg-black relative flex">

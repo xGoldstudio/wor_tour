@@ -30,7 +30,7 @@ export default function Button({
       className={cn(
         "rounded-sm overflow-hidden text-nowrap relative z-10 font-semibold shadow-md",
         width !== undefined ? width : full ? "w-full h-full" : "w-min",
-        disabled ? "brightness-50" : "brightness-100",
+        disabled ? "brightness-75" : "brightness-100",
         rarity === "epic" ? "bg-slate-100" : "bg-black"
       )}
       disabled={disabled}
