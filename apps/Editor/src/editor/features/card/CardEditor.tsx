@@ -4,12 +4,14 @@ import useEditorStore from "../../store/EditorStore";
 import { useNavigate, useParams } from "react-router";
 import ImageManager from "@/editor/utils/ImageManager";
 import { Button, FullCard, cn } from "@repo/ui";
+import { arrayfindElementOrFirst, getValueInRange } from "@repo/lib";
+import { DeleteIcon, PlusCircle } from "lucide-react";
+import { useState } from "react";
 import {
-  arrayfindElementOrFirst,
+  getStats,
   CardType,
   getRealStrength,
   getTargetStrength,
-  getValueInRange,
   testIsStrengthValid,
   CardStatesData,
   getOptionsFromType,
@@ -24,10 +26,7 @@ import {
   cardCostMultiplier,
   CardStateInfo,
   getAbsoluteTargetStrength,
-} from "@repo/lib";
-import { DeleteIcon, PlusCircle } from "lucide-react";
-import { useState } from "react";
-import { getStats } from "game_engine";
+} from "game_engine";
 
 export default function CardEditor() {
   const { cardId: cardIdParam } = useParams();
@@ -122,9 +121,24 @@ export default function CardEditor() {
       </div>
 
       <div className="flex gap-8">
-        <CardLevel cardStats={card} setCardStats={setCardLevel(1)} level={1} isPvp={isPvp} />
-        <CardLevel cardStats={card} setCardStats={setCardLevel(2)} level={2} isPvp={isPvp} />
-        <CardLevel cardStats={card} setCardStats={setCardLevel(3)} level={3} isPvp={isPvp} />
+        <CardLevel
+          cardStats={card}
+          setCardStats={setCardLevel(1)}
+          level={1}
+          isPvp={isPvp}
+        />
+        <CardLevel
+          cardStats={card}
+          setCardStats={setCardLevel(2)}
+          level={2}
+          isPvp={isPvp}
+        />
+        <CardLevel
+          cardStats={card}
+          setCardStats={setCardLevel(3)}
+          level={3}
+          isPvp={isPvp}
+        />
       </div>
     </div>
   );
@@ -137,7 +151,11 @@ interface CardLevelProps {
   isPvp: boolean;
 }
 
-function cardStatsToCard(cardStats: CardStat, level: number, isPvp: boolean): CardType {
+function cardStatsToCard(
+  cardStats: CardStat,
+  level: number,
+  isPvp: boolean
+): CardType {
   const stats = getStats(cardStats, level, isPvp);
   const world = useEditorStore.getState().getWorld(cardStats.world);
 

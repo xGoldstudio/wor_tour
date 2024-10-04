@@ -1,4 +1,4 @@
-import { CardStat } from "@repo/lib";
+import { CardStat } from "game_engine";
 
 export default function Ratios({
   setCard,

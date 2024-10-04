@@ -1,4 +1,3 @@
-import { CardState, getOptionsFromType } from "@repo/lib";
 import { Button, GameCard, useOnMount, useRunGameInstance } from "@repo/ui";
 import {
   bleedingStateTest,
@@ -16,6 +15,8 @@ import {
   triggerChangeAttackSpeed,
   triggerDirectAttackResolved,
   triggerHealCard,
+  CardState,
+  getOptionsFromType,
 } from "game_engine";
 import DebugPanelLayout from "./DebugPanelLayout";
 import { useDummyCard } from "./useDummyCard";
@@ -73,7 +74,14 @@ export default function InGameCardDebug() {
   function dealDamage(amount: number, directDamage: boolean) {
     const instanceId = state?.getCard(true, 0)?.instanceId;
     if (!clock || !state || instanceId === undefined) return;
-    triggerDirectAttackResolved(clock, state, instanceId, instanceId, amount, directDamage ? undefined : true);
+    triggerDirectAttackResolved(
+      clock,
+      state,
+      instanceId,
+      instanceId,
+      amount,
+      directDamage ? undefined : true
+    );
   }
 
   function healCard(amount: number) {
@@ -121,9 +129,13 @@ export default function InGameCardDebug() {
         <DebugPanelLayout instance={instance}>
           <p className="text-2xl font-semibold">Basic operations</p>
           <div className="flex gap-4">
-            <Button action={() => defaultActions(clock, state)}>PlaceCard</Button>
+            <Button action={() => defaultActions(clock, state)}>
+              PlaceCard
+            </Button>
             <Button action={() => dealDamage(10, true)}>Deal damage</Button>
-            <Button action={() => dealDamage(10, false)}>Deal undirect damage</Button>
+            <Button action={() => dealDamage(10, false)}>
+              Deal undirect damage
+            </Button>
             <Button action={() => dealDamage(9999, true)}>Kill card</Button>
             <Button action={() => healCard(10)}>Heal card</Button>
             <Button action={() => changeAs(10)}>Increase AS</Button>

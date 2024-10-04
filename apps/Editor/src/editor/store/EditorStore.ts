@@ -1,4 +1,4 @@
-import { CardRarity, CardStat, EditorData, WorldStats } from "@repo/lib";
+import { CardRarity, CardStat, EditorData, WorldStats } from "game_engine";
 import { create } from "zustand";
 
 interface EditorStore {

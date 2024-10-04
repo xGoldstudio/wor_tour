@@ -1,5 +1,4 @@
 import {
-  BoosterTypeDeclartion,
   formatTime,
   inPx,
 } from "@repo/lib";
@@ -8,6 +7,7 @@ import * as _ from "lodash";
 import { numberOfLevels } from "./consts";
 import { Link } from "react-router-dom";
 import { BoosterRarityDrop, levels, unlockedIndex, worldsHardcodedData } from "@repo/ui";
+import { BoosterTypeDeclartion } from "game_engine";
 
 export default function Progression() {
   const [currentLevelHover, setCurrentLevelHover] = useState<null | number>(
