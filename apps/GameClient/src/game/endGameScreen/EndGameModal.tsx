@@ -1,11 +1,11 @@
-import { Badge, Button, cn, EmptyBar, KeyAmount } from "@repo/ui";
+import { Badge, Button, cn, EmptyBar, KeyAmount, textureByRarity } from "@repo/ui";
 import useGameMetadataStore from "../stores/gameMetadataStore";
 import Ribbon from "@/home/ui/Ribbon";
 import RewardBox from "./RewardBox";
 import { useRef } from "react";
 import endGameScreenAnimation from "./animation";
 import { useGSAP } from "@gsap/react";
-import { getImageUrl, ICONS, textureByRarity } from "@repo/lib";
+import { getImageUrl, ICONS } from "@repo/lib";
 import ShinyRotator from "./ShinyRotator";
 import { experienceService, keysService } from "@/services/inject";
 import { CurrentWinner } from "game_engine";

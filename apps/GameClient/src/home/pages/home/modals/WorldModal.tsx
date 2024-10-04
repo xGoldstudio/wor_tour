@@ -4,10 +4,11 @@ import Modal from "@/home/ui/modal";
 import { boosters, Box, GoldAmount } from "@repo/ui";
 import ScrollContainer from "react-indiana-drag-scroll";
 import BoosterIllustration from "../../shop/BoosterIllustration";
-import { cardWorldMultiplier, getImageUrl, ICONS } from "@repo/lib";
+import { getImageUrl, ICONS } from "@repo/lib";
 import Field from "./Field";
 import WorldField from "./WorldField";
 import { getGoldPerVictory, getMaxGoldPerDay } from "@/services/DailyGoldService/dailyGoldService";
+import { cardWorldMultiplier } from "game_engine";
 
 interface WorldModalProps {
   closeModal: () => void;

@@ -1,12 +1,13 @@
 import useDataStore from "@/cards/DataStore";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
-import { EDITOR_SRC, getImageUrl, ICONS, textureByRarity } from "@repo/lib";
+import { EDITOR_SRC, getImageUrl, ICONS } from "@repo/lib";
 import {
   Borders,
   CardIllustartion,
   Cover,
   EmptyBar,
   InnerBord,
+  textureByRarity,
 } from "@repo/ui";
 import _ from "lodash";
 import { useState } from "react";

@@ -1,5 +1,5 @@
 import { CardBorder, CardContentIllustartion, ManaBall } from "@repo/ui";
-import { CardType } from "@repo/lib";
+import { CardType } from "game_engine";
 
 interface DeckCardProps {
   card: CardType;

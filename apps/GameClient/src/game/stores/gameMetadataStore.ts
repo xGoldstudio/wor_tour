@@ -1,7 +1,6 @@
 import { findCard } from "@/cards";
 import { create } from "zustand";
-import { CardType } from "@repo/lib";
-import { CurrentWinner, GameStateObjectConstructor } from "game_engine";
+import { CardType, CurrentWinner, GameStateObjectConstructor } from "game_engine";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 
 export interface GameRewards {

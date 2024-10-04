@@ -1,4 +1,4 @@
-import { CardType } from "@repo/lib";
+import { CardType } from "game_engine";
 
 const cardForTest: [number, CardType][] = [
     [

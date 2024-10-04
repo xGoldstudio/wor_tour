@@ -1,7 +1,7 @@
-import { AddedStateAction, ChangeValueStateAction } from "@repo/lib";
 import { GameStateObject } from "../../gameEngine/gameState";
 import { ClockReturn } from "../../clock/clock";
 import { EventType } from "../../../types/eventType";
+import { AddedStateAction, ChangeValueStateAction } from "../CardStatesData";
 
 const onChangeValueScorch: ChangeValueStateAction = ({ clock, event, gameState }) => {
 	if (event.delta <= 0) {

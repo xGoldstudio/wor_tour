@@ -4,6 +4,7 @@ import InHandCard, {
 } from "./card/InHandCard";
 import {
   CARD_IN_HAND,
+  CardType,
   ClockReturn,
   EventType,
   GameStateObject,
@@ -16,7 +17,7 @@ import {
   useOnUnMount,
 } from "@repo/ui";
 import { GuiDeckCard } from "./PlayerGui";
-import { CardType, inPx } from "@repo/lib";
+import { inPx } from "@repo/lib";
 
 interface HandCardResizerProps {
   clock: ClockReturn<EventType>;

@@ -1,5 +1,6 @@
-import { CardRarity, textureByRarity } from "@repo/lib";
+import { CardRarity } from "game_engine";
 import { cn } from "../lib/utils";
+import textureByRarity from "../lib/textureByRarity";
 
 interface CoverProps {
   cardRarity: CardRarity;

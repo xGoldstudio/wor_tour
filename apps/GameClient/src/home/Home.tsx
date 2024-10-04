@@ -12,6 +12,7 @@ import {
   Cover,
   InnerBord,
   NumberSpan,
+  textureByRarity,
   useOnWrapperResize,
 } from "@repo/ui";
 import { cn } from "@repo/ui";
@@ -20,7 +21,6 @@ import {
   getImageUrlCssValue,
   ICONS,
   numberWithCommas,
-  textureByRarity
 } from "@repo/lib";
 import KeysOutput from "./ui/KeysOutput";
 import Timer from "@/services/LoopService/Timer";

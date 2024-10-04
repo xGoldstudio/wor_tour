@@ -1,4 +1,4 @@
-import { Level } from "@repo/lib";
+import { Level } from "game_engine";
 
 export interface Tier {
   tier: number;

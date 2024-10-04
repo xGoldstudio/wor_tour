@@ -1,8 +1,8 @@
-import { Badge, Button, cn } from "@repo/ui";
+import { Badge, Button, cn, textureByRarity } from "@repo/ui";
 import Ribbon from "@/home/ui/Ribbon";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
-import { getImageUrl, ICONS, textureByRarity } from "@repo/lib";
+import { getImageUrl, ICONS } from "@repo/lib";
 import RewardBox from "@/game/endGameScreen/RewardBox";
 import ShinyRotator from "@/game/endGameScreen/ShinyRotator";
 import gsap from "gsap";

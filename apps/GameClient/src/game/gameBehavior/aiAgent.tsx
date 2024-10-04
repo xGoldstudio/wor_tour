@@ -2,12 +2,13 @@ import {
   EventType,
   ManaIncreaseEvent,
   GameStateObject,
-  BeforeCardDestroyedEvent
+  BeforeCardDestroyedEvent,
+  CardType
 } from "game_engine";
 import * as _ from "lodash";
 import { findCard } from "../../cards/index";
 import { addGameEventListener } from "@repo/ui";
-import { CardType, getRandomElement } from "@repo/lib";
+import { getRandomElement } from "@repo/lib";
 
 export const botOptions = {
   disabled: false,

@@ -4,8 +4,9 @@ import { CardRewardType } from "@/home/store/rewardStore";
 import { useEffect, useRef } from "react";
 import _ from "lodash";
 import gsap from "gsap";
-import { getImageUrl, getShardsFromLevel, ICONS } from "@repo/lib";
+import { getImageUrl, ICONS } from "@repo/lib";
 import { cn } from "@repo/ui";
+import { getShardsFromLevel } from "game_engine";
 
 interface RewardProps {
   reward: CardRewardType;

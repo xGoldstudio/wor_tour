@@ -4,11 +4,12 @@ import {
   DrawCardEvent,
   EventType,
   GameStateObject,
+  getStateData,
 } from "game_engine";
 import { useSyncGameAnimation } from "../useGameSyncAnimation";
 import { useRef, useState } from "react";
 import { useGameEventListener, useProgressPieChart } from "../../..";
-import { animationTimeline, getStateData, translateYpx } from "@repo/lib";
+import { animationTimeline, translateYpx } from "@repo/lib";
 import useConsumeEvents from "../caputeEvents/useConsumeEvents";
 import { EffectLayout } from "../Effects";
 

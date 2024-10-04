@@ -1,4 +1,4 @@
-import { CardType } from "@repo/lib";
+import { CardType } from "game_engine";
 import { ActiveFilters, FiltersDescription } from "./cardFilters";
 
 interface getCardsFilteredProps {

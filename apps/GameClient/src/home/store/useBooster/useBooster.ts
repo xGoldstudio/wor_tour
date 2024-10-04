@@ -1,8 +1,8 @@
 import useRewardStore from "../rewardStore";
 import usePlayerStore from "../playerStore/playerStore";
-import { BoosterTypeDeclartion, CardType } from "@repo/lib";
 import { useBoosterStore } from "../boosterStore";
 import { getRandomCardFromRarity } from "./getRandomCardFromRarity";
+import { BoosterTypeDeclartion, CardType } from "game_engine";
 
 export type BoosterName =
   | "Classic refill"

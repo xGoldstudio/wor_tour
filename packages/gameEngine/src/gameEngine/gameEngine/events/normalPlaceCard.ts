@@ -1,10 +1,10 @@
 import _ from "lodash";
 import { EventType, NormalPlaceCardEvent, PlaceCardType } from "../../../types/eventType";
 import { ComputeEventProps } from "../gameEngine";
-import { CardType } from "@repo/lib";
 import { getOptionsFromType } from "../../states/CardStatesData";
 import { ClockReturn } from "../../clock/clock";
 import { GameStateObject, MAX_ATTACK_SPEED, MIN_ATTACK_SPEED } from "../gameState";
+import { CardType } from "../../../types/Card";
 
 export default function normalPlaceCardEvent({ event, gameState, clock }: ComputeEventProps<NormalPlaceCardEvent>) {
 	if (!gameState.isStarted) {

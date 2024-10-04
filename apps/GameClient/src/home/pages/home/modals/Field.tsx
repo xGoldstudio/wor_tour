@@ -1,5 +1,4 @@
-import { textureByRarity } from "@repo/lib";
-import { Borders, CardIllustartion, InnerBord } from "@repo/ui";
+import { Borders, CardIllustartion, InnerBord, textureByRarity } from "@repo/ui";
 
 interface FieldProps {
   children: React.ReactNode;

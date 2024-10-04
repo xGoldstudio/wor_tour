@@ -1,7 +1,4 @@
 import {
-  CardState,
-  CardStateLayoutData,
-  getImageEffects,
   getImageUrl,
   inPx,
   STATES_SRC,
@@ -11,6 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { CardState, CardStateLayoutData, getImageEffects } from "game_engine";
 
 export default function States({
   states,

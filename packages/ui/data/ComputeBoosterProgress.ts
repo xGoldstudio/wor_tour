@@ -1,4 +1,4 @@
-import { BoosterTypeDeclartion, CardRarity } from "@repo/lib";
+import { BoosterTypeDeclartion, CardRarity } from "game_engine";
 import * as _ from "lodash";
 import { numberOfLevels } from "../lib/utils";
 import { WORLD_GOLD_RATIO } from "./const";

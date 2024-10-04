@@ -4,7 +4,7 @@ import { useState } from "react";
 import { priceByRarity, useBuyCard } from "@/home/store/shopStore/shopStore";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { Box, Button, FullCard, GoldAmount, cn } from "@repo/ui";
-import { CardType, getShardsFromLevel } from "@repo/lib";
+import { CardType, getShardsFromLevel } from "game_engine";
 
 interface BuyCardProps {
   card: CardType;

@@ -1,4 +1,5 @@
-import { CardStat, CardState, CardStateInfo, CardStatesData, CardStatLevel, DeepPartial, defaultValue, EditorData, filterNulls, findInOrFirst, getOptionsFromType, inRangeValue, isTrueOr, safeMap, WorldStats } from '@repo/lib';
+import { DeepPartial, defaultValue, filterNulls, findInOrFirst, inRangeValue, isTrueOr, safeMap } from "@repo/lib";
+import { EditorData, CardStat, WorldStats, CardStatLevel, CardState, CardStateInfo, CardStatesData, getOptionsFromType } from "game_engine";
 
 export function purifyAppState(data: Partial<EditorData>): EditorData {
 	const safeCards: CardStat[] = safeMap<Partial<CardStat>, CardStat>(data.cards)(validateCard);

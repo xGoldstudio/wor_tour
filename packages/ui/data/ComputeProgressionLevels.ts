@@ -1,8 +1,9 @@
 import * as _ from "lodash";
 import { boosters, getWorldBoosterName } from "./ComputeBoosterProgress";
 import { getStrengthMax, getStrengthMin } from "../lib/transformLevelStatInlevels";
-import { ceilToValue, cubicBezier, Level } from "@repo/lib";
+import { ceilToValue, cubicBezier } from "@repo/lib";
 import { numberOfLevels } from "../lib/utils";
+import { Level } from "game_engine";
 
 interface World {
 	id: number;

@@ -7,7 +7,7 @@ import { BoosterType } from "./useBooster/useBooster";
 import useDataStore from "@/cards/DataStore";
 import { create } from 'zustand';
 import { findCard } from '@/cards';
-import { BoosterTypeDeclartion, CardRarityOrder, CardStatsInfo, CardType } from '@repo/lib';
+import { BoosterTypeDeclartion, CardRarityOrder, CardStatsInfo, CardType } from 'game_engine';
 
 const playerCollectionObservable = toStream(usePlayerStore, (state) => state.collection, {
 	fireImmediately: true,

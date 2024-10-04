@@ -3,7 +3,7 @@ import { AppState } from "../appStore";
 import { dir, imagesDir } from '../initFs';
 import { FastifyRequest } from 'fastify';
 import { purifyAppState } from './validateEditorData/validateEditorData';
-import { EditorData } from '@repo/lib';
+import { EditorData } from 'game_engine';
 
 export default function GetPostContentHandler(state: AppState) {
 	return function handler(request: FastifyRequest) {
@@ -48,9 +48,5 @@ function purgeImages(valueObject: EditorData) {
 }
 
 function beautifyJson(jsonObject: unknown) {
-	return JSON.stringify(jsonObject, null, 2)
-		// .replace(/":\s+/g, '": ')
-		// .replace(/,{/g, ',\n{')
-		// .replace(/],/g, '],\n')
-		// .replace(/}]/g, '}\n]');
+	return JSON.stringify(jsonObject, null, 2);
 }

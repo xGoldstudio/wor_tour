@@ -1,6 +1,6 @@
 import { CollectionCard } from "@/home/store/playerStore/playerStore";
-import { CardType } from "@repo/lib";
 import { FullCard } from "@repo/ui";
+import { CardType } from "game_engine";
 
 export default function CardDisplay({
   card,

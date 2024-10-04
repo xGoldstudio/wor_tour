@@ -1,7 +1,7 @@
-import { CardState } from "@repo/lib";
 import { Button, HandCard, useOnMount, useRunGameInstance } from "@repo/ui";
 import {
   bleedingStateTest,
+  CardState,
   ClockReturn, EventType,
   getOptionsFromType,
   riposteStateTest,
