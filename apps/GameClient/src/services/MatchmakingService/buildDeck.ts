@@ -1,5 +1,5 @@
 import { NUMBER_OF_CARD_IN_DECK } from "@/const";
-import { CardType, getTargetStrength } from "@repo/lib";
+import { CardType, getTargetStrength } from "game_engine";
 
 export default function buildDeck(targetStrength: number, delta: number, cardPool: [number, CardType][]) {
   const deck: [number, CardType][] = [];

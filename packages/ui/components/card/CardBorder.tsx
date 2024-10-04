@@ -1,11 +1,11 @@
 import {
-  CardRarity,
   EDITOR_SRC,
   getImageUrlCssValue,
   inPx,
 } from "@repo/lib";
 import { cn } from "../../lib/utils";
 import textureByRarity from "../../lib/textureByRarity";
+import { CardRarity } from "game_engine";
 
 interface CardBoardProps {
   rarity: CardRarity;

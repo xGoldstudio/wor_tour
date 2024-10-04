@@ -1,4 +1,4 @@
-import { CardRarity, CardType } from "@repo/lib";
+import { CardRarity, CardType } from "game_engine";
 
 export function getRandomCardFromRarity(cards: CardType[], rarities: Record<CardRarity, number>) {
 	const cardsByRarity = arrayOfCardsToRarityMap(cards);

@@ -2,8 +2,9 @@ import ManaBall from "../ManaBall";
 import { CardContentIllustartion, InnerBord, CardBorder } from "./CardBorder";
 import * as _ from "lodash";
 import States from "./Effects";
-import { inPx, CardType, getImageUrl, ICONS } from "@repo/lib";
+import { inPx, getImageUrl, ICONS } from "@repo/lib";
 import { cn } from "@repo/ui";
+import { CardType } from "game_engine";
 
 export default function FullCard({
   card,

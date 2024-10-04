@@ -1,5 +1,5 @@
 import React from "react";
-import { BoosterTypeDeclartion } from "@repo/lib";
+import { BoosterTypeDeclartion } from "game_engine";
 import { allRarites } from "../../data/ComputeBoosterProgress";
 import textureByRarity from "../../lib/textureByRarity";
 

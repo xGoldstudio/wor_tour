@@ -1,7 +1,7 @@
 import useDataStore from "@/cards/DataStore";
 import buildDeck, { getDeckStrength } from "./buildDeck";
 import { findCard } from "@/cards";
-import { CardType, getTargetStrength } from "@repo/lib";
+import { CardType, getTargetStrength } from "game_engine";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import useGameMetadataStore, { GameReward } from "@/game/stores/gameMetadataStore";
 import { Tier } from "@/home/store/tiers";

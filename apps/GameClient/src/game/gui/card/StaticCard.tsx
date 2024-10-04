@@ -1,7 +1,7 @@
-import { CardType } from "@repo/lib";
 import CardModal from "@/home/pages/deck/CardModal";
 import { useState } from "react";
 import { CardBorder, CardContentIllustartion } from "@repo/ui";
+import { CardType } from "game_engine";
 
 function StaticCard({
   card,

@@ -1,10 +1,10 @@
 import { create } from "zustand";
 import { Tier } from "../tiers";
-import { CardType } from "@repo/lib";
 import { persist } from "zustand/middleware";
 import { defaultPlayerStoreData } from "./defaultData";
 import { findCard, getCardFromLevel, getCardStats } from "@/cards";
 import useDataStore from "@/cards/DataStore";
+import { CardType } from "game_engine";
 
 export interface CollectionCard {
   id: number;

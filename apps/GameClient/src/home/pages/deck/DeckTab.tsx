@@ -1,4 +1,4 @@
-import { CardType, filterUndefined, getImageUrl, ICONS } from "@repo/lib";
+import { filterUndefined, getImageUrl, ICONS } from "@repo/lib";
 import { Cover, ManaBall } from "@repo/ui";
 import * as _ from "lodash";
 import { useState } from "react";
@@ -9,6 +9,7 @@ import { DeckCardUI } from "./DeckCardUI";
 import { NUMBER_OF_CARD_IN_DECK } from "@/const";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { getDeckStrength } from "@/services/MatchmakingService/buildDeck";
+import { CardType } from "game_engine";
 
 interface DeckStatsProps {
   deck: CardType[];

@@ -1,4 +1,4 @@
-import { CardType } from "@repo/lib";
+import { CardType } from "game_engine";
 
 export type CardCollection = CardType & { isInDeck: boolean };
 export type Filters = Record<CardFilters, CardFilter>;

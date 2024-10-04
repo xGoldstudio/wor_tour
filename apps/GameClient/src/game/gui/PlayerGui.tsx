@@ -5,8 +5,7 @@ import { useShallow } from "zustand/react/shallow";
 import { useState } from "react";
 import { dummyCard } from "./card/const";
 import { GameTimer, ManaBar, textureByRarity, useGameEventListener } from "@repo/ui";
-import { CardType } from "@repo/lib";
-import { ClockReturn, EventType, GameStateObject } from "game_engine";
+import { CardType, ClockReturn, EventType, GameStateObject } from "game_engine";
 import HandCardResizer from "./HandCardResizer";
 
 interface PlayerGUIProps {

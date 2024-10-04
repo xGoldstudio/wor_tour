@@ -1,4 +1,5 @@
-import { animationTimeline, CardState, getStateData } from "@repo/lib";
+import { animationTimeline } from "@repo/lib";
+import { CardState, getStateData } from "game_engine";
 import { EffectLayout } from "../../card/Effects";
 import { useRef } from "react";
 import { useSyncGameAnimation } from "../../card/useGameSyncAnimation";

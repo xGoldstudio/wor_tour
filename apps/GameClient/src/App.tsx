@@ -9,8 +9,8 @@ import usePlayerStore from "./home/store/playerStore/playerStore";
 import { _warningResetPlayStore } from "./home/store/initAllClientData";
 import DebugPanel from "./DebugPanel";
 import ErrorBoundary from "./ErrorBoundary";
-import { EditorData } from "@repo/lib";
 import HomeTabContextProvider from "./home/HomeTabContext";
+import { EditorData } from "game_engine";
 
 const queryClient = new QueryClient();
 

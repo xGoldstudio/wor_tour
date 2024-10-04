@@ -1,4 +1,4 @@
-import { CardRarity, getCardStrength } from "@repo/lib";
+import { CardRarity, getCardStrength } from "game_engine";
 
 export function getStrengthMin(world: number) {
 	const rarities: CardRarity[] = [
