@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { drawPlaceCard, initGame, rageStateTest } from "./common";
-import { CardState } from "@repo/lib";
+import { CardState } from "../../states/CardStatesData";
 
 // max stacking already test,
 // decay is already tested

@@ -1,4 +1,4 @@
-import { AttackModifierStateAction } from "@repo/lib";
+import { AttackModifierStateAction } from "../CardStatesData";
 
 const sacredDuelistOnDamageModifier: AttackModifierStateAction = ({ event }) => {
 	return event.initiator.directAttack ? 1 : 0;

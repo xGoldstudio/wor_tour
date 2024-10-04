@@ -1,4 +1,4 @@
-import { AddedStateAction, ChangeValueStateAction, RemovedStateAction } from "@repo/lib";
+import { AddedStateAction, ChangeValueStateAction, RemovedStateAction } from "../CardStatesData";
 
 const onAddedRage: AddedStateAction = ({ clock, gameState, event }) => {
 	const state = gameState.getStateOfCardByInstanceId(event.instanceId, "rage");

@@ -1,7 +1,7 @@
-import { AttackModifierStateAction, filterUndefined } from "@repo/lib";
+import { filterUndefined } from "@repo/lib";
 import { BeforeCardDamageResolveEvent, InGameCardType } from "../../../types/eventType";
 import { ComputeEventProps, } from "../gameEngine";
-import { getOptionsFromType } from "../../states/CardStatesData";
+import { AttackModifierStateAction, getOptionsFromType } from "../../states/CardStatesData";
 
 // this event is required to have state effectively added to the card  
 export default function beforeCardDamageResolve({ event, gameState, clock }: ComputeEventProps<BeforeCardDamageResolveEvent>) {

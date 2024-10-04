@@ -1,4 +1,4 @@
-import { AttackModifierStateAction } from "@repo/lib";
+import { AttackModifierStateAction } from "../CardStatesData";
 
 const divineShieldOnDamageModifier: AttackModifierStateAction = () => {
 	return 0;
