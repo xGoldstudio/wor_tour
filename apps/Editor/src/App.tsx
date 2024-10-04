@@ -5,11 +5,11 @@ import WorldEditor from "./editor/features/worlds/World";
 import CardEditor from "./editor/features/card/CardEditor";
 import EditorLayout from "./editor/Layout";
 import Progression from "./editor/features/progression/Progression";
-import { EditorData } from "@repo/lib";
 import DebugIndex from "./editor/features/debug/DebugIndex";
 import AppEditorIndex from ".";
 import LightEditorLayout from "./editor/LightLayout";
 import { DebugComponents } from "./editor/features/debug/DebugComponents";
+import { EditorData } from "game_engine";
 
 const queryClient = new QueryClient();
 
