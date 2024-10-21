@@ -1,0 +1,26 @@
+services:
+  proxy:
+    image: traefik:v2.11
+    command: --providers.docker
+    ports:
+      - 80:80
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  game_client:
+    container_name: game_client
+    build:
+      context: .
+      dockerfile: ./apps/GameClient/Dockerfile
+    restart: always
+    labels:
+      traefik.http.routers.game_client.rule: Host(`game_client.localhost`)
+      traefik.http.services.game_client.loadbalancer.server.port: 4000
+  data_server:
+    container_name: data_server
+    build:
+      context: .
+      dockerfile: ./apps/DataServer/Dockerfile
+    restart: always
+    labels:
+      traefik.http.routers.data_server.rule: Host(`data_server.localhost`)
+      traefik.http.services.data_server.loadbalancer.server.port: 3000

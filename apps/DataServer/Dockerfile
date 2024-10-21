@@ -29,8 +29,10 @@ RUN pnpm turbo run build --filter=data_server
 FROM base AS runner
 WORKDIR /app
 
-# Don't run production as root
+# We need the data folder to be able to serve the game informations and images
+COPY --from=installer /app/apps/DataServer/data /app/data
 COPY --from=installer /app/apps/DataServer/dist /app/dist
+# Don't run production as root
 # Give the node user access to read files
 RUN chown -R node /app
 USER node
