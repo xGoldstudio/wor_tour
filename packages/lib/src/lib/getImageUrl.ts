@@ -1,4 +1,9 @@
-const DATA_SERVER_URL = 'http://localhost:3000';
+let DATA_SERVER_URL = 'http://localhost:3000';
+
+export function setDataServerUrl(url: string) {
+	DATA_SERVER_URL = url;
+}
+
 export function getImageUrlCssValue(base: string, url: string | null) {
 	if (!url) {
 		return undefined;

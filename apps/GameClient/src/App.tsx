@@ -33,7 +33,7 @@ function AppRouter() {
   }));
   const data = useQuery(
     "repoData",
-    () => fetch("http://localhost:3000/").then((res) => res.json()),
+    () => fetch(__DATA_SERVER_URL__).then((res) => res.json()),
     {
       onSuccess: (stringData) => {
         const objectData = JSON.parse(stringData) as EditorData;

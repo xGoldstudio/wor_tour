@@ -8,6 +8,7 @@ export default async function initServer() {
 	const fastify = Fastify({
 		logger: true,
 		bodyLimit: 1048576 * 100, // 100MB
+		trustProxy: true,
 	});
 
 	fastify.register(multipart, {
@@ -28,7 +29,7 @@ export default async function initServer() {
 
 	async function startServer() {
 		try {
-			await fastify.listen({ port: 3000 });
+			await fastify.listen({ port: 3000, host: "0.0.0.0" });
 		} catch (err) {
 			fastify.log.error(err);
 			process.exit(1);
