@@ -3,7 +3,7 @@ name: CI
 # workflow to build and push the Docker image
 on:
   push:
-    branches: ["main"]
+    branches: ["master"]
  
 jobs:
   build:
