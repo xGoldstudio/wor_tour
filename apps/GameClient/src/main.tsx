@@ -5,9 +5,12 @@ import { gsap } from "gsap";
 
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { setDataServerUrl } from "@repo/lib";
 
 gsap.registerPlugin(ScrollToPlugin);
-gsap.registerPlugin(ScrollTrigger) 
+gsap.registerPlugin(ScrollTrigger);
+// for images retrieval
+setDataServerUrl(__DATA_SERVER_URL__);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   // <React.StrictMode>
