@@ -9,12 +9,13 @@ export default function GetPostContentHandler(state: AppState) {
 	return function handler(request: FastifyRequest) {
 		const valueObject = purifyAppState(JSON.parse(request.body as string));
 
-		purgeImages(valueObject);
-
 		const value = beautifyJson(valueObject);
 
 		writeFileSync(`${dir}/data.json`, value);
 		state.updateContent(value);
+
+		purgeImages(valueObject);
+
 		return { status: "ok" };
 	}
 }

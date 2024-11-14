@@ -2,7 +2,7 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import multipart from "@fastify/multipart";
 import fastifyStatic from "@fastify/static";
-import { imagesDir } from './initFs';
+import { dir } from './initFs';
 
 export default async function initServer() {
 	const fastify = Fastify({
@@ -21,7 +21,7 @@ export default async function initServer() {
 		origin: "*", // Change this to your desired origin or set it dynamically based on request headers
 	});
 	fastify.register(fastifyStatic, {
-		root: imagesDir,
+		root: dir,
 		prefix: '/public/',
 		immutable: true,
 		maxAge: 31536000,

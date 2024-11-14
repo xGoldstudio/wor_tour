@@ -1,7 +1,7 @@
 {
   "cards": [
     {
-      "name": "Multi-eyes Mud",
+      "name": "Crystal mud",
       "rarity": "common",
       "id": 1,
       "world": 1,
@@ -12,17 +12,17 @@
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_1_level_1_1717529721890.png"
+          "illustration": "card_1_level_1_1731605699277.png"
         },
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_1_level_2_1717530044081.png"
+          "illustration": "card_1_level_2_1731605399149.png"
         },
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_1_level_3_1717530116564.png"
+          "illustration": "card_1_level_3_1731605401661.png"
         }
       ]
     },
@@ -46,7 +46,7 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_2_level_1_1717531255144.png"
+          "illustration": "card_2_level_1_1731605706503.png"
         },
         {
           "cost": 3,
@@ -59,7 +59,7 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_2_level_2_1717531258110.png"
+          "illustration": "card_2_level_2_1731605708652.png"
         },
         {
           "cost": 3,
@@ -72,12 +72,12 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_2_level_3_1717531263090.png"
+          "illustration": "card_2_level_3_1731605712636.png"
         }
       ]
     },
     {
-      "name": "Medusor",
+      "name": "Meduso",
       "rarity": "common",
       "id": 3,
       "world": 1,

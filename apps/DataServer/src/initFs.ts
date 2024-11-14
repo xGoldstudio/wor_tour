@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 
 export const dir = `${process.cwd()}/data`;
-export const imagesDir = `${dir}`;
+export const imagesDir = `${dir}/images`;
 export const dataFile = `${dir}/data.json`;
 
 export default function initFs() {
