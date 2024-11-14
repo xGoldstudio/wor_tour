@@ -126,6 +126,7 @@ function orchestrateTrophyAnimation({
     const y = trophyCount.getBoundingClientRect().top;
     trophyCountClone.style.left = inPx(x);
     trophyCountClone.style.top = inPx(y);
+    trophyCountClone.style.width = "min-content";
     container.appendChild(trophyCountClone);
     elements.push(trophyCountClone);
     const input =

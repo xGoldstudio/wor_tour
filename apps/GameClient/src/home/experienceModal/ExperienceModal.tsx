@@ -105,7 +105,7 @@ export default function ExperienceModal({ reward, removeCurrentReward }: Experie
 
   return (
     <div className="w-screen h-full flex justify-center fixed top-0 left-0 z-30">
-      <div className="w-[700px] h-full overflow-hidden flex flex-col items-center relative">
+      <div className="w-full h-full overflow-hidden flex flex-col items-center relative">
         <div className="bg-slate-800 w-full h-full absolute brightness-75 opacity-50"></div>
         <div
           className="grow flex flex-col items-center pt-48 relative"

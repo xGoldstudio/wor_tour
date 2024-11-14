@@ -183,10 +183,11 @@ function EffectDesc({
 
   return createPortal(
     <div
-      className={`fixed w-[${width}px] z-[999999] pointer-events-none bg-slate-900 drop-shadow-[1px_1px_1px_black] px-2 py-1 rounded-sm`}
+      className={`fixed z-[999999] pointer-events-none bg-slate-900 drop-shadow-[1px_1px_1px_black] px-2 py-1 rounded-sm`}
       style={{
         top: inPx(effectRef.getBoundingClientRect().top),
         left: inPx(getLeft()),
+        width: inPx(width),
       }}
       ref={(container) => setContainer(container ?? undefined)}
     >
