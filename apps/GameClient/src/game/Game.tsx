@@ -50,9 +50,9 @@ export default function Game() {
                 gameState={gameState}
               />
               <div className="w-full flex justify-center items-center relative grow">
-                <div className="absolute top-0 left-0">
+                {/* <div className="absolute top-0 left-0">
                   <PlayerProfile />
-                </div>
+                </div> */}
                 <div className="lg:hidden w-[70px]" />
                 <CardsBoard />
                 <div className="lg:right-0 lg:top-1/2 lg:-translate-y-1/2 h-[90%] lg:absolute lg:translate-x-full">

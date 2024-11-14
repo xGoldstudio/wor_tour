@@ -16,6 +16,7 @@ export { default as Effects } from './components/card/Effects.tsx';
 export * from './components/card/Effects.tsx';
 export { default as ManaBall } from './components/ManaBall.tsx';
 export { default as FullCard } from './components/card/FullCard.tsx';
+export { StatLine } from './components/card/FullCard.tsx';
 export { default as BoosterRarityDrop } from './components/booster/BoosterRarityDrop.tsx';
 export { default as Cover } from './components/Cover.tsx';
 export { default as EmptyBar } from './components/EmptyBar.tsx';

@@ -1,17 +1,14 @@
 import {
   CARD_BORDER_HEIGHT,
-  CARD_BORDER_WIDTH,
-  CardBorder,
-  CardContentIllustartion,
-  ManaBall,
+  CARD_BORDER_WIDTH, FullCard,
   useGameAnimation,
-  useGameEventListener,
+  useGameEventListener
 } from "@repo/ui";
 import { useState } from "react";
 import { animationTimeline, inPx } from "@repo/lib";
 import { CardType, DrawCardEvent } from "game_engine";
-import HandCardEffects from "./HandCardEffetcs";
 import { HAND_CARD_RATIO } from "../../../../../apps/GameClient/src/game/gui/card/InHandCard";
+import HandCardEffects from "./HandCardEffetcs";
 
 const dummyCard: CardType = {
   name: "string",
@@ -44,6 +41,9 @@ function HandCard({ position, size }: { position: number; size: number }) {
       (e as DrawCardEvent).isPlayer,
   });
 
+  const fullCardSize = 320;
+  const cardWidth = size * CARD_BORDER_WIDTH * HAND_CARD_RATIO;
+
   return (
     <div
       className="relative"
@@ -53,30 +53,30 @@ function HandCard({ position, size }: { position: number; size: number }) {
       }}
     >
       <div
-        className="relative"
-        style={{ transform: `scale(${size})`, transformOrigin: "top left" }}
+        style={{
+          transform: `scale(${cardWidth / fullCardSize})`,
+          transformOrigin: "top left",
+        }}
       >
-        <CardBorder rarity={card.rarity} size={1.8}>
-          <InHandCardIllustration card={card} position={position} />
-          <div className="absolute right-[3px] top-[4px] flex flex-col gap-2">
-            <HandCardEffects isPlayerCard={true} position={position} />
-          </div>
-        </CardBorder>
-      </div>
-      <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 scale-75">
-        <ManaBall mana={card.cost} />
+        <FullCard
+          card={card}
+          size={1}
+          showEffectDesc
+          illustrationChildren={
+            <div className="absolute top-0 left-0 w-full h-full z-10">
+              <div className="absolute right-[3px] top-[4px] flex flex-col gap-2 z-10 scale-[200%]">
+                <HandCardEffects isPlayerCard={true} position={position} />
+              </div>
+              <InHandCardIllustration position={position} />
+            </div>
+          }
+        />
       </div>
     </div>
   );
 }
 
-function InHandCardIllustration({
-  card,
-  position,
-}: {
-  card: CardType;
-  position: number;
-}) {
+function InHandCardIllustration({ position }: { position: number }) {
   const animationRef = useGameAnimation({
     tl: (ref, state) => {
       const usingCard = state.playerHand[position];
@@ -101,13 +101,10 @@ function InHandCardIllustration({
   });
 
   return (
-    <div className="relative w-full h-full">
-      <CardContentIllustartion card={card} size={1.8} />
-      <div
-        ref={animationRef}
-        className="absolute top-0 w-full h-full bg-slate-600 opacity-40 origin-top"
-      />
-    </div>
+    <div
+      ref={animationRef}
+      className="absolute top-0 w-full h-full bg-slate-800 opacity-60 origin-top"
+    />
   );
 }
 

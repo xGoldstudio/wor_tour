@@ -16,7 +16,7 @@ import {
 } from "game_engine";
 import useGameInterface from "../../stores/gameInterfaceStore";
 
-export const HAND_CARD_RATIO = 1.8;
+export const HAND_CARD_RATIO = 2.1;
 
 export default function InHandCard({
   position,
