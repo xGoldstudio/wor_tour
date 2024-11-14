@@ -95,6 +95,9 @@ export default function DebugPanel() {
           <>
             <DebugSection title={"Gold"}>
               <div className="flex gap-4">
+                <DebugButton onClick={() => useRewardStore.getState().addReward({ type: "rawGold", amount: 100 })}>
+                  Give 100 gold
+                </DebugButton>
                 <DebugButton onClick={() => addGold(1000)}>
                   Give 1000 gold
                 </DebugButton>

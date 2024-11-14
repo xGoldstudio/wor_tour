@@ -1,4 +1,4 @@
-import { bleedingStateTest, getStateData } from "game_engine";
+import { getStateData, healStateDefaultTest } from "game_engine";
 import { EffectLayout } from "@repo/ui";
 import { useState } from "react";
 
@@ -22,7 +22,7 @@ export default function StatesDescDebug() {
       <div className="w-full flex justify-center pt-8 gap-32">
         <div className="absolute" style={{ left: `${x}%` }}>
           <EffectLayout
-            effect={getStateData(bleedingStateTest)}
+            effect={getStateData(healStateDefaultTest)}
             size={1}
             showDesc
           />

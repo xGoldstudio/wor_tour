@@ -51,7 +51,9 @@ function RewardSection({ children }: { children: React.ReactNode }) {
       {transitionReady && (
         <div className="w-full h-full absolute z-10 flex flex-col">
           <HomeBg />
-          <Header />
+          <div className="w-full relative flex flex-col items-center justify-between">
+            <Header />
+          </div>
           {transitionReady === "end" && children}
         </div>
       )}
@@ -71,11 +73,26 @@ export function RewardBlockWithContext() {
   if (!currentReward) return null;
 
   if (currentReward.type === "rawGold") {
-    return <RawGoldReward reward={currentReward} removeCurrentReward={() => collectReward()}/>;
+    return (
+      <RawGoldReward
+        reward={currentReward}
+        removeCurrentReward={() => collectReward()}
+      />
+    );
   } else if (currentReward.type === "rawTrophies") {
-    return <RawTrophiesReward reward={currentReward} removeCurrentReward={() => collectReward()}/>;
+    return (
+      <RawTrophiesReward
+        reward={currentReward}
+        removeCurrentReward={() => collectReward()}
+      />
+    );
   } else if (currentReward.type === "nextLevel") {
-    return <ExperienceModal reward={currentReward} removeCurrentReward={() => collectReward()}/>;
+    return (
+      <ExperienceModal
+        reward={currentReward}
+        removeCurrentReward={() => collectReward()}
+      />
+    );
   } else if (currentReward.type === "tier") {
     useClientInterfaceStore.getState().setWorldsModalOpen("tier");
     collectReward();
@@ -84,41 +101,48 @@ export function RewardBlockWithContext() {
     collectReward();
   }
 
-  const getRewardBlock = (() => {
-    if (currentReward.type === "card") {return (
-      <CardReward
-        reward={currentReward}
-        removeCurrentReward={() => collectReward()}
-      />
-    )} else if (currentReward.type === "gold") { return (
-      <GoldReward
-        reward={currentReward}
-        removeCurrentReward={() => collectReward()}
-      />
-    )}
-    else if (currentReward.type === "chest") { return (
-      <ChestReward
-        reward={currentReward}
-        removeCurrentReward={() => collectReward()}
-      />
-    )} else if (currentReward.type === "key") { return (
-      <KeyReward
-        reward={currentReward}
-        removeCurrentReward={() => collectReward()}
-      />
-    )} else if (currentReward.type === "keys") { return (
-      <KeysReward
-        reward={currentReward}
-        removeCurrentReward={() => collectReward()}
-      />
-    )}
-  });
+  const getRewardBlock = () => {
+    if (currentReward.type === "card") {
+      return (
+        <CardReward
+          reward={currentReward}
+          removeCurrentReward={() => collectReward()}
+        />
+      );
+    } else if (currentReward.type === "gold") {
+      return (
+        <GoldReward
+          reward={currentReward}
+          removeCurrentReward={() => collectReward()}
+        />
+      );
+    } else if (currentReward.type === "chest") {
+      return (
+        <ChestReward
+          reward={currentReward}
+          removeCurrentReward={() => collectReward()}
+        />
+      );
+    } else if (currentReward.type === "key") {
+      return (
+        <KeyReward
+          reward={currentReward}
+          removeCurrentReward={() => collectReward()}
+        />
+      );
+    } else if (currentReward.type === "keys") {
+      return (
+        <KeysReward
+          reward={currentReward}
+          removeCurrentReward={() => collectReward()}
+        />
+      );
+    }
+  };
 
   return (
     <RewardSection>
-      <div className="grow">
-        {getRewardBlock()}
-      </div>
+      <div className="grow">{getRewardBlock()}</div>
     </RewardSection>
   );
 }

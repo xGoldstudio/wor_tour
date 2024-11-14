@@ -144,7 +144,6 @@ export default function CardReward({
         className="w-4 h-4 bg-transparent drop-shadow-[1px_1px_1px_black] fixed z-10 opacity-0"
         ref={shardRef}
       />
-
       <div
         className="w-full h-full relative flex flex-col gap-4"
         onClick={() => {
@@ -259,7 +258,7 @@ function ShowTitle({ title, delay, className }: { title: string; delay?: number,
   }, [delay, ref]);
 
   return (
-    <h1 className={cn("text-5xl text-nowrap flex font-semibold", className)} ref={ref}>
+    <h1 className={cn("text-5xl text-nowrap flex font-semibold text-white", className)} ref={ref}>
       {title.split("").map((letter, index) =>
         letter === " " ? (
           <div className="w-4" key={index}></div>
