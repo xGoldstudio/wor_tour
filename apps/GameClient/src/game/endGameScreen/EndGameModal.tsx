@@ -139,14 +139,13 @@ export default function EndGameModal({ currentWinner }: EndGameScreenProps) {
             </div>
           </div>
           <Button action={onContinue} forwardRef={buttonRef}>
-            Continue{" "}
             {isWinner && keysService.hasKeyRewardWaiting() ? (
               <>
-                (<KeyAmount amount={-1} className="pl-1" />)
+                Open a pack (<KeyAmount amount={-1} className="pl-1" />)
               </>
             ) : (
               <>
-                (<KeyAmount amount={0} className="pl-1 text-red-500" />)
+                Continue
               </>
             )}
           </Button>
