@@ -1,4 +1,11 @@
-import { Badge, Button, cn, EmptyBar, KeyAmount, textureByRarity } from "@repo/ui";
+import {
+  Badge,
+  Button,
+  cn,
+  EmptyBar,
+  KeyAmount,
+  textureByRarity,
+} from "@repo/ui";
 import useGameMetadataStore from "../stores/gameMetadataStore";
 import Ribbon from "@/home/ui/Ribbon";
 import RewardBox from "./RewardBox";
@@ -111,10 +118,22 @@ export default function EndGameModal({ currentWinner }: EndGameScreenProps) {
             />
             <div className="flex gap-6 items-center relative" ref={rewardsRef}>
               <RewardBox amount={rewards.money}>
-                <img src={getImageUrl(ICONS, "money.png")} className="h-[64px]" />
+                {rewards.money > 0 ? (
+                  <img
+                    src={getImageUrl(ICONS, "money.png")}
+                    className="h-[64px]"
+                  />
+                ) : (
+                  <p className="z-10 text-red-600 text-center">
+                    Daily gold limit reached
+                  </p>
+                )}
               </RewardBox>
               <RewardBox amount={rewards.trophies}>
-                <img src={getImageUrl(ICONS, "trophy.png")} className="h-[64px]" />
+                <img
+                  src={getImageUrl(ICONS, "trophy.png")}
+                  className="h-[64px]"
+                />
               </RewardBox>
             </div>
             <div className="flex gap-2 w-[350px] items-center relative">
@@ -144,9 +163,7 @@ export default function EndGameModal({ currentWinner }: EndGameScreenProps) {
                 Open a pack (<KeyAmount amount={-1} className="pl-1" />)
               </>
             ) : (
-              <>
-                Continue
-              </>
+              <>Continue</>
             )}
           </Button>
         </div>
