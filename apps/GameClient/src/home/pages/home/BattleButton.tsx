@@ -1,24 +1,17 @@
 import usePlayerStore from "@/home/store/playerStore/playerStore";
-import { dailyGoldService, matchmakingService } from "@/services/inject";
-import Timer from "@/services/LoopService/Timer";
+import { matchmakingService } from "@/services/inject";
 import { getImageUrl, ICONS } from "@repo/lib";
 import { cn, Cover } from "@repo/ui";
 import { useEditionMode } from "../deck/context/UseEditionMode";
 
 interface BattleButtonProps {
-	setCurrentTab?: (tab: "deck") => void;
+  setCurrentTab?: (tab: "deck") => void;
 }
 
 export default function BattleButton({ setCurrentTab }: BattleButtonProps) {
   const { setEditionMode } = useEditionMode();
 
-  const { dailyGoldConsumed, dailyGoldLimit } = dailyGoldService.store(
-    (state) => ({
-      dailyGoldConsumed: state.dailyGoldConsumed,
-      dailyGoldLimit: state.dailyGoldLimit,
-    })
-  );
-	const { isDeckFull } = usePlayerStore((state) => ({
+  const { isDeckFull } = usePlayerStore((state) => ({
     isDeckFull: state.isDeckFull(),
   }));
 
@@ -49,12 +42,6 @@ export default function BattleButton({ setCurrentTab }: BattleButtonProps) {
         </>
       )}
       <div className="relative rounded-sm w-full flex justify-center py-2 mx-4">
-        <div
-          className={cn(
-            "bg-white w-full h-full absolute top-0 backdrop-blur-sm opacity-50 rounded-sm",
-            !isDeckFull && "bg-gray-800"
-          )}
-        ></div>
         {!isDeckFull && (
           <img
             src={getImageUrl(ICONS, "padlock-nobg.png")}
@@ -62,10 +49,17 @@ export default function BattleButton({ setCurrentTab }: BattleButtonProps) {
             alt="padlock"
           />
         )}
-        <p className="text-2xl relative font-bold">Adventure</p>
+        <p className="text-2xl relative font-bold text-white">Next</p>
       </div>
-      <div className="relative flex items-center gap-3 justify-start w-full pl-16">
-        <img
+      <div className="relative flex items-center gap-3 w-full py-2 justify-center">
+        <div
+          className={cn(
+            "bg-slate-600 w-full h-full absolute top-0 backdrop-blur-sm opacity-50 rounded-sm",
+            !isDeckFull && "bg-gray-800"
+          )}
+        ></div>
+        <p className="text-2xl relative font-bold text-white">Combat</p>
+        {/* <img
           src={getImageUrl(ICONS, "/money.png")}
           className="h-[48px] drop-shadow-[2px_1px_1px_black]"
         />
@@ -76,7 +70,7 @@ export default function BattleButton({ setCurrentTab }: BattleButtonProps) {
           <p className="text-sm leading-4">
             reset in: <Timer name="dailyGold" />
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
