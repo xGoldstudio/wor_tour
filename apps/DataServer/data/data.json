@@ -1,7 +1,7 @@
 {
   "cards": [
     {
-      "name": "Crystal mud",
+      "name": "Duelist Of Umanity",
       "rarity": "common",
       "id": 1,
       "world": 1,
@@ -12,22 +12,22 @@
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_1_level_1_1731605699277.png"
+          "illustration": "card_1_level_1_1735664266463.png"
         },
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_1_level_2_1731605399149.png"
+          "illustration": "card_1_level_2_1735664272827.png"
         },
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_1_level_3_1731605401661.png"
+          "illustration": "card_1_level_3_1735664276534.png"
         }
       ]
     },
     {
-      "name": "Small Bitter",
+      "name": "Mel, Fury Of Umanity",
       "rarity": "common",
       "id": 2,
       "world": 1,
@@ -46,7 +46,7 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_2_level_1_1731605706503.png"
+          "illustration": "card_2_level_1_1735664225798.png"
         },
         {
           "cost": 3,
@@ -59,7 +59,7 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_2_level_2_1731605708652.png"
+          "illustration": "card_2_level_2_1735664247507.png"
         },
         {
           "cost": 3,
@@ -72,12 +72,12 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_2_level_3_1731605712636.png"
+          "illustration": "card_2_level_3_1735664250531.png"
         }
       ]
     },
     {
-      "name": "Meduso",
+      "name": "Baby Dragon",
       "rarity": "common",
       "id": 3,
       "world": 1,
@@ -88,7 +88,7 @@
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_3_level_1_1717283332492.png"
+          "illustration": "card_3_level_1_1735664651821.png"
         },
         {
           "cost": 3,
@@ -101,7 +101,7 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_3_level_2_1717283337041.png"
+          "illustration": "card_3_level_2_1735664655921.png"
         },
         {
           "cost": 3,
@@ -121,12 +121,12 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_3_level_3_1717283341661.png"
+          "illustration": "card_3_level_3_1735664660579.png"
         }
       ]
     },
     {
-      "name": "Habitant Of The Claw",
+      "name": "Gnome, Elite Of Umanity",
       "rarity": "common",
       "id": 4,
       "world": 1,
@@ -137,7 +137,7 @@
         {
           "cost": 2,
           "states": [],
-          "illustration": "card_4_level_1_1717531357516.png"
+          "illustration": "card_4_level_1_1735663827215.png"
         },
         {
           "cost": 2,
@@ -150,7 +150,7 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_4_level_2_1717531361979.png"
+          "illustration": "card_4_level_2_1735663833073.png"
         },
         {
           "cost": 2,
@@ -163,12 +163,12 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_4_level_3_1717531367194.png"
+          "illustration": "card_4_level_3_1735663842762.png"
         }
       ]
     },
     {
-      "name": "Crabvor Recruit",
+      "name": "Soldier Of Umanity",
       "rarity": "common",
       "id": 5,
       "world": 1,
@@ -179,22 +179,22 @@
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_5_level_1_1717532787493.png"
+          "illustration": "card_5_level_1_1735662180756.png"
         },
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_5_level_2_1717532831361.png"
+          "illustration": "card_5_level_2_1735662186031.png"
         },
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_5_level_3_1717532794506.png"
+          "illustration": "card_5_level_3_1735662188802.png"
         }
       ]
     },
     {
-      "name": "Psychalgua Exo Mana",
+      "name": "Clone Of Umanity",
       "rarity": "common",
       "id": 6,
       "world": 1,
@@ -205,22 +205,22 @@
         {
           "cost": 1,
           "states": [],
-          "illustration": "card_6_level_1_1717534152341.png"
+          "illustration": "card_6_level_1_1735664415936.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": "card_6_level_2_1717534163302.png"
+          "illustration": "card_6_level_2_1735664418154.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": "card_6_level_3_1717534167407.png"
+          "illustration": "card_6_level_3_1735664420499.png"
         }
       ]
     },
     {
-      "name": "Crabvor Preceptor",
+      "name": "Nala, Preceptor Of Umanity",
       "rarity": "common",
       "id": 7,
       "world": 1,
@@ -231,7 +231,7 @@
         {
           "cost": 5,
           "states": [],
-          "illustration": "card_7_level_1_1717535727870.png"
+          "illustration": "card_7_level_1_1735663236459.png"
         },
         {
           "cost": 5,
@@ -244,7 +244,7 @@
               "costPercentage": 0
             }
           ],
-          "illustration": "card_7_level_2_1717535731862.png"
+          "illustration": "card_7_level_2_1735663242071.png"
         },
         {
           "cost": 5,
@@ -257,12 +257,12 @@
               "costPercentage": 0
             }
           ],
-          "illustration": "card_7_level_3_1717535735398.png"
+          "illustration": "card_7_level_3_1735663246783.png"
         }
       ]
     },
     {
-      "name": "Crabvor Elite",
+      "name": "Al, Elite Of Humanity",
       "rarity": "common",
       "id": 8,
       "world": 1,
@@ -273,22 +273,22 @@
         {
           "cost": 4,
           "states": [],
-          "illustration": "card_8_level_1_1717546932368.png"
+          "illustration": "card_8_level_1_1735662414127.png"
         },
         {
           "cost": 4,
           "states": [],
-          "illustration": "card_8_level_2_1717546935760.png"
+          "illustration": "card_8_level_2_1735662416412.png"
         },
         {
           "cost": 4,
           "states": [],
-          "illustration": "card_8_level_3_1717546938522.png"
+          "illustration": "card_8_level_3_1735662419123.png"
         }
       ]
     },
     {
-      "name": "Friendly Crabvor",
+      "name": "Lala, Priestess Of Umanity",
       "rarity": "rare",
       "id": 9,
       "world": 1,
@@ -307,7 +307,7 @@
               "costPercentage": 47
             }
           ],
-          "illustration": "card_9_level_1_1719012812863.png"
+          "illustration": "card_9_level_1_1735663495547.png"
         },
         {
           "cost": 3,
@@ -320,7 +320,7 @@
               "costPercentage": 47
             }
           ],
-          "illustration": "card_9_level_2_1719012817640.png"
+          "illustration": "card_9_level_2_1735663500270.png"
         },
         {
           "cost": 3,
@@ -333,12 +333,12 @@
               "costPercentage": 48
             }
           ],
-          "illustration": "card_9_level_3_1719012820414.png"
+          "illustration": "card_9_level_3_1735663503584.png"
         }
       ]
     },
     {
-      "name": "Crabvor Mage",
+      "name": "An'chen,  Archimage Of Umanity",
       "rarity": "rare",
       "id": 10,
       "world": 1,
@@ -349,22 +349,22 @@
         {
           "cost": 4,
           "states": [],
-          "illustration": "card_10_level_1_1720023182860.png"
+          "illustration": "card_10_level_1_1735663310418.png"
         },
         {
           "cost": 4,
           "states": [],
-          "illustration": "card_10_level_2_1720024251885.png"
+          "illustration": "card_10_level_2_1735663315613.png"
         },
         {
           "cost": 4,
           "states": [],
-          "illustration": "card_10_level_3_1720024380213.png"
+          "illustration": "card_10_level_3_1735663312784.png"
         }
       ]
     },
     {
-      "name": "Crabvor Chief",
+      "name": "Spadassin Of Umanity",
       "rarity": "rare",
       "id": 11,
       "world": 1,
@@ -375,22 +375,22 @@
         {
           "cost": 4,
           "states": [],
-          "illustration": "card_11_level_1_1717534294464.png"
+          "illustration": "card_11_level_1_1735663957919.png"
         },
         {
           "cost": 4,
           "states": [],
-          "illustration": "card_11_level_2_1717534301963.png"
+          "illustration": "card_11_level_2_1735663961642.png"
         },
         {
           "cost": 4,
           "states": [],
-          "illustration": "card_11_level_3_1717534307249.png"
+          "illustration": "card_11_level_3_1735663964018.png"
         }
       ]
     },
     {
-      "name": "Primal Crabvor",
+      "name": "Dare, Exiled Force Of Umanity",
       "rarity": "rare",
       "id": 12,
       "world": 1,
@@ -409,7 +409,7 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_12_level_1_1720034721455.png"
+          "illustration": "card_12_level_1_1735663023256.png"
         },
         {
           "cost": 6,
@@ -422,7 +422,7 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_12_level_2_1720034153300.png"
+          "illustration": "card_12_level_2_1735663028230.png"
         },
         {
           "cost": 6,
@@ -435,12 +435,12 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_12_level_3_1720034142219.png"
+          "illustration": "card_12_level_3_1735663031311.png"
         }
       ]
     },
     {
-      "name": "Gigrabvor",
+      "name": "Skull, Elite Of Umanity",
       "rarity": "epic",
       "id": 13,
       "world": 1,
@@ -459,7 +459,7 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_13_level_1_1719956460438.png"
+          "illustration": "card_13_level_1_1735662889463.png"
         },
         {
           "cost": 4,
@@ -472,7 +472,7 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_13_level_2_1719956464360.png"
+          "illustration": "card_13_level_2_1735662893224.png"
         },
         {
           "cost": 4,
@@ -485,12 +485,12 @@
               "costPercentage": null
             }
           ],
-          "illustration": "card_13_level_3_1719956467507.png"
+          "illustration": "card_13_level_3_1735662897780.png"
         }
       ]
     },
     {
-      "name": "Hero Crabvor",
+      "name": "Hero Of Umanity",
       "rarity": "epic",
       "id": 14,
       "world": 1,
@@ -500,16 +500,8 @@
       "stats": [
         {
           "cost": 2,
-          "states": [
-            {
-              "type": "heal",
-              "trigger": "onPlacement",
-              "target": "allyCards",
-              "value": null,
-              "costPercentage": 0
-            }
-          ],
-          "illustration": "card_14_level_1_1720028759577.png"
+          "states": [],
+          "illustration": "card_14_level_1_1735662540750.png"
         },
         {
           "cost": 2,
@@ -519,10 +511,10 @@
               "trigger": "onPlacement",
               "target": "allyCards",
               "value": null,
-              "costPercentage": 0
+              "costPercentage": 10
             }
           ],
-          "illustration": "card_14_level_2_1720027978144.png"
+          "illustration": "card_14_level_2_1735662543433.png"
         },
         {
           "cost": 2,
@@ -532,15 +524,22 @@
               "trigger": "onPlacement",
               "target": "allyCards",
               "value": null,
-              "costPercentage": 0
+              "costPercentage": 10
+            },
+            {
+              "type": "bannerOfComand",
+              "trigger": "onPlacement",
+              "target": "allyCards",
+              "value": null,
+              "costPercentage": 10
             }
           ],
-          "illustration": "card_14_level_3_1720028021115.png"
+          "illustration": "card_14_level_3_1735662546160.png"
         }
       ]
     },
     {
-      "name": "Queen crabvor",
+      "name": "Dana, Queen Of Umanity",
       "rarity": "legendary",
       "id": 15,
       "world": 1,
@@ -551,17 +550,17 @@
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_15_level_1_1720100170687.png"
+          "illustration": "card_15_level_1_1735662741144.png"
         },
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_15_level_2_1720100176579.png"
+          "illustration": "card_15_level_2_1735662745699.png"
         },
         {
           "cost": 3,
           "states": [],
-          "illustration": "card_15_level_3_1720100190398.png"
+          "illustration": "card_15_level_3_1735662749755.png"
         }
       ]
     },
