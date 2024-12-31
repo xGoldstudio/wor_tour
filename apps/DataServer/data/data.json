@@ -1749,7 +1749,7 @@
       ]
     },
     {
-      "name": "common card 1",
+      "name": "Achiram, Fire Blade",
       "rarity": "common",
       "id": 46,
       "world": 4,
@@ -1758,24 +1758,32 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
-          "cost": 1,
+          "cost": 3,
           "states": [],
-          "illustration": null
+          "illustration": "card_46_level_1_1734799151473.png"
         },
         {
-          "cost": 1,
+          "cost": 3,
           "states": [],
-          "illustration": null
+          "illustration": "card_46_level_2_1734799154563.png"
         },
         {
-          "cost": 1,
-          "states": [],
-          "illustration": null
+          "cost": 3,
+          "states": [
+            {
+              "type": "flameThrower",
+              "trigger": "onDirectAttackHit",
+              "target": "enemyCards",
+              "value": null,
+              "costPercentage": 20
+            }
+          ],
+          "illustration": "card_46_level_3_1734799158022.png"
         }
       ]
     },
     {
-      "name": "common card 2",
+      "name": "Ulfire, The Conqueror",
       "rarity": "common",
       "id": 47,
       "world": 4,
@@ -1784,24 +1792,32 @@
       "speedDamageRatio": 0.5,
       "stats": [
         {
-          "cost": 1,
+          "cost": 3,
           "states": [],
-          "illustration": null
+          "illustration": "card_47_level_1_1734799343095.png"
         },
         {
-          "cost": 1,
+          "cost": 3,
           "states": [],
-          "illustration": null
+          "illustration": "card_47_level_2_1734799345326.png"
         },
         {
-          "cost": 1,
-          "states": [],
-          "illustration": null
+          "cost": 3,
+          "states": [
+            {
+              "type": "flameThrower",
+              "trigger": "onDirectAttackHit",
+              "target": "enemyCards",
+              "value": null,
+              "costPercentage": 40
+            }
+          ],
+          "illustration": "card_47_level_3_1734799347561.png"
         }
       ]
     },
     {
-      "name": "common card 3",
+      "name": "Fire Thief",
       "rarity": "common",
       "id": 48,
       "world": 4,
@@ -1812,22 +1828,44 @@
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_48_level_1_1734799844452.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_48_level_2_1734799807822.png"
         },
         {
           "cost": 1,
-          "states": [],
-          "illustration": null
+          "states": [
+            {
+              "type": "bleeding",
+              "trigger": "onAttack",
+              "target": "selfCard",
+              "value": 20,
+              "costPercentage": null
+            },
+            {
+              "type": "massacre",
+              "trigger": "onDirectAttackHit",
+              "target": "directEnnemyCard",
+              "value": null,
+              "costPercentage": 15
+            },
+            {
+              "type": "flameThrower",
+              "trigger": "onDirectAttackHit",
+              "target": "enemyCards",
+              "value": null,
+              "costPercentage": 20
+            }
+          ],
+          "illustration": "card_48_level_3_1734799811835.png"
         }
       ]
     },
     {
-      "name": "common card 4",
+      "name": "Lightnight",
       "rarity": "common",
       "id": 49,
       "world": 4,
@@ -1838,22 +1876,22 @@
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_49_level_1_1735660905941.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_49_level_2_1735660909510.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_49_level_3_1735660914682.png"
         }
       ]
     },
     {
-      "name": "common card 5",
+      "name": "Electronight",
       "rarity": "common",
       "id": 50,
       "world": 4,
@@ -1864,17 +1902,17 @@
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_50_level_1_1735660948219.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_50_level_2_1735660950650.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_50_level_3_1735660953485.png"
         }
       ]
     },
@@ -2035,59 +2073,59 @@
       ]
     },
     {
-      "name": "rare card 4",
+      "name": "Undead Sorceress",
       "rarity": "rare",
       "id": 57,
       "world": 4,
       "adjustementStrength": 0,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.66,
+      "speedDamageRatio": 0.24,
       "stats": [
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_57_level_1_1735661311498.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_57_level_2_1735661313974.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_57_level_3_1735661316584.png"
         }
       ]
     },
     {
-      "name": "epic card 1",
+      "name": "Mythril, Artic Founder",
       "rarity": "epic",
       "id": 58,
       "world": 4,
       "adjustementStrength": 0,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.55,
+      "speedDamageRatio": 0.76,
       "stats": [
         {
-          "cost": 1,
+          "cost": 4,
           "states": [],
-          "illustration": null
+          "illustration": "card_58_level_1_1734800513948.png"
         },
         {
-          "cost": 1,
+          "cost": 4,
           "states": [],
-          "illustration": null
+          "illustration": "card_58_level_2_1734800517017.png"
         },
         {
-          "cost": 1,
+          "cost": 4,
           "states": [],
-          "illustration": null
+          "illustration": "card_58_level_3_1734800528276.png"
         }
       ]
     },
     {
-      "name": "epic card 2",
+      "name": "Vindict, Of The Undead Army",
       "rarity": "epic",
       "id": 59,
       "world": 4,
@@ -2098,43 +2136,51 @@
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_59_level_1_1735661117534.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_59_level_2_1735661120528.png"
         },
         {
           "cost": 1,
           "states": [],
-          "illustration": null
+          "illustration": "card_59_level_3_1735661122884.png"
         }
       ]
     },
     {
-      "name": "legendary card 1",
+      "name": "Prince Of The Artics",
       "rarity": "legendary",
       "id": 60,
       "world": 4,
       "adjustementStrength": 0,
-      "attackDefenseRatio": 0.5,
-      "speedDamageRatio": 0.5,
+      "attackDefenseRatio": 0.7,
+      "speedDamageRatio": 0.73,
       "stats": [
         {
-          "cost": 1,
+          "cost": 5,
           "states": [],
-          "illustration": null
+          "illustration": "card_60_level_1_1734801040087.png"
         },
         {
-          "cost": 1,
+          "cost": 5,
           "states": [],
-          "illustration": null
+          "illustration": "card_60_level_2_1734801046568.png"
         },
         {
-          "cost": 1,
-          "states": [],
-          "illustration": null
+          "cost": 5,
+          "states": [
+            {
+              "type": "sacredDuelist",
+              "trigger": "idle",
+              "target": "selfCard",
+              "value": null,
+              "costPercentage": null
+            }
+          ],
+          "illustration": "card_60_level_3_1734801048969.png"
         }
       ]
     },
@@ -2503,28 +2549,57 @@
       ]
     },
     {
-      "name": "legendary card 1",
+      "name": "Zaran, God Hunter",
       "rarity": "legendary",
       "id": 75,
       "world": 5,
-      "adjustementStrength": 0,
-      "attackDefenseRatio": 0.01,
-      "speedDamageRatio": 0.01,
+      "adjustementStrength": 10,
+      "attackDefenseRatio": 0.68,
+      "speedDamageRatio": 0.33,
       "stats": [
         {
-          "cost": 1,
+          "cost": 5,
           "states": [],
-          "illustration": null
+          "illustration": "card_75_level_1_1734627932634.png"
         },
         {
-          "cost": 1,
+          "cost": 5,
           "states": [],
-          "illustration": null
+          "illustration": "card_75_level_2_1734628087956.png"
         },
         {
-          "cost": 1,
-          "states": [],
-          "illustration": null
+          "cost": 5,
+          "states": [
+            {
+              "type": "divineShield",
+              "trigger": "onDirectlyAttacked",
+              "target": "selfCard",
+              "value": 1,
+              "costPercentage": null
+            },
+            {
+              "type": "sacredDuelist",
+              "trigger": "idle",
+              "target": "selfCard",
+              "value": null,
+              "costPercentage": null
+            },
+            {
+              "type": "rage",
+              "trigger": "idle",
+              "target": "selfCard",
+              "value": null,
+              "costPercentage": 10
+            },
+            {
+              "type": "flameThrower",
+              "trigger": "onDirectAttackHit",
+              "target": "enemyCards",
+              "value": null,
+              "costPercentage": 10
+            }
+          ],
+          "illustration": "card_75_level_3_1734627940035.png"
         }
       ]
     }

@@ -98,6 +98,7 @@ export default function HandCardDebug() {
           <p className="text-2xl font-semibold">Basic operations</p>
           <div className="flex gap-4">
             <Button action={() => defaultActions(clock)}>Draw Card</Button>
+            <Button action={() => clock.triggerEvent({ type: "manaConsume", isPlayer: true, delta: 999 })}>Consume all mana</Button>
           </div>
           <p className="text-2xl font-semibold">States</p>
           <div className="grid grid-cols-3 gap-4">

@@ -125,7 +125,7 @@ function GameCard({
         position={position}
         trackedInstanceId={trackedInstanceId}
       >
-        <div className="animationProgress absolute top-0 w-full h-full bg-slate-600 opacity-40 origin-top" />
+        <div className="animationProgress absolute top-0 w-full h-full bg-slate-800 opacity-60 origin-top" />
       </GameCardDesign>
     </div>
   );

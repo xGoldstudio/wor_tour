@@ -1,1 +1,1 @@
-export const WORLD_GOLD_RATIO = 1.2;
+export const WORLD_GOLD_RATIO = 1;

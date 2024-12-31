@@ -8,6 +8,7 @@ import useRewardStore from "./home/store/rewardStore";
 import { GameStateObject } from "game_engine";
 import {
   clientLoop,
+  dailyGoldService,
   experienceService,
   matchmakingService,
 } from "./services/inject";
@@ -16,6 +17,7 @@ import DebugSection from "./debug/DebugSection";
 import { CornerUpLeft } from "lucide-react";
 import usePersistentState from "./debug/usePersistentState";
 import { cn, useOnMount, useOnUnMount } from "@repo/ui";
+import { useTimerStateSecond } from "./services/LoopService/Timer";
 
 export default function DebugPanel() {
   const { addGold, setTrophies } = usePlayerStore((state) => ({
@@ -63,6 +65,14 @@ export default function DebugPanel() {
   const [isOpen, setIsOpen] = usePersistentState("debug-panel-open", false);
 
   const [isShow, setIsShow] = usePersistentState<boolean>("debug-panel-show", true);
+
+  const { dailyGoldConsumed, dailyGoldLimit } = dailyGoldService.store(
+    (state) => ({
+      dailyGoldConsumed: state.dailyGoldConsumed,
+      dailyGoldLimit: state.dailyGoldLimit,
+    })
+  );
+  const remainingTimeDailyGoldRewards = useTimerStateSecond("dailyGold");
 
   function toggleDebugPanel(e: KeyboardEvent) {
     if (e.key === " ") {
@@ -124,6 +134,19 @@ export default function DebugPanel() {
                 <DebugButton onClick={() => setTrophies(-1)}>-1</DebugButton>
                 <DebugButton onClick={() => useRewardStore.getState().addReward({ type: "rawTrophies", amount: 100 })}>+100</DebugButton>
                 <DebugButton onClick={() => useRewardStore.getState().addReward({ type: "rawTrophies", amount: 1000 })}>+1000</DebugButton>
+              </div>
+            </DebugSection>
+            <DebugSection title="Gold daily reward">
+              <div className="grid grid-cols-2 gap-4">
+                <DebugButton onClick={() => console.log(`${dailyGoldConsumed}/${dailyGoldLimit}, reset in ${remainingTimeDailyGoldRewards}s`)}>
+                  Log
+                </DebugButton>
+                <DebugButton onClick={() => dailyGoldService.reset()}>
+                  Reset
+                </DebugButton>
+                <DebugButton onClick={() => dailyGoldService.earnReward(dailyGoldLimit - dailyGoldConsumed)}>
+                  Earn full
+                </DebugButton>
               </div>
             </DebugSection>
             <DebugSection title="Experience">

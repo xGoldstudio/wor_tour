@@ -12,6 +12,7 @@ export default function FullCard({
   size = 1,
   cardShards,
   showEffectDesc,
+  illustrationChildren,
 }: {
   card: CardType;
   className?: string;
@@ -21,6 +22,7 @@ export default function FullCard({
     maxShards: number;
   };
   showEffectDesc?: boolean;
+  illustrationChildren?: React.ReactNode;
 }) {
   return (
     <div
@@ -59,14 +61,16 @@ export default function FullCard({
                   </div>
                 </div>
               </div>
-              <div className="w-full h-full grow overflow-hidden relative pt-2 ">
-                <div className="flex flex-col items-end absolute bottom-[5px] z-10 right-[4px]">
-                  <States
-                    states={card.states}
-                    size={size * 1.1}
-                    showDesc={showEffectDesc}
-                  />
-                </div>
+              <div className="w-full h-full grow overflow-hidden relative mt-2">
+                {illustrationChildren || (
+                  <div className="flex flex-col items-end absolute bottom-[5px] z-10 right-[4px]">
+                    <States
+                      states={card.states}
+                      size={size * 1.1}
+                      showDesc={showEffectDesc}
+                    />
+                  </div>
+                )}
                 <CardContentIllustartion card={card} size={size * 3} />
               </div>
               {cardShards && (
@@ -111,7 +115,7 @@ interface StateLineProps {
   value: number;
 }
 
-function StatLine({ className, title, value }: StateLineProps) {
+export function StatLine({ className, title, value }: StateLineProps) {
   return (
     <div className={cn("text-sm", className)}>
       <InnerBord size={3}>

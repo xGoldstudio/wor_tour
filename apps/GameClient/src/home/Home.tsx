@@ -35,11 +35,11 @@ const tabs: (({
   setCurrentTab,
 }: {
   setCurrentTab: (tab: Tabs) => void;
-}) => JSX.Element)[] = [ShopTab, HomeTab, DeckTab];
+}) => JSX.Element)[] = [HomeTab, ShopTab, DeckTab];
 
 const tabsPosition: Record<Tabs, number> = {
-  shop: 0,
-  home: 1,
+  home: 0,
+  shop: 1,
   deck: 2,
 };
 export default function Home() {
@@ -49,7 +49,7 @@ export default function Home() {
     <div className="w-screen h-screen justify-center bg-black relative flex">
       <DebugPanel />
       <div
-        className="w-full h-full relative overflow-hidden bg-slate-900"
+        className="max-w-[700px] h-full relative overflow-hidden bg-slate-900"
         id="home"
       >
         <RewardBlockWithContext />
@@ -191,7 +191,7 @@ export function Header() {
   }));
 
   return (
-    <div className="grid grid-cols-3 gap-4 max-[700px]:px-4 py-4 w-full justify-between max-w-[700px]">
+    <div className="grid grid-cols-3 gap-4 px-4 py-4 w-full justify-between max-w-[700px]">
       <ExperienceOutput />
       <KeysOutput />
       <RessourceCounter
