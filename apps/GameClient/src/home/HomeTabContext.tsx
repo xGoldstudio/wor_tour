@@ -15,7 +15,7 @@ export default function HomeTabContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [currentTab, setCurrentTab] = useState<Tabs>("home");
+  const [currentTab, setCurrentTab] = useState<Tabs>("shop");
 
   return (
     <HomeTabContext.Provider

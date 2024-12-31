@@ -1,16 +1,11 @@
 import { BoosterType } from "@/home/store/useBooster/useBooster";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import BoosterIllustration from "./BoosterIllustration";
 import Modal, { BackgroundModal } from "@/home/ui/modal";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import CardDisplay from "@/game/gui/card/FullCard";
 import useScrollCardList from "../deck/useScrollCardList";
-import {
-  BoosterRarityDrop,
-  Box,
-  Button,
-  GoldAmount,
-} from "@repo/ui";
+import { BoosterRarityDrop, Box, Button, GoldAmount } from "@repo/ui";
 import ConfirmationModal from "@/home/ui/ConfirmationModal";
 import { getImageUrl, ICONS, preventDefault } from "@repo/lib";
 import openBooster from "@/home/store/useBooster/useBooster";
@@ -20,23 +15,19 @@ interface BoosterProps {
 }
 
 export function Booster({ booster }: BoosterProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const playerGold = usePlayerStore((state) => state.gold);
 
   return (
     <div
       className="flex flex-col items-center gap-4 cursor-pointer"
-      onClick={() => setIsModalOpen(true)}
     >
-      <BoosterIllustration size={0.95} title={booster.name} />
-      <Button action={() => setIsModalOpen(true)} full small>
-        <GoldAmount amount={booster.cost} />
+      <BoosterImage booster={booster} />
+      <Button action={() => openBooster(booster.name, true)} small disabled={playerGold < booster.cost}>
+        <div className="flex flex-col w-[250px]">
+          <p className="text-md">Buy {booster.name}</p>
+          <GoldAmount amount={booster.cost} />
+        </div>
       </Button>
-      {isModalOpen && (
-        <BoosterModal
-          closeModal={() => setIsModalOpen(false)}
-          booster={booster}
-        />
-      )}
     </div>
   );
 }
@@ -88,7 +79,10 @@ export function BoosterModal({ closeModal, booster }: BoosterModalProps) {
                   className="px-4"
                 >
                   <div className="w-10 h-10 flex justify-center items-center">
-                    <img src={getImageUrl(ICONS, "/glass.svg")} className="w-5 h-5" />
+                    <img
+                      src={getImageUrl(ICONS, "/glass.svg")}
+                      className="w-5 h-5"
+                    />
                   </div>
                 </Button>
               </div>
@@ -132,5 +126,43 @@ export function BoosterModal({ closeModal, booster }: BoosterModalProps) {
         </ConfirmationModal>
       </BackgroundModal>
     </Modal>
+  );
+}
+
+function BoosterImage({ booster }: { booster: BoosterType }) {
+  const ref = useRef<HTMLImageElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <div
+      className="w-[280px] relative z-50"
+      ref={wrapperRef}
+      onMouseMove={(e) => {
+        if (wrapperRef.current === null) return;
+        const x = e.clientX - wrapperRef.current.getBoundingClientRect().left;
+        const y = e.clientY - wrapperRef.current.getBoundingClientRect().top;
+        const normalizedX = x / wrapperRef.current.offsetWidth;
+        const normalizedY = y / wrapperRef.current.offsetHeight;
+        // 0 = -15, 1 = 15
+        const rotationX = (normalizedX - 0.5) * 30;
+        const rotationY = (normalizedY - 0.5) * -30;
+        ref.current!.style.transform = `perspective(1000px) rotateY(${rotationX}deg) rotateX(${rotationY}deg) scale3d(1.1, 1.1, 1.1)`;
+      }}
+      onMouseLeave={() => {
+        ref.current!.style.transform = "perspective(1000px)";
+      }}
+    >
+      <img
+        src={getImageUrl(ICONS, "classicBooster.png")}
+        alt={booster.name}
+        className="w-full"
+        ref={ref}
+        style={{
+          transform: "perspective(1000px)",
+          transition: "transform",
+          transitionDuration: "0.1s",
+        }}
+      />
+    </div>
   );
 }
