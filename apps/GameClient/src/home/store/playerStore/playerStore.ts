@@ -83,8 +83,7 @@ const usePlayerStore = create(
         set((state) => {
           const index = state.deck.findIndex((cardId) => cardId === id);
           state.deck.splice(index, 1, 0);
-          const nextNumberOfCardsInDeck = state.numberOfCardsInDeck - 1;
-
+          const nextNumberOfCardsInDeck = state.deck.filter((id) => id !== 0).length;
           return {
             deck: [...state.deck],
             numberOfCardsInDeck: nextNumberOfCardsInDeck,
@@ -98,10 +97,10 @@ const usePlayerStore = create(
             1,
             id
           );
-          const nextNumberOfCardsInDeck = state.numberOfCardsInDeck + 1;
+          const nextNumberOfCardsInDeck = state.deck.filter((id) => id !== 0).length;
           return {
             deck: [...state.deck],
-            numberOfCardsInDeck: state.numberOfCardsInDeck + 1,
+            numberOfCardsInDeck: nextNumberOfCardsInDeck,
             isDeckFull: nextNumberOfCardsInDeck >= 8,
           };
         }),

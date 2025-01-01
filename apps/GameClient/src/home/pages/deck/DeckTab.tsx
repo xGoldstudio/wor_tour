@@ -20,7 +20,9 @@ function DeckStats({ deck }: DeckStatsProps) {
   const powerTotal = getDeckStrength(deck);
 
   const averageCostDeck =
-    deck.reduce((total, card) => total + card.cost, 0) / deck.length;
+    deck.length === 0
+      ? 0
+      : deck.reduce((total, card) => total + card.cost, 0) / deck.length;
   return (
     <div className="flex w-full justify-between items-center min-h-[55px] h-[55px] mx-auto px-4 relative text-slate-800">
       <Cover cardRarity="rare" className="bg-slate-900" />
@@ -44,7 +46,7 @@ function DeckStats({ deck }: DeckStatsProps) {
 function EmptyDeckPlaceholder() {
   return (
     <div className="w-full h-full flex justify-center items-center">
-      <div className="mb-2 h-[178px] w-[128px] bg-black bg-opacity-20 border border-slate-700 border-opacity-25 backdrop-filter backdrop-blur-sm rounded-sm " />
+      <div className="h-[178px] w-[128px] bg-black bg-opacity-20 border border-slate-700 border-opacity-25 backdrop-filter backdrop-blur-sm rounded-sm " />
     </div>
   );
 }
@@ -98,7 +100,7 @@ export default function DeckTab() {
       <div className="absolute top-0 left-0 w-full">
         <div className="grid grid-rows-[1fr_auto]">
           <div className="flex justify-center">
-            <div className="py-12 max-w-full w-fit gap-6 grid grid-cols-[repeat(auto-fill,_128px)]">
+            <div className="py-10 max-w-full w-fit gap-6 grid grid-cols-[repeat(auto-fill,_128px)]">
               {detailledDeck.map((card, index) =>
                 !card ? (
                   <EmptyDeckPlaceholder />
