@@ -6,7 +6,7 @@ export default function ShopTab() {
   // const buyableCards = useShopStore((state) => state.cards);
 
   return (
-    <div className="w-full flex justify-center pt-20 absolute top-0 h-full">
+    <div className="w-full flex justify-center items-center absolute top-0 h-full">
       <Booster booster={boosters[0]} key={boosters[0].name} />
     </div>
   );

@@ -18,6 +18,8 @@ function RewardSection({ children }: { children: React.ReactNode }) {
   const [transitionReady, setTransitionReady] = useState<
     false | "layout" | "end"
   >(false);
+  
+  const duration = 0.7;
 
   useGSAP(
     () => {
@@ -28,18 +30,18 @@ function RewardSection({ children }: { children: React.ReactNode }) {
       const tl = gsap.timeline({
         onComplete: () => setTransitionReady("end"),
       });
-      tl.fromTo(doorLeft, { scaleX: 0 }, { scaleX: 1, duration: 1 }, "open");
+      tl.fromTo(doorLeft, { scaleX: 0 }, { scaleX: 1, duration }, "open");
       tl.fromTo(
         doorRight,
         { scaleX: 0 },
         {
           scaleX: 1,
-          duration: 1,
+          duration,
           onComplete: () => setTransitionReady("layout"),
         },
         "open"
       );
-      tl.addLabel("close", "+=0.5");
+      tl.addLabel("close", "+=0.1");
       tl.to(doorLeft, { scaleX: 0, duration: 1 }, "close");
       tl.to(doorRight, { scaleX: 0, duration: 1 }, "close");
     },
@@ -57,8 +59,8 @@ function RewardSection({ children }: { children: React.ReactNode }) {
           {transitionReady === "end" && children}
         </div>
       )}
-      <div className="doorLeft w-1/2 h-full bg-slate-800 origin-left z-10 relative scale-x-0"></div>
-      <div className="doorRight w-1/2 h-full bg-slate-800 origin-right z-10 relative scale-x-0"></div>
+      <div className="doorLeft w-1/2 h-full bg-slate-800 origin-left z-10 relative scale-x-0"><HomeBg /></div>
+      <div className="doorRight w-1/2 h-full bg-slate-800 origin-right z-10 relative scale-x-0"><HomeBg /></div>
     </div>
   );
 }

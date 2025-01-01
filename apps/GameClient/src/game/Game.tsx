@@ -8,7 +8,6 @@ import StartSequence from "./StartSequence";
 import EndGameScreenWatcher from "./endGameScreen/EndGameScreenWatcher";
 import { HomeBg } from "@/home/Home";
 import { StatesHistory } from "@repo/ui";
-import PlayerProfile from "./gui/PlayerProfile";
 import CardsBoard from "./gui/CardsBoard";
 
 export default function Game() {

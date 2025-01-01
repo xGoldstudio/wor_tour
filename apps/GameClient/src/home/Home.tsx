@@ -35,11 +35,11 @@ const tabs: (({
   setCurrentTab,
 }: {
   setCurrentTab: (tab: Tabs) => void;
-}) => JSX.Element)[] = [HomeTab, ShopTab, DeckTab];
+}) => JSX.Element)[] = [ShopTab, HomeTab, DeckTab];
 
 const tabsPosition: Record<Tabs, number> = {
-  home: 0,
-  shop: 1,
+  shop: 0,
+  home: 1,
   deck: 2,
 };
 export default function Home() {

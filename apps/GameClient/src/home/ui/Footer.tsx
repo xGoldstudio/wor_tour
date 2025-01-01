@@ -42,16 +42,16 @@ export default function Footer({
         <Cover cardRarity="epic" />
       </div>
       <FooterButton
-        onClick={() => setCurrentTab("home")}
-        label="Battle"
-        selected={currentTab === "home"}
-        imageUrl="fightback.png"
-      />
-      <FooterButton
         onClick={() => setCurrentTab("shop")}
         label="Shop"
         selected={currentTab === "shop"}
         imageUrl="backpack.png"
+      />
+      <FooterButton
+        onClick={() => setCurrentTab("home")}
+        label="Battle"
+        selected={currentTab === "home"}
+        imageUrl="fightback.png"
       />
       <FooterButton
         onClick={() => setCurrentTab("deck")}
