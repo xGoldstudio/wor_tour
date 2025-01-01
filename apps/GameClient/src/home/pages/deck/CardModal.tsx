@@ -7,6 +7,7 @@ import { Button } from "@repo/ui";
 import { preventDefault } from "@repo/lib";
 import { useContext } from "react";
 import { HomeTabContext, HomeTabContextType } from "@/home/HomeTabContext";
+import { Plus, ShoppingCart, Trash, Undo2 } from "lucide-react";
 
 interface CardModalProps {
   cardId: number;
@@ -34,7 +35,7 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
     3
   );
 
-  const isLevelOwned = level >= currentPosition;
+  const isLevelOwned = collectionInfo && level >= currentPosition;
 
   return (
     <Modal title={`card_${cardId}`} closeModal={closeModal} cover>
@@ -54,22 +55,28 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
             />
           ))}
         </div>
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex items-center gap-4">
+          <Button action={closeModal} rarity="rare" className="w-[150px]">
+            <Undo2 strokeWidth={2} />
+          </Button>
           {isLevelOwned ? (
             isPlayed ? (
               <Button
+                rarity="common"
                 action={() =>
                   usePlayerStore.getState().removeCardFromDeck(cardId)
                 }
+                className="w-[150px]"
               >
-                Remove from deck
+                <Trash strokeWidth={2} />
               </Button>
             ) : (
               <Button
                 action={() => usePlayerStore.getState().addCardToDeck(cardId)}
                 disabled={isDeckFull}
+                className="w-[150px]"
               >
-                {isDeckFull ? "Deck is full" : "Play this card"}
+                <Plus strokeWidth={3} />
               </Button>
             )
           ) : (
@@ -78,17 +85,11 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
                 setCurrentTab("shop");
                 closeModal();
               }}
+              className="w-[150px]"
             >
-              Buy more cards
+              <ShoppingCart strokeWidth={2} />
             </Button>
           )}
-          <Button
-            action={closeModal}
-            rarity="common"
-            className="text-white"
-          >
-            Leave
-          </Button>
         </div>
       </div>
     </Modal>
