@@ -45,15 +45,8 @@ export default function Modal({
     <div className="absolute w-full h-full top-0 z-20">
       {cover ? (
         <>
-          <div className="w-full h-full bg-slate-700 opacity-80 absolute"></div>
-          <div className="w-full h-full relative flex flex-col items-center justify-center">
-            {/* <div className="w-full max-w-[700px] absolute left-1/2 -translate-x-1/2 top-0">
-              <img
-                src={getImageUrl(ICONS, "cross.svg")}
-                className="absolute right-0 max-[700px]:right-8 top-4 w-8 h-8 cursor-pointer"
-                onClick={closeModal}
-              />
-            </div> */}
+          <div className="w-full h-full bg-gray-800 opacity-70 absolute"></div>
+          <div className="w-full h-full relative flex flex-col items-center justify-center backdrop-blur-sm">
             {children}
           </div>
         </>

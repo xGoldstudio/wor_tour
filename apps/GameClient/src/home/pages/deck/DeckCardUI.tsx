@@ -1,10 +1,9 @@
-import { getImageUrl, ICONS, preventDefault } from "@repo/lib";
+import { preventDefault } from "@repo/lib";
 import {
   Button,
   CardBorder,
   CardContentIllustartion,
   cn,
-  Cover,
   ManaBall,
 } from "@repo/ui";
 import { useState } from "react";
@@ -13,6 +12,7 @@ import { Tabs } from "./DeckInterface";
 import { useEditionMode } from "./context/UseEditionMode";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { CardCollection } from "./cardFilters";
+import { Info, Plus, Trash } from "lucide-react";
 
 interface CardUIProps {
   cardId: number;
@@ -41,7 +41,7 @@ export function DeckCardUI({
         : state.getCompleteInfo(cardId),
       removeCardFromDeck: state.removeCardFromDeck,
       addCardToDeck: state.addCardToDeck,
-      isDeckFull: state.isDeckFull(),
+      isDeckFull: state.isDeckFull,
       lockPattern: state.getTheLockPattern(cardId),
     }));
   const isSelected = selectedCard === card.id;
@@ -57,7 +57,7 @@ export function DeckCardUI({
       <div
         className={cn(
           `relative transition-transform`,
-          isSelected && "z-50 scale-105"
+          isSelected && "z-50 scale-110"
         )}
         style={{
           width: `${size * 128}px`,
@@ -65,13 +65,6 @@ export function DeckCardUI({
         }}
       >
         <div className="absolute top-0 left-0">
-          <Cover
-            cardRarity={"rare"}
-            className={cn(
-              "absolute w-[calc(100%_+17px)] h-[calc(100%_+17px)] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 blur-[2px] rounded-sm opacity-0 transition-opacity",
-              isSelected && "opacity-100"
-            )}
-          />
           <div className={cn("relative select-none h-min  ")}>
             {locked && (
               <div
@@ -99,7 +92,9 @@ export function DeckCardUI({
                   setSelectedCard(0);
                 } else {
                   setSelectedCard!(card.id);
-                  !isDeckFull && setEditionMode(true);
+                  if (!isDeckFull) {
+                    setEditionMode(true);
+                  }
                 }
               }}
             >
@@ -107,10 +102,7 @@ export function DeckCardUI({
                 <div
                   className={`w-full h-full flex flex-col relative ${opacity}`}
                 >
-                  <CardContentIllustartion
-                    card={card}
-                    size={size * 2}
-                  />
+                  <CardContentIllustartion card={card} size={size * 2} />
                   <div className={`absolute top-0 right-0 ${opacity}`}>
                     <svg
                       className="h-full absolute left-0 -translate-x-full"
@@ -142,56 +134,35 @@ export function DeckCardUI({
                   className="p-0"
                   action={() => setIsDescriptionOpen(true)}
                 >
-                  <img
-                    className="transition-all duration-100 ease-in-out group-hover:scale-125"
-                    src={getImageUrl(ICONS, "/information-circle-no-bg.png")}
-                    width={32}
-                    height={32}
-                    alt=""
-                  />
+                  <Info strokeWidth={2} className="my-1" />
                 </Button>
               </div>
-              <div
-                className={"shadow-2xl group rounded-lg w-full h-full"}
-              >
+              <div className={"shadow-2xl group rounded-lg w-full h-full"}>
                 {!locked && (card as CardCollection).isInDeck ? (
                   <Button
                     full
                     hFull
-                    rarity={"rare"}
+                    rarity={"common"}
                     className="p-0"
                     action={() => {
-                      setEditionMode(true);
                       removeCardFromDeck(card.id);
                       setCurrentTab?.("Deck");
                     }}
                   >
-                    <img
-                      className="transition-all duration-100 ease-in-out group-hover:scale-125"
-                      src={getImageUrl(ICONS, "/trash-no-bg.png")}
-                      width={32}
-                      height={32}
-                      alt=""
-                    />
+                    <Trash strokeWidth={2} />
                   </Button>
                 ) : (
                   <Button
                     full
                     hFull
                     rarity={"rare"}
-                    className="p-0"
                     action={preventDefault(() => {
                       addCardToDeck(card.id);
                       setCurrentTab?.("Deck");
                     })}
+                    className="p-0"
                   >
-                    <img
-                      className="transition-all duration-100 ease-in-out group-hover:scale-125"
-                      src={getImageUrl(ICONS, "plus.svg")}
-                      width={22}
-                      height={22}
-                      alt=""
-                    />
+                    <Plus strokeWidth={2} />
                   </Button>
                 )}
               </div>

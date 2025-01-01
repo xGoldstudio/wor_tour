@@ -1,6 +1,7 @@
 import { CardRarity } from "game_engine";
 import { cn } from "../lib/utils";
 import textureByRarity from "../lib/textureByRarity";
+import { disableDefaultAndPropagation } from "@repo/lib";
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -29,12 +30,12 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button
-      onClick={action}
+      onClick={disableDefaultAndPropagation(action)}
       className={cn(
         "rounded-sm overflow-hidden text-nowrap relative z-10 font-semibold shadow-md",
         width !== undefined ? width : full ? "w-full" : "w-min",
         hFull ? "h-full" : "h-min",
-        disabled ? "brightness-75" : "brightness-100",
+        disabled ? "brightness-50" : "brightness-100",
         rarity === "epic" ? "bg-slate-100" : "bg-black"
       )}
       disabled={disabled}

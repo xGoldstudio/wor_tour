@@ -38,7 +38,7 @@ interface PlayerStore {
   ) => (CardType & { isInDeck: boolean })[];
   removeCardFromDeck: (id: number) => void;
   addCardToDeck: (id: number) => void;
-  isDeckFull: () => boolean;
+  isDeckFull: boolean;
   isPlayed: (cardId: number) => boolean;
 
   getAllCardsLocked: () => (CardType & { isInDeck: boolean })[];
@@ -83,10 +83,12 @@ const usePlayerStore = create(
         set((state) => {
           const index = state.deck.findIndex((cardId) => cardId === id);
           state.deck.splice(index, 1, 0);
+          const nextNumberOfCardsInDeck = state.numberOfCardsInDeck - 1;
 
           return {
             deck: [...state.deck],
-            numberOfCardsInDeck: state.numberOfCardsInDeck - 1,
+            numberOfCardsInDeck: nextNumberOfCardsInDeck,
+            isDeckFull: nextNumberOfCardsInDeck >= 8,
           };
         }),
       addCardToDeck: (id: number) =>
@@ -96,12 +98,13 @@ const usePlayerStore = create(
             1,
             id
           );
+          const nextNumberOfCardsInDeck = state.numberOfCardsInDeck + 1;
           return {
             deck: [...state.deck],
             numberOfCardsInDeck: state.numberOfCardsInDeck + 1,
+            isDeckFull: nextNumberOfCardsInDeck >= 8,
           };
         }),
-      isDeckFull: () => get().numberOfCardsInDeck >= 8,
       isPlayed: (cardId: number) => get().deck.includes(cardId),
 
       getAllCardsLocked: () => {

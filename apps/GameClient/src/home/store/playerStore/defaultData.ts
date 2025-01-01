@@ -31,6 +31,7 @@ export const defaultPlayerStoreData = {
 	isInit: false,
   currentMissingCards: [],
   numberOfCardsInDeck: 8,
+	isDeckFull: true,
 }
 
 export function initPlayerStore() {

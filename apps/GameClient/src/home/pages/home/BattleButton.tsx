@@ -12,7 +12,7 @@ export default function BattleButton({ setCurrentTab }: BattleButtonProps) {
   const { setEditionMode } = useEditionMode();
 
   const { isDeckFull } = usePlayerStore((state) => ({
-    isDeckFull: state.isDeckFull(),
+    isDeckFull: state.isDeckFull,
   }));
 
   return (

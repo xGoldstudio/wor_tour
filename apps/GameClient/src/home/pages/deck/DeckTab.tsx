@@ -1,7 +1,7 @@
 import { filterUndefined, getImageUrl, ICONS } from "@repo/lib";
 import { Cover, ManaBall } from "@repo/ui";
 import * as _ from "lodash";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import Collection from "./Collection";
 import { useEditionMode } from "./context/UseEditionMode";
@@ -10,6 +10,7 @@ import { NUMBER_OF_CARD_IN_DECK } from "@/const";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { getDeckStrength } from "@/services/MatchmakingService/buildDeck";
 import { CardType } from "game_engine";
+import { useWhenLeaveTab } from "@/home/tabs/useWhenLeaveTab";
 
 interface DeckStatsProps {
   deck: CardType[];
@@ -50,6 +51,17 @@ function EmptyDeckPlaceholder() {
 
 export type selectedCardType = { id: number };
 
+function useWhenCardAddedOrRemovedFromDeck(cb: () => void) {
+  const { deck } = usePlayerStore((state) => ({
+    deck: state.deck,
+  }));
+  const deckRef = useRef(deck);
+  if (deck !== deckRef.current) {
+    deckRef.current = deck;
+    cb();
+  }
+}
+
 export default function DeckTab() {
   const { deck, getCompleteInfo, collectionInDeck } = usePlayerStore(
     (state) => ({
@@ -60,8 +72,18 @@ export default function DeckTab() {
       collectionInDeck: state.getCollectionNotInDeck(state.getCollection()),
     })
   );
-  const { editionMode } = useEditionMode();
+  const { editionMode, setEditionMode } = useEditionMode();
   const [selectedCard, setSelectedCard] = useState<number>(0);
+  useWhenLeaveTab("deck", () => {
+    setSelectedCard(0);
+    setEditionMode(false);
+  });
+  useWhenCardAddedOrRemovedFromDeck(() => {
+    setSelectedCard(0);
+    if (!usePlayerStore.getState().isDeckFull) {
+      setEditionMode(true);
+    }
+  });
   const deckArray = _.concat(
     deck,
     _.fill(Array(NUMBER_OF_CARD_IN_DECK - deck.length), null)

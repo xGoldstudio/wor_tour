@@ -4,7 +4,11 @@ import usePlayerStore from "@/home/store/playerStore/playerStore";
 import Modal from "@/home/ui/modal";
 import useScrollCardList from "./useScrollCardList";
 import { Button } from "@repo/ui";
-import { preventDefault } from "@repo/lib";
+import {
+  disableDefaultAndPropagation,
+  preventDefault,
+  stopPropagation,
+} from "@repo/lib";
 import { useContext } from "react";
 import { HomeTabContext, HomeTabContextType } from "@/home/HomeTabContext";
 import { Plus, ShoppingCart, Trash, Undo2 } from "lucide-react";
@@ -23,9 +27,10 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
     HomeTabContext
   ) as unknown as HomeTabContextType;
 
-  const { isPlayed, isDeckFull } = usePlayerStore((state) => ({
+  const { isPlayed, addCardToDeck } = usePlayerStore((state) => ({
     isPlayed: state.isPlayed(cardId),
-    isDeckFull: state.isDeckFull(),
+    isDeckFull: state.isDeckFull,
+    addCardToDeck: state.addCardToDeck,
   }));
 
   const level = collectionInfo ? collectionInfo.level - 1 : 1;
@@ -40,20 +45,28 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
   return (
     <Modal title={`card_${cardId}`} closeModal={closeModal} cover>
       <div
-        className="flex flex-col items-center justify-center gap-16 w-full h-full"
-        onMouseDown={preventDefault(() => setIsPressed(true))}
-        onMouseUp={preventDefault(() => setIsPressed(false))}
-        onMouseMove={changePosition}
+        className="flex flex-col items-center gap-12 justify-center w-full h-full"
+        onClick={() => {
+          closeModal();
+        }}
       >
-        <div className="relative h-[430px]">
-          {card.stats.map((_, index) => (
-            <CardDisplay
-              key={`level_${index}`}
-              card={getCardFromLevel(card, index + 1)}
-              position={index - currentPosition}
-              cardData={collectionInfo}
-            />
-          ))}
+        <div
+          className="flex justify-center h-[444px] w-full relative"
+          onMouseDown={disableDefaultAndPropagation(() => setIsPressed(true))}
+          onClick={stopPropagation(() => {})}
+          onMouseUp={preventDefault(() => setIsPressed(false))}
+          onMouseMove={changePosition}
+        >
+          <div className="relative h-full w-min">
+            {card.stats.map((_, index) => (
+              <CardDisplay
+                key={`level_${index}`}
+                card={getCardFromLevel(card, index + 1)}
+                position={index - currentPosition}
+                cardData={collectionInfo}
+              />
+            ))}
+          </div>
         </div>
         <div className="flex items-center gap-4">
           <Button action={closeModal} rarity="rare" className="w-[150px]">
@@ -63,20 +76,21 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
             isPlayed ? (
               <Button
                 rarity="common"
-                action={() =>
-                  usePlayerStore.getState().removeCardFromDeck(cardId)
-                }
+                action={() => {
+                  usePlayerStore.getState().removeCardFromDeck(cardId);
+                }}
                 className="w-[150px]"
               >
                 <Trash strokeWidth={2} />
               </Button>
             ) : (
               <Button
-                action={() => usePlayerStore.getState().addCardToDeck(cardId)}
-                disabled={isDeckFull}
+                action={() => {
+                  addCardToDeck(cardId);
+                }}
                 className="w-[150px]"
               >
-                <Plus strokeWidth={3} />
+                <Plus strokeWidth={2} />
               </Button>
             )
           ) : (

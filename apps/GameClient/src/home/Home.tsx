@@ -17,7 +17,8 @@ import {
 } from "@repo/ui";
 import { cn } from "@repo/ui";
 import {
-  COMMON, getImageUrl,
+  COMMON,
+  getImageUrl,
   getImageUrlCssValue,
   ICONS,
   numberWithCommas,
@@ -37,13 +38,16 @@ const tabs: (({
   setCurrentTab: (tab: Tabs) => void;
 }) => JSX.Element)[] = [ShopTab, HomeTab, DeckTab];
 
+
 const tabsPosition: Record<Tabs, number> = {
   shop: 0,
   home: 1,
   deck: 2,
 };
 export default function Home() {
-  const { currentTab, setCurrentTab } = useContext(HomeTabContext) as unknown as HomeTabContextType;
+  const { currentTab, setCurrentTab } = useContext(
+    HomeTabContext
+  ) as unknown as HomeTabContextType;
   const { editionMode, setEditionMode } = useEditionMode();
   return (
     <div className="w-screen h-screen justify-center bg-black relative flex">
@@ -140,7 +144,12 @@ export function RessourceCounter({
   }, container);
 
   return (
-    <div className="relative w-full" x-id={`${name}CountInput`} id={`${name}Count`} ref={container}>
+    <div
+      className="relative w-full"
+      x-id={`${name}CountInput`}
+      id={`${name}Count`}
+      ref={container}
+    >
       {icon}
       <Borders width={width} height={45} borderUnit={1} rarity={"epic"}>
         <CardIllustartion width={width} height={45} borderUnit={0.6}>
