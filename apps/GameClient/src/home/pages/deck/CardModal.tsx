@@ -33,7 +33,7 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
     addCardToDeck: state.addCardToDeck,
   }));
 
-  const level = collectionInfo ? collectionInfo.level - 1 : 1;
+  const level = collectionInfo ? collectionInfo.level - 1 : 0;
 
   const { currentPosition, setIsPressed, changePosition } = useScrollCardList(
     level,

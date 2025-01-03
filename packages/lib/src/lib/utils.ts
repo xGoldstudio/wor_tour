@@ -109,6 +109,10 @@ export function filterUndefined<T>(array: (T | undefined)[]): T[] {
 	return array.filter((item): item is T => item !== undefined);
 }
 
+export function filterFirstOfRow<T>(array: T[], rowLength: number) {
+  return array.filter((_, i) => i % rowLength === 0);
+}
+
 export function isTrueOr<T, U>(value: T, defaultValue: U) {
   return (bool: boolean) => bool === true ? value : defaultValue;
 }

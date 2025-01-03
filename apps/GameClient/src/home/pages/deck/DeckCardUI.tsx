@@ -14,7 +14,7 @@ import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { CardCollection } from "./cardFilters";
 import { Info, Plus, Trash } from "lucide-react";
 
-interface CardUIProps {
+export interface CardUIProps {
   cardId: number;
   locked?: boolean;
   setCurrentTab?: (tab: Tabs) => void;
@@ -46,6 +46,7 @@ export function DeckCardUI({
     }));
   const isSelected = selectedCard === card.id;
   const opacity = locked ? "brightness-[.70]" : "";
+
   return (
     <div>
       {isDescriptionOpen && (

@@ -74,6 +74,7 @@ export default function DeckTab() {
       collectionInDeck: state.getCollectionNotInDeck(state.getCollection()),
     })
   );
+  const parentScrollRef = useRef<HTMLDivElement>(null);
   const { editionMode, setEditionMode } = useEditionMode();
   const [selectedCard, setSelectedCard] = useState<number>(0);
   useWhenLeaveTab("deck", () => {
@@ -96,7 +97,10 @@ export default function DeckTab() {
     detailledDeck.push(cardId ? getCompleteInfo(cardId) : undefined);
   }
   return (
-    <ScrollContainer className="grow scrollbar-hiden flex flex-col w-full overflow-y-scroll relative">
+    <ScrollContainer
+      className="grow scrollbar-hiden flex flex-col w-full overflow-y-scroll relative"
+      innerRef={parentScrollRef}
+    >
       <div className="absolute top-0 left-0 w-full">
         <div className="grid grid-rows-[1fr_auto]">
           <div className="flex justify-center">
@@ -123,7 +127,7 @@ export default function DeckTab() {
             collection={collectionInDeck}
             setSelectedCard={setSelectedCard}
             selectedCard={selectedCard}
-            scrollable={false}
+            parentScrollRef={parentScrollRef}
           />
         )}
       </div>
