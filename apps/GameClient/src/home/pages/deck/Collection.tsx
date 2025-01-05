@@ -1,6 +1,9 @@
-import { useMemo, useRef, useState } from "react";
+import { useDeferredValue, useMemo, useRef, useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
-import { ActiveFilters, FiltersDescription } from "./cardFilters";
+import {
+  ActiveFilters,
+  defaultFilters,
+} from "./cardFilters";
 import { CardSorts, defaultSort, sorts } from "./cardSorts";
 import { DeckCardUI } from "./DeckCardUI";
 import { getCardsFiltered } from "./getCardsFiltered";
@@ -19,31 +22,66 @@ export default function Collection({
   parentScrollRef,
   filterDeck,
 }: CollectionProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [cardsPipeline, setCardsPipeline] = useState<CardsPipeline>({
+    filters: defaultFilters,
+    sort: defaultSort,
+    isAscending: true,
+  });
+  const deferedCardsPipeline = useDeferredValue(cardsPipeline);
+
+  return (
+    <div className="flex flex-col w-full">
+      <SortAndFilterBox
+        cardsPipeline={cardsPipeline}
+        setCardsPipeline={setCardsPipeline}
+      />
+      {!parentScrollRef ? (
+        <ScrollContainer
+          className={`grow h-full overflow-y-scroll scrollbar-hiden flex flex-col relative w-full`}
+          innerRef={scrollRef}
+        >
+          <CollectionContent
+            parentScrollRef={scrollRef}
+            cardsPipeline={deferedCardsPipeline}
+            filterDeck={filterDeck}
+          />
+        </ScrollContainer>
+      ) : (
+        <div className="flex flex-col relative w-full">
+          <CollectionContent
+            parentScrollRef={parentScrollRef}
+            cardsPipeline={deferedCardsPipeline}
+            filterDeck={filterDeck}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+export interface CardsPipeline {
+  filters: ActiveFilters;
+  sort: CardSorts;
+  isAscending: boolean;
+}
+
+function useCollectionFilteredAllCards({
+  filterDeck,
+  cardsPipeline,
+}: {
+  filterDeck?: boolean;
+  cardsPipeline: CardsPipeline;
+}) {
   const { collection, deck } = usePlayerStore((state) => ({
     collection: state.collection,
     deck: state.deck,
   }));
-  const [currentSort, setcurrentSort] = useState<CardSorts>(defaultSort);
-  const [isAscending, setIsAscending] = useState<boolean>(true);
-  const cardListRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const [currentFilter, setCurrentFilter] = useState<ActiveFilters>({
-    Cost: {
-      min: FiltersDescription.Cost.rangeMin!,
-      max: FiltersDescription.Cost.rangeMax!,
-    },
-    Common: false,
-    Rare: false,
-    Epic: false,
-    Legendary: false,
-    Level: {
-      min: FiltersDescription.Level.rangeMin!,
-      max: FiltersDescription.Level.rangeMax!,
-    },
-  });
-
   const allCards = useMemo(() => {
+    const currentFilter = cardsPipeline.filters;
+    const currentSort = cardsPipeline.sort;
+    const isAscending = cardsPipeline.isAscending;
+
     const detailledCollection = usePlayerStore
       .getState()
       .getCollectionCompleteInfo(collection, deck, !!filterDeck);
@@ -65,10 +103,29 @@ export default function Collection({
       isAscending
     );
     return [...filteredAndsortedCollection, ...sortedAndFilteredCardNotFound];
-  }, [currentFilter, currentSort, isAscending, collection, deck, filterDeck]);
+  }, [cardsPipeline, collection, deck, filterDeck]);
 
+  return {
+    allCards,
+  };
+}
+
+function CollectionContent({
+  parentScrollRef,
+  cardsPipeline,
+  filterDeck,
+}: {
+  parentScrollRef: React.RefObject<HTMLDivElement>;
+  cardsPipeline: CardsPipeline;
+  filterDeck?: boolean;
+}) {
+  const { allCards } = useCollectionFilteredAllCards({
+    filterDeck,
+    cardsPipeline,
+  });
+  const cardListRef = useRef<HTMLDivElement>(null);
   const { firstElementToShow, lastElementToShow } = useCollectionCardsRevealed({
-    scrollRef: parentScrollRef ?? scrollRef,
+    scrollRef: parentScrollRef,
     cardListRef,
     numberOfCards: allCards.length,
   });
@@ -87,7 +144,7 @@ export default function Collection({
     [lastElementToShow]
   );
 
-  const content = (
+  return (
     <div className="absolute top-0 left-0 w-full flex justify-center py-10 px-4">
       <div
         className="max-w-full w-fit gap-6 grid grid-cols-[repeat(auto-fill,_128px)]"
@@ -99,30 +156,6 @@ export default function Collection({
         ))}
         {afterCards}
       </div>
-    </div>
-  );
-
-  return (
-    <div className="flex flex-col w-full">
-      <SortAndFilterBox
-        collectionLength={collection.size}
-        currentSort={currentSort}
-        setCurrentSort={setcurrentSort}
-        isAscending={isAscending}
-        setIsAscending={setIsAscending}
-        currentFilter={currentFilter}
-        setCurrentFilter={setCurrentFilter}
-      />
-      {!parentScrollRef ? (
-        <ScrollContainer
-          className={`grow h-full overflow-y-scroll scrollbar-hiden flex flex-col relative w-full`}
-          innerRef={scrollRef}
-        >
-          {content}
-        </ScrollContainer>
-      ) : (
-        <div className="flex flex-col relative w-full">{content}</div>
-      )}
     </div>
   );
 }

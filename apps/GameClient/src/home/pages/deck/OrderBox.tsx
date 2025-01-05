@@ -3,13 +3,13 @@ import { Button, cn } from "@repo/ui";
 
 interface OrderBoxProps {
   isAscending: boolean;
-  setIsAscending: (isAscending: boolean) => void;
+  toggleIsAscending: () => void;
 }
 
-export function OrderBox({ isAscending, setIsAscending }: OrderBoxProps) {
+export function OrderBox({ isAscending, toggleIsAscending }: OrderBoxProps) {
   return (
     <Button
-      action={() => setIsAscending(!isAscending)}
+      action={toggleIsAscending}
       small={true}
       full={false}
     >

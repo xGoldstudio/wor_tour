@@ -126,3 +126,17 @@ export const CardFilterSliderStyles: FilterSliderStyles = {
     },
   },
 };
+export const defaultFilters = {
+  Cost: {
+    min: FiltersDescription.Cost.rangeMin!,
+    max: FiltersDescription.Cost.rangeMax!,
+  },
+  Common: false,
+  Rare: false,
+  Epic: false,
+  Legendary: false,
+  Level: {
+    min: FiltersDescription.Level.rangeMin!,
+    max: FiltersDescription.Level.rangeMax!,
+  },
+}

@@ -1,5 +1,6 @@
 import { Button, cn } from "@repo/ui";
 import { CardSorts, sorts } from "./cardSorts";
+import { findValueInRecordByKey } from "@/home/ui/utils/findValueInRecordByKey";
 
 interface SortModalProps {
   setActualSort: (sort: CardSorts) => void;
@@ -53,13 +54,11 @@ export function SortModal({
 }
 
 interface SortBoxProps {
-  children: React.ReactNode;
   currentSort: CardSorts;
   setCurrentSort: (sort: CardSorts) => void;
 }
 
 export function SortBox({
-  children,
   setCurrentSort,
   currentSort,
 }: SortBoxProps) {
@@ -88,7 +87,7 @@ export function SortBox({
   }
   return (
     <Button action={() => getNextSort()} width="w-32">
-      <div>{children}</div>
+      <div>{findValueInRecordByKey(sorts, currentSort)?.label}</div>
     </Button>
   );
 }
