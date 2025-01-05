@@ -1,7 +1,9 @@
 import { cn, Cover } from "@repo/ui";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CollectionTab from "./CollectionTab";
 import DeckTab from "./DeckTab";
+import { useEditionMode } from "./context/UseEditionMode";
+import usePlayerStore from "@/home/store/playerStore/playerStore";
 
 export type Tabs = "Deck" | "Collection";
 
@@ -42,6 +44,23 @@ function TabModal({ children, currentTab, setCurrentTab }: TabModalProps) {
 export function DeckInterface() {
   const [currentTab, setCurrentTab] = useState<Tabs>("Deck");
   const TabElement = tabs[currentTab];
+  const { editionMode } = useEditionMode();
+  const { deck } = usePlayerStore((state) => ({
+    deck: state.deck,
+  }));
+
+  useEffect(() => {
+    if (editionMode && currentTab !== "Deck") {
+      setCurrentTab("Deck");
+    }
+  }, [editionMode]);
+
+  useEffect(() => {
+    if (currentTab !== "Deck") {
+      setCurrentTab("Deck");
+    }
+  }, [deck]);
+
   return (
     <div className="w-full max-w-[700px] pt-4 flex flex-col">
       <div className="mx-8 relative flex justify-around gap-4">

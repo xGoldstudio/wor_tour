@@ -5,6 +5,7 @@ import { defaultPlayerStoreData } from "./defaultData";
 import { findCard, getCardFromLevel, getCardStats } from "@/cards";
 import useDataStore from "@/cards/DataStore";
 import { CardType } from "game_engine";
+import { PlayerCardCollectionInfo } from "@/home/pages/deck/cardFilters";
 
 export interface CollectionCard {
   id: number;
@@ -12,8 +13,10 @@ export interface CollectionCard {
   shard: number;
 }
 
+type CollectionType = Map<number, CollectionCard>;
+
 interface PlayerStore {
-  collection: Map<number, CollectionCard>;
+  collection: CollectionType;
   deck: number[];
   currentWorld: number;
   gold: number;
@@ -28,21 +31,16 @@ interface PlayerStore {
 
   getCollection: () => CollectionCard[];
   getCollectionInfo: (id: number) => CollectionCard | undefined;
-  getCompleteInfo: (id: number) => CardType & { isInDeck: boolean };
+  getCompleteInfo: (id: number) => PlayerCardCollectionInfo;
   getLockedCardInfo: (id: number) => CardType;
-  getCollectionCompleteInfo: (
-    collection: CollectionCard[]
-  ) => (CardType & { isInDeck: boolean })[];
-  getCollectionNotInDeck: (
-    collection: CollectionCard[]
-  ) => (CardType & { isInDeck: boolean })[];
+  getCollectionCompleteInfo: (collection: CollectionType, deckCards: number[], filterDeck: boolean) => PlayerCardCollectionInfo[];
   removeCardFromDeck: (id: number) => void;
   addCardToDeck: (id: number) => void;
   isDeckFull: boolean;
   isPlayed: (cardId: number) => boolean;
 
-  getAllCardsLocked: () => (CardType & { isInDeck: boolean })[];
-  getTheLockPattern: (id: number) => number;
+  getAllCardsLocked: () => PlayerCardCollectionInfo[];
+  getLockLabel: (id: number) => string | null;
 
   addCardOrShardOrEvolve: (cardId: number) => void;
 
@@ -69,16 +67,16 @@ const usePlayerStore = create(
       getCompleteInfo: (id: number) => ({
         ...findCard(id, get().getCollectionInfo(id)!.level),
         isInDeck: get().deck.includes(id),
+        lockLabel: null,
       }),
       getLockedCardInfo: (id: number) => findCard(id, 1),
-      getCollectionCompleteInfo: (collection: CollectionCard[]) =>
-        collection.map((card) => get().getCompleteInfo(card.id)),
-      getCollectionNotInDeck: (collection: CollectionCard[]) =>
-        collection
-          .map((card) => get().getCompleteInfo(card.id))
-          .filter((card) => !get().deck.includes(card.id)),
-
-
+      getCollectionCompleteInfo: (collection: CollectionType, deckCards: number[], filterDeck: boolean) => {
+        const detailledCollection = [...collection].map(([, card]) => get().getCompleteInfo(card.id));
+        if (filterDeck) {
+          return detailledCollection.filter((card) => !deckCards.includes(card.id));
+        }
+        return detailledCollection
+      },
       removeCardFromDeck: (id: number) =>
         set((state) => {
           const index = state.deck.findIndex((cardId) => cardId === id);
@@ -112,15 +110,13 @@ const usePlayerStore = create(
           .cards.filter((card) => {
             return !get().collection.has(card.id);
           })
-          .map((card) => ({ ...getCardFromLevel(card, 1), isInDeck: false }));
+          .map((card) => ({ ...getCardFromLevel(card, 1), isInDeck: false, lockLabel: get().getLockLabel(card.id) }));
       },
-      getTheLockPattern: (id: number) => {
+      getLockLabel: (id: number): string => {
         const card = getCardStats(id);
-        if (card.world > get().currentWorld) return card.world;
-        else return 0;
+        if (card.world > get().currentWorld) return `Unlockable at world ${card.world}`;
+        return "Not unlocked yet";
       },
-
-
       addCardOrShardOrEvolve: (cardId: number) => {
         const collectionCard = get().getCollectionInfo(cardId);
         if (!collectionCard) {

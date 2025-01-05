@@ -1,5 +1,5 @@
 import { findCard } from "@/cards";
-import { CardCollection } from "./cardFilters";
+import { PlayerCardCollectionInfo } from "./cardFilters";
 
 export const NUMBER_OF_CARD_IN_DECK: number = 8;
 
@@ -8,9 +8,9 @@ export type CardSorts = "cost" | "rarity" | "world" | "level";
 export interface CardSort {
   label: string;
   sortFunction: (
-    detailledCollection: CardCollection[],
+    detailledCollection: PlayerCardCollectionInfo[],
     isAcending: boolean
-  ) => CardCollection[];
+  ) => PlayerCardCollectionInfo[];
 }
 export const defaultSort: CardSorts = "world";
 

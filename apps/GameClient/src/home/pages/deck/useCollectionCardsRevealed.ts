@@ -73,7 +73,6 @@ export default function useCollectionCardsRevealed({ cardListRef, scrollRef, num
 			return;
 		}
 		internalCurrentShownRows.current = firstShownRow;
-		console.log("update state");
 		setCurrentShownRows(firstShownRow);
 	}
 

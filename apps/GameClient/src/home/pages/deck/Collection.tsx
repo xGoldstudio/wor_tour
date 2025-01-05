@@ -1,35 +1,27 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import { ActiveFilters, FiltersDescription } from "./cardFilters";
 import { CardSorts, defaultSort, sorts } from "./cardSorts";
 import { DeckCardUI } from "./DeckCardUI";
-import { Tabs } from "./DeckInterface";
 import { getCardsFiltered } from "./getCardsFiltered";
 import { SortAndFilterBox } from "./SortAndFilterBox";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
-import { CardType } from "game_engine";
 import { DisablableDeckCardUI } from "./DisablableDeckCardUI";
 import useCollectionCardsRevealed from "./useCollectionCardsRevealed";
 import { createArrayOfElements } from "@repo/ui";
 
 interface CollectionProps {
-  collection: (CardType & { isInDeck: boolean })[];
-  setCurrentTab?: (tab: Tabs) => void;
-  setSelectedCard: (id: number) => void;
-  selectedCard: number;
   parentScrollRef?: React.RefObject<HTMLDivElement>;
+  filterDeck?: boolean;
 }
 
 export default function Collection({
-  collection,
-  setCurrentTab,
-  setSelectedCard,
-  selectedCard,
   parentScrollRef,
+  filterDeck,
 }: CollectionProps) {
-  let { cardNotFound } = usePlayerStore((state) => ({
-    detailledCollection: state.getCollectionCompleteInfo(state.getCollection()),
-    cardNotFound: state.getAllCardsLocked(),
+  const { collection, deck } = usePlayerStore((state) => ({
+    collection: state.collection,
+    deck: state.deck,
   }));
   const [currentSort, setcurrentSort] = useState<CardSorts>(defaultSort);
   const [isAscending, setIsAscending] = useState<boolean>(true);
@@ -50,24 +42,30 @@ export default function Collection({
       max: FiltersDescription.Level.rangeMax!,
     },
   });
-  let detailledCollection = [...collection];
-  const collectionLength = detailledCollection.length;
 
-  detailledCollection = getCardsFiltered({
-    detailledCollection,
-    currentFilter,
-  });
-  detailledCollection = sorts[currentSort].sortFunction(
-    detailledCollection,
-    isAscending
-  );
-  cardNotFound = getCardsFiltered({
-    detailledCollection: cardNotFound,
-    currentFilter,
-  });
-  cardNotFound = sorts[currentSort].sortFunction(cardNotFound, isAscending);
-
-  const allCards = [...detailledCollection, ...cardNotFound];
+  const allCards = useMemo(() => {
+    const detailledCollection = usePlayerStore
+      .getState()
+      .getCollectionCompleteInfo(collection, deck, !!filterDeck);
+    const cardNotFound = usePlayerStore.getState().getAllCardsLocked();
+    const filteredCollection = getCardsFiltered({
+      detailledCollection,
+      currentFilter,
+    });
+    const filteredAndsortedCollection = sorts[currentSort].sortFunction(
+      filteredCollection,
+      isAscending
+    );
+    const filteredNotFound = getCardsFiltered({
+      detailledCollection: cardNotFound,
+      currentFilter,
+    });
+    const sortedAndFilteredCardNotFound = sorts[currentSort].sortFunction(
+      filteredNotFound,
+      isAscending
+    );
+    return [...filteredAndsortedCollection, ...sortedAndFilteredCardNotFound];
+  }, [currentFilter, currentSort, isAscending, collection, deck, filterDeck]);
 
   const { firstElementToShow, lastElementToShow } = useCollectionCardsRevealed({
     scrollRef: parentScrollRef ?? scrollRef,
@@ -75,27 +73,31 @@ export default function Collection({
     numberOfCards: allCards.length,
   });
 
+  const beforeCards = useMemo(
+    () => createArrayOfElements(DisablableDeckCardUI, firstElementToShow),
+    [firstElementToShow]
+  );
+
+  const afterCards = useMemo(
+    () =>
+      createArrayOfElements(
+        DisablableDeckCardUI,
+        allCards.length - lastElementToShow
+      ),
+    [lastElementToShow]
+  );
+
   const content = (
     <div className="absolute top-0 left-0 w-full flex justify-center py-10 px-4">
       <div
         className="max-w-full w-fit gap-6 grid grid-cols-[repeat(auto-fill,_128px)]"
         ref={cardListRef}
       >
-        {createArrayOfElements(DisablableDeckCardUI, firstElementToShow)}
+        {beforeCards}
         {allCards.slice(firstElementToShow, lastElementToShow).map((card) => (
-          <DeckCardUI
-            locked={true}
-            cardId={card.id}
-            setCurrentTab={setCurrentTab}
-            setSelectedCard={setSelectedCard}
-            selectedCard={selectedCard}
-            key={card.id}
-          />
+          <DeckCardUI card={card} key={card.id} />
         ))}
-        {createArrayOfElements(
-          DisablableDeckCardUI,
-          allCards.length - lastElementToShow
-        )}
+        {afterCards}
       </div>
     </div>
   );
@@ -103,7 +105,7 @@ export default function Collection({
   return (
     <div className="flex flex-col w-full">
       <SortAndFilterBox
-        collectionLength={collectionLength}
+        collectionLength={collection.size}
         currentSort={currentSort}
         setCurrentSort={setcurrentSort}
         isAscending={isAscending}

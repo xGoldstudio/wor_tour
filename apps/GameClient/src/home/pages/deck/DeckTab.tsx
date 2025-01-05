@@ -1,7 +1,7 @@
 import { filterUndefined, getImageUrl, ICONS } from "@repo/lib";
 import { Cover, ManaBall } from "@repo/ui";
 import * as _ from "lodash";
-import { useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import Collection from "./Collection";
 import { useEditionMode } from "./context/UseEditionMode";
@@ -11,6 +11,7 @@ import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { getDeckStrength } from "@/services/MatchmakingService/buildDeck";
 import { CardType } from "game_engine";
 import { useWhenLeaveTab } from "@/home/tabs/useWhenLeaveTab";
+import { PlayerCardCollectionInfo } from "./cardFilters";
 
 interface DeckStatsProps {
   deck: CardType[];
@@ -44,8 +45,14 @@ function DeckStats({ deck }: DeckStatsProps) {
 }
 
 function EmptyDeckPlaceholder() {
+  const { editionMode, setEditionMode } = useEditionMode();
+
   return (
-    <div className="w-full h-full flex justify-center items-center">
+    <div className="w-full h-full flex justify-center items-center cursor-pointer" onClick={() => {
+      if (!editionMode) {
+        setEditionMode(true);
+      }
+    }}>
       <div className="h-[178px] w-[128px] bg-black bg-opacity-20 border border-slate-700 border-opacity-25 backdrop-filter backdrop-blur-sm rounded-sm " />
     </div>
   );
@@ -65,37 +72,37 @@ function useWhenCardAddedOrRemovedFromDeck(cb: () => void) {
 }
 
 export default function DeckTab() {
-  const { deck, getCompleteInfo, collectionInDeck } = usePlayerStore(
+  const { deck, getCompleteInfo } = usePlayerStore(
     (state) => ({
       deck: state.deck,
       getCompleteInfo: state.getCompleteInfo,
       numberOfCardsInDeck: state.numberOfCardsInDeck,
       currentMissingCards: state.currentMissingCards,
-      collectionInDeck: state.getCollectionNotInDeck(state.getCollection()),
     })
   );
   const parentScrollRef = useRef<HTMLDivElement>(null);
   const { editionMode, setEditionMode } = useEditionMode();
-  const [selectedCard, setSelectedCard] = useState<number>(0);
   useWhenLeaveTab("deck", () => {
-    setSelectedCard(0);
     setEditionMode(false);
   });
   useWhenCardAddedOrRemovedFromDeck(() => {
-    setSelectedCard(0);
     if (!usePlayerStore.getState().isDeckFull) {
       setEditionMode(true);
     }
   });
-  const deckArray = _.concat(
-    deck,
-    _.fill(Array(NUMBER_OF_CARD_IN_DECK - deck.length), null)
-  );
-  const detailledDeck: (CardType | undefined)[] = [];
-  for (let i = 0; i < NUMBER_OF_CARD_IN_DECK; i++) {
-    const cardId = deckArray[i];
-    detailledDeck.push(cardId ? getCompleteInfo(cardId) : undefined);
-  }
+  const detailledDeck = useMemo(() => {
+    const deckArray = _.concat(
+      deck,
+      _.fill(Array(NUMBER_OF_CARD_IN_DECK - deck.length), null)
+    );
+    const detailledDeck: (PlayerCardCollectionInfo | undefined)[] = [];
+    for (let i = 0; i < NUMBER_OF_CARD_IN_DECK; i++) {
+      const cardId = deckArray[i];
+      detailledDeck.push(cardId ? getCompleteInfo(cardId) : undefined);
+    }
+    return detailledDeck;
+  }, [deck]);
+
   return (
     <ScrollContainer
       className="grow scrollbar-hiden flex flex-col w-full overflow-y-scroll relative"
@@ -111,9 +118,8 @@ export default function DeckTab() {
                 ) : (
                   <div className="w-full flex justify-center" key={index}>
                     <DeckCardUI
-                      cardId={card.id}
-                      setSelectedCard={setSelectedCard}
-                      selectedCard={selectedCard}
+                      deckCard
+                      card={card}
                     />
                   </div>
                 )
@@ -124,9 +130,7 @@ export default function DeckTab() {
         <DeckStats deck={filterUndefined(detailledDeck)} />
         {editionMode && (
           <Collection
-            collection={collectionInDeck}
-            setSelectedCard={setSelectedCard}
-            selectedCard={selectedCard}
+            filterDeck={true}
             parentScrollRef={parentScrollRef}
           />
         )}

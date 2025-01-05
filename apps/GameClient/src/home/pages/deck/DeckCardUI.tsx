@@ -5,47 +5,40 @@ import {
   CardContentIllustartion,
   cn,
   ManaBall,
+  useOnClickOutside,
 } from "@repo/ui";
-import { useState } from "react";
+import React, { useState } from "react";
 import CardModal from "./CardModal";
-import { Tabs } from "./DeckInterface";
-import { useEditionMode } from "./context/UseEditionMode";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
-import { CardCollection } from "./cardFilters";
+import { PlayerCardCollectionInfo } from "./cardFilters";
 import { Info, Plus, Trash } from "lucide-react";
+import { useEditionMode } from "./context/UseEditionMode";
 
 export interface CardUIProps {
-  cardId: number;
-  locked?: boolean;
-  setCurrentTab?: (tab: Tabs) => void;
-  setSelectedCard?: (id: number) => void;
-  selectedCard?: number;
+  card: PlayerCardCollectionInfo;
   size?: number;
+  deckCard?: boolean;
 }
 
 export function DeckCardUI({
-  cardId,
-  locked = false,
-  setCurrentTab,
-  setSelectedCard,
-  selectedCard,
+  card,
   size = 1,
+  deckCard,
 }: CardUIProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
-  const { setEditionMode } = useEditionMode();
-
-  const { card, removeCardFromDeck, addCardToDeck, isDeckFull, lockPattern } =
-    usePlayerStore((state) => ({
-      card: locked
-        ? state.getLockedCardInfo(cardId)
-        : state.getCompleteInfo(cardId),
+  const { removeCardFromDeck, addCardToDeck } = usePlayerStore(
+    (state) => ({
       removeCardFromDeck: state.removeCardFromDeck,
       addCardToDeck: state.addCardToDeck,
-      isDeckFull: state.isDeckFull,
-      lockPattern: state.getTheLockPattern(cardId),
-    }));
-  const isSelected = selectedCard === card.id;
-  const opacity = locked ? "brightness-[.70]" : "";
+    })
+  );
+  const [isSelected, setIsSelected] = useState(false);
+  const opacity = card.lockLabel !== null ? "brightness-[.70]" : "";
+  const { setEditionMode } = useEditionMode();
+  const wrapperRef = React.useRef<HTMLDivElement>(null);
+  useOnClickOutside(wrapperRef, () => {
+    setIsSelected(false);
+  });
 
   return (
     <div>
@@ -56,6 +49,7 @@ export function DeckCardUI({
         />
       )}
       <div
+        ref={wrapperRef}
         className={cn(
           `relative transition-transform`,
           isSelected && "z-50 scale-110"
@@ -67,36 +61,24 @@ export function DeckCardUI({
       >
         <div className="absolute top-0 left-0">
           <div className={cn("relative select-none h-min  ")}>
-            {locked && (
+            {card.lockLabel !== null && (
               <div
                 className="absolute h-full w-full px-5 flex text-center text-sm justify-center items-center z-10"
                 onClick={() => setIsDescriptionOpen(true)}
               >
-                {lockPattern === 0 ? (
-                  <span className="text-slate-200">Not unlocked yet</span>
-                ) : (
-                  <span className="text-slate-200">
-                    {" "}
-                    Unlockable at world {lockPattern}
-                  </span>
-                )}
+                <span className="text-slate-200">{card.lockLabel}</span>
               </div>
             )}
             <div
               className={`${opacity} hover:cursor-pointer`}
               onClick={() => {
-                if (setSelectedCard === undefined) {
-                  setIsDescriptionOpen(true);
-                  return;
-                }
-                if (isSelected) {
-                  setSelectedCard(0);
-                } else {
-                  setSelectedCard!(card.id);
-                  if (!isDeckFull) {
-                    setEditionMode(true);
+                setIsSelected(x => {
+                  const next = !x;
+                  if (deckCard) {
+                    setEditionMode(next);
                   }
-                }
+                  return next;
+                });
               }}
             >
               <CardBorder rarity={card.rarity} size={size * 2}>
@@ -139,7 +121,7 @@ export function DeckCardUI({
                 </Button>
               </div>
               <div className={"shadow-2xl group rounded-lg w-full h-full"}>
-                {!locked && (card as CardCollection).isInDeck ? (
+                {card.isInDeck ? (
                   <Button
                     full
                     hFull
@@ -147,7 +129,6 @@ export function DeckCardUI({
                     className="p-0"
                     action={() => {
                       removeCardFromDeck(card.id);
-                      setCurrentTab?.("Deck");
                     }}
                   >
                     <Trash strokeWidth={2} />
@@ -159,7 +140,6 @@ export function DeckCardUI({
                     rarity={"rare"}
                     action={preventDefault(() => {
                       addCardToDeck(card.id);
-                      setCurrentTab?.("Deck");
                     })}
                     className="p-0"
                   >

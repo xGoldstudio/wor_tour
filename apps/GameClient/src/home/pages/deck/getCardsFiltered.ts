@@ -1,10 +1,7 @@
-import { CardType } from "game_engine";
-import { ActiveFilters, FiltersDescription } from "./cardFilters";
+import { ActiveFilters, FiltersDescription, PlayerCardCollectionInfo } from "./cardFilters";
 
 interface getCardsFilteredProps {
-  detailledCollection: (CardType & {
-    isInDeck: boolean;
-  })[];
+  detailledCollection: PlayerCardCollectionInfo[];
   currentFilter: ActiveFilters;
 }
 
