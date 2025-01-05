@@ -33,8 +33,8 @@ export default function Collection({
   }));
   const [currentSort, setcurrentSort] = useState<CardSorts>(defaultSort);
   const [isAscending, setIsAscending] = useState<boolean>(true);
-  const contentRef = useRef<HTMLDivElement>(null);
   const cardListRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const [currentFilter, setCurrentFilter] = useState<ActiveFilters>({
     Cost: {
@@ -69,13 +69,11 @@ export default function Collection({
 
   const allCards = [...detailledCollection, ...cardNotFound];
 
-  const { onScroll, onScrollDebounced, firstElementToShow, lastElementToShow } =
-    useCollectionCardsRevealed({
-      contentRef,
-      cardListRef,
-      numberOfCards: allCards.length,
-    });
-
+  const { firstElementToShow, lastElementToShow } = useCollectionCardsRevealed({
+    scrollRef: parentScrollRef ?? scrollRef,
+    cardListRef,
+    numberOfCards: allCards.length,
+  });
 
   const content = (
     <div className="absolute top-0 left-0 w-full flex justify-center py-10 px-4">
@@ -113,18 +111,16 @@ export default function Collection({
         currentFilter={currentFilter}
         setCurrentFilter={setCurrentFilter}
       />
-      {/* { ? ( */}
+      {!parentScrollRef ? (
         <ScrollContainer
           className={`grow h-full overflow-y-scroll scrollbar-hiden flex flex-col relative w-full`}
-          onScroll={onScrollDebounced}
-          onEndScroll={onScroll}
-          innerRef={contentRef}
+          innerRef={scrollRef}
         >
           {content}
         </ScrollContainer>
-      {/* ) : (
+      ) : (
         <div className="flex flex-col relative w-full">{content}</div>
-      )} */}
+      )}
     </div>
   );
 }

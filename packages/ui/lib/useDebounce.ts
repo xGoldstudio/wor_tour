@@ -10,7 +10,7 @@ export default function useDebounce(cb: () => void, delay: number) {
 		}, delay);
 	}
 
-	return () => {
+	function onDebounce() {
 		if (timeoutCallId.current !== null) {
 			clearTimeout(timeoutCallId.current);
 			run(true);
@@ -18,5 +18,14 @@ export default function useDebounce(cb: () => void, delay: number) {
 			cb();
 			run(false);
 		}
-	};
+	}
+
+	function onForceDebounce() {
+		if (timeoutCallId.current !== null) {
+			clearTimeout(timeoutCallId.current);
+		}
+		run(true);
+	}
+
+	return [onDebounce, onForceDebounce] as const;
 }
