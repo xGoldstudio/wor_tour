@@ -1,17 +1,11 @@
 import { useDeferredValue, useMemo, useRef, useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
-import {
-  ActiveFilters,
-  defaultFilters,
-} from "./cardFilters";
+import { ActiveFilters, defaultFilters } from "./cardFilters";
 import { CardSorts, defaultSort, sorts } from "./cardSorts";
-import { DeckCardUI } from "./DeckCardUI";
 import { getCardsFiltered } from "./getCardsFiltered";
 import { SortAndFilterBox } from "./SortAndFilterBox";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { DisablableDeckCardUI } from "./DisablableDeckCardUI";
-import useCollectionCardsRevealed from "./useCollectionCardsRevealed";
-import { createArrayOfElements } from "@repo/ui";
 
 interface CollectionProps {
   parentScrollRef?: React.RefObject<HTMLDivElement>;
@@ -124,37 +118,15 @@ function CollectionContent({
     cardsPipeline,
   });
   const cardListRef = useRef<HTMLDivElement>(null);
-  const { firstElementToShow, lastElementToShow } = useCollectionCardsRevealed({
-    scrollRef: parentScrollRef,
-    cardListRef,
-    numberOfCards: allCards.length,
-  });
-
-  const beforeCards = useMemo(
-    () => createArrayOfElements(DisablableDeckCardUI, firstElementToShow),
-    [firstElementToShow]
-  );
-
-  const afterCards = useMemo(
-    () =>
-      createArrayOfElements(
-        DisablableDeckCardUI,
-        allCards.length - lastElementToShow
-      ),
-    [lastElementToShow]
-  );
-
   return (
     <div className="absolute top-0 left-0 w-full flex justify-center py-6 px-4">
       <div
         className="max-w-full w-fit gap-6 grid grid-cols-[repeat(auto-fill,_128px)]"
         ref={cardListRef}
       >
-        {beforeCards}
-        {allCards.slice(firstElementToShow, lastElementToShow).map((card) => (
-          <DeckCardUI card={card} key={card.id} />
+        {allCards.map((card) => (
+          <DisablableDeckCardUI card={card} key={card.id} parentScrollRef={parentScrollRef} />
         ))}
-        {afterCards}
       </div>
     </div>
   );
