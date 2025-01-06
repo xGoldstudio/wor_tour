@@ -145,7 +145,7 @@ function CollectionContent({
   );
 
   return (
-    <div className="absolute top-0 left-0 w-full flex justify-center py-10 px-4">
+    <div className="absolute top-0 left-0 w-full flex justify-center py-6 px-4">
       <div
         className="max-w-full w-fit gap-6 grid grid-cols-[repeat(auto-fill,_128px)]"
         ref={cardListRef}

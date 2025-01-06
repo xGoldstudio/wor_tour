@@ -18,8 +18,8 @@ export default function Footer({
   return (
     <div
       className={cn(
-        "flex max-w-[700px] w-full relative z-10",
-        editionMode && "hidden"
+        "flex max-w-[700px] w-full absolute z-10 transition-transform bottom-0",
+        editionMode && "translate-y-[150%]"
       )}
     >
       <div className="w-full h-full absolute flex overflow-hidden">

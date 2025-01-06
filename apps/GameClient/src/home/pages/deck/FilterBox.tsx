@@ -131,12 +131,12 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
           setFilterIsOpen(!filterIsOpen);
         }}
       >
-        <div className="h-6 w-6 flex justify-center items-center ">
+        <div className="h-[20px] w-[20px] flex justify-center items-center ">
           <img
             src={getImageUrl(ICONS, "filter.png")}
             alt="gear-wheel"
-            width={40}
-            height={40}
+            width={20}
+            height={20}
           />
         </div>
       </Button>

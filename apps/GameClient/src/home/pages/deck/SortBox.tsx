@@ -86,8 +86,8 @@ export function SortBox({
     }
   }
   return (
-    <Button action={() => getNextSort()} width="w-32">
-      <div>{findValueInRecordByKey(sorts, currentSort)?.label}</div>
+    <Button action={() => getNextSort()} width="w-32" small>
+      <div className="text-sm">{findValueInRecordByKey(sorts, currentSort)?.label}</div>
     </Button>
   );
 }

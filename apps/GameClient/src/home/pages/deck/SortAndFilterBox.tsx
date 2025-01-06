@@ -5,6 +5,7 @@ import { SortBox } from "./SortBox";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { CardsPipeline } from "./Collection";
 import { ActiveFilters } from "./cardFilters";
+import { StatBox } from "./DeckTab";
 
 interface SortAndFilterProps {
   cardsPipeline: CardsPipeline;
@@ -22,41 +23,46 @@ export function SortAndFilterBox({
     totalCards: state.cards.length,
   }));
   return (
-    <div className="px-4">
-      <div className="h-16 bg-black bg-opacity-30 mt-4 rounded-lg flex items-center px-4 justify-between">
-        <div>
-          Cards Found : {ownedCardsAmount} / {totalCards}
+    <div className="pt-6 px-14">
+      <StatBox className="py-2">
+        <div className="flex w-full justify-between items-center">
+          <div>
+            <p>Card Collection</p>
+            <p className="text-xs text-slate-300">
+              Found : {ownedCardsAmount} / {totalCards}
+            </p>
+          </div>
+          <div className="flex flex-row space-x-3 relative">
+            <FilterBox
+              setCurrentFilter={(filters: ActiveFilters) =>
+                setCardsPipeline({
+                  ...cardsPipeline,
+                  filters,
+                })
+              }
+              currentFilter={cardsPipeline.filters}
+            />
+            <OrderBox
+              isAscending={cardsPipeline.isAscending}
+              toggleIsAscending={() =>
+                setCardsPipeline((cardsPipeline) => ({
+                  ...cardsPipeline,
+                  isAscending: !cardsPipeline.isAscending,
+                }))
+              }
+            />
+            <SortBox
+              setCurrentSort={(sort) =>
+                setCardsPipeline({
+                  ...cardsPipeline,
+                  sort,
+                })
+              }
+              currentSort={cardsPipeline.sort}
+            />
+          </div>
         </div>
-        <div className="flex flex-row space-x-4 relative">
-          <FilterBox
-            setCurrentFilter={(filters: ActiveFilters) =>
-              setCardsPipeline({
-                ...cardsPipeline,
-                filters,
-              })
-            }
-            currentFilter={cardsPipeline.filters}
-          />
-          <OrderBox
-            isAscending={cardsPipeline.isAscending}
-            toggleIsAscending={() =>
-              setCardsPipeline((cardsPipeline) => ({
-                ...cardsPipeline,
-                isAscending: !cardsPipeline.isAscending,
-              }))
-            }
-          />{" "}
-          <SortBox
-            setCurrentSort={(sort) =>
-              setCardsPipeline({
-                ...cardsPipeline,
-                sort,
-              })
-            }
-            currentSort={cardsPipeline.sort}
-          />
-        </div>
-      </div>
+      </StatBox>
     </div>
   );
 }

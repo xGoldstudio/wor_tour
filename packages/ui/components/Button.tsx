@@ -36,7 +36,7 @@ export default function Button({
         width !== undefined ? width : full ? "w-full" : "w-min",
         hFull ? "h-full" : "h-min",
         disabled ? "brightness-50" : "brightness-100",
-        rarity === "epic" ? "bg-slate-100" : "bg-black"
+        rarity === "epic" ? "bg-slate-100" : "bg-slate-300"
       )}
       disabled={disabled}
       ref={forwardRef}
@@ -51,7 +51,7 @@ export default function Button({
       />
       <div
         className={cn(
-          "text-black h-full flex justify-center items-center relative",
+          "text-slate-900 font-bold h-full flex justify-center items-center relative",
           !small ? "px-12 py-2" : "px-2 py-1",
           className
         )}

@@ -38,7 +38,6 @@ const tabs: (({
   setCurrentTab: (tab: Tabs) => void;
 }) => JSX.Element)[] = [ShopTab, HomeTab, DeckTab];
 
-
 const tabsPosition: Record<Tabs, number> = {
   shop: 0,
   home: 1,
@@ -53,7 +52,7 @@ export default function Home() {
     <div className="w-screen h-screen justify-center bg-black relative flex">
       <DebugPanel />
       <div
-        className="max-w-[700px] h-full relative overflow-hidden bg-slate-900"
+        className="max-w-[700px] h-full relative overflow-hidden bg-slate-900 pb-[70px]"
         id="home"
       >
         <RewardBlockWithContext />
@@ -79,24 +78,23 @@ export default function Home() {
               </div>
             ))}
           </div>
-          {editionMode && (
-            <div className="h-[70px] w-full bg-white relative z-10 ">
-              <div className="grow h-full bg-slate-600 relative flex items-center justify-center">
-                <Cover cardRarity="rare" />
-                <Button rarity="epic" action={() => setEditionMode(false)}>
-                  Done
-                </Button>
-              </div>
-            </div>
-          )}
-
-          <Footer
-            setCurrentTab={setCurrentTab}
-            currentTab={currentTab}
-            tabsPosition={tabsPosition}
-            editionMode={editionMode}
-          />
         </div>
+        {editionMode && (
+          <div className="h-[70px] w-full bg-white relative z-10 ">
+            <div className="grow h-full bg-slate-300 relative flex items-center justify-center">
+              <Cover cardRarity="rare" />
+              <Button rarity="epic" action={() => setEditionMode(false)}>
+                Done
+              </Button>
+            </div>
+          </div>
+        )}
+        <Footer
+          setCurrentTab={setCurrentTab}
+          currentTab={currentTab}
+          tabsPosition={tabsPosition}
+          editionMode={editionMode}
+        />
       </div>
     </div>
   );
