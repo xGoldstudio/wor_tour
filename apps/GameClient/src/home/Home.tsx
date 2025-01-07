@@ -49,7 +49,7 @@ export default function Home() {
   ) as unknown as HomeTabContextType;
   const { editionMode, setEditionMode } = useEditionMode();
   return (
-    <div className="w-screen h-screen justify-center bg-black relative flex">
+    <div className="w-screen h-screen justify-center bg-green-50 relative flex">
       <DebugPanel />
       <div
         className="max-w-[700px] h-full relative overflow-hidden bg-slate-900 pb-[70px]"

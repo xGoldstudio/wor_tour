@@ -6,15 +6,19 @@ import { getCardsFiltered } from "./getCardsFiltered";
 import { SortAndFilterBox } from "./SortAndFilterBox";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { DisablableDeckCardUI } from "./DisablableDeckCardUI";
+import { DeckCardUI } from "./DeckCardUI";
+import { CARD_GAP } from "./DeckInterface";
 
 interface CollectionProps {
   parentScrollRef?: React.RefObject<HTMLDivElement>;
   filterDeck?: boolean;
+  size: number;
 }
 
 export default function Collection({
   parentScrollRef,
   filterDeck,
+  size,
 }: CollectionProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [cardsPipeline, setCardsPipeline] = useState<CardsPipeline>({
@@ -26,19 +30,17 @@ export default function Collection({
 
   return (
     <div className="flex flex-col w-full">
-      <SortAndFilterBox
-        cardsPipeline={cardsPipeline}
-        setCardsPipeline={setCardsPipeline}
-      />
       {!parentScrollRef ? (
         <ScrollContainer
-          className={`grow h-full overflow-y-scroll scrollbar-hiden flex flex-col relative w-full`}
+          className={`grow overflow-y-scroll flex flex-col relative`}
           innerRef={scrollRef}
         >
           <CollectionContent
             parentScrollRef={scrollRef}
             cardsPipeline={deferedCardsPipeline}
+            setCardsPipeline={setCardsPipeline}
             filterDeck={filterDeck}
+            size={size}
           />
         </ScrollContainer>
       ) : (
@@ -46,7 +48,9 @@ export default function Collection({
           <CollectionContent
             parentScrollRef={parentScrollRef}
             cardsPipeline={deferedCardsPipeline}
+            setCardsPipeline={setCardsPipeline}
             filterDeck={filterDeck}
+            size={size}
           />
         </div>
       )}
@@ -107,11 +111,15 @@ function useCollectionFilteredAllCards({
 function CollectionContent({
   parentScrollRef,
   cardsPipeline,
+  setCardsPipeline,
   filterDeck,
+  size,
 }: {
   parentScrollRef: React.RefObject<HTMLDivElement>;
   cardsPipeline: CardsPipeline;
+  setCardsPipeline: React.Dispatch<React.SetStateAction<CardsPipeline>>;
   filterDeck?: boolean;
+  size: number;
 }) {
   const { allCards } = useCollectionFilteredAllCards({
     filterDeck,
@@ -119,14 +127,27 @@ function CollectionContent({
   });
   const cardListRef = useRef<HTMLDivElement>(null);
   return (
-    <div className="absolute top-0 left-0 w-full flex justify-center py-6 px-4">
-      <div
-        className="max-w-full w-fit gap-6 grid grid-cols-[repeat(auto-fill,_128px)]"
-        ref={cardListRef}
-      >
-        {allCards.map((card) => (
-          <DisablableDeckCardUI card={card} key={card.id} parentScrollRef={parentScrollRef} />
-        ))}
+    <div className="absolute top-0 left-0 flex justify-center w-full">
+      <div className="grid gap-6 py-6">
+        <SortAndFilterBox
+          cardsPipeline={cardsPipeline}
+          setCardsPipeline={setCardsPipeline}
+        />
+        <div
+          className="w-fit grid grid-cols-4"
+          style={{ gap: CARD_GAP * size }}
+          ref={cardListRef}
+        >
+          {allCards.map((card) => (
+            <DisablableDeckCardUI
+              key={card.id}
+              parentScrollRef={parentScrollRef}
+              size={size}
+            >
+              <DeckCardUI card={card} size={size} />
+            </DisablableDeckCardUI>
+          ))}
+        </div>
       </div>
     </div>
   );

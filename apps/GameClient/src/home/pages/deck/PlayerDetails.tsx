@@ -17,7 +17,7 @@ export default function PlayerDetails({ deck }: { deck: CardType[] }) {
 						}}
         ></div>
         </div>
-				<p className="text-slate-50 text-[2.5em]">{numberWithCommas(Math.floor(getDeckStrength(deck) * 1000))} HP</p>
+				<p className="text-slate-50 text-[2.5em]">{numberWithCommas(Math.floor(getDeckStrength(deck) * 100))} HP</p>
       </div>
     </div>
   );

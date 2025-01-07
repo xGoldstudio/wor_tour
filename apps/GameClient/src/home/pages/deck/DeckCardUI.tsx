@@ -1,6 +1,8 @@
 import { preventDefault } from "@repo/lib";
 import {
   Button,
+  CARD_BORDER_HEIGHT,
+  CARD_BORDER_WIDTH,
   CardBorder,
   CardContentIllustartion,
   cn,
@@ -16,13 +18,13 @@ import { useEditionMode } from "./context/UseEditionMode";
 
 export interface CardUIProps {
   card: PlayerCardCollectionInfo;
-  size?: number;
+  size: number;
   deckCard?: boolean;
 }
 
 export function DeckCardUI({
   card,
-  size = 1,
+  size,
   deckCard,
 }: CardUIProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
@@ -55,8 +57,8 @@ export function DeckCardUI({
           isSelected && "z-50 scale-110"
         )}
         style={{
-          width: `${size * 128}px`,
-          height: `${size * 178}px`,
+          width: `${size * CARD_BORDER_WIDTH}px`,
+          height: `${size * CARD_BORDER_HEIGHT}px`,
         }}
       >
         <div className="absolute top-0 left-0">
@@ -81,11 +83,11 @@ export function DeckCardUI({
                 });
               }}
             >
-              <CardBorder rarity={card.rarity} size={size * 2}>
+              <CardBorder rarity={card.rarity} size={size}>
                 <div
                   className={`w-full h-full flex flex-col relative ${opacity}`}
                 >
-                  <CardContentIllustartion card={card} size={size * 2} />
+                  <CardContentIllustartion card={card} size={size} />
                   <div className={`absolute top-0 right-0 ${opacity}`}>
                     <svg
                       className="h-full absolute left-0 -translate-x-full"

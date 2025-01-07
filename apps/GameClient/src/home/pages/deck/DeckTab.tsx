@@ -1,5 +1,5 @@
 import { filterUndefined, getImageUrl, ICONS } from "@repo/lib";
-import { cn, ManaBall } from "@repo/ui";
+import { CARD_BORDER_HEIGHT, CARD_BORDER_WIDTH, cn, ManaBall } from "@repo/ui";
 import * as _ from "lodash";
 import { useMemo, useRef } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
@@ -13,6 +13,7 @@ import { CardType } from "game_engine";
 import { useWhenLeaveTab } from "@/home/tabs/useWhenLeaveTab";
 import { PlayerCardCollectionInfo } from "./cardFilters";
 import PlayerDetails from "./PlayerDetails";
+import { CARD_GAP } from "./DeckInterface";
 
 interface DeckStatsProps {
   deck: CardType[];
@@ -28,12 +29,14 @@ export function StatBox({
   return (
     <div
       className={cn(
-        "flex items-center px-3 py-1 gap-2 bold relative z-10 text-white shadow-md rounded-md",
+        "flex items-center px-2 py-1 gap-2 bold relative z-10 text-white shadow-md rounded-md",
         className ?? ""
       )}
     >
       <div className="w-full h-full bg-slate-600 opacity-60 rounded-sm backdrop-blur-sm absolute top-0 left-0" />
-      <div className="flex items-center gap-2 z-10 w-full h-full">{children}</div>
+      <div className="flex items-center gap-2 z-10 w-full h-full">
+        {children}
+      </div>
     </div>
   );
 }
@@ -47,36 +50,44 @@ function DeckStats({ deck }: DeckStatsProps) {
       : deck.reduce((total, card) => total + card.cost, 0) / deck.length;
   return (
     <>
-      <StatBox className="col-start-1 text-2xl ">
-        <ManaBall size={30} />
+      <StatBox className="col-start-1 text-xl ">
+        <ManaBall size={0.6} />
         <p>{averageCostDeck.toFixed(1)}</p>
       </StatBox>
-      <StatBox className="col-start-4 justify-end">
-        <span className=" text-2xl bold ">{powerTotal.toFixed(1)}</span>
-        <img
-          src={getImageUrl(ICONS, "epees-bouclier.png")}
-          alt="swords and a shield"
-          width={40}
-          height={40}
-        />
+      <StatBox className="col-start-4">
+        <div className="flex w-full items-center justify-end gap-2">
+          <span className="text-xl bold ">{powerTotal.toFixed(1)}</span>
+          <img
+            src={getImageUrl(ICONS, "epees-bouclier.png")}
+            alt="swords and a shield"
+            width={28}
+            height={28}
+          />
+        </div>
       </StatBox>
     </>
   );
 }
 
-function EmptyDeckPlaceholder() {
+function EmptyDeckPlaceholder({ size }: { size: number }) {
   const { editionMode, setEditionMode } = useEditionMode();
 
   return (
     <div
-      className="w-full h-full flex justify-center items-center cursor-pointer"
+      className="flex justify-center items-center cursor-pointer"
       onClick={() => {
         if (!editionMode) {
           setEditionMode(true);
         }
       }}
     >
-      <div className="h-[178px] w-[128px] bg-black bg-opacity-20 border border-slate-700 border-opacity-25 backdrop-filter backdrop-blur-sm rounded-sm " />
+      <div
+        className=" bg-slate-900 bg-opacity-30 border border-slate-700 border-opacity-25 backdrop-filter backdrop-blur-sm rounded-sm "
+        style={{
+          width: CARD_BORDER_WIDTH * size,
+          height: CARD_BORDER_HEIGHT * size,
+        }}
+      />
     </div>
   );
 }
@@ -94,7 +105,7 @@ function useWhenCardAddedOrRemovedFromDeck(cb: () => void) {
   }
 }
 
-export default function DeckTab() {
+export default function DeckTab({ size }: { size: number }) {
   const { deck, getCompleteInfo } = usePlayerStore((state) => ({
     deck: state.deck,
     getCompleteInfo: state.getCompleteInfo,
@@ -126,18 +137,24 @@ export default function DeckTab() {
 
   return (
     <ScrollContainer
-      className="grow scrollbar-hiden flex flex-col w-full overflow-y-scroll relative"
+      className="grow scrollbar-hiden overflow-y-scroll flex flex-col relative"
       innerRef={parentScrollRef}
     >
       <div className="absolute top-0 left-0 w-full min-h-full flex flex-col items-center">
-        <div className="pt-6 max-w-full w-fit gap-6 grid grid-cols-[repeat(auto-fill,_128px)] he-">
+        <div
+          className="pt-6 grid grid-cols-4 w-fit"
+          style={{ gap: CARD_GAP * size }}
+        >
           {detailledDeck.map((card, index) =>
             !card ? (
-              <EmptyDeckPlaceholder />
+              <EmptyDeckPlaceholder size={size} key={index} />
             ) : (
-              <div className="w-full flex justify-center" key={index}>
-                <DeckCardUI deckCard card={card} />
-              </div>
+              <DeckCardUI
+                deckCard
+                card={card}
+                size={size}
+                key={`${card.id}_${index}`}
+              />
             )
           )}
           <DeckStats deck={filterUndefined(detailledDeck)} />
@@ -148,7 +165,11 @@ export default function DeckTab() {
           )}
         </div>
         {editionMode ? (
-          <Collection filterDeck={true} parentScrollRef={parentScrollRef} />
+          <Collection
+            filterDeck={true}
+            parentScrollRef={parentScrollRef}
+            size={size}
+          />
         ) : (
           <PlayerDetails deck={filterUndefined(detailledDeck)}></PlayerDetails>
         )}

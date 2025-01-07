@@ -1,13 +1,14 @@
+import { CARD_BORDER_HEIGHT, CARD_BORDER_WIDTH } from "@repo/ui";
 import { createRef, useEffect, useState } from "react";
-import { PlayerCardCollectionInfo } from "./cardFilters";
-import { DeckCardUI } from "./DeckCardUI";
 
 export function DisablableDeckCardUI({
-  card,
+  children,
   parentScrollRef,
+  size,
 }: {
-  card: PlayerCardCollectionInfo;
+  children: React.ReactNode;
   parentScrollRef: React.RefObject<HTMLDivElement>;
+  size: number;
 }) {
   const [isShown, setIsShown] = useState(false);
   const ref = createRef<HTMLDivElement>();
@@ -41,9 +42,15 @@ export function DisablableDeckCardUI({
   return (
     <div className="" ref={ref}>
       {isShown ? (
-        <DeckCardUI card={card} size={1} deckCard />
+        children
       ) : (
-        <div className="w-[128px] h-[178px] bg-slate-500 rounded-sm opacity-90 animate-pulse"></div>
+        <div
+          className="bg-slate-500 rounded-sm opacity-90 animate-pulse"
+          style={{
+            width: CARD_BORDER_WIDTH * size,
+            height: CARD_BORDER_HEIGHT * size,
+          }}
+        ></div>
       )}
     </div>
   );
