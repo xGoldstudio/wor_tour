@@ -1,7 +1,7 @@
 import DebugPanel from "@/DebugPanel";
 import HomeTab from "./pages/home/HomeTab";
 import { useContext, useRef, useState } from "react";
-import { DeckInterface as DeckTab } from "./pages/deck/DeckInterface";
+import { CollectionInterface as DeckTab } from "./pages/deck/CollectionInterface";
 import ShopTab from "./pages/shop/ShopTab";
 import { RewardBlockWithContext } from "./pages/reward/Reward";
 import usePlayerStore from "./store/playerStore/playerStore";

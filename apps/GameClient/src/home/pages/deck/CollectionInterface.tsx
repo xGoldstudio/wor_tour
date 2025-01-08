@@ -41,7 +41,7 @@ function TabModal({ children, currentTab, setCurrentTab }: TabModalProps) {
   );
 }
 
-export function DeckInterface() {
+export function CollectionInterface() {
   const [currentTab, setCurrentTab] = useState<CollectionTabs>("Deck");
   const TabElement = tabs[currentTab];
   const { editionMode, setEditionMode } = useEditionMode();
@@ -135,12 +135,9 @@ function computeCardSize(
 ) {
   const width = wrapper.clientWidth;
   const height = wrapper.clientHeight;
-  console.log(width, height)
   // we want to create a gap between cards of size 1/5 of the card width
   const sizeWidth = (width) / ((cardsByRow * CARD_BORDER_WIDTH) + (CARD_GAP * (cardsByRow + 1)));
   const sizeHeight = (height) / (cardsByRow * CARD_BORDER_HEIGHT + (CARD_GAP * (cardsByRow - 1)));
-  console.log(sizeWidth, sizeHeight)
   const size = Math.min(sizeWidth, sizeHeight);
-  console.log(size)
   return size;
 }

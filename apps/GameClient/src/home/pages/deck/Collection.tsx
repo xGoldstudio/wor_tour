@@ -7,7 +7,7 @@ import { SortAndFilterBox } from "./SortAndFilterBox";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { DisablableDeckCardUI } from "./DisablableDeckCardUI";
 import { DeckCardUI } from "./DeckCardUI";
-import { CARD_GAP } from "./DeckInterface";
+import { CARD_GAP } from "./CollectionInterface";
 
 interface CollectionProps {
   parentScrollRef?: React.RefObject<HTMLDivElement>;
@@ -128,7 +128,7 @@ function CollectionContent({
   const cardListRef = useRef<HTMLDivElement>(null);
   return (
     <div className="absolute top-0 left-0 flex justify-center w-full">
-      <div className="grid gap-6 py-6">
+      <div className="grid gap-6 pt-6 pb-16">
         <SortAndFilterBox
           cardsPipeline={cardsPipeline}
           setCardsPipeline={setCardsPipeline}
@@ -144,7 +144,7 @@ function CollectionContent({
               parentScrollRef={parentScrollRef}
               size={size}
             >
-              <DeckCardUI card={card} size={size} />
+              <DeckCardUI card={card} size={size} parentScrollRef={parentScrollRef} />
             </DisablableDeckCardUI>
           ))}
         </div>

@@ -11,36 +11,73 @@ import {
 } from "@repo/ui";
 import React, { useState } from "react";
 import CardModal from "./CardModal";
-import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { PlayerCardCollectionInfo } from "./cardFilters";
-import { Info, Plus, Trash } from "lucide-react";
 import { useEditionMode } from "./context/UseEditionMode";
+import { useEditDeckActions } from "./context/EditionModeContext";
 
 export interface CardUIProps {
   card: PlayerCardCollectionInfo;
   size: number;
   deckCard?: boolean;
+  isSelectable?: boolean;
+  parentScrollRef?: React.RefObject<HTMLDivElement>;
 }
 
 export function DeckCardUI({
   card,
   size,
   deckCard,
+  isSelectable,
+  parentScrollRef,
 }: CardUIProps) {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
-  const { removeCardFromDeck, addCardToDeck } = usePlayerStore(
-    (state) => ({
-      removeCardFromDeck: state.removeCardFromDeck,
-      addCardToDeck: state.addCardToDeck,
-    })
-  );
+  const { addCard, removeCard, replaceCard } = useEditDeckActions();
   const [isSelected, setIsSelected] = useState(false);
   const opacity = card.lockLabel !== null ? "brightness-[.70]" : "";
   const { setEditionMode } = useEditionMode();
   const wrapperRef = React.useRef<HTMLDivElement>(null);
-  useOnClickOutside(wrapperRef, () => {
-    setIsSelected(false);
-  });
+  useOnClickOutside(
+    wrapperRef,
+    () => {
+      setIsSelected(false);
+    },
+    isSelected
+  );
+  const { replacingCard } = useEditionMode();
+
+  function onSelected() {
+    if (!parentScrollRef?.current || !wrapperRef.current) {
+      return;
+    }
+    const threshold = 30;
+    const top =
+      wrapperRef.current.getBoundingClientRect().top +
+      parentScrollRef.current.scrollTop -
+      parentScrollRef.current.getBoundingClientRect().top -
+      threshold;
+    const bottom =
+      wrapperRef.current.getBoundingClientRect().bottom +
+      parentScrollRef.current.scrollTop -
+      parentScrollRef.current.getBoundingClientRect().top +
+      threshold +
+      90;
+    if (top < parentScrollRef.current.scrollTop) {
+      parentScrollRef.current.scrollTo({
+        top: top,
+        behavior: "smooth",
+      });
+    } else if (
+      bottom >
+      parentScrollRef.current.scrollTop + parentScrollRef.current.clientHeight
+    ) {
+      parentScrollRef.current.scrollTo({
+        top: bottom - parentScrollRef.current.clientHeight,
+        behavior: "smooth",
+      });
+    }
+  }
+
+  // isSelected && "z-50 animate-[button_300ms_ease-in-out]",
 
   return (
     <div>
@@ -53,16 +90,28 @@ export function DeckCardUI({
       <div
         ref={wrapperRef}
         className={cn(
-          `relative transition-transform`,
-          isSelected && "z-50 scale-110"
+          `relative transition-transform rounded-sm`,
+          isSelected && "z-50",
+          replacingCard &&
+            deckCard &&
+            "animate-[wiggle_500ms_ease-in-out_infinite] shadow-[0px_0px_6px_4px_rgba(8,72,201,0.9)]"
         )}
         style={{
           width: `${size * CARD_BORDER_WIDTH}px`,
           height: `${size * CARD_BORDER_HEIGHT}px`,
         }}
       >
-        <div className="absolute top-0 left-0">
-          <div className={cn("relative select-none h-min  ")}>
+        <div className="absolute top-0 left-0 grid grid-cols-1 gap-2 backdrop-blur-sm">
+          {isSelected && (
+            <div
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-300 opacity-90 rounded-sm"
+              style={{
+                width: `calc(100% + ${0.30 * CARD_BORDER_WIDTH}px)`,
+                height: `calc(100% + ${0.30 * CARD_BORDER_WIDTH}px)`,
+              }}
+            ></div>
+          )}
+          <div className={cn("relative select-none h-min")}>
             {card.lockLabel !== null && (
               <div
                 className="absolute h-full w-full px-5 flex text-center text-sm justify-center items-center z-10"
@@ -74,8 +123,16 @@ export function DeckCardUI({
             <div
               className={`${opacity} hover:cursor-pointer`}
               onClick={() => {
-                setIsSelected(x => {
+                if (deckCard && replacingCard) {
+                  replaceCard(card.id);
+                }
+                if (isSelectable === false) return;
+
+                setIsSelected((x) => {
                   const next = !x;
+                  if (next) {
+                    onSelected();
+                  }
                   if (deckCard) {
                     setEditionMode(next);
                   }
@@ -105,52 +162,46 @@ export function DeckCardUI({
                 <ManaBall mana={card.cost} />
               </div>
             </div>
-            <div
-              className={cn(
-                "z-20 w-full grid-cols-2 gap-2 py-2 h-12 opacity-0 hidden",
-                isSelected && "opacity-100 grid"
-              )}
-            >
+          </div>
+          {isSelected && (
+            <>
               <div className="shadow-2xl group rounded-lg w-full h-full">
                 <Button
                   full
-                  hFull
-                  rarity={"rare"}
-                  className="p-0"
+                  rarity={"epic"}
+                  className="p-1"
                   action={() => setIsDescriptionOpen(true)}
                 >
-                  <Info strokeWidth={2} className="my-1" />
+                  Info
                 </Button>
               </div>
               <div className={"shadow-2xl group rounded-lg w-full h-full"}>
                 {card.isInDeck ? (
                   <Button
                     full
-                    hFull
                     rarity={"common"}
-                    className="p-0"
+                    className="p-1"
                     action={() => {
-                      removeCardFromDeck(card.id);
+                      removeCard(card.id);
                     }}
                   >
-                    <Trash strokeWidth={2} />
+                    Remove
                   </Button>
                 ) : (
                   <Button
                     full
-                    hFull
                     rarity={"rare"}
                     action={preventDefault(() => {
-                      addCardToDeck(card.id);
+                      addCard(card.id);
                     })}
-                    className="p-0"
+                    className="p-1"
                   >
-                    <Plus strokeWidth={2} />
+                    Use
                   </Button>
                 )}
               </div>
-            </div>
-          </div>
+            </>
+          )}
         </div>
       </div>
     </div>

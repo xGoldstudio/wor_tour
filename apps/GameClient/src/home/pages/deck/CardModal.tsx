@@ -12,6 +12,7 @@ import {
 import { useContext } from "react";
 import { HomeTabContext, HomeTabContextType } from "@/home/HomeTabContext";
 import { Plus, ShoppingCart, Trash, Undo2 } from "lucide-react";
+import { useEditDeckActions } from "./context/EditionModeContext";
 
 interface CardModalProps {
   cardId: number;
@@ -27,11 +28,12 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
     HomeTabContext
   ) as unknown as HomeTabContextType;
 
-  const { isPlayed, addCardToDeck } = usePlayerStore((state) => ({
+  const { isPlayed } = usePlayerStore((state) => ({
     isPlayed: state.isPlayed(cardId),
     isDeckFull: state.isDeckFull,
-    addCardToDeck: state.addCardToDeck,
   }));
+
+  const { addCard } = useEditDeckActions();
 
   const level = collectionInfo ? collectionInfo.level - 1 : 0;
 
@@ -86,7 +88,7 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
             ) : (
               <Button
                 action={() => {
-                  addCardToDeck(cardId);
+                  addCard(cardId);
                 }}
                 className="w-[150px]"
               >

@@ -13,7 +13,8 @@ import { CardType } from "game_engine";
 import { useWhenLeaveTab } from "@/home/tabs/useWhenLeaveTab";
 import { PlayerCardCollectionInfo } from "./cardFilters";
 import PlayerDetails from "./PlayerDetails";
-import { CARD_GAP } from "./DeckInterface";
+import { CARD_GAP } from "./CollectionInterface";
+import CardReplacement from "./CardReplacement";
 
 interface DeckStatsProps {
   deck: CardType[];
@@ -113,7 +114,7 @@ export default function DeckTab({ size }: { size: number }) {
     currentMissingCards: state.currentMissingCards,
   }));
   const parentScrollRef = useRef<HTMLDivElement>(null);
-  const { editionMode, setEditionMode } = useEditionMode();
+  const { editionMode, setEditionMode, replacingCard } = useEditionMode();
   useWhenLeaveTab("deck", () => {
     setEditionMode(false);
   });
@@ -154,6 +155,7 @@ export default function DeckTab({ size }: { size: number }) {
                 card={card}
                 size={size}
                 key={`${card.id}_${index}`}
+                parentScrollRef={parentScrollRef}
               />
             )
           )}
@@ -165,11 +167,15 @@ export default function DeckTab({ size }: { size: number }) {
           )}
         </div>
         {editionMode ? (
-          <Collection
-            filterDeck={true}
-            parentScrollRef={parentScrollRef}
-            size={size}
-          />
+          replacingCard ? (
+            <CardReplacement size={size} />
+          ) : (
+            <Collection
+              filterDeck={true}
+              parentScrollRef={parentScrollRef}
+              size={size}
+            />
+          )
         ) : (
           <PlayerDetails deck={filterUndefined(detailledDeck)}></PlayerDetails>
         )}

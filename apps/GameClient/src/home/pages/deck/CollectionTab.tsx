@@ -1,9 +1,6 @@
 import ScrollContainer from "react-indiana-drag-scroll";
 import Collection from "./Collection";
-import { CollectionTabProps } from "./DeckInterface";
-
-// interface CollectionTabProps {
-// }
+import { CollectionTabProps } from "./CollectionInterface";
 
 export default function CollectionTab({ size }: CollectionTabProps) {
   return (

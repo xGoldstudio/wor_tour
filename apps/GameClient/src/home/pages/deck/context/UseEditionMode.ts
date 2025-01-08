@@ -1,8 +1,11 @@
 import { createContext, useContext } from "react";
+import { PlayerCardCollectionInfo } from "../cardFilters";
 
 interface EditionModeContextProps {
   editionMode: boolean;
   setEditionMode: (value: boolean) => void;
+  replacingCard: PlayerCardCollectionInfo | null;
+  setReplacingCard: (value: PlayerCardCollectionInfo | null) => void;
 }
 
 export const EditionModeContext = createContext<
