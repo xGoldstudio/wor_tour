@@ -1,4 +1,10 @@
-import { CARD_BORDER_HEIGHT, CARD_BORDER_WIDTH, cn, Cover } from "@repo/ui";
+import {
+  Button,
+  CARD_BORDER_HEIGHT,
+  CARD_BORDER_WIDTH,
+  cn,
+  Cover,
+} from "@repo/ui";
 import { useEffect, useRef, useState } from "react";
 import CollectionTab from "./CollectionTab";
 import DeckTab from "./DeckTab";
@@ -22,22 +28,28 @@ interface TabModalProps {
   setCurrentTab: (tab: CollectionTabs) => void;
 }
 
-function TabModal({ children, currentTab, setCurrentTab }: TabModalProps) {
+function TabButton({ children, currentTab, setCurrentTab }: TabModalProps) {
   return (
-    <div
-      className={cn(
-        currentTab !== children?.toString() ? "opacity-70" : null,
-        "w-full h-[40px] hover:cursor-pointer shadow-md rounded-t-md "
-      )}
-      onClick={() => setCurrentTab(children?.toString() as CollectionTabs)}
+    <Button
+      action={() => setCurrentTab(children?.toString() as CollectionTabs)}
+      unstyled
+      full
+      containerClassname="origin-bottom"
     >
-      <div className="rounded-t-md overflow-hidden text-nowrap relative z-10 font-semibold h-full">
-        <Cover cardRarity="rare" className="bg-slate-400" />
-        <div className="text-slate-900 font-bold h-full flex justify-center items-center relative">
-          {children}
+      <div
+        className={cn(
+          currentTab !== children?.toString() ? "opacity-70" : null,
+          "w-full h-[40px] hover:cursor-pointer shadow-md rounded-t-md "
+        )}
+      >
+        <div className="rounded-t-md overflow-hidden text-nowrap relative z-10 font-semibold h-full">
+          <Cover cardRarity="rare" className="bg-slate-400" />
+          <div className="text-slate-900 font-bold h-full flex justify-center items-center relative">
+            {children}
+          </div>
         </div>
       </div>
-    </div>
+    </Button>
   );
 }
 
@@ -81,12 +93,12 @@ export function CollectionInterface() {
   return (
     <div className="w-full max-w-[700px] pt-4 flex flex-col">
       <div className="mx-8 relative flex justify-around gap-4">
-        <TabModal currentTab={currentTab} setCurrentTab={setCurrentTab}>
+        <TabButton currentTab={currentTab} setCurrentTab={setCurrentTab}>
           Deck
-        </TabModal>
-        <TabModal currentTab={currentTab} setCurrentTab={setCurrentTab}>
+        </TabButton>
+        <TabButton currentTab={currentTab} setCurrentTab={setCurrentTab}>
           Collection
-        </TabModal>
+        </TabButton>
       </div>
       <div className="w-full h-[40px] hover:cursor-pointer bg-slate-400">
         <div className="overflow-hidden relative z-10 font-semibold h-full">
@@ -94,11 +106,12 @@ export function CollectionInterface() {
         </div>
       </div>
       <div className="grow w-full relative flex">
-        <div className="w-full h-full relative flex justify-center" ref={tabContainerRef}>
+        <div
+          className="w-full h-full relative flex justify-center"
+          ref={tabContainerRef}
+        >
           {size !== null && (
-            <div
-              className="h-full relative flex w-full"
-            >
+            <div className="h-full relative flex w-full">
               <TabElement size={size} />
             </div>
           )}
@@ -129,15 +142,14 @@ function useOnWrapperResize(
 // CARD_BORDER_HEIGHT
 export const CARD_GAP = CARD_BORDER_WIDTH / 7;
 // 1.5 * 16 = 24
-function computeCardSize(
-  wrapper: HTMLDivElement,
-  cardsByRow: number,
-) {
+function computeCardSize(wrapper: HTMLDivElement, cardsByRow: number) {
   const width = wrapper.clientWidth;
   const height = wrapper.clientHeight;
   // we want to create a gap between cards of size 1/5 of the card width
-  const sizeWidth = (width) / ((cardsByRow * CARD_BORDER_WIDTH) + (CARD_GAP * (cardsByRow + 1)));
-  const sizeHeight = (height) / (cardsByRow * CARD_BORDER_HEIGHT + (CARD_GAP * (cardsByRow - 1)));
+  const sizeWidth =
+    width / (cardsByRow * CARD_BORDER_WIDTH + CARD_GAP * (cardsByRow + 1));
+  const sizeHeight =
+    height / (cardsByRow * CARD_BORDER_HEIGHT + CARD_GAP * (cardsByRow - 1));
   const size = Math.min(sizeWidth, sizeHeight);
   return size;
 }

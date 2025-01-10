@@ -18,6 +18,7 @@ interface ButtonProps {
   unstyled?: boolean;
   innerRef?: React.RefObject<HTMLButtonElement>;
   dontPreventPropagation?: boolean;
+  containerClassname?: string;
 }
 
 export default function Button({
@@ -32,6 +33,7 @@ export default function Button({
   unstyled,
   innerRef,
   dontPreventPropagation,
+  containerClassname,
 }: ButtonProps) {
   const container = useRef<HTMLDivElement>(null);
 
@@ -82,6 +84,7 @@ export default function Button({
       <div
         ref={container}
         className={cn(
+          containerClassname ?? "",
           unstyled
             ? ""
             : [
