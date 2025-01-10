@@ -1,3 +1,4 @@
+import DebugIndex from "@/editor/ui/DebugIndex";
 import GameTimerDebug from "./GameTimerDebug";
 import HandCardDebug from "./HandCardDebug";
 import InGameCardDebug from "./InGameCardDebug";
@@ -5,7 +6,7 @@ import ManaBarDebug from "./ManaBarDebug";
 import StateHistoryDebug from "./StateHistoryDebug";
 import StatesDescDebug from "./StatesDescDebug";
 
-export const DebugComponents: [string, React.FunctionComponent][] = [
+export const DebugGameComponents: [string, React.FunctionComponent][] = [
 	["Card", InGameCardDebug],
 	["Mana", ManaBarDebug],
 	["Timer", GameTimerDebug],
@@ -13,3 +14,7 @@ export const DebugComponents: [string, React.FunctionComponent][] = [
 	["State_History", StateHistoryDebug],
 	["State_Desc", StatesDescDebug],
 ];
+
+export default function DebugGameComponentsIndex() {
+	return <DebugIndex components={DebugGameComponents} title={"Debug Game Components"} />;
+}

@@ -5,11 +5,11 @@ import WorldEditor from "./editor/features/worlds/World";
 import CardEditor from "./editor/features/card/CardEditor";
 import EditorLayout from "./editor/Layout";
 import Progression from "./editor/features/progression/Progression";
-import DebugIndex from "./editor/features/debug/DebugIndex";
 import AppEditorIndex from ".";
 import LightEditorLayout from "./editor/LightLayout";
-import { DebugComponents } from "./editor/features/debug/DebugComponents";
 import { EditorData } from "game_engine";
+import DebugGameComponentsIndex, { DebugGameComponents } from "./editor/features/debug/DebugComponents";
+import DebugComponentsIndex, { DebugComponents } from "./editor/features/componentsDebug";
 
 const queryClient = new QueryClient();
 
@@ -53,8 +53,18 @@ function AppRouter() {
           <Route path=":worldId" element={<WorldEditor />} />
         </Route>
       </Route>
-      <Route path="/debug" element={<LightEditorLayout />}>
-        <Route path="" element={<DebugIndex />} />
+      <Route path="/components" element={<LightEditorLayout />}>
+        <Route path="" element={<DebugGameComponentsIndex />} />
+        {DebugGameComponents.map(([name, Component]) => (
+          <Route
+            path={`${name.toLowerCase()}`}
+            element={<Component />}
+            key={name}
+          />
+        ))}
+      </Route>
+      <Route path="/uxComponents" element={<LightEditorLayout />}>
+        <Route path="" element={<DebugComponentsIndex />} />
         {DebugComponents.map(([name, Component]) => (
           <Route
             path={`${name.toLowerCase()}`}

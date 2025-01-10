@@ -106,8 +106,8 @@ export function DeckCardUI({
             <div
               className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-300 opacity-90 rounded-sm"
               style={{
-                width: `calc(100% + ${0.30 * CARD_BORDER_WIDTH}px)`,
-                height: `calc(100% + ${0.30 * CARD_BORDER_WIDTH}px)`,
+                width: `calc(100% + ${0.3 * CARD_BORDER_WIDTH}px)`,
+                height: `calc(100% + ${0.3 * CARD_BORDER_WIDTH}px)`,
               }}
             ></div>
           )}
@@ -165,41 +165,37 @@ export function DeckCardUI({
           </div>
           {isSelected && (
             <>
-              <div className="shadow-2xl group rounded-lg w-full h-full">
+              <Button
+                full
+                rarity={"epic"}
+                className="p-1"
+                action={() => setIsDescriptionOpen(true)}
+              >
+                Info
+              </Button>
+              {card.isInDeck ? (
                 <Button
                   full
-                  rarity={"epic"}
+                  rarity={"common"}
                   className="p-1"
-                  action={() => setIsDescriptionOpen(true)}
+                  action={() => {
+                    removeCard(card.id);
+                  }}
                 >
-                  Info
+                  Remove
                 </Button>
-              </div>
-              <div className={"shadow-2xl group rounded-lg w-full h-full"}>
-                {card.isInDeck ? (
-                  <Button
-                    full
-                    rarity={"common"}
-                    className="p-1"
-                    action={() => {
-                      removeCard(card.id);
-                    }}
-                  >
-                    Remove
-                  </Button>
-                ) : (
-                  <Button
-                    full
-                    rarity={"rare"}
-                    action={preventDefault(() => {
-                      addCard(card.id);
-                    })}
-                    className="p-1"
-                  >
-                    Use
-                  </Button>
-                )}
-              </div>
+              ) : (
+                <Button
+                  full
+                  rarity={"rare"}
+                  action={preventDefault(() => {
+                    addCard(card.id);
+                  })}
+                  className="p-1"
+                >
+                  Use
+                </Button>
+              )}
             </>
           )}
         </div>

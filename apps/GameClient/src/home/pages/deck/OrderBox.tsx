@@ -13,7 +13,7 @@ export function OrderBox({ isAscending, toggleIsAscending }: OrderBoxProps) {
       small={true}
     >
       <div
-        className={cn("whitespace-nowrap z-10 transition-all", {
+        className={cn("whitespace-nowrap z-10", {
           "-rotate-180": isAscending,
         })}
       >

@@ -205,7 +205,7 @@ export default function CardReward({
                   ))}
                 </svg>
               </div>
-              <div className="relative h-[445px] flex" ref={cardRef}>
+              <div className="relative h-[445px] flex transform-gpu" ref={cardRef}>
                 <CardDisplay
                   card={card}
                   position={0}
