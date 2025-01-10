@@ -15,6 +15,9 @@ interface ButtonProps {
   className?: string;
   rarity?: CardRarity;
   width?: number;
+  unstyled?: boolean;
+  innerRef?: React.RefObject<HTMLButtonElement>;
+  dontPreventPropagation?: boolean;
 }
 
 export default function Button({
@@ -26,6 +29,9 @@ export default function Button({
   className,
   rarity = "rare",
   width,
+  unstyled,
+  innerRef,
+  dontPreventPropagation,
 }: ButtonProps) {
   const container = useRef<HTMLDivElement>(null);
 
@@ -43,10 +49,10 @@ export default function Button({
     // having action delayed is not optimal, may need a better solution
     tl.to(container.current, {
       scale: 1.05,
-      duration: 0.1,
+      duration: 0.15,
       ease: "power1.in",
     });
-    tl.to(container.current, { scale: 1, duration: 0.1, ease: "power1.out" });
+    tl.to(container.current, { scale: 1, duration: 0.15, ease: "power1.out" });
   });
   const onPressAnimation = contextSafe(() => {
     if (!container.current || !tl) return;
@@ -60,46 +66,57 @@ export default function Button({
 
   return (
     <button
-      onMouseDown={() => onPressAnimation()}
-      onTouchStart={() => onPressAnimation()}
+      onMouseDown={disableDefaultAndPropagation(onPressAnimation, dontPreventPropagation)}
+      onTouchStart={disableDefaultAndPropagation(onPressAnimation, dontPreventPropagation)}
       onMouseLeave={() => {
         onReleaseAnimation();
       }}
       onClick={disableDefaultAndPropagation((e) => {
         onActionAnimation();
         action(e);
-      })}
+      }, dontPreventPropagation)}
       disabled={disabled}
       className={cn("relative", full ? "w-full" : "w-min")}
+      ref={innerRef}
     >
       <div
         ref={container}
         className={cn(
-          "rounded-sm overflow-hidden text-nowrap relative z-10 font-semibold shadow-md",
-          disabled ? "brightness-50" : "brightness-100",
-          rarity === "epic" ? "bg-slate-100" : "bg-slate-300"
+          unstyled
+            ? ""
+            : [
+                "rounded-sm overflow-hidden text-nowrap relative z-10 font-semibold shadow-md",
+                disabled ? "brightness-50" : "brightness-100",
+                rarity === "epic" ? "bg-slate-100" : "bg-slate-300",
+              ]
         )}
         style={{
           width: width && !full ? `${width}px` : undefined,
         }}
       >
-        <div
-          className="absolute w-full h-full blur-sm"
-          style={{
-            backgroundImage: `url(${textureByRarity(rarity)})`,
-            backgroundSize: "cover",
-            backgroundPositionY: "center",
-          }}
-        />
-        <div
-          className={cn(
-            "text-slate-900 font-bold h-full flex justify-center items-center relative",
-            !small ? "px-12 py-2" : "px-2 py-1",
-            className
-          )}
-        >
-          {children}
-        </div>
+        {unstyled ? (
+          children
+        ) : (
+          <>
+            <div
+              className="absolute w-full h-full blur-sm"
+              style={{
+                backgroundImage: `url(${textureByRarity(rarity)})`,
+                backgroundSize: "cover",
+                backgroundPositionY: "center",
+              }}
+            />
+            <div
+              className={cn(
+                "text-slate-900 font-bold h-full flex justify-center items-center relative",
+                !small ? "px-12 py-2" : "px-2 py-1",
+                className
+              )}
+            >
+              {children}
+            </div>
+          </>
+        )}
       </div>
     </button>
   );

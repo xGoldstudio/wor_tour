@@ -17,24 +17,32 @@ export default function ButtonDebug() {
     },
     rarity: {
       type: ["common", "rare", "epic", "legendary"],
-			default: "rare",
+      default: "rare",
     },
     width: {
       type: "number",
       default: 300,
     },
+    unstyled: {
+      type: "boolean",
+      default: false,
+    },
   };
 
   const [Component, props] = usePropsEditor(propsPossible);
-	const [pressedTimes, setPressedTimes] = useState(0);
+  const [pressedTimes, setPressedTimes] = useState(0);
 
   return (
     <div>
       <div className="w-full flex flex-col justify-center items-center pt-16 gap-32">
         <div className="flex flex-col justify-center gap-4 max-w-[1000px] w-full">
           {Component}
-          <Button action={() => setPressedTimes(i => i+1)} {...props}>
-            Dummy {pressedTimes}
+          <Button action={() => setPressedTimes((i) => i + 1)} {...props}>
+            {props.unstyled ? (
+              <div className="w-32 h-32 bg-red-500" />
+            ) : (
+              `Dummy ${pressedTimes}`
+            )}
           </Button>
         </div>
       </div>
@@ -102,7 +110,9 @@ export function PropsEditor({
 }) {
   return (
     <div>
-			<button onClick={() => setProps(buildStateFromPropsOptions(propsList))}>Reset</button>
+      <button onClick={() => setProps(buildStateFromPropsOptions(propsList))}>
+        Reset
+      </button>
       {Object.entries(props).map(([key, value]) => {
         const type = propsList[key].type;
         return (

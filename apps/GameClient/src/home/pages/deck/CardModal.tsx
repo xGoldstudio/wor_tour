@@ -48,9 +48,7 @@ export default function CardModal({ closeModal, cardId }: CardModalProps) {
     <Modal title={`card_${cardId}`} closeModal={closeModal} cover>
       <div
         className="flex flex-col items-center gap-12 justify-center w-full h-full"
-        onClick={() => {
-          closeModal();
-        }}
+        onClick={stopPropagation(closeModal)}
       >
         <div
           className="flex justify-center h-[444px] w-full relative"

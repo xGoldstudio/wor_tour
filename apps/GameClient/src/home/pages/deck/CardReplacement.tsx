@@ -10,7 +10,9 @@ export default function CardReplacement({ size }: { size: number }) {
 
   useOnClickOutside(ref, () => {
     setReplacingCard(null);
-  }, !!replacingCard);
+  }, {
+    watching: !!replacingCard,
+  });
 
   if (!replacingCard) {
     return null;

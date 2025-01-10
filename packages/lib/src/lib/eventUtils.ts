@@ -17,7 +17,10 @@ export function stopPropagation<Event extends { stopPropagation: () => void }>(
 }
 
 export function disableDefaultAndPropagation<Event extends { stopPropagation: () => void; preventDefault: () => void }>(
-  cb: (e: Event) => void | (() => void),
+  cb: (e: Event) => void | (() => void), ignore?: boolean,
 ) {
+  if (ignore) {
+    return cb;
+  }
   return stopPropagation(preventDefault(cb));
 }

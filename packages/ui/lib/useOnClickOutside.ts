@@ -1,8 +1,10 @@
 import { RefObject, useEffect } from 'react';
 
-export default function useOnClickOutside(ref: RefObject<HTMLDivElement>, cb: () => void, watching: boolean = true) {
+export default function useOnClickOutside(ref: RefObject<HTMLElement>, cb: () => void, options?: {
+	watching?: boolean,
+}) {
 	useEffect(() => {
-		if (!watching) {
+		if (options?.watching !== undefined && !options.watching) {
 			return;
 		}
 		function handleClickOutside(event: MouseEvent) {
@@ -14,5 +16,5 @@ export default function useOnClickOutside(ref: RefObject<HTMLDivElement>, cb: ()
 		return () => {
 			document.removeEventListener("click", handleClickOutside);
 		};
-	}, [ref, watching]);
+	}, [ref, options?.watching]);
 }
