@@ -1,7 +1,7 @@
 import { filterUndefined, getImageUrl, ICONS } from "@repo/lib";
 import { CARD_BORDER_HEIGHT, CARD_BORDER_WIDTH, cn, ManaBall } from "@repo/ui";
 import * as _ from "lodash";
-import { useMemo, useRef } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import Collection from "./Collection";
 import { useEditionMode } from "./context/UseEditionMode";
@@ -15,7 +15,7 @@ import { PlayerCardCollectionInfo } from "./cardFilters";
 import PlayerDetails from "./PlayerDetails";
 import { CARD_GAP } from "./CollectionInterface";
 import CardReplacement from "./CardReplacement";
-import DragContextProvider from "./dragAndDrop/DragContext";
+import DragContextProvider, { DragContext, DragContextType } from "./dragAndDrop/DragContext";
 import Droppable from "./dragAndDrop/Droppable";
 import { useEditDeckActions } from "./context/EditionModeContext";
 
@@ -73,14 +73,22 @@ function DeckStats({ deck }: DeckStatsProps) {
   );
 }
 
-function EmptyDeckPlaceholder({ size, index }: { size: number, index: number }) {
+function EmptyDeckPlaceholder({
+  size,
+  index,
+}: {
+  size: number;
+  index: number;
+}) {
   const { editionMode, setEditionMode } = useEditionMode();
   const { replaceCard } = useEditDeckActions();
 
   return (
     <Droppable<number>
       onDrop={(originCardId) => {
-        const originIndex = usePlayerStore.getState().deck.findIndex((id) => id === originCardId);
+        const originIndex = usePlayerStore
+          .getState()
+          .deck.findIndex((id) => id === originCardId);
         if (originIndex === -1) {
           const target = usePlayerStore.getState().deck[index];
           if (target === 0) {
@@ -131,6 +139,14 @@ function useWhenCardAddedOrRemovedFromDeck(cb: () => void) {
 }
 
 export default function DeckTab({ size }: { size: number }) {
+  return (
+    <DragContextProvider>
+      <DeckTabContent size={size} />
+    </DragContextProvider>
+  );
+}
+
+function DeckTabContent({ size }: { size: number }) {
   const { deck, getCompleteInfo } = usePlayerStore((state) => ({
     deck: state.deck,
     getCompleteInfo: state.getCompleteInfo,
@@ -160,57 +176,60 @@ export default function DeckTab({ size }: { size: number }) {
     return detailledDeck;
   }, [deck]);
 
+  const { isDragging } = useContext(DragContext) as DragContextType<number>;
+
+  const [isDraggingState, setIsDraggingState] = useState(!!isDragging.current);
+  useEffect(() => setIsDraggingState(!!isDragging.current), [isDragging.current]);
+
   return (
     <ScrollContainer
       className="grow scrollbar-hiden overflow-y-scroll flex flex-col relative"
       innerRef={parentScrollRef}
+      horizontal={false}
+      vertical={!isDraggingState}
     >
-      <DragContextProvider>
-        <div className="absolute top-0 left-0 w-full min-h-full flex flex-col items-center">
-          <div
-            className="pt-6 grid grid-cols-4 w-fit"
-            style={{ gap: CARD_GAP * size }}
-          >
-            {detailledDeck.map((card, index) => (
-              <div className="relative">
-                <EmptyDeckPlaceholder size={size} key={index} index={index} />
-                <div className="absolute top-0 left-0">
-                  {card && (
-                    <DeckCardUI
-                      deckCard
-                      card={card}
-                      size={size}
-                      key={`${card.id}_${index}`}
-                      parentScrollRef={parentScrollRef}
-                    />
-                  )}
-                </div>
+      <div className="absolute top-0 left-0 w-full min-h-full flex flex-col items-center">
+        <div
+          className="pt-6 grid grid-cols-4 w-fit"
+          style={{ gap: CARD_GAP * size }}
+        >
+          {detailledDeck.map((card, index) => (
+            <div className="relative">
+              <EmptyDeckPlaceholder size={size} key={index} index={index} />
+              <div className="absolute top-0 left-0">
+                {card && (
+                  <DeckCardUI
+                    deckCard
+                    card={card}
+                    size={size}
+                    key={`${card.id}_${index}`}
+                    parentScrollRef={parentScrollRef}
+                  />
+                )}
               </div>
-            ))}
-            <DeckStats deck={filterUndefined(detailledDeck)} />
-            {!editionMode && (
-              <>
-                <StatBox className="col-start-0 col-span-4 w-full" />
-              </>
-            )}
-          </div>
-          {editionMode ? (
-            replacingCard ? (
-              <CardReplacement size={size} />
-            ) : (
-              <Collection
-                filterDeck={true}
-                parentScrollRef={parentScrollRef}
-                size={size}
-              />
-            )
-          ) : (
-            <PlayerDetails
-              deck={filterUndefined(detailledDeck)}
-            ></PlayerDetails>
+            </div>
+          ))}
+          <DeckStats deck={filterUndefined(detailledDeck)} />
+          {!editionMode && (
+            <>
+              <StatBox className="col-start-0 col-span-4 w-full" />
+            </>
           )}
         </div>
-      </DragContextProvider>
+        {editionMode ? (
+          replacingCard ? (
+            <CardReplacement size={size} />
+          ) : (
+            <Collection
+              filterDeck={true}
+              parentScrollRef={parentScrollRef}
+              size={size}
+            />
+          )
+        ) : (
+          <PlayerDetails deck={filterUndefined(detailledDeck)}></PlayerDetails>
+        )}
+      </div>
     </ScrollContainer>
   );
 }

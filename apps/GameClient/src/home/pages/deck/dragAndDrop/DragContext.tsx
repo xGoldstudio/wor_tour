@@ -28,7 +28,7 @@ export default function DragContextProvider<T = unknown>({
   const droppables = useRef<
     Map<React.RefObject<HTMLElement>, (data: T) => void>
   >(new Map());
-  const isDragging = useRef(false);
+  const isDragging = useRef<boolean>(false);
 
   function registerDroppable({
     onDrop,
@@ -60,11 +60,11 @@ export default function DragContextProvider<T = unknown>({
     initialCoords.x = initialCoords.x + (clientX - initialCoords.x);
     initialCoords.y = initialCoords.y + (clientY - initialCoords.y);
     dragRef.current.style.transition = "";
+    isDragging.current = true;
     function onMove(
       e: MouseEvent | TouchEvent | React.MouseEvent | React.TouchEvent
     ) {
       if (!dragRef.current) return;
-      isDragging.current = true;
       const clientX = "touches" in e ? e.touches[0].clientX : e.pageX;
       const clientY = "touches" in e ? e.touches[0].clientY : e.pageY;
 
