@@ -35,7 +35,7 @@ interface PlayerStore {
   getLockedCardInfo: (id: number) => CardType;
   getCollectionCompleteInfo: (collection: CollectionType, deckCards: number[], filterDeck: boolean) => PlayerCardCollectionInfo[];
   removeCardFromDeck: (id: number) => void;
-  deckSwapCards: (position: number, cardId: number) => void;
+  deckSwapCards: (position: number, cardId: number) => number;
   addCardToDeck: (id: number) => void;
   isDeckFull: boolean;
   isPlayed: (cardId: number) => boolean;
@@ -104,17 +104,21 @@ const usePlayerStore = create(
             isDeckFull: nextNumberOfCardsInDeck >= 8,
           };
         }),
-      deckSwapCards: (position: number, cardId: number) =>
+      deckSwapCards: (position: number, cardId: number) => {
+        let replacedCardId = 0;
         set((state) => {
           const index = state.deck.findIndex((id) => id === cardId);
           const cardToSwap = state.deck[position];
           if (index === -1) {
             return state;
           }
+          replacedCardId = cardToSwap;
           state.deck[position] = cardId;
           state.deck[index] = cardToSwap;
           return { deck: [...state.deck] };
-        }),
+        });
+        return replacedCardId;
+      },
       isPlayed: (cardId: number) => get().deck.includes(cardId),
 
       getAllCardsLocked: () => {

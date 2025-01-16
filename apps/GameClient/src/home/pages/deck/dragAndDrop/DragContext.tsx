@@ -84,9 +84,9 @@ export default function DragContextProvider<T = unknown>({
       onDrop(e, data);
 			options?.onDragEnd?.(e);
       if (!dragRef.current) return;
-      dragRef.current.style.zIndex = "";
       dragRef.current.style.transition = "transform 0.5s";
-      dragRef.current.style.transform = "translate(0, 0)";
+      dragRef.current.style.transform = "";
+      dragRef.current.style.zIndex = "";
     }
     document.addEventListener("mousemove", onMove);
     document.addEventListener("touchmove", onMove);
@@ -106,7 +106,6 @@ export default function DragContextProvider<T = unknown>({
 			const rect = ref.current.getBoundingClientRect();
 			const clientX = "touches" in e ? e.touches[0].clientX : e.pageX;
 			const clientY = "touches" in e ? e.touches[0].clientY : e.pageY;
-			// console.log(rect, clientX, clientY);
 			if (
 				clientX >= rect.left &&
 				clientX <= rect.right &&

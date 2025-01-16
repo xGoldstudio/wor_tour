@@ -13,6 +13,9 @@ import { useEditDeckActions } from "../context/EditionModeContext";
 import Draggable from "../dragAndDrop/Draggable";
 import { DragContext, DragContextType } from "../dragAndDrop/DragContext";
 import ContentCardDeckUi from "./ContentCardDeckUi";
+import { cardsAddingAnimationService } from "@/services/inject";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 
 export interface CardUIProps {
   card: PlayerCardCollectionInfo;
@@ -30,6 +33,37 @@ export function DeckCardUI({
   const { replaceCard } = useEditDeckActions();
   const { setEditionMode } = useEditionMode();
   const { replacingCard, setReplacingCard } = useEditionMode();
+
+  useEffect(() => {
+    const potentialAnimation =
+      cardsAddingAnimationService.consumeCardAddingAnimation(card.id);
+    if (!potentialAnimation || !dragRef.current) {
+      return;
+    }
+    const { x, y } = dragRef.current.getBoundingClientRect();
+    const diffX = potentialAnimation.x - x;
+    const diffY = potentialAnimation.y - y;
+    addingAnimation(diffX, diffY)();
+  });
+
+  const { contextSafe } = useGSAP();
+  const addingAnimation = (diffX: number, diffY: number) =>
+    contextSafe(() => {
+      if (!dragRef.current) {
+        return;
+      }
+      dragRef.current.style.zIndex = "1000";
+      gsap.fromTo(
+        dragRef.current,
+        { x: diffX, y: diffY },
+        {
+          x: 0,
+          y: 0,
+          duration: 0.5,
+          onComplete: () => dragRef.current?.removeAttribute("style"),
+        }
+      );
+    });
 
   const { startDragging, isDragging } = useContext(
     DragContext
@@ -173,6 +207,7 @@ export function CollectionCardUI({
           width: `${size * CARD_BORDER_WIDTH}px`,
           height: `${size * CARD_BORDER_HEIGHT}px`,
         }}
+        id={cardsAddingAnimationService.getCollectionCardId(card.id)}
       >
         <Button
           innerRef={wrapperRef}

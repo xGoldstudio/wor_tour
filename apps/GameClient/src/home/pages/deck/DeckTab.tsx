@@ -1,5 +1,10 @@
 import { filterUndefined, getImageUrl, ICONS } from "@repo/lib";
-import { CARD_BORDER_HEIGHT, CARD_BORDER_WIDTH, cn, ManaBall } from "@repo/ui";
+import {
+  CARD_BORDER_HEIGHT,
+  CARD_BORDER_WIDTH,
+  cn,
+  ManaBall
+} from "@repo/ui";
 import * as _ from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
@@ -15,7 +20,10 @@ import { PlayerCardCollectionInfo } from "./cardFilters";
 import PlayerDetails from "./PlayerDetails";
 import { CARD_GAP } from "./CollectionInterface";
 import CardReplacement from "./CardReplacement";
-import DragContextProvider, { DragContext, DragContextType } from "./dragAndDrop/DragContext";
+import DragContextProvider, {
+  DragContext,
+  DragContextType,
+} from "./dragAndDrop/DragContext";
 import Droppable from "./dragAndDrop/Droppable";
 import { useEditDeckActions } from "./context/EditionModeContext";
 
@@ -80,8 +88,8 @@ function EmptyDeckPlaceholder({
   size: number;
   index: number;
 }) {
-  const { editionMode, setReplacingCard, setEditionMode } = useEditionMode();
-  const { replaceCard } = useEditDeckActions();
+  const { editionMode, setEditionMode } = useEditionMode();
+  const { replaceCard, swapCards } = useEditDeckActions();
 
   return (
     <Droppable<number>
@@ -89,21 +97,21 @@ function EmptyDeckPlaceholder({
         const originIndex = usePlayerStore
           .getState()
           .deck.findIndex((id) => id === originCardId);
-        if (originIndex === -1) { // we dropped the origin card
+        if (originIndex === -1) {
+          // we dropped the origin card
           const target = usePlayerStore.getState().deck[index];
           if (target === 0) {
             return;
           }
           replaceCard(target);
-          setReplacingCard(null);
           return;
         }
-        if (originIndex === index) { // we dropped the card on itself
+        if (originIndex === index) {
+          // we dropped the card on itself
           return;
         }
         // we dropped a card on another card
-        usePlayerStore.getState().deckSwapCards(index, originCardId);
-        setReplacingCard(null);
+        swapCards(index, originCardId);
       }}
     >
       <div
@@ -180,7 +188,10 @@ function DeckTabContent({ size }: { size: number }) {
   const { isDragging } = useContext(DragContext) as DragContextType<number>;
 
   const [isDraggingState, setIsDraggingState] = useState(!!isDragging.current);
-  useEffect(() => setIsDraggingState(!!isDragging.current), [isDragging.current]);
+  useEffect(
+    () => setIsDraggingState(!!isDragging.current),
+    [isDragging.current]
+  );
 
   return (
     <ScrollContainer
