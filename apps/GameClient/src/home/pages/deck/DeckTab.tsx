@@ -15,6 +15,9 @@ import { PlayerCardCollectionInfo } from "./cardFilters";
 import PlayerDetails from "./PlayerDetails";
 import { CARD_GAP } from "./CollectionInterface";
 import CardReplacement from "./CardReplacement";
+import DragContextProvider from "./dragAndDrop/DragContext";
+import Droppable from "./dragAndDrop/Droppable";
+import { useEditDeckActions } from "./context/EditionModeContext";
 
 interface DeckStatsProps {
   deck: CardType[];
@@ -30,7 +33,7 @@ export function StatBox({
   return (
     <div
       className={cn(
-        "flex items-center px-2 py-1 gap-2 bold relative z-10 text-white shadow-md rounded-md",
+        "flex items-center px-2 py-1 gap-2 bold relative text-white shadow-md rounded-md z-0",
         className ?? ""
       )}
     >
@@ -70,26 +73,47 @@ function DeckStats({ deck }: DeckStatsProps) {
   );
 }
 
-function EmptyDeckPlaceholder({ size }: { size: number }) {
+function EmptyDeckPlaceholder({ size, index }: { size: number, index: number }) {
   const { editionMode, setEditionMode } = useEditionMode();
+  const { replaceCard } = useEditDeckActions();
 
   return (
-    <div
-      className="flex justify-center items-center cursor-pointer"
-      onClick={() => {
-        if (!editionMode) {
-          setEditionMode(true);
+    <Droppable<number>
+      onDrop={(originCardId) => {
+        const originIndex = usePlayerStore.getState().deck.findIndex((id) => id === originCardId);
+        if (originIndex === -1) {
+          const target = usePlayerStore.getState().deck[index];
+          if (target === 0) {
+            return;
+          }
+          replaceCard(target);
+          setEditionMode(false);
+          return;
         }
+        if (originIndex === index) {
+          return;
+        }
+        setEditionMode(false);
+        usePlayerStore.getState().deckSwapCards(index, originCardId);
       }}
     >
       <div
-        className=" bg-slate-900 bg-opacity-30 border border-slate-700 border-opacity-25 backdrop-filter backdrop-blur-sm rounded-sm "
-        style={{
-          width: CARD_BORDER_WIDTH * size,
-          height: CARD_BORDER_HEIGHT * size,
+        className="flex justify-center items-center cursor-pointer"
+        onClick={() => {
+          if (!editionMode) {
+            setEditionMode(true);
+          }
         }}
-      />
-    </div>
+      >
+        <div
+          className=" bg-slate-900 bg-opacity-30 border border-slate-700 border-opacity-25 backdrop-filter backdrop-blur-sm rounded-sm "
+          style={{
+            width: CARD_BORDER_WIDTH * size,
+            height: CARD_BORDER_HEIGHT * size,
+          }}
+        />
+      </div>
+    </Droppable>
   );
 }
 
@@ -141,45 +165,52 @@ export default function DeckTab({ size }: { size: number }) {
       className="grow scrollbar-hiden overflow-y-scroll flex flex-col relative"
       innerRef={parentScrollRef}
     >
-      <div className="absolute top-0 left-0 w-full min-h-full flex flex-col items-center">
-        <div
-          className="pt-6 grid grid-cols-4 w-fit"
-          style={{ gap: CARD_GAP * size }}
-        >
-          {detailledDeck.map((card, index) =>
-            !card ? (
-              <EmptyDeckPlaceholder size={size} key={index} />
+      <DragContextProvider>
+        <div className="absolute top-0 left-0 w-full min-h-full flex flex-col items-center">
+          <div
+            className="pt-6 grid grid-cols-4 w-fit"
+            style={{ gap: CARD_GAP * size }}
+          >
+            {detailledDeck.map((card, index) => (
+              <div className="relative">
+                <EmptyDeckPlaceholder size={size} key={index} index={index} />
+                <div className="absolute top-0 left-0">
+                  {card && (
+                    <DeckCardUI
+                      deckCard
+                      card={card}
+                      size={size}
+                      key={`${card.id}_${index}`}
+                      parentScrollRef={parentScrollRef}
+                    />
+                  )}
+                </div>
+              </div>
+            ))}
+            <DeckStats deck={filterUndefined(detailledDeck)} />
+            {!editionMode && (
+              <>
+                <StatBox className="col-start-0 col-span-4 w-full" />
+              </>
+            )}
+          </div>
+          {editionMode ? (
+            replacingCard ? (
+              <CardReplacement size={size} />
             ) : (
-              <DeckCardUI
-                deckCard
-                card={card}
-                size={size}
-                key={`${card.id}_${index}`}
+              <Collection
+                filterDeck={true}
                 parentScrollRef={parentScrollRef}
+                size={size}
               />
             )
-          )}
-          <DeckStats deck={filterUndefined(detailledDeck)} />
-          {!editionMode && (
-            <>
-              <StatBox className="col-start-0 col-span-4 w-full" />
-            </>
+          ) : (
+            <PlayerDetails
+              deck={filterUndefined(detailledDeck)}
+            ></PlayerDetails>
           )}
         </div>
-        {editionMode ? (
-          replacingCard ? (
-            <CardReplacement size={size} />
-          ) : (
-            <Collection
-              filterDeck={true}
-              parentScrollRef={parentScrollRef}
-              size={size}
-            />
-          )
-        ) : (
-          <PlayerDetails deck={filterUndefined(detailledDeck)}></PlayerDetails>
-        )}
-      </div>
+      </DragContextProvider>
     </ScrollContainer>
   );
 }

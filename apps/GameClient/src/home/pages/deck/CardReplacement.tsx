@@ -8,11 +8,15 @@ export default function CardReplacement({ size }: { size: number }) {
 
   const { replacingCard, setReplacingCard } = useEditionMode();
 
-  useOnClickOutside(ref, () => {
-    setReplacingCard(null);
-  }, {
-    watching: !!replacingCard,
-  });
+  useOnClickOutside(
+    ref,
+    () => {
+      setReplacingCard(null);
+    },
+    {
+      watching: !!replacingCard,
+    }
+  );
 
   if (!replacingCard) {
     return null;
@@ -20,10 +24,14 @@ export default function CardReplacement({ size }: { size: number }) {
 
   return (
     <div className="w-full h-full flex flex-col gap-4 pt-4 items-center grow relative">
-      <p className="text-md font-bold text-slate-50">Select card to be replaced</p>
-      <div ref={ref}>
-        <DeckCardUI card={replacingCard} size={size} isSelectable={false} />
-      </div>
+      <p className="text-md font-bold text-slate-50">
+        Select card to be replaced
+      </p>
+      {typeof replacingCard === "object" && (
+        <div ref={ref}>
+          <DeckCardUI card={replacingCard} size={size} isSelectable={false} scrollable />
+        </div>
+      )}
     </div>
   );
 }

@@ -4,8 +4,8 @@ import { PlayerCardCollectionInfo } from "../cardFilters";
 interface EditionModeContextProps {
   editionMode: boolean;
   setEditionMode: (value: boolean) => void;
-  replacingCard: PlayerCardCollectionInfo | null;
-  setReplacingCard: (value: PlayerCardCollectionInfo | null) => void;
+  replacingCard: PlayerCardCollectionInfo | true | null;
+  setReplacingCard: React.Dispatch<PlayerCardCollectionInfo | true | null>;
 }
 
 export const EditionModeContext = createContext<

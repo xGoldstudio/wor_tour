@@ -19,6 +19,7 @@ interface ButtonProps {
   innerRef?: React.RefObject<HTMLButtonElement>;
   dontPreventPropagation?: boolean;
   containerClassname?: string;
+  onLongPressAction?: (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent) => void;
 }
 
 export default function Button({
@@ -34,10 +35,13 @@ export default function Button({
   innerRef,
   dontPreventPropagation,
   containerClassname,
+  onLongPressAction,
 }: ButtonProps) {
   const container = useRef<HTMLDivElement>(null);
 
   const [tl, setTl] = useState<gsap.core.Timeline>();
+  const isPressing = useRef(false);
+  const longTouchTimer = useRef<number | null>(null);
 
   useGSAP(() => {
     const tl = gsap.timeline();
@@ -65,17 +69,41 @@ export default function Button({
     if (!container.current || !tl) return;
     tl.to(container.current, { scale: 1, duration: 0, ease: "none" });
   });
+  function onPress(e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent) {
+    isPressing.current = true;
+    if (longTouchTimer.current) {
+      clearTimeout(longTouchTimer.current);
+    }
+    if (onLongPressAction) {
+      longTouchTimer.current = setTimeout(() => {
+        isPressing.current = false;
+        onLongPressAction(e);
+        longTouchTimer.current = null;
+      }, 300);
+    }
+    onPressAnimation();
+  }
 
   return (
     <button
-      onMouseDown={disableDefaultAndPropagation(onPressAnimation, dontPreventPropagation)}
-      onTouchStart={disableDefaultAndPropagation(onPressAnimation, dontPreventPropagation)}
+      onMouseDown={disableDefaultAndPropagation(
+        onPress,
+        dontPreventPropagation
+      )}
+      onTouchStart={disableDefaultAndPropagation(
+        onPress,
+        dontPreventPropagation
+      )}
       onMouseLeave={() => {
         onReleaseAnimation();
       }}
       onClick={disableDefaultAndPropagation((e) => {
+        longTouchTimer.current && clearTimeout(longTouchTimer.current);
+        if (isPressing.current) {
+          action(e);
+        }
+        isPressing.current = false;
         onActionAnimation();
-        action(e);
       }, dontPreventPropagation)}
       disabled={disabled}
       className={cn("relative", full ? "w-full" : "w-min")}

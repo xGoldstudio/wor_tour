@@ -4,9 +4,24 @@ import { PlayerCardCollectionInfo } from "../cardFilters";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 
 export function EditionModeProvider({ children }: { children: ReactNode }) {
-  const [editionMode, setEditionMode] = useState(false);
-  const [replacingCard, setReplacingCard] =
-    useState<PlayerCardCollectionInfo | null>(null);
+  const [editionMode, setEditionModeInternal] = useState(false);
+  const [replacingCard, setReplacingCardInternal] =
+    useState<PlayerCardCollectionInfo | true | null>(null);
+
+  function setEditionMode(value: boolean) {
+    if (value === false) {
+      setReplacingCard(null);
+    }
+    setEditionModeInternal(value);
+  }
+
+  function setReplacingCard(value: PlayerCardCollectionInfo | true | null) {
+    if (value !== null) {
+      setEditionMode(true);
+    }
+    setReplacingCardInternal(value);
+  }
+
   return (
     <EditionModeContext.Provider
       value={{ editionMode, setEditionMode, replacingCard, setReplacingCard }}
@@ -18,10 +33,11 @@ export function EditionModeProvider({ children }: { children: ReactNode }) {
 
 export function useEditDeckActions() {
   const { setReplacingCard, replacingCard } = useEditionMode();
-  const { addCardToDeck, removeCardFromDeck ,isDeckFull } = usePlayerStore((state) => ({
+  const { addCardToDeck, removeCardFromDeck, isDeckFull } = usePlayerStore((state) => ({
     addCardToDeck: state.addCardToDeck,
     isDeckFull: state.isDeckFull,
     removeCardFromDeck: state.removeCardFromDeck,
+    deckSwapCards: state.deckSwapCards,
   }));
 
   function addCard(cardId: number) {
@@ -38,8 +54,7 @@ export function useEditDeckActions() {
   }
 
   function replaceCard(cardToReplaceId: number) {
-    if (!replacingCard) {
-      console.warn("Impossible to replace this card, no card selected");
+    if (!replacingCard || replacingCard === true) {
       return;
     }
     removeCardFromDeck(cardToReplaceId);
