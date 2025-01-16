@@ -5,7 +5,7 @@ import usePlayerStore from "@/home/store/playerStore/playerStore";
 
 export function EditionModeProvider({ children }: { children: ReactNode }) {
   const [editionMode, setEditionModeInternal] = useState(false);
-  const [replacingCard, setReplacingCardInternal] =
+  const [replacingCard, setReplacingCard] =
     useState<PlayerCardCollectionInfo | true | null>(null);
 
   function setEditionMode(value: boolean) {
@@ -13,13 +13,6 @@ export function EditionModeProvider({ children }: { children: ReactNode }) {
       setReplacingCard(null);
     }
     setEditionModeInternal(value);
-  }
-
-  function setReplacingCard(value: PlayerCardCollectionInfo | true | null) {
-    if (value !== null) {
-      setEditionMode(true);
-    }
-    setReplacingCardInternal(value);
   }
 
   return (

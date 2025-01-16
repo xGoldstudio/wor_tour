@@ -12,7 +12,7 @@ export default function useOnClickOutside(ref: RefObject<HTMLElement>, cb: () =>
 				cb();
 			}
 		}
-		document.addEventListener("click", handleClickOutside);
+		document.addEventListener("click", handleClickOutside, { passive: true });
 		return () => {
 			document.removeEventListener("click", handleClickOutside);
 		};

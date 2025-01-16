@@ -5,7 +5,7 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
 import Collection from "./Collection";
 import { useEditionMode } from "./context/UseEditionMode";
-import { DeckCardUI } from "./DeckCardUI";
+import { DeckCardUI } from "./deckCardUi/DeckCardUI";
 import { NUMBER_OF_CARD_IN_DECK } from "@/const";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { getDeckStrength } from "@/services/MatchmakingService/buildDeck";
@@ -80,7 +80,7 @@ function EmptyDeckPlaceholder({
   size: number;
   index: number;
 }) {
-  const { editionMode, setEditionMode } = useEditionMode();
+  const { editionMode, setReplacingCard, setEditionMode } = useEditionMode();
   const { replaceCard } = useEditDeckActions();
 
   return (
@@ -89,20 +89,21 @@ function EmptyDeckPlaceholder({
         const originIndex = usePlayerStore
           .getState()
           .deck.findIndex((id) => id === originCardId);
-        if (originIndex === -1) {
+        if (originIndex === -1) { // we dropped the origin card
           const target = usePlayerStore.getState().deck[index];
           if (target === 0) {
             return;
           }
           replaceCard(target);
-          setEditionMode(false);
+          setReplacingCard(null);
           return;
         }
-        if (originIndex === index) {
+        if (originIndex === index) { // we dropped the card on itself
           return;
         }
-        setEditionMode(false);
+        // we dropped a card on another card
         usePlayerStore.getState().deckSwapCards(index, originCardId);
+        setReplacingCard(null);
       }}
     >
       <div
@@ -199,7 +200,7 @@ function DeckTabContent({ size }: { size: number }) {
               <div className="absolute top-0 left-0">
                 {card && (
                   <DeckCardUI
-                    deckCard
+                    isDeckCard
                     card={card}
                     size={size}
                     key={`${card.id}_${index}`}

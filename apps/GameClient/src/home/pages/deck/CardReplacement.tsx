@@ -1,16 +1,21 @@
-import { DeckCardUI } from "./DeckCardUI";
+import { DeckCardUI } from "./deckCardUi/DeckCardUI";
 import { useOnClickOutside } from "@repo/ui";
 import { useEditionMode } from "./context/UseEditionMode";
-import { useRef } from "react";
+import { useContext, useRef } from "react";
+import { DragContext, DragContextType } from "./dragAndDrop/DragContext";
 
 export default function CardReplacement({ size }: { size: number }) {
   const ref = useRef<HTMLDivElement>(null);
 
   const { replacingCard, setReplacingCard } = useEditionMode();
+  const { isDragging } = useContext(DragContext) as DragContextType<number>;
 
   useOnClickOutside(
     ref,
     () => {
+      if (isDragging.current) {
+        return;
+      }
       setReplacingCard(null);
     },
     {
@@ -29,7 +34,7 @@ export default function CardReplacement({ size }: { size: number }) {
       </p>
       {typeof replacingCard === "object" && (
         <div ref={ref}>
-          <DeckCardUI card={replacingCard} size={size} isSelectable={false} scrollable />
+          <DeckCardUI card={replacingCard} size={size} isDeckCard={false} />
         </div>
       )}
     </div>

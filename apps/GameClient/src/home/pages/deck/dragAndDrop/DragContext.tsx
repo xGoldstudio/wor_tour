@@ -1,6 +1,6 @@
 import { createContext, useRef } from "react";
 
-export interface DragContextType<DataT> {
+export interface DragContextType<DataT = unknown> {
   registerDroppable: ({
     onDrop,
     ref,
@@ -12,13 +12,16 @@ export interface DragContextType<DataT> {
   startDragging: (
     e: React.MouseEvent | React.TouchEvent | TouchEvent | MouseEvent,
     data: DataT,
-    ref: React.RefObject<HTMLElement>,
-		options?: { onDragEnd?: () => void }
+    dragRef: React.RefObject<HTMLElement>,
+		options?: StartDraggingOptions,
   ) => void;
   isDragging: React.RefObject<boolean>;
 }
 
-export const DragContext = createContext<DragContextType<unknown> | null>(null);
+interface StartDraggingOptions  { onDragEnd?: (e: TouchEvent | MouseEvent) => void }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const DragContext = createContext<DragContextType<any> | null>(null);
 
 export default function DragContextProvider<T = unknown>({
   children,
@@ -48,7 +51,7 @@ export default function DragContextProvider<T = unknown>({
     e: React.MouseEvent | React.TouchEvent | TouchEvent | MouseEvent,
     data: T,
     dragRef: React.RefObject<HTMLElement>,
-		options?: { onDragEnd?: () => void }
+		options?: StartDraggingOptions,
   ) {
     if (!dragRef.current) {
       return;
@@ -60,11 +63,11 @@ export default function DragContextProvider<T = unknown>({
     initialCoords.x = initialCoords.x + (clientX - initialCoords.x);
     initialCoords.y = initialCoords.y + (clientY - initialCoords.y);
     dragRef.current.style.transition = "";
-    isDragging.current = true;
     function onMove(
       e: MouseEvent | TouchEvent | React.MouseEvent | React.TouchEvent
     ) {
       if (!dragRef.current) return;
+      isDragging.current = true;
       const clientX = "touches" in e ? e.touches[0].clientX : e.pageX;
       const clientY = "touches" in e ? e.touches[0].clientY : e.pageY;
 
@@ -75,21 +78,19 @@ export default function DragContextProvider<T = unknown>({
     }
     function mouseUp(e: MouseEvent | TouchEvent) {
       isDragging.current = false;
-      document.removeEventListener("mouseup", mouseUp);
-      document.removeEventListener("touchend", mouseUp);
+      document.removeEventListener("click", mouseUp);
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("touchmove", onMove);
       onDrop(e, data);
-			options?.onDragEnd?.();
+			options?.onDragEnd?.(e);
       if (!dragRef.current) return;
-      dragRef.current.style.zIndex = "1";
+      dragRef.current.style.zIndex = "";
       dragRef.current.style.transition = "transform 0.5s";
       dragRef.current.style.transform = "translate(0, 0)";
     }
     document.addEventListener("mousemove", onMove);
     document.addEventListener("touchmove", onMove);
-    document.addEventListener("mouseup", mouseUp);
-    document.addEventListener("touchend", mouseUp);
+    document.addEventListener("click", mouseUp);
     dragRef.current.style.zIndex = "999";
   }
 
@@ -120,9 +121,9 @@ export default function DragContextProvider<T = unknown>({
   return (
     <DragContext.Provider
       value={{
+        startDragging,
         registerDroppable,
         removeDroppable,
-        startDragging,
         isDragging,
       }}
     >

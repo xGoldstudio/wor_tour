@@ -6,7 +6,7 @@ import { getCardsFiltered } from "./getCardsFiltered";
 import { SortAndFilterBox } from "./SortAndFilterBox";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { DisablableDeckCardUI } from "./DisablableDeckCardUI";
-import { DeckCardUI } from "./DeckCardUI";
+import { CollectionCardUI } from "./deckCardUi/DeckCardUI";
 import { CARD_GAP } from "./CollectionInterface";
 
 interface CollectionProps {
@@ -144,7 +144,7 @@ function CollectionContent({
               parentScrollRef={parentScrollRef}
               size={size}
             >
-              <DeckCardUI card={card} size={size} parentScrollRef={parentScrollRef} />
+              <CollectionCardUI card={card} size={size} parentScrollRef={parentScrollRef} />
             </DisablableDeckCardUI>
           ))}
         </div>

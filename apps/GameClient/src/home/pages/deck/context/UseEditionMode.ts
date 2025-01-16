@@ -5,7 +5,7 @@ interface EditionModeContextProps {
   editionMode: boolean;
   setEditionMode: (value: boolean) => void;
   replacingCard: PlayerCardCollectionInfo | true | null;
-  setReplacingCard: React.Dispatch<PlayerCardCollectionInfo | true | null>;
+  setReplacingCard: React.Dispatch<React.SetStateAction<true | PlayerCardCollectionInfo | null>>;
 }
 
 export const EditionModeContext = createContext<

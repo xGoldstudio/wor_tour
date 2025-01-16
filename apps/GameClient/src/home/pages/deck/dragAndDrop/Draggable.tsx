@@ -6,7 +6,7 @@ interface DraggableProps<T> {
   disabled?: boolean;
   dragData: T;
   dragRef?: React.RefObject<HTMLDivElement>;
-  onDragEnd?: () => void;
+  onDragEnd?: (e: MouseEvent | TouchEvent) => void;
 }
 
 export default function Draggable<T>({ children, disabled, dragData, dragRef, onDragEnd }: DraggableProps<T>) {
@@ -21,11 +21,11 @@ export default function Draggable<T>({ children, disabled, dragData, dragRef, on
 			if (disabled) return;
 			startDragging(e, dragData, ref, { onDragEnd });
 		}
-		ref.current.addEventListener("mousedown", onStartDragging, true);
-		ref.current.addEventListener("touchstart", onStartDragging, true);
+		ref.current.addEventListener("mousedown", onStartDragging);
+		ref.current.addEventListener("touchstart", onStartDragging, { passive: true });
 		return () => {
-			ref.current?.removeEventListener("mousedown", onStartDragging, true);
-			ref.current?.removeEventListener("touchstart", onStartDragging, true);
+			ref.current?.removeEventListener("mousedown", onStartDragging);
+			ref.current?.removeEventListener("touchstart", onStartDragging);
 		};
 	}, [dragRef, disabled]);
 
