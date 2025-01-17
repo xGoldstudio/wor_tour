@@ -1,13 +1,15 @@
-import { useDeferredValue, useMemo, useRef, useState } from "react";
+import { useDeferredValue, useMemo, useRef } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
-import { ActiveFilters, defaultFilters } from "./cardFilters";
-import { CardSorts, defaultSort, sorts } from "./cardSorts";
+import { ActiveFilters } from "./cardFilters";
+import { CardSorts, sorts } from "./cardSorts";
 import { getCardsFiltered } from "./getCardsFiltered";
 import { SortAndFilterBox } from "./SortAndFilterBox";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { DisablableDeckCardUI } from "./DisablableDeckCardUI";
 import { CollectionCardUI } from "./deckCardUi/DeckCardUI";
 import { CARD_GAP } from "./CollectionInterface";
+import { collectionSortFilterService } from "@/services/inject";
+import { useOnUnMount } from "@repo/ui";
 
 interface CollectionProps {
   parentScrollRef?: React.RefObject<HTMLDivElement>;
@@ -21,11 +23,7 @@ export default function Collection({
   size,
 }: CollectionProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [cardsPipeline, setCardsPipeline] = useState<CardsPipeline>({
-    filters: defaultFilters,
-    sort: defaultSort,
-    isAscending: true,
-  });
+  const cardsPipeline = collectionSortFilterService.useWatch();
   const deferedCardsPipeline = useDeferredValue(cardsPipeline);
 
   return (
@@ -38,7 +36,6 @@ export default function Collection({
           <CollectionContent
             parentScrollRef={scrollRef}
             cardsPipeline={deferedCardsPipeline}
-            setCardsPipeline={setCardsPipeline}
             filterDeck={filterDeck}
             size={size}
           />
@@ -48,7 +45,6 @@ export default function Collection({
           <CollectionContent
             parentScrollRef={parentScrollRef}
             cardsPipeline={deferedCardsPipeline}
-            setCardsPipeline={setCardsPipeline}
             filterDeck={filterDeck}
             size={size}
           />
@@ -111,13 +107,11 @@ function useCollectionFilteredAllCards({
 function CollectionContent({
   parentScrollRef,
   cardsPipeline,
-  setCardsPipeline,
   filterDeck,
   size,
 }: {
   parentScrollRef: React.RefObject<HTMLDivElement>;
   cardsPipeline: CardsPipeline;
-  setCardsPipeline: React.Dispatch<React.SetStateAction<CardsPipeline>>;
   filterDeck?: boolean;
   size: number;
 }) {
@@ -126,13 +120,13 @@ function CollectionContent({
     cardsPipeline,
   });
   const cardListRef = useRef<HTMLDivElement>(null);
+  useOnUnMount(() => {
+    collectionSortFilterService.clearFilters();
+  });
   return (
     <div className="absolute top-0 left-0 flex justify-center w-full">
       <div className="grid gap-6 pt-6 pb-16">
-        <SortAndFilterBox
-          cardsPipeline={cardsPipeline}
-          setCardsPipeline={setCardsPipeline}
-        />
+        <SortAndFilterBox />
         <div
           className="w-fit grid grid-cols-4"
           style={{ gap: CARD_GAP * size }}
@@ -144,7 +138,11 @@ function CollectionContent({
               parentScrollRef={parentScrollRef}
               size={size}
             >
-              <CollectionCardUI card={card} size={size} parentScrollRef={parentScrollRef} />
+              <CollectionCardUI
+                card={card}
+                size={size}
+                parentScrollRef={parentScrollRef}
+              />
             </DisablableDeckCardUI>
           ))}
         </div>

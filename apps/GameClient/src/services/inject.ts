@@ -6,7 +6,8 @@ import { MatchmakingService } from "./MatchmakingService/matchmakingService";
 import { ClientLoop } from "./LoopService/clientLoopService";
 import { CARDS_ROTATION_TIME, setCardsToBuy } from "@/home/store/shopStore/shopStore";
 import ExperienceService from "./experienceService/experienceService";
-import CardsAddingAnimationsService from "./CardsAddingAnimationService/CardsAddingAnimationService";
+import CardsAddingAnimationsService from "./CardsAddingAnimationService/cardsAddingAnimationService";
+import CollectionSortFilterService from "./CollectionSortFilterService/collectionSortFilterService";
 
 export const keysService = KeysService();
 
@@ -30,3 +31,5 @@ clientLoop.start();
 export const experienceService = ExperienceService();
 
 export const cardsAddingAnimationService = CardsAddingAnimationsService();
+
+export const collectionSortFilterService = CollectionSortFilterService();

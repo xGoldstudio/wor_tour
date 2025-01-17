@@ -3,13 +3,13 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import { useEffect, useRef, useState } from "react";
 import {
-  ActiveFilters,
   CardFilters,
   CardFilterSliderStyles,
   CardFiltersStyles,
   FiltersDescription,
 } from "./cardFilters";
 import { getImageUrl, getImageUrlCssValue, ICONS } from "@repo/lib";
+import { collectionSortFilterService } from "@/services/inject";
 
 interface OutsideClickHandlerProps {
   children: React.ReactNode;
@@ -51,16 +51,12 @@ function OutsideClickHandler({
   );
 }
 
-interface FilterBoxProps {
-  setCurrentFilter: (filter: ActiveFilters) => void;
-  currentFilter: ActiveFilters;
-}
-
-export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
+export function FilterBox() {
   const [filterIsOpen, setFilterIsOpen] = useState(false);
+  const currentFilter = collectionSortFilterService.useWatchFilter();
 
   const handleChange = (filterCriteria: CardFilters) => {
-    setCurrentFilter({
+    collectionSortFilterService.updateFilters({
       ...currentFilter,
       [filterCriteria]: !currentFilter[filterCriteria],
     });
@@ -106,22 +102,6 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
       : FiltersDescription[filterCriteria].rangeMax;
   }
 
-  function deleteAllFilters() {
-    setCurrentFilter({
-      Common: false,
-      Rare: false,
-      Epic: false,
-      Legendary: false,
-      Level: {
-        min: FiltersDescription.Level.rangeMin!,
-        max: FiltersDescription.Level.rangeMax!,
-      },
-      Cost: {
-        min: FiltersDescription.Cost.rangeMin!,
-        max: FiltersDescription.Cost.rangeMax!,
-      },
-    });
-  }
   return (
     <>
       <Button
@@ -181,7 +161,7 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
                         )}
                         onChange={(value) => {
                           if (Array.isArray(value))
-                            setCurrentFilter({
+                            collectionSortFilterService.updateFilters({
                               ...currentFilter,
                               [filterCriteria.label]: {
                                 min: value[0],
@@ -204,7 +184,8 @@ export function FilterBox({ setCurrentFilter, currentFilter }: FilterBoxProps) {
                 <button
                   className=""
                   onClick={() => {
-                    setFilterIsOpen(false), deleteAllFilters();
+                    setFilterIsOpen(false);
+                    collectionSortFilterService.clearFilters();
                   }}
                 >
                   <span>Clear</span>

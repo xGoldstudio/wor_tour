@@ -1,6 +1,7 @@
 import { Button, cn } from "@repo/ui";
 import { CardSorts, sorts } from "./cardSorts";
 import { findValueInRecordByKey } from "@/home/ui/utils/findValueInRecordByKey";
+import { collectionSortFilterService } from "@/services/inject";
 
 interface SortModalProps {
   setActualSort: (sort: CardSorts) => void;
@@ -53,15 +54,9 @@ export function SortModal({
   );
 }
 
-interface SortBoxProps {
-  currentSort: CardSorts;
-  setCurrentSort: (sort: CardSorts) => void;
-}
+export function SortBox() {
+  const currentSort = collectionSortFilterService.useWatchSort();
 
-export function SortBox({
-  setCurrentSort,
-  currentSort,
-}: SortBoxProps) {
   const getNextSortByNumber: Record<number, CardSorts> = {
     0: "cost",
     1: "rarity",
@@ -78,16 +73,18 @@ export function SortBox({
 
   function getNextSort() {
     if (getnextSortByCardSorts[currentSort] < 3) {
-      setCurrentSort(
+      collectionSortFilterService.updateSort(
         getNextSortByNumber[getnextSortByCardSorts[currentSort] + 1]
       );
     } else {
-      setCurrentSort("cost");
+      collectionSortFilterService.updateSort("cost");
     }
   }
   return (
     <Button action={() => getNextSort()} width={80} small>
-      <div className="text-sm">{findValueInRecordByKey(sorts, currentSort)?.label}</div>
+      <div className="text-sm">
+        {findValueInRecordByKey(sorts, currentSort)?.label}
+      </div>
     </Button>
   );
 }

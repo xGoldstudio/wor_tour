@@ -206,8 +206,8 @@ function DeckTabContent({ size }: { size: number }) {
           style={{ gap: CARD_GAP * size }}
         >
           {detailledDeck.map((card, index) => (
-            <div className="relative">
-              <EmptyDeckPlaceholder size={size} key={index} index={index} />
+            <div className="relative" key={index}>
+              <EmptyDeckPlaceholder size={size} index={index} />
               <div className="absolute top-0 left-0">
                 {card && (
                   <DeckCardUI

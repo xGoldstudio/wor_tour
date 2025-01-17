@@ -150,11 +150,11 @@ export function MatchmakingService() {
 		store.setState({ isMirror: !store.getState().isMirror });
 	}
 
-	return { startGame, endGame, reset, wathcIsMirror, toggleMirror };
-}
-
-function getHpFromDeck(deck: CardType[]) {
-	return Math.round(getDeckStrength(deck) * 100);
+	function getHpFromDeck(deck: CardType[]) {
+		return Math.round(getDeckStrength(deck) * 100);
+	}
+	
+	return { startGame, endGame, reset, wathcIsMirror, toggleMirror, getHpFromDeck };
 }
 
 function getCardsPoolFromTier(tier: Tier) {

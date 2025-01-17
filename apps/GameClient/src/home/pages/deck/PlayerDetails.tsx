@@ -1,4 +1,4 @@
-import { getDeckStrength } from "@/services/MatchmakingService/buildDeck";
+import { matchmakingService } from "@/services/inject";
 import { getImageUrlCssValue, ICONS, numberWithCommas } from "@repo/lib";
 import { CardType } from "game_engine";
 
@@ -17,7 +17,7 @@ export default function PlayerDetails({ deck }: { deck: CardType[] }) {
 						}}
         ></div>
         </div>
-				<p className="text-slate-50 text-[2.5em]">{numberWithCommas(Math.floor(getDeckStrength(deck) * 100))} HP</p>
+				<p className="text-slate-50 text-[2.5em]">{numberWithCommas(matchmakingService.getHpFromDeck(deck))} HP</p>
       </div>
     </div>
   );
