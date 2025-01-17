@@ -1,6 +1,6 @@
 import { collectionSortFilterService } from "@/services/inject";
-import { getImageUrl, ICONS } from "@repo/lib";
 import { Button, cn } from "@repo/ui";
+import { ArrowBigUp } from "lucide-react";
 
 export function OrderBox() {
   const isAscending = collectionSortFilterService.useWatchIsAscending();
@@ -13,12 +13,7 @@ export function OrderBox() {
         })}
       >
         <div className="h-[20px] w-[20px] flex justify-center items-center ">
-          <img
-            src={getImageUrl(ICONS, "triangle.png")}
-            alt="arrow"
-            width={20}
-            height={20}
-          />
+          <ArrowBigUp />
         </div>
       </div>
     </Button>
