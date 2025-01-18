@@ -1,11 +1,11 @@
-import { Button } from "@repo/ui";
+import { Button, Popover, PopoverPortal, PopoverTrigger } from "@repo/ui";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import { useState } from "react";
 import {
   CardFilters,
   CardFilterSliderStyles,
   CardFiltersStyles,
+  defaultFilters,
   FiltersDescription,
 } from "./cardFilters";
 import { getImageUrlCssValue, ICONS } from "@repo/lib";
@@ -13,7 +13,6 @@ import { collectionSortFilterService } from "@/services/inject";
 import { SlidersHorizontal } from "lucide-react";
 
 export function FilterBox() {
-  const [filterIsOpen, setFilterIsOpen] = useState(false);
   const currentFilter = collectionSortFilterService.useWatchFilter();
 
   const handleChange = (filterCriteria: CardFilters) => {
@@ -64,89 +63,87 @@ export function FilterBox() {
   }
 
   return (
-    <>
-      <Button
-        small={true}
-        full={false}
-        action={() => {
-          setFilterIsOpen(!filterIsOpen);
-        }}
-      >
+    <Popover>
+      <PopoverTrigger small={true} full={false} rarity={currentFilter === defaultFilters ? "rare" : "epic"}>
         <div className="h-[20px] w-[20px] flex justify-center items-center ">
           <SlidersHorizontal />
         </div>
-      </Button>
-      {filterIsOpen && (
-        <div className="absolute -left-[82px] top-14 z-50 flex flex-col items-center justify-center -mt-8 ">
-          <div className="w-0 h-0 border-l-[10px] border-r-[10px] border-b-[16px] border-transparent border-b-white " />
-          <div className="h-[371px] w-[170px] bg-[#406799] border-white border-2 rounded-md flex flex-col gap-2 items-center text-white">
-            <span className="pt-2">Filter</span>
-            {Object.values(FiltersDescription).map((filterCriteria, index) =>
-              filterCriteria.isButton ? (
-                <div className="flex justify-start items-center gap-2 border-t-[1px] border-opacity-30 border-t-neutral-300 w-full pl-2 pt-2">
-                  <button
-                    key={index}
-                    value={filterCriteria.label}
-                    onClick={() => handleChange(filterCriteria.label)}
-                    style={isActiveFilter(filterCriteria.label as CardFilters)}
-                    className="p-3 bg-[#284673] rounded-lg hover:bg-blue-700"
-                  />
-                  <div className="pl-1 pb-1">{filterCriteria.label}</div>
-                </div>
-              ) : (
-                <div
+      </PopoverTrigger>
+      <PopoverPortal position="bottom">
+        <div className="w-[170px] bg-[#406799] border-white border-2 rounded-md flex flex-col gap-2 items-center text-white overflow-hidden">
+          <span className="pt-2">Filter</span>
+          {Object.values(FiltersDescription).map((filterCriteria, index) =>
+            filterCriteria.isButton ? (
+              <>
+                <div className="border-t-[1px] border-opacity-30 border-t-neutral-300 w-full" />
+                <Button
                   key={index}
-                  className="px-3 gap-2 border-t-[1px] border-opacity-30 border-t-neutral-300 w-full pl-1 pt-1"
+                  action={() =>
+                    handleChange(filterCriteria.label as CardFilters)
+                  }
+                  unstyled
+                  full
                 >
-                  <span className="ml-10">{filterCriteria.label}</span>
-                  <div className="flex mx-2 justify-center items-center">
-                    {getMinValueForSlider(
-                      filterCriteria.label as CardFiltersStyles
-                    )}
-                    <Slider
-                      className="w-8/12 mx-auto"
-                      range
-                      count={1}
-                      min={FiltersDescription[filterCriteria.label].rangeMin}
-                      max={FiltersDescription[filterCriteria.label].rangeMax}
-                      defaultValue={getdefaultValuesForSlider(
-                        filterCriteria.label as CardFiltersStyles
+                  <div className="flex justify-start items-center gap-2 w-full pl-2 py-1">
+                    <div
+                      style={isActiveFilter(
+                        filterCriteria.label as CardFilters
                       )}
-                      onChange={(value) => {
-                        if (Array.isArray(value))
-                          collectionSortFilterService.updateFilters({
-                            ...currentFilter,
-                            [filterCriteria.label]: {
-                              min: value[0],
-                              max: value[1],
-                            },
-                          });
-                      }}
-                      styles={getStyleForSlider(
-                        filterCriteria.label as CardFiltersStyles
-                      )}
+                      className="p-3 bg-[#284673] rounded-lg hover:bg-blue-700"
                     />
-                    {getMaxValueForSlider(
+                    {filterCriteria.label}
+                  </div>
+                </Button>
+              </>
+            ) : (
+              <div
+                key={index}
+                className="px-3 gap-2 border-t-[1px] border-opacity-30 border-t-neutral-300 w-full pl-1 pt-1"
+              >
+                <span className="ml-10">{filterCriteria.label}</span>
+                <div className="flex mx-2 justify-center items-center">
+                  {getMinValueForSlider(
+                    filterCriteria.label as CardFiltersStyles
+                  )}
+                  <Slider
+                    className="w-8/12 mx-auto"
+                    range
+                    count={1}
+                    min={FiltersDescription[filterCriteria.label].rangeMin}
+                    max={FiltersDescription[filterCriteria.label].rangeMax}
+                    defaultValue={getdefaultValuesForSlider(
                       filterCriteria.label as CardFiltersStyles
                     )}
-                  </div>
+                    onChange={(value) => {
+                      if (Array.isArray(value))
+                        collectionSortFilterService.updateFilters({
+                          ...currentFilter,
+                          [filterCriteria.label]: {
+                            min: value[0],
+                            max: value[1],
+                          },
+                        });
+                    }}
+                    styles={getStyleForSlider(
+                      filterCriteria.label as CardFiltersStyles
+                    )}
+                  />
+                  {getMaxValueForSlider(
+                    filterCriteria.label as CardFiltersStyles
+                  )}
                 </div>
-              )
-            )}
-            <div className="w-full h-full flex justify-center items-center border-t-neutral-300 border-t-[1px] border-opacity-30 bg-[#1E3E5B] rounded-b-md">
-              <button
-                className=""
-                onClick={() => {
-                  setFilterIsOpen(false);
-                  collectionSortFilterService.clearFilters();
-                }}
-              >
-                <span>Clear</span>
-              </button>
-            </div>
-          </div>
+              </div>
+            )
+          )}
+          <Button
+            full
+            small
+            action={() => collectionSortFilterService.clearFilters()}
+          >
+            <span>Clear</span>
+          </Button>
         </div>
-      )}
-    </>
+      </PopoverPortal>
+    </Popover>
   );
 }

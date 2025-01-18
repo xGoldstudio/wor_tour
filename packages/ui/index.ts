@@ -3,6 +3,8 @@ import gsap from 'gsap';
 
 // components
 export { default as Button } from './components/Button.tsx';
+export * from './components/Button.tsx';
+export * from './components/Popover.tsx';
 export { default as Box } from './components/Box.tsx';
 export { default as GoldAmount } from './components/GoldAmount.tsx';
 export { default as KeyAmount } from './components/KeyAmount.tsx';

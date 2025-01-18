@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 
-interface ButtonProps {
+export interface ButtonProps {
   children: React.ReactNode;
   action: React.MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
