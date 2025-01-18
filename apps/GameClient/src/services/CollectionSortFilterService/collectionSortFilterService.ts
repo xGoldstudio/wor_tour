@@ -1,4 +1,4 @@
-import { ActiveFilters, defaultFilters } from "@/home/pages/deck/cardFilters";
+import { ActiveFilters, CardFilterState, defaultFilters } from "@/home/pages/deck/cardFilters";
 import { CardSorts, defaultSort } from "@/home/pages/deck/cardSorts";
 import { CardsPipeline } from "@/home/pages/deck/Collection";
 import { create } from "zustand";
@@ -13,7 +13,7 @@ export default function CollectionSortFilterService() {
 		}
 	), { name: "CollectionSortFilterServiceStore" }));
 
-	
+
 	/***************
 	 **** Getter ****
 	 ***************/
@@ -38,6 +38,14 @@ export default function CollectionSortFilterService() {
 			filters,
 		}));
 	}
+	function updateFilter(filter: keyof ActiveFilters, value: CardFilterState) {
+		store.setState((state) => ({
+			filters: {
+				...state.filters,
+				[filter]: value,
+			},
+		}))
+	}
 
 	function updateSort(sort: CardSorts) {
 		store.setState(() => ({
@@ -58,8 +66,10 @@ export default function CollectionSortFilterService() {
 	}
 
 	return {
+		store,
 		useWatch,
 		updateFilters,
+		updateFilter,
 		updateSort,
 		toggleIsAscending,
 		useWatchFilter,

@@ -87,7 +87,7 @@ export function CollectionInterface() {
   }, [tabContainerRef.current]);
 
   useOnWrapperResize((ref) => {
-    setSize(computeCardSize(ref, 4));
+    setSize(computeCardSize(ref, CARDS_BY_ROWS));
   }, tabContainerRef);
 
   return (
@@ -140,6 +140,7 @@ function useOnWrapperResize(
 
 // CARD_BORDER_WIDTH
 // CARD_BORDER_HEIGHT
+export const CARDS_BY_ROWS = 4;
 export const CARD_GAP = CARD_BORDER_WIDTH / 7;
 // 1.5 * 16 = 24
 function computeCardSize(wrapper: HTMLDivElement, cardsByRow: number) {

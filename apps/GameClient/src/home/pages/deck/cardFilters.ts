@@ -1,7 +1,14 @@
 import { CardType } from "game_engine";
 
 export type PlayerCardCollectionInfo = CardType & { isInDeck: boolean, lockLabel: string | null };
-export type Filters = Record<CardFilters, CardFilter>;
+export type Filters = {
+  "Common": CardFilter;
+  "Rare": CardFilter;
+  "Epic": CardFilter;
+  "Legendary": CardFilter;
+  "Cost": RangeCardFilter;
+  "Level": RangeCardFilter;
+};
 export type CardFiltersByRarity = "Common" | "Rare" | "Epic" | "Legendary";
 export type CardFilters =
   | "Cost"
@@ -10,17 +17,21 @@ export type CardFilters =
   | "Epic"
   | "Legendary"
   | "Level";
-export type CardFiltersStyles = "Cost" | "Level";
+export type CardFiltersRange = "Cost" | "Level";
 export type CardFilterState = boolean | { min: number; max: number };
 export interface CardFilter {
   label: CardFilters;
-  rangeMin?: number;
-  rangeMax?: number;
   isButton: boolean;
   filterFunction: (
     cards: PlayerCardCollectionInfo[],
-    state: CardFilterState
+    state: CardFilterState,
   ) => PlayerCardCollectionInfo[] | null;
+}
+export interface RangeCardFilter extends CardFilter {
+  label: CardFiltersRange;
+  isButton: false;
+  rangeMin: number;
+  rangeMax: number;
 }
 export type ActiveFilters = Record<CardFilters, CardFilterState>;
 export interface FilterSliderProperties {
@@ -31,13 +42,11 @@ export interface FilterSliderProperties {
     boxShadow: string;
   };
   track: {
-    backgroundColor: string;
-    backgroundImage: string;
     background: string;
   };
 }
 export type FilterSliderStyles = Record<
-  CardFiltersStyles,
+  CardFiltersRange,
   FilterSliderProperties
 >;
 export const FiltersDescription: Filters = {
@@ -75,8 +84,8 @@ export const FiltersDescription: Filters = {
     filterFunction: (cards: PlayerCardCollectionInfo[], state: CardFilterState) =>
       typeof state === "object" && typeof state.min === "number"
         ? cards.filter(
-            (card) => card.cost >= state.min && card.cost <= state.max
-          )
+          (card) => card.cost >= state.min && card.cost <= state.max
+        )
         : cards,
   },
   Level: {
@@ -87,8 +96,8 @@ export const FiltersDescription: Filters = {
     filterFunction: (cards: PlayerCardCollectionInfo[], state: CardFilterState) =>
       typeof state === "object" && typeof state.min === "number"
         ? cards.filter(
-            (card) => card.level >= state.min && card.level <= state.max
-          )
+          (card) => card.level >= state.min && card.level <= state.max
+        )
         : cards,
   },
 };
@@ -104,12 +113,8 @@ export const CardFilterSliderStyles: FilterSliderStyles = {
       boxShadow: "none",
     },
     track: {
-      backgroundColor:
-        "radial-gradient(at 95% 15%,#DCA9D8, rgba(184,121,179,1) 22%,#9f3897 45%, rgba(184,121,179,1) 68%, rgba(207,137,201,1) 100%)",
-      backgroundImage:
-        "linear-gradient(60deg, rgba(136,21,127,1) 0%, rgba(212,100,203,1) 100%)",
       background:
-        "radial-gradient(at 95% 15%,#DCA9D8, rgba(184,121,179,1) 22%,#9f3897 45%, rgba(184,121,179,1) 68%, rgba(207,137,201,1) 100%)",
+        "linear-gradient(0deg, rgba(136,21,127,1) 0%, rgba(212,100,203,1) 100%)",
     },
   },
   Level: {
@@ -120,23 +125,22 @@ export const CardFilterSliderStyles: FilterSliderStyles = {
       boxShadow: "none",
     },
     track: {
-      backgroundColor: "#B90015",
-      backgroundImage: "linear-gradient(60deg, #B90015 0%, #FF5A5F 100%)",
-      background: "radial-gradient(at 95% 15%, #B90015 0%, #FF5A5F 100%)",
+      background:
+        "linear-gradient(0deg, #B90015 0%, #FF5A5F 100%)",
     },
   },
 };
 export const defaultFilters = {
   Cost: {
-    min: FiltersDescription.Cost.rangeMin!,
-    max: FiltersDescription.Cost.rangeMax!,
+    min: FiltersDescription.Cost.rangeMin,
+    max: FiltersDescription.Cost.rangeMax,
   },
   Common: false,
   Rare: false,
   Epic: false,
   Legendary: false,
   Level: {
-    min: FiltersDescription.Level.rangeMin!,
-    max: FiltersDescription.Level.rangeMax!,
+    min: FiltersDescription.Level.rangeMin,
+    max: FiltersDescription.Level.rangeMax,
   },
 }

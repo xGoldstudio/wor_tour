@@ -7,9 +7,9 @@ import { SortAndFilterBox } from "./SortAndFilterBox";
 import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { DisablableDeckCardUI } from "./DisablableDeckCardUI";
 import { CollectionCardUI } from "./deckCardUi/DeckCardUI";
-import { CARD_GAP } from "./CollectionInterface";
+import { CARD_GAP, CARDS_BY_ROWS } from "./CollectionInterface";
 import { collectionSortFilterService } from "@/services/inject";
-import { useOnUnMount } from "@repo/ui";
+import { CARD_BORDER_WIDTH, useOnUnMount } from "@repo/ui";
 
 interface CollectionProps {
   parentScrollRef?: React.RefObject<HTMLDivElement>;
@@ -71,6 +71,7 @@ function useCollectionFilteredAllCards({
     collection: state.collection,
     deck: state.deck,
   }));
+  let hasBeenFiltered = false;
   const allCards = useMemo(() => {
     const currentFilter = cardsPipeline.filters;
     const currentSort = cardsPipeline.sort;
@@ -84,6 +85,7 @@ function useCollectionFilteredAllCards({
       detailledCollection,
       currentFilter,
     });
+    hasBeenFiltered = detailledCollection.length !== filteredCollection.length;
     const filteredAndsortedCollection = sorts[currentSort].sortFunction(
       filteredCollection,
       isAscending
@@ -101,6 +103,7 @@ function useCollectionFilteredAllCards({
 
   return {
     allCards,
+    hasBeenFiltered,
   };
 }
 
@@ -115,7 +118,7 @@ function CollectionContent({
   filterDeck?: boolean;
   size: number;
 }) {
-  const { allCards } = useCollectionFilteredAllCards({
+  const { allCards, hasBeenFiltered } = useCollectionFilteredAllCards({
     filterDeck,
     cardsPipeline,
   });
@@ -123,13 +126,14 @@ function CollectionContent({
   useOnUnMount(() => {
     collectionSortFilterService.clearFilters();
   });
+  const gapSize = CARD_GAP * size;
   return (
     <div className="absolute top-0 left-0 flex justify-center w-full">
-      <div className="grid gap-6 pt-6 pb-16">
-        <SortAndFilterBox />
+      <div className="grid gap-6 pt-6 pb-16" style={{ minWidth: CARD_BORDER_WIDTH * size * CARDS_BY_ROWS + (CARDS_BY_ROWS - 1) * gapSize}}>
+        <SortAndFilterBox hasBeenFiltered={hasBeenFiltered} />
         <div
           className="w-fit grid grid-cols-4"
-          style={{ gap: CARD_GAP * size }}
+          style={{ gap: gapSize }}
           ref={cardListRef}
         >
           {allCards.map((card) => (

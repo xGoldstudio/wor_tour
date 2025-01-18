@@ -6,6 +6,7 @@ import useOnClickOutside from "../lib/useOnClickOutside";
 import { RemoveScroll } from "react-remove-scroll";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import textureByRarity from "../lib/textureByRarity";
 
 interface PopoverContextValue {
   isOpen: boolean;
@@ -164,7 +165,7 @@ export function PopoverPortal({
           ref={animationRef}
         >
           <RemoveScroll>
-            <div className="flex justify-center items-center bg-slate-100 pointer-events-auto rounded-sm">
+            <div className="flex justify-center items-center pointer-events-auto rounded-sm">
               <ArrowBox position={usingPosition} />
               {children}
             </div>
@@ -274,8 +275,32 @@ function ArrowBox({ position }: { position: Position }) {
 
   return (
     <div
-      className="absolute w-0 h-0 border-l-[10px] border-r-[10px] border-b-[16px] border-transparent border-b-slate-100"
+      className="absolute w-[20px] h-[20px] pointer-events-none"
       style={styles[position]}
-    />
+    >
+      <svg width="100%" height="100%" className="absolute top-0 left-0" viewBox="0 0 100 100" >
+        <mask id="guiOpponent">
+          <polygon points="0,100 50,20 100,100" fill="#ffffff" />
+        </mask>
+        <rect
+          fill="rgb(30 41 59)"
+          x={0}
+          y={0}
+          width="100%"
+          height="100%"
+          mask="url(#guiOpponent)"
+        />
+        <image
+          className="blur-lg"
+          href={textureByRarity("common")}
+          x="0"
+          y="0"
+          width="100%"
+          height="100%"
+          preserveAspectRatio="xMidYMid slice"
+          mask="url(#guiOpponent)"
+        />
+      </svg>
+    </div>
   );
 }

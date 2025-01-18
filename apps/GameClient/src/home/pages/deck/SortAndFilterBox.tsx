@@ -6,7 +6,7 @@ import usePlayerStore from "@/home/store/playerStore/playerStore";
 import { StatBox } from "./DeckTab";
 
 
-export function SortAndFilterBox() {
+export function SortAndFilterBox({ hasBeenFiltered }: { hasBeenFiltered: boolean }) {
   const { ownedCardsAmount } = usePlayerStore((state) => ({
     ownedCardsAmount: state.collection.size,
   }));
@@ -23,7 +23,7 @@ export function SortAndFilterBox() {
           </p>
         </div>
         <div className="flex flex-row space-x-3 relative">
-          <FilterBox />
+          <FilterBox hasBeenFiltered={hasBeenFiltered} />
           <OrderBox />
           <SortBox />
         </div>

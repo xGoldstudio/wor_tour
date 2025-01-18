@@ -22,7 +22,7 @@ export default function Cover({
       )}
     >
       <div
-        className="absolute w-full h-full top-0 left-0 blur-sm "
+        className="absolute w-full h-full top-0 left-0 blur-sm"
         style={{
           backgroundImage: `url(${textureByRarity(cardRarity)})`,
           backgroundSize: "cover",
