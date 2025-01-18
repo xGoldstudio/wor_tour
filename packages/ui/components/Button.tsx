@@ -11,6 +11,7 @@ export interface ButtonProps {
   action: React.MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
   full?: boolean;
+  hFull?: boolean;
   small?: boolean;
   className?: string;
   rarity?: CardRarity;
@@ -19,7 +20,10 @@ export interface ButtonProps {
   innerRef?: React.RefObject<HTMLButtonElement>;
   dontPreventPropagation?: boolean;
   containerClassname?: string;
-  onLongPressAction?: (e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent) => void;
+  onLongPressAction?: (
+    e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent
+  ) => void;
+  isNew?: boolean;
 }
 
 export default function Button({
@@ -36,6 +40,8 @@ export default function Button({
   dontPreventPropagation,
   containerClassname,
   onLongPressAction,
+  hFull,
+  isNew,
 }: ButtonProps) {
   const container = useRef<HTMLDivElement>(null);
 
@@ -106,9 +112,19 @@ export default function Button({
         onActionAnimation();
       }, dontPreventPropagation)}
       disabled={disabled}
-      className={cn("relative", full ? "w-full" : "w-min")}
+      className={cn(
+        "relative",
+        full ? "w-full" : "w-min",
+        hFull ? "h-full" : ""
+      )}
       ref={innerRef}
     >
+      {isNew && !disabled && (
+        <span className="flex h-3 w-3 absolute right-0 top-0 z-20 translate-x-1/3 -translate-y-1/3">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-600"></span>
+        </span>
+      )}
       <div
         ref={container}
         className={cn(
@@ -116,7 +132,7 @@ export default function Button({
           unstyled
             ? ""
             : [
-                "rounded-sm overflow-hidden text-nowrap relative z-10 font-semibold shadow-md",
+                "rounded-sm overflow-hidden text-nowrap relative z-10 font-semibold shadow-md h-full",
                 disabled ? "brightness-50" : "brightness-100",
                 rarity === "epic" ? "bg-slate-100" : "bg-slate-300",
               ]

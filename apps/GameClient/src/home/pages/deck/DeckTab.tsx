@@ -1,10 +1,5 @@
 import { filterUndefined, getImageUrl, ICONS } from "@repo/lib";
-import {
-  CARD_BORDER_HEIGHT,
-  CARD_BORDER_WIDTH,
-  cn,
-  ManaBall
-} from "@repo/ui";
+import { CARD_BORDER_HEIGHT, CARD_BORDER_WIDTH, cn, ManaBall } from "@repo/ui";
 import * as _ from "lodash";
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import ScrollContainer from "react-indiana-drag-scroll";
@@ -26,6 +21,7 @@ import DragContextProvider, {
 } from "./dragAndDrop/DragContext";
 import Droppable from "./dragAndDrop/Droppable";
 import { useEditDeckActions } from "./context/EditionModeContext";
+import ButtonOptimizeStrengthDeck from "./ButtonOptimizeStrengthDeck";
 
 interface DeckStatsProps {
   deck: CardType[];
@@ -41,7 +37,7 @@ export function StatBox({
   return (
     <div
       className={cn(
-        "flex items-center px-2 py-1 gap-2 bold relative text-white shadow-md rounded-md z-0",
+        "flex items-center px-2 gap-2 bold relative text-white shadow-md rounded-md z-0",
         className ?? ""
       )}
     >
@@ -66,17 +62,18 @@ function DeckStats({ deck }: DeckStatsProps) {
         <ManaBall size={0.6} />
         <p>{averageCostDeck.toFixed(1)}</p>
       </StatBox>
-      <StatBox className="col-start-4">
-        <div className="flex w-full items-center justify-end gap-2">
-          <span className="text-xl bold ">{powerTotal.toFixed(1)}</span>
-          <img
-            src={getImageUrl(ICONS, "epees-bouclier.png")}
-            alt="swords and a shield"
-            width={28}
-            height={28}
-          />
-        </div>
+      <StatBox className="col-start-2">
+        <img
+          src={getImageUrl(ICONS, "epees-bouclier.png")}
+          alt="swords and a shield"
+          width={28}
+          height={28}
+        />
+        <span className="text-xl bold ">{powerTotal.toFixed(1)}</span>
       </StatBox>
+      <div className="col-start-4 h-full flex items-center justify-end">
+        <ButtonOptimizeStrengthDeck currentDeck={deck} />
+      </div>
     </>
   );
 }
@@ -205,6 +202,7 @@ function DeckTabContent({ size }: { size: number }) {
           className="pt-6 grid grid-cols-4 w-fit"
           style={{ gap: CARD_GAP * size }}
         >
+          <DeckStats deck={filterUndefined(detailledDeck)} />
           {detailledDeck.map((card, index) => (
             <div className="relative" key={index}>
               <EmptyDeckPlaceholder size={size} index={index} />
@@ -221,10 +219,9 @@ function DeckTabContent({ size }: { size: number }) {
               </div>
             </div>
           ))}
-          <DeckStats deck={filterUndefined(detailledDeck)} />
           {!editionMode && (
             <>
-              <StatBox className="col-start-0 col-span-4 w-full" />
+              <StatBox className="col-start-0 col-span-4 w-full p-1" />
             </>
           )}
         </div>
